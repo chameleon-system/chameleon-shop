@@ -1,0 +1,4 @@
+css:
+   - /assets/snippets/pkgShopPaymentTransaction/partial-form.css
+js:
+  - /assets/snippets/pkgShopPaymentTransaction/backend.js

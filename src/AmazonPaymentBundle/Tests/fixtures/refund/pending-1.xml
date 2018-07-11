@@ -1,0 +1,26 @@
+<RefundResponse xmlns="http://mws.amazonservices.com/schema/OffAmazonPayments/2013-01-01">
+    <RefundResult>
+        <RefundDetails>
+            <AmazonRefundId>AMAZON-REFUND-PEN-1</AmazonRefundId>
+            <RefundReferenceId>REFUND-REFERENCE-PEND-ID-1</RefundReferenceId>
+            <SellerRefundNote>Lorem ipsum</SellerRefundNote>
+            <RefundType>SellerInitiated</RefundType>
+            <RefundAmount>
+                <CurrencyCode>EUR</CurrencyCode>
+                <Amount>10</Amount>
+            </RefundAmount>
+            <FeeRefunded>
+                <CurrencyCode>EUR</CurrencyCode>
+                <Amount>0</Amount>
+            </FeeRefunded>
+            <RefundStatus>
+                <State>Pending</State>
+                <LastUpdateTimestamp>2012-11-07T19:10:16Z</LastUpdateTimestamp>
+            </RefundStatus>
+            <CreationTimestamp>2012-11-05T19:10:16Z</CreationTimestamp>
+        </RefundDetails>
+    </RefundResult>
+    <ResponseMetadata>
+        <RequestId>b4ab4bc3-c9ea-44f0-9a3d-67cccef565c6</RequestId>
+    </ResponseMetadata>
+</RefundResponse>

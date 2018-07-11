@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon_system_shop_article_detail_paging.content_from_url_loader_service" class="ChameleonSystem\ShopArticleDetailPagingBundle\Bridge\Service\ContentFromUrlLoaderService" public="false">
+            <argument type="service" id="kernel" />
+            <argument type="service" id="request_stack" />
+        </service>
+
+        <service id="chameleon_system_shop_article_detail_paging.content_from_url_loader_standard_service" class="ChameleonSystem\ShopArticleDetailPagingBundle\Bridge\Service\ContentFromUrlLoaderStandardService" public="false">
+            <argument type="service" id="request_stack" />
+        </service>
+
+
+        <service id="chameleon_system_shop_article_detail_paging.add_parameters_to_url_service" class="ChameleonSystem\ShopArticleDetailPagingBundle\Service\AddParametersToUrlService" public="false">
+            <argument type="service" id="chameleon_system_cms_string_utilities.url_utility_service" />
+        </service>
+
+        <service id="chameleon_system_shop_article_detail_paging.request_to_list_url_converter" class="ChameleonSystem\ShopArticleDetailPagingBundle\Bridge\Service\RequestToListUrlConverter" public="false">
+            <argument type="service" id="chameleon_system_core.util.input_filter" />
+        </service>
+
+        <service id="chameleon_system_shop_article_detail_paging.article_list_api" class="ChameleonSystem\ShopArticleDetailPagingBundle\ArticleList\ArticleListApi" public="false">
+            <argument type="service" id="chameleon_system_shop_article_detail_paging.content_from_url_loader_standard_service" />
+            <argument type="service" id="chameleon_system_shop_article_detail_paging.add_parameters_to_url_service" />
+        </service>
+
+        <service id="chameleon_system_shop_article_detail_paging.detail_paging_service" class="ChameleonSystem\ShopArticleDetailPagingBundle\Service\DetailPagingService">
+            <argument type="service" id="chameleon_system_shop_article_detail_paging.article_list_api"/>
+            <argument type="service" id="chameleon_system_shop_article_detail_paging.request_to_list_url_converter" />
+            <argument type="service" id="chameleon_system_shop_article_detail_paging.add_parameters_to_url_service" />
+        </service>
+
+        <service id="chameleon_system_shop_article_detail_paging.module.pager_module" class="ChameleonSystem\ShopArticleDetailPagingBundle\Bridge\Module\DetailPagingModule" shared="false">
+            <tag name="chameleon_system.module" />
+            <argument type="service" id="chameleon_system_shop.shop_service" />
+            <argument type="service" id="chameleon_system_shop_article_detail_paging.detail_paging_service" />
+        </service>
+    </services>
+</container>

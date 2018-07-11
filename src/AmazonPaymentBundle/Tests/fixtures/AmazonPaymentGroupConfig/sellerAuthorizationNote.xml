@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<container>
+    <common>
+        <sellerAuthorizationNote>
+            <![CDATA[
+                Vielen Dank für Ihre Bestellung {{shop_order__ordernumber}} bei {{shop__name}}{%if captureNow%} (mit capture now){%endif%}
+            ]]>
+        </sellerAuthorizationNote>
+    </common>
+</container>

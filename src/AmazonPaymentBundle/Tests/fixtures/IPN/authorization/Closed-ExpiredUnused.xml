@@ -1,0 +1,37 @@
+<AuthorizationNotification xmlns="https://mws.amazonservices.com/ipn/OffAmazonPayments/2013-01-01">
+  <AuthorizationDetails>
+    <AmazonAuthorizationId>AUTH-ID</AmazonAuthorizationId>
+    <AuthorizationReferenceId>AUTH-REF-ID</AuthorizationReferenceId>
+    <AuthorizationAmount>
+      <Amount>12.23</Amount>
+      <CurrencyCode>EUR</CurrencyCode>
+    </AuthorizationAmount>
+    <CapturedAmount>
+      <Amount>0</Amount>
+      <CurrencyCode>EUR</CurrencyCode>
+    </CapturedAmount>
+    <AuthorizationFee>
+      <Amount>0</Amount>
+      <CurrencyCode>EUR</CurrencyCode>
+    </AuthorizationFee>
+    <IdList>
+    </IdList>
+    <CreationTimestamp>2008-09-29T03:49:45</CreationTimestamp>
+    <AuthorizationStatus>
+      <State>Closed</State>
+      <LastUpdateTimestamp>2018-11-01T06:36:46+01:00</LastUpdateTimestamp>
+      <!--Optional:-->
+      <ReasonCode>ExpiredUnused</ReasonCode>
+      <!--Optional:-->
+      <ReasonDescription>The authorization has been in the Open state for 30 days (two days for Sandbox) and you did not submit any captures against it.</ReasonDescription>
+    </AuthorizationStatus>
+    <OrderItemCategories>
+    </OrderItemCategories>
+    <CaptureNow>false</CaptureNow>
+    <SoftDescriptor>string</SoftDescriptor>
+    <!--You may enter ANY elements at this point-->
+    <AnyElement/>
+  </AuthorizationDetails>
+  <!--You may enter ANY elements at this point-->
+  <AnyElement/>
+</AuthorizationNotification>

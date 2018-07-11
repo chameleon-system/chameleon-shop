@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="messages.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_shop_order_status.msg.mail_success">
+                <source>chameleon_system_shop_order_status.msg.mail_success</source>
+                <target>Successfully sent email to address:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_order_status.error.mail_error">
+                <source>chameleon_system_shop_order_status.error.mail_error</source>
+                <target>Could not send email: %error%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_order_status.error.order_not_found">
+                <source>chameleon_system_shop_order_status.error.order_not_found</source>
+                <target>Could not find order!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_order_status.error.missing_parameter">
+                <source>chameleon_system_shop_order_status.error.missing_parameter</source>
+                <target>Missing parameters!</target>
+            </trans-unit>
+
+
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="chameleon_system_product_export.base_export_cache_dir" type="constant">CMS_TMP_DIR</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="chameleon_system_shop_product_export.exporter" class="ChameleonSystem\ShopProductExportBundle\ShopProductExporter" public="false">
+            <argument type="service" id="chameleon_system_shop.result_factory" />
+            <argument type="service" id="chameleon_system_shop.shop_service" />
+            <argument type="service" id="chameleon_system_shop.state_factory.state_factory" />
+        </service>
+
+        <service id="chameleon_system_shop_product_export.export_handler.csv" class="TPkgShopProductExportCSV" public="false" shared="false">
+            <tag name="chameleon_system_shop_product_export.export_handler" alias="csv" />
+        </service>
+        <service id="chameleon_system_shop_product_export.export_handler.xml" class="TPkgShopProductExportXML" public="false" shared="false">
+            <tag name="chameleon_system_shop_product_export.export_handler" alias="xml" />
+        </service>
+
+        <service id="chameleon_system_shop_product_export.module.exporter" class="ChameleonSystem\ShopProductExportBundle\Modules\ShopProductExportModule" shared="false">
+            <tag name="chameleon_system.module" />
+            <argument type="service" id="chameleon_system_shop_product_export.exporter" />
+            <argument type="service" id="chameleon_system_shop.db_adapter" />
+            <argument type="service" id="chameleon_system_core.util.input_filter" />
+            <argument>%chameleon_system_product_export.base_export_cache_dir%/pkgshopproductexport/</argument>
+        </service>
+    </services>
+</container>

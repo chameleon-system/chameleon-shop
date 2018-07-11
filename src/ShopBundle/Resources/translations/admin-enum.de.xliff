@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="admin-enum.en.xliff">
+        <body>
+
+            <trans-unit id="shop_discount.value_type.absolut">
+                <source>shop_discount.value_type.absolut</source>
+                <target>Absolut</target>
+            </trans-unit>
+            <trans-unit id="shop_discount.value_type.prozent">
+                <source>shop_discount.value_type.prozent</source>
+                <target>Prozent</target>
+            </trans-unit>
+
+            <trans-unit id="shop_voucher_series.value_type.absolut">
+                <source>shop_voucher_series.value_type.absolut</source>
+                <target>Absolut</target>
+            </trans-unit>
+            <trans-unit id="shop_voucher_series.value_type.prozent">
+                <source>shop_voucher_series.value_type.prozent</source>
+                <target>Prozent</target>
+            </trans-unit>
+
+            <trans-unit id="shop_shipping_type.value_type.absolut">
+                <source>shop_shipping_type.value_type.absolut</source>
+                <target>Absolut</target>
+            </trans-unit>
+            <trans-unit id="shop_shipping_type.value_type.prozent">
+                <source>shop_shipping_type.value_type.prozent</source>
+                <target>Prozent</target>
+            </trans-unit>
+
+            <trans-unit id="shop_order_step.render_view_type.Core">
+                <source>shop_order_step.render_view_type.Core</source>
+                <target>Core</target>
+            </trans-unit>
+            <trans-unit id="shop_order_step.render_view_type.Custom-Core">
+                <source>shop_order_step.render_view_type.Custom-Core</source>
+                <target>Custom-Core</target>
+            </trans-unit>
+            <trans-unit id="shop_order_step.render_view_type.Customer">
+                <source>shop_order_step.render_view_type.Customer</source>
+                <target>Customer</target>
+            </trans-unit>
+
+            <trans-unit id="shop_payment_handler_group.environment.default">
+                <source>shop_payment_handler_group.environment.default</source>
+                <target>Standard</target>
+            </trans-unit>
+            <trans-unit id="shop_payment_handler_group.environment.sandbox">
+                <source>shop_payment_handler_group.environment.sandbox</source>
+                <target>Sandbox</target>
+            </trans-unit>
+            <trans-unit id="shop_payment_handler_group.environment.production">
+                <source>shop_payment_handler_group.environment.production</source>
+                <target>Production</target>
+            </trans-unit>
+
+            <trans-unit id="shop_payment_method.value_type.absolut">
+                <source>shop_payment_method.value_type.absolut</source>
+                <target>Absolut</target>
+            </trans-unit>
+            <trans-unit id="shop_payment_method.value_type.prozent">
+                <source>shop_payment_method.value_type.prozent</source>
+                <target>Prozent</target>
+            </trans-unit>
+
+            <trans-unit id="shop.product_url_mode.V1">
+                <source>shop.product_url_mode.V1</source>
+                <target>V1</target>
+            </trans-unit>
+            <trans-unit id="shop.product_url_mode.V2">
+                <source>shop.product_url_mode.V2</source>
+                <target>V2</target>
+            </trans-unit>
+
+            <trans-unit id="shop_module_articlelist_orderby.order_direction.ASC">
+                <source>shop_module_articlelist_orderby.order_direction.ASC</source>
+                <target>Aufsteigend</target>
+            </trans-unit>
+            <trans-unit id="shop_module_articlelist_orderby.order_direction.DESC">
+                <source>shop_module_articlelist_orderby.order_direction.DESC</source>
+                <target>Absteigend</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

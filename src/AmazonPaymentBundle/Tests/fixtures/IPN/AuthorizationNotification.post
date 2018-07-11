@@ -1,0 +1,71 @@
+POST / HTTP/1.1
+x-amz-sns-message-type: Notification
+x-amz-sns-message-id: 6f7e123e-49c9-5c9d-a389-5bed0EXAMPLE
+x-amz-sns-topic-arn: arn:aws:sns:EXAMPLE:59860EXAMPLE:TestTopic
+x-amz-sns-subscription-arn:arn:aws:sns:EXAMPLE:59860EXAMPLE:TestTopic: EXAMPLE
+Content-Length: 961
+Content-Type: text/plain; charset=UTF-8
+Host: ec2-EXAMPLE.compute-1.amazonaws.com
+Connection: Keep-Alive
+User-Agent: Amazon Simple Notification Service Agent
+
+{
+"Type" : "Notification",
+"MessageId" : "cf5543af-dd65-5f74-8ccf-0a410EXAMPLE",
+"TopicArn" : "arn:aws:sns:EXAMPLE:59860EXAMPLE:TestTopic",
+"Message" :
+"{\"NotificationReferenceId\":\"32d195c3-a829-4222-b1e2-14ab28909513\",
+\"NotificationType\":\"PaymentAuthorize\",
+\"SellerId\":\"YOUR_SELLER_ID_HERE\",
+\"ReleaseEnvironment\":\"Sandbox\",
+\"Version\":\"2013-01-01\",
+\"NotificationData\":
+\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>
+<AuthorizationNotification
+xmlns=\\\"https://mws-eu.amazonservices.com/
+ipn/OffAmazonPayments/2013-01-01\\\">\\n
+<AuthorizationDetails>\\n
+<AmazonAuthorizationId>
+S23-1234567-1234567-0000001
+<\\/AmazonAuthorizationId>\\n
+<AuthorizationReferenceId>
+9bbe88cd5ab4435b85d717fd8EXAMPLE
+<\\/AuthorizationReferenceId>\\n
+<AuthorizationAmount>\\n
+<Amount>5.0<\\/Amount>\\n
+<CurrencyCode>EUR<\\/CurrencyCode>\\n
+<\\/AuthorizationAmount>\\n
+<CapturedAmount>\\n
+<Amount>0.0<\\/Amount>\\n
+<CurrencyCode>EUR<\\/CurrencyCode>\\n
+<\\/CapturedAmount>\\n
+<AuthorizationFee>\\n
+<Amount>0.0<\\/Amount>\\n
+<CurrencyCode>EUR<\\/CurrencyCode>\\n
+<\\/AuthorizationFee>\\n
+<IdList/>\\n
+<CreationTimestamp>2013-04-22T05:59:38.186Z<\\/CreationTimestamp>\\n
+<ExpirationTimestamp>
+2013-05-22T05:59:38.186Z
+<\\/ExpirationTimestamp>\\n
+<AuthorizationStatus>\\n
+<State>Open<\\/State>\\n
+<LastUpdateTimestamp>
+2013-04-22T06:00:11.473Z
+<\\/LastUpdateTimestamp>\\n
+<\\/AuthorizationStatus>\\n
+<OrderItemCategories/>\\n
+<CaptureNow>false<\\/CaptureNow>\\n
+<SoftDescriptor/>\\n
+<\\/AuthorizationDetails>\\n
+<\\/AuthorizationNotification>\",
+\"Timestamp\":\"2013-04-22T06:00:14Z\"}",
+"Timestamp" : "2013-04-22T06:00:15.108Z",
+"SignatureVersion" : "1",
+"Signature" : "W/cfaDzC...5glwqJk=",
+"SigningCertURL" : "https://sns.EXAMPLE.amazonaws.com/
+SimpleNotificationService-f3ecfb7224c7233fe7bb5f59fEXAMPLE.pem",
+"UnsubscribeURL" : "https://sns.EXAMPLE.amazonaws.com/
+?Action=Unsubscribe
+&SubscriptionArn=arn:aws:sns:EXAMPLE:59860EXAMPLE:TestTopic:GUID"
+}

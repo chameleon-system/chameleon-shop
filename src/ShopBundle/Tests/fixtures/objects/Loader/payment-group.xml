@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<container>
+    <common>
+        <commonKey>common value</commonKey>
+    </common>
+    <live>
+        <liveKey>live value</liveKey>
+        <liveAndDevKey>live and dev value in live mode</liveAndDevKey>
+    </live>
+    <dev>
+        <devKey>dev value</devKey>
+        <liveAndDevKey>live and dev value in dev mode</liveAndDevKey>
+    </dev>
+</container>

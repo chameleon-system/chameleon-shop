@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="admin.de.xliff">
+        <body>
+            <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.error_export_page_missing">
+                <source>chameleon_system_shop_product_export.field_show_export_url.error_export_page_missing</source>
+                <target>Es wurde keine Exportseite gefunden. Bitte legen Sie eine Systemseite mit dem Systemnamen "productexport" an und verlinken diese mit der Exportseite.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.error_export_module_missing">
+                <source>chameleon_system_shop_product_export.field_show_export_url.error_export_module_missing</source>
+                <target>Auf der Exportseite wurde kein Exportmodul gefunden. Bitte legen Sie auf der Exportseite ein Artikellisten-Exportmodul an.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.error_export_views_missing">
+                <source>chameleon_system_shop_product_export.field_show_export_url.error_export_views_missing</source>
+                <target>Es wurden keine Exporte für das Artikellisten-Exportmodul gefunden.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.error_invalid_field_owner">
+                <source>chameleon_system_shop_product_export.field_show_export_url.error_invalid_field_owner</source>
+                <target>Fehler beim Auslesen des aktuellen Datensatzes.</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.headline">
+                <source>chameleon_system_shop_product_export.field_show_export_url.headline</source>
+                <target>Exporte für Portal %portalName%</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

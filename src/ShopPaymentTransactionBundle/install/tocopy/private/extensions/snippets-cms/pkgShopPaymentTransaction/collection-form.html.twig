@@ -1,0 +1,122 @@
+<div id="pkgShopPaymentTransaction-form" class="pkgShopPaymentTransaction"  title="{{ sHeadline }}"><div class="partialForm">
+    <form name="" method="post" action="{{ sTargetURL|raw }}">
+        {{ sHiddenFields | raw }}
+        <table>
+            <tr>
+                <th class="left">{{ "chameleon_system_shop_payment_transaction.collection_form.column_product_number" | trans}}</th>
+                <th class="left">{{ "chameleon_system_shop_payment_transaction.collection_form.column_product_name" | trans }}</th>
+                <th class="center">{{ "chameleon_system_shop_payment_transaction.collection_form.column_quantity_ordered" | trans }}</th>
+                <th class="center">{{ "chameleon_system_shop_payment_transaction.collection_form.column_quantity_shipped" | trans }}</th>
+                <th class="center">{{ "chameleon_system_shop_payment_transaction.collection_form.column_quantity_canceled" | trans }}</th>
+                <th class="center">{{ "chameleon_system_shop_payment_transaction.collection_form.column_quantity_in_transaction" | trans }}</th>
+                <th class="right">{{ "chameleon_system_shop_payment_transaction.collection_form.column_item_price" | trans }}</th>
+                <th class="right">{{ "chameleon_system_shop_payment_transaction.collection_form.column_item_total_price" | trans }}</th>
+            </tr>
+            {% for item in items %}
+                <tr id="item-{{ item.id }}" class="items">
+                    <td class="articlenumber left">{{ item.articlenumber }}</td>
+                    <td class="name left">{{ item.name }}</td>
+                    <td class="totalQuantityOrdered center">{{ item.totalQuantityOrdered }}</td>
+                    <td class="totalQuantityPaid center">{{ item.totalQuantityPaid }} ({{ "chameleon_system_shop_payment_transaction.collection_form.confirmed_count"|trans({'%quantity%':item.totalQuantityPaidConfirmed}) }})</td>
+                    <td class="totalQuantityCanceled center">{{ item.totalQuantityCanceled}} ({{ "chameleon_system_shop_payment_transaction.collection_form.confirmed_count"|trans({'%quantity%':item.totalQuantityCanceledConfirmed}) }})</td>
+                    <td class="amount center"><input class="amount" type="text" name="amount[{{ item.id }}]" value="{{ item.totalQuantityForTransaction }}" > ({{ "chameleon_system_shop_payment_transaction.collection_form.quantity_available"|trans({'%quantity%': item.totalQuantityForTransaction}) }})</td>
+                    <td class="price right">{{ item.price }}</td>
+                    <td class="totalValueForTransaction right">{{ item.totalValueForTransaction }}</td>
+                </tr>
+            {% endfor %}
+            <tr id="products" class="summary">
+                <th colspan="6">{{ "chameleon_system_shop_payment_transaction.collection_form.summary_product_value" | trans }}</th>
+                <th colspan="2" class="">{{ valueProducts }}</th>
+            </tr>
+            {% if valueDiscount != 0 %}
+                <tr id="discount" class="summary">
+                    <th colspan="6">{{ "chameleon_system_shop_payment_transaction.collection_form.summary_discounts" | trans }}</th>
+                    <th colspan="2">{{ valueDiscount }}</th>
+                </tr>
+            {% endif %}
+            {% if valueDiscountVouchers != 0 %}
+                <tr id="discountVouchers" class="summary">
+                    <th colspan="6">{{ "chameleon_system_shop_payment_transaction.collection_form.summary_vouchers" | trans }}</th>
+                    <th colspan="2">{{ valueDiscountVouchers }}</th>
+                </tr>
+            {% endif %}
+            {% if valueShipping != 0 %}
+                <tr id="shipping" class="summary">
+                    <th colspan="6">{{ "chameleon_system_shop_payment_transaction.collection_form.summary_shipping_cost" | trans }}</th>
+                    <th colspan="2">{{ valueShipping }}</th>
+                </tr>
+            {% endif %}
+            {% if valuePayment != 0 %}
+                <tr id="payment" class="summary">
+                    <th colspan="6">{{ "chameleon_system_shop_payment_transaction.collection_form.summary_payment_surcharge" | trans }}</th>
+                    <th colspan="2">{{ valuePayment }}</th>
+                </tr>
+            {% endif %}
+            {% if valueOther != 0 %}
+                <tr id="other" class="summary">
+                    <th colspan="6">{{ "chameleon_system_shop_payment_transaction.collection_form.summary_other_costs" | trans }}</th>
+                    <th colspan="2">{{ valueOther }}</th>
+                </tr>
+            {% endif %}
+            {% if valueVoucher != 0 %}
+                <tr id="voucher" class="summary">
+                    <th colspan="6">{{ "chameleon_system_shop_payment_transaction.collection_form.summary_sponsored_vouchers" | trans }}</th>
+                    <th colspan="2">{{ valueVoucher }}</th>
+                </tr>
+            {% endif %}
+            <tr id="grandTotal" class="summary">
+                <th colspan="6">{{ "chameleon_system_shop_payment_transaction.collection_form.summary_order_value" | trans }}</th>
+                <th colspan="2">
+                    {{ order_total }}
+                </th>
+            </tr>
+
+            <tr id="grandTotal" class="summary">
+                <th colspan="6">{{ "chameleon_system_shop_payment_transaction.collection_form.form_transaction_value" | trans }}</th>
+                <th colspan="2">
+                    <input type="text" name="totalAmount" value="{{ valueGrandTotal }}" />
+                </th>
+            </tr>
+            <tr id="grandTotal" class="summary">
+                <th colspan="3">&nbsp;</th>
+                <th colspan="5">
+                    {{'chameleon_system_shop_payment_transaction.collection_form.form_transaction_value_help'|trans}}
+                </th>
+            </tr>
+        </table>
+        <input type="button" name="abort" value="{{ "chameleon_system_shop_payment_transaction.collection_form.action_abort" | trans }}" onclick="TPkgShopPaymentTransaction_closeForm();">
+        <input type="submit" name="submit" value="{{ "chameleon_system_shop_payment_transaction.collection_form.action_submit" | trans }}">
+
+        {% if bHasSponsoredVouchers %}
+            <br /><br />
+            <div class="alert alert-block">
+                <strong>
+                    {{ "chameleon_system_shop_payment_transaction.collection_form.msg_has_sponsored_vouchers" |trans }}
+                </strong>
+            </div>
+        {% endif %}
+
+            <h2>{{"chameleon_system_shop_payment_transaction.collection_form.existing_transactions_headline"|trans}}</h2>
+            <table class="transactions">
+                <tr>
+                    <th>{{'chameleon_system_shop_payment_transaction.collection_form.existing_transactions_type' | trans}}</th>
+                    <th>{{'chameleon_system_shop_payment_transaction.collection_form.existing_transactions_date' | trans}}</th>
+                    <th>{{'chameleon_system_shop_payment_transaction.collection_form.existing_transaction_confirmed' | trans}}</th>
+                    <th style="text-align: right">{{'chameleon_system_shop_payment_transaction.collection_form.existing_transaction_value' | trans}}</th>
+                    <th style="text-align: right">{{'chameleon_system_shop_payment_transaction.collection_form.existing_transaction_running_total' | trans}}</th>
+                    <th style="text-align: right">{{'chameleon_system_shop_payment_transaction.collection_form.existing_transaction_remaining_order_value' | trans}}</th>
+                </tr>
+                {% for transaction in transactionList %}
+                <tr>
+                    <td>{{ transaction.type }}</td>
+                    <td>{{ transaction.date }}</td>
+                    <td>{% if transaction.confirmed == '1' %}{{'chameleon_system_shop_payment_transaction.collection_form.existing_transaction_is_confirmed' | trans}}{% else %}{{'chameleon_system_shop_payment_transaction.collection_form.existing_transaction_is_not_confirmed' | trans}}{% endif %}</td>
+                    <td style="text-align: right">{{ transaction.amount }}</td>
+                    <td style="text-align: right">{{ transaction.sum }}</td>
+                    <td style="text-align: right">{{ transaction.orderBalance }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+    </form>
+</div></div>

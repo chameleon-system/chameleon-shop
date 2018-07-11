@@ -1,0 +1,22 @@
+liste
+<form name="changeorder" method="get" action="{{ sortFormAction }}">
+    {{ sortFormStateInputFields | raw }}
+    sortierung:
+    <select name="{{ sortFieldName }}">
+        {% for sortOption in sortList %}
+            <option value="{{ sortOption.id }}" {% if sortOption.id == state.s %}selected="selected"{% endif %}>{{ sortOption.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="go">
+</form>
+<ul>
+    {% for item in items %}
+    <li>{{ item.fieldPrice }} | {{ item.fieldName }}</li>
+    {% endfor %}
+</ul>
+{{ listPagerUrl }}
+<ul>
+    {% for page in 1..numberOfPages%}
+        <li {% if state.p == page %}class="active"{% endif %}><a href="{{ listPagerUrl | replace({"_pageNumber_": page-1}) | raw }}">{{ page }}</a></li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,77 @@
+<div class="TCMSFieldShopVariantDetails">
+    <div class="main-product">
+        <p>
+        {{ 'chameleon_system_shop.variants.msg_current_product_is_no_variant'|trans }}
+        </p>
+        <br>
+        {% if hasVariantSet %}
+            <div>
+            {% for variantTypeName, variantType in variantTypeParameters %}
+                <div class="variantTypes">
+                    <h4 data-id="{{ variantType.variantTypeId|e('html_attr') }}">{{ variantTypeName }}</h4>
+                    <div class="row">
+                        {% for variantId, variantName in variantType.typeVariants %}
+                            <div class="checkbox col-xs-12 col-md-4 col-lg-3" style="margin-top: 0;">
+                                <label>
+                                    <input type="checkbox" name="form[checkbox]" value="{{ variantId|e('html_attr') }}" /> {{ variantName }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+
+                <button type="button" class="btn btn-info btn-sm" id="variantCombinationButton">
+                    {{ 'chameleon_system_shop.variants.action_show_possible_variants'|trans }}
+                </button>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                {{ 'chameleon_system_shop.variants.error_create_variant_variant_type_required'|trans }}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#variantCombinationButton").on("click", function () {
+
+            var variantsValuesChecked = false;
+            var variantTypeObj = {};
+            $('.TCMSFieldShopVariantDetails .variantTypes').each(function() {
+                var variantTypeId = $(this).find('h4').data("id");
+                variantTypeObj[variantTypeId] = [];
+
+                $(this).find('input:checked').each(function() {
+                    var variantId = $(this).val();
+
+                    variantsValuesChecked = true;
+                    variantTypeObj[variantTypeId].push(variantId);
+                });
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '{{ ajaxUrl|e('js') }}&_fieldName={{ fieldName|e('js') }}&_fnc=getPossibleVariantCombinations',
+                data: { variantTypeValues: variantTypeObj },
+                success: showVariantCombinations,
+                dataType: 'json',
+                error: AjaxError
+            });
+        });
+    });
+
+    function showVariantCombinations(data, statusText) {
+        if(!data || data == 'false') {
+            toasterMessage('{{ 'chameleon_system_shop.variants.error_to_many_combinations_possible'|trans({'%max%': maxPossibleVariantCombinations})|e('js') }}', 'ERROR');
+        } else {
+            CreateModalIFrameDialogFromContent(data,800,800,'{{ 'chameleon_system_shop.variants.action_create_variants'|trans|e('js') }}',true,true);
+
+            $(".generateVariantCheckall").click(function() {
+                var checkBoxes = $("#generateVariantTable input.generateVariantItem[type=checkbox]").not(':disabled');
+                checkBoxes.prop("checked", !checkBoxes.prop("checked"));
+            });
+        }
+    }
+</script>

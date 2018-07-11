@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_shop_article_review.action.publish_comment">
+                <source>chameleon_system_shop_article_review.action.publish_comment</source>
+                <target>Kommentar freigeben</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.delete_comment">
+                <source>chameleon_system_shop_article_review.action.delete_comment</source>
+                <target>Kommentar löschen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.delete_review">
+                <source>chameleon_system_shop_article_review.action.delete_review</source>
+                <target>löschen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_article_review.text.anonymous">
+                <source>chameleon_system_shop_article_review.text.anonymous</source>
+                <target>Anonym</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_article_review.form.author_name">
+                <source>chameleon_system_shop_article_review.form.author_name</source>
+                <target>Ihr Name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.form.author_email">
+                <source>chameleon_system_shop_article_review.form.author_email</source>
+                <target>Ihr Emailadresse</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.form.send_notifications">
+                <source>chameleon_system_shop_article_review.form.send_notifications</source>
+                <target>Benachrichtigung bei Kommentierung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.form.title">
+                <source>chameleon_system_shop_article_review.form.title</source>
+                <target>Titel eingeben</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.form.rating">
+                <source>chameleon_system_shop_article_review.form.rating</source>
+                <target>Ihre Bewertung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.form.rating_star">
+                <source>chameleon_system_shop_article_review.form.rating_star</source>
+                <target>Stern</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.form.comment">
+                <source>chameleon_system_shop_article_review.form.comment</source>
+                <target>Ihr Kommentar</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.form.captcha">
+                <source>chameleon_system_shop_article_review.form.captcha</source>
+                <target>Spamschutz</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.form.captcha_help">
+                <source>chameleon_system_shop_article_review.form.captcha_help</source>
+                <target>Diese Eingabe dient lediglich der Verhinderung automatisierter Eingaben.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.report_as_inappropriate">
+                <source>chameleon_system_shop_article_review.action.report_as_inappropriate</source>
+                <target>Rezension unzumutbar</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.comment_inappropriate">
+                <source>chameleon_system_shop_article_review.text.comment_inappropriate</source>
+                <target>Als ungeeignet gekennzeichnet.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.report_comment_as_inappropriate">
+                <source>chameleon_system_shop_article_review.action.report_comment_as_inappropriate</source>
+                <target>Diesen Beitrag melden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.respond_to_comment">
+                <source>chameleon_system_shop_article_review.action.respond_to_comment</source>
+                <target>Antworten</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_shop_article_review.action.write_review">
+                <source>chameleon_system_shop_article_review.action.write_review</source>
+                <target>Eigene Rezension schreiben</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.how_helpful">
+                <source>chameleon_system_shop_article_review.text.how_helpful</source>
+                <target>%helpful% von %sumRanked% Kunden fanden die folgende Rezension hilfreich:</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.vote_up">
+                <source>chameleon_system_shop_article_review.action.vote_up</source>
+                <target>Hilfreich</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.vote_down">
+                <source>chameleon_system_shop_article_review.action.vote_down</source>
+                <target>Nicht hilfreich</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.login_required">
+                <source>chameleon_system_shop_article_review.text.login_required</source>
+                <target>Sie müssen angemeldet sein um einen Kommentare lesen zu können</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.login_required_to_read_reviews">
+                <source>chameleon_system_shop_article_review.text.login_required_to_read_reviews</source>
+                <target>Bitte melden Sie sich im Shop an, um Bewertungen lesen zu können!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.login_required_to_write_review">
+                <source>chameleon_system_shop_article_review.text.login_required_to_write_review</source>
+                <target>Bitte melden Sie sich im Shop an, um eine Bewertung abzugeben!</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_shop_article_review.action.comment_on_review">
+                <source>chameleon_system_shop_article_review.action.comment_on_review</source>
+                <target>Rezension Kommentieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.comment_on_review_headline">
+                <source>chameleon_system_shop_article_review.text.comment_on_review_headline</source>
+                <target>Bewertung kommentieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.submit_comment">
+                <source>chameleon_system_shop_article_review.action.submit_comment</source>
+                <target>Kommentar abgegeben</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.unknown_product">
+                <source>chameleon_system_shop_article_review.text.unknown_product</source>
+                <target>wurde aus dem Sortiment genommen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.waiting_for_publication">
+                <source>chameleon_system_shop_article_review.text.waiting_for_publication</source>
+                <target>wartet auf Freigabe</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.published">
+                <source>chameleon_system_shop_article_review.text.published</source>
+                <target>freigegeben</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_article_review.text.comment_notification_active">
+                <source>chameleon_system_shop_article_review.text.comment_notification_active</source>
+                <target>Ja</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.comment_notification_inactive">
+                <source>chameleon_system_shop_article_review.text.comment_notification_inactive</source>
+                <target>Nein</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.disable_comment_notification">
+                <source>chameleon_system_shop_article_review.action.disable_comment_notification</source>
+                <target>Ich möchte nicht mehr benachrichtigt werden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.enable_comment_notification">
+                <source>chameleon_system_shop_article_review.action.enable_comment_notification</source>
+                <target>Ich möchte benachrichtigt werden</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_article_review.action.refresh">
+                <source>chameleon_system_shop_article_review.action.refresh</source>
+                <target>Aktualisieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.deleted_comment">
+                <source>chameleon_system_shop_article_review.text.deleted_comment</source>
+                <target>Kommentar wurde gelöscht.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_article_review.text.review_comments">
+                <source>chameleon_system_shop_article_review.text.review_comments</source>
+                <target>Kommentare zur Rezension</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.show_all_comments">
+                <source>chameleon_system_shop_article_review.action.show_all_comments</source>
+                <target>Alle Kommentare Anzeigen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.show_fewer_comments">
+                <source>chameleon_system_shop_article_review.action.show_fewer_comments</source>
+                <target>Weniger Kommentare Anzeigen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.review_count">
+                <source>chameleon_system_shop_article_review.text.review_count</source>
+                <target>Anzahl geschriebene Rezensionen (%count%)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.show_all_reviews">
+                <source>chameleon_system_shop_article_review.action.show_all_reviews</source>
+                <target>Alle Anzeigen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.show_fewer_reviews">
+                <source>chameleon_system_shop_article_review.action.show_fewer_reviews</source>
+                <target>Weniger Anzeigen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.you_have_no_reviews">
+                <source>chameleon_system_shop_article_review.text.you_have_no_reviews</source>
+                <target>Sie haben noch keine Bewertungen geschrieben.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.no_reviews">
+                <source>chameleon_system_shop_article_review.text.no_reviews</source>
+                <target>Für diesen Artikel liegt noch keine Bewertung vor. Bitte geben Sie die erste Bewertung ein!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.action.add_to_basket">
+                <source>chameleon_system_shop_article_review.action.add_to_basket</source>
+                <target>in den Warenkorb</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.absolute_voucher_value">
+                <source>chameleon_system_shop_article_review.text.absolute_voucher_value</source>
+                <target>Der Gutschein besitzt einen Wert von %value%%currency%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_article_review.text.percent_voucher_value">
+                <source>chameleon_system_shop_article_review.text.percent_voucher_value</source>
+                <target>Der Gutschein enthält einen Rabatt von %discountPercent%%</target>
+            </trans-unit>
+
+
+        </body>
+    </file>
+</xliff>

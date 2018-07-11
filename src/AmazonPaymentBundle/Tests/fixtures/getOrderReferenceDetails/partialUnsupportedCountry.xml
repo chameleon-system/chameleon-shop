@@ -1,0 +1,25 @@
+<GetOrderReferenceDetailsResponse xmlns="http://mws.amazonservices.com/schema/OffAmazonPayments/2013-01-01">
+    <GetOrderReferenceDetailsResult>
+        <OrderReferenceDetails>
+            <AmazonOrderReferenceId>P01-1234567-1234567</AmazonOrderReferenceId>
+            <CreationTimestamp>2012-11-05T20:21:19Z</CreationTimestamp>
+            <ExpirationTimestamp>2013-05-07T23:21:19Z</ExpirationTimestamp>
+            <OrderReferenceStatus>
+                <State>Draft</State>
+            </OrderReferenceStatus>
+            <Destination>
+                <DestinationType>Physical</DestinationType>
+                <PhysicalDestination>
+                    <City>Freiburg</City>
+                    <StateOrRegion>BaWü</StateOrRegion>
+                    <PostalCode>79098</PostalCode>
+                    <CountryCode>DEE</CountryCode>
+                </PhysicalDestination>
+            </Destination>
+            <ReleaseEnvironment>Live</ReleaseEnvironment>
+        </OrderReferenceDetails>
+    </GetOrderReferenceDetailsResult>
+    <ResponseMetadata>
+        <RequestId>5f20169b-7ab2-11df-bcef-d35615e2b044</RequestId>
+    </ResponseMetadata>
+</GetOrderReferenceDetailsResponse>

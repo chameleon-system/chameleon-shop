@@ -1,0 +1,29 @@
+<RefundNotification xmlns="https://mws.amazonservices.com/ipn/OffAmazonPayments/2013-01-01">
+  <RefundDetails>
+    <AmazonRefundId>string</AmazonRefundId>
+    <RefundReferenceId>string</RefundReferenceId>
+    <RefundType>string</RefundType>
+    <RefundAmount>
+      <Amount>1.051732E7</Amount>
+      <CurrencyCode>string</CurrencyCode>
+    </RefundAmount>
+    <FeeRefunded>
+      <Amount>1.051732E7</Amount>
+      <CurrencyCode>string</CurrencyCode>
+    </FeeRefunded>
+    <CreationTimestamp>2008-09-29T03:49:45</CreationTimestamp>
+    <RefundStatus>
+      <State>Declined</State>
+      <LastUpdateTimestamp>2004-02-14T19:44:14</LastUpdateTimestamp>
+      <!--Optional:-->
+      <ReasonCode>AmazonRejected</ReasonCode>
+      <!--Optional:-->
+      <ReasonDescription>Amazon has rejected the refund. You should issue a refund to the buyer in an alternate manner (for example, a gift card or store credit).</ReasonDescription>
+    </RefundStatus>
+    <SoftDescriptor>string</SoftDescriptor>
+    <!--You may enter ANY elements at this point-->
+    <AnyElement/>
+  </RefundDetails>
+  <!--You may enter ANY elements at this point-->
+  <AnyElement/>
+</RefundNotification>

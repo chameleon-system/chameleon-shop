@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="admin-enum.en.xliff">
+        <body>
+
+            <trans-unit id="pkg_shop_listfilter_item_type.view_class_type.Core">
+                <source>pkg_shop_listfilter_item_type.view_class_type.Core</source>
+                <target>Core</target>
+            </trans-unit>
+            <trans-unit id="pkg_shop_listfilter_item_type.view_class_type.Custom-Core">
+                <source>pkg_shop_listfilter_item_type.view_class_type.Custom-Core</source>
+                <target>Custom-Core</target>
+            </trans-unit>
+            <trans-unit id="pkg_shop_listfilter_item_type.view_class_type.Customer">
+                <source>pkg_shop_listfilter_item_type.view_class_type.Customer</source>
+                <target>Customer</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

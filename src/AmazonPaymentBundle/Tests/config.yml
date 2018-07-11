@@ -1,0 +1,47 @@
+services:
+  request:
+    class: Symfony\Component\HttpFoundation\Request
+
+  cmsPkgCore.logHandler.nullHandler:
+    class: Monolog\Handler\NullHandler
+    public: false
+
+
+
+  cmsPkgCore.logDriver.standard:
+    class: Monolog\Logger
+    arguments: ["core.test"]
+    calls:
+          - [pushHandler, ["@cmsPkgCore.logHandler.nullHandler"]]
+    public: false
+  cmsPkgCore.logChannel.standard:
+    class: TPkgCmsCoreLog
+    arguments: ["@cmsPkgCore.logDriver.standard"]
+    calls:
+          - [setLogMetaData, [false]]
+
+  cmsPkgCore.logChannel.apilogger:
+    class: TPkgCmsCoreLog
+    arguments: ["@cmsPkgCore.logDriver.standard"]
+    calls:
+          - [setLogMetaData, [false]]
+
+
+  testpdo:
+    class: PDO
+    arguments: ["mysql:dbname=champhpunit;host=localhost;charset=utf8","champhpunit", "champhpunit", {"constant:\\PDO::MYSQL_ATTR_INIT_COMMAND":"SET NAMES utf8"}]
+    calls:
+          - [setAttribute, ["constant:PDO::ATTR_ERRMODE", "constant:PDO::ERRMODE_EXCEPTION"]]
+
+  database_connection:
+    class: Doctrine\DBAL\Connection
+    factory_class: Doctrine\DBAL\DriverManager
+    factory_method: getConnection
+    arguments:
+      - {"driver":"pdo_mysql", "pdo":"@testpdo", "charset":"UTF8" }
+
+  cache_database_connection:
+    alias: database_connection
+
+  sessionPdo:
+    alias: testpdo

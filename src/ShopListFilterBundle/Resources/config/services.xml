@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+
+    <services>
+        <service id="chameleon_system_shop_list_filter.db_adapter" class="ChameleonSystem\pkgshoplistfilter\DatabaseAccessLayer\DbAdapter">
+            <call method="setDatabaseConnection">
+                <argument type="service" id="database_connection" />
+            </call>
+        </service>
+        <service id="chameleon_system_shop_list_filter.filter_api" class="ChameleonSystem\pkgshoplistfilter\objects\FilterApi">
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="chameleon_system_shop_list_filter.db_adapter" />
+            <argument type="service" id="chameleon_system_shop.db_adapter" />
+            <argument type="service" id="chameleon_system_shop.state_factory.state_factory" />
+            <argument type="service" id="chameleon_system_shop.result_factory_cached" />
+            <argument type="service" id="chameleon_system_core.active_page_service" />
+            <argument type="service" id="chameleon_system_core.cache" />
+            <argument type="service" id="chameleon_system_shop.state_request_extractor_collection" />
+        </service>
+        <service id="chameleon_system_shop_list_filter.result_modification" class="ChameleonSystem\ShopListFilterBundle\pkgShop\objects\ArticleList\ResultModifier\ResultModification">
+            <tag name="chameleon_system_shop.article_list_module.result_modification" />
+        </service>
+        <service id="chameleon_system_shop_list_filter.state_extractor" class="ChameleonSystem\ShopListFilterBundle\pkgShop\objects\ArticleList\StateRequestExtractor\StateRequestExtractor">
+            <tag name="chameleon_system_shop.article_list_module.state_extractor" />
+        </service>
+
+    </services>
+
+</container>

@@ -1,0 +1,32 @@
+<CaptureNotification xmlns="https://mws.amazonservices.com/ipn/OffAmazonPayments/2013-01-01">
+    <CaptureDetails>
+        <AmazonCaptureId>AMAZON-CAPTURE-ID</AmazonCaptureId>
+        <CaptureReferenceId>AMAZON-CAPTURE-REFERENCE-ID</CaptureReferenceId>
+        <CaptureAmount>
+            <Amount>12.34</Amount>
+            <CurrencyCode>string</CurrencyCode>
+        </CaptureAmount>
+        <RefundedAmount>
+            <Amount>1.051732E7</Amount>
+            <CurrencyCode>string</CurrencyCode>
+        </RefundedAmount>
+        <CaptureFee>
+            <Amount>1.051732E7</Amount>
+            <CurrencyCode>string</CurrencyCode>
+        </CaptureFee>
+        <IdList>
+            <!--Zero or more repetitions:-->
+            <Id>string</Id>
+        </IdList>
+        <CreationTimestamp>2008-09-29T03:49:45</CreationTimestamp>
+        <CaptureStatus>
+            <State>Completed</State>
+            <LastUpdateTimestamp>2004-02-14T19:44:14</LastUpdateTimestamp>
+        </CaptureStatus>
+        <SoftDescriptor>string</SoftDescriptor>
+        <!--You may enter ANY elements at this point-->
+        <AnyElement/>
+    </CaptureDetails>
+    <!--You may enter ANY elements at this point-->
+    <AnyElement/>
+</CaptureNotification>

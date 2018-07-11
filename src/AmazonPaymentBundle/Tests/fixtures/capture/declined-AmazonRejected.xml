@@ -1,0 +1,23 @@
+<CaptureResponse xmlns="http://mws.amazonservices.com/schema/OffAmazonPayments/2013-01-01">
+    <CaptureResult>
+        <CaptureDetails>
+            <AmazonCaptureId>P01-1234567-1234567-0000007</AmazonCaptureId>
+            <CaptureReferenceId>CAPTURE-REFERENCE-ID</CaptureReferenceId>
+            <SellerCaptureNote>Lorem ipsum</SellerCaptureNote>
+            <CaptureAmount>
+                <CurrencyCode>EUR</CurrencyCode>
+                <Amount>94.50</Amount>
+            </CaptureAmount>
+            <CaptureStatus>
+                <State>Declined</State>
+                <LastUpdateTimestamp>2012-11-03T19:10:16Z</LastUpdateTimestamp>
+                <ReasonCode>AmazonRejected</ReasonCode>
+                <ReasonDescription>Amazon has rejected the capture. You should only retry the capture if the authorization is in the Open state.</ReasonDescription>
+            </CaptureStatus>
+            <CreationTimestamp>2012-11-03T19:10:16Z</CreationTimestamp>
+        </CaptureDetails>
+    </CaptureResult>
+    <ResponseMetadata>
+        <RequestId>b4ab4bc3-c9ea-44f0-9a3d-67cccef565c6</RequestId>
+    </ResponseMetadata>
+</CaptureResponse>

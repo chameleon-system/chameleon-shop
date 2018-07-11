@@ -1,0 +1,4 @@
+live:
+  captureOnShipment: 1
+dev:
+  captureOnShipment: 0

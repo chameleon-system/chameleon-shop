@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="admin-enum.en.xliff">
+        <body>
+
+            <trans-unit id="pkg_shop_article_review_module_shop_article_review_configuration.option_show_author_name.Vorname und Nachname">
+                <source>pkg_shop_article_review_module_shop_article_review_configuration.option_show_author_name.Vorname und Nachname</source>
+                <target>First name and last name</target>
+            </trans-unit>
+            <trans-unit id="pkg_shop_article_review_module_shop_article_review_configuration.option_show_author_name.Vorname und erste Buchstabe vom Nachnamen">
+                <source>pkg_shop_article_review_module_shop_article_review_configuration.option_show_author_name.Vorname und erste Buchstabe vom Nachnamen</source>
+                <target>First name and first letter of last name</target>
+            </trans-unit>
+            <trans-unit id="pkg_shop_article_review_module_shop_article_review_configuration.option_show_author_name.Aliasname">
+                <source>pkg_shop_article_review_module_shop_article_review_configuration.option_show_author_name.Aliasname</source>
+                <target>Alias</target>
+            </trans-unit>
+            <trans-unit id="pkg_shop_article_review_module_shop_article_review_configuration.option_show_author_name.Anonym">
+                <source>pkg_shop_article_review_module_shop_article_review_configuration.option_show_author_name.Anonym</source>
+                <target>Anonymous</target>
+            </trans-unit>
+            <trans-unit id="pkg_shop_article_review_module_shop_article_review_configuration.option_show_author_name.Eingegebener Name">
+                <source>pkg_shop_article_review_module_shop_article_review_configuration.option_show_author_name.Eingegebener Name</source>
+                <target>Entered name</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

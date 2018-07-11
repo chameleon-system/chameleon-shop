@@ -1,0 +1,7 @@
+{% if  previousItem || backToListUrl ||  nextItem %}
+    <ul class="snippetShopArticleDetailPageNextPrev">
+        {% if previousItem %}<li class="previous-product"><a href="{{ previousItem.getUrl() | raw }}" title="{{ previousItem.getName() }}" rel="nofollow"><span class="i i-arrow_small_left"></span> {{ "chameleon_system_theme_shop_standard.products.previous_product" | trans }}</a></li>{% endif %}
+        {% if backToListUrl %}<li class="back-to-list"><a href="{{ backToListUrl | raw }}">{{ "chameleon_system_theme_shop_standard.products.return_to_list" | trans }}</a></li>{% endif %}
+        {% if nextItem %}<li class="next-product pull-right"><a href="{{ nextItem.getUrl() | raw }}" title="{{ nextItem.getName() }}" rel="nofollow">{{"chameleon_system_theme_shop_standard.products.next_product" | trans}} <span class="i i-arrow_small_right"></span></a></li>{% endif %}
+    </ul>
+{% endif %}

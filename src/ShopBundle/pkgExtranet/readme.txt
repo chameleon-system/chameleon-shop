@@ -1,0 +1,1 @@
+we use pkgExtranet within pkgShop to place shop specific functionality into the extranet

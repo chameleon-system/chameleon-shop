@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon_system_amazon_payment.config" class="ChameleonSystem\AmazonPaymentBundle\AmazonPaymentConfigFactory">
+            <argument  type="service" id="cmsPkgCore.logChannel.apilogger" />
+            <argument type="service" id="chameleon_system_shop.payment.config_loader" />
+            <argument type="service" id="chameleon_system_amazon_payment.config_validator" />
+        </service>
+
+        <service id="chameleon_system_amazon_payment.config_provider" class="ChameleonSystem\AmazonPaymentBundle\Configuration\ConfigProvider">
+            <argument />
+            <tag name="chameleon_system_shop.payment_config_provider" system_name="amazon" />
+        </service>
+
+        <service id="chameleon_system_amazon_payment.config_validator" class="ChameleonSystem\AmazonPaymentBundle\Configuration\ConfigValidator">
+        </service>
+
+    </services>
+</container>

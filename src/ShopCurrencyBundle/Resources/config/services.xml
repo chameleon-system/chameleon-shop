@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="chameleon_system_shop_currency.mapper.shop_currency_mapper" class="TPkgShopCurrencyMapper">
+        </service>
+
+        <service id="chameleon_system_shop_currency.shop_currency" class="ChameleonSystem\ShopCurrencyBundle\Service\ShopCurrencyService">
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="chameleon_system_extranet.extranet_user_provider" />
+        </service>
+
+        <service id="chameleon_system_shop_currency.shop_currency_request_level_cache_decorator" class="ChameleonSystem\ShopCurrencyBundle\Service\ShopCurrencyServiceRequestLevelCacheDecorator" decorates="chameleon_system_shop_currency.shop_currency">
+            <argument type="service" id="chameleon_system_shop_currency.shop_currency_request_level_cache_decorator.inner" />
+        </service>
+
+        <service class="ChameleonSystem\ShopCurrencyBundle\RequestState\CurrencyRequestStateProvider" id="chameleon_system_shop_currency.currency_request_state_provider">
+            <tag name="chameleon_system_core.request_state_element_provider" />
+            <argument id="chameleon_system_core.request_info_service" type="service"/>
+            <argument type="service" id="chameleon_system_shop_currency.shop_currency"/>
+        </service>
+
+    </services>
+</container>

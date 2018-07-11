@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<container>
+    <live>
+        <captureOnShipment>1</captureOnShipment>
+    </live>
+    <dev>
+        <captureOnShipment>0</captureOnShipment>
+    </dev>
+</container>

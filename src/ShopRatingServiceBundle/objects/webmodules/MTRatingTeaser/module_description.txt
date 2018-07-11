@@ -1,0 +1,4 @@
+
+Shows a rating from the imported shop ratings, randomly selected on page load. Under the displayed rating, a teaser logo
+of the respective rating portal is shown. The logo links to the shop's page on the rating portal (a new browser window
+will be opened).

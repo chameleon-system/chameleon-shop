@@ -1,0 +1,34 @@
+<OrderReferenceNotification xmlns="https://mws.amazonservices.com/ipn/OffAmazonPayments/2013-01-01">
+    <OrderReference>
+        <AmazonOrderReferenceId>AMAZON-ORDER-REFERENCE</AmazonOrderReferenceId>
+        <!--Optional:-->
+        <OrderTotal>
+            <Amount>200.00</Amount>
+            <CurrencyCode>EUR</CurrencyCode>
+        </OrderTotal>
+        <!--Optional:-->
+        <SellerOrderAttributes>
+            <!--Optional:-->
+            <SellerId>SELLER-ID</SellerId>
+            <!--Optional:-->
+            <SellerOrderId>SHOP-ORDER-ID</SellerOrderId>
+            <!--Optional:-->
+            <OrderItemCategories>
+            </OrderItemCategories>
+        </SellerOrderAttributes>
+        <OrderReferenceStatus>
+            <State>Closed</State>
+            <LastUpdateTimestamp>2007-10-26T08:36:28</LastUpdateTimestamp>
+            <!--Optional:-->
+            <ReasonCode>AmazonClosed</ReasonCode>
+            <!--Optional:-->
+            <ReasonDescription>Amazon has closed the order reference due to a failed internal validation or due to an A-to-z claim being decided against you.</ReasonDescription>
+        </OrderReferenceStatus>
+        <CreationTimestamp>2004-02-14T19:44:14</CreationTimestamp>
+        <ExpirationTimestamp>2018-11-01T06:36:46+01:00</ExpirationTimestamp>
+        <!--You may enter ANY elements at this point-->
+        <AnyElement/>
+    </OrderReference>
+    <!--You may enter ANY elements at this point-->
+    <AnyElement/>
+</OrderReferenceNotification>

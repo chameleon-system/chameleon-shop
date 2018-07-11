@@ -1,0 +1,135 @@
+{
+    "name": "chameleon-system/chameleon-shop",
+    "type": "library",
+    "description": "This is the Chameleon System shop core system, which is the basis for all shop-specific functionality.",
+    "keywords": [
+        "Shop",
+        "Chameleon",
+        "E-Commerce"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ESONO AG",
+            "email": "info@chameleonsystem.com",
+            "homepage": "https://www.chameleonsystem.com",
+            "role": "Company"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://composer.esono.de"
+        }
+    ],
+    "extra": {
+        "name": "Chameleon Shop",
+        "dev_info_installation": "",
+        "dev_info_usage": "",
+        "pricegroup": 0,
+        "public": false,
+        "screenshotfolder_id": ""
+    },
+    "require": {
+        "chameleon-system/chameleon-base": "dev-master",
+        "simplepie/simplepie": "~1.3"
+    },
+    "require-dev": {
+        "phpunit/dbunit": "~2.0",
+        "phpunit/phpunit": "~5.0"
+    },
+    "autoload": {
+        "classmap": [
+            "src/CmsNavigationPkgShopBundle/objects",
+            "src/ExtranetRegistrationGuestBundle/mappers",
+            "src/ExtranetRegistrationGuestBundle/pkgExtranet",
+            "src/ImageHotspotBundle/mappers",
+            "src/ImageHotspotBundle/objects",
+            "src/SearchBundle/objects",
+            "src/ShopAffiliateBundle/objects",
+            "src/ShopArticlePreorderBundle/objects",
+            "src/ShopArticlePreorderBundle/pkgShop",
+            "src/ShopArticleReviewBundle/mapper",
+            "src/ShopArticleReviewBundle/objects",
+            "src/ShopCurrencyBundle/mappers",
+            "src/ShopCurrencyBundle/objects",
+            "src/ShopCurrencyBundle/pkgCmsActionPlugin",
+            "src/ShopCurrencyBundle/pkgCmsNavigation",
+            "src/ShopCurrencyBundle/pkgShop",
+            "src/ShopBundle/Interfaces",
+            "src/ShopBundle/mappers",
+            "src/ShopBundle/objects",
+            "src/ShopBundle/pkgCmsEvent",
+            "src/ShopBundle/pkgExtranet",
+            "src/ShopBundle/pkgRunFrontendAction",
+            "src/ShopBundle/TPkgShopPaymentIPN",
+            "src/ShopDhlPackstationBundle/pkgExtranet",
+            "src/ShopDhlPackstationBundle/pkgShop",
+            "src/ShopListFilterBundle/mappers",
+            "src/ShopListFilterBundle/objects",
+            "src/ShopListFilterBundle/pkgShop",
+            "src/ShopListFilterBundle/Interfaces",
+            "src/ShopListFilterBundle/DatabaseAccessLayer",
+            "src/ShopNewsletterSignupWithOrderBundle/pkgShop",
+            "src/ShopOrderStatusBundle/exceptions",
+            "src/ShopOrderStatusBundle/interface",
+            "src/ShopOrderStatusBundle/mappers",
+            "src/ShopOrderStatusBundle/objects",
+            "src/ShopOrderStatusBundle/pkgRunFrontendAction",
+            "src/ShopOrderViaPhoneBundle/pkgShop",
+            "src/AmazonPaymentBundle/lib",
+            "src/ShopPaymentIPNBundle/exceptions",
+            "src/ShopPaymentIPNBundle/interfaces",
+            "src/ShopPaymentIPNBundle/objects",
+            "src/ShopPaymentIPNBundle/pkgShop",
+            "src/ShopPaymentIPNBundle/pkgShopPaymentTransaction",
+            "src/ShopPaymentTransactionBundle/exceptions",
+            "src/ShopPaymentTransactionBundle/interface",
+            "src/ShopPaymentTransactionBundle/mappers",
+            "src/ShopPaymentTransactionBundle/objects",
+            "src/ShopPaymentTransactionBundle/pkgShopOrderStatus",
+            "src/ShopPrimaryNavigationBundle/mappers",
+            "src/ShopPrimaryNavigationBundle/objects",
+            "src/ShopPrimaryNavigationBundle/pkgCmsNavigation",
+            "src/ShopPrimaryNavigationBundle/pkgShop",
+            "src/ShopPrimaryNavigationBundle/web_modules",
+            "src/ShopProductExportBundle/objects",
+            "src/ShopRatingServiceBundle/mappers",
+            "src/ShopRatingServiceBundle/objects",
+            "src/ShopWishlistBundle/objects",
+            "src/ShopWishlistBundle/pkgExtranet"
+        ],
+        "psr-4": {
+            "ChameleonSystem\\": "src"
+        },
+        "exclude-from-classmap": [
+            "/tests/",
+            "/Tests/"
+        ]
+    },
+    "replace": {
+        "chameleon-system/pkgcmsnavigationpkgshop": "*",
+        "chameleon-system/pkgextranetregistrationguest": "*",
+        "chameleon-system/pkgimagehotspot": "*",
+        "chameleon-system/pkgsearch": "*",
+        "chameleon-system/pkgshop": "*",
+        "chameleon-system/pkgshopaffiliate": "*",
+        "chameleon-system/pkgshoparticledetailpaging": "*",
+        "chameleon-system/pkgshoparticlepreorder": "*",
+        "chameleon-system/pkgshoparticlereview": "*",
+        "chameleon-system/pkgshopcurrency": "*",
+        "chameleon-system/pkgshopdhlpackstation": "*",
+        "chameleon-system/pkgshoplistfilter": "*",
+        "chameleon-system/pkgshopnewslettersignupwithorder": "*",
+        "chameleon-system/pkgshoporderstatus": "*",
+        "chameleon-system/pkgshoporderviaphone": "*",
+        "chameleon-system/pkgshoppaymentamazon": "*",
+        "chameleon-system/pkgshoppaymentipn": "*",
+        "chameleon-system/pkgshoppaymenttransaction": "*",
+        "chameleon-system/pkgshopprimarynavigation": "*",
+        "chameleon-system/pkgshopproductexport": "*",
+        "chameleon-system/pkgshopratingservice": "*",
+        "chameleon-system/pkgshopwishlist": "*",
+        "chameleon-system/pkgtshoppaymenthandlersofortueberweisung": "*"
+    }
+}

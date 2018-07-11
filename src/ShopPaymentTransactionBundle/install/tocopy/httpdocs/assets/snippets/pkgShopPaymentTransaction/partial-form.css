@@ -1,0 +1,32 @@
+.pkgShopPaymentTransaction .partialForm {
+    background-color:#ffffff;
+}
+
+.pkgShopPaymentTransaction .partialForm tr.summary th, .pkgShopPaymentTransaction .partialForm tr.summary td {
+    text-align: right;
+}
+
+.pkgShopPaymentTransaction .partialForm input.amount {
+    width:50px;
+    text-align: right;
+}
+
+.pkgShopPaymentTransaction .transactions td, .pkgShopPaymentTransaction .transactions th {
+    padding-right:10px;
+}
+.pkgShopPaymentTransaction .partialForm table td , .pkgShopPaymentTransaction .partialForm table th{
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.pkgShopPaymentTransaction .partialForm table #products td, .pkgShopPaymentTransaction .partialForm table #products th{
+    padding-top:10px;
+}
+.pkgShopPaymentTransaction .partialForm table .left{
+    text-align: left;
+}
+.pkgShopPaymentTransaction .partialForm table .right{
+    text-align: right;
+}
+.pkgShopPaymentTransaction .partialForm table .center{
+    text-align: center;
+}

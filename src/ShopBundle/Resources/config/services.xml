@@ -1,0 +1,273 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="chameleon_system_shop.state_factory.state_element_valid_page_sizes" type="collection">
+            <parameter>null</parameter>
+            <parameter>4</parameter>
+            <parameter>5</parameter>
+            <parameter>6</parameter>
+
+            <parameter>8</parameter>
+            <parameter>10</parameter>
+            <parameter>12</parameter>
+
+            <parameter>16</parameter>
+            <parameter>20</parameter>
+            <parameter>24</parameter>
+
+            <parameter>32</parameter>
+            <parameter>40</parameter>
+            <parameter>48</parameter>
+
+            <parameter>64</parameter>
+            <parameter>80</parameter>
+
+            <parameter>96</parameter>
+
+        </parameter>
+
+        <parameter key="chameleon_system_shop.article_list.view_to_list_view_mapping" type="collection">
+            <parameter key="rightNoticeList">/common/lists/listStandardShopArticle.html.twig</parameter>
+            <parameter key="full">/common/lists/listExtendedShopArticle.html.twig</parameter>
+            <parameter key="standardEmptyOnNoArticles">/common/lists/listScrollShopArticle.html.twig</parameter>
+            <parameter key="standard">/common/lists/listScrollShopArticle.html.twig</parameter>
+        </parameter>
+
+        <parameter key="chameleon_system_shop.product_controller.class">TPkgShopRouteControllerArticle</parameter>
+
+        <parameter key="chameleon_system_shop.shop_route_article_factory.class">ShopRouteArticleFactory</parameter>
+    </parameters>
+
+    <services>
+        <service id="chameleon_system_shop.shop_service" class="ChameleonSystem\ShopBundle\Service\ShopService">
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="chameleon_system_extranet.extranet_user_provider" />
+            <call method="setDatabaseConnection"><argument type="service" id="database_connection" /></call>
+        </service>
+
+
+        <service id="chameleon_system_shop.result_modification" class="ChameleonSystem\ShopBundle\objects\ArticleList\ResultModifier\ResultModification" public="false">
+            <tag name="chameleon_system_shop.article_list_module.result_modification" />
+            <argument type="service" id="chameleon_system_shop.db_adapter" />
+        </service>
+
+        <service id="chameleon_system_shop.state_factory.state_element_current_page" class="ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementCurrentPage" public="false">
+            <tag name="chameleon_system_shop.article_list_module.state_element" />
+        </service>
+        <service id="chameleon_system_shop.state_factory.state_element_page_size" class="ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementPageSize" public="false">
+            <tag name="chameleon_system_shop.article_list_module.state_element" />
+            <argument>%chameleon_system_shop.state_factory.state_element_valid_page_sizes%</argument>
+        </service>
+        <service id="chameleon_system_shop.state_factory.state_element_query" class="ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementQuery" public="false">
+            <tag name="chameleon_system_shop.article_list_module.state_element" />
+        </service>
+        <service id="chameleon_system_shop.state_factory.state_element_sort" class="ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementSort" public="false">
+            <tag name="chameleon_system_shop.article_list_module.state_element" />
+        </service>
+        <service id="chameleon_system_shop.state_request_extractor_collection" class="ChameleonSystem\ShopBundle\objects\ArticleList\StateRequestExtractor\StateRequestExtractorCollection" public="false" />
+
+        <service id="chameleon_system_shop.state_factory.state_factory" class="ChameleonSystem\ShopBundle\objects\ArticleList\StateFactory" />
+
+        <service id="chameleon_system_shop.result_modifier" class="ChameleonSystem\ShopBundle\objects\ArticleList\ResultModifier\ResultModifier" public="false" />
+        <service id="chameleon_system_shop.filter_factory" class="ChameleonSystem\ShopBundle\objects\ArticleList\FilterFactory" public="false">
+        </service>
+        <service id="chameleon_system_shop.db_adapter" class="ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\DbAdapter" public="false">
+            <call method="setDatabaseConnection">
+                <argument type="service" id="database_connection" />
+            </call>
+        </service>
+        <service id="chameleon_system_shop.result_factory" class="ChameleonSystem\ShopBundle\objects\ArticleList\ResultFactory" public="false">
+            <argument type="service" id="chameleon_system_shop.db_adapter" />
+            <argument type="service" id="chameleon_system_shop.filter_factory" />
+            <argument type="service" id="chameleon_system_shop.result_modifier" />
+            <argument type="service" id="event_dispatcher" />
+        </service>
+        <service id="chameleon_system_shop.result_factory_cached" class="ChameleonSystem\ShopBundle\objects\ArticleList\ResultFactoryCache" public="false">
+            <argument type="service" id="chameleon_system_shop.result_factory" />
+            <argument type="service" id="chameleon_system_core.cache" />
+            <argument type="service" id="chameleon_system_shop.filter_factory" />
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="chameleon_system_shop.db_adapter" />
+        </service>
+
+
+        <service id="chameleon_system_shop.module.article_list" class="ChameleonSystem_ShopBundle_objects_ArticleList_ModuleEntryPoint" shared="false">
+            <tag name="chameleon_system.module" />
+            <argument>%chameleon_system_shop.article_list.view_to_list_view_mapping%</argument>
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="chameleon_system_shop.state_factory.state_factory" />
+            <argument type="service" id="chameleon_system_shop.db_adapter" />
+            <argument type="service" id="chameleon_system_shop.result_factory_cached" />
+            <argument type="service" id="chameleon_system_shop.state_request_extractor_collection" />
+            <argument type="service" id="chameleon_system_core.active_page_service" />
+            <argument type="service" id="chameleon_system_view_renderer.view_renderer" />
+            <argument type="service" id="chameleon_system_core.cache" />
+            <argument type="service" id="chameleon_system_shop.state_factory.state_element_page_size" />
+            <argument>%chameleon_system_shop.state_factory.state_element_valid_page_sizes%</argument>
+            <argument type="service" id="chameleon_system_core.util.url" />
+            <argument type="service" id="chameleon_system_core.mapper_loader" />
+        </service>
+
+        <service id="chameleon_system_shop.product_stats_service" class="ChameleonSystem\ShopBundle\Service\ProductStatisticsService">
+            <call method="setDatabaseConnection">
+                <argument type="service" id="database_connection" />
+            </call>
+        </service>
+        <service id="chameleon_system_shop.product_stats_service_runtime_cache_decorator" class="ChameleonSystem\ShopBundle\RuntimeCache\ProductStatisticsServiceRuntimeCacheDecorator" decorates="chameleon_system_shop.product_stats_service">
+            <argument type="service" id="chameleon_system_shop.product_stats_service_runtime_cache_decorator.inner" />
+        </service>
+
+        <service id="chameleon_system_shop.product_inventory_service_provider" class="ChameleonSystem\ShopBundle\Service\ProductInventoryService">
+            <call method="setDatabaseConnection">
+                <argument type="service" id="database_connection" />
+            </call>
+        </service>
+        <service id="chameleon_system_shop.product_inventory_service" class="ChameleonSystem\ShopBundle\Service\ProductInventoryServiceCacheProxy">
+            <argument type="service" id="chameleon_system_shop.product_inventory_service_provider" />
+        </service>
+
+        <service id="chameleon_system_shop.product_controller" class="%chameleon_system_shop.product_controller.class%">
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.language_service" />
+            <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
+            <argument type="service" id="chameleon_system_core.util.url" />
+            <argument type="service" id="chameleon_system_core.util.routing" />
+            <call method="setMainController">
+                <argument type="service" id="chameleon_system_core.frontend_controller" />
+            </call>
+            <call method="setShopRouteArticleFactory">
+                <argument type="service" id="chameleon_system_shop.shop_route_article_factory" />
+            </call>
+            <call method="setCache">
+                <argument type="service" id="chameleon_system_cms_cache.cache" />
+            </call>
+        </service>
+        <service id="chameleon_system_shop.shop_route_article_factory" class="%chameleon_system_shop.shop_route_article_factory.class%">
+        </service>
+
+        <service id="chameleon_system_shop.basket_step_controller" class="TPkgShopBasketStepsRouteController">
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.language_service" />
+            <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
+            <argument type="service" id="chameleon_system_core.util.url" />
+            <argument type="service" id="chameleon_system_core.util.routing" />
+            <call method="setMainController">
+                <argument type="service" id="chameleon_system_core.frontend_controller" />
+            </call>
+        </service>
+
+        <service id="chameleon_system_shop.category_route_collection_generator" class="TPkgShopCategoryRouteCollectionGenerator">
+            <argument type="service" id="chameleon_system_core.system_page_service" />
+        </service>
+
+        <service id="chameleon_system_shop.basket_steps_route_collection_generator" class="TPkgShopBasketStepsRouteCollectionGenerator">
+            <argument type="service" id="chameleon_system_core.system_page_service" />
+            <argument type="service" id="database_connection" />
+            <argument type="service" id="chameleon_system_core.util.routing" />
+        </service>
+
+        <service id="chameleon_system_shop.payment.config_loader_data_access" class="ChameleonSystem\ShopBundle\Payment\PaymentConfig\ShopPaymentConfigLoaderDatabaseAccess" public="false">
+            <argument type="service" id="database_connection" />
+        </service>
+
+        <service id="chameleon_system_shop.payment.config_loader" class="ChameleonSystem\ShopBundle\Payment\PaymentConfig\ShopPaymentConfigLoader">
+            <argument type="service" id="chameleon_system_shop.payment.config_loader_data_access" />
+            <argument type="expression">(container.getParameter('kernel.environment') === 'prod') ? constant('IPkgShopOrderPaymentConfig::ENVIRONMENT_PRODUCTION') : constant('IPkgShopOrderPaymentConfig::ENVIRONMENT_SANDBOX')</argument>
+        </service>
+
+        <service id="chameleon_system_shop.payment.config_loader_request_level_cache_decorator" decorates="chameleon_system_shop.payment.config_loader" class="ChameleonSystem\ShopBundle\Payment\PaymentConfig\ShopPaymentConfigLoaderRequestLevelCacheDecorator">
+            <argument type="service" id="chameleon_system_shop.payment.config_loader_request_level_cache_decorator.inner" />
+        </service>
+
+        <service id="chameleon_system_shop.payment.handler_data_access" class="ChameleonSystem\ShopBundle\Payment\PaymentHandler\ShopPaymentHandlerDatabaseAccess">
+        </service>
+
+        <service id="chameleon_system_shop.payment.handler_data_access_request_level_cache_decorator" decorates="chameleon_system_shop.payment.handler_data_access" class="ChameleonSystem\ShopBundle\Payment\PaymentHandler\ShopPaymentHandlerDataAccessRequestLevelCacheDecorator">
+            <argument type="service" id="chameleon_system_shop.payment.handler_data_access_request_level_cache_decorator.inner" />
+        </service>
+
+        <service id="chameleon_system_shop.payment.handler_factory" class="ChameleonSystem\ShopBundle\Payment\PaymentHandler\ShopPaymentHandlerFactory">
+            <argument type="service" id="chameleon_system_shop.payment.config_loader" />
+            <argument type="service" id="chameleon_system_shop.payment.handler_data_access" />
+        </service>
+
+        <service id="chameleon_system_shop.payment_info_service" class="ChameleonSystem\ShopBundle\Service\PaymentInfoService">
+            <argument type="service" id="database_connection" />
+        </service>
+
+        <service id="chameleon_system_shop.order_step_page_service" class="ChameleonSystem\ShopBundle\Service\OrderStepPageService">
+            <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
+            <argument type="service" id="chameleon_system_core.util.url" />
+            <argument type="service" id="chameleon_system_core.util.routing" />
+        </service>
+
+        <service id="chameleon_system_shop.event_listener.update_variant_parent_stock" class="ChameleonSystem\ShopBundle\EventListener\UpdateVariantParentStockListener">
+            <argument type="service" id="chameleon_system_shop.product_inventory_service" />
+            <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="onUpdateProductStock" />
+        </service>
+
+        <service id="chameleon_system_shop.event_listener.update_product_statistics" class="ChameleonSystem\ShopBundle\EventListener\UpdateProductStatisticsListener">
+            <argument type="service" id="chameleon_system_shop.product_stats_service" />
+            <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="onUpdateProductStock" />
+        </service>
+
+        <service id="chameleon_system_shop.basket.basket_product_amount_validator" class="ChameleonSystem\ShopBundle\Basket\BasketProductAmountValidator">
+        </service>
+
+        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\PaymentMethodDataAccess" id="chameleon_system_shop.payment_method_data_access">
+            <argument id="database_connection" type="service"/>
+        </service>
+        <service class="ChameleonSystem\ShopBundle\RuntimeCache\PaymentMethodDataAccessRuntimeCacheDecorator" id="chameleon_system_shop.payment_method_data_access_runtime_cache_decorator" decorates="chameleon_system_shop.payment_method_data_access">
+            <argument id="chameleon_system_shop.payment_method_data_access_runtime_cache_decorator.inner" type="service"/>
+        </service>
+
+        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\ShopShippingTypeDataAccess" id="chameleon_system_shop.shop_shipping_type_data_access">
+            <argument id="database_connection" type="service"/>
+        </service>
+        <service class="ChameleonSystem\ShopBundle\RuntimeCache\ShopShippingTypeDataAccessRuntimeCacheDecorator" id="chameleon_system_shop.shop_shipping_type_data_access_runtime_cache_decorator" decorates="chameleon_system_shop.shop_shipping_type_data_access">
+            <argument id="chameleon_system_shop.shop_shipping_type_data_access_runtime_cache_decorator.inner" type="service"/>
+        </service>
+
+
+        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\ShopCategoryDataAccess" id="chameleon_system_shop.shop_category_data_access">
+            <argument id="database_connection" type="service"/>
+        </service>
+        <service class="ChameleonSystem\ShopBundle\RuntimeCache\ShopCategoryDataAccessRuntimeCacheDecorator" id="chameleon_system_shop.runtime_cache.shop_category_data_access_runtime_cache_decorator" decorates="chameleon_system_shop.shop_category_data_access">
+            <argument id="chameleon_system_shop.runtime_cache.shop_category_data_access_runtime_cache_decorator.inner" type="service"/>
+        </service>
+
+
+        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\ShopShippingGroupDataAccess" id="chameleon_system_shop.shop_shipping_group_data_access">
+            <argument id="database_connection" type="service"/>
+        </service>
+        <service class="ChameleonSystem\ShopBundle\RuntimeCache\ShopShippingGroupDataAccessRuntimeCacheDecorator" id="chameleon_system_shop.shop_shipping_group_data_access_runtime_cache_decorator" decorates="chameleon_system_shop.shop_shipping_group_data_access">
+            <argument id="chameleon_system_shop.shop_shipping_group_data_access_runtime_cache_decorator.inner" type="service"/>
+        </service>
+
+        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\ShopStockMessageDataAccess" id="chameleon_system_shop.shop_stock_message_data_access">
+            <argument id="database_connection" type="service"/>
+        </service>
+        <service class="ChameleonSystem\ShopBundle\RuntimeCache\ShopStockMessageDataAccessRuntimeCacheDecorator" id="chameleon_system_shop.shop_stock_message_data_access_runtime_cache_decorator" decorates="chameleon_system_shop.shop_stock_message_data_access">
+            <argument id="chameleon_system_shop.shop_stock_message_data_access_runtime_cache_decorator.inner" type="service"/>
+        </service>
+
+        <service id="chameleon_system_shop.controller.search_suggest" class="ChameleonSystem\ShopBundle\Controller\SearchSuggestController">
+            <argument type="service" id="chameleon_system_shop.shop_search_suggest" />
+        </service>
+
+        <service id="chameleon_system_shop.shop_search_suggest" class="ChameleonSystem\ShopBundle\Service\ShopSearchSuggest">
+            <argument type="service" id="database_connection" />
+        </service>
+
+        <service id="chameleon_system_shop.product_variant.product_variant_name_generator" class="ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGenerator">
+
+        </service>
+
+    </services>
+
+</container>

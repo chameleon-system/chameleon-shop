@@ -1,0 +1,45 @@
+<GetAuthorizationDetailsResponse xmlns="http://mws.amazonservices.com/schema/OffAmazonPayments/2013-01-01">
+    <GetAuthorizationDetailsResult>
+    <AuthorizationDetails>
+        <AmazonAuthorizationId>
+            P01-1234567-1234567-0000001
+        </AmazonAuthorizationId>
+        <AuthorizationReferenceId>test_authorize_1</AuthorizationReferenceId>
+        <SellerAuthorizationNote>Lorem ipsum</SellerAuthorizationNote>
+        <AuthorizationAmount>
+            <CurrencyCode>USD</CurrencyCode>
+            <Amount>94.50</Amount>
+        </AuthorizationAmount>
+        <AuthorizationBillingAddress>
+            <AddressLine1>ESONO AG</AddressLine1>
+            <AddressLine2>Grünwälderstr. 10-14</AddressLine2>
+            <City>Freiburg</City>
+            <CountryCode>DE</CountryCode>
+            <Name>Mr. Dev</Name>
+            <PostalCode>79098</PostalCode>
+        </AuthorizationBillingAddress>
+        <AuthorizationFee>
+            <CurrencyCode>USD</CurrencyCode>
+            <Amount>0</Amount>
+        </AuthorizationFee>
+        <CapturedAmount>
+            <Amount>0</Amount>
+            <CurrencyCode>EUR</CurrencyCode>
+        </CapturedAmount>
+        <IdList>
+
+        </IdList>
+        <CaptureNow>false</CaptureNow>
+        <OrderItemCategories></OrderItemCategories>
+        <AuthorizationStatus>
+            <State>Open</State>
+            <LastUpdateTimestamp>2013-05-07T23:21:19Z</LastUpdateTimestamp>
+        </AuthorizationStatus>
+        <CreationTimestamp>2013-05-07T23:21:19Z</CreationTimestamp>
+        <ExpirationTimestamp>2013-01-10T19:10:16Z</ExpirationTimestamp>
+    </AuthorizationDetails>
+    </GetAuthorizationDetailsResult>
+    <ResponseMetadata>
+        <RequestId>b4ab4bc3-c9ea-44f0-9a3d-67cccef565c6</RequestId>
+    </ResponseMetadata>
+</GetAuthorizationDetailsResponse>

@@ -1,0 +1,67 @@
+amazon_payment_id_mapping:
+  -
+    id: "1234567890-2"
+    local_id: "1234"
+    shop_order_id: "12345"
+    amazon_order_reference_id: "S02-1974231-0772375"
+    amazon_id: "57675465465"
+    value: 400
+    type: "1"
+    capture_now: "0"
+    request_mode: "1"
+    pkg_shop_payment_transaction_id: "fdgksfkhjsfhjfgh"
+  -
+    id: "1234567890-1"
+    local_id: "2234"
+    shop_order_id: "12345"
+    amazon_order_reference_id: "S02-1974231-0772375"
+    amazon_id: "545665465465"
+    value: 300
+    type: "2"
+    capture_now: "0"
+    request_mode: "1"
+    pkg_shop_payment_transaction_id: "fdgksfkhjsxxx"
+  -
+    id: "1234567890-66"
+    local_id: "AUTH-WITH-CAPTURE-NOW"
+    shop_order_id: "12345"
+    amazon_order_reference_id: "S02-1974231-0772375"
+    amazon_id: "AMAZON-AUTH-WITH-CAPTURE-ID"
+    value: 200
+    type: "1"
+    capture_now: "1"
+    request_mode: "1"
+    pkg_shop_payment_transaction_id: "AUTH-WITH-CAPTURE-TRANSACTION-ID"
+  -
+    id: "1234567890-5"
+    local_id: "AUTH-WITH-CAPTURE-NOW"
+    shop_order_id: "12345"
+    amazon_order_reference_id: "S02-1974231-0772375"
+    amazon_id: "AMAZON-CAPTURE-ID"
+    value: 200
+    type: "2"
+    capture_now: "1"
+    request_mode: "1"
+    pkg_shop_payment_transaction_id: "AUTH-WITH-CAPTURE-TRANSACTION-ID"
+  -
+    id: "1234567890-3"
+    local_id: "REFUND-REF-ID"
+    shop_order_id: "12345"
+    amazon_order_reference_id: "S02-1974231-0772375"
+    amazon_id: "REFUND-AMAZON-ID"
+    value: 50
+    type: "3"
+    capture_now: "0"
+    request_mode: "1"
+    pkg_shop_payment_transaction_id: "REFUND-TRANSACTION-ID"
+  -
+    id: "1234567890"
+    local_id: "NOT-RELATED"
+    shop_order_id: "NOT-RELATED-ORDER"
+    amazon_order_reference_id: "SOME-ORDER-REF-NOT-RELATED"
+    amazon_id: "SOME-UNRELATED-AUTH-ID"
+    value: 200.00
+    type: "1"
+    capture_now: "0"
+    request_mode: "1"
+    pkg_shop_payment_transaction_id: "NOT-RELATED-TRANSACTION-ID"

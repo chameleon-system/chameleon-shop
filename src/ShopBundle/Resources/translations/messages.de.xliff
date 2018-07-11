@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_shop.link.shipping_link">
+                <source>chameleon_system_shop.link.shipping_link</source>
+                <target>Versand</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.text.product">
+                <source>chameleon_system_shop.text.product</source>
+                <target>Artikel</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.text.other_categories_headline">
+                <source>chameleon_system_shop.text.other_categories_headline</source>
+                <target>Ähnliche Artikel finden Sie hier</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_shop.error.unable_to_send_order_confirm_mail">
+                <source>chameleon_system_shop.error.unable_to_send_order_confirm_mail</source>
+                <target>Achtung: Bestellbestätigung konnte nicht gesendet werden.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.order_notification.error_mail_template_not_found">
+                <source>chameleon_system_shop.order_notification.error_mail_template_not_found</source>
+                <target>E-Mail Vorlage %emailTemplate% wurde nicht gefunden!</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.stock_message.different_shipping_time_applies">
+                <source>chameleon_system_shop.stock_message.different_shipping_time_applies</source>
+                <target>Für %amount% Stück gilt eine andere Lieferzeit: %shippingMessage%</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.tell_a_friend.captcha">
+                <source>chameleon_system_shop.tell_a_friend.captcha</source>
+                <target>Was ergibt %num1% + %num2%?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.error.generic_payment_shipping_error">
+                <source>chameleon_system_shop.error.generic_payment_shipping_error</source>
+                <target>Bei der Auswahl der Versandart/Zahlmethode ist ein Fehler aufgetreten</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_shop.payment_data_trans.settlement_failure_mail_info">
+                <source>chameleon_system_shop.payment_data_trans.settlement_failure_mail_info</source>
+                <target>Bestellnumer: %ordernumber% Referenznummer: %ref%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.action_use_stored_card">
+                <source>chameleon_system_shop.payment_data_trans.action_use_stored_card</source>
+                <target>Verwenden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.action_delete_stored_card">
+                <source>chameleon_system_shop.payment_data_trans.action_delete_stored_card</source>
+                <target>löschen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.security_headline">
+                <source>chameleon_system_shop.payment_data_trans.security_headline</source>
+                <target>Sichere Kreditkartenzahlung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.security_text">
+                <source>chameleon_system_shop.payment_data_trans.security_text</source>
+                <target>Dies ist eine sichere 128-Bit verschlüsselte Verbindung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.form_card_type">
+                <source>chameleon_system_shop.payment_data_trans.form_card_type</source>
+                <target>Kartentyp</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.form_card_number">
+                <source>chameleon_system_shop.payment_data_trans.form_card_number</source>
+                <target>Kartennummer</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.form_card_number_help">
+                <source>chameleon_system_shop.payment_data_trans.form_card_number_help</source>
+                <target>Diese 16-stellige Zahl finden Sie auf der Vorderseite Ihrer Kreditkarte</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.form_card_owner">
+                <source>chameleon_system_shop.payment_data_trans.form_card_owner</source>
+                <target>Karten-Inhaber</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.form_card_valid_until">
+                <source>chameleon_system_shop.payment_data_trans.form_card_valid_until</source>
+                <target>Gültig bis</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.form_card_valid_until_help">
+                <source>chameleon_system_shop.payment_data_trans.form_card_valid_until_help</source>
+                <target>Das Datum finden Sie ebenfalls auf der Vorderseite</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.form_card_checksum">
+                <source>chameleon_system_shop.payment_data_trans.form_card_checksum</source>
+                <target>Sicherheitscode</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.form_card_checksum_help">
+                <source>chameleon_system_shop.payment_data_trans.form_card_checksum_help</source>
+                <target>Diese 3-stellige Zahl finden Sie auf der Rückseite Ihrer Kreditkarte</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_data_trans.form_card_payment_time">
+                <source>chameleon_system_shop.payment_data_trans.form_card_payment_time</source>
+                <target>Die Belastung Ihres Kontos erfolgt mit dem Versand der Ware.</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_h1">
+                <source>chameleon_system_shop.payment_montrada.payment_form_h1</source>
+                <target>Beschreibung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_h2">
+                <source>chameleon_system_shop.payment_montrada.payment_form_h2</source>
+                <target>Preis</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_shipping">
+                <source>chameleon_system_shop.payment_montrada.payment_form_shipping</source>
+                <target>Versandkosten</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_payment_surcharge">
+                <source>chameleon_system_shop.payment_montrada.payment_form_payment_surcharge</source>
+                <target>Zahlungsaufschlag</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_voucher">
+                <source>chameleon_system_shop.payment_montrada.payment_form_voucher</source>
+                <target>Gutscheine</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_help">
+                <source>chameleon_system_shop.payment_montrada.payment_form_help</source>
+                <target>HINWEIS: Bitte nach der durchgeführten Zahlung auf "WEITER ZUM SHOP" klicken, damit wir Ihre Bestellung vollständig durchführen können. Erst DANACH werden Ihnen Ihre Produkte zugesandt bzw. Ihr Download bereitgestellt und Ihr Konto belastet.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_montrada.error_request">
+                <source>chameleon_system_shop.payment_montrada.error_request</source>
+                <target>Fehler beim Verarbeiten des Requests an Montrada.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.payment_payone.error_unknown">
+                <source>chameleon_system_shop.payment_payone.error_unknown</source>
+                <target>Ein unbekannter Fehler ist aufgetreten.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_payone.error_no_card_type">
+                <source>chameleon_system_shop.payment_payone.error_no_card_type</source>
+                <target>Bitte den Kartentyp auswählen!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_payone.error_no_card_owner">
+                <source>chameleon_system_shop.payment_payone.error_no_card_owner</source>
+                <target>Bitte den Namen des Kreditkarteninhabers eintragen!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_payone.error_no_card_number">
+                <source>chameleon_system_shop.payment_payone.error_no_card_number</source>
+                <target>Bitte die Kreditkartennummer eintragen!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_payone.error_no_card_checksum">
+                <source>chameleon_system_shop.payment_payone.error_no_card_checksum</source>
+                <target>Bitte die Prüfziffer eintragen!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_payone.error">
+                <source>chameleon_system_shop.payment_payone.error</source>
+                <target>Fehler: %errortext%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.payment_payone.error_user_abort">
+                <source>chameleon_system_shop.payment_payone.error_user_abort</source>
+                <target>Abbruch durch den Benutzer.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.payment_paypal_express.error_guest_user_with_id">
+                <source>chameleon_system_shop.payment_paypal_express.error_guest_user_with_id</source>
+                <target>Benutzerdaten nicht ok. Ein User MIT ID ist als nicht Angemeldet markiert</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.payment_easy_cash.error_unable_to_confirm_payment">
+                <source>chameleon_system_shop.payment_easy_cash.error_unable_to_confirm_payment</source>
+                <target>Konnte die Zahlungsdetails beim PayMaster auch nach 3 Versuchen nicht bestätigen. Bitte versuchen Sie es später erneut</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.module_article_catalog.captcha">
+                <source>chameleon_system_shop.module_article_catalog.captcha</source>
+                <target>Was ergibt %num1% + %num2%?</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.module_basket.error_no_data_sent_to_update_basket_items">
+                <source>chameleon_system_shop.module_basket.error_no_data_sent_to_update_basket_items</source>
+                <target>Es wurden keine Daten an UpdateBasketItems übermittelt</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.module_basket.error_basket_item_key_unknown">
+                <source>chameleon_system_shop.module_basket.error_basket_item_key_unknown</source>
+                <target>Es gibt kein Produkt mit dem sBasketItemKey %key%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.module_basket.error_add_to_basket_no_data">
+                <source>chameleon_system_shop.module_basket.error_add_to_basket_no_data</source>
+                <target>Es wurden keine Daten an AddToBasket übermittelt</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.module_basket.error_add_to_basket_no_id">
+                <source>chameleon_system_shop.module_basket.error_add_to_basket_no_id</source>
+                <target>Es wurde keine Artikel ID an AddToBasket übermittelt</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.module_basket.error_add_to_basket_id_unknown">
+                <source>chameleon_system_shop.module_basket.error_add_to_basket_id_unknown</source>
+                <target>Es gibt kein Produkt mit der ID %id%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.module_basket.error_add_to_basket_not_buyable">
+                <source>chameleon_system_shop.module_basket.error_add_to_basket_not_buyable</source>
+                <target>Das Produkt ist ist nicht kaufbar</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.orders.msg_order_confirm_sent">
+                <source>chameleon_system_shop.orders.msg_order_confirm_sent</source>
+                <target>E-Mail erfolgreich an folgende E-Mail Adresse versendet: %mail%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.orders.error_sending_confirm_mail">
+                <source>chameleon_system_shop.orders.error_sending_confirm_mail</source>
+                <target>Fehler: %error%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.orders.error_sending_confirm_order_not_found">
+                <source>chameleon_system_shop.orders.error_sending_confirm_order_not_found</source>
+                <target>Bestellung wurde nicht gefunden!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.orders.error_sending_confirm_order_missing_parameter">
+                <source>chameleon_system_shop.orders.error_sending_confirm_order_missing_parameter</source>
+                <target>Fehlende Parameter!</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.module_wizard_step.action_previous_step">
+                <source>chameleon_system_shop.module_wizard_step.action_previous_step</source>
+                <target>zurück</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.module_checkout.login_action_previous_step">
+                <source>chameleon_system_shop.module_checkout.login_action_previous_step</source>
+                <target>zurück</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.module_checkout.navi_header">
+                <source>chameleon_system_shop.module_checkout.navi_header</source>
+                <target>Bestellschritte</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.module_checkout.help_header">
+                <source>chameleon_system_shop.module_checkout.help_header</source>
+                <target>Hinweise</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.module_checkout.login_action_order_as_guest">
+                <source>chameleon_system_shop.module_checkout.login_action_order_as_guest</source>
+                <target>weiter als Gast</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.module_checkout.login_action_register">
+                <source>chameleon_system_shop.module_checkout.login_action_register</source>
+                <target>zur Registrierung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.module_checkout.user_different_billing_address">
+                <source>chameleon_system_shop.module_checkout.user_different_billing_address</source>
+                <target>Eine andere Rechnungsadresse</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.module_checkout.user_ship_to_billing_address">
+                <source>chameleon_system_shop.module_checkout.user_ship_to_billing_address</source>
+                <target>Lieferadresse ist auch die Rechnungsadresse</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.product_list.sort">
+                <source>chameleon_system_shop.product_list.sort</source>
+                <target>Sortierung</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.product.error_no_preview_image">
+                <source>chameleon_system_shop.product.error_no_preview_image</source>
+                <target>Artikel hat kein Bild</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.manufacturer">
+                <source>chameleon_system_shop.manufacturer</source>
+                <target>Hersteller</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

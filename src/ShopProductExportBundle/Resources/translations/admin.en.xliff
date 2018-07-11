@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="admin.de.xliff">
+        <body>
+            <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.error_export_page_missing">
+                <source>chameleon_system_shop_product_export.field_show_export_url.error_export_page_missing</source>
+                <target>No export page found. Please create a system page named "productexport" and link it to the export page.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.error_export_module_missing">
+                <source>chameleon_system_shop_product_export.field_show_export_url.error_export_module_missing</source>
+                <target>No export module found on export page. Please create a product list export module on your export page.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.error_export_views_missing">
+                <source>chameleon_system_shop_product_export.field_show_export_url.error_export_views_missing</source>
+                <target>No exports found for the product list export module.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.error_invalid_field_owner">
+                <source>chameleon_system_shop_product_export.field_show_export_url.error_invalid_field_owner</source>
+                <target>Error while reading current record (invalid field owner).</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.headline">
+                <source>chameleon_system_shop_product_export.field_show_export_url.headline</source>
+                <target>Exports for portal %portalName%</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

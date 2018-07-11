@@ -1,0 +1,8 @@
+common:
+  commonKey: "common value"
+live:
+  liveKey: "live value"
+  liveAndDevKey: "live and dev value in live mode"
+dev:
+  devKey: "dev value"
+  liveAndDevKey: "live and dev value in dev mode"

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="admin.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.column_product_number">
+                <source>chameleon_system_shop_payment_transaction.collection_form.column_product_number</source>
+                <target>Produkt-Nr</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.column_product_name">
+                <source>chameleon_system_shop_payment_transaction.collection_form.column_product_name</source>
+                <target>Produktname</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.column_quantity_ordered">
+                <source>chameleon_system_shop_payment_transaction.collection_form.column_quantity_ordered</source>
+                <target>Bestellt</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.column_quantity_shipped">
+                <source>chameleon_system_shop_payment_transaction.collection_form.column_quantity_shipped</source>
+                <target>Versendet</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.column_quantity_canceled">
+                <source>chameleon_system_shop_payment_transaction.collection_form.column_quantity_canceled</source>
+                <target>Storniert</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.column_quantity_in_transaction">
+                <source>chameleon_system_shop_payment_transaction.collection_form.column_quantity_in_transaction</source>
+                <target>Stück in dieser Aktion</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.column_item_price">
+                <source>chameleon_system_shop_payment_transaction.collection_form.column_item_price</source>
+                <target>Einzelpreis</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.column_item_total_price">
+                <source>chameleon_system_shop_payment_transaction.collection_form.column_item_total_price</source>
+                <target>Gesamtpreis</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.confirmed_count">
+                <source>chameleon_system_shop_payment_transaction.collection_form.confirmed_count</source>
+                <target>Bestätigt: %quantity%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.quantity_available">
+                <source>chameleon_system_shop_payment_transaction.collection_form.quantity_available</source>
+                <target>möglich %quantity%</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.summary_product_value">
+                <source>chameleon_system_shop_payment_transaction.collection_form.summary_product_value</source>
+                <target>Produktwert</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.summary_discounts">
+                <source>chameleon_system_shop_payment_transaction.collection_form.summary_discounts</source>
+                <target>Rabatte</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.summary_vouchers">
+                <source>chameleon_system_shop_payment_transaction.collection_form.summary_vouchers</source>
+                <target>Gutscheine</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.summary_shipping_cost">
+                <source>chameleon_system_shop_payment_transaction.collection_form.summary_shipping_cost</source>
+                <target>Versandkosten</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.summary_payment_surcharge">
+                <source>chameleon_system_shop_payment_transaction.collection_form.summary_payment_surcharge</source>
+                <target>Zahlungsaufschlag</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.summary_other_costs">
+                <source>chameleon_system_shop_payment_transaction.collection_form.summary_other_costs</source>
+                <target>Sonstige Zusatzleistungen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.summary_sponsored_vouchers">
+                <source>chameleon_system_shop_payment_transaction.collection_form.summary_sponsored_vouchers</source>
+                <target>Gesponserte Gutscheine</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.summary_order_value">
+                <source>chameleon_system_shop_payment_transaction.collection_form.summary_order_value</source>
+                <target>Wert der Bestellung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.form_transaction_value">
+                <source>chameleon_system_shop_payment_transaction.collection_form.form_transaction_value</source>
+                <target>Wert der Buchung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.form_transaction_value_help">
+                <source>chameleon_system_shop_payment_transaction.collection_form.form_transaction_value_help</source>
+                <target><![CDATA[Der hier angegeben Wert ist unabhängig von den gewählten Produkten. Die Auswahl der Produkte dient nur als Notize damit später nachvollziehbar ist um welche Produkte es bei der Transaktion ging. Wenn Sie also zB Teilbuchungen vornehmen, dann müssen Sie entscheiden ob Sie die Versandkosten bei der ersten Buchung mit einziehen, oder erst bei der letzten. Produkte die bereits eingezogen bzw zurück gezahlt wurden, werden nicht aufgeführt.]]></target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.action_abort">
+                <source>chameleon_system_shop_payment_transaction.collection_form.action_abort</source>
+                <target>Abbrechen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.action_submit">
+                <source>chameleon_system_shop_payment_transaction.collection_form.action_submit</source>
+                <target>Ausführen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.msg_has_sponsored_vouchers">
+                <source>chameleon_system_shop_payment_transaction.collection_form.msg_has_sponsored_vouchers</source>
+                <target><![CDATA[Hinweis: Diese Bestellung enthält geldwerte (gesponserte) Gutscheine. Eine Rückzahlung ist ggf. nicht möglich (da dem Kunden mehr zurück gezahlt werden müsste als über den Zahlungsanbieter eingezogen.]]></target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.existing_transactions_headline">
+                <source>chameleon_system_shop_payment_transaction.collection_form.existing_transactions_headline</source>
+                <target>Bereits ausgeführte Transaktionen</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.existing_transactions_type">
+                <source>chameleon_system_shop_payment_transaction.collection_form.existing_transactions_type</source>
+                <target>Art</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.existing_transactions_date">
+                <source>chameleon_system_shop_payment_transaction.collection_form.existing_transactions_date</source>
+                <target>Datum</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.existing_transaction_confirmed">
+                <source>chameleon_system_shop_payment_transaction.collection_form.existing_transaction_confirmed</source>
+                <target>Bestätigt</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.existing_transaction_value">
+                <source>chameleon_system_shop_payment_transaction.collection_form.existing_transaction_value</source>
+                <target>Wert</target>
+            </trans-unit>
+            <trans-unit
+                    id="chameleon_system_shop_payment_transaction.collection_form.existing_transaction_running_total">
+                <source>chameleon_system_shop_payment_transaction.collection_form.existing_transaction_running_total</source>
+                <target>Laufende Summe</target>
+            </trans-unit>
+            <trans-unit
+                    id="chameleon_system_shop_payment_transaction.collection_form.existing_transaction_remaining_order_value">
+                <source>chameleon_system_shop_payment_transaction.collection_form.existing_transaction_remaining_order_value</source>
+                <target>Restwert der Bestellung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.existing_transaction_is_confirmed">
+                <source>chameleon_system_shop_payment_transaction.collection_form.existing_transaction_is_confirmed</source>
+                <target>Ja</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.existing_transaction_is_not_confirmed">
+                <source>chameleon_system_shop_payment_transaction.collection_form.existing_transaction_is_not_confirmed</source>
+                <target>Nein</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.headline_payment">
+                <source>chameleon_system_shop_payment_transaction.collection_form.headline_payment</source>
+                <target>Betrag einziehen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.headline_refund">
+                <source>chameleon_system_shop_payment_transaction.collection_form.headline_refund</source>
+                <target>Betrag zurückzahlen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.error.invalid_transaction_type">
+                <source>chameleon_system_shop_payment_transaction.error.invalid_transaction_type</source>
+                <target>Unbekannte Transaktionsart %sTransactionType%</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_shop_payment_transaction.action.collect_all">
+                <source>chameleon_system_shop_payment_transaction.action.collect_all</source>
+                <target>Bestellung einziehen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.confirm.collect_all">
+                <source>chameleon_system_shop_payment_transaction.confirm.collect_all</source>
+                <target>Betrag vollständig einziehen?</target>
+            </trans-unit>
+
+
+            <trans-unit id="chameleon_system_shop_payment_transaction.action.refund_all">
+                <source>chameleon_system_shop_payment_transaction.action.refund_all</source>
+                <target>Bestellung vollständig zurück</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.confirm.refund_all">
+                <source>chameleon_system_shop_payment_transaction.confirm.refund_all</source>
+                <target>Betrag vollständig zurückzahlen?</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop_payment_transaction.action.collect_partial">
+                <source>chameleon_system_shop_payment_transaction.action.collect_partial</source>
+                <target>Teilzahlung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_payment_transaction.action.refund_partial">
+                <source>chameleon_system_shop_payment_transaction.action.refund_partial</source>
+                <target>Teilrückzahlung</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

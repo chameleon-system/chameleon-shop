@@ -1,0 +1,29 @@
+<RefundNotification xmlns="https://mws.amazonservices.com/ipn/OffAmazonPayments/2013-01-01">
+  <RefundDetails>
+    <AmazonRefundId>string</AmazonRefundId>
+    <RefundReferenceId>string</RefundReferenceId>
+    <RefundType>string</RefundType>
+    <RefundAmount>
+      <Amount>1.051732E7</Amount>
+      <CurrencyCode>string</CurrencyCode>
+    </RefundAmount>
+    <FeeRefunded>
+      <Amount>1.051732E7</Amount>
+      <CurrencyCode>string</CurrencyCode>
+    </FeeRefunded>
+    <CreationTimestamp>2008-09-29T03:49:45</CreationTimestamp>
+    <RefundStatus>
+      <State>Declined</State>
+      <LastUpdateTimestamp>2004-02-14T19:44:14</LastUpdateTimestamp>
+      <!--Optional:-->
+      <ReasonCode>ProcessingFailure</ReasonCode>
+      <!--Optional:-->
+      <ReasonDescription>Amazon could not process the transaction due to an internal processing error or because the buyer has already received a refund from an A-to-z claim or a charge back. You should only retry the refund if the Capture object is in the Completed state. Otherwise, you should refund the buyer in an alternative way (for example, a store credit or a check).</ReasonDescription>
+    </RefundStatus>
+    <SoftDescriptor>string</SoftDescriptor>
+    <!--You may enter ANY elements at this point-->
+    <AnyElement/>
+  </RefundDetails>
+  <!--You may enter ANY elements at this point-->
+  <AnyElement/>
+</RefundNotification>

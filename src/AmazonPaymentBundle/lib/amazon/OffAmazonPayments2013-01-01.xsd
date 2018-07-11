@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <xs:schema
+      targetNamespace="http://mws.amazonservices.com/schema/OffAmazonPayments/2013-01-01"
+      elementFormDefault="qualified"
+      xmlns:xs="http://www.w3.org/2001/XMLSchema"
+      xmlns:tns="http://mws.amazonservices.com/schema/OffAmazonPayments/2013-01-01">
+
+      <xs:element name="ResponseMetadata">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="RequestId" type="xs:string"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="Error">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="Type">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="Receiver"/>
+                  <xs:enumeration value="Sender"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="Code" type="xs:string"/>
+            <xs:element name="Message" type="xs:string"/>
+            <xs:element name="Detail" minOccurs="0">
+              <xs:complexType>
+                <xs:all>
+                  <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##any" processContents="lax"/>
+                </xs:all>
+                <xs:anyAttribute namespace="##other" processContents="lax"/>
+              </xs:complexType>
+            </xs:element>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="ErrorResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:Error" maxOccurs="unbounded"/>
+            <xs:element name="RequestId" type="xs:string" minOccurs="0"/>
+            <xs:element name="RequestID" type="xs:string" minOccurs="0"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="CaptureResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:CaptureResult"/>
+            <xs:element ref="tns:ResponseMetadata" minOccurs="1"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="CaptureResult">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="CaptureDetails" type="tns:CaptureDetails"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="CloseAuthorizationResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:CloseAuthorizationResult"/>
+            <xs:element ref="tns:ResponseMetadata" minOccurs="1"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="CloseAuthorizationResult">
+        <xs:complexType>
+          <xs:all>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="CloseOrderReferenceResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:CloseOrderReferenceResult"/>
+            <xs:element ref="tns:ResponseMetadata" minOccurs="1"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="CloseOrderReferenceResult">
+        <xs:complexType>
+          <xs:all>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="GetOrderReferenceDetailsResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:GetOrderReferenceDetailsResult"/>
+            <xs:element ref="tns:ResponseMetadata" minOccurs="1"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="GetOrderReferenceDetailsResult">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="OrderReferenceDetails" type="tns:OrderReferenceDetails" minOccurs="0"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="AuthorizeResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:AuthorizeResult"/>
+            <xs:element ref="tns:ResponseMetadata" minOccurs="1"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="AuthorizeResult">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="AuthorizationDetails" type="tns:AuthorizationDetails"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="SetOrderReferenceDetailsResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:SetOrderReferenceDetailsResult"/>
+            <xs:element ref="tns:ResponseMetadata" minOccurs="1"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="SetOrderReferenceDetailsResult">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="OrderReferenceDetails" type="tns:OrderReferenceDetails" minOccurs="0"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="GetAuthorizationDetailsResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:GetAuthorizationDetailsResult"/>
+            <xs:element ref="tns:ResponseMetadata" minOccurs="1"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="GetAuthorizationDetailsResult">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="AuthorizationDetails" type="tns:AuthorizationDetails"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="RefundResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:RefundResult"/>
+            <xs:element ref="tns:ResponseMetadata" minOccurs="1"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="RefundResult">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="RefundDetails" type="tns:RefundDetails"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="GetRefundDetailsResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:GetRefundDetailsResult"/>
+            <xs:element ref="tns:ResponseMetadata" minOccurs="1"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="GetRefundDetailsResult">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="RefundDetails" type="tns:RefundDetails"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="GetCaptureDetailsResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:GetCaptureDetailsResult"/>
+            <xs:element ref="tns:ResponseMetadata" minOccurs="1"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="GetCaptureDetailsResult">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="CaptureDetails" type="tns:CaptureDetails"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="ConfirmOrderReferenceResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:ResponseMetadata" minOccurs="1"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="CancelOrderReferenceResponse">
+        <xs:complexType>
+          <xs:all>
+            <xs:element ref="tns:CancelOrderReferenceResult"/>
+            <xs:element ref="tns:ResponseMetadata" minOccurs="1"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name="CancelOrderReferenceResult">
+        <xs:complexType>
+          <xs:all>
+             <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:complexType name="OrderReferenceStatus">
+        <xs:all>
+            <xs:element name="State" type="xs:string" minOccurs="0"/>
+            <xs:element name="LastUpdateTimestamp" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="ReasonCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="ReasonDescription" type="xs:string" minOccurs="0"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:complexType name="Constraints">
+        <xs:all>
+          <xs:element name="Constraint" type="tns:Constraint" maxOccurs="unbounded"/>
+          <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:complexType name="AuthorizationDetails">
+        <xs:all>
+            <xs:element name="AmazonAuthorizationId" type="xs:string"/>
+            <xs:element name="AuthorizationReferenceId" type="tns:String32"/>
+            <xs:element name="AuthorizationBillingAddress" type="tns:Address" minOccurs="0"/>
+            <xs:element name="SellerAuthorizationNote" type="xs:string"/>
+            <xs:element name="AuthorizationAmount" type="tns:Price"/>
+            <xs:element name="CapturedAmount" type="tns:Price"/>
+            <xs:element name="AuthorizationFee" type="tns:Price"/>
+            <xs:element name="IdList" type="tns:IdList" minOccurs="0"/>
+            <xs:element name="CreationTimestamp" type="xs:dateTime"/>
+            <xs:element name="ExpirationTimestamp" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="AuthorizationStatus" type="tns:Status"/>
+            <xs:element name="OrderItemCategories" type="tns:OrderItemCategories" minOccurs="0"/>
+            <xs:element name="CaptureNow" type="xs:boolean"/>
+            <xs:element name="SoftDescriptor" type="xs:string" minOccurs="0"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:simpleType name="NonNegativeInteger">
+        <xs:restriction base="xs:integer">
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:complexType name="Price">
+        <xs:all>
+            <xs:element name="Amount" type="tns:NonEmptyString"/>
+            <xs:element name="CurrencyCode" type="xs:string"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:complexType name="OrderItemCategories">
+        <xs:all>
+          <xs:element name="OrderItemCategory" type="xs:string" maxOccurs="unbounded"/>
+          <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:complexType name="Constraint">
+        <xs:all>
+            <xs:element name="ConstraintID" type="xs:string" minOccurs="0"/>
+            <xs:element name="Description" type="xs:string" minOccurs="0"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:complexType name="RefundDetails">
+        <xs:all>
+            <xs:element name="AmazonRefundId" type="xs:string"/>
+            <xs:element name="RefundReferenceId" type="tns:String32"/>
+            <xs:element name="SellerRefundNote" type="xs:string"/>
+            <xs:element name="RefundType" type="tns:RefundType"/>
+            <xs:element name="RefundAmount" type="tns:Price"/>
+            <xs:element name="FeeRefunded" type="tns:Price"/>
+            <xs:element name="CreationTimestamp" type="xs:dateTime"/>
+            <xs:element name="RefundStatus" type="tns:Status"/>
+            <xs:element name="SoftDescriptor" type="xs:string"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:simpleType name="NonEmptyString">
+        <xs:restriction base="xs:string">
+          <xs:minLength value="1"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="PaymentStatus">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Pending"/>
+          <xs:enumeration value="Open"/>
+          <xs:enumeration value="Declined"/>
+          <xs:enumeration value="Closed"/>
+          <xs:enumeration value="Completed"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="String16">
+        <xs:restriction base="xs:string">
+          <xs:minLength value="0"/>
+          <xs:maxLength value="16"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:complexType name="IdList">
+        <xs:all>
+          <xs:element name="member" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:simpleType name="ReleaseEnvironment">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Live"/>
+          <xs:enumeration value="Sandbox"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:complexType name="SellerOrderAttributes">
+        <xs:all>
+            <xs:element name="SellerOrderId" type="xs:string" minOccurs="0"/>
+            <xs:element name="StoreName" type="xs:string" minOccurs="0"/>
+            <xs:element name="OrderItemCategories" type="tns:OrderItemCategories" minOccurs="0"/>
+            <xs:element name="CustomInformation" type="xs:string" minOccurs="0"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:complexType name="OrderReferenceDetails">
+        <xs:all>
+            <xs:element name="AmazonOrderReferenceId" type="xs:string"/>
+            <xs:element name="Buyer" type="tns:Buyer" minOccurs="0"/>
+            <xs:element name="OrderTotal" type="tns:OrderTotal" minOccurs="0"/>
+            <xs:element name="SellerNote" type="tns:String1024" minOccurs="0"/>
+            <xs:element name="PlatformId" type="xs:string" minOccurs="0"/>
+            <xs:element name="Destination" type="tns:Destination" minOccurs="0"/>
+            <xs:element name="ReleaseEnvironment" type="tns:ReleaseEnvironment"/>
+            <xs:element name="SellerOrderAttributes" type="tns:SellerOrderAttributes" minOccurs="0"/>
+            <xs:element name="OrderReferenceStatus" type="tns:OrderReferenceStatus"/>
+            <xs:element name="Constraints" type="tns:Constraints" minOccurs="0"/>
+            <xs:element name="CreationTimestamp" type="xs:dateTime"/>
+            <xs:element name="ExpirationTimestamp" type="xs:dateTime"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:complexType name="Status">
+        <xs:all>
+            <xs:element name="State" type="tns:PaymentStatus" minOccurs="0"/>
+            <xs:element name="LastUpdateTimestamp" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="ReasonCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="ReasonDescription" type="tns:String255" minOccurs="0"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:simpleType name="String1024">
+        <xs:restriction base="xs:string">
+          <xs:minLength value="0"/>
+          <xs:maxLength value="1024"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="String255">
+        <xs:restriction base="xs:string">
+          <xs:minLength value="0"/>
+          <xs:maxLength value="255"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="String32">
+        <xs:restriction base="xs:string">
+          <xs:minLength value="0"/>
+          <xs:maxLength value="32"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:complexType name="CaptureDetails">
+        <xs:all>
+            <xs:element name="AmazonCaptureId" type="xs:string"/>
+            <xs:element name="CaptureReferenceId" type="tns:String32"/>
+            <xs:element name="SellerCaptureNote" type="xs:string"/>
+            <xs:element name="CaptureAmount" type="tns:Price"/>
+            <xs:element name="RefundedAmount" type="tns:Price"/>
+            <xs:element name="CaptureFee" type="tns:Price"/>
+            <xs:element name="IdList" type="tns:IdList"/>
+            <xs:element name="CreationTimestamp" type="xs:dateTime"/>
+            <xs:element name="CaptureStatus" type="tns:Status"/>
+            <xs:element name="SoftDescriptor" type="xs:string"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:complexType name="OrderTotal">
+        <xs:all>
+            <xs:element name="CurrencyCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="Amount" type="xs:string" minOccurs="0"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:complexType name="Destination">
+        <xs:all>
+            <xs:element name="DestinationType" type="xs:string" minOccurs="0"/>
+            <xs:element name="PhysicalDestination" type="tns:Address" minOccurs="0"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:simpleType name="RefundType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="AmazonA-ZRefund"/>
+          <xs:enumeration value="AmazonA-ZGuarantee"/>
+          <xs:enumeration value="SellerInitiated"/>
+          <xs:enumeration value="Chargeback"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:complexType name="Buyer">
+        <xs:all>
+            <xs:element name="Name" type="xs:string" minOccurs="0"/>
+            <xs:element name="Email" type="xs:string" minOccurs="0"/>
+            <xs:element name="Phone" type="xs:string" minOccurs="0"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+
+      <xs:complexType name="Address">
+        <xs:all>
+            <xs:element name="Name" type="xs:string" minOccurs="0"/>
+            <xs:element name="AddressLine1" type="xs:string" minOccurs="0"/>
+            <xs:element name="AddressLine2" type="xs:string" minOccurs="0"/>
+            <xs:element name="AddressLine3" type="xs:string" minOccurs="0"/>
+            <xs:element name="City" type="xs:string" minOccurs="0"/>
+            <xs:element name="County" type="xs:string" minOccurs="0"/>
+            <xs:element name="District" type="xs:string" minOccurs="0"/>
+            <xs:element name="StateOrRegion" type="xs:string" minOccurs="0"/>
+            <xs:element name="PostalCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="CountryCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="Phone" type="xs:string" minOccurs="0"/>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:all>
+      </xs:complexType>
+    </xs:schema>

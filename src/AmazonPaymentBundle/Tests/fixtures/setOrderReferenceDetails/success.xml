@@ -1,0 +1,40 @@
+<SetOrderReferenceDetailsResponse xmlns="http://mws.amazonservices.com/schema/OffAmazonPayments/2013-01-01">
+    <SetOrderReferenceDetailsResult>
+        <OrderReferenceDetails>
+            <AmazonOrderReferenceId>P01-1234567-1234567</AmazonOrderReferenceId>
+            <OrderTotal>
+                <Amount>106</Amount>
+                <CurrencyCode>USD</CurrencyCode>
+            </OrderTotal>
+            <SellerOrderAttributes>
+                <SellerOrderId>5678-23</SellerOrderId>
+            </SellerOrderAttributes>
+            <SellerNote>Lorem ipsum</SellerNote>
+            <CreationTimestamp>2012-11-05T20:21:19Z</CreationTimestamp>
+            <ExpirationTimestamp>2013-05-07T23:21:19Z</ExpirationTimestamp>
+            <OrderReferenceStatus>
+                <State>Draft</State>
+            </OrderReferenceStatus>
+            <Destination>
+                <DestinationType>Physical</DestinationType>
+                <PhysicalDestination>
+                    <Name>Mr. Dev</Name>
+                    <AddressLine1>ESONO AG</AddressLine1>
+                    <AddressLine2>Grünwälderstr. 10-14</AddressLine2>
+                    <AddressLine3>2 OG</AddressLine3>
+                    <County/>
+                    <District/>
+                    <Phone>0761 15 18 28 0</Phone>
+                    <City>Freiburg</City>
+                    <StateOrRegion>BaWü</StateOrRegion>
+                    <PostalCode>79098</PostalCode>
+                    <CountryCode>DE</CountryCode>
+                </PhysicalDestination>
+            </Destination>
+            <ReleaseEnvironment>Live</ReleaseEnvironment>
+        </OrderReferenceDetails>
+    </SetOrderReferenceDetailsResult>
+    <ResponseMetadata>
+        <RequestId>f42df4b1-8047-11df-8d5c-bf56a38ef3b4</RequestId>
+    </ResponseMetadata>
+</SetOrderReferenceDetailsResponse>

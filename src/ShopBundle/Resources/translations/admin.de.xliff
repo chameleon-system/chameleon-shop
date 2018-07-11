@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="admin.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.field_article_number">
+                <source>chameleon_system_shop.cms_module_shop_statistic.field_article_number</source>
+                <target>Artikelnummer</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.field_article_name">
+                <source>chameleon_system_shop.cms_module_shop_statistic.field_article_name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.field_order_count">
+                <source>chameleon_system_shop.cms_module_shop_statistic.field_order_count</source>
+                <target>Bestellungen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.field_value">
+                <source>chameleon_system_shop.cms_module_shop_statistic.field_value</source>
+                <target>Wert</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.field_category">
+                <source>chameleon_system_shop.cms_module_shop_statistic.field_category</source>
+                <target>Kategorie</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.headline">
+                <source>chameleon_system_shop.cms_module_shop_statistic.headline</source>
+                <target>Auswertung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.form_show_change">
+                <source>chameleon_system_shop.cms_module_shop_statistic.form_show_change</source>
+                <target>Veränderung anzeigen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.form_portal">
+                <source>chameleon_system_shop.cms_module_shop_statistic.form_portal</source>
+                <target>Anzeigen für Portal</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.all_portals">
+                <source>chameleon_system_shop.cms_module_shop_statistic.all_portals</source>
+                <target>Alle Portale</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.date_year">
+                <source>chameleon_system_shop.cms_module_shop_statistic.date_year</source>
+                <target>Jahr</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.date_day">
+                <source>chameleon_system_shop.cms_module_shop_statistic.date_day</source>
+                <target>Tag</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.date_month">
+                <source>chameleon_system_shop.cms_module_shop_statistic.date_month</source>
+                <target>Monat</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.date_week">
+                <source>chameleon_system_shop.cms_module_shop_statistic.date_week</source>
+                <target>Woche</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.form_date_from">
+                <source>chameleon_system_shop.cms_module_shop_statistic.form_date_from</source>
+                <target>Von</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.form_date_to">
+                <source>chameleon_system_shop.cms_module_shop_statistic.form_date_to</source>
+                <target>Bis</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.form_output_type">
+                <source>chameleon_system_shop.cms_module_shop_statistic.form_output_type</source>
+                <target>Ansicht</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.form_output_type_table">
+                <source>chameleon_system_shop.cms_module_shop_statistic.form_output_type_table</source>
+                <target>Tabelle</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.form_output_type_chart">
+                <source>chameleon_system_shop.cms_module_shop_statistic.form_output_type_chart</source>
+                <target>Balkendiagramm</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.action_show">
+                <source>chameleon_system_shop.cms_module_shop_statistic.action_show</source>
+                <target>Anzeigen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.action_print">
+                <source>chameleon_system_shop.cms_module_shop_statistic.action_print</source>
+                <target>Drucken</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.action_download">
+                <source>chameleon_system_shop.cms_module_shop_statistic.action_download</source>
+                <target>Download Übersicht</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.action_download_top_seller">
+                <source>chameleon_system_shop.cms_module_shop_statistic.action_download_top_seller</source>
+                <target>Download Top 50 Artikel</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.column_total">
+                <source>chameleon_system_shop.cms_module_shop_statistic.column_total</source>
+                <target>Summe</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.headline">
+                <source>chameleon_system_shop.cron_send_basket_stats.headline</source>
+                <target>Gesamt Statistiken</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.completed">
+                <source>chameleon_system_shop.cron_send_basket_stats.completed</source>
+                <target>abgeschlossen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.text_aborted">
+                <source>chameleon_system_shop.cron_send_basket_stats.text_aborted</source>
+                <target>Abgebrochen in Warenkorbschritt %step% (%value% von %totalBaskets% | %percent%%)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.text_completed">
+                <source>chameleon_system_shop.cron_send_basket_stats.text_completed</source>
+                <target>Bestellung abgeschlossen (%value% von %totalBaskets% | %percent%%)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.text_total_aborted_orders">
+                <source>chameleon_system_shop.cron_send_basket_stats.text_total_aborted_orders</source>
+                <target>Summe aller abgebrochenen Warenkörbe</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.text_general_info">
+                <source>chameleon_system_shop.cron_send_basket_stats.text_general_info</source>
+                <target>Generelle Informationen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.text_general_aborted">
+                <source>chameleon_system_..</source>
+                <target>Abgebrochen im Warenkorbschritt: %step%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.text_user">
+                <source>chameleon_system_shop.cron_send_basket_stats.text_user</source>
+                <target>Benutzerdaten</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.user_name">
+                <source>chameleon_system_shop.cron_send_basket_stats.user_name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.user_email">
+                <source>chameleon_system_shop.cron_send_basket_stats.user_email</source>
+                <target>E-Mail</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.user_street">
+                <source>chameleon_system_shop.cron_send_basket_stats.user_street</source>
+                <target>Straße</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.user_zip">
+                <source>chameleon_system_shop.cron_send_basket_stats.user_zip</source>
+                <target>PLZ</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.user_country">
+                <source>chameleon_system_shop.cron_send_basket_stats.user_country</source>
+                <target>Land</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.user_telefon">
+                <source>chameleon_system_shop.cron_send_basket_stats.user_telefon</source>
+                <target>Telefon</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.guest_user">
+                <source>chameleon_system_shop.cron_send_basket_stats.guest_user</source>
+                <target>Kunde noch nicht registriert/angemeldet</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.basket_content">
+                <source>chameleon_system_shop.cron_send_basket_stats.basket_content</source>
+                <target>Warenkorbdaten</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.basket_content_line">
+                <source>chameleon_system_shop.cron_send_basket_stats.basket_content_line</source>
+                <target>%amount% mal %name% Einzelpreis %price% Gesamtpreis %totalPrice%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.cron_send_basket_stats.basket_content_total">
+                <source>chameleon_system_shop.cron_send_basket_stats.basket_content_total</source>
+                <target>Warenkorb Preis %basketTotal%</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.cron_resend_order_mail.subject">
+                <source>chameleon_system_shop.cron_resend_order_mail.subject</source>
+                <target>Bestell-Email konnte nicht versendet werden an %mail% (%date%)</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.order_list.user_type_guest">
+                <source>chameleon_system_shop.order_list.user_type_guest</source>
+                <target>Gast</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.order_list.user_type_customer">
+                <source>chameleon_system_shop.order_list.user_type_customer</source>
+                <target>Kunde</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.field_shop_variant_details.msg_created_variants">
+                <source>chameleon_system_shop.field_shop_variant_details.msg_created_variants</source>
+                <target>%generatedVariantsCount% Varianten wurden angelegt.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.voucher.action_create">
+                <source>chameleon_system_shop.voucher.action_create</source>
+                <target>Gutscheine erstellen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.voucher.prompt_number_of_vouchers_to_create">
+                <source>chameleon_system_shop.voucher.prompt_number_of_vouchers_to_create</source>
+                <target>Wie viele Gutscheine möchten Sie erstellen?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.voucher.prompt_voucher_code_to_create">
+                <source>chameleon_system_shop.voucher.prompt_voucher_code_to_create</source>
+                <target>Welchen Code wollen Sie erstellen? Bei keiner Angabe werden automatisch eindeutige Codes erstellt</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.voucher.action_export">
+                <source>chameleon_system_shop.voucher.action_export</source>
+                <target>Gutscheine exportieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.voucher.export_column_code">
+                <source>chameleon_system_shop.voucher.export_column_code</source>
+                <target>Code</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.voucher.export_column_created">
+                <source>chameleon_system_shop.voucher.export_column_created</source>
+                <target>Erstellt am</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.voucher.export_column_spent">
+                <source>chameleon_system_shop.voucher.export_column_spent</source>
+                <target>Verbraucht</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.voucher.export_column_spent_date">
+                <source>chameleon_system_shop.voucher.export_column_spent_date</source>
+                <target>Verbraucht am</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.orders.action_send_order_confirm_mail">
+                <source>chameleon_system_shop.orders.action_send_order_confirm_mail</source>
+                <target>Bestellbestätigung versenden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.orders.msg_order_confirm_sent">
+                <source>chameleon_system_shop.orders.msg_order_confirm_sent</source>
+                <target>E-Mail erfolgreich an folgende E-Mail Adresse versendet: %mail%</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.orders.error_sending_confirm_mail">
+                <source>chameleon_system_shop.orders.error_sending_confirm_mail</source>
+                <target>Fehler: %error%</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_main">
+                <source>chameleon_system_shop.list_manager_article.filter_type_main</source>
+                <target>Hauptartikel</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_variants">
+                <source>chameleon_system_shop.list_manager_article.filter_type_variants</source>
+                <target>Varianten</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_all">
+                <source>chameleon_system_shop.list_manager_article.filter_type_all</source>
+                <target>Alle</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.list_manager_article.filter_active_only_active">
+                <source>chameleon_system_shop.list_manager_article.filter_active_only_active</source>
+                <target>Nur aktive</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.list_manager_article.filter_active_only_inactive">
+                <source>chameleon_system_shop.list_manager_article.filter_active_only_inactive</source>
+                <target>Nur inaktive</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.list_manager_article.filter_active_all">
+                <source>chameleon_system_shop.list_manager_article.filter_active_all</source>
+                <target>Alle</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

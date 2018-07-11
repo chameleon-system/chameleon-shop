@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon_system_shop_payment_ipn.cronjob.process_triggers_cronjob" class="TPkgShopPaymentIPN_TCmsCronJob_ProcessTrigger" shared="false">
+            <tag name="chameleon_system.cronjob" />
+        </service>
+    </services>
+</container>
