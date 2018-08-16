@@ -16,12 +16,6 @@
             "role": "Company"
         }
     ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://composer.esono.de"
-        }
-    ],
     "extra": {
         "name": "Chameleon Shop",
         "dev_info_installation": "",
