@@ -25,13 +25,14 @@
         "screenshotfolder_id": ""
     },
     "require": {
-        "chameleon-system/chameleon-base": "~6.2.0",
+        "chameleon-system/chameleon-base": "dev-master",
         "simplepie/simplepie": "~1.3"
     },
     "require-dev": {
-        "chameleon-system/code-style-config": "dev-master@dev",
+        "chameleon-system/sanitycheck": "dev-master",
+        "chameleon-system/sanitycheck-bundle": "dev-master",
         "phpunit/dbunit": "~2.0",
-        "phpunit/phpunit": "~5.7"
+        "phpunit/phpunit": "~5.0"
     },
     "autoload": {
         "classmap": [
