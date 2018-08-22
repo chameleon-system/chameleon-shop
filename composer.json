@@ -29,6 +29,8 @@
         "simplepie/simplepie": "~1.3"
     },
     "require-dev": {
+        "chameleon-system/sanitycheck": "dev-master",
+        "chameleon-system/sanitycheck-bundle": "dev-master",
         "phpunit/dbunit": "~2.0",
         "phpunit/phpunit": "~5.0"
     },
