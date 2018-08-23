@@ -90,7 +90,7 @@
             <li><a href="javascript:void()"
                    onclick="window.print()"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.action_print')); ?></a></li>
             <li><a href="?<?=$sURL; ?>"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.action_download')); ?></a></li>
-            <li><a href="?<?=$sTopSellerURL; ?>"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.action_download_top_seller'));?></a>
+            <li><a href="?<?=$sTopSellerURL; ?>"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.action_download_top_seller')); ?></a>
             </li>
         </ul>
 

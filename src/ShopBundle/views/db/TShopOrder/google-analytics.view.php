@@ -11,7 +11,7 @@ if (!empty($activePortal->fieldGoogleAnalyticNumber)) {
     $(document).ready(function () {
         <?php
         $oLastOrder = $oOrder;
-    //start of trans data ?>
+    //start of trans data?>
         _gaq.push(['_addTrans',
             <?php
             echo "'".$oLastOrder->fieldOrdernumber."',";

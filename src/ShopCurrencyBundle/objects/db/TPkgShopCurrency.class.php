@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopCurrencyBundle\Event\CurrencyChangedEvent;
 use ChameleonSystem\ShopCurrencyBundle\Interfaces\ShopCurrencyServiceInterface;

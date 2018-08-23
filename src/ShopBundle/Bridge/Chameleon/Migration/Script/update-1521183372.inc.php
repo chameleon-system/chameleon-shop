@@ -14,7 +14,7 @@ $indexEntryExists = TCMSLogChange::getDatabaseConnection()->fetchColumn(
     $query,
     ['shopOrderTableId' => TCMSLogChange::GetTableId('shop_order')]
 );
-if (1 === (int)$indexEntryExists) {
+if (1 === (int) $indexEntryExists) {
     TCMSLogChange::delete(
         __LINE__,
         TCMSLogChange::createMigrationQueryData('cms_tbl_conf_index', 'en')
@@ -25,7 +25,7 @@ if (1 === (int)$indexEntryExists) {
 $query = "show index from shop_order where Key_name = 'order_ident'";
 $row = TCMSLogChange::getDatabaseConnection()->fetchAssoc($query);
 if (false !== $row) {
-    $query = "ALTER TABLE `shop_order` DROP INDEX  `order_ident`";
+    $query = 'ALTER TABLE `shop_order` DROP INDEX  `order_ident`';
     TCMSLogChange::RunQuery(__LINE__, $query);
 }
 
@@ -34,15 +34,15 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf_index', 'de')
     ->setFields(
         array(
             'cms_tbl_conf_id' => TCMSLogChange::GetTableId('shop_order'),
-            'name'            => 'order_ident',
-            'definition'      => 'order_ident',
-            'type'            => 'INDEX',
-            'id'              => $orderIdentIndexId,
+            'name' => 'order_ident',
+            'definition' => 'order_ident',
+            'type' => 'INDEX',
+            'id' => $orderIdentIndexId,
         )
     );
 TCMSLogChange::insert(__LINE__, $data);
-$query = "ALTER TABLE `shop_order`
-                        ADD INDEX  `order_ident` ( order_ident )";
+$query = 'ALTER TABLE `shop_order`
+                        ADD INDEX  `order_ident` ( order_ident )';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 // --------------------------------------------------------
@@ -65,15 +65,14 @@ $orderIndicies = [
     'canceled_date',
 ];
 foreach ($orderIndicies as $orderIndex) {
-    $query = "show index from shop_order where Key_name = :keyName";
+    $query = 'show index from shop_order where Key_name = :keyName';
     $row = TCMSLogChange::getDatabaseConnection()->fetchAssoc($query, ['keyName' => $orderIndex]);
     if (false !== $row) {
         $query = sprintf(
-            "ALTER TABLE `shop_order` DROP INDEX  %s",
+            'ALTER TABLE `shop_order` DROP INDEX  %s',
             TCMSLogChange::getDatabaseConnection()->quoteIdentifier($orderIndex)
         );
         TCMSLogChange::RunQuery(__LINE__, $query);
-
     }
 }
 
@@ -85,23 +84,20 @@ $indexEntryExists = TCMSLogChange::getDatabaseConnection()->fetchColumn(
     $query,
     ['shopOrderTableId' => TCMSLogChange::GetTableId('shop_article_stats')]
 );
-if (0 === (int)$indexEntryExists) {
-
+if (0 === (int) $indexEntryExists) {
     $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf_index', 'de')
         ->setFields(
             array(
                 'cms_tbl_conf_id' => TCMSLogChange::GetTableId('shop_article_stats'),
-                'name'            => 'sales_per_article',
-                'definition'      => '`stats_sales`,`shop_article_id`',
-                'type'            => 'INDEX',
-                'id'              => TCMSLogChange::createUnusedRecordId('cms_tbl_conf_index'),
+                'name' => 'sales_per_article',
+                'definition' => '`stats_sales`,`shop_article_id`',
+                'type' => 'INDEX',
+                'id' => TCMSLogChange::createUnusedRecordId('cms_tbl_conf_index'),
             )
         );
     TCMSLogChange::insert(__LINE__, $data);
 
-    $query = "ALTER TABLE `shop_article_stats`
-                        ADD INDEX  `sales_per_article` ( `stats_sales`,`shop_article_id` )";
+    $query = 'ALTER TABLE `shop_article_stats`
+                        ADD INDEX  `sales_per_article` ( `stats_sales`,`shop_article_id` )';
     TCMSLogChange::RunQuery(__LINE__, $query);
-
-
 }

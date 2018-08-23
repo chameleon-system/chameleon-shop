@@ -22,7 +22,7 @@ interface ProductVariantNameGeneratorInterface
      * @param \TdbShopArticle $product
      * @param int             $variantNameType
      *
-     * @return string|null A variant name, or null if the product is not a variant.
+     * @return string|null a variant name, or null if the product is not a variant
      */
     public function generateName(\TdbShopArticle $product, $variantNameType = self::VARIANT_NAME_TYPE_DEFAULT);
 
@@ -32,7 +32,7 @@ interface ProductVariantNameGeneratorInterface
      * @param \TdbShopArticle $product
      * @param int             $variantNameType
      *
-     * @return array A list of variant names (key = language, value = variant name), or null if the product is not a variant.
+     * @return array a list of variant names (key = language, value = variant name), or null if the product is not a variant
      */
     public function generateNamesForAllLanguages(\TdbShopArticle $product, $variantNameType = self::VARIANT_NAME_TYPE_DEFAULT);
 }

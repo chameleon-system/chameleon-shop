@@ -465,6 +465,7 @@ class RefundTest extends AbstractAmazonPayment
         }
         $transactionManager->expects($this->any())->method('addTransaction')->will($this->returnCallback(function ($arg) use ($expectedTransactionList) {
             static $count = 0;
+
             return $expectedTransactionList[$count++];
         }));
 
@@ -505,6 +506,7 @@ class RefundTest extends AbstractAmazonPayment
         $transactionManager->expects($this->any())->method('confirmTransaction')
             ->will($this->returnCallback(function ($arg, $arg2) use ($callList) {
                 static $index = 0;
+
                 return $callList[$index++];
             }));
 

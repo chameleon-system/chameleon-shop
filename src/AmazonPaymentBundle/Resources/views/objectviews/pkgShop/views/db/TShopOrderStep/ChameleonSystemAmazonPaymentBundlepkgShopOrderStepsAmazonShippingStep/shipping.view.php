@@ -15,7 +15,6 @@
 /** @var $oStepNext TdbShopOrderStep */
 /** @var $oStepPrevious TdbShopOrderStep */
 /** @var $sBackLink string */
-
 $oViewRenderer = new ViewRenderer();
 $oViewRenderer->addMapperFromIdentifier('chameleon_system_shop.mapper.shipping_group.shipping_group_list');
 $oViewRenderer->addMapperFromIdentifier('chameleon_system_shop.mapper.orderwizard.payment_list');

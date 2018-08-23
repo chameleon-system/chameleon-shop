@@ -4,7 +4,6 @@
 /** @var $oShippingAddress TdbDataExtranetUserAddress */
 /** @var $oBillingAddress TdbDataExtranetUserAddress */
 /** @var $bShipToBillingAddress bool */
-
 $oShippingAddressList = $oUserData->GetFieldDataExtranetUserAddressList();
 
 $aShippingParams = array('sAddressName' => TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING, 'selectedAddressId' => $oShippingAddress->id);

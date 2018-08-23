@@ -4,6 +4,6 @@ $oLocal = &TCMSLocal::GetActive();
 ?>
 <div class="TPkgShopListfilterItem <?=get_class($oListItem); ?> <?=$aCallTimeVars['CountClass']; ?>">
     <div class="tree">
-        <?=$oListItem->GetRenderedCategoryTree();?>
+        <?=$oListItem->GetRenderedCategoryTree(); ?>
     </div>
 </div>

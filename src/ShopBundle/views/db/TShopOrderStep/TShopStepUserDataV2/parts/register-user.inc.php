@@ -3,7 +3,6 @@
 /** @var $oShippingAddress TdbDataExtranetUserAddress */
 /** @var $oBillingAddress TdbDataExtranetUserAddress */
 /** @var $bShipToBillingAddress tinyint */
-
 ?>
 <?php
 // render shipping address

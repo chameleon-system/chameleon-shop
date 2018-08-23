@@ -12,6 +12,6 @@
         <input type="hidden" name="module_fnc[<?=TGlobal::OutHTML($sSpotName); ?>]" value="ExecuteStep"/>
         <input type="hidden" name="umode" value="register"/>
 
-        <input type="submit" value="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.module_checkout.login_action_register'));?>"/>
+        <input type="submit" value="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.module_checkout.login_action_register')); ?>"/>
     </form>
 </div>

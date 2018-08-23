@@ -16,7 +16,7 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 use PHPUnit\Framework\TestCase;
 
 if (false === class_exists('TdbShopModuleArticleListFilter')) {
-    require __DIR__ . '/fixtures/TdbShopModuleArticleListFilterMock.php';
+    require __DIR__.'/fixtures/TdbShopModuleArticleListFilterMock.php';
 }
 
 class StateRequestExtractorTest extends TestCase
