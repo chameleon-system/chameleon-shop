@@ -26,6 +26,13 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
     protected $sEnclosure = '';
 
     /**
+     * The character(s) that end the current line.
+     *
+     * @var string
+     */
+    protected $lineBreak = "\n";
+
+    /**
      * returns the list of all available fields as array.
      *
      * @return array
@@ -40,8 +47,39 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
      */
     protected function PreArticleListHandling()
     {
-        $aFields = $this->GetFields();
-        $this->Write($this->sEnclosure.implode($this->sEnclosure.$this->sDelimiter.$this->sEnclosure, $aFields).$this->sEnclosure."\n");
+        $this->Write($this->getLine($this->GetFields()).$this->lineBreak);
+    }
+
+    /**
+     * Returns a CSV line from the given field data. This line does not end with line break characters.
+     *
+     * @param string[] $fields
+     *
+     * @return string
+     */
+    private function getLine(array $fields): string
+    {
+        $fields = $this->quoteFields($fields);
+
+        return $this->sEnclosure.implode($this->sEnclosure.$this->sDelimiter.$this->sEnclosure, $fields).$this->sEnclosure;
+    }
+
+    /**
+     * Quotes occurrences of the enclosure character within the passed fields.
+     *
+     * @param string[] $fields
+     *
+     * @return string[]
+     */
+    protected function quoteFields(array $fields): array
+    {
+        if ('' === $this->sEnclosure) {
+            return $fields;
+        }
+
+        return array_map(function ($element) {
+            return \str_replace($this->sEnclosure, $this->sEnclosure.$this->sEnclosure, $element);
+        }, $fields);
     }
 
     /**
@@ -88,17 +126,13 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
         $aFieldValues = array();
         reset($aFields);
         foreach ($aFields as $sFieldName) {
-            $sTmpMemBefore = memory_get_usage();
             $aFieldValues[] = $this->GetFieldValue($sFieldName, $oArticle);
-            $sTmpMemAfter = memory_get_usage();
-            $sTmpDiff = $sTmpMemAfter - $sTmpMemBefore;
         }
-        $sLine = $this->sEnclosure.implode($this->sEnclosure.$this->sDelimiter.$this->sEnclosure, $aFieldValues).$this->sEnclosure;
+        $sLine = $this->getLine($aFieldValues);
 
-        $this->Write($sLine."\n");
+        $this->Write($sLine.$this->lineBreak);
 
         $iLogCount = 1000;
-//        $iLogCount = 100;
 
         if (0 === $iCount % $iLogCount) {
             $sMemUsageAfterArticleProcessed = memory_get_usage();
@@ -158,11 +192,16 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
     protected function CleanContent($sValue)
     {
         $sValue = parent::CleanContent($sValue);
-        $sValue = preg_replace('/\ +/i', ' ', $sValue);
-        if (',' != $this->sDelimiter && "\t" != $this->sDelimiter && "\n" != $this->sDelimiter) {
-            $sValue = str_replace($this->sDelimiter, ',', $sValue);
-        } else {
+        $sValue = preg_replace('/\ +/', ' ', $sValue);
+
+        if ('' !== $this->sEnclosure) {
+            return $sValue;
+        }
+
+        if (true === \in_array($this->sDelimiter, [',', "\t", "\n"], true)) {
             $sValue = str_replace($this->sDelimiter, ' ', $sValue);
+        } else {
+            $sValue = str_replace($this->sDelimiter, ',', $sValue);
         }
 
         return $sValue;
