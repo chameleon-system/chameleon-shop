@@ -73,12 +73,12 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
      */
     protected function quoteFields(array $fields): array
     {
-        if ('' === $this->sEnclosure) {
+        if ('"' !== $this->sEnclosure) {
             return $fields;
         }
 
         return array_map(function ($element) {
-            return \str_replace($this->sEnclosure, $this->sEnclosure.$this->sEnclosure, $element);
+            return \str_replace('"', '""', $element);
         }, $fields);
     }
 
@@ -194,7 +194,7 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
         $sValue = parent::CleanContent($sValue);
         $sValue = preg_replace('/\ +/', ' ', $sValue);
 
-        if ('' !== $this->sEnclosure) {
+        if ('"' === $this->sEnclosure) {
             return $sValue;
         }
 

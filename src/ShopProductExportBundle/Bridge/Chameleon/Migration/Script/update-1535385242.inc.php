@@ -4,5 +4,5 @@
 </div>
 <?php
 
-TCMSLogChange::addInfoMessage('CSV product exports now quote the enclosure character if it is set to a value different from the empty string (most likely a double quote).
+TCMSLogChange::addInfoMessage('CSV product exports now quote the enclosure character if it is set to double quote (only!).
 If an export already quotes, remove the custom quoting or overwrite TPkgShopProductExportCSVEndPoint::quoteFields() to deactivate default quoting.', TCMSLogChange::INFO_MESSAGE_LEVEL_INFO);
