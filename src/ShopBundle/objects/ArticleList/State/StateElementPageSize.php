@@ -49,7 +49,7 @@ class StateElementPageSize implements StateElementInterface
     public function normalize($value)
     {
         $pageSize = intval($value);
-        if ($pageSize <= 0 && $pageSize !== -1) {
+        if ($pageSize <= 0 && -1 !== $pageSize) {
             return current($this->validOptions);
         }
 

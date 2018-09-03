@@ -41,8 +41,8 @@ class AmazonPaymentBasket extends \ChameleonSystemAmazonPaymentBundlepkgShopAmaz
 
     /**
      * @param null                $amazonOrderReferenceId
-     * @param TdbDataExtranetUser $user                   The user for whom the Amazon payment will be enabled.
-     *                                                    Note that the user object will be changed in memory, but not persistent.
+     * @param TdbDataExtranetUser $user                   the user for whom the Amazon payment will be enabled.
+     *                                                    Note that the user object will be changed in memory, but not persistent
      *
      * @throws TPkgCmsException_LogAndMessage
      */
