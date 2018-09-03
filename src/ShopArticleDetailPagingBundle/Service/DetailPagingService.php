@@ -162,7 +162,7 @@ class DetailPagingService implements DetailPagingServiceInterface
 
         $positionPreviousElement = $positionCurrentElement - 1;
         // if we are the last element, we need to get the first of the next page
-        if ($positionPreviousElement === -1) {
+        if (-1 === $positionPreviousElement) {
             $previousPageUrl = $page->getPreviousPageUrl();
             if (null === $previousPageUrl) {
                 return null;

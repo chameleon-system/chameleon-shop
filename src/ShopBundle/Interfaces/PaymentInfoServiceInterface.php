@@ -20,8 +20,8 @@ interface PaymentInfoServiceInterface
      * Indicates if the given payment method is currently active for the given portal (if not null).
      *
      * @param string             $paymentMethodInternalName The internal_name of the payment method
-     * @param \TdbCmsPortal|null $portal                    If the portal is not null, the portal restrictions for the payment method will be applied.
-     *                                                      Always provide a portal in the frontend.
+     * @param \TdbCmsPortal|null $portal                    if the portal is not null, the portal restrictions for the payment method will be applied.
+     *                                                      Always provide a portal in the frontend
      *
      * @return bool
      */

@@ -250,7 +250,7 @@ class TShopStockMessage extends TAdbShopStockMessage
                             $dQuantityRequested = $dQuantityRequested - ($iTotalStock - $dNewTotalStock);
                         }
                         $dRange = $aStock[$iStockIndex]['dRange'];
-                        if ($dRange == -1) {
+                        if (-1 == $dRange) {
                             $dRange = $dQuantityRequested;
                         }
                         $dAmountUsed = min($dRange, $dQuantityRequested);
