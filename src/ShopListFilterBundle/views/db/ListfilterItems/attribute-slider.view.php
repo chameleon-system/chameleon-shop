@@ -85,7 +85,7 @@ if (count($aData) > 0) {
                     range:true,
                     values:[<?=$dStartAmount.', '.$dEndAmount; ?>],
                     min: <?=$oListItem->GetMinValue(); ?>,
-                    max: <?=$oListItem->GetMaxValue();?>,
+                    max: <?=$oListItem->GetMaxValue(); ?>,
                     slide:function (event, ui) {
                         $("#amountStart").val(ui.values[0]);
                         $("#amountEnd").val(ui.values[1]);

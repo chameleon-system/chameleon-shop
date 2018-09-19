@@ -108,13 +108,13 @@ foreach ($aSpecificPaymentParameter as $sKey => $sValue) {
         <?php if (!array_key_exists('cc_checkcode', $aUserPaymentData)) {
             $aUserPaymentData['cc_checkcode'] = '';
         } ?>
-        <?=TTemplateTools::TWInputField('cc_checkcode', $aUserPaymentData['cc_checkcode'], false, false, $sInputControlParameter);?>
+        <?=TTemplateTools::TWInputField('cc_checkcode', $aUserPaymentData['cc_checkcode'], false, false, $sInputControlParameter); ?>
     </div>
     <span class="i i-security-code isLft"></span>
 
     <div class="cleardiv">&nbsp;</div>
     <div
-        class="colorblack1"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.form_card_payment_time'));?></div>
+        class="colorblack1"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.form_card_payment_time')); ?></div>
 </div>
 
 

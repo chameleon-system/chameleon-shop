@@ -433,7 +433,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         }
 
         TdbShopSearchCache::ClearCompleteCache();
-        TTools::WriteLogEntrySimple('search index create completed', 1, __FILE__, __LINE__, 'TShopSearchIndexer.log');
+        TTools::WriteLogEntrySimple('search index create completed', 4, __FILE__, __LINE__, 'TShopSearchIndexer.log');
     }
 
     /**

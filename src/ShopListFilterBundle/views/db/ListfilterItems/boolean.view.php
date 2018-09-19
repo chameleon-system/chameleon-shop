@@ -34,7 +34,7 @@ if (array_key_exists(0, $aValues)) {
                 (<?=TGlobal::OutHTML($oLocal->FormatNumber($iInactiveItemCount, 0)); ?>)</label>
             <label><input type="radio" name="<?=TGlobal::OutHTML($oListItem->GetURLInputName()); ?>"
                           value="" <?=$sSelectedNotSelected; ?> /> Egal
-                (<?=TGlobal::OutHTML($oLocal->FormatNumber($iInactiveItemCount + $iActiveItemCount, 0));?>)</label>
+                (<?=TGlobal::OutHTML($oLocal->FormatNumber($iInactiveItemCount + $iActiveItemCount, 0)); ?>)</label>
         </div>
     </div>
 </div>

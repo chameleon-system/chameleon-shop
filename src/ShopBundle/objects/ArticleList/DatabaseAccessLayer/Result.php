@@ -48,7 +48,7 @@ class Result implements ResultInterface
 
     private function transferPagingToContentObject()
     {
-        if ($this->pageSize === -1) {
+        if (-1 === $this->pageSize) {
             $startRecord = 0;
         } else {
             $startRecord = $this->page * $this->pageSize;

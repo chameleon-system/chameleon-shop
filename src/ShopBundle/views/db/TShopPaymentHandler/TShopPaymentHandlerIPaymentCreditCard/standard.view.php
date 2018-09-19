@@ -97,7 +97,7 @@ $oIPaymentHandler = $data['oPaymentHandler'];
                 <?php if (!array_key_exists('cc_checkcode', $aUserPaymentData)) {
                     $aUserPaymentData['cc_checkcode'] = '';
                 } ?>
-                <?=TTemplateTools::InputField('cc_checkcode', $aUserPaymentData['cc_checkcode'], 130);?>
+                <?=TTemplateTools::InputField('cc_checkcode', $aUserPaymentData['cc_checkcode'], 130); ?>
             </td>
         </tr>
     </table>

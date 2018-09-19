@@ -191,4 +191,3 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'en')
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
-

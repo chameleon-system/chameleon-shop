@@ -157,7 +157,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
                 $oItem = null;
             }
 
-            if (null !== $oItem && $oItem->fieldNumberOfRecordsFound == -1) {
+            if (null !== $oItem && -1 == $oItem->fieldNumberOfRecordsFound) {
                 $itemDate = DateTime::createFromFormat('Y-m-d H:i:s', $oItem->fieldLastUsedDate);
                 if ((time() - $itemDate->getTimestamp()) < 5) {
                     // search is being executed by another process... give it a chance to complete

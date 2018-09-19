@@ -30,5 +30,5 @@ if ('0' == $bShipToBillingAddress) {
         echo '1';
     } ?>"/>
     <input type="submit" name="ChangeShipToBillingState"
-           value="<?=TGlobal::OutHTML(TGlobal::Translate($sChangeShippingButtonText));?>"/>
+           value="<?=TGlobal::OutHTML(TGlobal::Translate($sChangeShippingButtonText)); ?>"/>
 </noscript>

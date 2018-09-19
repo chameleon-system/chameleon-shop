@@ -23,7 +23,7 @@ use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
 if (false === class_exists('TShopModuleArticleListFilterAutoParent')) {
-    require __DIR__ . '/fixtures/TShopModuleArticleListFilterAutoParentMock.php';
+    require __DIR__.'/fixtures/TShopModuleArticleListFilterAutoParentMock.php';
 }
 
 class SearchResultLoggerListenerTest extends TestCase
