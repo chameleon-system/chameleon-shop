@@ -88,7 +88,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.action_download_top_seller">
                 <source>chameleon_system_shop.cms_module_shop_statistic.action_download_top_seller</source>
-                <target>Download top 50 selling articles</target>
+                <target>Download top 50 selling products</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.column_total">
                 <source>chameleon_system_shop.cms_module_shop_statistic.column_total</source>
@@ -105,11 +105,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cron_send_basket_stats.text_aborted">
                 <source>chameleon_system_shop.cron_send_basket_stats.text_aborted</source>
-                <target>User abort in order step %step% (%value% von %totalBaskets% | %percent%%)</target>
+                <target>User aborted in order step %step% (%value% von %totalBaskets% | %percent%%)</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cron_send_basket_stats.text_completed">
                 <source>chameleon_system_shop.cron_send_basket_stats.text_completed</source>
-                <target>Bestellung abgeschlossen (%value% von %totalBaskets% | %percent%%)</target>
+                <target>Order completed (%value% of %totalBaskets% | %percent%%)</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cron_send_basket_stats.text_total_aborted_orders">
                 <source>chameleon_system_shop.cron_send_basket_stats.text_total_aborted_orders</source>
@@ -141,7 +141,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cron_send_basket_stats.user_zip">
                 <source>chameleon_system_shop.cron_send_basket_stats.user_zip</source>
-                <target>ZIP</target>
+                <target>Zip</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cron_send_basket_stats.user_country">
                 <source>chameleon_system_shop.cron_send_basket_stats.user_country</source>
@@ -197,7 +197,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.voucher.prompt_voucher_code_to_create">
                 <source>chameleon_system_shop.voucher.prompt_voucher_code_to_create</source>
-                <target>Please enter the code for all vouchers or (If you don't enter a voucher code) random codes will be generated for every voucher</target>
+                <target>Please enter the code for all vouchers or (if you don't enter a voucher code) random codes will be generated for every voucher</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.voucher.action_export">
                 <source>chameleon_system_shop.voucher.action_export</source>
@@ -222,7 +222,7 @@
 
             <trans-unit id="chameleon_system_shop.orders.action_send_order_confirm_mail">
                 <source>chameleon_system_shop.orders.action_send_order_confirm_mail</source>
-                <target>Send order confirmation mail</target>
+                <target>Send order confirmation email</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.orders.msg_order_confirm_sent">
                 <source>chameleon_system_shop.orders.msg_order_confirm_sent</source>
@@ -233,17 +233,25 @@
                 <target>Error: %error%</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_label">
+                <source>chameleon_system_shop.list_manager_article.filter_type_label</source>
+                <target>Product type</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_main">
                 <source>chameleon_system_shop.list_manager_article.filter_type_main</source>
-                <target>Main product</target>
+                <target>Only main products</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_variants">
                 <source>chameleon_system_shop.list_manager_article.filter_type_variants</source>
-                <target>Variants</target>
+                <target>Only variants</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_all">
                 <source>chameleon_system_shop.list_manager_article.filter_type_all</source>
                 <target>All</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.list_manager_article.filter_active_label">
+                <source>chameleon_system_shop.list_manager_article.filter_active_label</source>
+                <target>Active</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.list_manager_article.filter_active_only_active">
                 <source>chameleon_system_shop.list_manager_article.filter_active_only_active</source>

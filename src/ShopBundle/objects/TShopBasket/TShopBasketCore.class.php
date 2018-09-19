@@ -1503,7 +1503,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     }
 
     /**
-     * Attempts to add the voucher to the basket. error and success messages are send to the sMessageHandler.
+     * Attempts to add the voucher to the basket. Error and success messages are sent to $sMessageHandler.
      *
      * @param TdbShopVoucher $oVoucher
      * @param string         $sMessageHandler - send any messages to this message consumer

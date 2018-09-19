@@ -16,7 +16,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.column_quantity_shipped">
                 <source>chameleon_system_shop_payment_transaction.collection_form.column_quantity_shipped</source>
-                <target>Versendet</target>
+                <target>Versandt</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.column_quantity_canceled">
                 <source>chameleon_system_shop_payment_transaction.collection_form.column_quantity_canceled</source>
@@ -81,7 +81,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.form_transaction_value_help">
                 <source>chameleon_system_shop_payment_transaction.collection_form.form_transaction_value_help</source>
-                <target><![CDATA[Der hier angegeben Wert ist unabhängig von den gewählten Produkten. Die Auswahl der Produkte dient nur als Notize damit später nachvollziehbar ist um welche Produkte es bei der Transaktion ging. Wenn Sie also zB Teilbuchungen vornehmen, dann müssen Sie entscheiden ob Sie die Versandkosten bei der ersten Buchung mit einziehen, oder erst bei der letzten. Produkte die bereits eingezogen bzw zurück gezahlt wurden, werden nicht aufgeführt.]]></target>
+                <target><![CDATA[Der hier angegebene Wert ist unabhängig von den gewählten Produkten. Die Auswahl der Produkte dient nur als Notiz, damit später nachvollziehbar ist, welche Produkte an der Transaktion beteiligt waren. Wenn Sie also z.B. Teilbuchungen vornehmen, dann müssen Sie entscheiden ob Sie die Versandkosten bei der ersten Buchung mit einziehen oder erst bei der letzten. Produkte, die bereits eingezogen bzw. zurückgezahlt wurden, werden nicht aufgeführt.]]></target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.action_abort">
