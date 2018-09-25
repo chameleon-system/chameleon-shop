@@ -136,7 +136,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
         }
 
         if ($productIsActive) {
-            // NOTE this value might be outdated (changed above)...
+            // NOTE this value might be outdated (changed above)...; see #84
 
             if (false === $product->fieldVariantParentIsActive) {
                 $this->SaveField('variant_parent_is_active', $oPostTable->sqlData['active']);

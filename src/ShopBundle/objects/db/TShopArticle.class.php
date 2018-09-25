@@ -1908,7 +1908,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         }
         $oldStock = $this->getAvailableStock();
         //$valueChanged = (double)$oldStock !== (double)$dNewStockValue;
-        // NOTE the below comparisson always has true as result (compares int to double)
+        // NOTE the below comparisson always has true as result (compares int to double); see #84
         $stockIsChanging = ($bNewAmountIsDelta || $oldStock !== $dNewStockValue);
         if (false === $stockIsChanging && false === $bUpdateSaleCounter && false === $bForceUpdate) {
             return false;
