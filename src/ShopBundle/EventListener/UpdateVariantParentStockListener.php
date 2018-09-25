@@ -74,7 +74,7 @@ class UpdateVariantParentStockListener
             $activeValue = $parentProduct->fieldActive;
         }
 
-        if ($parentProduct->fieldActive !== $activeValue) {
+        if ($parentProduct->fieldActive !== $activeValue || $parentProduct->fieldVariantParentIsActive !== $activeValue) {
             $product->setVariantParentActive($parentProduct->id, $activeValue);
         }
     }
