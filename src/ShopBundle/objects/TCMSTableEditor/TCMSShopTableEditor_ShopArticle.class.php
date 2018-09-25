@@ -59,6 +59,9 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
         parent::PostSaveHook($oFields, $oPostTable);
         /** @var TdbShopArticle $product */
         $product = $this->oTable;
+
+        $productIsActive = isset($oPostTable->sqlData['active']) && $oPostTable->sqlData['active'];
+
         if ($product->HasVariants()) {
             $oVariantSet = $product->GetFieldShopVariantSet();
             /** @var $oVariantSet TdbShopVariantSet */
@@ -111,8 +114,30 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
                 }
                 $this->oTableConf->SetLanguage($originalLanguageId);
             }
+
+            $stockMessage = $product->GetFieldShopStockMessage();
+            if (null !== $stockMessage) {
+                $hasStock = $product->getAvailableStock() > 0;
+
+                if (true === $hasStock
+                    && true === $stockMessage->fieldAutoActivateOnStock
+                    && false === $productIsActive) {
+
+                    $product->setIsActive(true);
+                }
+
+                if (false === $hasStock
+                    && true === $stockMessage->fieldAutoDeactivateOnZeroStock
+                    && true === $productIsActive) {
+
+                    $product->setIsActive(false);
+                }
+            }
         }
-        if (isset($oPostTable->sqlData['active']) && $oPostTable->sqlData['active']) {
+
+        if ($productIsActive) {
+            // NOTE this value might be outdated (changed above)...
+
             if (false === $product->fieldVariantParentIsActive) {
                 $this->SaveField('variant_parent_is_active', $oPostTable->sqlData['active']);
             }
