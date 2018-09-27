@@ -83,7 +83,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.payment_data_trans.form_card_valid_until_help">
                 <source>chameleon_system_shop.payment_data_trans.form_card_valid_until_help</source>
-                <target>This date can be found at the front of your credit card.</target>
+                <target>This date can be found on the front side of your credit card.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.payment_data_trans.form_card_checksum">
                 <source>chameleon_system_shop.payment_data_trans.form_card_checksum</source>

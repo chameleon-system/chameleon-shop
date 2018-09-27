@@ -159,7 +159,7 @@
 
             <trans-unit id="chameleon_system_shop.payment_paypal_express.error_guest_user_with_id">
                 <source>chameleon_system_shop.payment_paypal_express.error_guest_user_with_id</source>
-                <target>Benutzerdaten nicht OK. Ein User MIT ID ist als nicht angemeldet markiert</target>
+                <target>Benutzerdaten nicht OK. Ein User mit ID ist als nicht angemeldet markiert</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_shop.payment_easy_cash.error_unable_to_confirm_payment">
