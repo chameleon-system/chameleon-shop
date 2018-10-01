@@ -66,7 +66,7 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
         $oViewRenderer->AddSourceObject('sInputClass', 'form-control input-sm');
         $oViewRenderer->AddSourceObject('sName', 'filterArticleType');
         $oViewRenderer->AddSourceObject('sValue', '0');
-        $oViewRenderer->AddSourceObject('sLabelText', 'Artikeltyp');
+        $oViewRenderer->AddSourceObject('sLabelText', $this->getTranslation('chameleon_system_shop.list_manager_article.filter_type_label'));
         $oViewRenderer->AddSourceObject('sValue', '1');
 
         $aValueList = array();
@@ -96,7 +96,7 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
         $oViewRenderer = new ViewRenderer();
         $oViewRenderer->AddSourceObject('sInputClass', 'form-control input-sm');
         $oViewRenderer->AddSourceObject('sName', 'is_active');
-        $oViewRenderer->AddSourceObject('sLabelText', 'aktiv');
+        $oViewRenderer->AddSourceObject('sLabelText', $this->getTranslation('chameleon_system_shop.list_manager_article.filter_active_label'));
         $oViewRenderer->AddSourceObject('sValue', $isActive);
 
         $aValueList = array();

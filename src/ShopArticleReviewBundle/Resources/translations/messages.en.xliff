@@ -30,7 +30,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.form.send_notifications">
                 <source>chameleon_system_shop_article_review.form.send_notifications</source>
-                <target>Notify on new comments by mail</target>
+                <target>Notify on new comments by email</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.form.title">
                 <source>chameleon_system_shop_article_review.form.title</source>
@@ -58,7 +58,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.action.report_as_inappropriate">
                 <source>chameleon_system_shop_article_review.action.report_as_inappropriate</source>
-                <target>Review inapproriate</target>
+                <target>Review inappropriate</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.text.comment_inappropriate">
                 <source>chameleon_system_shop_article_review.text.comment_inappropriate</source>

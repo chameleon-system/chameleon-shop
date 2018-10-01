@@ -26,7 +26,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.form.author_email">
                 <source>chameleon_system_shop_article_review.form.author_email</source>
-                <target>Ihr Emailadresse</target>
+                <target>Ihre E-Mail-Adresse</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.form.send_notifications">
                 <source>chameleon_system_shop_article_review.form.send_notifications</source>
@@ -92,21 +92,21 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.text.login_required">
                 <source>chameleon_system_shop_article_review.text.login_required</source>
-                <target>Sie müssen angemeldet sein um einen Kommentare lesen zu können</target>
+                <target>Sie müssen angemeldet sein um einen Kommentar lesen zu können</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.text.login_required_to_read_reviews">
                 <source>chameleon_system_shop_article_review.text.login_required_to_read_reviews</source>
-                <target>Bitte melden Sie sich im Shop an, um Bewertungen lesen zu können!</target>
+                <target>Bitte melden Sie sich im Shop an, um Bewertungen lesen zu können.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.text.login_required_to_write_review">
                 <source>chameleon_system_shop_article_review.text.login_required_to_write_review</source>
-                <target>Bitte melden Sie sich im Shop an, um eine Bewertung abzugeben!</target>
+                <target>Bitte melden Sie sich im Shop an, um eine Bewertung abzugeben.</target>
             </trans-unit>
 
 
             <trans-unit id="chameleon_system_shop_article_review.action.comment_on_review">
                 <source>chameleon_system_shop_article_review.action.comment_on_review</source>
-                <target>Rezension Kommentieren</target>
+                <target>Rezension kommentieren</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.text.comment_on_review_headline">
                 <source>chameleon_system_shop_article_review.text.comment_on_review_headline</source>
@@ -161,23 +161,23 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.action.show_all_comments">
                 <source>chameleon_system_shop_article_review.action.show_all_comments</source>
-                <target>Alle Kommentare Anzeigen</target>
+                <target>Alle Kommentare anzeigen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.action.show_fewer_comments">
                 <source>chameleon_system_shop_article_review.action.show_fewer_comments</source>
-                <target>Weniger Kommentare Anzeigen</target>
+                <target>Weniger Kommentare anzeigen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.text.review_count">
                 <source>chameleon_system_shop_article_review.text.review_count</source>
-                <target>Anzahl geschriebene Rezensionen (%count%)</target>
+                <target>Anzahl geschriebener Rezensionen (%count%)</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.action.show_all_reviews">
                 <source>chameleon_system_shop_article_review.action.show_all_reviews</source>
-                <target>Alle Anzeigen</target>
+                <target>Alle anzeigen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.action.show_fewer_reviews">
                 <source>chameleon_system_shop_article_review.action.show_fewer_reviews</source>
-                <target>Weniger Anzeigen</target>
+                <target>Weniger anzeigen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_article_review.text.you_have_no_reviews">
                 <source>chameleon_system_shop_article_review.text.you_have_no_reviews</source>
