@@ -115,28 +115,17 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
                 $this->oTableConf->SetLanguage($originalLanguageId);
             }
 
-            $stockMessage = $product->GetFieldShopStockMessage();
-            if (null !== $stockMessage) {
-                $hasStock = $product->getAvailableStock() > 0;
+            // The save data for activation (in $this->oTable) might be wrong if a stock was changed in the embedded iframe.
+            $activeNum = $product->CheckActivateOrDeactivate();
+            $shouldBeActive = 1 === $activeNum;
 
-                if (true === $hasStock
-                    && true === $stockMessage->fieldAutoActivateOnStock
-                    && false === $productIsActive) {
-
-                    $product->setIsActive(true);
-                }
-
-                if (false === $hasStock
-                    && true === $stockMessage->fieldAutoDeactivateOnZeroStock
-                    && true === $productIsActive) {
-
-                    $product->setIsActive(false);
-                }
+            if ($shouldBeActive !== $productIsActive) {
+                $product->setIsActive($shouldBeActive);
             }
         }
 
         if ($productIsActive) {
-            // NOTE this value might be outdated (changed above)...; see #84
+            // NOTE this value might be outdated (changed above)...; see https://github.com/chameleon-system/chameleon-system/issues/84
 
             if (false === $product->fieldVariantParentIsActive) {
                 $this->SaveField('variant_parent_is_active', $oPostTable->sqlData['active']);
