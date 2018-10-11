@@ -114,7 +114,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
 
             /*
              * NOTE the "active" flag of the variant itself is probably wrong here after a stock change
-             *   (stock iframe is saved first which may change the active state, POST data of this request 
+             *   (stock iframe is saved first which may change the active state, POST data of this request
              *    contains the old active state)
              */
         }
