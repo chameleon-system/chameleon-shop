@@ -1907,7 +1907,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             return false;
         }
         $oldStock = $this->getAvailableStock();
-        // NOTE the below comparisson always has true as result (compares int to double); see https://github.com/chameleon-system/chameleon-system/issues/120
+        // NOTE the below comparison always has true as result (compares int to double); see https://github.com/chameleon-system/chameleon-system/issues/120
         $stockIsChanging = ($bNewAmountIsDelta || $oldStock !== $dNewStockValue);
         if (false === $stockIsChanging && false === $bUpdateSaleCounter && false === $bForceUpdate) {
             return false;
