@@ -59,9 +59,6 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
         parent::PostSaveHook($oFields, $oPostTable);
         /** @var TdbShopArticle $product */
         $product = $this->oTable;
-
-        $productIsActive = isset($oPostTable->sqlData['active']) && $oPostTable->sqlData['active'];
-
         if ($product->HasVariants()) {
             $oVariantSet = $product->GetFieldShopVariantSet();
             /** @var $oVariantSet TdbShopVariantSet */
@@ -115,11 +112,14 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
                 $this->oTableConf->SetLanguage($originalLanguageId);
             }
 
-            // NOTE the "active" flag of the variant itself is probably wrong here after a stock change
-            //   (old data in $oPostTable->sqlData['active'])
+            /*
+             * NOTE the "active" flag of the variant itself is probably wrong here after a stock change
+             *   (stock iframe is saved first which may change the active state, POST data of this request 
+             *    contains the old active state)
+             */
         }
 
-        if ($productIsActive) {
+        if (isset($oPostTable->sqlData['active']) && $oPostTable->sqlData['active']) {
             if (false === $product->fieldVariantParentIsActive) {
                 $this->SaveField('variant_parent_is_active', $oPostTable->sqlData['active']);
             }
