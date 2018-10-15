@@ -81,7 +81,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.form_transaction_value_help">
                 <source>chameleon_system_shop_payment_transaction.collection_form.form_transaction_value_help</source>
-                <target><![CDATA[This value is independent from what products are selected. The selection is just as a reminder for you to keep track of the products involved in the transaction. This means: If you're doing split transactions you have to decide in which transaction you'll charge for the shipping costs. Products for which their value has already been withdrawn or refunded will not be shown.]]></target>
+                <target><![CDATA[This value is independent from which products are selected. The selection is just a reminder for you to keep track of the products involved in the transaction. This means: If you're doing split transactions you need to decide in which transaction you'll charge for the shipping costs. Products whose value has already been withdrawn or refunded will not be shown.]]></target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_shop_payment_transaction.collection_form.action_abort">
@@ -172,11 +172,11 @@
 
             <trans-unit id="chameleon_system_shop_payment_transaction.action.collect_partial">
                 <source>chameleon_system_shop_payment_transaction.action.collect_partial</source>
-                <target>Part payment</target>
+                <target>Partial payment</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_payment_transaction.action.refund_partial">
                 <source>chameleon_system_shop_payment_transaction.action.refund_partial</source>
-                <target>Part refund</target>
+                <target>Partial refund</target>
             </trans-unit>
 
         </body>

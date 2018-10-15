@@ -84,7 +84,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.action_download">
                 <source>chameleon_system_shop.cms_module_shop_statistic.action_download</source>
-                <target>Download Übersicht</target>
+                <target>Download-Übersicht</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cms_module_shop_statistic.action_download_top_seller">
                 <source>chameleon_system_shop.cms_module_shop_statistic.action_download_top_seller</source>
@@ -97,7 +97,7 @@
 
             <trans-unit id="chameleon_system_shop.cron_send_basket_stats.headline">
                 <source>chameleon_system_shop.cron_send_basket_stats.headline</source>
-                <target>Gesamt Statistiken</target>
+                <target>Gesamtstatistiken</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cron_send_basket_stats.completed">
                 <source>chameleon_system_shop.cron_send_basket_stats.completed</source>
@@ -117,7 +117,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cron_send_basket_stats.text_general_info">
                 <source>chameleon_system_shop.cron_send_basket_stats.text_general_info</source>
-                <target>Generelle Informationen</target>
+                <target>Allgemeine Informationen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cron_send_basket_stats.text_general_aborted">
                 <source>chameleon_system_..</source>
@@ -165,12 +165,12 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.cron_send_basket_stats.basket_content_total">
                 <source>chameleon_system_shop.cron_send_basket_stats.basket_content_total</source>
-                <target>Warenkorb Preis %basketTotal%</target>
+                <target>Warenkorb-Preis %basketTotal%</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_shop.cron_resend_order_mail.subject">
                 <source>chameleon_system_shop.cron_resend_order_mail.subject</source>
-                <target>Bestell-Email konnte nicht versendet werden an %mail% (%date%)</target>
+                <target>Bestell-E-Mail konnte nicht versandt werden an %mail% (%date%)</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_shop.order_list.user_type_guest">
@@ -226,24 +226,32 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.orders.msg_order_confirm_sent">
                 <source>chameleon_system_shop.orders.msg_order_confirm_sent</source>
-                <target>E-Mail erfolgreich an folgende E-Mail Adresse versendet: %mail%</target>
+                <target>E-Mail erfolgreich an folgende E-Mail-Adresse versendet: %mail%</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.orders.error_sending_confirm_mail">
                 <source>chameleon_system_shop.orders.error_sending_confirm_mail</source>
                 <target>Fehler: %error%</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_label">
+                <source>chameleon_system_shop.list_manager_article.filter_type_label</source>
+                <target>Produkttyp</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_main">
                 <source>chameleon_system_shop.list_manager_article.filter_type_main</source>
-                <target>Hauptartikel</target>
+                <target>Nur Hauptartikel</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_variants">
                 <source>chameleon_system_shop.list_manager_article.filter_type_variants</source>
-                <target>Varianten</target>
+                <target>Nur Varianten</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_all">
                 <source>chameleon_system_shop.list_manager_article.filter_type_all</source>
                 <target>Alle</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.list_manager_article.filter_active_label">
+                <source>chameleon_system_shop.list_manager_article.filter_active_label</source>
+                <target>Aktiv</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.list_manager_article.filter_active_only_active">
                 <source>chameleon_system_shop.list_manager_article.filter_active_only_active</source>

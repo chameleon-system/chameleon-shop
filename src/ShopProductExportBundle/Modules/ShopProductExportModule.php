@@ -109,7 +109,7 @@ class ShopProductExportModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $oVisitor->SetMappedValueFromArray($responseData);
 
-        if (true === $responseData['error']) {
+        if (false !== $responseData['error']) {
             return;
         }
 

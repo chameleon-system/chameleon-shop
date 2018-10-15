@@ -12,11 +12,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop_order_status.error.order_not_found">
                 <source>chameleon_system_shop_order_status.error.order_not_found</source>
-                <target>Could not find order!</target>
+                <target>Could not find order.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_order_status.error.missing_parameter">
                 <source>chameleon_system_shop_order_status.error.missing_parameter</source>
-                <target>Missing parameters!</target>
+                <target>Missing parameters.</target>
             </trans-unit>
 
 
