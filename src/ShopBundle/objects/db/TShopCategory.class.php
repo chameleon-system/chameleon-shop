@@ -62,45 +62,27 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
         }
         $sLink = $this->GetFromInternalCache($sInternalCacheKey);
         if (is_null($sLink)) {
-            $oShop = $this->getShopService()->getActiveShop();
-            $oNaviNodeFound = null;
-            if (method_exists($oShop, 'GetFieldShopPrimaryNaviList')) {
-                $oNaviNodes = $oShop->GetFieldShopPrimaryNaviList();
-                $oNaviNodeFound = $oNaviNodes->FindItemWithProperty('fieldShopCategoryId', $this->id);
-                if (empty($oNaviNodeFound->fieldContentNode)) {
-                    $oNaviNodeFound = null;
-                }
-            }
-            if (!is_null($oNaviNodeFound) && !empty($oNaviNodeFound->fieldContentNode)) {
-                $treeService = static::getTreeService();
-                $oTreeNode = $treeService->getById($oNaviNodeFound->fieldContentNode);
+            try {
                 if ($bAbsolute) {
-                    $sLink = $treeService->getLinkToPageForTreeAbsolute($oTreeNode, array(), $language);
+                    $sPageLink = $this->getSystemPageService()->getLinkToSystemPageAbsolute('products', array(), $portal, $language);
                 } else {
-                    $sLink = $treeService->getLinkToPageForTreeRelative($oTreeNode, array(), $language);
+                    $sPageLink = $this->getSystemPageService()->getLinkToSystemPageRelative('products', array(), $portal, $language);
                 }
-            } else {
-                try {
-                    if ($bAbsolute) {
-                        $sPageLink = $this->getSystemPageService()->getLinkToSystemPageAbsolute('products', array(), $portal, $language);
-                    } else {
-                        $sPageLink = $this->getSystemPageService()->getLinkToSystemPageRelative('products', array(), $portal, $language);
-                    }
-                    if ('.html' === substr($sPageLink, -5)) {
-                        $sPageLink = substr($sPageLink, 0, -5).'/';
-                    }
-                    if ('/' === substr($sPageLink, -1)) {
-                        $sPageLink = substr($sPageLink, 0, -1);
-                    }
-                } catch (RouteNotFoundException $e) {
-                    $sPageLink = '';
+                if ('.html' === substr($sPageLink, -5)) {
+                    $sPageLink = substr($sPageLink, 0, -5).'/';
                 }
-                $sCatUrl = $this->GetURLPath();
-                if ('/' !== substr($sCatUrl, 0, 1)) {
-                    $sCatUrl = '/'.$sCatUrl;
+                if ('/' === substr($sPageLink, -1)) {
+                    $sPageLink = substr($sPageLink, 0, -1);
                 }
-                $sLink = $sPageLink.$sCatUrl;
+            } catch (RouteNotFoundException $e) {
+                $sPageLink = '';
             }
+            $sCatUrl = $this->GetURLPath();
+            if ('/' !== substr($sCatUrl, 0, 1)) {
+                $sCatUrl = '/'.$sCatUrl;
+            }
+            $sLink = $sPageLink.$sCatUrl;
+
             if (null === $portal) {
                 $portal = $this->getPortalDomainService()->getActivePortal();
             }
