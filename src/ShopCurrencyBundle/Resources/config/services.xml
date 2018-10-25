@@ -6,7 +6,7 @@
         <service id="chameleon_system_shop_currency.mapper.shop_currency_mapper" class="TPkgShopCurrencyMapper">
         </service>
 
-        <service id="chameleon_system_shop_currency.shop_currency" class="ChameleonSystem\ShopCurrencyBundle\Service\ShopCurrencyService">
+        <service id="chameleon_system_shop_currency.shop_currency" class="ChameleonSystem\ShopCurrencyBundle\Service\ShopCurrencyService" public="true">
             <argument type="service" id="request_stack" />
             <argument type="service" id="chameleon_system_extranet.extranet_user_provider" />
         </service>

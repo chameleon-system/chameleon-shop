@@ -11,7 +11,7 @@
                 <argument type="service" id="database_connection" />
             </call>
         </service>
-        <service id="chameleon_system_shop_list_filter.filter_api" class="ChameleonSystem\pkgshoplistfilter\objects\FilterApi">
+        <service id="chameleon_system_shop_list_filter.filter_api" class="ChameleonSystem\pkgshoplistfilter\objects\FilterApi" public="true">
             <argument type="service" id="request_stack" />
             <argument type="service" id="chameleon_system_shop_list_filter.db_adapter" />
             <argument type="service" id="chameleon_system_shop.db_adapter" />
