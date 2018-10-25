@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface;
 
 class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymentTransaction_TCMSTableEditorShopOrderAutoParent
@@ -76,8 +78,13 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
             );
         }
         $aParam = TGlobal::instance()->GetUserData(null, array('module_fnc', '_noModuleFunction'));
-        $sURL = URL_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParam);
+        $sURL = URL_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl($aParam,'','&');
         $this->getRedirect()->redirect($sURL);
+    }
+
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 
     public function paymentTransactionRefundAll()
@@ -129,7 +136,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
             );
         }
         $aParam = TGlobal::instance()->GetUserData(null, array('module_fnc', '_noModuleFunction'));
-        $sURL = URL_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParam);
+        $sURL = URL_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl($aParam,'','&');
         $this->getRedirect()->redirect($sURL);
     }
 
@@ -198,7 +205,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
             );
         }
         $aParam = TGlobal::instance()->GetUserData(null, array('module_fnc', '_noModuleFunction', 'debitType'));
-        $sURL = URL_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParam);
+        $sURL = URL_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl($aParam,'','&');
         $this->getRedirect()->redirect($sURL);
     }
 
