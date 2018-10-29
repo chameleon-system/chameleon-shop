@@ -45,6 +45,7 @@ class ContentFromUrlLoaderStandardService implements ContentFromUrlLoaderService
             'http' => array(
                 'method' => 'GET',
                 'header' => 'Cookie: '.urlencode($session->getName()).'='.urlencode($session->getId())."\r\n",
+                'user_agent' => $_SERVER['HTTP_USER_AGENT'],
             ),
         );
 
