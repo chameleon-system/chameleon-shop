@@ -81,12 +81,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         $sURL = URL_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl($aParam, '', '&');
         $this->getRedirect()->redirect($sURL);
     }
-
-    private function getUrlUtil(): UrlUtil
-    {
-        return ServiceLocator::get('chameleon_system_core.util.url');
-    }
-
+    
     public function paymentTransactionRefundAll()
     {
         if (false === $this->allowTransactions()) {
@@ -403,5 +398,10 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     private function getRedirect()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+    }
+    
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }
