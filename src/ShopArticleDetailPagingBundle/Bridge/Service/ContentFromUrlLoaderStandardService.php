@@ -29,6 +29,7 @@ class ContentFromUrlLoaderStandardService implements ContentFromUrlLoaderService
 
     /**
      * @param string $url
+     *
      * @return string
      *
      * @throws ContentLoadingException
@@ -36,21 +37,29 @@ class ContentFromUrlLoaderStandardService implements ContentFromUrlLoaderService
     public function load($url)
     {
         $request = $this->requestStack->getCurrentRequest();
-        if (substr($url, 0,7) !== 'http://' && substr($url, 0,8) !== 'https://') {
-            $url = $request->getSchemeAndHttpHost() . $url;
+
+        if (null === $request) {
+            throw new ContentLoadingException('Content loader needs current request; none found.');
+        }
+
+        $session = $request->getSession();
+
+        if (null === $session) {
+            throw new ContentLoadingException('Content loader needs current session; none found.');
+        }
+
+        if (0 !== strpos($url, 'http://') && 0 !== strpos($url, 'https://')) {
+            $url = $request->getSchemeAndHttpHost().$url;
         }
 
         /*
          * We need to pass the session as cookie (the session may not be accepted via GET).
          * We don't pass all headers, since we do not provide the same functionality as the browser does.
-         * The user agent is needed as well, as the session validation would otherwise fail if
-         * CHAMELEON_SECURITY_EXTRANET_SESSION_USE_USER_AGENT_IN_KEY is set and lead to a user logout.
-         * The same holds true for the client IP address and CHAMELEON_SECURITY_EXTRANET_SESSION_USE_IP_IN_KEY, but
-         * there is no simple workaround for that problem, so the bundle is currently incompatible with that constant.
+         * The user agent is needed, as the session validation would otherwise fail if
+         * CHAMELEON_SECURITY_EXTRANET_SESSION_USE_USER_AGENT_IN_KEY is set and that leads to a user logout.
          */
-        $session = $request->getSession();
         $headers = array(
-            'Cookie' => urlencode($session->getName()) .'='.urlencode($session->getId()),
+            'Cookie' => urlencode($session->getName()).'='.urlencode($session->getId()),
             'User-Agent' => $request->headers->get('User-Agent'),
         );
         $headerString = '';
@@ -61,15 +70,17 @@ class ContentFromUrlLoaderStandardService implements ContentFromUrlLoaderService
             'http' => array(
                 'method' => 'GET',
                 'header' => $headerString,
-            )
+            ),
         );
 
         $context = stream_context_create($opts);
 
         $content = @file_get_contents($url, false, $context);
-        if(null === $content) {
+
+        if (null === $content) {
             throw new ContentLoadingException('Content loading failed.');
         }
+
         return $content;
     }
 }
