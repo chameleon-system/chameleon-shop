@@ -81,7 +81,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         $sURL = URL_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl($aParam, '', '&');
         $this->getRedirect()->redirect($sURL);
     }
-    
+
     public function paymentTransactionRefundAll()
     {
         if (false === $this->allowTransactions()) {
