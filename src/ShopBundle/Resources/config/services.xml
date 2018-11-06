@@ -43,7 +43,7 @@
     </parameters>
 
     <services>
-        <service id="chameleon_system_shop.shop_service" class="ChameleonSystem\ShopBundle\Service\ShopService">
+        <service id="chameleon_system_shop.shop_service" class="ChameleonSystem\ShopBundle\Service\ShopService" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="request_stack" />
             <argument type="service" id="chameleon_system_extranet.extranet_user_provider" />
@@ -113,7 +113,7 @@
             <argument type="service" id="chameleon_system_core.mapper_loader" />
         </service>
 
-        <service id="chameleon_system_shop.product_stats_service" class="ChameleonSystem\ShopBundle\Service\ProductStatisticsService">
+        <service id="chameleon_system_shop.product_stats_service" class="ChameleonSystem\ShopBundle\Service\ProductStatisticsService" public="true">
             <call method="setDatabaseConnection">
                 <argument type="service" id="database_connection" />
             </call>
@@ -127,7 +127,7 @@
                 <argument type="service" id="database_connection" />
             </call>
         </service>
-        <service id="chameleon_system_shop.product_inventory_service" class="ChameleonSystem\ShopBundle\Service\ProductInventoryServiceCacheProxy">
+        <service id="chameleon_system_shop.product_inventory_service" class="ChameleonSystem\ShopBundle\Service\ProductInventoryServiceCacheProxy" public="true">
             <argument type="service" id="chameleon_system_shop.product_inventory_service_provider" />
         </service>
 
@@ -161,11 +161,11 @@
             </call>
         </service>
 
-        <service id="chameleon_system_shop.category_route_collection_generator" class="TPkgShopCategoryRouteCollectionGenerator">
+        <service id="chameleon_system_shop.category_route_collection_generator" class="TPkgShopCategoryRouteCollectionGenerator" public="true">
             <argument type="service" id="chameleon_system_core.system_page_service" />
         </service>
 
-        <service id="chameleon_system_shop.basket_steps_route_collection_generator" class="TPkgShopBasketStepsRouteCollectionGenerator">
+        <service id="chameleon_system_shop.basket_steps_route_collection_generator" class="TPkgShopBasketStepsRouteCollectionGenerator" public="true">
             <argument type="service" id="chameleon_system_core.system_page_service" />
             <argument type="service" id="database_connection" />
             <argument type="service" id="chameleon_system_core.util.routing" />
@@ -196,11 +196,11 @@
             <argument type="service" id="chameleon_system_shop.payment.handler_data_access" />
         </service>
 
-        <service id="chameleon_system_shop.payment_info_service" class="ChameleonSystem\ShopBundle\Service\PaymentInfoService">
+        <service id="chameleon_system_shop.payment_info_service" class="ChameleonSystem\ShopBundle\Service\PaymentInfoService" public="true">
             <argument type="service" id="database_connection" />
         </service>
 
-        <service id="chameleon_system_shop.order_step_page_service" class="ChameleonSystem\ShopBundle\Service\OrderStepPageService">
+        <service id="chameleon_system_shop.order_step_page_service" class="ChameleonSystem\ShopBundle\Service\OrderStepPageService" public="true">
             <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
             <argument type="service" id="chameleon_system_core.util.url" />
             <argument type="service" id="chameleon_system_core.util.routing" />
@@ -216,17 +216,17 @@
             <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="onUpdateProductStock" />
         </service>
 
-        <service id="chameleon_system_shop.basket.basket_product_amount_validator" class="ChameleonSystem\ShopBundle\Basket\BasketProductAmountValidator">
+        <service id="chameleon_system_shop.basket.basket_product_amount_validator" class="ChameleonSystem\ShopBundle\Basket\BasketProductAmountValidator" public="true">
         </service>
 
-        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\PaymentMethodDataAccess" id="chameleon_system_shop.payment_method_data_access">
+        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\PaymentMethodDataAccess" id="chameleon_system_shop.payment_method_data_access" public="true">
             <argument id="database_connection" type="service"/>
         </service>
         <service class="ChameleonSystem\ShopBundle\RuntimeCache\PaymentMethodDataAccessRuntimeCacheDecorator" id="chameleon_system_shop.payment_method_data_access_runtime_cache_decorator" decorates="chameleon_system_shop.payment_method_data_access">
             <argument id="chameleon_system_shop.payment_method_data_access_runtime_cache_decorator.inner" type="service"/>
         </service>
 
-        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\ShopShippingTypeDataAccess" id="chameleon_system_shop.shop_shipping_type_data_access">
+        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\ShopShippingTypeDataAccess" id="chameleon_system_shop.shop_shipping_type_data_access" public="true">
             <argument id="database_connection" type="service"/>
         </service>
         <service class="ChameleonSystem\ShopBundle\RuntimeCache\ShopShippingTypeDataAccessRuntimeCacheDecorator" id="chameleon_system_shop.shop_shipping_type_data_access_runtime_cache_decorator" decorates="chameleon_system_shop.shop_shipping_type_data_access">
@@ -234,7 +234,7 @@
         </service>
 
 
-        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\ShopCategoryDataAccess" id="chameleon_system_shop.shop_category_data_access">
+        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\ShopCategoryDataAccess" id="chameleon_system_shop.shop_category_data_access" public="true">
             <argument id="database_connection" type="service"/>
         </service>
         <service class="ChameleonSystem\ShopBundle\RuntimeCache\ShopCategoryDataAccessRuntimeCacheDecorator" id="chameleon_system_shop.runtime_cache.shop_category_data_access_runtime_cache_decorator" decorates="chameleon_system_shop.shop_category_data_access">
@@ -242,14 +242,14 @@
         </service>
 
 
-        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\ShopShippingGroupDataAccess" id="chameleon_system_shop.shop_shipping_group_data_access">
+        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\ShopShippingGroupDataAccess" id="chameleon_system_shop.shop_shipping_group_data_access" public="true">
             <argument id="database_connection" type="service"/>
         </service>
         <service class="ChameleonSystem\ShopBundle\RuntimeCache\ShopShippingGroupDataAccessRuntimeCacheDecorator" id="chameleon_system_shop.shop_shipping_group_data_access_runtime_cache_decorator" decorates="chameleon_system_shop.shop_shipping_group_data_access">
             <argument id="chameleon_system_shop.shop_shipping_group_data_access_runtime_cache_decorator.inner" type="service"/>
         </service>
 
-        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\ShopStockMessageDataAccess" id="chameleon_system_shop.shop_stock_message_data_access">
+        <service class="ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess\ShopStockMessageDataAccess" id="chameleon_system_shop.shop_stock_message_data_access" public="true">
             <argument id="database_connection" type="service"/>
         </service>
         <service class="ChameleonSystem\ShopBundle\RuntimeCache\ShopStockMessageDataAccessRuntimeCacheDecorator" id="chameleon_system_shop.shop_stock_message_data_access_runtime_cache_decorator" decorates="chameleon_system_shop.shop_stock_message_data_access">
@@ -264,7 +264,7 @@
             <argument type="service" id="database_connection" />
         </service>
 
-        <service id="chameleon_system_shop.product_variant.product_variant_name_generator" class="ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGenerator">
+        <service id="chameleon_system_shop.product_variant.product_variant_name_generator" class="ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGenerator" public="true">
 
         </service>
 
