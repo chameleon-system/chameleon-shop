@@ -605,7 +605,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
     }
 
     /**
-     * @return TdbCmsTplPage
+     * @return TdbCmsTplPage|null
      */
     public function getTargetPage()
     {
@@ -630,8 +630,17 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
             if (null === $activePortal) {
                 return null;
             }
-            $targetPageId = $activePortal->GetSystemPageId('products');
-            $defaultPage = TdbCmsTplPage::GetNewInstance($targetPageId);
+
+            $systemPageService = $this->getSystemPageService();
+            $defaultSystemPage = $systemPageService->getSystemPage('products', $activePortal);
+
+            if (null === $defaultSystemPage) {
+                return null;
+            }
+
+            $pageService = self::getPageService();
+            $defaultPage = $pageService->getById($defaultSystemPage->id);
+
             $targetPage = $defaultPage;
         }
 
