@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\ShopBundle\Exception\ConfigurationException;
 use ChameleonSystem\ShopBundle\Payment\PaymentHandler\Interfaces\ShopPaymentHandlerFactoryInterface;
+use Psr\Log\LoggerInterface;
 
 class TCMSSmartURLHandler_ShopPaymentOgone extends TCMSSmartURLHandler_ShopBasketSteps
 {
@@ -61,8 +62,13 @@ class TCMSSmartURLHandler_ShopPaymentOgone extends TCMSSmartURLHandler_ShopBaske
                         $this->handleError();
                     }
                 } catch (ConfigurationException $e) {
-                    $this->getLogger()->error('Unable to create payment handler: '.$e->getMessage(), __FILE__, __LINE__,
-                        array('paymentHandlerId' => $oPaymentHandler->id, 'portalId' => $activePortal->id));
+                    $this->getLogger()->error(
+                        sprintf('Unable to create payment handler: %s', $e->getMessage()),
+                        [
+                            'paymentHandlerId' => $oPaymentHandler->id,
+                            'portalId' => $activePortal->id,
+                        ]
+                    );
                     $this->handleError();
                 }
             } else {
@@ -114,11 +120,8 @@ class TCMSSmartURLHandler_ShopPaymentOgone extends TCMSSmartURLHandler_ShopBaske
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return IPkgCmsCoreLog
-     */
-    private function getLogger()
+    private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.shop_payment');
     }
 }

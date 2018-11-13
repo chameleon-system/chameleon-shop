@@ -11,6 +11,7 @@
 
 use ChameleonSystem\ShopBundle\Exception\ConfigurationException;
 use ChameleonSystem\ShopBundle\Payment\PaymentHandler\Interfaces\ShopPaymentHandlerFactoryInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class TShopOrder extends TShopOrderAutoParent
@@ -394,8 +395,13 @@ class TShopOrder extends TShopOrderAutoParent
                     $oPaymentHandler = $this->getShopPaymentHandlerFactory()->createPaymentHandler($oPaymentMethod->fieldShopPaymentHandlerId, $this->fieldCmsPortalId, $aParameter);
                     $this->SetInternalCache('oOrderPaymentHandler', $oPaymentHandler);
                 } catch (ConfigurationException $e) {
-                    $this->getLogger()->error('Unable to create payment handler: '.$e->getMessage(), __FILE__, __LINE__,
-                        array('paymentHandlerId' => $oPaymentMethod->fieldShopPaymentHandlerId, 'portalId' => $this->fieldCmsPortalId));
+                    $this->getLogger()->error(
+                        sprintf('Unable to create payment handler: %s', $e->getMessage()),
+                        [
+                            'paymentHandlerId' => $oPaymentMethod->fieldShopPaymentHandlerId,
+                            'portalId' => $this->fieldCmsPortalId,
+                        ]
+                    );
                 }
             }
         }
@@ -411,12 +417,9 @@ class TShopOrder extends TShopOrderAutoParent
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
     }
 
-    /**
-     * @return IPkgCmsCoreLog
-     */
-    private function getLogger()
+    private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.shop_order');
     }
 
     /**
@@ -1019,7 +1022,7 @@ class TShopOrder extends TShopOrderAutoParent
             'voucherId' => $voucher->id,
             'voucherCode' => $voucher->fieldCode,
         );
-        $this->getLogger()->error($message, __FILE__, __LINE__, $context);
+        $this->getLogger()->error($message, $context);
     }
 
     /**

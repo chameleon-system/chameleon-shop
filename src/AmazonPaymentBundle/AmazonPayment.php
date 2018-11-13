@@ -580,13 +580,6 @@ class AmazonPayment implements PaymentTransactionHandlerInterface
     }
 
     /**
-     * @return \IPkgCmsCoreLog
-     */
-    protected function getLog()
-    {
-    }
-
-    /**
      * @param \OffAmazonPaymentsService_Model_OrderReferenceDetails $orderReferenceDetails
      * @param \TdbShopOrder                                         $order
      */
