@@ -367,6 +367,10 @@ class TShopDiscount extends TShopDiscountAutoParent
             }
         }
 
+        if (0 === count($aArticleRestrictions) && 0 === count($aCategoryRestrictons)) {
+            TCacheManager::PerformeTableChange('shop_article', null);
+        }
+
         $databaseConnection->update($this->table, array(
             'cache_clear_last_executed' => date('Y-m-d H:i:s', $iStartOperation),
         ), array(
