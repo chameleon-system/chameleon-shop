@@ -43,15 +43,9 @@ class ShopCategoryDataAccess implements ShopCategoryDataAccessInterface
         $query = $query.' ORDER BY `position`';
         $categories = $this->connection->fetchAll($query);
 
-        return array_reduce(
-            $categories,
-            function (array $carry, array $row) {
-                $carry[$row['id']] = $row;
+        $idList = \array_column($categories, 'id');
 
-                return $carry;
-            },
-            array()
-        );
+        return \array_combine($idList, $categories);
     }
 
     /**
