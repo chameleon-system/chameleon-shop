@@ -13,7 +13,7 @@
             <directory>src/SearchBundle/Tests</directory>
             <directory>src/ShopArticleDetailPagingBundle/Tests</directory>
             <!-- Amazon Pay tests do not work currently -->
-            <!--<directory>src/ShopPaymentAmazonBundle/Tests</directory>-->
+            <!--<directory>src/AmazonPaymentBundle/Tests</directory>-->
         </testsuite>
     </testsuites>
 

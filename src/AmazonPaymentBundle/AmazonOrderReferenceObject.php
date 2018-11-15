@@ -17,6 +17,7 @@ use ChameleonSystem\AmazonPaymentBundle\Exceptions\AmazonRefundDeclinedException
 use ChameleonSystem\AmazonPaymentBundle\Interfaces\IAmazonOrderReferenceObject;
 use ChameleonSystem\AmazonPaymentBundle\Interfaces\IAmazonReferenceId;
 use ChameleonSystem\AmazonPaymentBundle\ReferenceIdMapping\AmazonReferenceIdList;
+use Psr\Log\LoggerInterface;
 use TPkgCmsException_LogAndMessage;
 
 /**
@@ -52,7 +53,7 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
      */
     private $converter = null;
     /**
-     * @var \IPkgCmsCoreLog
+     * @var LoggerInterface|null
      */
     private $logger;
 
@@ -62,12 +63,11 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
     public function __construct(
         AmazonPaymentGroupConfig $config,
         $amazonOrderReferenceId,
-        \IPkgCmsCoreLog $logger = null
+        LoggerInterface $logger = null
     ) {
         $this->config = $config;
         $this->amazonOrderReferenceId = $amazonOrderReferenceId;
         $this->converter = new AmazonDataConverter();
-
         $this->logger = $logger;
     }
 
@@ -101,9 +101,9 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
             $result = $response->getSetOrderReferenceDetailsResult();
             /** @var \OffAmazonPaymentsService_Model_OrderReferenceDetails $orderReferenceDetails */
             $orderReferenceDetails = $result->getOrderReferenceDetails();
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             // api error
             throw $this->convertApiToLogMessageException($request, $e, 'setOrderReferenceOrderValue');
         }
@@ -166,7 +166,7 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
             $orderReferenceDetails = $result->getOrderReferenceDetails();
             // check if there are constraints
             if (true === $orderReferenceDetails->isSetConstraints()) {
-                $this->logApiError($request, $response, __LINE__);
+                $this->logApiError($request, $response);
                 throw $this->getConstraintException($orderReferenceDetails->getConstraints());
             }
 
@@ -174,7 +174,7 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
             try {
                 $this->converter->getCountryIdFromAmazonCountryCode($countryCode, AmazonDataConverter::ORDER_ADDRESS_TYPE_SHIPPING);
             } catch (\InvalidArgumentException $e) {
-                $this->logApiError($request, $response, __LINE__);
+                $this->logApiError($request, $response);
                 throw new TPkgCmsException_LogAndMessage(AmazonPayment::ERROR_CODE_INVALID_ADDRESS, array('countryCode' => $countryCode),
                     'User selected a shipping address in a country to which shipment is not supported', array(
                         'order' => $order->sqlData,
@@ -182,9 +182,9 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
                     )
                 );
             }
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             // api error
             throw $this->convertApiToLogMessageException($request, $e, 'setOrderReferenceDetails');
         }
@@ -203,9 +203,9 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
 
         try {
             $response = $this->config->getAmazonAPI()->confirmOrderReference($request);
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             // api error
             throw $this->convertApiToLogMessageException($request, $e, 'confirmOrderReference');
         }
@@ -243,7 +243,7 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
 
             $status = $authDetails->getAuthorizationStatus();
             if (self::STATUS_AUTHORIZATION_DECLINED === $status->getState()) {
-                $this->logApiError($request, $response, __LINE__);
+                $this->logApiError($request, $response);
                 throw new AmazonAuthorizationDeclinedException($status->getReasonCode(),
                     array(
                         'reasonCode' => $status->getReasonCode(),
@@ -261,11 +261,11 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
                     )
                 );
             }
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
 
             return $authDetails;
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             // api error
             throw $this->convertApiToLogMessageException($request, $e, 'authorize');
         }
@@ -309,7 +309,7 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
 
             $status = $authDetails->getAuthorizationStatus();
             if (self::STATUS_AUTHORIZATION_DECLINED === $status->getState()) {
-                $this->logApiError($request, $response, __LINE__);
+                $this->logApiError($request, $response);
                 throw new AmazonAuthorizationDeclinedException($status->getReasonCode(),
                     array(
                         'reasonCode' => $status->getReasonCode(),
@@ -327,11 +327,11 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
                     )
                 );
             }
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
 
             return $authDetails;
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             // api error
             throw $this->convertApiToLogMessageException($request, $e, 'authorize');
         }
@@ -362,7 +362,7 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
             $details = $response->getCaptureResult()->getCaptureDetails();
             // check state
             if (self::STATUS_CAPTURE_DECLINED === $details->getCaptureStatus()->getState()) {
-                $this->logApiError($request, $response, __LINE__);
+                $this->logApiError($request, $response);
                 throw new AmazonCaptureDeclinedException($details->getCaptureStatus()->getReasonCode(),
                     array(
                         'reasonCode' => $details->getCaptureStatus()->getReasonCode(),
@@ -381,11 +381,11 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
                     )
                 );
             }
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
 
             return $details;
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             // api error
             throw $this->convertApiToLogMessageException($request, $e, 'authorize');
         }
@@ -419,7 +419,7 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
             $response = $this->config->getAmazonAPI()->refund($request);
             $details = $response->getRefundResult()->getRefundDetails();
             if (self::STATUS_REFUND_DECLINED === $details->getRefundStatus()->getState()) {
-                $this->logApiError($request, $response, __LINE__);
+                $this->logApiError($request, $response);
                 throw new AmazonRefundDeclinedException($details->getRefundStatus()->getReasonCode(),
                     array(
                         'reasonCode' => $details->getRefundStatus()->getReasonCode(),
@@ -439,11 +439,11 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
                     )
                 );
             }
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
 
             return $details;
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             // api error
             throw $this->convertApiToLogMessageException($request, $e, 'refund');
         }
@@ -474,9 +474,9 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
 
         try {
             $response = $this->config->getAmazonAPI()->getOrderReferenceDetails($request);
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             // api error
             throw $this->convertApiToLogMessageException($request, $e, 'getOrderReferenceDetails');
         }
@@ -523,11 +523,11 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
 
         try {
             $response = $this->config->getAmazonAPI()->getAuthorizationDetails($request);
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
 
             return $response->getGetAuthorizationDetailsResult()->getAuthorizationDetails();
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             // api error
             throw $this->convertApiToLogMessageException($request, $e, 'getAuthorizationDetails');
         }
@@ -543,11 +543,11 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
         $request->setAmazonCaptureId($amazonCaptureId);
         try {
             $response = $this->config->getAmazonAPI()->getCaptureDetails($request);
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
 
             return $response->getGetCaptureDetailsResult()->getCaptureDetails();
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             throw $this->convertApiToLogMessageException($request, $e, 'getCaptureDetails');
         }
     }
@@ -562,11 +562,11 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
         $request->setAmazonRefundId($amazonRefundId);
         try {
             $response = $this->config->getAmazonAPI()->getRefundDetails($request);
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
 
             return $response->getGetRefundDetailsResult()->getRefundDetails();
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             throw $this->convertApiToLogMessageException($request, $e, 'getRefundDetails');
         }
     }
@@ -586,9 +586,9 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
 
         try {
             $response = $this->config->getAmazonAPI()->cancelOrderReference($request);
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             throw $this->convertApiToLogMessageException($request, $e, 'cancelOrderReference');
         }
     }
@@ -607,9 +607,9 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
         }
         try {
             $response = $this->config->getAmazonAPI()->closeOrderReference($request);
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             throw $this->convertApiToLogMessageException($request, $e, 'closeOrderReference');
         }
     }
@@ -628,9 +628,9 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
         }
         try {
             $response = $this->config->getAmazonAPI()->closeAuthorization($request);
-            $this->logApiCall($request, $response, __LINE__);
+            $this->logApiCall($request, $response);
         } catch (\OffAmazonPaymentsService_Exception $e) {
-            $this->logApiError($request, $e, __LINE__);
+            $this->logApiError($request, $e);
             throw $this->convertApiToLogMessageException($request, $e, 'closeAuthorization');
         }
     }
@@ -689,7 +689,7 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
         ));
     }
 
-    private function logApiCall($request, $response, $line)
+    private function logApiCall($request, $response)
     {
         if (null === $this->logger) {
             return;
@@ -698,14 +698,15 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
         $requestLogData = (method_exists($request, 'toXML')) ? $request->toXML() : $request;
         $responseLogData = (method_exists($response, 'toXML')) ? $response->toXML() : $response;
         $this->logger->info(
-            'Amazon Payment Request '.get_class($request).' with response '.get_class($response),
-            __FILE__,
-            $line,
-            array('request' => $requestLogData, 'response' => $responseLogData)
+            sprintf('Amazon Payment Request %s with response %s', get_class($request), get_class($response)),
+            [
+                'request' => $requestLogData,
+                'response' => $responseLogData,
+            ]
         );
     }
 
-    private function logApiError($request, $response, $line)
+    private function logApiError($request, $response)
     {
         if (null === $this->logger) {
             return;
@@ -716,10 +717,11 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
             $responseLogData = (string) $responseLogData;
         }
         $this->logger->error(
-            'Amazon Payment Request '.get_class($request).' with response '.get_class($response),
-            __FILE__,
-            $line,
-            array('request' => $requestLogData, 'response' => $responseLogData)
+            sprintf('Error on Amazon Payment Request %s with response %s',  get_class($request), get_class($response)),
+            [
+                'request' => $requestLogData,
+                'response' => $responseLogData,
+            ]
         );
     }
 

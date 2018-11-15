@@ -5,7 +5,7 @@
 
     <services>
         <service id="chameleon_system_amazon_payment.config" class="ChameleonSystem\AmazonPaymentBundle\AmazonPaymentConfigFactory">
-            <argument  type="service" id="cmsPkgCore.logChannel.apilogger" />
+            <argument type="service" id="monolog.logger.core_api"/>
             <argument type="service" id="chameleon_system_shop.payment.config_loader" />
             <argument type="service" id="chameleon_system_amazon_payment.config_validator" />
         </service>
