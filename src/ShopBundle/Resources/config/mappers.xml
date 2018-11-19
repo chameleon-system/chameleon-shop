@@ -89,5 +89,8 @@
 
         <service id="chameleon_system_shop.mapper.objects.article_list.item_mapper_standard" class="ChameleonSystem\ShopBundle\objects\ArticleList\Mapper\ItemMapperStandard">
         </service>
+
+        <service id="chameleon_system_shop.mapper.view_my_order_details.view_my_order_details_order_object_as_string" class="MTShopViewMyOrderDetailsOrderObjectAsStringMapper">
+        </service>
     </services>
 </container>

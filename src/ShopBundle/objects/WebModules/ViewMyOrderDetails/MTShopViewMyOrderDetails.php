@@ -14,6 +14,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MTShopViewMyOrderDetails extends MTPkgViewRendererAbstractModuleMapper
 {
+    /**
+     * @var string
+     */
+    private $orderIdRequested;
+
     public function Init()
     {
         parent::Init();
