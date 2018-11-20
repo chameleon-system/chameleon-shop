@@ -153,6 +153,14 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
 
         $oTransactionManager = new TPkgShopPaymentTransactionManager($oOrder);
 
+        if (0.00 === $transactionValue) {
+            $oTransactionData = $oTransactionManager->getTransactionDataFromOrder($debitType, $aAmount);
+            $transactionValue = $oTransactionData->getTotalValue();
+            if ($transactionValue < 0) {
+                $transactionValue = 0;
+            }
+        }
+
         try {
             /** @var $paymentHandler PaymentHandlerWithTransactionSupportInterface|\TdbShopPaymentHandler */
             $paymentHandler = $oOrder->GetPaymentHandler();
