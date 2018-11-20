@@ -11,7 +11,7 @@
 
 /**
  * overwritten to handle variant management.
-/**/
+ * /**/
 class TCMSShopTableEditor_ShopDiscount extends TCMSTableEditor
 {
     /**
@@ -24,5 +24,14 @@ class TCMSShopTableEditor_ShopDiscount extends TCMSTableEditor
     {
         parent::PostSaveHook($oFields, $oPostTable);
         $this->oTable->ClearCacheOnAllAffectedArticles();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function Delete($sId = null)
+    {
+        $this->oTable->ClearCacheOnAllAffectedArticles();
+        parent::Delete($sId);
     }
 }
