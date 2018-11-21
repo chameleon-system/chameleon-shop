@@ -57,7 +57,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
         }
         $aData = array(
             'shop_order_id' => $this->order->id,
-            'data_extranet_user_id' => (null !== $oContext->getExtranetUser()) ? ($oContext->getExtranetUser()->id) : (''),
+            'data_extranet_user_id' => (null !== $oContext->getExtranetUser()) ? ($oContext->getExtranetUser(
+            )->id) : (''),
             'cms_user_id' => (null !== $oContext->getCmsUser()) ? ($oContext->getCmsUser()->id) : (''),
             'datecreated' => date('Y-m-d H:i:s'),
             'ip' => $oContext->getIp(),
@@ -262,7 +263,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
                 $voucherUse->SaveFieldsFast(['value_used' => $newVoucherUsedValue]);
                 $voucherUse->AllowEditByAll(false);
                 $voucher = $voucherUse->GetFieldShopVoucher();
-                if(null === $voucher) {
+                if (null === $voucher) {
                     return;
                 }
                 $voucher->AllowEditByAll(true);
@@ -294,7 +295,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
         }
         $query = "SELECT SUM(`pkg_shop_payment_transaction`.`amount`) AS total
                     FROM `pkg_shop_payment_transaction`
-                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(
+                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance(
+            )->real_escape_string(
                 $this->order->id
             )."'
                     {$sRestriction}
@@ -316,7 +318,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
     {
         $query = "SELECT MAX(sequence_number) AS max_sequence_number
                     FROM `pkg_shop_payment_transaction`
-                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(
+                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance(
+            )->real_escape_string(
                 $this->order->id
             )."'
                 GROUP BY `pkg_shop_payment_transaction`.`shop_order_id`
@@ -374,7 +377,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
         }
         $query = "SELECT COUNT(*) AS transactions
                     FROM `pkg_shop_payment_transaction`
-                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(
+                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance(
+            )->real_escape_string(
                 $this->order->id
             )."'
                     {$sTransactionTypeRestriction}
