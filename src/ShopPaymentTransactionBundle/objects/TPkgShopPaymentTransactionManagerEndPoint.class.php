@@ -667,7 +667,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
             TPkgShopPaymentTransactionItemData::TYPE_VOUCHER,
             true
         );
-        $voucherOrderAmount = $this->order->fieldValueVouchers > 0 ? $this->order->fieldValueVouchers * -1 : 0 ;
+        $voucherOrderAmount = $this->order->fieldValueVouchers > 0 ? $this->order->fieldValueVouchers * -1 : 0;
         $dVoucher = $voucherOrderAmount - $voucherValueUsed;
         if (TPkgShopPaymentTransactionData::TYPE_CREDIT === $sTransactionType) {
             $maxAmountAllowedForCredit = $this->getMaxAllowedValueFor(self::TRANSACTION_TYPE_CREDIT);
