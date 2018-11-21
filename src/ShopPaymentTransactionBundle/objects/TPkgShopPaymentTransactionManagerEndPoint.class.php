@@ -620,21 +620,6 @@ class TPkgShopPaymentTransactionManagerEndPoint
             $bAllRemainingItemsSelected = $bAllRemainingItemsSelected && ($iAmountForTransaction == $iAmountAllowedForUse);
         }
 
-        if (true === $bAllRemainingItemsSelected && TPkgShopPaymentTransactionData::TYPE_PAYMENT === $sTransactionType) {
-            // use the complete remaining discount
-            $dOriginalDiscount = -1 * ($this->order->fieldValueVouchersNotSponsored + $this->order->fieldValueDiscounts);
-            $dDiscountUsed = $this->getTransactionPositionTotalForType(
-                    TPkgShopPaymentTransactionItemData::TYPE_DISCOUNT,
-                    true
-                )
-                + $this->getTransactionPositionTotalForType(
-                    TPkgShopPaymentTransactionItemData::TYPE_DISCOUNT_VOUCHER,
-                    true
-                );
-            $dRemainingDiscount = $dOriginalDiscount - $dDiscountUsed;
-            $dDiscount = $dRemainingDiscount;
-        }
-
         if ($dDiscount > 0 || $dDiscount < 0) {
             $oItem = new TPkgShopPaymentTransactionItemData();
             $oItem
@@ -678,7 +663,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
             TPkgShopPaymentTransactionItemData::TYPE_VOUCHER,
             true
         );
-        $dVoucher = (-1 * $this->order->fieldValueVouchers) - $voucherValueUsed;
+        $voucherOrderAmount = $this->order->fieldValueVouchers > 0 ? $this->order->fieldValueVouchers * -1 : 0 ;
+        $dVoucher = $voucherOrderAmount - $voucherValueUsed;
         if (TPkgShopPaymentTransactionData::TYPE_CREDIT === $sTransactionType) {
             $maxAmountAllowedForCredit = $this->getMaxAllowedValueFor(self::TRANSACTION_TYPE_CREDIT);
             if ($dOrderTotal > $maxAmountAllowedForCredit && $voucherValueUsed * -1 > 0) {
@@ -689,7 +675,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
             }
         }
 
-        if ($dVoucher * -1 > $dOrderTotal) {
+        if (0.00 !== $dVoucher && $dVoucher * -1 > $dOrderTotal) {
             $dVoucher = $dOrderTotal * -1;
         }
 
