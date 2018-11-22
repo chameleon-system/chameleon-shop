@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+
 class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
 {
     /**
@@ -76,10 +79,16 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
             }
             //$this->aCheckoutDetails
         }
+
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = ServiceLocator::get('monolog.logger.core_standard');
+
         if ($bResponse) {
             $oBasket = TShopBasket::GetInstance();
             // paypal expres success... redirect to confirm page. we need to force correct redirection here.
-            TTools::WriteLogEntry('PostProcessExternalPaymentHandlerHook: return from express ok - redirect to checkout', 4, __FILE__, __LINE__, self::LOG_FILE);
+            $logger->info('PostProcessExternalPaymentHandlerHook: return from express ok - redirect to checkout');
             $oNextStep = &TdbShopOrderStep::GetStep('confirm');
             $oStepList = TdbShopOrderStepList::GetNavigationStepList($oNextStep);
             $oStepList->GoToStart();
@@ -94,7 +103,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
             $oStepList->GoToStart();
             $oNextStep->JumpToStep($oNextStep);
         } else {
-            TTools::WriteLogEntry('PostProcessExternalPaymentHandlerHook: return from express NOT ok', 1, __FILE__, __LINE__, self::LOG_FILE);
+            $logger->error('PostProcessExternalPaymentHandlerHook: return from express NOT ok');
         }
 
         return $bResponse;
