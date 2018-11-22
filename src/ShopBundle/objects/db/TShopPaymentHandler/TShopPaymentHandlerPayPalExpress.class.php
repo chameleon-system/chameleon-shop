@@ -83,7 +83,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.core_standard');
+        $logger = ServiceLocator::get('monolog.logger.chameleon');
 
         if ($bResponse) {
             $oBasket = TShopBasket::GetInstance();

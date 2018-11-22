@@ -12,7 +12,7 @@
         </service>
 
         <service id="chameleon_system_shop.log.order" class="TPkgCmsCoreLog">
-            <argument type="service" id="monolog.logger.shop_order"/>
+            <argument type="service" id="monolog.logger.chameleon_order"/>
         </service>
 
     </services>

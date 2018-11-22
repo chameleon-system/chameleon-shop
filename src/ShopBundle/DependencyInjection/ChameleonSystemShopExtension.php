@@ -36,6 +36,6 @@ class ChameleonSystemShopExtension extends Extension implements PrependExtension
      */
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig('monolog', ['channels' => ['shop_order', 'shop_payment']]);
+        $container->prependExtensionConfig('monolog', ['channels' => ['chameleon_order']]);
     }
 }

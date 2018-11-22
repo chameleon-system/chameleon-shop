@@ -65,7 +65,7 @@ class TPkgShopPaymentIPayment_TPkgShopPaymentIPNHandler_BaseResponse implements 
                     $oOrder->Save();
                 }
                 /** @var LoggerInterface $log */
-                $log = \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.shop_payment');
+                $log = \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order');
                 $log->info(
                     sprintf('IPN marked order %s (id: %s) as completed when it was marked as paid.', $oOrder->fieldOrdernumber, $oOrder->id),
                     $aInfo

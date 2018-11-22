@@ -551,7 +551,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.shop_payment');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order');
     }
 
     /**
