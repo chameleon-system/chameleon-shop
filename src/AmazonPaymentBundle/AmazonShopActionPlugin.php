@@ -54,10 +54,8 @@ class AmazonShopActionPlugin extends \AbstractPkgActionPlugin
     private function handleError($error, $errorCode)
     {
         if (null !== $error) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard')->warning(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order')->warning(
                 'amazon error: '.$error,
-                __FILE__,
-                __LINE__,
                 array('error' => $error, 'errorCode' => $errorCode)
             );
             $msgManager = \TCMSMessageManager::GetInstance();

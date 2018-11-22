@@ -65,10 +65,8 @@ class AmazonButtonWidgetMapper extends \AbstractViewMapper
             $data['sellerId'] = $config->getMerchantId();
             $data['sText'] = $config->getPayWithAmazonButtonText();
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard')->error(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order')->error(
                 'unable to load amazon config: '.(string) $e,
-                __FILE__,
-                __LINE__,
                 array('e.message' => $e->getMessage(), 'e.file' => $e->getFile(), 'e.line' => $e->getLine())
             );
             $data['payWithAmazonButtonURL'] = '<!-- ERROR: unable to load amazon payment config due to config error (invalid parameter). check log for details -->';

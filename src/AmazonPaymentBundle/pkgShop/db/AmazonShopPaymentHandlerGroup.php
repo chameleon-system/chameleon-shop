@@ -165,19 +165,15 @@ class AmazonShopPaymentHandlerGroup extends \TdbShopPaymentHandlerGroup
                     break;
             }
         } catch (\OffAmazonPaymentsNotifications_InvalidMessageException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard')->error(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order')->error(
                 'Amazon IPN failed '.$e->getMessage(),
-                __FILE__,
-                __LINE__,
                 array('requestData' => $aRequestData, 'exception' => (string) $e)
             );
 
             return $aRequestData;
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard')->error(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order')->error(
                 'Amazon IPN failed because no matching order was found',
-                __FILE__,
-                __LINE__,
                 array('requestData' => $aRequestData)
             );
 
