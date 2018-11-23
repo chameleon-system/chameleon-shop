@@ -167,9 +167,10 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
         $category = $this->getValidCategoryForArticle($catid, $article);
 
         if (null === $category && null !== $article->GetPrimaryCategory()) {
-            $newUrl = $article->getLink(true);
-            if ($request->getUri() !== $newUrl) {
-                $aResponse['redirectURL'] = $newUrl;
+            $currentArticlePath = $article->getLink(false);
+            $requestedPath = $request->getPathInfo();
+            if ($requestedPath !== $currentArticlePath) {
+                $aResponse['redirectURL'] = $article->getLink(true);
                 $aResponse['fullURL'] = $aResponse['redirectURL'];
                 $aResponse['redirectPermanent'] = true;
             }
