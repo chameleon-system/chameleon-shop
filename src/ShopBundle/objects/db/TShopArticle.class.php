@@ -245,7 +245,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * return the link to the detail view of the product.
      *
-     * @param bool                $bAbsolute           set to true to include the domain in the link
+     * @param bool                $bAbsolute set to true to include the domain in the link
      * @param null|string         $sAnchor
      * @param array               $aOptionalParameters supported optional parameters:
      *                                                 TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY - (string) force the article link to be within the given category id (only works if the category is assigned to the article)
@@ -253,6 +253,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param TdbCmsLanguage|null $language
      *
      * @return string
+     *
+     * @throws ErrorException
      */
     public function getLink($bAbsolute = false, $sAnchor = null, $aOptionalParameters = array(), \TdbCmsPortal $portal = null, \TdbCmsLanguage $language = null)
     {
@@ -452,19 +454,29 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             $catId = $oCategory->sqlData['cmsident'];
         }
         $parameters = array(
-            'productPath' => $productPath,
             'productName' => $productName,
             'catid' => $catId,
             'identifier' => $this->sqlData[PKG_SHOP_PRODUCT_URL_KEY_FIELD],
         );
-        $router = $this->getFrontendRouter();
-        if ($bIncludePortalLink) {
-            $sProductLink = $router->generateWithPrefixes('shop_article', $parameters, $portal, $language, UrlGeneratorInterface::ABSOLUTE_URL);
-        } else {
-            $sProductLink = $router->generateWithPrefixes('shop_article', $parameters, $portal, $language, UrlGeneratorInterface::ABSOLUTE_PATH);
+        if (null !== $productPath && '' !== $productPath) {
+            $parameters['productPath'] = $productPath;
         }
 
-        return $sProductLink;
+        $router = $this->getFrontendRouter();
+
+        if (null !== $oManufacturer) {
+            $routeName = 'shop_article';
+        } else {
+            $routeName = 'shop_article_without_manufacturer';
+        }
+
+        if ($bIncludePortalLink) {
+            $referenceType = UrlGeneratorInterface::ABSOLUTE_URL;
+        } else {
+            $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH;
+        }
+
+        return $router->generateWithPrefixes($routeName, $parameters, $portal, $language, $referenceType);
     }
 
     /**

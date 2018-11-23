@@ -186,7 +186,8 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
         $realItemURL = $this->getArticleFullUrlForRequest($category, $variantArticle);
         $aResponse['fullURL'] = $realItemURL;
         $currentFullURL = $request->getPathInfo();
-        if ($realItemURL !== $currentFullURL && $variantArticle->AllowDetailviewInShop()) {
+        // TODO 0 === strpos()
+        if (0 === strpos($currentFullURL, $realItemURL) && $variantArticle->AllowDetailviewInShop()) {
             $aResponse['redirectURL'] = $realItemURL;
             $aResponse['redirectPermanent'] = true;
         }
