@@ -368,7 +368,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     }
 
     /**
-     * @return TPkgCmsCoreLog
+     * @return IPkgCmsCoreLog
      *
      * @deprecated - since 6.3.0 - use getPaypalLogger()
      */
