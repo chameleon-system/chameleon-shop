@@ -13,14 +13,6 @@ shop_article:
     catid: '|\d+'
     identifier: .+?
 
-shop_article_without_manufacturer:
-  path: /{productName}_pid_{catid}_{identifier}.html
-  defaults:  { _controller: chameleon_system_shop.product_controller:shopArticle, _format: html }
-  requirements:
-    productName: '.*'
-    catid: '|\d+'
-    identifier: .+?
-
 shop_article_short:
   path: /{productName}_pid_{identifier}.html
   defaults:  { _controller: chameleon_system_shop.product_controller:shopArticle, _format: html }
