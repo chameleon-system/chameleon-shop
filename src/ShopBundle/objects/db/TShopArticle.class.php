@@ -410,6 +410,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $oManufacturer = $this->GetFieldShopManufacturer();
         if (!is_null($oManufacturer)) {
             $aParts[] = $urlNormalizationUtil->normalizeUrl($oManufacturer->fieldName);
+        } else {
+            $aParts[] = '-';
         }
 
         $oCategory = null;
@@ -444,6 +446,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             if (!empty($sCatName)) {
                 $aNameParts[] = $urlNormalizationUtil->normalizeUrl($sCatName);
             }
+        } else {
+            $aParts[] = '-';
         }
 
         $productPath = strtolower(join('/', $aParts));
@@ -454,29 +458,21 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             $catId = $oCategory->sqlData['cmsident'];
         }
         $parameters = array(
+            'productPath' => $productPath,
             'productName' => $productName,
             'catid' => $catId,
             'identifier' => $this->sqlData[PKG_SHOP_PRODUCT_URL_KEY_FIELD],
         );
-        if (null !== $productPath && '' !== $productPath) {
-            $parameters['productPath'] = $productPath;
-        }
 
         $router = $this->getFrontendRouter();
 
-        if (null !== $oManufacturer) {
-            $routeName = 'shop_article';
-        } else {
-            $routeName = 'shop_article_without_manufacturer';
-        }
-
-        if ($bIncludePortalLink) {
+        if (true === $bIncludePortalLink) {
             $referenceType = UrlGeneratorInterface::ABSOLUTE_URL;
         } else {
             $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH;
         }
 
-        return $router->generateWithPrefixes($routeName, $parameters, $portal, $language, $referenceType);
+        return $router->generateWithPrefixes('shop_article', $parameters, $portal, $language, $referenceType);
     }
 
     /**
