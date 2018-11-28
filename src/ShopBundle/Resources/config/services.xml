@@ -123,6 +123,7 @@
         </service>
 
         <service id="chameleon_system_shop.product_inventory_service_provider" class="ChameleonSystem\ShopBundle\Service\ProductInventoryService">
+            <argument type="service" id="chameleon_system_cms_cache.cache"/>
             <call method="setDatabaseConnection">
                 <argument type="service" id="database_connection" />
             </call>

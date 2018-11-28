@@ -1951,12 +1951,6 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if ($oldStock !== $newStock || true === $bForceUpdate) {
             $this->StockWasUpdatedHook($oldStock, $newStock);
             $this->getEventDispatcher()->dispatch(ShopEvents::UPDATE_PRODUCT_STOCK, new UpdateProductStockEvent($this->id, $newStock, $oldStock));
-
-            $this->getCache()->callTrigger('shop_article', $this->id);
-            // TODO / NOTE must also be done for parent?
-            // TODO might only be necessary on change of activation
-            // TODO and this here would be a trigger on shop_article_stock -- which has no id however
-            // TODO what about force update here?
         }
 
         return $oldStock !== $newStock;
