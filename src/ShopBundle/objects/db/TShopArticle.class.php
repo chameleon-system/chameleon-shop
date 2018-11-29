@@ -1970,6 +1970,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         $query = 'UPDATE shop_article SET variant_parent_is_active = :active WHERE variant_parent_id = :id';
         $this->getDatabaseConnection()->executeUpdate($query, array('active' => $activeValue, 'id' => $this->id));
+
+        $this->getCache()->callTrigger('shop_article', $this->id);
     }
 
     /**
@@ -1992,7 +1994,12 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             'activeValue' => $activeValue,
             'parentId' => $parentId,
         );
-        $databaseConnection->executeUpdate($query, $parameters);
+        $affectedRows = $databaseConnection->executeUpdate($query, $parameters);
+
+        if ($affectedRows > 0) {
+            $this->getCache()->callTrigger('shop_article', $parentId);
+        }
+
         $this->UpdateVariantParentActiveField();
     }
 

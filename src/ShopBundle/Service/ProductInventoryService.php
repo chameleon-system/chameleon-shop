@@ -13,7 +13,6 @@ namespace ChameleonSystem\ShopBundle\Service;
 
 use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
 use Doctrine\DBAL\Connection;
-use esono\pkgCmsCache\CacheInterface;
 
 class ProductInventoryService implements ProductInventoryServiceInterface
 {
@@ -21,16 +20,6 @@ class ProductInventoryService implements ProductInventoryServiceInterface
      * @var Connection
      */
     private $databaseConnection;
-
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    public function __construct(CacheInterface $cache)
-    {
-        $this->cache = $cache;
-    }
 
     /**
      * {@inheritdoc}
@@ -64,8 +53,6 @@ class ProductInventoryService implements ProductInventoryServiceInterface
             array('id' => \TTools::GetUUID(), 'amount' => $stock, 'articleId' => $shopArticleId),
             array('amount' => \PDO::PARAM_INT)
         );
-
-        $this->cache->callTrigger('shop_article', $shopArticleId);
     }
 
     /**
@@ -84,8 +71,6 @@ class ProductInventoryService implements ProductInventoryServiceInterface
             array('id' => \TTools::GetUUID(), 'amount' => $stock, 'articleId' => $shopArticleId),
             array('amount' => \PDO::PARAM_INT)
         );
-
-        $this->cache->callTrigger('shop_article', $shopArticleId);
     }
 
     /**
@@ -118,8 +103,6 @@ class ProductInventoryService implements ProductInventoryServiceInterface
             $updateData,
             array('amount' => \PDO::PARAM_INT)
         );
-
-        $this->cache->callTrigger('shop_article', $parentArticleId);
     }
 
     /**
