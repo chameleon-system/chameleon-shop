@@ -2058,7 +2058,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * @return IPkgCmsCoreLog
      *
-     * @deprecated - use getLogger()
+     * @deprecated since 6.3.0 - use getLogger()
      */
     protected function getOrderLogger()
     {

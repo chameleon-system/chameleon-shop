@@ -18,13 +18,15 @@ class TPkgShopOrderStatusManagerEndPoint
 {
     /**
      * @var IPkgCmsCoreLog
+     *
+     * @deprecated since 6.3.0
      */
     private $logger = null;
 
     /**
      * @param IPkgCmsCoreLog $logger
      *
-     * @deprecated - is not supported anymore; use only getShopLogger() or do your own logging
+     * @deprecated since 6.3.0 - is not supported anymore; use only getShopLogger() or do your own logging
      */
     public function setLogger(IPkgCmsCoreLog $logger)
     {
@@ -34,7 +36,7 @@ class TPkgShopOrderStatusManagerEndPoint
     /**
      * @return IPkgCmsCoreLog
      *
-     * @deprecated - use getShopLogger()
+     * @deprecated since 6.3.0 - use getShopLogger()
      */
     protected function getLogger()
     {
