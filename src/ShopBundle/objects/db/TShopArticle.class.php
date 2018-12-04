@@ -253,8 +253,6 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param TdbCmsLanguage|null $language
      *
      * @return string
-     *
-     * @throws ErrorException
      */
     public function getLink($bAbsolute = false, $sAnchor = null, $aOptionalParameters = array(), \TdbCmsPortal $portal = null, \TdbCmsLanguage $language = null)
     {
