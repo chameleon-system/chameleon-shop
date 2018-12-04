@@ -406,10 +406,10 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $urlNormalizationUtil = $this->getUrlNormalizationUtil();
         $aNameParts[] = $urlNormalizationUtil->normalizeUrl($this->fieldName);
         $oManufacturer = $this->GetFieldShopManufacturer();
-        if (!is_null($oManufacturer)) {
-            $aParts[] = $urlNormalizationUtil->normalizeUrl($oManufacturer->fieldName);
-        } else {
+        if (is_null($oManufacturer)) {
             $aParts[] = '-';
+        } else {
+            $aParts[] = $urlNormalizationUtil->normalizeUrl($oManufacturer->fieldName);
         }
 
         $oCategory = null;
@@ -432,7 +432,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if (is_null($oCategory)) {
             $oCategory = &$this->GetPrimaryCategory();
         }
-        if (!is_null($oCategory)) {
+        if (is_null($oCategory)) {
+            $aParts[] = '-';
+        } else {
             $oRootCat = $oCategory->GetRootCategory();
             if ($oRootCat) {
                 $aParts[] = $urlNormalizationUtil->normalizeUrl($oRootCat->fieldName);
@@ -444,8 +446,6 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             if (!empty($sCatName)) {
                 $aNameParts[] = $urlNormalizationUtil->normalizeUrl($sCatName);
             }
-        } else {
-            $aParts[] = '-';
         }
 
         $productPath = strtolower(join('/', $aParts));
