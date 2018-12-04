@@ -14,8 +14,8 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
-use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
 use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopStockMessageDataAccessInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
@@ -406,7 +406,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $urlNormalizationUtil = $this->getUrlNormalizationUtil();
         $aNameParts[] = $urlNormalizationUtil->normalizeUrl($this->fieldName);
         $oManufacturer = $this->GetFieldShopManufacturer();
-        if (!is_null($oManufacturer)) {
+        if (is_null($oManufacturer)) {
+            $aParts[] = '-';
+        } else {
             $aParts[] = $urlNormalizationUtil->normalizeUrl($oManufacturer->fieldName);
         }
 
@@ -430,7 +432,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if (is_null($oCategory)) {
             $oCategory = &$this->GetPrimaryCategory();
         }
-        if (!is_null($oCategory)) {
+        if (is_null($oCategory)) {
+            $aParts[] = '-';
+        } else {
             $oRootCat = $oCategory->GetRootCategory();
             if ($oRootCat) {
                 $aParts[] = $urlNormalizationUtil->normalizeUrl($oRootCat->fieldName);
@@ -457,14 +461,16 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             'catid' => $catId,
             'identifier' => $this->sqlData[PKG_SHOP_PRODUCT_URL_KEY_FIELD],
         );
+
         $router = $this->getFrontendRouter();
-        if ($bIncludePortalLink) {
-            $sProductLink = $router->generateWithPrefixes('shop_article', $parameters, $portal, $language, UrlGeneratorInterface::ABSOLUTE_URL);
+
+        if (true === $bIncludePortalLink) {
+            $referenceType = UrlGeneratorInterface::ABSOLUTE_URL;
         } else {
-            $sProductLink = $router->generateWithPrefixes('shop_article', $parameters, $portal, $language, UrlGeneratorInterface::ABSOLUTE_PATH);
+            $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH;
         }
 
-        return $sProductLink;
+        return $router->generateWithPrefixes('shop_article', $parameters, $portal, $language, $referenceType);
     }
 
     /**
