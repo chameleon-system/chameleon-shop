@@ -107,8 +107,6 @@ class ProductInventoryService implements ProductInventoryServiceInterface
 
     /**
      * @param Connection $connection
-     *
-     * will be deprecated with 6.3 - use constructor injection
      */
     public function setDatabaseConnection(Connection $connection)
     {
