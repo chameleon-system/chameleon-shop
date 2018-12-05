@@ -257,7 +257,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         );
         $sURL .= TTools::GetArrayAsURLForJavascript($aParams);
 
-        $oMenuItem->sOnClick = "if (true == confirm('".TGlobal::Translate('chameleon_system_shop_payment_transaction.confirm.collect_all')."')) {TPkgShopPaymentTransaction_closeForm();document.location.href='{$sURL}';}";
+        $oMenuItem->sOnClick = "if (true == confirm('".TGlobal::Translate(
+                'chameleon_system_shop_payment_transaction.confirm.collect_all'
+            )."')) {TPkgShopPaymentTransaction_closeForm();document.location.href='{$sURL}';}";
 
         return $oMenuItem;
     }
@@ -282,7 +284,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         );
         $sURL .= TTools::GetArrayAsURLForJavascript($aParams);
 
-        $oMenuItem->sOnClick = "if (true == confirm('".TGlobal::Translate('chameleon_system_shop_payment_transaction.confirm.refund_all')."')) {TPkgShopPaymentTransaction_closeForm();document.location.href='{$sURL}'};";
+        $oMenuItem->sOnClick = "if (true == confirm('".TGlobal::Translate(
+                'chameleon_system_shop_payment_transaction.confirm.refund_all'
+            )."')) {TPkgShopPaymentTransaction_closeForm();document.location.href='{$sURL}'};";
 
         return $oMenuItem;
     }
@@ -294,7 +298,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'collectpartial';
-        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_shop_payment_transaction.action.collect_partial');
+        $oMenuItem->sDisplayName = TGlobal::Translate(
+            'chameleon_system_shop_payment_transaction.action.collect_partial'
+        );
         $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/coins_add.png');
 
         $sURL = URL_CMS_CONTROLLER.'?';
@@ -319,7 +325,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'refundpartial';
-        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_shop_payment_transaction.action.refund_partial');
+        $oMenuItem->sDisplayName = TGlobal::Translate(
+            'chameleon_system_shop_payment_transaction.action.refund_partial'
+        );
         $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/coins_delete.png');
 
         $sURL = URL_CMS_CONTROLLER.'?';
@@ -361,7 +369,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
 
-        $aIncludesFromPackage = $this->getViewRendererSnippetDirectory()->getResourcesForSnippetPackage('pkgShopPaymentTransaction');
+        $aIncludesFromPackage = $this->getViewRendererSnippetDirectory()->getResourcesForSnippetPackage(
+            'pkgShopPaymentTransaction'
+        );
         $aIncludes = array_merge($aIncludes, $aIncludesFromPackage);
 
         return $aIncludes;
@@ -407,7 +417,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
-    
+
     private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
