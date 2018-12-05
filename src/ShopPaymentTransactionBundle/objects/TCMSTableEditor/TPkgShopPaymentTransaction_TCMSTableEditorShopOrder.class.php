@@ -153,7 +153,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
 
         $oTransactionManager = new TPkgShopPaymentTransactionManager($oOrder);
 
-        if (0.00 === $transactionValue) {
+        if ($transactionValue < 0.0001) {
             $oTransactionData = $oTransactionManager->getTransactionDataFromOrder($debitType, $aAmount);
             $transactionValue = $oTransactionData->getTotalValue();
             if ($transactionValue < 0) {
