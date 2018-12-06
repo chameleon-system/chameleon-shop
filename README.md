@@ -25,6 +25,5 @@ This repository is licensed under the MIT License. See the complete license unde
 Reporting an Issue or a Feature Request
 ---------------------------------------
 
-Please report issues and feature requests at the official GitHub repository of the [Chameleon System main
+Please report issues and feature requests at the [Chameleon System main
 repository](https://github.com/chameleon-system/chameleon-system/issues).
-
