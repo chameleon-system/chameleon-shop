@@ -319,53 +319,54 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
      */
     public function shopCategory(Request $request, $category, $categoryPath, $pagedef)
     {
-        $queryParameter = $request->query->all();
-        if (0 === count($queryParameter)) {
-            $queryParameter = null;
-        }
-        $catPath = $category;
-        $catPrefix = $categoryPath;
-        $tmp = array();
-        if ('' !== $catPrefix) {
-            $tmp[] = $catPrefix;
-        }
-        if ('' !== $catPath) {
-            $tmp[] = $catPath;
-        }
-        $fullPath = '/'.implode('/', $tmp);
-
-        $aKey = array(
-            'class' => __CLASS__,
-            'method' => 'shopCategory',
-            'path' => $catPath,
-        );
-
-        $catPath = rtrim($catPath, '/');
+        $catPath = rtrim($category, '/');
         if ('.html' === substr($catPath, -5) && strlen($catPath) > 5) {
             $catPath = substr($catPath, 0, -5);
         }
 
-        $cache = $this->getCache();
-        $key = $cache->getKey($aKey);
-        $aResponse = $cache->get($key);
-        if (null !== $aResponse) {
-            return $this->processCategoryResponse($aResponse, $request);
-        }
-
-        $aResponse = array(
-            'activeShopArticle' => null,
-            'activeShopCategory' => null,
-            'redirectURL' => null,
-            'redirectPermanent' => false,
-            'noMatch' => false,
-            'pagedef' => $pagedef,
-            'queryParameter' => $queryParameter,
-        );
-
         $oPathCat = TdbShopCategoryList::GetCategoryForCategoryPath(explode('/', $catPath));
+
         if (null !== $oPathCat && true === $oPathCat->AllowDisplayInShop()) {
+            $aKey = array(
+                'class' => __CLASS__,
+                'method' => 'shopCategory',
+                'path' => $category,
+            );
+            $cache = $this->getCache();
+            $key = $cache->getKey($aKey);
+            $aResponse = $cache->get($key);
+            if (null !== $aResponse) {
+                return $this->processCategoryResponse($aResponse, $request);
+            }
+
+            $queryParameter = $request->query->all();
+            if (0 === count($queryParameter)) {
+                $queryParameter = null;
+            }
+
+            $aResponse = array(
+                'activeShopArticle' => null,
+                'activeShopCategory' => null,
+                'redirectURL' => null,
+                'redirectPermanent' => false,
+                'noMatch' => false,
+                'pagedef' => $pagedef,
+                'queryParameter' => $queryParameter,
+            );
+
             // does the URL match?
             $url = $oPathCat->GetLink(false);
+
+            $catPrefix = $categoryPath;
+            $tmp = array();
+            if ('' !== $catPrefix) {
+                $tmp[] = $catPrefix;
+            }
+            if ('' !== $category) {
+                $tmp[] = $category;
+            }
+            $fullPath = '/'.implode('/', $tmp);
+
             if (false === $this->compareRelativeAndPrefixedURL($fullPath, $url)) {
                 $aResponse['redirectURL'] = $oPathCat->GetLink(true);
                 $aResponse['redirectPermanent'] = true;
