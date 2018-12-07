@@ -21,6 +21,10 @@ use Psr\Log\LoggerInterface;
 class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
 {
     const URL_IDENTIFIER_IPN = '_paypalipn_'; // instant payment notification URL identifier
+
+    /**
+     * @deprecated since 6.3.0 - not used anymore
+     */
     const LOG_FILE = 'paypal.log';
 
     /**
