@@ -28,7 +28,7 @@ None.
 
 ## Constants
 
-None.
+- \TShopPaymentHandlerPayPal_PayViaLink::LOG_FILE
 
 ## Classes and Interfaces
 
