@@ -130,7 +130,7 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
         }
 
         if (null === $oTransaction) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order')->warning(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order_ipn')->warning(
                 "IPN had transaction data but no matching transaction was found. order-id: {$oOrder->id}, ordernumber: {$oOrder->fieldOrdernumber}",
                 array('request' => $oRequest->getRequestPayload())
             );
