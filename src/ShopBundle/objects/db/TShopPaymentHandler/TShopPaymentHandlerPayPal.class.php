@@ -260,7 +260,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
      */
     public function ExecutePayPalCall($methodName, $nvp)
     {
-        TTools::WriteLogEntry("PayPal-Request: {$methodName} with ".print_r($nvp, true), 4, __FILE__, __LINE__, self::LOG_FILE);
+        $this->getPaypalLogger()->info(sprintf('PayPal-Request: %s with %s', $methodName, print_r($nvp, true)));
 
         $apiEndpoint = $this->GetConfigParameter('urlApiEndpoint');
         $ch = curl_init();
