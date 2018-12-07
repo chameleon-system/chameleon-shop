@@ -13,10 +13,11 @@ namespace ChameleonSystem\AmazonPaymentBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class ChameleonSystemAmazonPaymentExtension extends Extension
+class ChameleonSystemAmazonPaymentExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * Loads a specific configuration.
@@ -35,5 +36,13 @@ class ChameleonSystemAmazonPaymentExtension extends Extension
         $loader->load('services.xml');
         $serviceDefDataFetcher = $container->getDefinition('chameleon_system_amazon_payment.config_provider');
         $serviceDefDataFetcher->replaceArgument(0, $config);
+    }
+
+    /**
+     * Allow an extension to prepend the extension configurations.
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        $container->prependExtensionConfig('monolog', ['channels' => ['chameleon_order_amazon']]);
     }
 }

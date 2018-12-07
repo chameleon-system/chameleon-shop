@@ -60,7 +60,7 @@ class AmazonPaymentHandler extends \TdbShopPaymentHandler implements \IPkgShopPa
             $amazonPayment->captureOrder($transactionManager, $oOrder);
             $continue = true;
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order')->warning(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order_amazon')->warning(
                 'error loading amazon payment config - unable to execute payment',
                 array(
                     'message' => $e->getMessage(),
@@ -106,7 +106,7 @@ class AmazonPaymentHandler extends \TdbShopPaymentHandler implements \IPkgShopPa
         try {
             $data['amazonConfig'] = $this->getAmazonPaymentGroupConfig($this->getActivePortalId());
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order')->warning(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order_amazon')->warning(
                 'error loading amazon payment config'
             );
         }

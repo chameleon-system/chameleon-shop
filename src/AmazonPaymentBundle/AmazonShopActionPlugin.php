@@ -54,7 +54,7 @@ class AmazonShopActionPlugin extends \AbstractPkgActionPlugin
     private function handleError($error, $errorCode)
     {
         if (null !== $error) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order')->warning(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order_amazon')->warning(
                 'amazon error: '.$error,
                 array('error' => $error, 'errorCode' => $errorCode)
             );

@@ -33,7 +33,7 @@ class AmazonShopBasket extends \ChameleonSystemAmazonPaymentBundlepkgShopWebModu
             $includes[] = "<script type='text/javascript' src='".$config->getWidgetURL()."'></script>";
             $includes[] = "<script type='text/javascript' src='".TGlobal::GetStaticURL('/bundles/chameleonsystemamazonpayment/common.js')."'></script>";
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order')->error(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order_amazon')->error(
                 'unable to load amazon config: '.(string) $e,
                 array('e.message' => $e->getMessage(), 'e.file' => $e->getFile(), 'e.line' => $e->getLine())
             );
