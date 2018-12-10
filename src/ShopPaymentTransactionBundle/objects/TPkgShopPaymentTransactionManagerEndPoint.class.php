@@ -57,7 +57,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
         }
         $aData = array(
             'shop_order_id' => $this->order->id,
-            'data_extranet_user_id' => (null !== $oContext->getExtranetUser()) ? ($oContext->getExtranetUser()->id) : (''),
+            'data_extranet_user_id' => (null !== $oContext->getExtranetUser()) ? ($oContext->getExtranetUser(
+            )->id) : (''),
             'cms_user_id' => (null !== $oContext->getCmsUser()) ? ($oContext->getCmsUser()->id) : (''),
             'datecreated' => date('Y-m-d H:i:s'),
             'ip' => $oContext->getIp(),
@@ -168,6 +169,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
             $transaction->AllowEditByAll(false);
             // mark order as paid/unpaid depending on the remaining balance
             $this->updateOrderPaidStatusBasedOnCurrentBalance();
+            $this->updateRealUsedVoucherValueBasedOnTransactions($transaction);
         }
 
         return $transaction;
@@ -223,6 +225,75 @@ class TPkgShopPaymentTransactionManagerEndPoint
         return $bOrderPaidStatusChanged;
     }
 
+    private function updateRealUsedVoucherValueBasedOnTransactions(TdbPkgShopPaymentTransaction $transaction): void
+    {
+        $oTransactionData = $this->getTransactionDataFromOrder(
+            TPkgShopPaymentTransactionData::TYPE_PAYMENT,
+            null,
+            true
+        );
+        $valueToCapture = $oTransactionData->getTotalValueForItemType(TPkgShopPaymentTransactionItemData::TYPE_PRODUCT);
+
+        // There are uncaptured products, so no voucher handling is needed because not captured products can use open/refunded voucher values.
+        if ($valueToCapture > 0) {
+            return;
+        }
+
+        $realVoucherValueUsed = $this->getTransactionPositionTotalForType(
+                TPkgShopPaymentTransactionItemData::TYPE_VOUCHER,
+                true
+            ) * -1;
+        $shopOrder = $transaction->GetFieldShopOrder();
+        if (null === $shopOrder) {
+            return;
+        }
+
+        $this->updateRealUsedVoucherValue($shopOrder, $realVoucherValueUsed);
+    }
+
+    private function updateRealUsedVoucherValue(TdbShopOrder $shopOrder, float $realVoucherValueUsed): void
+    {
+        $voucherUsedDifference = $shopOrder->fieldValueVouchers - $realVoucherValueUsed;
+        if ($voucherUsedDifference <= 0.00) {
+            return;
+        }
+        $voucherUseList = $shopOrder->GetFieldShopVoucherUseList();
+        while ($voucherUse = $voucherUseList->Next()) {
+            $newVoucherUsedValue = $voucherUse->fieldValueUsed - $voucherUsedDifference;
+            if ($newVoucherUsedValue < 0) {
+                $newVoucherUsedValue = 0;
+                $voucherUsedDifference = $voucherUsedDifference - $voucherUse->fieldValueUsed;
+            } else {
+                $voucherUsedDifference = 0;
+            }
+            $this->changeVoucherUseValue($voucherUse, $newVoucherUsedValue);
+            $voucher = $voucherUse->GetFieldShopVoucher();
+            if (null === $voucher) {
+                return;
+            }
+            $this->changeVoucherUsedUp($voucher);
+            if (0 === $voucherUsedDifference) {
+                break;
+            }
+        }
+    }
+
+    private function changeVoucherUseValue(TAdbShopVoucherUse $voucherUse, float $newVoucherUsedValue): void
+    {
+        $voucherUse->AllowEditByAll(true);
+        $voucherUse->SaveFieldsFast(['value_used' => $newVoucherUsedValue]);
+        $voucherUse->AllowEditByAll(false);
+    }
+
+    private function changeVoucherUsedUp(TdbShopVoucher $voucher): void
+    {
+        if (true === $voucher->fieldIsUsedUp) {
+            $voucher->AllowEditByAll(true);
+            $voucher->SaveFieldsFast(['is_used_up' => '0', 'date_used_up' => '0000-00-00 00:00:00']);
+            $voucher->AllowEditByAll(false);
+        }
+    }
+
     /**
      * returns the balance of all transactions for an order (without the order value).
      *
@@ -239,7 +310,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
         }
         $query = "SELECT SUM(`pkg_shop_payment_transaction`.`amount`) AS total
                     FROM `pkg_shop_payment_transaction`
-                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(
+                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance(
+            )->real_escape_string(
                 $this->order->id
             )."'
                     {$sRestriction}
@@ -261,7 +333,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
     {
         $query = "SELECT MAX(sequence_number) AS max_sequence_number
                     FROM `pkg_shop_payment_transaction`
-                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(
+                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance(
+            )->real_escape_string(
                 $this->order->id
             )."'
                 GROUP BY `pkg_shop_payment_transaction`.`shop_order_id`
@@ -319,7 +392,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
         }
         $query = "SELECT COUNT(*) AS transactions
                     FROM `pkg_shop_payment_transaction`
-                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(
+                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance(
+            )->real_escape_string(
                 $this->order->id
             )."'
                     {$sTransactionTypeRestriction}
@@ -619,10 +693,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
             $dOrderTotal = $dOrderTotal + ($oItem->getAmount() * $oItem->getValue());
         }
 
-        $dVoucher = (-1 * $this->order->fieldValueVouchers) - ($this->getTransactionPositionTotalForType(
-                TPkgShopPaymentTransactionItemData::TYPE_VOUCHER,
-                true
-            ));
+        $dVoucher = $this->getTransactionOrderDataVoucherValue($sTransactionType, $dOrderTotal);
+
         if ($dVoucher > 0 || $dVoucher < 0) {
             $oItem = new TPkgShopPaymentTransactionItemData();
             $oItem
@@ -668,5 +740,35 @@ class TPkgShopPaymentTransactionManagerEndPoint
         $dOrderTotal = round($dOrderTotal, 2);
 
         return $dOrderTotal;
+    }
+
+    /**
+     * @param $sTransactionType
+     * @param $dOrderTotal
+     *
+     * @return float|int
+     */
+    private function getTransactionOrderDataVoucherValue($sTransactionType, $dOrderTotal)
+    {
+        $voucherValueUsed = $this->getTransactionPositionTotalForType(
+            TPkgShopPaymentTransactionItemData::TYPE_VOUCHER,
+            true
+        );
+        $dVoucher = (-1 * $this->order->fieldValueVouchers) - $voucherValueUsed;
+        if (TPkgShopPaymentTransactionData::TYPE_CREDIT === $sTransactionType) {
+            $maxAmountAllowedForCredit = $this->getMaxAllowedValueFor(self::TRANSACTION_TYPE_CREDIT);
+            if ($dOrderTotal > $maxAmountAllowedForCredit && $voucherValueUsed < 0) {
+                $dVoucher = ($dOrderTotal - $maxAmountAllowedForCredit) * -1;
+                if ($dVoucher < $voucherValueUsed) {
+                    $dVoucher = $voucherValueUsed;
+                }
+            }
+        }
+
+        if ($dVoucher * -1 > $dOrderTotal) {
+            $dVoucher = $dOrderTotal * -1;
+        }
+
+        return $dVoucher;
     }
 }
