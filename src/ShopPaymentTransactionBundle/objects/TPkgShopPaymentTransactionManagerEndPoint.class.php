@@ -254,25 +254,26 @@ class TPkgShopPaymentTransactionManagerEndPoint
     private function updateRealUsedVoucherValue(TdbShopOrder $shopOrder, float $realVoucherValueUsed): void
     {
         $voucherUsedDifference = $shopOrder->fieldValueVouchers - $realVoucherValueUsed;
-        if ($voucherUsedDifference > 0) {
-            $voucherUseList = $shopOrder->GetFieldShopVoucherUseList();
-            while ($voucherUse = $voucherUseList->Next()) {
-                $newVoucherUsedValue = $voucherUse->fieldValueUsed - $voucherUsedDifference;
-                if ($newVoucherUsedValue < 0) {
-                    $newVoucherUsedValue = 0;
-                    $voucherUsedDifference = $voucherUsedDifference - $voucherUse->fieldValueUsed;
-                } else {
-                    $voucherUsedDifference = 0;
-                }
-                $this->changeVoucherUseValue($voucherUse, $newVoucherUsedValue);
-                $voucher = $voucherUse->GetFieldShopVoucher();
-                if (null === $voucher) {
-                    return;
-                }
-                $this->changeVouucherUsedUp($voucher);
-                if (0 === $voucherUsedDifference) {
-                    break;
-                }
+        if ($voucherUsedDifference <= 0.00) {
+            return;
+        }
+        $voucherUseList = $shopOrder->GetFieldShopVoucherUseList();
+        while ($voucherUse = $voucherUseList->Next()) {
+            $newVoucherUsedValue = $voucherUse->fieldValueUsed - $voucherUsedDifference;
+            if ($newVoucherUsedValue < 0) {
+                $newVoucherUsedValue = 0;
+                $voucherUsedDifference = $voucherUsedDifference - $voucherUse->fieldValueUsed;
+            } else {
+                $voucherUsedDifference = 0;
+            }
+            $this->changeVoucherUseValue($voucherUse, $newVoucherUsedValue);
+            $voucher = $voucherUse->GetFieldShopVoucher();
+            if (null === $voucher) {
+                return;
+            }
+            $this->changeVoucherUsedUp($voucher);
+            if (0 === $voucherUsedDifference) {
+                break;
             }
         }
     }
@@ -284,7 +285,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
         $voucherUse->AllowEditByAll(false);
     }
 
-    private function changeVouucherUsedUp(TdbShopVoucher $voucher): void
+    private function changeVoucherUsedUp(TdbShopVoucher $voucher): void
     {
         if (true === $voucher->fieldIsUsedUp) {
             $voucher->AllowEditByAll(true);
