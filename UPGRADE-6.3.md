@@ -6,7 +6,18 @@ UPGRADE FROM 6.2 TO 6.3
 This section contains information on interface and method signature changes which affect backwards compatibility (BC).
 Note that ONLY BC breaking changes are listed, according to our backwards compatibility policy.
 
-None.
+
+## \ChameleonSystem\AmazonPaymentBundle\AmazonOrderReferenceObject
+
+- Changed method `__construct()` is now using `LoggerInterface` as parameter type.
+
+## \ChameleonSystem\AmazonPaymentBundle\AmazonPaymentGroupConfig
+
+- Changed method `setLogger()` is now using `LoggerInterface` as parameter type.
+
+## \ChameleonSystem\AmazonPaymentBundle\Interfaces\IAmazonOrderReferenceObject
+
+- Changed method `__construct()` is now using `LoggerInterface` as parameter type.
 
 # Deprecated Code Entities
 
