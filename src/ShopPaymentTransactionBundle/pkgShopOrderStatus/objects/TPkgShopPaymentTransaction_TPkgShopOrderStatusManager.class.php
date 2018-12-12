@@ -77,7 +77,7 @@ class TPkgShopPaymentTransaction_TPkgShopOrderStatusManager extends TPkgShopPaym
                     $aOrderItemRestriction
                 );
             } else {
-                \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order')->warning(
+                \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order')->warning(
                     "no transaction executed for {$oOrder->id} because allowTransaction returned false for type {$oTransactionType->fieldSystemName}"
                 );
 

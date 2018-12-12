@@ -49,7 +49,7 @@ class TPkgShopOrderStatusManagerEndPoint
 
     protected function getShopLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order_status');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_status');
     }
 
     /**

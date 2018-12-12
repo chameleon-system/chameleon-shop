@@ -21,7 +21,7 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.chameleon_order_ipn');
+        $logger = ServiceLocator::get('monolog.logger.order_ipn');
 
         $iPageId = false;
         $oURLData = &TCMSSmartURLData::GetActive();

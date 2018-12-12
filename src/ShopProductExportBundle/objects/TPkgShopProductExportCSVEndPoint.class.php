@@ -119,7 +119,7 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.chameleon');
+        $logger = ServiceLocator::get('logger');
 
         $iStart = microtime(true);
         static $iCount = 0;

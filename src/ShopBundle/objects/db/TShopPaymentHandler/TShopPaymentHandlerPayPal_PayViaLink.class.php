@@ -133,7 +133,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.chameleon_order');
+        $logger = ServiceLocator::get('monolog.logger.order');
         
         $sPayPalURL = $this->GetConfigParameter('url');
         $sPayPalURL = str_replace(array('https://', 'http://'), '', $sPayPalURL);

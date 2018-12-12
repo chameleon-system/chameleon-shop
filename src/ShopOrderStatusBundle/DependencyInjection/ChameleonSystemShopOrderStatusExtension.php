@@ -30,6 +30,6 @@ class ChameleonSystemShopOrderStatusExtension extends Extension implements Prepe
      */
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig('monolog', ['channels' => ['chameleon_order_status']]);
+        $container->prependExtensionConfig('monolog', ['channels' => ['order_status']]);
     }
 }

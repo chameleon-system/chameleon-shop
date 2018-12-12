@@ -122,6 +122,6 @@ class TCMSSmartURLHandler_ShopPaymentOgone extends TCMSSmartURLHandler_ShopBaske
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
     }
 }

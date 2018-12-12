@@ -111,6 +111,6 @@ class TCMSSmartURLHandler_ShopPaymentSofortueberweisungAPI extends TCMSSmartURLH
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
     }
 }

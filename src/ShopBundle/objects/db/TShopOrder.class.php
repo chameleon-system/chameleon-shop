@@ -419,7 +419,7 @@ class TShopOrder extends TShopOrderAutoParent
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.chameleon_order');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
     }
 
     /**

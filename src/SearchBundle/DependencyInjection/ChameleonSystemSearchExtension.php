@@ -30,6 +30,6 @@ class ChameleonSystemSearchExtension extends Extension implements PrependExtensi
      */
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig('monolog', ['channels' => ['chameleon_search_indexer']]);
+        $container->prependExtensionConfig('monolog', ['channels' => ['search_indexer']]);
     }
 }

@@ -343,7 +343,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         /**
          * @var $logger LoggerInterface
          */
-        $logger = ServiceLocator::get('monolog.logger.chameleon_search_indexer');
+        $logger = ServiceLocator::get('monolog.logger.search_indexer');
 
         $logger->info('copy index tables start');
         $aIndexTableNames = TdbShopSearchIndexer::GetAllIndexTableNames();
