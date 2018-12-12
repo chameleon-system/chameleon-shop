@@ -1112,7 +1112,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                     // errors messages should be added in $oOrder->PrePaymentExecuteHook()
                     $this->getLogger()->info(
                         sprintf('Order cancelled because PrePaymentExecuteHook returned false. Order id: %s', $oOrder->id),
-                        $oOrder->sqlData
+                        [$oOrder->sqlData]
                     );
                     $oOrder->SetStatusCanceled(true);
                     $bOrderCreated = false;
