@@ -51,7 +51,8 @@ None.
 
 ## Methods
 
-None.
+- \TPkgShopOrderStatusManagerEndPoint::getLogger()
+- \TPkgShopOrderStatusManagerEndPoint::setLogger()
 
 ## JavaScript Files and Functions
 
