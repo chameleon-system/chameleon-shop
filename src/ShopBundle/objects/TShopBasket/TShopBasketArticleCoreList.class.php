@@ -476,7 +476,7 @@ class TShopBasketArticleCoreList extends TIterator
         }
         // what ever is left over in $missingDiscountValue at this point, is removed from the first article that has a discounted value larger 0
         reset($articlesAffected);
-        foreach ($articlesAffected as  $affectedArticle) {
+        foreach ($articlesAffected as $affectedArticle) {
             if ($dRemainingDiscountUse > 0) {
                 $dMaxUse = $articlesAffected[0]->dPriceTotalAfterDiscount;
                 if ($dMaxUse >= $dRemainingDiscountUse) {
