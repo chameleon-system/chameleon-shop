@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ChameleonSystem\ShopCurrencyBundle\Bridge\Chameleon\Objects;
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -8,20 +17,20 @@ use ChameleonSystem\ShopCurrencyBundle\Interfaces\ShopCurrencyServiceInterface;
 class CurrencyBasket extends \ChameleonSystemShopCurrencyBundleBridgeChameleonObjectsCurrencyBasketAutoParent
 {
     /**
-     * Reload active set payment method on currency change.
-     * So payment method holds correct price for currency.
+     * Reloads the active payment method on currency change,
+     * so that the payment method holds the payment charges in the correct currency.
      *
      * {@inheritdoc}
      */
     public function SetActivePaymentMethod($oShopPayment)
     {
-        $activePaymentMethod = $this->GetActivePaymentMethod();
+        $oldActivePaymentMethod = $this->GetActivePaymentMethod();
         $isPaymentSet = parent::SetActivePaymentMethod($oShopPayment);
         $newActivePaymentMethod = $this->GetActivePaymentMethod();
-        if (null === $activePaymentMethod || null === $newActivePaymentMethod) {
+        if (null === $oldActivePaymentMethod || null === $newActivePaymentMethod) {
             return $isPaymentSet;
         }
-        if (false === $activePaymentMethod->IsSameAs($newActivePaymentMethod)) {
+        if (false === $oldActivePaymentMethod->IsSameAs($newActivePaymentMethod)) {
             return $isPaymentSet;
         }
         $activeCurrency = $this->getCurrencyService()->getObject();
