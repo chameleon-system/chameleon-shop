@@ -158,34 +158,22 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             return $this->processArticleResponse($aResponse, $request, $key);
         }
 
-        $cat = null;
-        if (null !== $catid && 0 !== $catid) {
-            $cat = TdbShopCategory::GetNewInstance();
-            if (false === $cat->LoadFromField('cmsident', $catid) || false === $cat->AllowDisplayInShop()) {
-                $cat = null;
-            }
-        }
-
-        // check - is the product in that category?
-        if (null !== $cat) {
-            if (false === $article->IsInCategory(array($cat->id))) {
-                $cat = null;
-            }
-        }
-
-        if (null === $cat && null !== $article->GetPrimaryCategory()) {
-            $newUrl = $article->getLink(true);
-            if ($request->getUri() !== $newUrl) {
-                $aResponse['redirectURL'] = $newUrl;
-                $aResponse['fullURL'] = $aResponse['redirectURL'];
-                $aResponse['redirectPermanent'] = true;
-            }
+        if (false === $article->AllowDetailviewInShop()) {
+            $aResponse = $this->prepareArticleResponseWhenDetailViewNotAllowed($aResponse, $article, $catid);
 
             return $this->processArticleResponse($aResponse, $request, $key);
         }
 
-        if (false === $article->AllowDetailviewInShop()) {
-            $aResponse = $this->prepareArticleResponseWhenDetailViewNotAllowed($aResponse, $article, $catid);
+        $category = $this->getValidCategoryForArticle($catid, $article);
+
+        if (null === $category && null !== $article->GetPrimaryCategory()) {
+            $currentArticlePath = $article->getLink(false);
+            $requestedPath = $request->getPathInfo();
+            if ($requestedPath !== $currentArticlePath) {
+                $aResponse['redirectURL'] = $article->getLink(true);
+                $aResponse['fullURL'] = $aResponse['redirectURL'];
+                $aResponse['redirectPermanent'] = true;
+            }
 
             return $this->processArticleResponse($aResponse, $request, $key);
         }
@@ -195,7 +183,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             $variantArticle = TdbShop::GetActiveItemVariant($article);
         }
 
-        $realItemURL = $this->getArticleFullUrlForRequest($cat, $variantArticle);
+        $realItemURL = $this->getArticleFullUrlForRequest($category, $variantArticle);
         $aResponse['fullURL'] = $realItemURL;
         $currentFullURL = $request->getPathInfo();
         if ($realItemURL !== $currentFullURL && $variantArticle->AllowDetailviewInShop()) {
@@ -205,8 +193,8 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
         $article = $variantArticle;
 
         $aResponse['activeShopArticle'] = $article;
-        if (null !== $cat) {
-            $aResponse['activeShopCategory'] = $cat;
+        if (null !== $category) {
+            $aResponse['activeShopCategory'] = $category;
         }
 
         return $this->processArticleResponse($aResponse, $request, $key);
@@ -331,53 +319,54 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
      */
     public function shopCategory(Request $request, $category, $categoryPath, $pagedef)
     {
-        $queryParameter = $request->query->all();
-        if (0 === count($queryParameter)) {
-            $queryParameter = null;
-        }
-        $catPath = $category;
-        $catPrefix = $categoryPath;
-        $tmp = array();
-        if ('' !== $catPrefix) {
-            $tmp[] = $catPrefix;
-        }
-        if ('' !== $catPath) {
-            $tmp[] = $catPath;
-        }
-        $fullPath = '/'.implode('/', $tmp);
-
-        $aKey = array(
-            'class' => __CLASS__,
-            'method' => 'shopCategory',
-            'path' => $catPath,
-        );
-
-        $catPath = rtrim($catPath, '/');
+        $catPath = rtrim($category, '/');
         if ('.html' === substr($catPath, -5) && strlen($catPath) > 5) {
             $catPath = substr($catPath, 0, -5);
         }
 
-        $cache = $this->getCache();
-        $key = $cache->getKey($aKey);
-        $aResponse = $cache->get($key);
-        if (null !== $aResponse) {
-            return $this->processCategoryResponse($aResponse, $request);
-        }
-
-        $aResponse = array(
-            'activeShopArticle' => null,
-            'activeShopCategory' => null,
-            'redirectURL' => null,
-            'redirectPermanent' => false,
-            'noMatch' => false,
-            'pagedef' => $pagedef,
-            'queryParameter' => $queryParameter,
-        );
-
         $oPathCat = TdbShopCategoryList::GetCategoryForCategoryPath(explode('/', $catPath));
+
         if (null !== $oPathCat && true === $oPathCat->AllowDisplayInShop()) {
+            $aKey = array(
+                'class' => __CLASS__,
+                'method' => 'shopCategory',
+                'path' => $category,
+            );
+            $cache = $this->getCache();
+            $key = $cache->getKey($aKey);
+            $aResponse = $cache->get($key);
+            if (null !== $aResponse) {
+                return $this->processCategoryResponse($aResponse, $request);
+            }
+
+            $queryParameter = $request->query->all();
+            if (0 === count($queryParameter)) {
+                $queryParameter = null;
+            }
+
+            $aResponse = array(
+                'activeShopArticle' => null,
+                'activeShopCategory' => null,
+                'redirectURL' => null,
+                'redirectPermanent' => false,
+                'noMatch' => false,
+                'pagedef' => $pagedef,
+                'queryParameter' => $queryParameter,
+            );
+
             // does the URL match?
             $url = $oPathCat->GetLink(false);
+
+            $catPrefix = $categoryPath;
+            $tmp = array();
+            if ('' !== $catPrefix) {
+                $tmp[] = $catPrefix;
+            }
+            if ('' !== $category) {
+                $tmp[] = $category;
+            }
+            $fullPath = '/'.implode('/', $tmp);
+
             if (false === $this->compareRelativeAndPrefixedURL($fullPath, $url)) {
                 $aResponse['redirectURL'] = $oPathCat->GetLink(true);
                 $aResponse['redirectPermanent'] = true;
@@ -451,5 +440,27 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
         }
 
         return $this->cache;
+    }
+
+    private function getValidCategoryForArticle(?string $requestedCategoryId, TdbShopArticle $article): ?TdbShopCategory
+    {
+        if (null === $requestedCategoryId || 0 === $requestedCategoryId) {
+            return null;
+        }
+
+        $category = TdbShopCategory::GetNewInstance();
+        if (false === $category->LoadFromField('cmsident', $requestedCategoryId)) {
+            return null;
+        }
+
+        if (false === $category->AllowDisplayInShop()) {
+            return null;
+        }
+
+        if (false === $article->IsInCategory([$category->id])) {
+            return null;
+        }
+
+        return $category;
     }
 }
