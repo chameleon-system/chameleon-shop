@@ -20,6 +20,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
 {
     const VIEW_PATH = '/pkgShop/views/db/TShopCategory';
     const FILTER_KEY_NAME = 'cattreeid';
+    const PRODUCTS_PAGE_SYSTEM_NAME = 'products';
 
     /**
      * return the vat group of the category.
@@ -64,9 +65,9 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
         if (is_null($sLink)) {
             try {
                 if ($bAbsolute) {
-                    $sPageLink = $this->getSystemPageService()->getLinkToSystemPageAbsolute('products', array(), $portal, $language);
+                    $sPageLink = $this->getSystemPageService()->getLinkToSystemPageAbsolute(self::PRODUCTS_PAGE_SYSTEM_NAME, array(), $portal, $language);
                 } else {
-                    $sPageLink = $this->getSystemPageService()->getLinkToSystemPageRelative('products', array(), $portal, $language);
+                    $sPageLink = $this->getSystemPageService()->getLinkToSystemPageRelative(self::PRODUCTS_PAGE_SYSTEM_NAME, array(), $portal, $language);
                 }
                 if ('.html' === substr($sPageLink, -5)) {
                     $sPageLink = substr($sPageLink, 0, -5).'/';
@@ -605,7 +606,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
     }
 
     /**
-     * @return TdbCmsTplPage
+     * @return TdbCmsTplPage|null
      */
     public function getTargetPage()
     {
@@ -630,8 +631,17 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
             if (null === $activePortal) {
                 return null;
             }
-            $targetPageId = $activePortal->GetSystemPageId('products');
-            $defaultPage = TdbCmsTplPage::GetNewInstance($targetPageId);
+
+            $systemPageService = $this->getSystemPageService();
+            $defaultSystemPage = $systemPageService->getSystemPage(self::PRODUCTS_PAGE_SYSTEM_NAME, $activePortal);
+
+            if (null === $defaultSystemPage) {
+                return null;
+            }
+
+            $pageService = self::getPageService();
+            $defaultPage = $pageService->getById($defaultSystemPage->id);
+
             $targetPage = $defaultPage;
         }
 

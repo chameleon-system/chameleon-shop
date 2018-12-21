@@ -410,83 +410,108 @@ class TShopBasketArticleCoreList extends TIterator
      */
     public function ReducePriceForItemsAffectedByNoneSponsoredVoucher(TdbShopVoucher &$oVoucher, $dVoucherValue)
     {
-        $iCurrentPosition = $this->getItemPointer();
+        $currentPosition = $this->getItemPointer();
         $this->GoToStart();
-        $oVoucherDef = &$oVoucher->GetFieldShopVoucherSeries();
-        $aArticlesAffected = array();
-        $dTotalValueOfAffectedItems = 0;
-        while ($oItem = &$this->Next()) {
-            $bIncludeProduct = $oVoucher->AllowVoucherForArticle($oItem);
-            if ($bIncludeProduct) {
-                $aArticlesAffected[] = &$oItem;
-                $dTotalValueOfAffectedItems = $dTotalValueOfAffectedItems + $oItem->dPriceTotalAfterDiscountWithoutVouchers;
+        $articlesAffected = array();
+        $totalValueOfAffectedItems = 0;
+        while ($basketItem = $this->Next()) {
+            if (true === $oVoucher->AllowVoucherForArticle($basketItem)) {
+                $articlesAffected[] = $basketItem;
+                $totalValueOfAffectedItems = $totalValueOfAffectedItems + $basketItem->dPriceTotalAfterDiscountWithoutVouchers;
             }
         }
-        $this->setItemPointer($iCurrentPosition);
+        $this->setItemPointer($currentPosition);
 
-        $iNumberOfAffectedItems = count($aArticlesAffected);
-        $dTotalValueOfAffectedItemsUsed = 0;
-        if ($iNumberOfAffectedItems > 0) {
-            $dRemainingVoucherUse = $dVoucherValue;
-            foreach (array_keys($aArticlesAffected) as $iAffectedArticleIndex) {
-                // total value used for the article is calculated based on the relative value of the article to the other articles
-                // (200*(49/448.95))/1 =
-                $dValueToUse = ($dVoucherValue * ($aArticlesAffected[$iAffectedArticleIndex]->dPriceTotalAfterDiscountWithoutVouchers / $dTotalValueOfAffectedItems)) / $aArticlesAffected[$iAffectedArticleIndex]->dAmount;
-                $dValueToUse = $dValueToUse * 100;
-                //the reason for adding the 0.5 in the next step is float precision error in php, see http://php.net/float
-                $dValueToUse = intval(floor($dValueToUse + 0.5)) / 100;
-                $dRealUse = $dValueToUse * $aArticlesAffected[$iAffectedArticleIndex]->dAmount;
-                //round has to be done because php doesn't handle values correctly and returns true for identical values for ($dRealUse > $dRemainingVoucherUse)
-                $dRealUse = round($dRealUse, 10);
-                $dRemainingVoucherUse = round($dRemainingVoucherUse, 10);
-                if ($dRealUse > $dRemainingVoucherUse) {
-                    $dValueToUse = floor(($dRemainingVoucherUse / $aArticlesAffected[$iAffectedArticleIndex]->dAmount) * 100) / 100; // prevent over spending
-                    $dRealUse = $dValueToUse * $aArticlesAffected[$iAffectedArticleIndex]->dAmount;
-                }
-                $dRemainingVoucherUse = $dRemainingVoucherUse - $dRealUse;
-                $aArticlesAffected[$iAffectedArticleIndex]->dPriceAfterDiscount = $aArticlesAffected[$iAffectedArticleIndex]->dPriceAfterDiscount - $dValueToUse;
-                $aArticlesAffected[$iAffectedArticleIndex]->dPriceTotalAfterDiscount = $aArticlesAffected[$iAffectedArticleIndex]->dPriceAfterDiscount * $aArticlesAffected[$iAffectedArticleIndex]->dAmount;
+        $this->correctBasketItemDiscountPrices($articlesAffected, $dVoucherValue, $totalValueOfAffectedItems);
+    }
+
+    /**
+     * @param TdbShopDiscount $discount
+     * @param float           $unusedDiscountValue value difference between discount based on single article and discount based on all articles
+     */
+    public function reducePriceForItemsAffectedByDiscount(\TdbShopDiscount $discount, float $unusedDiscountValue): void
+    {
+        $currentPosition = $this->getItemPointer();
+        $this->GoToStart();
+        $articlesAffected = array();
+        $totalValueOfAffectedItems = 0;
+        while ($basketItem = $this->Next()) {
+            if (true === $discount->AllowDiscountForArticle($basketItem)) {
+                $articlesAffected[] = $basketItem;
+                $totalValueOfAffectedItems = $totalValueOfAffectedItems + $basketItem->dPriceTotalAfterDiscountWithoutVouchers;
             }
-            // what ever is left over in $dVoucherValue at this point, is removed from the first article that has a discounted value larger 0
-            if ($dRemainingVoucherUse > 0) {
-                reset($aArticlesAffected);
-                foreach (array_keys($aArticlesAffected) as $iAffectedArticleIndex) {
-                    if ($dRemainingVoucherUse > 0) {
-                        $dMaxUse = $aArticlesAffected[0]->dPriceTotalAfterDiscount;
-                        if ($dMaxUse >= $dRemainingVoucherUse) {
-                            $dUsePerItem = floor(($dRemainingVoucherUse / $aArticlesAffected[$iAffectedArticleIndex]->dAmount) * 100) / 100;
-                            if ($dUsePerItem > 0) {
-                                $dRemainingVoucherUse = $dRemainingVoucherUse - $dUsePerItem * $aArticlesAffected[$iAffectedArticleIndex]->dAmount;
-                                $aArticlesAffected[$iAffectedArticleIndex]->dPriceAfterDiscount = $aArticlesAffected[$iAffectedArticleIndex]->dPriceAfterDiscount - $dUsePerItem;
-                                $aArticlesAffected[$iAffectedArticleIndex]->dPriceTotalAfterDiscount = $aArticlesAffected[$iAffectedArticleIndex]->dPriceAfterDiscount * $aArticlesAffected[$iAffectedArticleIndex]->dAmount;
-                            }
-                        }
+        }
+        $this->setItemPointer($currentPosition);
+
+        $this->correctBasketItemDiscountPrices($articlesAffected, $unusedDiscountValue, $totalValueOfAffectedItems);
+    }
+
+    protected function correctBasketItemDiscountPrices(array $articlesAffected, float $unusedDiscountValue, float $totalValueOfAffectedItems): void
+    {
+        if (0 === count($articlesAffected)) {
+            return;
+        }
+        $dRemainingDiscountUse = $unusedDiscountValue;
+        foreach ($articlesAffected as  $affectedArticle) {
+            // total value used for the article is calculated based on the relative value of the article to the other articles
+            // (200*(49/448.95))/1 =
+            $dValueToUse = ($unusedDiscountValue * ($affectedArticle->dPriceTotalAfterDiscountWithoutVouchers / $totalValueOfAffectedItems)) / $affectedArticle->dAmount;
+            $dValueToUse = $dValueToUse * 100;
+            //the reason for adding the 0.5 in the next step is float precision error in php, see http://php.net/float
+            $dValueToUse = intval(floor($dValueToUse + 0.5)) / 100;
+            $dRealUse = $dValueToUse * $affectedArticle->dAmount;
+            //round has to be done because php doesn't handle values correctly and returns true for identical values for ($dRealUse > $dRemainingDiscountUse)
+            $dRealUse = round($dRealUse, 10);
+            $dRemainingDiscountUse = round($dRemainingDiscountUse, 10);
+            if ($dRealUse > $dRemainingDiscountUse) {
+                $dValueToUse = floor(($dRemainingDiscountUse / $affectedArticle->dAmount) * 100) / 100; // prevent over spending
+                $dRealUse = $dValueToUse * $affectedArticle->dAmount;
+            }
+            $dRemainingDiscountUse = $dRemainingDiscountUse - $dRealUse;
+            $affectedArticle->dPriceAfterDiscount = $affectedArticle->dPriceAfterDiscount - $dValueToUse;
+            $affectedArticle->dPriceTotalAfterDiscount = $affectedArticle->dPriceAfterDiscount * $affectedArticle->dAmount;
+        }
+        if ($dRemainingDiscountUse <= 0.001) {
+            return;
+        }
+        // what ever is left over in $missingDiscountValue at this point, is removed from the first article that has a discounted value larger 0
+        reset($articlesAffected);
+        foreach ($articlesAffected as $affectedArticle) {
+            if ($dRemainingDiscountUse > 0) {
+                $dMaxUse = $articlesAffected[0]->dPriceTotalAfterDiscount;
+                if ($dMaxUse >= $dRemainingDiscountUse) {
+                    $dUsePerItem = floor(($dRemainingDiscountUse / $affectedArticle->dAmount) * 100) / 100;
+                    if ($dUsePerItem > 0) {
+                        $dRemainingDiscountUse = $dRemainingDiscountUse - $dUsePerItem * $affectedArticle->dAmount;
+                        $affectedArticle->dPriceAfterDiscount = $affectedArticle->dPriceAfterDiscount - $dUsePerItem;
+                        $affectedArticle->dPriceTotalAfterDiscount = $affectedArticle->dPriceAfterDiscount * $affectedArticle->dAmount;
                     }
                 }
             }
+        }
 
-            // we may still have some value remaining since the individual price may not split evenly into the items (if we use an item price)
-            // we solve this by: change the price of the affected item that most closely matches the final value into such a fraction, that the total matches
-            if ($dRemainingVoucherUse > 0) {
-                reset($aArticlesAffected);
-                $dSmallestChange = null;
-                $indexOfArticleWithSmallestChange = null;
-                foreach (array_keys($aArticlesAffected) as $iAffectedArticleIndex) {
-                    $dRequiredPositionPrice = ($aArticlesAffected[$iAffectedArticleIndex]->dPriceTotalAfterDiscount - $dRemainingVoucherUse) / $aArticlesAffected[$iAffectedArticleIndex]->dAmount;
-                    $dDiff = abs($dRequiredPositionPrice - $aArticlesAffected[$iAffectedArticleIndex]->dPriceAfterDiscount);
-                    if (null === $dSmallestChange || $dDiff < $dSmallestChange) {
-                        $dSmallestChange = $dDiff;
-                        $indexOfArticleWithSmallestChange = $iAffectedArticleIndex;
-                    }
-                }
-                reset($aArticlesAffected);
-                if (null !== $indexOfArticleWithSmallestChange) {
-                    $dRequiredPositionPrice = ($aArticlesAffected[$indexOfArticleWithSmallestChange]->dPriceTotalAfterDiscount - $dRemainingVoucherUse) / $aArticlesAffected[$indexOfArticleWithSmallestChange]->dAmount;
-                    $aArticlesAffected[$indexOfArticleWithSmallestChange]->dPriceAfterDiscount = $dRequiredPositionPrice;
-                    $aArticlesAffected[$indexOfArticleWithSmallestChange]->dPriceTotalAfterDiscount = $aArticlesAffected[$indexOfArticleWithSmallestChange]->dPriceTotalAfterDiscount - $dRemainingVoucherUse;
-                    $dRemainingVoucherUse = 0;
-                }
+        if ($dRemainingDiscountUse <= 0.001) {
+            return;
+        }
+        // we may still have some value remaining since the individual price may not split evenly into the items (if we use an item price)
+        // we solve this by: change the price of the affected item that most closely matches the final value into such a fraction, that the total matches
+
+        reset($articlesAffected);
+        $dSmallestChange = null;
+        $indexOfArticleWithSmallestChange = null;
+        foreach ($articlesAffected as $iAffectedArticleIndex => $affectedArticle) {
+            $dRequiredPositionPrice = ($affectedArticle->dPriceTotalAfterDiscount - $dRemainingDiscountUse) / $affectedArticle->dAmount;
+            $dDiff = abs($dRequiredPositionPrice - $affectedArticle->dPriceAfterDiscount);
+            if (null === $dSmallestChange || $dDiff < $dSmallestChange) {
+                $dSmallestChange = $dDiff;
+                $indexOfArticleWithSmallestChange = $iAffectedArticleIndex;
             }
+        }
+        reset($articlesAffected);
+        if (null !== $indexOfArticleWithSmallestChange) {
+            $dRequiredPositionPrice = ($articlesAffected[$indexOfArticleWithSmallestChange]->dPriceTotalAfterDiscount - $dRemainingDiscountUse) / $articlesAffected[$indexOfArticleWithSmallestChange]->dAmount;
+            $articlesAffected[$indexOfArticleWithSmallestChange]->dPriceAfterDiscount = $dRequiredPositionPrice;
+            $articlesAffected[$indexOfArticleWithSmallestChange]->dPriceTotalAfterDiscount = $articlesAffected[$indexOfArticleWithSmallestChange]->dPriceTotalAfterDiscount - $dRemainingDiscountUse;
         }
     }
 
@@ -617,11 +642,18 @@ class TShopBasketArticleCoreList extends TIterator
             $dTotalDiscountValue = $oDiscount->fieldValue;
         }
 
+        $totalDiscountValueItemCalculated = 0;
         while ($oItem = &$this->Next()) {
             if ((!$bIsAbsoluteDiscount || $dTotalDiscountValue > 0) && $oDiscount->AllowDiscountForArticle($oItem)) {
                 $oDiscountToPass = clone $oDiscount;
-                $dTotalDiscountValue = $oItem->ApplyDiscount($oDiscountToPass, $dTotalDiscountValue);
+                $oItem->ApplyDiscount($oDiscountToPass, $dTotalDiscountValue);
+                $totalDiscountValueItemCalculated += $oDiscountToPass->dRealValueUsed;
             }
+        }
+        $totalDiscountValueOverAll = $oDiscount->GetValue();
+        if ($totalDiscountValueOverAll !== $totalDiscountValueItemCalculated) {
+            $missingDiscountValue = $totalDiscountValueOverAll - $totalDiscountValueItemCalculated;
+            $this->reducePriceForItemsAffectedByDiscount($oDiscount, $missingDiscountValue);
         }
         $this->setItemPointer($iCurrentPosition);
     }
