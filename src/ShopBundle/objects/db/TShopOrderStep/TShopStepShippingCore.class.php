@@ -225,6 +225,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
         // check if the group is still valid. if not, reload using default
         if (!$this->oActiveShippingGroup || false == $this->oActiveShippingGroup->IsAvailable()) {
             $oBasket->SetActiveShippingGroup(null);
+            $oBasket->SetBasketRecalculationFlag(true);
             $this->oActiveShippingGroup = $oBasket->GetActiveShippingGroup();
         }
         $iShippingGroupId = null;
@@ -239,6 +240,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
                 }
             } else {
                 $oBasket->SetActiveShippingGroup($this->oActiveShippingGroup);
+                $oBasket->SetBasketRecalculationFlag(true);
             }
         }
     }
