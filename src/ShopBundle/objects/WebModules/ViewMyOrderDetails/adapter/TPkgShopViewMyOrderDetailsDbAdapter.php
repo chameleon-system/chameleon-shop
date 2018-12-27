@@ -45,6 +45,6 @@ class TPkgShopViewMyOrderDetailsDbAdapter implements IPkgShopViewMyOrderDetailsD
     {
         $order = TdbShopOrder::GetNewInstance($orderId);
 
-        return (false !== $order->sqlData) ? $order : null;
+        return (false !== $order->sqlData || count($order->sqlData) > 0) ? $order : null;
     }
 }
