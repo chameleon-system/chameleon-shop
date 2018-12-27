@@ -85,22 +85,37 @@ class MTShopViewMyOrderDetails extends MTPkgViewRendererAbstractModuleMapper
             'order' => null,
         );
 
-        if (false === $viewOrderDetailHandler->orderIdBelongsToUser($orderIdRequested, $extranetUserId)) {
-            // this is not our order. access denied
-            $viewData['error'] = true;
-            $viewData['errorCode'] = 'notMyOrderError';
-        }
+        $order = $this->getOrder($orderIdRequested);
 
-        $order = $this->getDbAdapter()->getOrder($orderIdRequested);
         if (null === $order) {
             // this is not our order. access denied
             $viewData['error'] = true;
             $viewData['errorCode'] = 'orderNotFoundError';
+        } else {
+            if (null === $extranetUserId || false === $viewOrderDetailHandler->orderIdBelongsToUser($orderIdRequested, $extranetUserId)) {
+                // this is not our order. access denied
+                $viewData['error'] = true;
+                $viewData['errorCode'] = 'notMyOrderError';
+            }
         }
 
         $viewData['order'] = $order;
 
         $oVisitor->SetMappedValueFromArray($viewData);
+    }
+
+    private function getOrder($orderIdRequested): ?\TdbShopOrder
+    {
+        if (null === $orderIdRequested || '' === $orderIdRequested) {
+            return null;
+        }
+
+        $order = $this->getDbAdapter()->getOrder($orderIdRequested);
+        if (null !== $order) {
+            return $order;
+        }
+
+        return null;
     }
 
     /**
