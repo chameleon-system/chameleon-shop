@@ -33,7 +33,7 @@ if (TCMSLogChange::GetFieldType('CMSFIELD_EXTENDEDTABLELIST_MEDIA') !== $fieldCo
 $query = 'ALTER TABLE `pkg_image_hotspot_item` ADD `cms_media_id_image_crop_id` CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
-$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields(
         [
             'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_EXTENDEDTABLELIST_MEDIA_CROP'),
@@ -53,15 +53,26 @@ $query = 'ALTER TABLE `pkg_image_hotspot_item` ADD INDEX ( `cms_media_id_image_c
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 $highestPosition = (int) $databaseConnection->fetchColumn('SELECT MAX(`position`) FROM `cms_image_crop_preset`');
-$data = TCMSLogChange::createMigrationQueryData('cms_image_crop_preset', 'de')
+$newPresetId = TCMSLogChange::createUnusedRecordId('cms_image_crop_preset');
+
+$data = TCMSLogChange::createMigrationQueryData('cms_image_crop_preset', 'en')
     ->setFields(
         [
-            'name' => 'Image-Hotspot: Hintergrundbild',
+            'name' => 'Presenter with hotspots: Background image',
             'width' => '1170',
             'height' => '385',
             'system_name' => 'pkgImageHotspotItemBackground',
             'position' => $highestPosition++,
-            'id' => TCMSLogChange::createUnusedRecordId('cms_image_crop_preset'),
+            'id' => $newPresetId,
         ]
     );
 TCMSLogChange::insert(__LINE__, $data);
+
+$data = TCMSLogChange::createMigrationQueryData('cms_image_crop_preset', 'de')
+    ->setFields(
+        [
+            'name' => 'Presenter mit Hotspots: Hintergrundbild',
+        ]
+    )
+    ->setWhereEquals(['id' => $newPresetId]);
+TCMSLogChange::update(__LINE__, $data);
