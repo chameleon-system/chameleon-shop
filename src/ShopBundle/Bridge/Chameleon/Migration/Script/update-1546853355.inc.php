@@ -4,7 +4,7 @@
     - add crop to image field of hotspot item
 </div>
 <?php
-TCMSLogChange::requireBundleUpdates('ImageCropBundle', 1534864767);
+TCMSLogChange::requireBundleUpdates('ChameleonSystemImageCropBundle', 1534864767);
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
 
@@ -21,7 +21,7 @@ if (false === $fieldConfigImageField) {
     return;
 }
 
-if ('CMSFIELD_EXTENDEDTABLELIST_MEDIA' !== $fieldConfigImageField['cms_field_type_id']) {
+if (TCMSLogChange::GetFieldType('CMSFIELD_EXTENDEDTABLELIST_MEDIA') !== $fieldConfigImageField['cms_field_type_id']) {
     TCMSLogChange::addInfoMessage(
         'Field type of `cms_media_id` in table `pkg_image_hotspot_item` was apparently changed, please change type to CMSFIELD_EXTENDEDTABLELIST_MEDIA_CROP manually and make sure to keep any custom code. Restrict field to crop preset `pkgImageHotspotItemBackground`.',
         TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR
