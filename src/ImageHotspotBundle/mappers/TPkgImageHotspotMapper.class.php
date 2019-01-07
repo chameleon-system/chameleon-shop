@@ -76,6 +76,7 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
         $oVisitor->SetMappedValue('sHeadline', $oPkgImageHotspot->fieldName);
 
         $oVisitor->SetMappedValue('sBackgroundImageId', $oActiveItemImage->id);
+        $oVisitor->SetMappedValue('backgroundImageCropId', $oActiveItem->fieldCmsMediaIdImageCropId);
         $oVisitor->SetMappedValue('sBackgroundImageAlt', $oActiveItem->fieldName);
 
         $oNextItem = $oActiveItem->GetNextItem();
