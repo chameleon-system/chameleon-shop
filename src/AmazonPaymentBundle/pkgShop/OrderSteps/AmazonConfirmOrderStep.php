@@ -13,7 +13,9 @@ namespace ChameleonSystem\AmazonPaymentBundle\pkgShop\OrderSteps;
 
 use ChameleonSystem\AmazonPaymentBundle\AmazonPaymentConfigFactory;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
+use Psr\Log\LoggerInterface;
 use TGlobal;
 
 class AmazonConfirmOrderStep extends \TShopStepConfirm
@@ -51,7 +53,7 @@ class AmazonConfirmOrderStep extends \TShopStepConfirm
         try {
             $data['amazonConfig'] = AmazonPaymentConfigFactory::createConfig($this->getActivePortalId());
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_payment_amazon')->error(
+            $this->getLogger()->error(
                 'unable to load amazon config: '.(string) $e,
                 array('e.message' => $e->getMessage(), 'e.file' => $e->getFile(), 'e.line' => $e->getLine())
             );
@@ -75,5 +77,10 @@ class AmazonConfirmOrderStep extends \TShopStepConfirm
     private function getExtranetUserProvider()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order_payment_amazon');
     }
 }

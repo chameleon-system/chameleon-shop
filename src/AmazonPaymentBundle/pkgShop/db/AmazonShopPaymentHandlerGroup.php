@@ -17,7 +17,9 @@ use ChameleonSystem\AmazonPaymentBundle\Interfaces\IAmazonReferenceId;
 use ChameleonSystem\AmazonPaymentBundle\IPN\AmazonPaymentIPNInvalidException;
 use ChameleonSystem\AmazonPaymentBundle\ReferenceIdMapping\AmazonReferenceIdManager;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use TdbShopOrder;
 
@@ -86,7 +88,7 @@ class AmazonShopPaymentHandlerGroup extends \TdbShopPaymentHandlerGroup
     private function getActivePortalId()
     {
         /** @var PortalDomainServiceInterface $portalDomainService */
-        $portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        $portalDomainService = ServiceLocator::get('chameleon_system_core.portal_domain_service');
 
         return $portalDomainService->getActivePortal()->id;
     }
@@ -165,14 +167,14 @@ class AmazonShopPaymentHandlerGroup extends \TdbShopPaymentHandlerGroup
                     break;
             }
         } catch (\OffAmazonPaymentsNotifications_InvalidMessageException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_payment_amazon')->error(
+            $this->getLogger()->error(
                 'Amazon IPN failed '.$e->getMessage(),
                 array('requestData' => $aRequestData, 'exception' => (string) $e)
             );
 
             return $aRequestData;
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_payment_amazon')->error(
+            $this->getLogger()->error(
                 'Amazon IPN failed because no matching order was found',
                 array('requestData' => $aRequestData)
             );
@@ -222,7 +224,7 @@ class AmazonShopPaymentHandlerGroup extends \TdbShopPaymentHandlerGroup
             return $this->request;
         }
 
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -261,6 +263,11 @@ class AmazonShopPaymentHandlerGroup extends \TdbShopPaymentHandlerGroup
             return $this->databaseConnection;
         }
 
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order_payment_amazon');
     }
 }

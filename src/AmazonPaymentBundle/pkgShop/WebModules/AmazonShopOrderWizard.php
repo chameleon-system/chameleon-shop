@@ -13,6 +13,8 @@ namespace ChameleonSystem\AmazonPaymentBundle\pkgShop\WebModules;
 
 use ChameleonSystem\AmazonPaymentBundle\AmazonPaymentConfigFactory;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
 use TdbShopShippingGroupList;
 
 class AmazonShopOrderWizard extends \ChameleonSystemAmazonPaymentBundlepkgShopWebModulesAmazonShopOrderWizardAutoParent
@@ -28,7 +30,7 @@ class AmazonShopOrderWizard extends \ChameleonSystemAmazonPaymentBundlepkgShopWe
             $footerIncludes[] = "<script type='text/javascript' src='".$config->getWidgetURL()."'></script>";
             $footerIncludes[] = "<script type='text/javascript' src='".\TGlobal::GetStaticURL('/bundles/chameleonsystemamazonpayment/common.js')."'></script>";
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_payment_amazon')->error(
+            $this->getLogger()->error(
                 'unable to load amazon config: '.(string) $e,
                 array('e.message' => $e->getMessage(), 'e.file' => $e->getFile(), 'e.line' => $e->getLine())
             );
@@ -46,8 +48,13 @@ class AmazonShopOrderWizard extends \ChameleonSystemAmazonPaymentBundlepkgShopWe
     private function getActivePortalId()
     {
         /** @var PortalDomainServiceInterface $portalDomainService */
-        $portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        $portalDomainService = ServiceLocator::get('chameleon_system_core.portal_domain_service');
 
         return $portalDomainService->getActivePortal()->id;
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order_payment_amazon');
     }
 }

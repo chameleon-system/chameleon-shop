@@ -12,6 +12,8 @@
 namespace ChameleonSystem\AmazonPaymentBundle;
 
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
 use TdbShopOrderStep;
 use TPkgCmsException_LogAndMessage;
 
@@ -54,7 +56,7 @@ class AmazonShopActionPlugin extends \AbstractPkgActionPlugin
     private function handleError($error, $errorCode)
     {
         if (null !== $error) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_payment_amazon')->warning(
+            $this->getLogger()->warning(
                 'amazon error: '.$error,
                 array('error' => $error, 'errorCode' => $errorCode)
             );
@@ -79,7 +81,7 @@ class AmazonShopActionPlugin extends \AbstractPkgActionPlugin
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 
     /**
@@ -87,6 +89,11 @@ class AmazonShopActionPlugin extends \AbstractPkgActionPlugin
      */
     private function getSystemPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ServiceLocator::get('chameleon_system_core.system_page_service');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order_payment_amazon');
     }
 }
