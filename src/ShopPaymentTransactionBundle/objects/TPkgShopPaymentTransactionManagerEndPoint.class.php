@@ -278,7 +278,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
         }
     }
 
-    private function changeVoucherUseValue(TdbShopVoucherUse $voucher, float $newVoucherUsedValue): void
+    private function changeVoucherUseValue(TdbShopVoucherUse $voucherUse, float $newVoucherUsedValue): void
     {
         $voucherUse->AllowEditByAll(true);
         $voucherUse->SaveFieldsFast(['value_used' => $newVoucherUsedValue]);
