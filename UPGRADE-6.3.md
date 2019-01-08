@@ -13,7 +13,7 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 
 ## \ChameleonSystem\AmazonPaymentBundle\AmazonPaymentGroupConfig
 
-- Changed method `setLogger()` is now using `LoggerInterface` as parameter type.
+- Changed method `setLogger()` now expects `Psr\Log\LoggerInterface` instead of `\IPkgCmsCoreLog`.
 
 ## \ChameleonSystem\AmazonPaymentBundle\Interfaces\IAmazonOrderReferenceObject
 
