@@ -28,7 +28,7 @@ class AmazonShopOrderWizard extends \ChameleonSystemAmazonPaymentBundlepkgShopWe
             $footerIncludes[] = "<script type='text/javascript' src='".$config->getWidgetURL()."'></script>";
             $footerIncludes[] = "<script type='text/javascript' src='".\TGlobal::GetStaticURL('/bundles/chameleonsystemamazonpayment/common.js')."'></script>";
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_amazon')->error(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_payment_amazon')->error(
                 'unable to load amazon config: '.(string) $e,
                 array('e.message' => $e->getMessage(), 'e.file' => $e->getFile(), 'e.line' => $e->getLine())
             );

@@ -51,7 +51,7 @@ class AmazonConfirmOrderStep extends \TShopStepConfirm
         try {
             $data['amazonConfig'] = AmazonPaymentConfigFactory::createConfig($this->getActivePortalId());
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_amazon')->error(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_payment_amazon')->error(
                 'unable to load amazon config: '.(string) $e,
                 array('e.message' => $e->getMessage(), 'e.file' => $e->getFile(), 'e.line' => $e->getLine())
             );

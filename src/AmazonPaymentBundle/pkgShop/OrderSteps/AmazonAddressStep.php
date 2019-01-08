@@ -53,7 +53,7 @@ class AmazonAddressStep extends \TdbShopOrderStep
         try {
             $data['amazonConfig'] = AmazonPaymentConfigFactory::createConfig($this->getActivePortalId());
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_amazon')->warning(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_payment_amazon')->warning(
                 'error loading amazon payment config'
             );
         }

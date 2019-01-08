@@ -43,6 +43,6 @@ class ChameleonSystemAmazonPaymentExtension extends Extension implements Prepend
      */
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig('monolog', ['channels' => ['order_amazon']]);
+        $container->prependExtensionConfig('monolog', ['channels' => ['order_payment_amazon']]);
     }
 }
