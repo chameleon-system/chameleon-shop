@@ -80,10 +80,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
             //$this->aCheckoutDetails
         }
 
-        /**
-         * @var $logger LoggerInterface
-         */
-        $logger = ServiceLocator::get('monolog.logger.order');
+        $logger = $this->getPaypalLogger();
 
         if ($bResponse) {
             $oBasket = TShopBasket::GetInstance();
@@ -193,5 +190,10 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
         }
 
         return false;
+    }
+
+    private function getPaypalLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order');
     }
 }

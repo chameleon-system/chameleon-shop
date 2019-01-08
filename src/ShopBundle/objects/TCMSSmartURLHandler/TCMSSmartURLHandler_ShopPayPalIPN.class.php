@@ -18,10 +18,7 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
 {
     public function GetPageDef()
     {
-        /**
-         * @var $logger LoggerInterface
-         */
-        $logger = ServiceLocator::get('monolog.logger.order_payment_ipn');
+        $logger = $this->getLogger();
 
         $iPageId = false;
         $oURLData = &TCMSSmartURLData::GetActive();
@@ -117,6 +114,11 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
      */
     private function getShopPaymentHandlerFactory()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
+        return ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order_payment_ipn');
     }
 }

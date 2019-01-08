@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Psr\Log\LoggerInterface;
 
 if (!defined('PKG_SHOP_ORDER_STATUS_SEND_STATUS_NOTIFICATION_MAIL')) {
@@ -44,12 +45,12 @@ class TPkgShopOrderStatusManagerEndPoint
             return $this->logger;
         }
 
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
+        return ServiceLocator::get('cmsPkgCore.logChannel.standard');
     }
 
     protected function getShopLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_status');
+        return ServiceLocator::get('monolog.logger.order_status');
     }
 
     /**
