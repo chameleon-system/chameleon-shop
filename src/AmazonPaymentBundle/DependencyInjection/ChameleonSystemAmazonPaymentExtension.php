@@ -39,7 +39,7 @@ class ChameleonSystemAmazonPaymentExtension extends Extension implements Prepend
     }
 
     /**
-     * Allow an extension to prepend the extension configurations.
+     * {@inheritdoc}
      */
     public function prepend(ContainerBuilder $container)
     {
