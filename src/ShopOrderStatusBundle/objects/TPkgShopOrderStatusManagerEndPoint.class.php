@@ -36,7 +36,7 @@ class TPkgShopOrderStatusManagerEndPoint
     /**
      * @return IPkgCmsCoreLog
      *
-     * @deprecated since 6.3.0 - use getShopLogger()
+     * @deprecated since 6.3.0 - use getShopLogger() instead
      */
     protected function getLogger()
     {
