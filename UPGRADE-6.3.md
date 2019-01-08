@@ -17,7 +17,7 @@ Note that ONLY BC breaking changes are listed, according to our backwards compat
 
 ## \ChameleonSystem\AmazonPaymentBundle\Interfaces\IAmazonOrderReferenceObject
 
-- Changed method `__construct()` is now using `LoggerInterface` as parameter type.
+- Changed method `__construct()` now expects `Psr\Log\LoggerInterface` instead of `\IPkgCmsCoreLog`.
 
 # Deprecated Code Entities
 
