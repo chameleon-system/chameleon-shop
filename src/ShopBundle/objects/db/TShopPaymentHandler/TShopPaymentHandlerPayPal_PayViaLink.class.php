@@ -131,7 +131,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
     public function ProcessIPNRequest($oOrder, $aURLParameter)
     {
         $logger = $this->getLogger();
-        
+
         $sPayPalURL = $this->GetConfigParameter('url');
         $sPayPalURL = str_replace(array('https://', 'http://'), '', $sPayPalURL);
         $sDomain = substr($sPayPalURL, 0, strpos($sPayPalURL, '/'));

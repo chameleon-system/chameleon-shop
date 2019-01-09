@@ -717,7 +717,7 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
             $responseLogData = (string) $responseLogData;
         }
         $this->logger->error(
-            sprintf('Error on Amazon Payment Request %s with response %s',  get_class($request), get_class($response)),
+            sprintf('Error on Amazon Payment Request %s with response %s', get_class($request), get_class($response)),
             [
                 'request' => $requestLogData,
                 'response' => $responseLogData,

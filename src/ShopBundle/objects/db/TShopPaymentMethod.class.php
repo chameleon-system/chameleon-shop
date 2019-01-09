@@ -101,7 +101,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
                     sprintf('Unable to create payment handler: %s', $e->getMessage()),
                     [
                         'paymentHandlerId' => $this->fieldShopPaymentHandlerId,
-                        'portalId' => $activePortal->id
+                        'portalId' => $activePortal->id,
                     ]
                 );
 

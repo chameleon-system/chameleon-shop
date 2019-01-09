@@ -399,7 +399,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
-    
+
     private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
