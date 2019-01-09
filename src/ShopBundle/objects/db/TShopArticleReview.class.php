@@ -149,7 +149,7 @@ class TShopArticleReview extends TAdbShopArticleReview
     }
 
     /**
-     * load data from row, only allowing user-changeable fields
+     * load data from row, only allowing user-changeable fields.
      *
      * @param array $aRow
      */
