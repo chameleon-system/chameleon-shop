@@ -147,6 +147,11 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
         $aOrder['sSumGrandTotal'] = $oOrder->fieldValueTotalFormated;
         $aOrder['sShippingAddress'] = $this->getShippingAddress($oOrder, $bCachingEnabled, $oCacheTriggerManager);
         $aOrder['sDetailLink'] = $this->getDetailLink($oOrder);
+        $orderCurrency = $oOrder->GetFieldPkgShopCurrency();
+        if (null !== $orderCurrency) {
+            $aOrder['currencyIso'] = $orderCurrency->fieldIso4217;
+            $aOrder['currencySymbol'] = $orderCurrency->fieldSymbol;
+        }
         $aOrder['bActive'] = false;
 
         return $aOrder;
