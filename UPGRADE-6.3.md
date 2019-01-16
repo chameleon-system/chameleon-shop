@@ -9,10 +9,11 @@ See the Changed Interfaces and Method Signatures section whether changes in sign
 
 # Changed Features
 
-## \TShopArticleReview::LoadFromRowProtected()
+## \TShopArticleReview::LoadFromRowProtected() Uses Whitelist Instead of Blacklist
 
-- This works now with a white-list. You need to overwrite `\TShopArticleReview::getFieldWhitelistForLoadByRow()` if 
-you want to change the white-list in a sub-class.
+
+- This works now with a whitelist. You need to overwrite `\TShopArticleReview::getFieldWhitelistForLoadByRow()` if 
+you want to change the whitelist in a sub-class.
 
 # Deprecated Code Entities
 
