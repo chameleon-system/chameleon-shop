@@ -14,14 +14,15 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
-use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
 use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopStockMessageDataAccessInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
 use ChameleonSystem\ShopBundle\ProductStatistics\Interfaces\ProductStatisticsServiceInterface;
 use ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGeneratorInterface;
 use ChameleonSystem\ShopBundle\ShopEvents;
+use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -406,7 +407,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $urlNormalizationUtil = $this->getUrlNormalizationUtil();
         $aNameParts[] = $urlNormalizationUtil->normalizeUrl($this->fieldName);
         $oManufacturer = $this->GetFieldShopManufacturer();
-        if (!is_null($oManufacturer)) {
+        if (is_null($oManufacturer)) {
+            $aParts[] = '-';
+        } else {
             $aParts[] = $urlNormalizationUtil->normalizeUrl($oManufacturer->fieldName);
         }
 
@@ -430,7 +433,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if (is_null($oCategory)) {
             $oCategory = &$this->GetPrimaryCategory();
         }
-        if (!is_null($oCategory)) {
+        if (is_null($oCategory)) {
+            $aParts[] = '-';
+        } else {
             $oRootCat = $oCategory->GetRootCategory();
             if ($oRootCat) {
                 $aParts[] = $urlNormalizationUtil->normalizeUrl($oRootCat->fieldName);
@@ -457,14 +462,16 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             'catid' => $catId,
             'identifier' => $this->sqlData[PKG_SHOP_PRODUCT_URL_KEY_FIELD],
         );
+
         $router = $this->getFrontendRouter();
-        if ($bIncludePortalLink) {
-            $sProductLink = $router->generateWithPrefixes('shop_article', $parameters, $portal, $language, UrlGeneratorInterface::ABSOLUTE_URL);
+
+        if (true === $bIncludePortalLink) {
+            $referenceType = UrlGeneratorInterface::ABSOLUTE_URL;
         } else {
-            $sProductLink = $router->generateWithPrefixes('shop_article', $parameters, $portal, $language, UrlGeneratorInterface::ABSOLUTE_PATH);
+            $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH;
         }
 
-        return $sProductLink;
+        return $router->generateWithPrefixes('shop_article', $parameters, $portal, $language, $referenceType);
     }
 
     /**
@@ -1965,10 +1972,14 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         }
         $activeValue = (true === $isActive) ? '1' : '0';
         $query = 'UPDATE shop_article SET `active` = :active WHERE id = :id';
-        $this->getDatabaseConnection()->executeUpdate($query, array('active' => $activeValue, 'id' => $this->id));
+        $affectedRows = $this->getDatabaseConnection()->executeUpdate($query, array('active' => $activeValue, 'id' => $this->id));
 
         $query = 'UPDATE shop_article SET variant_parent_is_active = :active WHERE variant_parent_id = :id';
         $this->getDatabaseConnection()->executeUpdate($query, array('active' => $activeValue, 'id' => $this->id));
+
+        if ($affectedRows > 0) {
+            $this->getCache()->callTrigger('shop_article', $this->id);
+        }
     }
 
     /**
@@ -1991,7 +2002,12 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             'activeValue' => $activeValue,
             'parentId' => $parentId,
         );
-        $databaseConnection->executeUpdate($query, $parameters);
+        $affectedRows = $databaseConnection->executeUpdate($query, $parameters);
+
+        if ($affectedRows > 0) {
+            $this->getCache()->callTrigger('shop_article', $parentId);
+        }
+
         $this->UpdateVariantParentActiveField();
     }
 
@@ -2426,5 +2442,10 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     private function getProductVariantNameGenerator()
     {
         return ServiceLocator::get('chameleon_system_shop.product_variant.product_variant_name_generator');
+    }
+
+    private function getCache(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_cache.cache');
     }
 }

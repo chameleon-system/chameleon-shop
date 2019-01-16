@@ -1,6 +1,20 @@
 UPGRADE FROM 6.2 TO 6.3
 =======================
 
+# Essentials
+
+## Changed Signatures
+
+See the Changed Interfaces and Method Signatures section whether changes in signatures affect the project.
+
+# Changed Features
+
+None.
+
+# Changed Interfaces and Method Signatures
+
+This section contains information on interface and method signature changes which affect backwards compatibility (BC).
+Note that ONLY BC breaking changes are listed, according to our backwards compatibility policy.
 # Changed Interfaces and Method Signatures
 
 This section contains information on interface and method signature changes which affect backwards compatibility (BC).
@@ -43,7 +57,9 @@ None.
 
 ## Classes and Interfaces
 
-None.
+- \TPkgShopCurrency_ShopDiscount
+- \TPkgShopCurrency_ShopPaymentMethod
+- \TPkgShopCurrency_ShopShippingType
 
 ## Properties
 

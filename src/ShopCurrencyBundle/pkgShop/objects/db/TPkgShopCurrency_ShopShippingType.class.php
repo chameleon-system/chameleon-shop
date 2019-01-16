@@ -9,44 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 6.3.0 - no longer used
+ */
 class TPkgShopCurrency_ShopShippingType extends TPkgShopCurrency_ShopShippingTypeAutoParent
 {
-    /**
-     * the original value for the "value" field in the base currency.
-     *
-     * @var float
-     */
-    public $fieldValueOriginal = null;
-
-    protected function PostLoadHook()
-    {
-        if (false == TGlobal::IsCMSMode() && is_array($this->sqlData)) {
-            if (array_key_exists('value_type', $this->sqlData) && 'absolut' == $this->sqlData['value_type']) {
-                if (array_key_exists('value', $this->sqlData)) {
-                    $this->fieldValueOriginal = $this->sqlData['value'];
-                    $this->sqlData['value'] = TdbPkgShopCurrency::ConvertToActiveCurrency($this->sqlData['value']);
-                }
-            }
-        }
-        parent::PostLoadHook();
-    }
-
-    protected function PostWakeupHook()
-    {
-        if (array_key_exists('value_type', $this->sqlData) && 'absolut' == $this->sqlData['value_type']) {
-            $sFieldName = 'value';
-            if (!is_null($this->fieldValueOriginal)) {
-                $this->sqlData[$sFieldName] = $this->fieldValueOriginal;
-            }
-
-            if (array_key_exists($sFieldName, $this->sqlData)) {
-                $this->sqlData[$sFieldName] = TdbPkgShopCurrency::ConvertToActiveCurrency($this->sqlData[$sFieldName]);
-                $this->fieldValue = $this->sqlData[$sFieldName];
-                $oActiveCurrency = TdbPkgShopCurrency::GetActiveInstance();
-                if ($oActiveCurrency) {
-                    $this->fieldValueFormated = $oActiveCurrency->GetFormattedCurrency($this->fieldValue);
-                }
-            }
-        }
-    }
 }
