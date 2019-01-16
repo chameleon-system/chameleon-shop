@@ -30,6 +30,11 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oOrder->table, $oOrder->id);
             }
+            $currency = $oOrder->GetFieldPkgShopCurrency();
+            if (null !== $currency) {
+                $oVisitor->SetMappedValue('oCurrency', $currency);
+            }
+
             $oVisitor->SetMappedValue('sSumGrandTotal', $oOrder->fieldValueTotalFormated);
 
             $oVisitor->SetMappedValue('sSumShipping', $oOrder->fieldShopShippingGroupPriceFormated);
@@ -171,7 +176,14 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
      */
     protected function getDataFromVoucher(TdbShopVoucherUse $oVoucherUse, TdbShopVoucher $oVoucher = null, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aVoucher = array('sCode' => '', 'sName' => '', 'dValue' => $oVoucherUse->fieldValueUsed, 'sValue' => TCMSLocal::GetActive()->FormatNumber($oVoucherUse->fieldValueUsed, 2), 'sRemoveFromBasketLink' => '#');
+        $aVoucher = array(
+            'sCode' => '',
+            'sName' => '',
+            'dValue' => $oVoucherUse->fieldValueUsed,
+            'dValueInOrderCurrency' => $oVoucherUse->fieldValueUsedInOrderCurrency,
+            'sValue' => TCMSLocal::GetActive()->FormatNumber($oVoucherUse->fieldValueUsed, 2),
+            'sValueInOrderCurrency' => TCMSLocal::GetActive()->FormatNumber($oVoucherUse->fieldValueUsedInOrderCurrency, 2),
+            'sRemoveFromBasketLink' => '#', );
 
         if (null !== $oVoucher) {
             $aVoucher['sCode'] = $oVoucher->fieldCode;

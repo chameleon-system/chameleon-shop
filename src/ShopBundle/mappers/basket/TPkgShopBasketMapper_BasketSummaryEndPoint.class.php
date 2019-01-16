@@ -166,10 +166,12 @@ class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
     protected function getDataFromVoucher(TdbShopVoucher $oVoucher)
     {
         $oVoucherSeries = $oVoucher->GetFieldShopVoucherSeries();
+        $voucherValue = -1 * $oVoucher->GetValue();
         $aVoucher = array(
             'sCode' => $oVoucher->fieldCode,
             'sName' => $oVoucherSeries->fieldName,
-            'dValue' => -1 * $oVoucher->GetValue(),
+            'dValue' => $voucherValue,
+            'dValueInOrderCurrency' => $voucherValue,
             'sRemoveFromBasketLink' => $oVoucher->GetRemoveFromBasketLink(),
         );
 

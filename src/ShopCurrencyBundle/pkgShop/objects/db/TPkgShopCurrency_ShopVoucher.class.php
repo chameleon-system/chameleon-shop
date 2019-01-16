@@ -32,7 +32,12 @@ class TPkgShopCurrency_ShopVoucher extends TPkgShopCurrency_ShopVoucherAutoParen
         // value used is converted to the base currency - euro
         $oCurrency = TdbPkgShopCurrency::GetBaseCurrency();
         $oActive = TdbPkgShopCurrency::GetActiveInstance();
+        $aData['value_used_in_order_currency'] = $aData['value_used'];
+        if (false !== $oCurrency) {
+            $aData['pkg_shop_currency_id'] = $oCurrency->id;
+        }
         if ($oCurrency && $oActive && $oActive->id != $oCurrency->id) {
+            $aData['pkg_shop_currency_id'] = $oActive->id;
             $aData['value_used'] = $oCurrency->Convert($aData['value_used'], $oActive);
         }
     }

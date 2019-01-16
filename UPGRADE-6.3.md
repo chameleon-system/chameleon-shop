@@ -16,6 +16,11 @@ instead of a blacklist to avoid users being able to pass data not intended for c
 If your project uses custom fields in the shop_article_review table, 
 override `\TShopArticleReview::getFieldWhitelistForLoadByRow()` to add these fields to the whitelist.
 
+# Changed Interfaces and Method Signatures
+
+This section contains information on interface and method signature changes which affect backwards compatibility (BC).
+Note that ONLY BC breaking changes are listed, according to our backwards compatibility policy.
+
 # Deprecated Code Entities
 
 It is recommended that all references to the classes, interfaces, properties, constants, methods and services in the
@@ -39,7 +44,9 @@ None.
 
 ## Classes and Interfaces
 
-None.
+- \TPkgShopCurrency_ShopDiscount
+- \TPkgShopCurrency_ShopPaymentMethod
+- \TPkgShopCurrency_ShopShippingType
 
 ## Properties
 
