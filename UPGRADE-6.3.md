@@ -11,9 +11,10 @@ See the Changed Interfaces and Method Signatures section whether changes in sign
 
 ## \TShopArticleReview::LoadFromRowProtected() Uses Whitelist Instead of Blacklist
 
-
-- This works now with a whitelist. You need to overwrite `\TShopArticleReview::getFieldWhitelistForLoadByRow()` if 
-you want to change the whitelist in a sub-class.
+When loading data from user input `\TShopArticleReview::LoadFromRowProtected()` now uses a whitelist
+instead of a blacklist to avoid users being able to pass data not intended for change.
+If your project uses custom fields in the shop_article_review table, 
+override `\TShopArticleReview::getFieldWhitelistForLoadByRow()` to add these fields to the whitelist.
 
 # Deprecated Code Entities
 
