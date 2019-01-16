@@ -13,6 +13,8 @@ namespace ChameleonSystem\AmazonPaymentBundle\pkgShop\WebModules;
 
 use ChameleonSystem\AmazonPaymentBundle\AmazonPaymentConfigFactory;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
 use TGlobal;
 
 class AmazonShopBasket extends \ChameleonSystemAmazonPaymentBundlepkgShopWebModulesAmazonShopBasketAutoParent
@@ -33,10 +35,8 @@ class AmazonShopBasket extends \ChameleonSystemAmazonPaymentBundlepkgShopWebModu
             $includes[] = "<script type='text/javascript' src='".$config->getWidgetURL()."'></script>";
             $includes[] = "<script type='text/javascript' src='".TGlobal::GetStaticURL('/bundles/chameleonsystemamazonpayment/common.js')."'></script>";
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard')->error(
+            $this->getLogger()->error(
                 'unable to load amazon config: '.(string) $e,
-                __FILE__,
-                __LINE__,
                 array('e.message' => $e->getMessage(), 'e.file' => $e->getFile(), 'e.line' => $e->getLine())
             );
             $includes[] = '<!-- ERROR: unable to load amazon payment config due to config error (invalid parameter). check log for details -->';
@@ -48,7 +48,7 @@ class AmazonShopBasket extends \ChameleonSystemAmazonPaymentBundlepkgShopWebModu
     private function getActivePortal()
     {
         /** @var PortalDomainServiceInterface $portalDomainService */
-        $portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        $portalDomainService = ServiceLocator::get('chameleon_system_core.portal_domain_service');
 
         return $portalDomainService->getActivePortal();
     }
@@ -58,6 +58,11 @@ class AmazonShopBasket extends \ChameleonSystemAmazonPaymentBundlepkgShopWebModu
      */
     private function getPaymentInfoService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.payment_info_service');
+        return ServiceLocator::get('chameleon_system_shop.payment_info_service');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order_payment_amazon');
     }
 }

@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+
 class TPkgShopPaymentIPayment_TPkgShopPaymentIPNHandler_BaseResponse implements IPkgShopPaymentIPNHandler
 {
     /**
@@ -62,12 +65,9 @@ class TPkgShopPaymentIPayment_TPkgShopPaymentIPNHandler_BaseResponse implements 
                     $oOrder->AllowEditByAll(true);
                     $oOrder->Save();
                 }
-                /** @var IPkgCmsCoreLog $log */
-                $log = \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
+                $log = $this->getLogger();
                 $log->info(
-                    'IPN marked order '.$oOrder->fieldOrdernumber.' (id: '.$oOrder->id.') als completed when it was marked as paid',
-                    __FILE__,
-                    __LINE__,
+                    sprintf('IPN marked order %s (id: %s) as completed when it was marked as paid.', $oOrder->fieldOrdernumber, $oOrder->id),
                     $aInfo
                 );
             }
@@ -116,5 +116,10 @@ class TPkgShopPaymentIPayment_TPkgShopPaymentIPNHandler_BaseResponse implements 
         );
 
         return $oTransactionDetails;
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order');
     }
 }

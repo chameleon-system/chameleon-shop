@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use Psr\Log\LoggerInterface;
 
 /**
  * a simple paypal integration that does not execute the payment on order, but instead provides a payment
@@ -20,6 +21,10 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
 {
     const URL_IDENTIFIER_IPN = '_paypalipn_'; // instant payment notification URL identifier
+
+    /**
+     * @deprecated since 6.3.0 - not used anymore
+     */
     const LOG_FILE = 'paypal.log';
 
     /**
@@ -125,6 +130,8 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
      */
     public function ProcessIPNRequest($oOrder, $aURLParameter)
     {
+        $logger = $this->getLogger();
+
         $sPayPalURL = $this->GetConfigParameter('url');
         $sPayPalURL = str_replace(array('https://', 'http://'), '', $sPayPalURL);
         $sDomain = substr($sPayPalURL, 0, strpos($sPayPalURL, '/'));
@@ -137,7 +144,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         $oTools = ServiceLocator::get('chameleon_system_core.tools');
         $sResponse = $oTools::sendToHost($sDomain, 'POST', $sPath, $sData, false, 'application/x-www-form-urlencoded', true);
         if (0 != strcmp($sResponse, 'VERIFIED')) {
-            TTools::WriteLogEntrySimple("PayPal IPN: unable to send notify-validate response. Domain:{$sDomain}\nPath:{$sPath}\nParameter: ".print_r($aURLParameter, true)."\ndata: {$sData}\nRESPONSE: ".$sResponse, 1, __FILE__, __LINE__, self::LOG_FILE);
+            $logger->error("PayPal IPN: unable to send notify-validate response. Domain:{$sDomain}\nPath:{$sPath}\nParameter: ".print_r($aURLParameter, true)."\ndata: {$sData}\nRESPONSE: ".$sResponse);
 
             return false;
         }
@@ -149,7 +156,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         if ($oPaymentParameterList->Length() > 0) {
             while ($oPaymentParameter = $oPaymentParameterList->Next()) {
                 if ('Completed' == $oPaymentParameter->fieldValue) {
-                    TTools::WriteLogEntrySimple("PayPal IPN: the txn '{$sTxnId}' has been processed before and was set to completed".print_r($aURLParameter, true).' data: '.$sData, 1, __FILE__, __LINE__, self::LOG_FILE);
+                    $logger->error("PayPal IPN: the txn '{$sTxnId}' has been processed before and was set to completed".print_r($aURLParameter, true).' data: '.$sData);
 
                     return false;
                 }
@@ -170,7 +177,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
 
         if (false === $bIsComplete) {
             // some other response other than is paid - we log the info
-            TTools::WriteLogEntrySimple("PayPal IPN: returned payment status '{$aURLParameter['payment_status']}'! ".$aURLParameter.' data: '.$sData, 1, __FILE__, __LINE__, self::LOG_FILE);
+            $logger->error("PayPal IPN: returned payment status '{$aURLParameter['payment_status']}'! ".$aURLParameter.' data: '.$sData);
 
             return false;
         }
@@ -185,7 +192,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
 
         if (0 != strcasecmp($sCurrency, $sPaymentCurrency)) {
             // invalid currency
-            TTools::WriteLogEntrySimple('PayPal IPN: invalid currency in request '.print_r($aURLParameter, true), 1, __FILE__, __LINE__, self::LOG_FILE);
+            $logger->error('PayPal IPN: invalid currency in request '.print_r($aURLParameter, true));
             $aInfo = array('shop_order_id' => $oOrder->id, 'name' => 'IPN '.date('Y-m-d H:i:s'), 'value' => 'invalid currency: '.$sPaymentCurrency);
             $oPaymentInfo = TdbShopOrderPaymentMethodParameter::GetNewInstance($aInfo);
             $oPaymentInfo->AllowEditByAll(true);
@@ -212,7 +219,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
                 $bPaymentOk = true;
                 $bPaymentCompleted = true;
             } else {
-                TTools::WriteLogEntrySimple("PayPal IPN: invalid amount paid: required = {$oOrder->fieldValueTotal}, paid = {$dPaymentValue}. Rawdata: ".print_r($aURLParameter, true), 1, __FILE__, __LINE__, self::LOG_FILE);
+                $logger->error("PayPal IPN: invalid amount paid: required = {$oOrder->fieldValueTotal}, paid = {$dPaymentValue}. Rawdata: ".print_r($aURLParameter, true));
             }
         } else {
             $bPaymentOk = true;
@@ -233,7 +240,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         }
 
         if (false == $bPaymentOk) {
-            TTools::WriteLogEntrySimple('PayPal IPN: payment invalid '.print_r($aURLParameter, true), 1, __FILE__, __LINE__, self::LOG_FILE);
+            $logger->error('PayPal IPN: payment invalid '.print_r($aURLParameter, true));
         } else {
             if ($bPaymentCompleted) {
                 $oOrder->SetStatusPaid(true);
@@ -316,8 +323,11 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
      */
     private function getUrlUtilService()
     {
-        return ServiceLocator::get(
-            'chameleon_system_core.util.url'
-        );
+        return ServiceLocator::get('chameleon_system_core.util.url');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order');
     }
 }

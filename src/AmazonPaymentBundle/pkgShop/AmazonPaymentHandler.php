@@ -15,7 +15,9 @@ use ChameleonSystem\AmazonPaymentBundle\AmazonPayment;
 use ChameleonSystem\AmazonPaymentBundle\AmazonPaymentConfigFactory;
 use ChameleonSystem\AmazonPaymentBundle\AmazonPaymentGroupConfig;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface;
+use Psr\Log\LoggerInterface;
 use TdbShopOrder;
 use TShopBasket;
 
@@ -60,10 +62,8 @@ class AmazonPaymentHandler extends \TdbShopPaymentHandler implements \IPkgShopPa
             $amazonPayment->captureOrder($transactionManager, $oOrder);
             $continue = true;
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard')->warning(
+            $this->getLogger()->warning(
                 'error loading amazon payment config - unable to execute payment',
-                __FILE__,
-                __LINE__,
                 array(
                     'message' => $e->getMessage(),
                     'code' => $e->getCode(),
@@ -108,11 +108,7 @@ class AmazonPaymentHandler extends \TdbShopPaymentHandler implements \IPkgShopPa
         try {
             $data['amazonConfig'] = $this->getAmazonPaymentGroupConfig($this->getActivePortalId());
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard')->warning(
-                'error loading amazon payment config',
-                __FILE__,
-                __LINE__
-            );
+            $this->getLogger()->warning('error loading amazon payment config');
         }
 
         return $data;
@@ -162,7 +158,7 @@ class AmazonPaymentHandler extends \TdbShopPaymentHandler implements \IPkgShopPa
     private function getActivePortalId()
     {
         /** @var PortalDomainServiceInterface $portalDomainService */
-        $portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        $portalDomainService = ServiceLocator::get('chameleon_system_core.portal_domain_service');
 
         return $portalDomainService->getActivePortal()->id;
     }
@@ -216,5 +212,10 @@ class AmazonPaymentHandler extends \TdbShopPaymentHandler implements \IPkgShopPa
         }
 
         return false;
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order_payment_amazon');
     }
 }

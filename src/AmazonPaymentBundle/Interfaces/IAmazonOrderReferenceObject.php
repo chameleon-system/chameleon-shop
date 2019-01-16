@@ -16,6 +16,7 @@ use ChameleonSystem\AmazonPaymentBundle\Exceptions\AmazonAuthorizationDeclinedEx
 use ChameleonSystem\AmazonPaymentBundle\Exceptions\AmazonCaptureDeclinedException;
 use ChameleonSystem\AmazonPaymentBundle\Exceptions\AmazonRefundDeclinedException;
 use ChameleonSystem\AmazonPaymentBundle\ReferenceIdMapping\AmazonReferenceIdList;
+use Psr\Log\LoggerInterface;
 
 interface IAmazonOrderReferenceObject
 {
@@ -27,9 +28,9 @@ interface IAmazonOrderReferenceObject
     /**
      * @param AmazonPaymentGroupConfig $config
      * @param string                   $amazonOrderReferenceId
-     * @param \IPkgCmsCoreLog          $logger
+     * @param LoggerInterface          $logger
      */
-    public function __construct(AmazonPaymentGroupConfig $config, $amazonOrderReferenceId, \IPkgCmsCoreLog $logger);
+    public function __construct(AmazonPaymentGroupConfig $config, $amazonOrderReferenceId, LoggerInterface $logger);
 
     /**
      * @param \TdbShopOrder $order

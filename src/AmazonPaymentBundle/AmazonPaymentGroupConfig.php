@@ -13,6 +13,7 @@ namespace ChameleonSystem\AmazonPaymentBundle;
 
 use Doctrine\DBAL\Connection;
 use ChameleonSystem\AmazonPaymentBundle\ReferenceIdMapping\AmazonReferenceIdManager;
+use Psr\Log\LoggerInterface;
 
 class AmazonPaymentGroupConfig implements \IPkgShopOrderPaymentConfig
 {
@@ -42,7 +43,7 @@ class AmazonPaymentGroupConfig implements \IPkgShopOrderPaymentConfig
     private $amazonApi = null;
 
     /**
-     * @var \IPkgCmsCoreLog
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -316,7 +317,7 @@ class AmazonPaymentGroupConfig implements \IPkgShopOrderPaymentConfig
     }
 
     /**
-     * @return \IPkgCmsCoreLog
+     * @return LoggerInterface
      */
     private function getLogger()
     {
@@ -324,9 +325,9 @@ class AmazonPaymentGroupConfig implements \IPkgShopOrderPaymentConfig
     }
 
     /**
-     * @param \IPkgCmsCoreLog $logger
+     * @param LoggerInterface $logger
      */
-    public function setLogger($logger)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }

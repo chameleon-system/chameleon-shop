@@ -70,22 +70,6 @@ class TPkgShopPaymentIPNManager
     }
 
     /**
-     * @param TdbPkgShopPaymentIpnTrigger $oTrigger
-     * @param TPkgShopPaymentIPNRequest   $oRequest
-     */
-    private function callRemoteTrigger(TdbPkgShopPaymentIpnTrigger $oTrigger, TPkgShopPaymentIPNRequest $oRequest)
-    {
-        $aPayload = $oRequest->getRequestPayload();
-        $sUrl = $oTrigger->fieldTargetUrl;
-
-        $oSendToHost = new TPkgCmsCoreSendToHost($sUrl);
-        $oSendToHost->setPayload($aPayload)->setTimeout($oTrigger->fieldTimeoutSeconds);
-
-        $oSendToHost->setLogRequest(true); // we want to log these requests since they may fail and we have no other details on this
-        $oSendToHost->executeRequest();
-    }
-
-    /**
      * @return LanguageServiceInterface
      */
     private function getLanguageService()

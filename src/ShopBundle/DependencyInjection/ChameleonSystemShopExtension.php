@@ -13,10 +13,11 @@ namespace ChameleonSystem\ShopBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class ChameleonSystemShopExtension extends Extension
+class ChameleonSystemShopExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritdoc}
@@ -28,5 +29,13 @@ class ChameleonSystemShopExtension extends Extension
         $loader->load('logging.xml');
         $loader->load('mappers.xml');
         $loader->load('services.xml');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        $container->prependExtensionConfig('monolog', ['channels' => ['order', 'order_payment_ipn']]);
     }
 }

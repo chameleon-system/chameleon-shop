@@ -14,11 +14,12 @@ namespace ChameleonSystem\AmazonPaymentBundle;
 use ChameleonSystem\AmazonPaymentBundle\Configuration\ConfigValidator;
 use ChameleonSystem\ShopBundle\Payment\PaymentConfig\Interfaces\ShopPaymentConfigLoaderInterface;
 use IPkgCmsCoreLog;
+use Psr\Log\LoggerInterface;
 
 class AmazonPaymentConfigFactory
 {
     /**
-     * @var \IPkgCmsCoreLog
+     * @var LoggerInterface
      */
     private $logger;
     /**
@@ -33,11 +34,11 @@ class AmazonPaymentConfigFactory
     private $internalCache;
 
     /**
-     * @param IPkgCmsCoreLog                   $logger
+     * @param LoggerInterface                  $logger
      * @param ShopPaymentConfigLoaderInterface $shopPaymentConfigLoader
      * @param ConfigValidator                  $configValidator
      */
-    public function __construct(IPkgCmsCoreLog $logger, ShopPaymentConfigLoaderInterface $shopPaymentConfigLoader, ConfigValidator $configValidator)
+    public function __construct(LoggerInterface $logger, ShopPaymentConfigLoaderInterface $shopPaymentConfigLoader, ConfigValidator $configValidator)
     {
         $this->logger = $logger;
         $this->shopPaymentConfigLoader = $shopPaymentConfigLoader;

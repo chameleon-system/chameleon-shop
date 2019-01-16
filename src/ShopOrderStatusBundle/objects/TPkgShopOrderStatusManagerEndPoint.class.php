@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+
 if (!defined('PKG_SHOP_ORDER_STATUS_SEND_STATUS_NOTIFICATION_MAIL')) {
     define('PKG_SHOP_ORDER_STATUS_SEND_STATUS_NOTIFICATION_MAIL', true);
 }
@@ -16,9 +19,16 @@ class TPkgShopOrderStatusManagerEndPoint
 {
     /**
      * @var IPkgCmsCoreLog
+     *
+     * @deprecated since 6.3.0
      */
     private $logger = null;
 
+    /**
+     * @param IPkgCmsCoreLog $logger
+     *
+     * @deprecated since 6.3.0 - is not supported anymore; use only getShopLogger() or do your own logging
+     */
     public function setLogger(IPkgCmsCoreLog $logger)
     {
         $this->logger = $logger;
@@ -26,6 +36,8 @@ class TPkgShopOrderStatusManagerEndPoint
 
     /**
      * @return IPkgCmsCoreLog
+     *
+     * @deprecated since 6.3.0 - use getShopLogger() instead
      */
     protected function getLogger()
     {
@@ -33,7 +45,12 @@ class TPkgShopOrderStatusManagerEndPoint
             return $this->logger;
         }
 
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
+        return ServiceLocator::get('cmsPkgCore.logChannel.standard');
+    }
+
+    protected function getShopLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order_status');
     }
 
     /**
@@ -62,15 +79,15 @@ class TPkgShopOrderStatusManagerEndPoint
      */
     final public function addStatus(TPkgShopOrderStatusData $oData)
     {
-        $this->getLogger()->info('add status', __FILE__, __LINE__, array('oData' => $oData));
+        $this->getShopLogger()->info('add status', array('oData' => $oData));
         $this->validateStatusData($oData);
-        $this->getLogger()->info('status validated ok', __FILE__, __LINE__);
+        $this->getShopLogger()->info('status validated ok');
         $aData = $oData->getDataAsTdbArray();
         $oStatus = TdbShopOrderStatus::GetNewInstance($aData);
         $oStatus->AllowEditByAll(true);
         $oStatus->SaveFieldsFast($aData);
         $oStatus->AllowEditByAll(false);
-        $this->getLogger()->info('status saved', __FILE__, __LINE__);
+        $this->getShopLogger()->info('status saved');
 
         $aItems = $oData->getItems();
         $itemCount = count($aItems);
@@ -78,7 +95,7 @@ class TPkgShopOrderStatusManagerEndPoint
         /** @var TPkgShopOrderStatusItemData $item */
         foreach ($aItems as $item) {
             ++$count;
-            $this->getLogger()->info("process status  {$count}/{$itemCount}", __FILE__, __LINE__);
+            $this->getShopLogger()->info("process status  {$count}/{$itemCount}");
             $aItem = $item->getDataAsTdbArray();
             $aItem['shop_order_status_id'] = $oStatus->id;
 
@@ -136,12 +153,12 @@ class TPkgShopOrderStatusManagerEndPoint
     private function orderStatusAddedHook(TdbShopOrderStatus $oStatus)
     {
         $aExceptionList = array();
-        $this->getLogger()->info('orderStatusAddedHook', __FILE__, __LINE__);
+        $this->getShopLogger()->info('orderStatusAddedHook');
         foreach ($this->getPostOrderStatusAddedHookList() as $sMethodName) {
             try {
-                $this->getLogger()->info("calling \$this->{$sMethodName} on status", __FILE__, __LINE__);
+                $this->getShopLogger()->info("calling \$this->{$sMethodName} on status");
                 call_user_func(array($this, $sMethodName), $oStatus);
-                $this->getLogger()->info("called \$this->{$sMethodName} on status", __FILE__, __LINE__);
+                $this->getShopLogger()->info("called \$this->{$sMethodName} on status");
             } catch (TPkgCmsException $e) {
                 $aExceptionList[] = $e;
             }
@@ -159,22 +176,22 @@ class TPkgShopOrderStatusManagerEndPoint
      */
     public function sendStatusMailToCustomer(TdbShopOrderStatus $oStatus)
     {
-        $this->getLogger()->info('start sendStatusMailToCustomer', __FILE__, __LINE__);
+        $this->getShopLogger()->info('start sendStatusMailToCustomer');
         $statusCode = $oStatus->GetFieldShopOrderStatusCode();
 
         if (null !== $statusCode && false === $statusCode->fieldSendMailNotification) {
-            $this->getLogger()->info('no mail needed', __FILE__, __LINE__);
+            $this->getShopLogger()->info('no mail needed');
 
             return true;
         }
 
         $oGlobal = TGlobal::instance();
         if ($oGlobal->isCMSMode()) {
-            $this->getLogger()->info('sending mail using front end action', __FILE__, __LINE__);
+            $this->getShopLogger()->info('sending mail using front end action');
             $bSuccess = $this->sendStatusMailToCustomerWithFrontEndAction($oStatus);
-            $this->getLogger()->info('done sending mail using front end action', __FILE__, __LINE__);
+            $this->getShopLogger()->info('done sending mail using front end action');
         } else {
-            $this->getLogger()->info('sending mail classic', __FILE__, __LINE__);
+            $this->getShopLogger()->info('sending mail classic');
             $oMailProfile = null;
             if ('' !== $statusCode->fieldDataMailProfileId) {
                 $oMailProfile = $statusCode->GetFieldDataMailProfile();
@@ -203,9 +220,9 @@ class TPkgShopOrderStatusManagerEndPoint
                 $oOrder->fieldUserEmail,
                 $oOrder->fieldAdrBillingFirstname.' '.$oOrder->fieldAdrBillingLastname
             );
-            $this->getLogger()->info('sent mail classic', __FILE__, __LINE__);
+            $this->getShopLogger()->info('sent mail classic');
             $bSuccess = $oMailProfile->SendUsingObjectView('emails', 'Customer');
-            $this->getLogger()->info('done sending mail classic', __FILE__, __LINE__);
+            $this->getShopLogger()->info('done sending mail classic');
         }
 
         return $bSuccess;
@@ -235,10 +252,10 @@ class TPkgShopOrderStatusManagerEndPoint
         $sURL = str_replace('&amp;', '&', $sURL); // remove encoding
         $oToHostHandler = new TPkgCmsCoreSendToHost();
         $oToHostHandler->setConfigFromUrl($sURL);
-        $this->getLogger()->info('sending mail vai frontend action using URL: '.$sURL, __FILE__, __LINE__);
+        $this->getShopLogger()->info(sprintf('sending mail via frontend action using URL: %s', $sURL));
         $executeRequestResponse = $oToHostHandler->executeRequest();
         if (preg_match('#{.*}#', $executeRequestResponse, $aMatches)) {
-            $this->getLogger()->info('done sending mail vai frontend action. got response ', __FILE__, __LINE__, array('response' => $aMatches[0]));
+            $this->getShopLogger()->info('done sending mail via frontend action. got response ', array('response' => $aMatches[0]));
             $aResponse = json_decode($aMatches[0], true);
             if (is_array($aResponse) && count(
                 $aResponse
@@ -247,7 +264,7 @@ class TPkgShopOrderStatusManagerEndPoint
                 $bSuccess = true;
             }
         } else {
-            $this->getLogger()->error('failed sending mail via frontend action. got response', __FILE__, __LINE__, array('response' => $executeRequestResponse));
+            $this->getShopLogger()->error('failed sending mail via frontend action. got response', array('response' => $executeRequestResponse));
         }
 
         return $bSuccess;

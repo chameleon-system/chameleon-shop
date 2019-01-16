@@ -9,7 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
 
 if (!defined('PKG_SEARCH_USE_SEARCH_QUEUE')) {
     define('PKG_SEARCH_USE_SEARCH_QUEUE', true);
@@ -338,10 +340,15 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
     protected function CopyIndexTables()
     {
-        TTools::WriteLogEntrySimple('copy index tables start', 4, __FILE__, __LINE__, '/logs/TShopSearchIndexer.log');
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = ServiceLocator::get('monolog.logger.search_indexer');
+
+        $logger->info('copy index tables start');
         $aIndexTableNames = TdbShopSearchIndexer::GetAllIndexTableNames();
         foreach ($aIndexTableNames as $sTableName => $iLength) {
-            TTools::WriteLogEntrySimple('Load data for table '.$sTableName, 4, __FILE__, __LINE__, '/logs/TShopSearchIndexer.log');
+            $logger->info('Load data for table '.$sTableName);
             $sTmpTableName = MySqlLegacySupport::getInstance()->real_escape_string('_tmp'.$sTableName);
             if (CMS_SEARCH_INDEX_USE_LOAD_FILE) {
                 $sFile = TdbShopSearchFieldWeight::GetTmpFileNameForTableImport($sTmpTableName);
@@ -352,17 +359,17 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
                     unlink($sFile);
                 }
             }
-            TTools::WriteLogEntrySimple('Load data for table '.$sTableName.' DONE', 4, __FILE__, __LINE__, '/logs/TShopSearchIndexer.log');
+            $logger->info('Load data for table '.$sTableName.' DONE');
 
             if ($this->bRegenerateCompleteIndex) {
-                TTools::WriteLogEntrySimple('recreate index for table '.$sTableName, 4, __FILE__, __LINE__, '/logs/TShopSearchIndexer.log');
+                $logger->info('recreate index for table '.$sTableName);
                 $query = 'ALTER TABLE `'.$sTmpTableName.'` ADD INDEX ( `substring`, `cms_language_id`,`shop_search_field_weight_id` ) ';
                 MySqlLegacySupport::getInstance()->query($query);
                 $query = 'ALTER TABLE `'.$sTmpTableName.'` ADD INDEX ( `shop_search_field_weight_id`, `cms_language_id`) ';
                 MySqlLegacySupport::getInstance()->query($query);
                 $query = 'ALTER TABLE `'.$sTmpTableName.'` ADD INDEX ( `shop_article_id` , `substring`, `shop_search_field_weight_id`, `cms_language_id` ) ';
                 MySqlLegacySupport::getInstance()->query($query);
-                TTools::WriteLogEntrySimple('recreate index for table '.$sTableName.' DONE ', 4, __FILE__, __LINE__, '/logs/TShopSearchIndexer.log');
+                $logger->info('recreate index for table '.$sTableName.' DONE ');
             } else {
                 $query = "INSERT INTO `{$sTableName}` (`shop_article_id`,`substring`,`occurrences`,`weight`,`shop_search_field_weight_id`,`cms_language_id`)
                                SELECT `shop_article_id`,`substring`,`occurrences`,`weight`,`shop_search_field_weight_id`,`cms_language_id` FROM `{$sTmpTableName}`";
@@ -373,7 +380,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         }
 
         if ($this->bRegenerateCompleteIndex) {
-            TTools::WriteLogEntrySimple('start table rename ', 4, __FILE__, __LINE__, '/logs/TShopSearchIndexer.log');
+            $logger->info('start table rename ');
             reset($aIndexTableNames);
 
             // we only rename if at least one of the tmp index tables contains at least one item
@@ -391,12 +398,12 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             reset($aIndexTableNames);
             if (false === $bAllowIndexRename) {
                 // no content in index - so log and exit
-                TTools::WriteLogEntrySimple('NO data in tmp index tables - keeping old index!', 4, __FILE__, __LINE__, '/logs/TShopSearchIndexer.log');
+                $logger->info('NO data in tmp index tables - keeping old index!');
 
                 return false;
             }
             foreach ($aIndexTableNames as $sTableName => $iLength) {
-                TTools::WriteLogEntrySimple('rename '.$sTableName, 1, __FILE__, __LINE__, 'TShopSearchIndexer.log');
+                $logger->info('rename '.$sTableName);
                 $sTmpTableName = MySqlLegacySupport::getInstance()->real_escape_string('_tmp'.$sTableName);
                 if (TGlobal::TableExists($sTableName)) {
                     $query = 'RENAME TABLE  `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'` to  `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."_tmp`,  `{$sTmpTableName}`  TO `".MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'`';
@@ -407,7 +414,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
                     $query = "RENAME TABLE `{$sTmpTableName}`  TO `".MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'`';
                     MySqlLegacySupport::getInstance()->query($query);
                 }
-                TTools::WriteLogEntrySimple('rename '.$sTableName.' DONE', 4, __FILE__, __LINE__, '/logs/TShopSearchIndexer.log');
+                $logger->info('rename '.$sTableName.' DONE');
             }
         }
 
@@ -433,7 +440,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         }
 
         TdbShopSearchCache::ClearCompleteCache();
-        TTools::WriteLogEntrySimple('search index create completed', 4, __FILE__, __LINE__, 'TShopSearchIndexer.log');
+        $logger->info('search index create completed');
     }
 
     /**

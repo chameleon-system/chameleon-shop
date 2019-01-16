@@ -14,7 +14,9 @@ namespace ChameleonSystem\AmazonPaymentBundle\pkgShop\OrderSteps;
 use ChameleonSystem\AmazonPaymentBundle\AmazonPayment;
 use ChameleonSystem\AmazonPaymentBundle\AmazonPaymentConfigFactory;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
+use Psr\Log\LoggerInterface;
 use TdbDataExtranetUser;
 use TGlobal;
 use TShopBasket;
@@ -40,7 +42,7 @@ class AmazonAddressStep extends \TdbShopOrderStep
     private function getActivePortalId()
     {
         /** @var PortalDomainServiceInterface $portalDomainService */
-        $portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        $portalDomainService = ServiceLocator::get('chameleon_system_core.portal_domain_service');
 
         return $portalDomainService->getActivePortal()->id;
     }
@@ -53,11 +55,7 @@ class AmazonAddressStep extends \TdbShopOrderStep
         try {
             $data['amazonConfig'] = AmazonPaymentConfigFactory::createConfig($this->getActivePortalId());
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard')->warning(
-                'error loading amazon payment config',
-                __FILE__,
-                __LINE__
-            );
+            $this->getLogger()->warning('error loading amazon payment config');
         }
 
         return $data;
@@ -113,6 +111,11 @@ class AmazonAddressStep extends \TdbShopOrderStep
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order_payment_amazon');
     }
 }

@@ -13,9 +13,11 @@ namespace ChameleonSystem\AmazonPaymentBundle\mappers;
 
 use ChameleonSystem\AmazonPaymentBundle\AmazonPaymentConfigFactory;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use IMapperCacheTriggerRestricted;
 use IMapperRequirementsRestricted;
 use IMapperVisitorRestricted;
+use Psr\Log\LoggerInterface;
 
 class AmazonButtonWidgetMapper extends \AbstractViewMapper
 {
@@ -65,10 +67,8 @@ class AmazonButtonWidgetMapper extends \AbstractViewMapper
             $data['sellerId'] = $config->getMerchantId();
             $data['sText'] = $config->getPayWithAmazonButtonText();
         } catch (\InvalidArgumentException $e) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard')->error(
+            $this->getLogger()->error(
                 'unable to load amazon config: '.(string) $e,
-                __FILE__,
-                __LINE__,
                 array('e.message' => $e->getMessage(), 'e.file' => $e->getFile(), 'e.line' => $e->getLine())
             );
             $data['payWithAmazonButtonURL'] = '<!-- ERROR: unable to load amazon payment config due to config error (invalid parameter). check log for details -->';
@@ -80,8 +80,13 @@ class AmazonButtonWidgetMapper extends \AbstractViewMapper
     private function getActivePortalId()
     {
         /** @var PortalDomainServiceInterface $portalDomainService */
-        $portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        $portalDomainService = ServiceLocator::get('chameleon_system_core.portal_domain_service');
 
         return $portalDomainService->getActivePortal()->id;
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order_payment_amazon');
     }
 }

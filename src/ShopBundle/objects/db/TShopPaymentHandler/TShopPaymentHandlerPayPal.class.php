@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
@@ -83,9 +84,9 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
 
         //$aParameter['notify_url'] = $this->GetInstantPaymentNotificationListenerURL(); // instant payment notification url
 
-        $logger = $this->getLogger();
+        $logger = $this->getPaypalLogger();
 
-        $logger->info('Parameters sent to the PayPal API', __FILE__, __LINE__, $aParameter);
+        $logger->info('Parameters sent to the PayPal API', $aParameter);
         $aResponse = $this->ExecutePayPalCall('SetExpressCheckout', $aParameter);
 
         $sSuccess = false;
@@ -101,7 +102,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
         }
         if (!$sSuccess) {
             $sResponse = self::GetPayPalErrorMessage($aResponse);
-            $logger->critical('PayPal payment could not be initiated.', __FILE__, __LINE__, array($sResponse));
+            $logger->critical('PayPal payment could not be initiated.', array($sResponse));
 
             $oMsgManager = TCMSMessageManager::GetInstance();
             $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => 'Error Number: '.$aResponse['L_ERRORCODE0']));
@@ -226,8 +227,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
                 'Command' => $aCommand,
                 'PayPalAnswer' => $aAnswer,
             );
-            $logger = $this->getLogger();
-            $logger->critical('PayPal payment could not be executed for order id '.$oOrder->id, __FILE__, __LINE__, $logContext);
+            $this->getPaypalLogger()->critical('PayPal payment could not be executed for order id '.$oOrder->id, $logContext);
         }
 
         return $bPaymentOk;
@@ -260,7 +260,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
      */
     public function ExecutePayPalCall($methodName, $nvp)
     {
-        TTools::WriteLogEntry("PayPal-Request: {$methodName} with ".print_r($nvp, true), 4, __FILE__, __LINE__, self::LOG_FILE);
+        $this->getPaypalLogger()->info(sprintf('PayPal-Request: %s with %s', $methodName, print_r($nvp, true)));
 
         $apiEndpoint = $this->GetConfigParameter('urlApiEndpoint');
         $ch = curl_init();
@@ -300,8 +300,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
                 'url' => $apiEndpoint,
                 'params' => $parameters,
             );
-            $logger = $this->getLogger();
-            $logger->critical('PayPal curl error: '.curl_error($ch).' ('.curl_errno($ch).')', __FILE__, __LINE__, $logContext);
+            $this->getPaypalLogger()->critical('PayPal curl error: '.curl_error($ch).' ('.curl_errno($ch).')', $logContext);
         } else {
             curl_close($ch);
         }
@@ -369,11 +368,18 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     }
 
     /**
-     * @return TPkgCmsCoreLog
+     * @return IPkgCmsCoreLog
+     *
+     * @deprecated - since 6.3.0 - use getPaypalLogger() instead
      */
     protected function getLogger()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
+    }
+
+    private function getPaypalLogger(): LoggerInterface
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
     }
 
     /**

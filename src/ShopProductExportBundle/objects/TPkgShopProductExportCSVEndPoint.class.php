@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
+
 class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
 {
     /**
@@ -113,6 +116,11 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
      */
     protected function HandleArticle(&$oArticle, &$aFields)
     {
+        /**
+         * @var $logger LoggerInterface
+         */
+        $logger = ServiceLocator::get('logger');
+
         $iStart = microtime(true);
         static $iCount = 0;
         static $sMemUsageBeforeArticleProcessed = null;
@@ -146,7 +154,7 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
             $sMemDifferenceTmp = $sMemDifferenceTmp / 1024;
 
             if ($this->GetDebug()) {
-                TTools::WriteLogEntry('memory difference after processing '.$iLogCount.' articles: '.$sMemDifference.'MB ('.$sMemDifferenceTmp.'MB for '.$iLogCount.' articles) - total article count: '.$iCount, 1, __FILE__, __LINE__);
+                $logger->debug('memory difference after processing '.$iLogCount.' articles: '.$sMemDifference.'MB ('.$sMemDifferenceTmp.'MB for '.$iLogCount.' articles) - total article count: '.$iCount);
             }
 
             $sMemUsageTmp = $sMemUsageAfterArticleProcessed;
@@ -154,15 +162,7 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
         $iEnd = microtime(true);
         $iTime = $iEnd - $iStart;
         if ($this->GetDebug()) {
-            TTools::WriteLogEntry(
-                "\n start ".$iStart.
-                    "\n end ".$iEnd.
-                    "\n time for one article: ".$iTime,
-                1,
-                __FILE__,
-                __LINE__,
-                'exportTime.log'
-            );
+            $logger->debug("\n start ".$iStart."\n end ".$iEnd."\n time for one article: ".$iTime);
         }
 
         return $sLine;

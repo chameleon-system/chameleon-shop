@@ -15,6 +15,23 @@ None.
 
 This section contains information on interface and method signature changes which affect backwards compatibility (BC).
 Note that ONLY BC breaking changes are listed, according to our backwards compatibility policy.
+# Changed Interfaces and Method Signatures
+
+This section contains information on interface and method signature changes which affect backwards compatibility (BC).
+Note that ONLY BC breaking changes are listed, according to our backwards compatibility policy.
+
+
+## \ChameleonSystem\AmazonPaymentBundle\AmazonOrderReferenceObject
+
+- Changed method `__construct()` now expects `Psr\Log\LoggerInterface` instead of `\IPkgCmsCoreLog`.
+
+## \ChameleonSystem\AmazonPaymentBundle\AmazonPaymentGroupConfig
+
+- Changed method `setLogger()` now expects `Psr\Log\LoggerInterface` instead of `\IPkgCmsCoreLog`.
+
+## \ChameleonSystem\AmazonPaymentBundle\Interfaces\IAmazonOrderReferenceObject
+
+- Changed method `__construct()` now expects `Psr\Log\LoggerInterface` instead of `\IPkgCmsCoreLog`.
 
 # Deprecated Code Entities
 
@@ -27,7 +44,8 @@ is recommended (although this tool may not find database-related deprecations).
 
 ## Services
 
-None.
+- chameleon_system_shop.log.order
+- chameleon_system_shop.log.order_channel
 
 ## Container Parameters
 
@@ -35,7 +53,7 @@ None.
 
 ## Constants
 
-None.
+- \TShopPaymentHandlerPayPal_PayViaLink::LOG_FILE
 
 ## Classes and Interfaces
 
@@ -49,7 +67,8 @@ None.
 
 ## Methods
 
-None.
+- \TPkgShopOrderStatusManagerEndPoint::getLogger()
+- \TPkgShopOrderStatusManagerEndPoint::setLogger()
 
 ## JavaScript Files and Functions
 

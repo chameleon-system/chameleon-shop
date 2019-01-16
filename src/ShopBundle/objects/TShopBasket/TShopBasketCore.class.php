@@ -14,6 +14,7 @@ use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -1035,9 +1036,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $bBasketVouchersValidated = $this->CheckBasketVoucherAvailable($sMessageConsumer);
         $this->RecalculateBasket();
         $bSkipPaymentValidation = $bForcePayment; // skip the payment validation if the payment is to be forced
-        $this->getOrderLogger()->info('create order', __FILE__, __LINE__);
+        $this->getLogger()->info('create order');
         if ($this->CreateOrderAllowCreation($sMessageConsumer, $bSkipPaymentValidation) && $bBasketVouchersValidated) {
-            $this->getOrderLogger()->info('create order: order creation permitted', __FILE__, __LINE__, array('basket' => $this, 'user' => TdbDataExtranetUser::GetInstance()));
+            $this->getLogger()->info('create order: order creation permitted', array('basket' => $this, 'user' => TdbDataExtranetUser::GetInstance()));
             // lock basket to prevent a second request from creating the order again.
             $this->LockBasket();
             // now create order
@@ -1109,7 +1110,10 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                     }
                 } else {
                     // errors messages should be added in $oOrder->PrePaymentExecuteHook()
-                    $this->getOrderLogger()->info('Order canceled because PrePaymentExecuteHook returned false. order id: '.$oOrder->id, __FILE__, __LINE__, array($oOrder->sqlData));
+                    $this->getLogger()->info(
+                        sprintf('Order cancelled because PrePaymentExecuteHook returned false. Order id: %s', $oOrder->id),
+                        [$oOrder->sqlData]
+                    );
                     $oOrder->SetStatusCanceled(true);
                     $bOrderCreated = false;
                 }
@@ -2053,10 +2057,17 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * @return IPkgCmsCoreLog
+     *
+     * @deprecated since 6.3.0 - use getLogger() instead
      */
     protected function getOrderLogger()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.log.order');
+    }
+
+    protected function getLogger(): LoggerInterface
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
     }
 
     /**

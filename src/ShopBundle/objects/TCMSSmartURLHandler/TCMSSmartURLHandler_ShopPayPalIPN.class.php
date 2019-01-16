@@ -9,13 +9,17 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopBundle\Exception\ConfigurationException;
 use ChameleonSystem\ShopBundle\Payment\PaymentHandler\Interfaces\ShopPaymentHandlerFactoryInterface;
+use Psr\Log\LoggerInterface;
 
 class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
 {
     public function GetPageDef()
     {
+        $logger = $this->getLogger();
+
         $iPageId = false;
         $oURLData = &TCMSSmartURLData::GetActive();
         if (false !== strpos($oURLData->sRelativeURL, TShopPaymentHandlerPayPal_PayViaLink::URL_IDENTIFIER_IPN)) {
@@ -23,29 +27,21 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
             $sOrderId = null;
             $sPaymentHandlerId = null;
             if (!$oGlobal->UserDataExists('custom')) {
-                TTools::WriteLogEntrySimple(
+                $logger->error(
                     'PayPal IPN: parameter "custom" missing from paypal IPN response: '.print_r(
                         $oGlobal->GetUserData(null, array(), TCMSUserInput::FILTER_NONE),
                         true
-                    ),
-                    1,
-                    __FILE__,
-                    __LINE__,
-                    TShopPaymentHandlerPayPal::LOG_FILE
+                    )
                 );
             } else {
                 $sCustomParameters = $oGlobal->GetUserData('custom', array(), TCMSUserInput::FILTER_DEFAULT);
                 $aCustomParameters = explode(',', $sCustomParameters);
                 if (2 != count($aCustomParameters)) {
-                    TTools::WriteLogEntrySimple(
+                    $logger->error(
                         'PayPal IPN: parameter "custom" invalid from paypal IPN response: '.print_r(
                             $oGlobal->GetUserData(null, array(), TCMSUserInput::FILTER_NONE),
                             true
-                        ),
-                        1,
-                        __FILE__,
-                        __LINE__,
-                        TShopPaymentHandlerPayPal::LOG_FILE
+                        )
                     );
                 } else {
                     $sPaymentHandlerId = $aCustomParameters[0];
@@ -76,41 +72,29 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
                             die(0);
                         }
                     } catch (ConfigurationException $e) {
-                        TTools::WriteLogEntrySimple(
+                        $logger->error(
                             "PayPal IPN: failed to load payment handler {$sPaymentHandlerId}: ".print_r(
                                 $oGlobal->GetUserData(null, array(), TCMSUserInput::FILTER_NONE),
                                 true
-                            ),
-                            1,
-                            __FILE__,
-                            __LINE__,
-                            TShopPaymentHandlerPayPal::LOG_FILE
+                            )
                         );
                         $this->handleError();
                     }
                 } else {
-                    TTools::WriteLogEntrySimple(
+                    $logger->error(
                         "PayPal IPN: failed to load order [{$sOrderId}]: ".print_r(
                             $oGlobal->GetUserData(null, array(), TCMSUserInput::FILTER_NONE),
                             true
-                        ),
-                        1,
-                        __FILE__,
-                        __LINE__,
-                        TShopPaymentHandlerPayPal::LOG_FILE
+                        )
                     );
                     $this->handleError();
                 }
             } else {
-                TTools::WriteLogEntrySimple(
+                $logger->error(
                     'PayPal IPN: parameter "custom" missing from paypal IPN response: '.print_r(
                         $oGlobal->GetUserData(null, array(), TCMSUserInput::FILTER_NONE),
                         true
-                    ),
-                    1,
-                    __FILE__,
-                    __LINE__,
-                    TShopPaymentHandlerPayPal::LOG_FILE
+                    )
                 );
                 $this->handleError();
             }
@@ -130,6 +114,11 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
      */
     private function getShopPaymentHandlerFactory()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
+        return ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.order_payment_ipn');
     }
 }
