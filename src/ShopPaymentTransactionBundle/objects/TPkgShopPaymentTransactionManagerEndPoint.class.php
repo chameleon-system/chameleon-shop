@@ -278,7 +278,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
         }
     }
 
-    private function changeVoucherUseValue(TAdbShopVoucherUse $voucherUse, float $newVoucherUsedValue): void
+    private function changeVoucherUseValue(TdbShopVoucherUse $voucherUse, float $newVoucherUsedValue): void
     {
         $voucherUse->AllowEditByAll(true);
         $voucherUse->SaveFieldsFast(['value_used' => $newVoucherUsedValue]);
@@ -639,21 +639,6 @@ class TPkgShopPaymentTransactionManagerEndPoint
             $bAllRemainingItemsSelected = $bAllRemainingItemsSelected && ($iAmountForTransaction == $iAmountAllowedForUse);
         }
 
-        if (true === $bAllRemainingItemsSelected && TPkgShopPaymentTransactionData::TYPE_PAYMENT === $sTransactionType) {
-            // use the complete remaining discount
-            $dOriginalDiscount = -1 * ($this->order->fieldValueVouchersNotSponsored + $this->order->fieldValueDiscounts);
-            $dDiscountUsed = $this->getTransactionPositionTotalForType(
-                    TPkgShopPaymentTransactionItemData::TYPE_DISCOUNT,
-                    true
-                )
-                + $this->getTransactionPositionTotalForType(
-                    TPkgShopPaymentTransactionItemData::TYPE_DISCOUNT_VOUCHER,
-                    true
-                );
-            $dRemainingDiscount = $dOriginalDiscount - $dDiscountUsed;
-            $dDiscount = $dRemainingDiscount;
-        }
-
         if ($dDiscount > 0 || $dDiscount < 0) {
             $oItem = new TPkgShopPaymentTransactionItemData();
             $oItem
@@ -742,33 +727,28 @@ class TPkgShopPaymentTransactionManagerEndPoint
         return $dOrderTotal;
     }
 
-    /**
-     * @param $sTransactionType
-     * @param $dOrderTotal
-     *
-     * @return float|int
-     */
-    private function getTransactionOrderDataVoucherValue($sTransactionType, $dOrderTotal)
+    private function getTransactionOrderDataVoucherValue(string $transactionType, float $orderTotal): float
     {
         $voucherValueUsed = $this->getTransactionPositionTotalForType(
             TPkgShopPaymentTransactionItemData::TYPE_VOUCHER,
             true
         );
-        $dVoucher = (-1 * $this->order->fieldValueVouchers) - $voucherValueUsed;
-        if (TPkgShopPaymentTransactionData::TYPE_CREDIT === $sTransactionType) {
+        $voucherOrderAmount = $this->order->fieldValueVouchers > 0 ? $this->order->fieldValueVouchers * -1 : 0;
+        $voucher = $voucherOrderAmount - $voucherValueUsed;
+        if (TPkgShopPaymentTransactionData::TYPE_CREDIT === $transactionType) {
             $maxAmountAllowedForCredit = $this->getMaxAllowedValueFor(self::TRANSACTION_TYPE_CREDIT);
-            if ($dOrderTotal > $maxAmountAllowedForCredit && $voucherValueUsed < 0) {
-                $dVoucher = ($dOrderTotal - $maxAmountAllowedForCredit) * -1;
-                if ($dVoucher < $voucherValueUsed) {
-                    $dVoucher = $voucherValueUsed;
+            if ($orderTotal > $maxAmountAllowedForCredit && $voucherValueUsed < 0) {
+                $voucher = ($orderTotal - $maxAmountAllowedForCredit) * -1;
+                if ($voucher < $voucherValueUsed) {
+                    $voucher = $voucherValueUsed;
                 }
             }
         }
 
-        if ($dVoucher * -1 > $dOrderTotal) {
-            $dVoucher = $dOrderTotal * -1;
+        if (0.00 !== $voucher && $voucher * -1 > $orderTotal) {
+            $voucher = $orderTotal * -1;
         }
 
-        return $dVoucher;
+        return $voucher;
     }
 }
