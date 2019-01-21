@@ -25,8 +25,6 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
     {
         parent::PostCreateTableObjectHook();
 
-        $filterSection = "<div class=\"form-group\">\n";
-
         $isActive = $this->tableObj->getCustomSearchFieldParameter('is_active');
 
         if (null === $isActive) {
@@ -44,7 +42,10 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
             $filterArticleType = $request->query->get('filterArticleType');
         }
 
+        $filterSection = "<div class=\"form-group mr-2\">\n";
         $filterSection .= $this->getFilterFieldArticleType($filterArticleType);
+        $filterSection .= "\n</div>\n";
+        $filterSection .= "<div class=\"form-group mr-2\">\n";
         $filterSection .= $this->getFilterFieldActive($isActive);
         $filterSection .= "\n</div>\n";
 
@@ -63,11 +64,12 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
     private function getFilterFieldArticleType($filterArticleType)
     {
         $oViewRenderer = new ViewRenderer();
-        $oViewRenderer->AddSourceObject('sInputClass', 'form-control input-sm');
+        $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm');
         $oViewRenderer->AddSourceObject('sName', 'filterArticleType');
         $oViewRenderer->AddSourceObject('sValue', '0');
         $oViewRenderer->AddSourceObject('sLabelText', $this->getTranslation('chameleon_system_shop.list_manager_article.filter_type_label'));
         $oViewRenderer->AddSourceObject('sValue', '1');
+        $oViewRenderer->AddSourceObject('autoWidth', true);
 
         $aValueList = array();
         $aValueList[] = array('sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_type_all'), 'sValue' => 'all');
@@ -98,6 +100,7 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
         $oViewRenderer->AddSourceObject('sName', 'is_active');
         $oViewRenderer->AddSourceObject('sLabelText', $this->getTranslation('chameleon_system_shop.list_manager_article.filter_active_label'));
         $oViewRenderer->AddSourceObject('sValue', $isActive);
+        $oViewRenderer->AddSourceObject('autoWidth', true);
 
         $aValueList = array();
         $aValueList[] = array('sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_active_all'), 'sValue' => 'all');
