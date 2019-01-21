@@ -9,7 +9,12 @@ See the Changed Interfaces and Method Signatures section whether changes in sign
 
 # Changed Features
 
-None.
+## \TShopArticleReview::LoadFromRowProtected() Uses Whitelist Instead of Blacklist
+
+When loading data from user input `\TShopArticleReview::LoadFromRowProtected()` now uses a whitelist
+instead of a blacklist to avoid users being able to pass data not intended for change.
+If your project uses custom fields in the shop_article_review table, 
+override `\TShopArticleReview::getFieldWhitelistForLoadByRow()` to add these fields to the whitelist.
 
 # Changed Interfaces and Method Signatures
 

@@ -149,27 +149,29 @@ class TShopArticleReview extends TAdbShopArticleReview
     }
 
     /**
-     * load data from row, removing extranet user, id, etc.
+     * load data from row, only allowing user-changeable fields.
      *
      * @param array $aRow
      */
     public function LoadFromRowProtected($aRow)
     {
-        $aData = $this->sqlData;
-        if (!is_array($aData)) {
-            $aData = array();
-        }
-        $aInvaliditems = array('id', 'data_extranet_user_id', 'datecreated', 'publish');
-        foreach ($aInvaliditems as $key) {
-            if (array_key_exists($key, $aRow)) {
-                unset($aRow[$key]);
+        $whitelist = $this->getFieldWhitelistForLoadByRow();
+        $safeData = [];
+        foreach ($aRow as $key => $val) {
+            if (\in_array($key, $whitelist, true)) {
+                $safeData[$key] = $val;
             }
         }
-        $oUser = TdbDataExtranetUser::GetInstance();
-        if ($oUser->IsLoggedIn()) {
-            $aRow['data_extranet_user_id'] = $oUser->id;
+        $user = TdbDataExtranetUser::GetInstance();
+        if ($user->IsLoggedIn()) {
+            $safeData['data_extranet_user_id'] = $user->id;
         }
-        $this->LoadFromRow($aRow);
+        $this->LoadFromRow($safeData);
+    }
+
+    protected function getFieldWhitelistForLoadByRow(): array
+    {
+        return ['author_name', 'rating', 'comment', 'author_email', 'title', 'send_comment_notification', 'shop_article_id', 'captcha-question'];
     }
 
     /**
