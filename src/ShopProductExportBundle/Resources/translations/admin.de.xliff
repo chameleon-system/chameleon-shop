@@ -20,7 +20,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.show_list_button_title">
                 <source>chameleon_system_shop_product_export.field_show_export_url.show_list_button_title</source>
-                <target>Export URL Liste anzeigen</target>
+                <target>Export-URL-Liste anzeigen</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.headline">
