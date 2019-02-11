@@ -18,7 +18,10 @@
                 <source>chameleon_system_shop_product_export.field_show_export_url.error_invalid_field_owner</source>
                 <target>Error while reading current record (invalid field owner).</target>
             </trans-unit>
-
+            <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.show_list_button_title">
+                <source>chameleon_system_shop_product_export.field_show_export_url.show_list_button_title</source>
+                <target>Show export URL list</target>
+            </trans-unit>
 
             <trans-unit id="chameleon_system_shop_product_export.field_show_export_url.headline">
                 <source>chameleon_system_shop_product_export.field_show_export_url.headline</source>
