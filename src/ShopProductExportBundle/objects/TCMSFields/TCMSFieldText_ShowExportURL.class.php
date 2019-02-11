@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * varchar field with javascript to set the blog post url onblur.
@@ -55,7 +56,7 @@ class TCMSFieldText_ShowExportURL extends TCMSFieldVarchar
                     $sReturn = '<div>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_product_export.field_show_export_url.error_export_views_missing')).'</div>';
                     continue;
                 }
-                $sReturn .= '<div><h2>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_product_export.field_show_export_url.headline', array('%portalName%' => $oPortal->GetName()))).'</h2></div>';
+                $sReturn .= '<div><h5>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_product_export.field_show_export_url.headline', array('%portalName%' => $oPortal->GetName()))).'</h5></div>';
                 foreach ($aViewList as $sView) {
                     $sURL = $sExportPageURL.'sModuleSpotName/'.$sSpotName.'/view/'.$sView.'/key/'.$oShop->fieldExportKey;
                     $sReturn .= '<div><b>'.$sView.' -></b> <a href="'.$sURL.'" title="export" target="_blank">'.$sURL.'</a>';
@@ -136,8 +137,8 @@ class TCMSFieldText_ShowExportURL extends TCMSFieldVarchar
     public function GetHTML()
     {
         $sHtml = parent::GetHTML();
-        $sHtml .= '<input id="showExportURLList" type="button"  value="Export URL Liste anzeigen"/>';
-        $sHtml .= '<div id="exportURLListcontainer"></div>';
+        $sHtml .= '<input id="showExportURLList" type="button" class="btn btn-sm btn-secondary mt-2" value="'.TGlobal::OutHTML($this->getTranslator()->trans('chameleon_system_shop_product_export.field_show_export_url.show_list_button_title')).'"/>';
+        $sHtml .= '<div id="exportURLListcontainer" class="mt-2"></div>';
         $sHtml .= "
         <script type=\"text/javascript\">
 
@@ -165,5 +166,10 @@ class TCMSFieldText_ShowExportURL extends TCMSFieldVarchar
     private function getSystemPageService()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 }
