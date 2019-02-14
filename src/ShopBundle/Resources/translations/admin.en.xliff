@@ -265,6 +265,18 @@
                 <source>chameleon_system_shop.list_manager_article.filter_active_all</source>
                 <target>All</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_shop.product_search_index.headline">
+                <source>chameleon_system_shop.product_search_index.headline</source>
+                <target>Generate product search index</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.product_search_index.generate">
+                <source>chameleon_system_shop.product_search_index.generate</source>
+                <target>Generate</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.product_search_index.completed">
+                <source>chameleon_system_shop.product_search_index.completed</source>
+                <target>Completed</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
