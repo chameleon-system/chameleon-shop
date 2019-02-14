@@ -271,7 +271,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_shop.product_search_index.generate">
                 <source>chameleon_system_shop.product_search_index.generate</source>
-                <target>Generiere</target>
+                <target>Generieren</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.product_search_index.completed">
                 <source>chameleon_system_shop.product_search_index.completed</source>
