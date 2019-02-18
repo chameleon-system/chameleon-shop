@@ -31,7 +31,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'createvoucher';
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_shop.voucher.action_create');
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/coins_add.png');
+            $oMenuItem->sIcon = 'fas fa-file-invoice-dollar';
 
             $oGlobal = TGlobal::instance();
             $oExecutingModulePointer = &$oGlobal->GetExecutingModulePointer();
@@ -48,7 +48,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'exportvoucher';
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_shop.voucher.action_export');
-            $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/coins.png');
+            $oMenuItem->sIcon = 'fas fa-file-download';
 
             $oGlobal = TGlobal::instance();
             $oExecutingModulePointer = &$oGlobal->GetExecutingModulePointer();

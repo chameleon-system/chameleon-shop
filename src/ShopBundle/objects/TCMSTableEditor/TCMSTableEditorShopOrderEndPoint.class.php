@@ -20,7 +20,7 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'sendordermail';
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_shop.orders.action_send_order_confirm_mail');
-        $oMenuItem->sIcon = TGlobal::GetStaticURLToWebLib('/images/icons/email_go.png');
+        $oMenuItem->sIcon = 'fas fa-envelope';
 
         $oGlobal = TGlobal::instance();
         $sURL = PATH_CMS_CONTROLLER.'?';
