@@ -72,15 +72,11 @@ class MTShopViewMyOrderDetails extends MTPkgViewRendererAbstractModuleMapper
         );
 
         if (null === $order) {
-            // this is not our order. access denied
             $viewData['error'] = true;
             $viewData['errorCode'] = 'orderNotFoundError';
-        } else {
-            if (false === $viewOrderDetailHandler->orderIdBelongsToUser($orderIdRequested, $extranetUserId)) {
-                // this is not our order. access denied
-                $viewData['error'] = true;
-                $viewData['errorCode'] = 'notMyOrderError';
-            }
+        } elseif (false === $viewOrderDetailHandler->orderIdBelongsToUser($orderIdRequested, $extranetUserId)) {
+            $viewData['error'] = true;
+            $viewData['errorCode'] = 'notMyOrderError';
         }
 
         $oVisitor->SetMappedValueFromArray($viewData);
