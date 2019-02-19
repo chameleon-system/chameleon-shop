@@ -49,23 +49,7 @@ class MTShopViewMyOrderDetails extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * To map values from models to views the mapper has to implement iVisitable.
-     * The ViewRender will pass a prepared MapperVisitor instance to the mapper.
-     *
-     * The mapper has to fill the values it is responsible for in the visitor.
-     *
-     * example:
-     *
-     * $foo = $oVisitor->GetSourceObject("foomodel")->GetFoo();
-     * $oVisitor->SetMapperValue("foo", $foo);
-     *
-     *
-     * To be able to access the desired source object in the visitor, the mapper has
-     * to declare this requirement in its GetRequirements method (see IViewMapper)
-     *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
+     * {@inheritdoc}
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,
@@ -77,28 +61,23 @@ class MTShopViewMyOrderDetails extends MTPkgViewRendererAbstractModuleMapper
         $orderIdRequested = $oVisitor->GetSourceObject('orderIdRequested');
         $extranetUserId = $oVisitor->GetSourceObject('extranetUserId');
 
+        $order = $this->getDbAdapter()->getOrder($orderIdRequested);
+
         $viewData = array(
             'error' => false,
             'errorCode' => null,
             'notMyOrderError' => false,
             'orderNotFoundError' => false,
-            'order' => null,
+            'order' => $order,
         );
 
-        if (false === $viewOrderDetailHandler->orderIdBelongsToUser($orderIdRequested, $extranetUserId)) {
-            // this is not our order. access denied
+        if (null === $order) {
+            $viewData['error'] = true;
+            $viewData['errorCode'] = 'orderNotFoundError';
+        } elseif (false === $viewOrderDetailHandler->orderIdBelongsToUser($orderIdRequested, $extranetUserId)) {
             $viewData['error'] = true;
             $viewData['errorCode'] = 'notMyOrderError';
         }
-
-        $order = $this->getDbAdapter()->getOrder($orderIdRequested);
-        if (null === $order) {
-            // this is not our order. access denied
-            $viewData['error'] = true;
-            $viewData['errorCode'] = 'orderNotFoundError';
-        }
-
-        $viewData['order'] = $order;
 
         $oVisitor->SetMappedValueFromArray($viewData);
     }
@@ -125,7 +104,7 @@ class MTShopViewMyOrderDetails extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @return TPkgShopViewMyOrderDetailsDbAdapter
+     * @return IPkgShopViewMyOrderDetailsDbAdapter
      */
     private function getDbAdapter()
     {
