@@ -22,7 +22,7 @@ interface IPkgShopViewMyOrderDetailsDbAdapter
     /**
      * @param string $orderId
      *
-     * @return TdbShopOrder
+     * @return TdbShopOrder|null
      */
     public function getOrder($orderId);
 }
