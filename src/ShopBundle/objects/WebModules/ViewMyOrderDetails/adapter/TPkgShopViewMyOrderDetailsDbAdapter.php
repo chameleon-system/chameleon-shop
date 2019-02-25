@@ -22,10 +22,7 @@ class TPkgShopViewMyOrderDetailsDbAdapter implements IPkgShopViewMyOrderDetailsD
     }
 
     /**
-     * @param $userId
-     * @param $orderId
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasOrder($userId, $orderId)
     {
@@ -37,14 +34,15 @@ class TPkgShopViewMyOrderDetailsDbAdapter implements IPkgShopViewMyOrderDetailsD
     }
 
     /**
-     * @param string $orderId
-     *
-     * @return TdbShopOrder
+     * {@inheritdoc}
      */
     public function getOrder($orderId)
     {
-        $order = TdbShopOrder::GetNewInstance($orderId);
+        $order = TdbShopOrder::GetNewInstance();
+        if (false === $order->Load($orderId)) {
+            return null;
+        }
 
-        return (false !== $order->sqlData) ? $order : null;
+        return $order;
     }
 }
