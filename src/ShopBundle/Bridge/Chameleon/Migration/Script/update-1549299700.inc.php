@@ -4,6 +4,7 @@
     - Add CMS main menu categories.
 </div>
 <?php
+TCMSLogChange::requireBundleUpdates('ChameleonSystemCoreBundle', 1549299689);
 
 $categoryDef = <<<EOT
 products             # Products & categories # Produkte & Kategorien # fas fa-cubes
