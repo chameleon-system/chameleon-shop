@@ -19,6 +19,8 @@ t pkg_multi_module_set                  contents
 t pkg_comment                           contents
 t pkg_comment_type                      contents
 t data_contact_topic                    contents
+t pkg_comment                           contents
+t pkg_comment_type                      contents
 t shop_article                          products
 t shop_category                         products
 t shop_attribute                        products
@@ -61,6 +63,7 @@ t shop_search_cloud_word                search
 m articlesearchindex                    search
 t shop_search_indexer                   search
 t shop_search_query                     search
+t pkg_external_tracker                  analytics
 m shopstats                             analytics
 t pkg_external_tracker                  analytics
 t pkg_cms_changelog_set                 analytics
@@ -70,6 +73,7 @@ t shop_search_log                       logs
 t pkg_shop_payment_ipn_message          logs
 t pkg_shop_payment_ipn_message_trigger  logs
 t shop                                  system
+t pkg_cms_counter                       system
 m Interface                             dataexchange
 t cms_interface_manager                 dataexchange
 t pkg_csv2sql                           dataexchange
