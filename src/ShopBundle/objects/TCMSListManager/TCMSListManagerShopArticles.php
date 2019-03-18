@@ -64,7 +64,7 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
     private function getFilterFieldArticleType($filterArticleType)
     {
         $oViewRenderer = new ViewRenderer();
-        $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm');
+        $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm submitOnSelect');
         $oViewRenderer->AddSourceObject('sName', 'filterArticleType');
         $oViewRenderer->AddSourceObject('sValue', '0');
         $oViewRenderer->AddSourceObject('sLabelText', $this->getTranslation('chameleon_system_shop.list_manager_article.filter_type_label'));
@@ -96,7 +96,7 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
         }
 
         $oViewRenderer = new ViewRenderer();
-        $oViewRenderer->AddSourceObject('sInputClass', 'form-control input-sm');
+        $oViewRenderer->AddSourceObject('sInputClass', 'form-control input-sm submitOnSelect');
         $oViewRenderer->AddSourceObject('sName', 'is_active');
         $oViewRenderer->AddSourceObject('sLabelText', $this->getTranslation('chameleon_system_shop.list_manager_article.filter_active_label'));
         $oViewRenderer->AddSourceObject('sValue', $isActive);
