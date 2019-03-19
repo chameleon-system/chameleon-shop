@@ -35,6 +35,9 @@
         "phpunit/dbunit": "~2.0",
         "phpunit/phpunit": "~5.7"
     },
+    "conflict": {
+        "sebastian/comparator": "<1.2.4"
+    },
     "autoload": {
         "classmap": [
             "src/CmsNavigationPkgShopBundle/objects",
