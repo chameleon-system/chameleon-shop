@@ -9,14 +9,16 @@
                 <form method="post" action="">
                     <div class="d-flex align-items-center mb-4">
                         <label class="switch switch-label switch-pill switch-success mb-0 mr-2">
-                            <input class="switch-input" type="checkbox" value="1" name="<?=TGlobal::GetModuleURLParameter('bShowChange'); ?>" <?php if ($bShowChange) { echo 'checked="checked"'; }?> />
+                            <input class="switch-input" type="checkbox" value="1" name="<?=TGlobal::GetModuleURLParameter('bShowChange'); ?>" <?php if ($bShowChange) {
+    echo 'checked="checked"';
+}?> />
                             <span class="switch-slider" data-checked="✓" data-unchecked="✕"></span>
                         </label>
                         <span><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.form_show_change')); ?></span>
                     </div>
 
                     <?php if (count($portalList) > 1) {
-                        ?>
+    ?>
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
@@ -25,21 +27,21 @@
                                     </label>
                                     <select class="form-control" name="<?=TGlobal::GetModuleURLParameter('portalId'); ?>">
                                         <option value="" <?php if ('' == $selectedPortalId) {
-                                            echo 'selected';
-                                        } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.all_portals')); ?></option>
+        echo 'selected';
+    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.all_portals')); ?></option>
                                         <?php foreach ($portalList as $portalId => $portalName) {
-                                            ?>
+        ?>
                                             <option value="<?=$portalId; ?>" <?php if ($selectedPortalId == $portalId) {
-                                                echo 'selected';
-                                            } ?> ><?=TGlobal::OutHTML($portalName); ?></option>
+            echo 'selected';
+        } ?> ><?=TGlobal::OutHTML($portalName); ?></option>
                                             <?php
-                                        } ?>
+    } ?>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <?php
-                    } ?>
+} ?>
 
                     <div class="row">
                         <div class="col-12 col-sm-6">
@@ -50,12 +52,12 @@
                                 <select class="form-control" name="<?=TGlobal::GetModuleURLParameter('sViewName'); ?>">
                                     <option
                                             value="html.table" <?php if ('html.table' == $sViewName) {
-                                        echo 'selected="selected"';
-                                    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.form_output_type_table')); ?></option>
+        echo 'selected="selected"';
+    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.form_output_type_table')); ?></option>
                                     <option
                                             value="html.barchart" <?php if ('html.barchart' == $sViewName) {
-                                        echo 'selected="selected"';
-                                    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.form_output_type_chart')); ?></option>
+        echo 'selected="selected"';
+    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.form_output_type_chart')); ?></option>
                                 </select>
                             </div>
                         </div>
@@ -67,20 +69,20 @@
                                 <select class="form-control" name="<?=TGlobal::GetModuleURLParameter('sDateGroupType'); ?>">
                                     <option
                                             value="year" <?php if ('year' == $sDateGroupType) {
-                                        echo 'selected="selected"';
-                                    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.date_year')); ?></option>
+        echo 'selected="selected"';
+    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.date_year')); ?></option>
                                     <option
                                             value="day" <?php if ('day' == $sDateGroupType) {
-                                        echo 'selected="selected"';
-                                    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.date_day')); ?></option>
+        echo 'selected="selected"';
+    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.date_day')); ?></option>
                                     <option
                                             value="month" <?php if ('month' == $sDateGroupType) {
-                                        echo 'selected="selected"';
-                                    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.date_month')); ?></option>
+        echo 'selected="selected"';
+    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.date_month')); ?></option>
                                     <option
                                             value="week" <?php if ('week' == $sDateGroupType) {
-                                        echo 'selected="selected"';
-                                    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.date_week')); ?></option>
+        echo 'selected="selected"';
+    } ?>><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.date_week')); ?></option>
                                 </select>
                             </div>
                         </div>

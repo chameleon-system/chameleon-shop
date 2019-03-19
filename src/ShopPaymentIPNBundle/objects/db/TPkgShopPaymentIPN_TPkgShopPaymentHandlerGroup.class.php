@@ -165,7 +165,7 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
      *
      * @param $aRequestData
      *
-     * @return null|TdbShopOrder
+     * @return TdbShopOrder|null
      */
     public function getOrderFromRequestData($aRequestData)
     {
@@ -188,7 +188,7 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
     /**
      * @param TPkgShopPaymentIPNRequest $oRequest
      *
-     * @return null|TdbPkgShopPaymentIpnStatus
+     * @return TdbPkgShopPaymentIpnStatus|null
      */
     public function getIPNStatus(TPkgShopPaymentIPNRequest $oRequest)
     {

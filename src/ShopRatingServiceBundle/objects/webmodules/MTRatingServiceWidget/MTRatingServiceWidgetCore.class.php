@@ -16,7 +16,7 @@
 class MTRatingServiceWidgetCore extends TUserCustomModelBase
 {
     /**
-     * @var null|TdbPkgShopRatingServiceWidgetConfig
+     * @var TdbPkgShopRatingServiceWidgetConfig|null
      */
     protected $oModuleConfig = null;
 
@@ -32,7 +32,7 @@ class MTRatingServiceWidgetCore extends TUserCustomModelBase
     /**
      * Select right RatingService object.
      *
-     * @return null|TdbPkgShopRatingService
+     * @return TdbPkgShopRatingService|null
      */
     protected function GetRatingService()
     {
@@ -47,7 +47,7 @@ class MTRatingServiceWidgetCore extends TUserCustomModelBase
     /**
      * loads config for instance.
      *
-     * @return null|TdbPkgShopRatingServiceWidgetConfig
+     * @return TdbPkgShopRatingServiceWidgetConfig|null
      */
     protected function GetModuleConfig()
     {

@@ -13,7 +13,6 @@ namespace ChameleonSystem\AmazonPaymentBundle;
 
 use ChameleonSystem\AmazonPaymentBundle\Configuration\ConfigValidator;
 use ChameleonSystem\ShopBundle\Payment\PaymentConfig\Interfaces\ShopPaymentConfigLoaderInterface;
-use IPkgCmsCoreLog;
 use Psr\Log\LoggerInterface;
 
 class AmazonPaymentConfigFactory

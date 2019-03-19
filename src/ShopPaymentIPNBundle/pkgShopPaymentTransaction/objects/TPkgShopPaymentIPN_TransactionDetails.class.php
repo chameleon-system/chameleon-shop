@@ -111,7 +111,7 @@ class TPkgShopPaymentIPN_TransactionDetails
      *
      * @param $key
      *
-     * @return null|mixed
+     * @return mixed|null
      */
     public function getAdditionalData($key)
     {

@@ -63,7 +63,7 @@ class AmazonPaymentFixturesFactory
     /**
      * @param $file
      *
-     * @return null|\OffAmazonPaymentsNotifications_Model_OrderReferenceNotification
+     * @return \OffAmazonPaymentsNotifications_Model_OrderReferenceNotification|null
      */
     public static function getIPNOrderReferenceNotification($file)
     {
@@ -94,7 +94,7 @@ INPUT;
     /**
      * @param $file
      *
-     * @return null|\OffAmazonPaymentsNotifications_Model_AuthorizationNotification
+     * @return \OffAmazonPaymentsNotifications_Model_AuthorizationNotification|null
      */
     public static function getIPNAuthorizationNotification($file)
     {
@@ -125,7 +125,7 @@ INPUT;
     /**
      * @param $file
      *
-     * @return null|\OffAmazonPaymentsNotifications_Model_CaptureNotification
+     * @return \OffAmazonPaymentsNotifications_Model_CaptureNotification|null
      */
     public static function getIPNCaptureNotification($file)
     {
@@ -156,7 +156,7 @@ INPUT;
     /**
      * @param $file
      *
-     * @return null|\OffAmazonPaymentsNotifications_Model_RefundNotification
+     * @return \OffAmazonPaymentsNotifications_Model_RefundNotification|null
      */
     public static function getIPNRefundNotification($file)
     {

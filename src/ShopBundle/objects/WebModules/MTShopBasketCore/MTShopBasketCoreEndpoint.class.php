@@ -555,7 +555,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      *
      * @param $sShopVoucherCode
      *
-     * @return null|TdbShopVoucher
+     * @return TdbShopVoucher|null
      */
     protected function getValidVoucher($sShopVoucherCode)
     {
@@ -1147,7 +1147,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     }
 
     /**
-     * @return null|Request
+     * @return Request|null
      */
     private function getCurrentRequest()
     {

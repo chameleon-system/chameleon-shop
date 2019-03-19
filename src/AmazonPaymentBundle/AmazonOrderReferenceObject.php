@@ -74,7 +74,7 @@ class AmazonOrderReferenceObject implements IAmazonOrderReferenceObject
     /**
      * @param float $orderValue
      *
-     * @return null|\OffAmazonPaymentsService_Model_OrderReferenceDetails
+     * @return \OffAmazonPaymentsService_Model_OrderReferenceDetails|null
      *
      * @throws TPkgCmsException_LogAndMessage
      */

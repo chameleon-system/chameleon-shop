@@ -17,11 +17,11 @@ class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgEx
 {
     private $amazonPaymentEnabled = false;
     /**
-     * @var null|\TdbDataExtranetUserAddress
+     * @var \TdbDataExtranetUserAddress|null
      */
     private $originalShippingAddress = null;
     /**
-     * @var null|\TdbDataExtranetUserAddress
+     * @var \TdbDataExtranetUserAddress|null
      */
     private $originalBillingAddress = null;
 

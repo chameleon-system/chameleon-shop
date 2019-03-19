@@ -29,7 +29,7 @@ interface StateInterface
     /**
      * returns a string representation of the state, excluding the parameter specified by varyingStateParameter.
      *
-     * @param null|array $varyingStateParameter
+     * @param array|null $varyingStateParameter
      *
      * @return string
      */

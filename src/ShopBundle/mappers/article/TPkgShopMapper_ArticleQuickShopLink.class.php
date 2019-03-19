@@ -58,7 +58,7 @@ class TPkgShopMapper_ArticleQuickShopLink extends AbstractPkgShopMapper_Article
     }
 
     /**
-     * @return null|\Symfony\Component\HttpFoundation\Request
+     * @return \Symfony\Component\HttpFoundation\Request|null
      */
     private function getRequest()
     {

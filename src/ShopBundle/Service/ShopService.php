@@ -74,7 +74,7 @@ class ShopService implements ShopServiceInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getActivePortalId()
     {

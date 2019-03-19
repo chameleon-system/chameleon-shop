@@ -14,7 +14,7 @@ class TPkgShopPaymentIPayment_TShopPaymentHandlerGroup extends TdbShopPaymentHan
     /**
      * @param TPkgShopPaymentIPNRequest $oRequest
      *
-     * @return null|TdbPkgShopPaymentIpnStatus
+     * @return TdbPkgShopPaymentIpnStatus|null
      */
     public function getIPNStatus(TPkgShopPaymentIPNRequest $oRequest)
     {

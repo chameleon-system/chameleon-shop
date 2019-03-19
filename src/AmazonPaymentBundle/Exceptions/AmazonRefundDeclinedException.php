@@ -60,7 +60,7 @@ class AmazonRefundDeclinedException extends \TPkgCmsException_LogAndMessage
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getReasonCode()
     {

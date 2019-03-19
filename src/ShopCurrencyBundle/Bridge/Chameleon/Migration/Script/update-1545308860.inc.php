@@ -5,11 +5,10 @@
 </div>
 <?php
 
-
 $moduleManager = TCMSLogChange::getModuleManager('MTShopOrderHistory');
 $mapperConfig = $moduleManager->getMapperConfig();
-$mapperConfig->removeMapper('standard','chameleon_system_shop_currency.mapper.shop_currency_mapper');
-$mapperConfig->addMapper('standard','chameleon_system_shop_currency.mapper.shop_currency_mapper');
+$mapperConfig->removeMapper('standard', 'chameleon_system_shop_currency.mapper.shop_currency_mapper');
+$mapperConfig->addMapper('standard', 'chameleon_system_shop_currency.mapper.shop_currency_mapper');
 $moduleManager->updateMapperConfig($mapperConfig);
 
-TCMSLogChange::addInfoMessage('Voucher values can now be displayed correctly in the order currency in order history and order notification emails. If your shop uses multiple currencies, have a look at these changes to see which adjustments might be needed: https://github.com/chameleon-system/chameleon-shop-theme-bundle/pull/15/files .',TCMSLogChange::INFO_MESSAGE_LEVEL_INFO);
+TCMSLogChange::addInfoMessage('Voucher values can now be displayed correctly in the order currency in order history and order notification emails. If your shop uses multiple currencies, have a look at these changes to see which adjustments might be needed: https://github.com/chameleon-system/chameleon-shop-theme-bundle/pull/15/files .', TCMSLogChange::INFO_MESSAGE_LEVEL_INFO);

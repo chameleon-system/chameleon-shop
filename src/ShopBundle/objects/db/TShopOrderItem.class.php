@@ -203,7 +203,7 @@ class TShopOrderItem extends TAdbShopOrderItem
      *
      * @param string $sTableName - the table name
      *
-     * @return int|null|string
+     * @return int|string|null
      *
      * @deprecated since 6.2.0 - no longer used.
      */

@@ -147,7 +147,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
      * @param TdbCmsTplPage $page
      * @param string        $baseQuery
      *
-     * @return null|TdbPkgShopListfilter
+     * @return TdbPkgShopListfilter|null
      */
     private static function getInstanceForPage(TdbCmsTplPage $page, $baseQuery)
     {
@@ -349,7 +349,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
     }
 
     /**
-     * @return null|array
+     * @return array|null
      */
     private function pushStaticFilterToRequest()
     {

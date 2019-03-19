@@ -57,7 +57,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * used to store the pre-discounted price of the article.
      *
-     * @var null|array
+     * @var array|null
      */
     protected $aPriceBeforeDiscount = null;
 
@@ -227,7 +227,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * so we are falling back to the value from sqlData here
      * (this is a workaround chosen for simplicity, this would need to be changed in the table editor instead).
      *
-     * @return null|TdbShopVat
+     * @return TdbShopVat|null
      */
     private function getOwnVat()
     {
@@ -247,7 +247,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * return the link to the detail view of the product.
      *
      * @param bool                $bAbsolute           set to true to include the domain in the link
-     * @param null|string         $sAnchor
+     * @param string|null         $sAnchor
      * @param array               $aOptionalParameters supported optional parameters:
      *                                                 TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY - (string) force the article link to be within the given category id (only works if the category is assigned to the article)
      * @param TdbCmsPortal|null   $portal
@@ -935,7 +935,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @param string $sTableName - the table name
      *
-     * @return int|null|string
+     * @return int|string|null
      *
      * @deprecated since 6.2.0 - no longer used.
      */
@@ -1455,7 +1455,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param TdbShopVariantType $oVariantType
      * @param array              $aSelectedTypeValues - restrict list to values matching this preselection (format: array(shop_variant_type_id=>shop_variant_type_value_id,...)
      *
-     * @return null|TdbShopVariantTypeValueList
+     * @return TdbShopVariantTypeValueList|null
      */
     public function GetVariantValuesAvailableForTypeIncludingInActive($oVariantType, $aSelectedTypeValues = array())
     {
@@ -2095,7 +2095,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * the method gets the shopstockmessage for the current article.
      *
-     * @return null|TdbShopStockMessage
+     * @return TdbShopStockMessage|null
      */
     public function &GetFieldShopStockMessage()
     {

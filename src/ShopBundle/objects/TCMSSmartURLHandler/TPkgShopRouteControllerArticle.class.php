@@ -90,7 +90,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
     /**
      * @param string $articleIdentificationToken
      *
-     * @return null|TdbShopArticle
+     * @return TdbShopArticle|null
      */
     private function createArticleFromIdentificationToken($articleIdentificationToken)
     {

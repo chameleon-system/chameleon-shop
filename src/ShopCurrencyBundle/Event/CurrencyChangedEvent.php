@@ -7,7 +7,7 @@ use Symfony\Component\EventDispatcher\Event;
 class CurrencyChangedEvent extends Event
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $newCurrencyId;
 
@@ -20,7 +20,7 @@ class CurrencyChangedEvent extends Event
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getNewCurrencyId()
     {

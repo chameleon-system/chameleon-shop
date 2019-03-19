@@ -80,7 +80,7 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
      *
      * @param TdbShopOrderList $oOrderList
      *
-     * @return null|TdbShopOrder
+     * @return TdbShopOrder|null
      */
     protected function getActiveOrder(TdbShopOrderList $oOrderList)
     {

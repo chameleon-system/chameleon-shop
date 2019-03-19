@@ -188,7 +188,7 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
     }
 
     /**
-     * @return null|\Symfony\Component\HttpFoundation\ParameterBag
+     * @return \Symfony\Component\HttpFoundation\ParameterBag|null
      */
     public function getStatusData()
     {

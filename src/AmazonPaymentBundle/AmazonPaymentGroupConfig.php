@@ -38,7 +38,7 @@ class AmazonPaymentGroupConfig implements \IPkgShopOrderPaymentConfig
     }
 
     /**
-     * @var null|\OffAmazonPaymentsService_Client
+     * @var \OffAmazonPaymentsService_Client|null
      */
     private $amazonApi = null;
 
@@ -231,7 +231,7 @@ class AmazonPaymentGroupConfig implements \IPkgShopOrderPaymentConfig
      * The description to be shown on the buyer’s payment instrument statement. Maximum: 16 characters.
      *
      * @param \TdbShopOrder $order
-     * @param null|string   $invoiceNumber - optionally you may pass an invoice number
+     * @param string|null   $invoiceNumber - optionally you may pass an invoice number
      *
      * @return string
      */

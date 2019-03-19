@@ -39,7 +39,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
     /**
      * return the ISO-4217 code for the currency.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getISO4217Code()
     {

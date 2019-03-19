@@ -32,7 +32,7 @@ class AmazonPaymentBasket extends \ChameleonSystemAmazonPaymentBundlepkgShopAmaz
     private $errorDuringAmazonCheckout = false;
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getAmazonOrderReferenceId()
     {

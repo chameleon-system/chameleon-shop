@@ -163,7 +163,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * Returns the active manufacturer.
      *
-     * @return null|TdbShopManufacturer
+     * @return TdbShopManufacturer|null
      */
     public static function GetActiveManufacturer()
     {

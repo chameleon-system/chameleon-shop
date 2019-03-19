@@ -180,7 +180,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
     /**
      * Get owner email for comment notification.
      *
-     * @return null|string
+     * @return string|null
      */
     protected function GetSendReviewCommentNotificationEmail()
     {

@@ -16,7 +16,7 @@ class MTShopManufacturerCore extends TShopUserCustomModelBase
     /**
      * id of manufacturer.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $iActiveItemId = null;
 

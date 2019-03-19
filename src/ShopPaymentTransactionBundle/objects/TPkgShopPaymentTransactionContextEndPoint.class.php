@@ -28,7 +28,7 @@ class TPkgShopPaymentTransactionContextEndPoint
     }
 
     /**
-     * @return null|\TdbCmsUser
+     * @return \TdbCmsUser|null
      */
     public function getCmsUser()
     {
@@ -44,7 +44,7 @@ class TPkgShopPaymentTransactionContextEndPoint
     }
 
     /**
-     * @return null|\TdbDataExtranetUser
+     * @return \TdbDataExtranetUser|null
      */
     public function getExtranetUser()
     {
@@ -52,7 +52,7 @@ class TPkgShopPaymentTransactionContextEndPoint
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getIp()
     {

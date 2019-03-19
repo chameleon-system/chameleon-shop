@@ -71,8 +71,8 @@ abstract class AbstractIPNHandler extends AbstractAmazonPayment
 
     /**
      * @param string      $state
-     * @param null|string $reasonCode
-     * @param null|string $reasonDescription
+     * @param string|null $reasonCode
+     * @param string|null $reasonDescription
      */
     protected function helperAddIPNMailObject($state, $reasonCode = null, $reasonDescription = null)
     {

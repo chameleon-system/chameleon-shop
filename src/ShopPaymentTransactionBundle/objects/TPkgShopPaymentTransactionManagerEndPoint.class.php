@@ -136,7 +136,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
      * @param int $iSequenceNumber
      * @param int $iConfirmedDate  - unix timestamp
      *
-     * @return null|\TdbPkgShopPaymentTransaction
+     * @return \TdbPkgShopPaymentTransaction|null
      */
     public function confirmTransaction($iSequenceNumber, $iConfirmedDate)
     {

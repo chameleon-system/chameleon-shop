@@ -60,7 +60,7 @@ class AmazonIPNTransactionException extends \TPkgCmsException_Log
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getErrorCode()
     {

@@ -12,7 +12,7 @@
 class TPkgShopPaymentIPNException_RequestError extends AbstractPkgShopPaymentIPNException
 {
     /**
-     * @var null|TPkgShopPaymentIPNRequest
+     * @var TPkgShopPaymentIPNRequest|null
      */
     private $request = null;
 
@@ -55,7 +55,7 @@ class TPkgShopPaymentIPNException_RequestError extends AbstractPkgShopPaymentIPN
     }
 
     /**
-     * @return null|TPkgShopPaymentIPNRequest
+     * @return TPkgShopPaymentIPNRequest|null
      */
     public function getRequest()
     {

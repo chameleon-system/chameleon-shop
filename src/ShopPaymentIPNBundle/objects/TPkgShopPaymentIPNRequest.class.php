@@ -22,11 +22,11 @@ class TPkgShopPaymentIPNRequest
      */
     private $requestPayload = null;
     /**
-     * @var null|TdbShopPaymentHandlerGroup
+     * @var TdbShopPaymentHandlerGroup|null
      */
     private $paymentHandlerGroup = null;
     /**
-     * @var null|TdbShopOrder
+     * @var TdbShopOrder|null
      */
     private $order = null;
 
@@ -72,7 +72,7 @@ class TPkgShopPaymentIPNRequest
     }
 
     /**
-     * @return null|TdbPkgShopPaymentIpnStatus
+     * @return TdbPkgShopPaymentIpnStatus|null
      */
     public function getIpnStatus()
     {
@@ -243,7 +243,7 @@ class TPkgShopPaymentIPNRequest
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getRequestURL()
     {
@@ -259,7 +259,7 @@ class TPkgShopPaymentIPNRequest
     }
 
     /**
-     * @return null|TdbShopPaymentHandlerGroup
+     * @return TdbShopPaymentHandlerGroup|null
      */
     public function getPaymentHandlerGroup()
     {
@@ -267,7 +267,7 @@ class TPkgShopPaymentIPNRequest
     }
 
     /**
-     * @return null|TdbShopOrder
+     * @return TdbShopOrder|null
      */
     public function getOrder()
     {
@@ -275,7 +275,7 @@ class TPkgShopPaymentIPNRequest
     }
 
     /**
-     * @return null|TdbShopPaymentHandler|IPkgShopPaymentIPNHandler
+     * @return TdbShopPaymentHandler|IPkgShopPaymentIPNHandler|null
      */
     public function getPaymentHandler()
     {

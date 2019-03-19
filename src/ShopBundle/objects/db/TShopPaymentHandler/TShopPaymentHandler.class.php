@@ -68,7 +68,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
     /**
      * getter for the owning payment method.
      *
-     * @return null|string
+     * @return string|null
      */
     protected function &GetOwningPaymentMethodId()
     {

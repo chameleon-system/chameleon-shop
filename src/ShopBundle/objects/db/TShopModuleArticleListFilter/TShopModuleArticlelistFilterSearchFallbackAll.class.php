@@ -26,7 +26,7 @@ class TShopModuleArticlelistFilterSearchFallbackAll extends TShopModuleArticleli
      * if set, then this will overwrite, returns the parent as default
      * note: this will only be called if PreventUseOfParentObjectWhenNoRecordsAreFound returns false.
      *
-     * @return null|TdbShopModuleArticleListFilter
+     * @return TdbShopModuleArticleListFilter|null
      */
     public function getFallbackListFilter()
     {

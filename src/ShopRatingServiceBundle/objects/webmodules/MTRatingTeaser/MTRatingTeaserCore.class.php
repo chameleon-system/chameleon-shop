@@ -16,7 +16,7 @@
 class MTRatingTeaserCore extends TUserCustomModelBase
 {
     /**
-     * @var null|TdbPkgShopRatingServiceTeaserCnf
+     * @var TdbPkgShopRatingServiceTeaserCnf|null
      */
     protected $oModuleConfig = null;
 
@@ -132,7 +132,7 @@ class MTRatingTeaserCore extends TUserCustomModelBase
     /**
      * Select one (random) rating item.
      *
-     * @return null|TdbPkgShopRatingServiceRating
+     * @return TdbPkgShopRatingServiceRating|null
      */
     protected function GetRatingItem()
     {
@@ -182,7 +182,7 @@ class MTRatingTeaserCore extends TUserCustomModelBase
     /**
      * loads config for instance.
      *
-     * @return null|TdbPkgShopRatingServiceTeaserCnf
+     * @return TdbPkgShopRatingServiceTeaserCnf|null
      */
     protected function GetModuleConfig()
     {

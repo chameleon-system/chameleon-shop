@@ -17,14 +17,14 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     /**
      * article list loaded by module or something else that calls this class.
      *
-     * @var null|TIterator
+     * @var TIterator|null
      */
     protected $oArticleList = null;
 
     /**
      * absolute path to the cache file.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $sCacheFile = null;
 
@@ -266,7 +266,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * @param array          $aAttributeNames
      * @param string         $sFieldName
      *
-     * @return null|array
+     * @return array|null
      */
     public function GetArticleAttributeValueListForAttributeNames(
         &$oArticle,
@@ -296,7 +296,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * @param string         $sFieldName
      * @param bool           $bReturnFirstOccurrence
      *
-     * @return null|string|array
+     * @return string|array|null
      */
     protected function GetArticleAttributeValueForAttributeName(
         &$oArticle,
@@ -603,7 +603,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     /**
      * return list of all attributes (by default) to restrict this method overwrite.
      *
-     * @return null|array
+     * @return array|null
      */
     public function GetAllowedAttributes()
     {

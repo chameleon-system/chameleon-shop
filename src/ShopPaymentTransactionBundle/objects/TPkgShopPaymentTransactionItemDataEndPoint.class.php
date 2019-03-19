@@ -37,7 +37,7 @@ class TPkgShopPaymentTransactionItemDataEndPoint
     private $orderItemId = null;
 
     /**
-     * @var null|TdbShopOrderItem
+     * @var TdbShopOrderItem|null
      */
     private $orderItem = null;
 
@@ -114,7 +114,7 @@ class TPkgShopPaymentTransactionItemDataEndPoint
     }
 
     /**
-     * @return null|TdbShopOrderItem
+     * @return TdbShopOrderItem|null
      *
      * @throws TPkgCmsException_LogAndMessage
      */

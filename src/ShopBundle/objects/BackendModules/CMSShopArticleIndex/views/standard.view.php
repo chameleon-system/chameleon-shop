@@ -20,10 +20,10 @@ $translator = ServiceLocator::get('translator');
                    value="TickerIndexGeneration"/>
 
             <?php if (!$data['bIndexIsRunning'] || $data['bIndexCompleted']) {
-                ?>
+    ?>
                 <input class="btn btn-primary" type="submit" value="<?= TGlobal::OutHTML($translator->trans('chameleon_system_shop.product_search_index.generate')); ?>"/>
                 <?php
-            } ?>
+} ?>
         </form>
         <?php
         $oLocal = &TCMSLocal::GetActive();

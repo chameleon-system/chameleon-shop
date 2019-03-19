@@ -623,7 +623,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      * @param $sReferenceAddressId
      * @param string $sForAddressForm - billing or shipping (use TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING)
      *
-     * @return int|null|string
+     * @return int|string|null
      */
     protected function GetAnotherAddressFromUser($sReferenceAddressId, $sForAddressForm = TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING)
     {

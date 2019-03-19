@@ -82,7 +82,7 @@ class AmazonIPNHandler implements \IPkgShopPaymentIPNHandler
     /**
      * @param TPkgShopPaymentIPNRequest $oRequest
      *
-     * @return null|\TdbPkgShopPaymentTransaction
+     * @return \TdbPkgShopPaymentTransaction|null
      *
      * @throws \TPkgCmsException_Log
      */
@@ -380,7 +380,7 @@ class AmazonIPNHandler implements \IPkgShopPaymentIPNHandler
     /**
      * @param \TdbShopOrder $order
      *
-     * @return null|\TPkgShopPaymentTransactionManager
+     * @return \TPkgShopPaymentTransactionManager|null
      */
     protected function getTransactionManager(\TdbShopOrder $order)
     {

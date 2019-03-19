@@ -67,7 +67,7 @@ class TPkgShopPaymentIpnMessage extends TPkgShopPaymentIpnMessageAutoParent
      * @param TdbShopOrder $oOrder
      * @param string       $sStatusCode
      *
-     * @return null|TdbPkgShopPaymentIpnMessage
+     * @return TdbPkgShopPaymentIpnMessage|null
      */
     public static function getMessageForOrder(TdbShopOrder $oOrder, $sStatusCode)
     {

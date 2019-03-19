@@ -352,7 +352,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return the active shipping group - will NOT set the shipping group to the default group, if none is set.
      *
-     * @return null|TdbShopShippingGroup
+     * @return TdbShopShippingGroup|null
      */
     public function &GetActiveShippingGroupWithoutLoading()
     {
@@ -2087,7 +2087,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     }
 
     /**
-     * @return null|Request
+     * @return Request|null
      */
     private function getRequest()
     {

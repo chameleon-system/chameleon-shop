@@ -82,7 +82,7 @@ class TPkgShopPaymentIPayment_TPkgShopPaymentIPNHandler_BaseResponse implements 
      *
      * @param TPkgShopPaymentIPNRequest $oRequest
      *
-     * @return null|TPkgShopPaymentIPN_TransactionDetails
+     * @return TPkgShopPaymentIPN_TransactionDetails|null
      */
     public function getIPNTransactionDetails(TPkgShopPaymentIPNRequest $oRequest)
     {

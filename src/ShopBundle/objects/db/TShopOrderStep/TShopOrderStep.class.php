@@ -153,7 +153,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      * @param TShopBasket $basket
      * @param string      $classList comma seperated list of class names
      *
-     * @return null|TdbShopOrderStep
+     * @return TdbShopOrderStep|null
      */
     private static function createClass(TShopBasket $basket, $classList)
     {
@@ -572,7 +572,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     }
 
     /**
-     * @return null|Request
+     * @return Request|null
      */
     private function getRequest()
     {

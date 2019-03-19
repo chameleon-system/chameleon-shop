@@ -29,7 +29,7 @@ interface IPkgShopPaymentIPNHandler
      *
      * @param TPkgShopPaymentIPNRequest $oRequest
      *
-     * @return null|TPkgShopPaymentIPN_TransactionDetails
+     * @return TPkgShopPaymentIPN_TransactionDetails|null
      */
     public function getIPNTransactionDetails(TPkgShopPaymentIPNRequest $oRequest);
 }
