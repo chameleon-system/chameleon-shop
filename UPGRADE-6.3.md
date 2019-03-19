@@ -20,11 +20,6 @@ override `\TShopArticleReview::getFieldWhitelistForLoadByRow()` to add these fie
 
 This section contains information on interface and method signature changes which affect backwards compatibility (BC).
 Note that ONLY BC breaking changes are listed, according to our backwards compatibility policy.
-# Changed Interfaces and Method Signatures
-
-This section contains information on interface and method signature changes which affect backwards compatibility (BC).
-Note that ONLY BC breaking changes are listed, according to our backwards compatibility policy.
-
 
 ## \ChameleonSystem\AmazonPaymentBundle\AmazonOrderReferenceObject
 
