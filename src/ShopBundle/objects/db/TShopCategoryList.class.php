@@ -59,14 +59,14 @@ class TShopCategoryList extends TShopCategoryListAutoParent
     /**
      * return root category list.
      *
-     * @param int $sLanguageID
+     * @param string|null $sLanguageID
      *
      * @return TdbShopCategoryList
      */
     public static function &GetRootCategoryList($sLanguageID = null)
     {
-        if (is_null($sLanguageID)) {
-            $sLanguageID = TGlobal::GetActiveLanguageId();
+        if ($sLanguageID === null) {
+            $sLanguageID = self::getMyLanguageService()->getActiveLanguageId();
         }
         $sRestriction = "(`shop_category`.`shop_category_id` = '0' OR `shop_category`.`shop_category_id` = '')";
         $sCategoryRestriction = TdbShopCategoryList::GetActiveCategoryQueryRestriction();

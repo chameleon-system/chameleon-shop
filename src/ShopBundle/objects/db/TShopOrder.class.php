@@ -112,7 +112,7 @@ class TShopOrder extends TShopOrderAutoParent
             'totalvolume' => $oBasket->dTotalVolume,
             'affiliate_code' => $sAffiliateCode,
             'pkg_shop_affiliate_id' => $pkg_shop_affiliate_id,
-            'cms_language_id' => TGlobal::GetActiveLanguageId(),
+            'cms_language_id' => self::getLanguageService()->getActiveLanguageId(),
             'user_ip' => null === $request ? '' : $request->getClientIp(),
         );
         if (property_exists($oBillingAdr, 'fieldAddressAdditionalInfo')) {

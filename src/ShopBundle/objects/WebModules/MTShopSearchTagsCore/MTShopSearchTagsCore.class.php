@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * module shows a tag cloud.
 /**/
@@ -42,11 +45,12 @@ class MTShopSearchTagsCore extends TShopUserCustomModelBase
         if ($iSize < 0) {
             $iSize = 0;
         }
+        $activeLanguage = $this->getLanguageService()->getActiveLanguageId();
         $query = 'SELECT COUNT(`shop_search_log`.`id`) AS '.TCMSTagCloud::QUERY_ITEM_COUNT_NAME.',
                        `shop_search_log`.`name` AS '.TCMSTagCloud::QUERY_ITEM_KEY_NAME.",
                        `shop_search_log`.*
                   FROM `shop_search_log`
-                 WHERE `cms_language_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(TGlobal::GetActiveLanguageId())."' OR `cms_language_id` =  ''
+                 WHERE `cms_language_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($activeLanguage)."' OR `cms_language_id` =  ''
               GROUP BY `shop_search_log`.`name`
                 HAVING ".TCMSTagCloud::QUERY_ITEM_COUNT_NAME.' > 0
               ORDER BY '.TCMSTagCloud::QUERY_ITEM_COUNT_NAME." DESC
@@ -55,5 +59,10 @@ class MTShopSearchTagsCore extends TShopUserCustomModelBase
         // add custom words...
 
         return TCMSTagCloud::GetCloud($query, 'TdbShopSearchLog', $aCustomWords);
+    }
+
+    private function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 }

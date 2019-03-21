@@ -190,9 +190,9 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
         }
         $this->GetAdditionalViewVariables($oOrder, $aParameter);
 
-        $oGlobal = TGlobal::instance();
+        $stringReplacer = new TPkgCmsStringUtilities_VariableInjection();
 
-        return $oGlobal->ReplaceCustomVariablesInString($this->fieldOrderSuccessCode, $aParameter);
+        return $stringReplacer->replace($this->fieldOrderSuccessCode, $aParameter);
     }
 
     /**

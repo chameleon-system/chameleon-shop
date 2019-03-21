@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 
 /**
@@ -322,7 +324,7 @@ class TShopBasketArticleCore extends TdbShopArticle
     public function RefreshDataFromDatabase()
     {
         $this->ClearInternalCache();
-        $sActiveLanguageId = TGlobal::GetActiveLanguageId();
+        $sActiveLanguageId = $this->getLanguageService()->getActiveLanguageId();
         if (!is_null($sActiveLanguageId)) {
             $this->SetLanguage($sActiveLanguageId);
         }
@@ -373,7 +375,12 @@ class TShopBasketArticleCore extends TdbShopArticle
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
+    }
+
+    private function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     /**
@@ -381,6 +388,6 @@ class TShopBasketArticleCore extends TdbShopArticle
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }

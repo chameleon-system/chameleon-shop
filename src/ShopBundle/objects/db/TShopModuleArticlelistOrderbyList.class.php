@@ -54,9 +54,9 @@ class TShopModuleArticlelistOrderbyList extends TShopModuleArticlelistOrderbyLis
         $sHTML = $oView->RenderObjectPackageView($sViewName, self::VIEW_PATH, $sViewType);
 
         $sActivePageUrl = $this->getActivePageService()->getLinkToActivePageRelative(array(), array('module_fnc', 'listkey', 'listrequest', 'listpage'));
-        $sHTML = TGlobal::instance()->ReplaceCustomVariablesInString($sHTML, array('sActivePageUrl' => $sActivePageUrl));
+        $stringReplacer = new TPkgCmsStringUtilities_VariableInjection();
 
-        return $sHTML;
+        return $stringReplacer->replace($sHTML, ['sActivePageUrl' => $sActivePageUrl]);
     }
 
     /**

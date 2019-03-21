@@ -22,8 +22,8 @@ class TShopSearchKeywordArticleList extends TAdbShopSearchKeywordArticleList
      */
     public static function &GetListForShopKeywords($iShopId, $aKeywordList, $iLanguageId = null)
     {
-        if (is_null($iLanguageId)) {
-            $iLanguageId = TGlobal::GetActiveLanguageId();
+        if ($iLanguageId === null) {
+            $iLanguageId = self::getMyLanguageService()->getActiveLanguageId();
         }
         $aKeywordList = TTools::MysqlRealEscapeArray($aKeywordList);
         $query = self::GetDefaultQuery($iLanguageId, "`shop_search_keyword_article`.`shop_id`= '".MySqlLegacySupport::getInstance()->real_escape_string($iShopId)."' AND `shop_search_keyword_article`.`name` IN ('".implode("','", $aKeywordList)."') AND (`shop_search_keyword_article`.`cms_language_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iLanguageId)."' OR `shop_search_keyword_article`.`cms_language_id` = '') ");

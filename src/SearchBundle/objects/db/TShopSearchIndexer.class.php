@@ -484,21 +484,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      */
     public static function GetSearchQuery($sSearchTerm, $aSearchTerms = null, $aFilter = array(), $sLanguageId = null)
     {
-        if (false && '' === $sSearchTerm && null === $aSearchTerms && 0 === count($aFilter)) {
-            // so search term - so return query that selects nothing
-            return 'SELECT DISTINCT
-                        `shop_search_cache_item`.`weight` AS cms_search_weight,
-                        `shop_article`.*
-                   FROM `shop_article`
-              LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
-             INNER JOIN `shop_search_cache_item` ON `shop_article`.`id` = `shop_search_cache_item`.`shop_article_id`
-              LEFT JOIN `shop_manufacturer` ON `shop_article`.`shop_manufacturer_id` = `shop_manufacturer`.`id`
-              LEFT JOIN `shop_category` ON `shop_article`.`shop_category_id`  = `shop_category`.`id`
-              LEFT JOIN `shop_article_shop_category_mlt` ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
-                  WHERE 1=0';
-        }
-        $sLanguageId = TGlobal::GetActiveLanguageId();
-        $sQuery = '';
+        $sLanguageId = self::getLanguageService()->getActiveLanguageId();
 
         $aCacheKeys = array('class' => __CLASS__, 'type' => 'searchquery', 'sSearchTerm' => $sSearchTerm, 'aSearchTerms' => serialize($aSearchTerms), 'cms_language_id' => $sLanguageId);
         $sCacheKey = TCacheManager::GetKey($aCacheKeys);
@@ -518,8 +504,6 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
               LEFT JOIN `shop_article_shop_category_mlt` ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
                   WHERE `shop_search_cache_item`.`shop_search_cache_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oSearchCache->id)."'
                 ";
-
-        //      echo "<pre>{$sQuery}</pre>";
 
         return $sQuery;
     }
