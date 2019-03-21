@@ -140,9 +140,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         $aVerifyData = TGlobal::instance()->GetUserData(null, array(), TCMSUserInput::FILTER_NONE);
 
         $sData = 'cmd=_notify-validate&'.str_replace('&amp;', '&', TTools::GetArrayAsURL($aVerifyData));
-        /** @var TTools $oTools */
-        $oTools = ServiceLocator::get('chameleon_system_core.tools');
-        $sResponse = $oTools::sendToHost($sDomain, 'POST', $sPath, $sData, false, 'application/x-www-form-urlencoded', true);
+        $sResponse = $this->sendRequest($sDomain, $sPath, $sData);
         if (0 != strcmp($sResponse, 'VERIFIED')) {
             $logger->error("PayPal IPN: unable to send notify-validate response. Domain:{$sDomain}\nPath:{$sPath}\nParameter: ".print_r($aURLParameter, true)."\ndata: {$sData}\nRESPONSE: ".$sResponse);
 
@@ -250,6 +248,33 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         }
 
         return $bProcessed;
+    }
+
+    private function sendRequest(string $host, string $path, string $data): string
+    {
+        $data = str_replace('&amp;', '&', $data); // remove encoding
+
+        $oToHostHandler = new TPkgCmsCoreSendToHost();
+
+        try {
+            $oToHostHandler
+                ->setHost($host)
+                ->setMethod('POST')
+                ->setPath($path)
+                ->setPayloadFromQueryString($data)
+                ->setSendUserAgent(false)
+                ->setContentType('application/x-www-form-urlencoded')
+                ->setUseSSL(true)
+                ->setUser(null)
+                ->setPassword(null);
+
+            $response = $oToHostHandler->executeRequest();
+            $response = \substr($response, \strpos($response, "\r\n\r\n") + 4);
+
+            return $oToHostHandler->getLastResponseHeader().$response;
+        } catch (TPkgCmsException_Log $e) {
+            return '';
+        }
     }
 
     /**

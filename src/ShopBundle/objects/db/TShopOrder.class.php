@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopBundle\Exception\ConfigurationException;
 use ChameleonSystem\ShopBundle\Payment\PaymentHandler\Interfaces\ShopPaymentHandlerFactoryInterface;
 use Psr\Log\LoggerInterface;
@@ -45,7 +47,7 @@ class TShopOrder extends TShopOrderAutoParent
     public function LoadFromBasket(TShopBasket &$oBasket)
     {
         $oShop = TdbShop::GetInstance();
-        $oPortal = TTools::GetActivePortal();
+        $oPortal = $this->getPortalDomainService()->getActivePortal();
         $oUser = TdbDataExtranetUser::GetInstance();
         $oBillingAdr = $oUser->GetBillingAddress();
 
@@ -414,12 +416,12 @@ class TShopOrder extends TShopOrderAutoParent
      */
     private function getShopPaymentHandlerFactory()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
+        return ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
     }
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
+        return ServiceLocator::get('monolog.logger.order');
     }
 
     /**
@@ -1193,6 +1195,11 @@ class TShopOrder extends TShopOrderAutoParent
      */
     private function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

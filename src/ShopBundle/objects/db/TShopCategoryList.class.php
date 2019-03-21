@@ -137,9 +137,10 @@ class TShopCategoryList extends TShopCategoryListAutoParent
         }
         /** @var $oCategory TdbShopCategory */
         $oCategory = TdbShopCategory::GetNewInstance();
-        $oCategory->SetLanguage(TGlobal::GetActiveLanguageId());
+        $activeLanguageId = self::getLanguageService()->getActiveLanguageId();
+        $oCategory->SetLanguage($activeLanguageId);
         if (!$oCategory->LoadFromField('url_path', $sPath) || false == $oCategory->AllowDisplayInShop()) {
-            if (CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE && !TGlobal::IsCMSMode() && TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId != TGlobal::instance()->GetActiveLanguageId()) {
+            if (CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE && !TGlobal::IsCMSMode() && TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId != $activeLanguageId) {
                 // try fallback
                 $oCategory->SetLanguage(TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId);
                 if (!$oCategory->LoadFromField('url_path', $sPath) || false == $oCategory->AllowDisplayInShop()) {

@@ -8,4 +8,4 @@
 /* @var $oImageThumbnail TCMSImage // the tcms image to show cut to the right size based on the oArticleSize object*/
 /* @var $oPreviewImage TdbShopArticlePreviewImage - the preview image object */
 ?>
-<?= $oImage->GetThumbnailTag($oImageSize->fieldWidth, $oImageSize->fieldHeight, 800, 600); ?>
+<?= $oImage->renderImage($oImageSize->fieldWidth, $oImageSize->fieldHeight, 800, 600); ?>
