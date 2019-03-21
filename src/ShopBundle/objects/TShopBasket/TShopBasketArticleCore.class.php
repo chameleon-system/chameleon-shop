@@ -324,8 +324,8 @@ class TShopBasketArticleCore extends TdbShopArticle
     public function RefreshDataFromDatabase()
     {
         $this->ClearInternalCache();
-        $sActiveLanguageId = $this->getLanguageService()->getActiveLanguageId();
-        if (!is_null($sActiveLanguageId)) {
+        $sActiveLanguageId = self::getLanguageService()->getActiveLanguageId();
+        if (null !== $sActiveLanguageId) {
             $this->SetLanguage($sActiveLanguageId);
         }
         $bEnableObjectCaching = $this->GetEnableObjectCaching();
@@ -376,11 +376,6 @@ class TShopBasketArticleCore extends TdbShopArticle
     private function getActivePageService()
     {
         return ServiceLocator::get('chameleon_system_core.active_page_service');
-    }
-
-    private function getLanguageService(): LanguageServiceInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     /**

@@ -521,7 +521,6 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
                 $this->CommitNoticeListToCookie();
             }
         }
-        $this->CommitToSession();
     }
 
     /**

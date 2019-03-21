@@ -9,7 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 
 class TPkgShopMapper_ShopAddress extends AbstractViewMapper
@@ -22,23 +24,16 @@ class TPkgShopMapper_ShopAddress extends AbstractViewMapper
      * @var ShopServiceInterface
      */
     private $shopService;
-
     /**
-     * @param PortalDomainServiceInterface|null $portalDomainService
-     * @param ShopServiceInterface|null         $shopService
+     * @var PageServiceInterface
      */
-    public function __construct(PortalDomainServiceInterface $portalDomainService = null, ShopServiceInterface $shopService = null)
+    private $pageService;
+
+    public function __construct(PortalDomainServiceInterface $portalDomainService = null, ShopServiceInterface $shopService = null, PageServiceInterface $pageService = null)
     {
-        if (null === $portalDomainService) {
-            $this->portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
-        } else {
-            $this->portalDomainService = $portalDomainService;
-        }
-        if (null === $shopService) {
-            $this->shopService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
-        } else {
-            $this->shopService = $shopService;
-        }
+        $this->portalDomainService = $portalDomainService ?? ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        $this->shopService = $shopService ?? ServiceLocator::get('chameleon_system_shop.shop_service');
+        $this->pageService = $pageService ?? ServiceLocator::get('chameleon_system_core.page_service');
     }
 
     /**
@@ -87,7 +82,7 @@ class TPkgShopMapper_ShopAddress extends AbstractViewMapper
                     $oVisitor->SetMappedValue('sLogoURL', $thumb->GetFullURL());
                 }
             }
-            $oVisitor->SetMappedValue('sHomeURL', $oPortal->GetPortalHomeURL());
+            $oVisitor->SetMappedValue('sHomeURL', $this->pageService->getLinkToPortalHomePageAbsolute([], $oPortal));
         }
         if ($bCachingEnabled) {
             $oCacheTriggerManager->addTrigger('shop', $oShop->id);

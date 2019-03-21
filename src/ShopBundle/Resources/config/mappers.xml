@@ -7,6 +7,7 @@
         <service id="chameleon_system_shop.mapper.shop_address" class="TPkgShopMapper_ShopAddress">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_shop.shop_service" />
+            <argument type="service" id="chameleon_system_core.page_service"/>
         </service>
 
         <service id="chameleon_system_shop.mapper.shop_central_handler" class="TPkgShopMapper_ShopCentralHandler">

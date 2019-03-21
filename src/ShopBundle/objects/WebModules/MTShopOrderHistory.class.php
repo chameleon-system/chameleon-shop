@@ -12,15 +12,6 @@
 class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
 {
     /**
-     * @deprecated since 6.2.0 - do not use this constant outside of MTShopOrderHistory.
-     */
-    const ADDRESS_TYPE_BILLING = 1;
-    /**
-     * @deprecated since 6.2.0 - do not use this constant outside of MTShopOrderHistory.
-     */
-    const ADDRESS_TYPE_SHIPPING = 2;
-
-    /**
      * {@inheritdoc}
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
@@ -155,32 +146,6 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
         $aOrder['bActive'] = false;
 
         return $aOrder;
-    }
-
-    /**
-     * returns one address as concatenated string
-     * type can be defined by using the class constants.
-     *
-     * @param TdbShopOrder                  $order
-     * @param int                           $addressType         use constants of the class to define the type to be fetched from
-     * @param bool                          $cachingEnabled
-     * @param IMapperCacheTriggerRestricted $cacheTriggerManager
-     *
-     * @return string
-     *
-     * @deprecated since 6.0.9 use getBillingAddress() or getShippingAddress()
-     */
-    protected function getAddress(TdbShopOrder $order, $addressType, $cachingEnabled, IMapperCacheTriggerRestricted $cacheTriggerManager)
-    {
-        $address = '';
-
-        if (self::ADDRESS_TYPE_BILLING === $addressType) {
-            $address = $this->getBillingAddress($order, $cachingEnabled, $cacheTriggerManager);
-        } elseif (self::ADDRESS_TYPE_SHIPPING === $addressType) {
-            $address = $this->getShippingAddress($order, $cachingEnabled, $cacheTriggerManager);
-        }
-
-        return $address;
     }
 
     /**
