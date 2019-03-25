@@ -377,43 +377,6 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
     /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD
 
     /**
-     * Add view based clear cache triggers for the Render method here
-     *
-     * @param array $aClearTriggers - clear trigger array (with current contents)
-     * @param string $sViewName - view being requested
-     * @param string $sViewType - location of the view (Core, Custom-Core, Customer)
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
-    {
-    }
-
-    /**
-     * used to set the id of a clear cache (ie. related table).
-     *
-     * @param string $sTableName - the table name
-     *
-     * @return int|string|null
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function GetClearCacheTriggerTableValue($sTableName)
-    {
-        $sValue = '';
-        switch ($sTableName) {
-            case $this->table:
-                $sValue = $this->id;
-                break;
-
-            default:
-                break;
-        }
-
-        return $sValue;
-    }
-
-    /**
      * returns an array with all table names that are relevant for the render function.
      *
      * @param string $sViewName - the view name being requested (if know by the caller)
@@ -462,21 +425,6 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
         }
 
         return $sDesc;
-    }
-
-    /**
-     * returns count of articles found in category
-     * if $bRecursive is true, then this check walks down the category tree recursively.
-     *
-     * @param bool $bRecursive
-     *
-     * @return int - number of articles found in category
-     *
-     * @deprecated since 6.2.0 - use GetNumberOfArticlesInCategory() instead.
-     */
-    protected function NumberOfArticlesInCategory($bRecursive = false)
-    {
-        return $this->GetNumberOfArticlesInCategory($bRecursive);
     }
 
     /**

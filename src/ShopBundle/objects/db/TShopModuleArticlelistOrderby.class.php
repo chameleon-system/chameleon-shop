@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
-
 class TShopModuleArticlelistOrderby extends TShopModuleArticlelistOrderbyAutoParent
 {
     /**
@@ -35,27 +33,5 @@ class TShopModuleArticlelistOrderby extends TShopModuleArticlelistOrderbyAutoPar
         }
 
         return $sOrderBy;
-    }
-
-    /**
-     * return the url that can be used to change the order of the current page to this order.
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function GetURLToChangeOrder()
-    {
-        $aParameters = array(MTShopArticleCatalogCore::URL_ORDER_BY => $this->id);
-
-        return $this->getActivePageService()->getLinkToActivePageRelative($aParameters);
-    }
-
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

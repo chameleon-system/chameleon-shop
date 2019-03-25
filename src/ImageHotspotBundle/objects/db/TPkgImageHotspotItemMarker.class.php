@@ -46,22 +46,6 @@ class TPkgImageHotspotItemMarker extends TAdbPkgImageHotspotItemMarker
     }
 
     /**
-     * Add view based clear cache triggers for the Render method here.
-     *
-     * @param array  $aClearTriggers - clear trigger array (with current contents)
-     * @param string $sViewName      - view being requested
-     * @param string $sViewType      - location of the view (Core, Custom-Core, Customer)
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
-    {
-        $aClearTriggers[] = array('table' => $this->table, 'id' => $this->id);
-        $aClearTriggers[] = array('table' => 'cms_tree', 'id' => '');
-        $aClearTriggers[] = array('table' => 'cms_media', 'id' => ''); // for the connected markers that may hold tree links
-    }
-
-    /**
      * fetches the connected record and tries to get a url from that.
      *
      * @return string

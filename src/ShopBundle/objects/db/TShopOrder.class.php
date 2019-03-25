@@ -813,42 +813,6 @@ class TShopOrder extends TShopOrderAutoParent
     }
 
     /**
-     * add order status to order. optional: send info mail to customer.
-     *
-     * @param TdbShopOrderStatus $oShopOrderStatus
-     * @param bool               $bSendCustomerInfoMail
-     *
-     * @deprecated - use TPkgShopOrderStatusManager::addStatus instead
-     */
-    public function AddOrderStatus(TdbShopOrderStatus $oShopOrderStatus, $bSendCustomerInfoMail)
-    {
-        $aData = $oShopOrderStatus->sqlData;
-        $aData['shop_order_id'] = $this->id;
-        if (!array_key_exists('status_date', $aData)) {
-            $aData['status_date'] = date('Y-m-d H:i:s');
-        }
-        $oShopOrderStatus->LoadFromRow($aData);
-        $oShopOrderStatus->AllowEditByAll(true);
-        $oShopOrderStatus->Save();
-        $oShopOrderStatus->Load($oShopOrderStatus->id);
-
-        if ($bSendCustomerInfoMail) {
-            $oMailProfil = TdbDataMailProfile::GetProfile(TdbShopOrder::MAIL_STATUS_UPDATE);
-            if ($oMailProfil) {
-                $aOrderInfo = $this->GetSQLWithTablePrefix();
-                $oMailProfil->AddDataArray($aOrderInfo);
-                $aOrderStatusInfo = $oShopOrderStatus->GetSQLWithTablePrefix();
-                $oMailProfil->AddDataArray($aOrderStatusInfo);
-
-                $sOrderStatusText = $oShopOrderStatus->GetStatusText(true);
-                $oMailProfil->AddData('sOrderStatusText', $sOrderStatusText);
-                $oMailProfil->ChangeToAddress($this->fieldUserEmail, $this->fieldAdrBillingFirstname.' '.$this->fieldAdrBillingLastname);
-                $oMailProfil->SendUsingObjectView('emails', 'Customer');
-            }
-        }
-    }
-
-    /**
      * return the net product value of the order (so product value without taxes shipping or payment costs).
      *
      * @return float
@@ -1069,43 +1033,6 @@ class TShopOrder extends TShopOrderAutoParent
     }
 
     /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD
-
-    /**
-     * Add view based clear cache triggers for the Render method here
-     *
-     * @param array $aClearTriggers - clear trigger array (with current contents)
-     * @param string $sViewName - view being requested
-     * @param string $sViewType - location of the view (Core, Custom-Core, Customer)
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
-    {
-    }
-
-    /**
-     * used to set the id of a clear cache (ie. related table).
-     *
-     * @param string $sTableName - the table name
-     *
-     * @return int|string|null
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function GetClearCacheTriggerTableValue($sTableName)
-    {
-        $sValue = '';
-        switch ($sTableName) {
-            case $this->table:
-                $sValue = $this->id;
-                break;
-
-            default:
-                break;
-        }
-
-        return $sValue;
-    }
 
     /**
      * returns an array with all table names that are relevant for the render function.

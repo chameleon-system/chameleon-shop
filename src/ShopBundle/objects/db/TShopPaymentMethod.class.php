@@ -67,19 +67,6 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
     }
 
     /**
-     * return payment handler for method
-     * Note: you should NOT use this function - use GetFieldShopPaymentHandler instead! this method is outdated!
-     *
-     * @deprecated
-     *
-     * @return TdbShopPaymentHandler
-     */
-    public function &GetPaymentHandler()
-    {
-        return $this->GetFieldShopPaymentHandler();
-    }
-
-    /**
      * Paymenthandler.
      *
      * @return TdbShopPaymentHandler

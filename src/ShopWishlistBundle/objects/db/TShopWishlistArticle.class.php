@@ -48,20 +48,6 @@ class TShopWishlistArticle extends TShopWishlistArticleAutoParent
     }
 
     /**
-     * add cache parameters (trigger clear for render).
-     *
-     * @param array $aCacheParameters
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddCacheParameters(&$aCacheParameters)
-    {
-        parent::AddCacheParameters($aCacheParameters);
-        $oUser = TdbDataExtranetUser::GetInstance();
-        $aCacheParameters['bUserIsLoggedIn'] = $oUser->IsLoggedIn();
-    }
-
-    /**
      * @return ActivePageServiceInterface
      */
     private function getActivePageService()

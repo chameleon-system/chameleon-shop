@@ -101,24 +101,4 @@ class TPkgImageHotspotItemSpot extends TAdbPkgImageHotspotItemSpot
     {
         return array();
     }
-
-    /**
-     * Add view based clear cache triggers for the Render method here.
-     *
-     * @param array  $aClearTriggers - clear trigger array (with current contents)
-     * @param string $sViewName      - view being requested
-     * @param string $sViewType      - location of the view (Core, Custom-Core, Customer)
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
-    {
-        $aClearTriggers[] = array('table' => $this->table, 'id' => $this->id);
-        $aClearTriggers[] = array('table' => 'shop_article', 'id' => ''); // for now we keep it simple and react to any article changes. this should later be changed to react only to relevant items
-        $oField = $this->GetTableConf()->GetField('linked_record', $this);
-        $aTables = $oField->GetAllowedTables();
-        foreach ($aTables as $sTableName) {
-            $aClearTriggers[] = array('table' => $sTableName, 'id' => '');
-        }
-    }
 }

@@ -18,11 +18,74 @@ The code entities in this list were marked as deprecated in previous releases an
 
 ## Classes and Interfaces
 
+- MTShopCategoryNavigationCore
+- MTShopShippingInfoCore
+- MTShopUserNoticeListCore
+- TCMSCronJob_ShopImportOrderStatus
+- TCMSSmartURLHandler_ShopProduct
+- TCMSSmartURLHandler_ShopProducts
+- TPkgShopCurrency_ShopDiscount
+- TPkgShopCurrency_ShopPaymentMethod
+- TPkgShopCurrency_ShopShippingType
+
 ## Properties
+
+- TShop::$bInternalCacheMarkedAsDirty
 
 ## Methods
 
+- ChameleonSystem\ShopProductExportBundle\Interfaces\ShopProductExportHandlerInterface::SetCacheFile()
+- ChameleonSystem\ShopProductExportBundle\Interfaces\ShopProductExportHandlerInterface::SetGenerateFile()
+- MTRatingTeaserCore::GetCachedItemForPosition()
+- MTRatingTeaserCore::GetCacheKeyForMaxHints()
+- MTRatingTeaserCore::GetCacheKeyForPosition()
+- MTRatingTeaserCore::GetNumberOfHitsFromCache()
+- MTRatingTeaserCore::GetMainTrigger()
+- MTRatingTeaserCore::SetCachedItemForPosition()
+- MTRatingTeaserCore::SetNumberOfHintsToCache()
 - MTShopOrderHistory::getAddress()
+- TPkgShopProductExportBaseEndPoint::FileIsCached()
+- TPkgShopProductExportBaseEndPoint::GetFilePointer()
+- TPkgShopProductExportBaseEndPoint::SetFilePointer()
+- TPkgShopWishlist::AddClearCacheTriggers()
+- TShop::GetSystemPageLinkList()
+- TShopArticle::AddClearCacheTriggers()
+- TShopArticle::GetClearCacheTriggerTableValue()
+- TShopArticle::GetSendAFriendLink()
+- TShopArticle::GetVariantName()
+- TShopArticle::GetVariantSet()
+- TShopArticleList::AddCacheParameters()
+- TShopArticleList::AddClearCacheTriggers()
+- TShopArticlePkgShopListfilter::AddCacheParameters()
+- TShopArticlePreviewImage::AddCacheParameters()
+- TShopArticlePreviewImagePkgShopListfilter::AddCacheParameters()
+- TShopBasketArticleCore::AddCacheParameters()
+- TShopBasketCore::GetNextLowestShipping()
+- TShopBundleArticle::AddClearCacheTriggers()
+- TShopBundleArticle::GetClearCacheTriggerTableValue()
+- TShopBundleArticleList::AddClearCacheTriggers()
+- TShopBundleArticleList::GetClearCacheTriggerTableValue()
+- TShopCategory::AddClearCacheTriggers()
+- TShopCategory::GetClearCacheTriggerTableValue()
+- TShopCategory::NumberOfArticlesInCategory()
+- TShopManufacturer::AddClearCacheTriggers()
+- TShopManufacturer::GetAdditionalViewVariables()
+- TShopModuleArticlelistOrderby::GetURLToChangeOrder()
+- TShopModuleArticlelistOrderbyList::AddCacheParameters()
+- TShopModuleArticlelistOrderbyList::GetAdditionalViewVariables()
+- TShopOrder::AddClearCacheTriggers()
+- TShopOrder::AddOrderStatus()
+- TShopOrder::GetClearCacheTriggerTableValue()
+- TShopOrderBundleArticle::AddClearCacheTriggers()
+- TShopOrderBundleArticle::GetClearCacheTriggerTableValue()
+- TShopOrderBundleArticleList::AddClearCacheTriggers()
+- TShopOrderBundleArticleList::GetClearCacheTriggerTableValue()
+- TShopOrderItem::AddClearCacheTriggers()
+- TShopOrderItem::GetClearCacheTriggerTableValue()
+- TShopOrderStep::GetInstance()
+- TShopPaymentMethod::GetPaymentHandler()
+- TShopStepConfirmCore::WriteToLogfile()
+- TShopWishlistArticle::AddCacheParameters()
 
 ## JavaScript Files and Functions
 

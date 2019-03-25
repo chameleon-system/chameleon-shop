@@ -608,19 +608,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     }
 
     /**
-     * returns the next lowest (relative to the current shipping total) valid (ie usable by this user) shipping type
-     * taking the oActiveShippingGroup into account.
-     *
-     * @return TShopShippingType
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function GetNextLowestShipping()
-    {
-        // Not yet implemented
-    }
-
-    /**
      * add a TShopBasketArticle to the article list. if such an item is already in the basket, we just add the amount
      * instead of inserting a new entry.
      * return true if the item was updated, false if it was removed (happens when the amount falls below zero).
@@ -1096,7 +1083,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
                 // now try payment...
                 if ($bPaymentExecutionAllowed) {
-                    $oPaymentHandler = $this->GetActivePaymentMethod()->GetPaymentHandler();
+                    $oPaymentHandler = $this->GetActivePaymentMethod()->GetFieldShopPaymentHandler();
                     $bPaymentOK = $oOrder->ExecutePayment($oPaymentHandler, $sMessageConsumer);
 
                     if (true === $bPaymentOK) {

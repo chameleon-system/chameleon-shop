@@ -60,31 +60,6 @@ class TShopModuleArticlelistOrderbyList extends TShopModuleArticlelistOrderbyLis
     }
 
     /**
-     * add cache parameters (trigger clear for render).
-     *
-     * @param array $aCacheParameters
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddCacheParameters(&$aCacheParameters)
-    {
-    }
-
-    /**
-     * use this method to add any variables to the render method that you may
-     * require for some view.
-     *
-     * @param string $sViewName - the view being requested
-     * @param string $sViewType - the location of the view (Core, Custom-Core, Customer)
-     *
-     * @return array
-     */
-    protected function GetAdditionalViewVariables($sViewName, $sViewType)
-    {
-        return array();
-    }
-
-    /**
      * @return ActivePageServiceInterface
      */
     private function getActivePageService()

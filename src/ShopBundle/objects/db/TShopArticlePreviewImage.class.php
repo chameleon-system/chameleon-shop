@@ -92,17 +92,6 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
     }
 
     /**
-     * add cache parameters (trigger clear for render).
-     *
-     * @param array $aCacheParameters
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddCacheParameters(&$aCacheParameters)
-    {
-    }
-
-    /**
      * fetch the connected article
      * Note: we provide a separate method for this (instead of using GetLookup) because we want
      * to make sure that these objects are properly cached.
