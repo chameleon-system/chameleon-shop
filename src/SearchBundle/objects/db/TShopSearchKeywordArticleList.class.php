@@ -22,7 +22,7 @@ class TShopSearchKeywordArticleList extends TAdbShopSearchKeywordArticleList
      */
     public static function &GetListForShopKeywords($iShopId, $aKeywordList, $iLanguageId = null)
     {
-        if ($iLanguageId === null) {
+        if (null === $iLanguageId) {
             $iLanguageId = self::getMyLanguageService()->getActiveLanguageId();
         }
         $aKeywordList = TTools::MysqlRealEscapeArray($aKeywordList);

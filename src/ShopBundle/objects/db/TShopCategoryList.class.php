@@ -65,7 +65,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      */
     public static function &GetRootCategoryList($sLanguageID = null)
     {
-        if ($sLanguageID === null) {
+        if (null === $sLanguageID) {
             $sLanguageID = self::getMyLanguageService()->getActiveLanguageId();
         }
         $sRestriction = "(`shop_category`.`shop_category_id` = '0' OR `shop_category`.`shop_category_id` = '')";
