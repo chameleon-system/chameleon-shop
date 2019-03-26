@@ -94,6 +94,20 @@ class TShopManufacturer extends TShopManufacturerAutoParent
     }
 
     /**
+     * use this method to add any variables to the render method that you may
+     * require for some view.
+     *
+     * @param string $sViewName - the view being requested
+     * @param string $sViewType - the location of the view (Core, Custom-Core, Customer)
+     *
+     * @return array
+     */
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
+    {
+        return array();
+    }
+
+    /**
      * returns the number of search hits for a manufacturer.
      *
      * @param int  $iShopSearchCacheId
