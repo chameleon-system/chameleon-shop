@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-//TGlobal::LoadDBObjectClassDefinition('TdbShop');
-
 /**
  * assumes the path in the TCMSSmartURLData is a simple tree path.
 /**/

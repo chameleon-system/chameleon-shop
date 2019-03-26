@@ -24,21 +24,8 @@ class TPkgShopRatingServiceRating extends TPkgShopRatingServiceRatingAutoParent
      */
     public function Render($sViewName = 'RatingServiceRating_standard', $sViewSubType = 'pkgShopRatingService/views', $sViewType = 'Customer', $sSpotName = null, $aCallTimeVars = array())
     {
-        $sHTML = '';
-
         $oView = new TViewParser();
-        /** @var $oView TViewParser */
 
-        /*
-        $oView->UseCaching(true); // step list is cached
-        $aCacheParameters = array(
-          'sview'=>$sViewName,
-          'sViewType'=>$sViewType,
-          'sSpotName'=>$sSpotName,
-          'aCallTimeVars'=>serialize($aCallTimeVars),
-        );
-        $oView->SetCacheParameters($aCacheParameters);
-        */
         $oRatingService = $this->GetFieldPkgShopRatingService();
         $oView->AddVar('oRating', $this);
         $oView->AddVar('oRatingService', $oRatingService);
@@ -52,8 +39,6 @@ class TPkgShopRatingServiceRating extends TPkgShopRatingServiceRatingAutoParent
 
         $oView->AddVar('fieldRatingService_CurrentRating', $this->GetFieldPkgShopRatingService()->fieldCurrentRating);
 
-        $sHTML .= $oView->RenderObjectPackageView($sViewName, $sViewSubType, $sViewType);
-
-        return $sHTML;
+        return $oView->RenderObjectPackageView($sViewName, $sViewSubType, $sViewType);
     }
 }

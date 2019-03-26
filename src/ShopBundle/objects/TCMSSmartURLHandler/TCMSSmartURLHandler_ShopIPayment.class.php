@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-//TGlobal::LoadDBObjectClassDefinition('TdbShop');
 use Symfony\Component\HttpFoundation\Response;
 
 /**

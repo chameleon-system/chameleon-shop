@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-//TGlobal::LoadDBObjectClassDefinition('TdbShop');
-
 /**
  * looks for URLS of the form /kaufen/ean/number... these will result in the article being
  * placed in the basket.

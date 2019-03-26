@@ -77,8 +77,6 @@ class ShopProductExporter implements ShopProductExporterInterface
 
         $exportHandler->SetArticleList($this->getResultList($moduleConfiguration));
 
-        $exportHandler->SetGenerateFile(false);
-
         ob_start();
         $bSuccess = $exportHandler->Run();
         $exportedData = ob_get_contents();
