@@ -11,23 +11,4 @@
 
 class TShopArticlePreviewImagePkgShopListfilter extends TShopArticlePreviewImagePkgShopListfilterAutoParent
 {
-    /**
-     * add cache parameters (trigger clear for render).
-     *
-     * @param array $aCacheParameters
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddCacheParameters(&$aCacheParameters)
-    {
-        parent::AddCacheParameters($aCacheParameters);
-        // add cache trigger for filters that may select variants
-        if (false === TdbShop::GetActiveItem()) {
-            $oActiveFilter = TdbPkgShopListfilter::GetActiveInstance();
-            if ($oActiveFilter) {
-                $aFilter = $oActiveFilter->GetCurrentFilterAsArray();
-                $aCacheParameters['sActiveFilter'] = serialize($aFilter);
-            }
-        }
-    }
 }

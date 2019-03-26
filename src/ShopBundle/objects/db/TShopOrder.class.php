@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopBundle\Exception\ConfigurationException;
 use ChameleonSystem\ShopBundle\Payment\PaymentHandler\Interfaces\ShopPaymentHandlerFactoryInterface;
 use Psr\Log\LoggerInterface;
@@ -45,7 +47,7 @@ class TShopOrder extends TShopOrderAutoParent
     public function LoadFromBasket(TShopBasket &$oBasket)
     {
         $oShop = TdbShop::GetInstance();
-        $oPortal = TTools::GetActivePortal();
+        $oPortal = $this->getPortalDomainService()->getActivePortal();
         $oUser = TdbDataExtranetUser::GetInstance();
         $oBillingAdr = $oUser->GetBillingAddress();
 
@@ -110,7 +112,7 @@ class TShopOrder extends TShopOrderAutoParent
             'totalvolume' => $oBasket->dTotalVolume,
             'affiliate_code' => $sAffiliateCode,
             'pkg_shop_affiliate_id' => $pkg_shop_affiliate_id,
-            'cms_language_id' => TGlobal::GetActiveLanguageId(),
+            'cms_language_id' => self::getLanguageService()->getActiveLanguageId(),
             'user_ip' => null === $request ? '' : $request->getClientIp(),
         );
         if (property_exists($oBillingAdr, 'fieldAddressAdditionalInfo')) {
@@ -414,12 +416,12 @@ class TShopOrder extends TShopOrderAutoParent
      */
     private function getShopPaymentHandlerFactory()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
+        return ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
     }
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
+        return ServiceLocator::get('monolog.logger.order');
     }
 
     /**
@@ -811,42 +813,6 @@ class TShopOrder extends TShopOrderAutoParent
     }
 
     /**
-     * add order status to order. optional: send info mail to customer.
-     *
-     * @param TdbShopOrderStatus $oShopOrderStatus
-     * @param bool               $bSendCustomerInfoMail
-     *
-     * @deprecated - use TPkgShopOrderStatusManager::addStatus instead
-     */
-    public function AddOrderStatus(TdbShopOrderStatus $oShopOrderStatus, $bSendCustomerInfoMail)
-    {
-        $aData = $oShopOrderStatus->sqlData;
-        $aData['shop_order_id'] = $this->id;
-        if (!array_key_exists('status_date', $aData)) {
-            $aData['status_date'] = date('Y-m-d H:i:s');
-        }
-        $oShopOrderStatus->LoadFromRow($aData);
-        $oShopOrderStatus->AllowEditByAll(true);
-        $oShopOrderStatus->Save();
-        $oShopOrderStatus->Load($oShopOrderStatus->id);
-
-        if ($bSendCustomerInfoMail) {
-            $oMailProfil = TdbDataMailProfile::GetProfile(TdbShopOrder::MAIL_STATUS_UPDATE);
-            if ($oMailProfil) {
-                $aOrderInfo = $this->GetSQLWithTablePrefix();
-                $oMailProfil->AddDataArray($aOrderInfo);
-                $aOrderStatusInfo = $oShopOrderStatus->GetSQLWithTablePrefix();
-                $oMailProfil->AddDataArray($aOrderStatusInfo);
-
-                $sOrderStatusText = $oShopOrderStatus->GetStatusText(true);
-                $oMailProfil->AddData('sOrderStatusText', $sOrderStatusText);
-                $oMailProfil->ChangeToAddress($this->fieldUserEmail, $this->fieldAdrBillingFirstname.' '.$this->fieldAdrBillingLastname);
-                $oMailProfil->SendUsingObjectView('emails', 'Customer');
-            }
-        }
-    }
-
-    /**
      * return the net product value of the order (so product value without taxes shipping or payment costs).
      *
      * @return float
@@ -1069,43 +1035,6 @@ class TShopOrder extends TShopOrderAutoParent
     /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD
 
     /**
-     * Add view based clear cache triggers for the Render method here
-     *
-     * @param array $aClearTriggers - clear trigger array (with current contents)
-     * @param string $sViewName - view being requested
-     * @param string $sViewType - location of the view (Core, Custom-Core, Customer)
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
-    {
-    }
-
-    /**
-     * used to set the id of a clear cache (ie. related table).
-     *
-     * @param string $sTableName - the table name
-     *
-     * @return int|string|null
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function GetClearCacheTriggerTableValue($sTableName)
-    {
-        $sValue = '';
-        switch ($sTableName) {
-            case $this->table:
-                $sValue = $this->id;
-                break;
-
-            default:
-                break;
-        }
-
-        return $sValue;
-    }
-
-    /**
      * returns an array with all table names that are relevant for the render function.
      *
      * @param string $sViewName - the view name being requested (if know by the caller)
@@ -1193,6 +1122,11 @@ class TShopOrder extends TShopOrderAutoParent
      */
     private function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

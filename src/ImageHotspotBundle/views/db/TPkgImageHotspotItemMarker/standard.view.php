@@ -12,21 +12,17 @@ if (empty($sLink)) {
     <div class="standard">
         <?php
         if (!is_null($oImage)) {
-            if (!$oImage->IsFlashMovie()) {
+            ?>
+            <a href="<?=TGlobal::OutHTML($sLink); ?>" title="<?=TGlobal::OutHTML($oMarker->fieldName); ?>">
+                <img src="<?=TGlobal::OutHTML($oImage->GetFullURL()); ?>"
+                    <?php         if (!is_null($oHoverImage)) {
                 ?>
-                <a href="<?=TGlobal::OutHTML($sLink); ?>" title="<?=TGlobal::OutHTML($oMarker->fieldName); ?>">
-                    <img src="<?=TGlobal::OutHTML($oImage->GetFullURL()); ?>"
-                        <?php         if (!is_null($oHoverImage)) {
-                    ?>
-                         onmouseover="this.src='<?=TGlobal::OutHTML($oHoverImage->GetFullURL()); ?>'"
-                         onmouseout="this.src='<?=TGlobal::OutHTML($oImage->GetFullURL()); ?>'"
-                        <?php
-                } ?>            alt="<?=TGlobal::OutHTML($oMarker->fieldName); ?>" border="0"/>
-                </a>
-                <?php
-            } else {
-                echo $oImage->GetThumbnailTag(300, 300, null, null);
-            }
+                     onmouseover="this.src='<?=TGlobal::OutHTML($oHoverImage->GetFullURL()); ?>'"
+                     onmouseout="this.src='<?=TGlobal::OutHTML($oImage->GetFullURL()); ?>'"
+                    <?php
+            } ?>            alt="<?=TGlobal::OutHTML($oMarker->fieldName); ?>" border="0"/>
+            </a>
+            <?php
         } else {
             echo 'no image defined'.$sLink;
         }

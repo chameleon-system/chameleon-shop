@@ -179,24 +179,6 @@ class TPkgShopWishlist extends TAdbPkgShopWishlist
     }
 
     /**
-     * Add view based clear cache triggers for the Render method here.
-     *
-     * @param array  $aClearTriggers - clear trigger array (with current contents)
-     * @param string $sViewName      - view being requested
-     * @param string $sViewType      - location of the view (Core, Custom-Core, Customer)
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
-    {
-        $aClearTriggers[] = array('table' => $this->table, 'id' => $this->id);
-        $oWishlistItems = &$this->GetFieldPkgShopWishlistArticleList();
-        while ($oItem = $oWishlistItems->Next()) {
-            $aClearTriggers[] = array('table' => 'shop_article', 'id' => $oItem->fieldShopArticleId);
-        }
-    }
-
-    /**
      * return description text as html.
      *
      * @return string

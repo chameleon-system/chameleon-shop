@@ -33,14 +33,6 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * @var TdbShopSearchCache
      */
     protected $oActiveSearchCache = null;
-    /**
-     * set to true, if the content in internal cache has changed.
-     *
-     * @var bool
-     *
-     * @deprecated since 6.2.0 - should no longer be used by subclasses.
-     */
-    protected $bInternalCacheMarkedAsDirty = true;
 
     /**
      * set the affiliate partner code for the current session.
@@ -600,20 +592,6 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
         return $oInfo;
     }
 
-    /**
-     * return an array with system page links.
-     *
-     * @deprecated
-     *
-     * @param bool $bForcePortalLink
-     *
-     * @return array
-     */
-    protected function GetSystemPageLinkList($bForcePortalLink)
-    {
-        trigger_error('do not use GetSystemPageLinkList on shop, shop system pages are now in portal.', E_USER_ERROR);
-    }
-
     /* RENDER SECTION - this section holds methods that render shop sepcific information          */
 
     /**
@@ -778,7 +756,6 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      */
     public function CacheCommit()
     {
-        $this->bInternalCacheMarkedAsDirty = false;
     }
 
     /**
@@ -799,12 +776,6 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
         $aKey = array('class' => 'TdbShop', 'ident' => 'objectInstance', 'portalid' => $iPortalId);
 
         return TCacheManager::GetKey($aKey);
-    }
-
-    protected function SetInternalCache($varName, $content)
-    {
-        parent::SetInternalCache($varName, $content);
-        $this->bInternalCacheMarkedAsDirty = true;
     }
 
     /**

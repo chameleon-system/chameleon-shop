@@ -568,25 +568,6 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     }
 
     /**
-     * return link to send a friend form.
-     *
-     * @param string $sLinkText - the text to display in the link
-     * @param string $sCSSClass - the css classname of the a element
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public function GetSendAFriendLink($sLinkText, $sCSSClass = '')
-    {
-        $sLink = '';
-        $oShop = TdbShop::GetInstance();
-        $sLink = $oShop->GetLinkToSystemPageAsPopUp($sLinkText, 'tell-a-friend', array(MTShopArticleCatalogCore::URL_ITEM_ID => $this->id), false, 700, 450, $sCSSClass);
-
-        return $sLink;
-    }
-
-    /**
      * generate a link used to add the article to the notice list.
      *
      * @param bool $bIncludePortalLink - include domain in link
@@ -913,46 +894,6 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     }
 
     /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD
-
-    /**
-     * Add view based clear cache triggers for the Render method here
-     *
-     * @param array $aClearTriggers - clear trigger array (with current contents)
-     * @param string $sViewName - view being requested
-     * @param string $sViewType - location of the view (Core, Custom-Core, Customer)
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
-    {
-        if (!empty($this->fieldShopUnitOfMeasurementId)) {
-            $aClearTriggers[] = array('table' => 'shop_unit_of_measurement', 'id' => $this->fieldShopUnitOfMeasurementId);
-        }
-    }
-
-    /**
-     * used to set the id of a clear cache (ie. related table).
-     *
-     * @param string $sTableName - the table name
-     *
-     * @return int|string|null
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function GetClearCacheTriggerTableValue($sTableName)
-    {
-        $sValue = '';
-        switch ($sTableName) {
-            case $this->table:
-                $sValue = $this->id;
-                break;
-
-            default:
-                break;
-        }
-
-        return $sValue;
-    }
 
     /**
      * returns an array with all table names that are relevant for the render function.
@@ -1330,27 +1271,6 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     }
 
     /**
-     * returns the variant value set for this article as a string (if the article
-     * is a variant. returns empty string if not).
-     *
-     * @param bool $bAsURLName
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - use ProductVariantNameGenerator::generateName() instead.
-     */
-    public function GetVariantName($bAsURLName = false)
-    {
-        if (true === $bAsURLName) {
-            $nameType = ProductVariantNameGeneratorInterface::VARIANT_NAME_TYPE_URL;
-        } else {
-            $nameType = ProductVariantNameGeneratorInterface::VARIANT_NAME_TYPE_DEFAULT;
-        }
-
-        return $this->getProductVariantNameGenerator()->generateName($this, $nameType);
-    }
-
-    /**
      * return variant with the lowest price.
      *
      * @return TdbShopArticle
@@ -1617,18 +1537,6 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         }
 
         return $sHTML;
-    }
-
-    /**
-     * returns the variant set of the article (or its parent, if this is a variant).
-     *
-     * @return TdbShopVariantSet
-     *
-     * @deprecated You can use $this->GetFieldShopVariantSet() instead - it does the same thing
-     */
-    public function &GetVariantSet()
-    {
-        return $this->GetFieldShopVariantSet();
     }
 
     /**

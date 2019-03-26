@@ -404,9 +404,9 @@ class AmazonReferenceIdManagerPersistenceTest extends \PHPUnit_Extensions_Databa
         $containerBuilder->compile();
         ServiceLocator::setContainer($containerBuilder);
 
-        $chameleon = new \chameleon();
-        $chameleon->setRequestType($chameleon::REQUEST_TYPE_UNITTEST);
-        $chameleon->run();
+//        $chameleon = new \chameleon();
+//        $chameleon->setRequestType($chameleon::REQUEST_TYPE_FRONTEND);
+//        $chameleon->run();
 
         if (null == self::$pdo) {
             self::$pdo = ServiceLocator::get('testpdo');

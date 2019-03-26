@@ -139,7 +139,6 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         /** @var Request $request */
         $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
 
-        $this->WriteToLogfile($request);
         $oExportLog = TdbShopOrderExportLog::GetNewInstance();
         $oExportLog->sqlData['datecreated'] = date('Y-m-d H:i:s');
         $oExportLog->sqlData['data'] = serialize($request);
@@ -148,15 +147,6 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         $oExportLog->AllowEditByAll(true);
         $oExportLog->Save();
         $oExportLog->AllowEditByAll(false);
-    }
-
-    /**
-     * @deprecated
-     *
-     * @param $parameters
-     */
-    protected function WriteToLogfile($parameters)
-    {
     }
 
     /**

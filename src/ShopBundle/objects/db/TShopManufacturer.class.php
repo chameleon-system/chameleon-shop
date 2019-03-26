@@ -94,33 +94,6 @@ class TShopManufacturer extends TShopManufacturerAutoParent
     }
 
     /**
-     * Add view based clear cache triggers for the Render method here.
-     *
-     * @param array  $aClearTriggers - clear trigger array (with current contents)
-     * @param string $sViewName      - view being requested
-     * @param string $sViewType      - location of the view (Core, Custom-Core, Customer)
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
-    {
-    }
-
-    /**
-     * use this method to add any variables to the render method that you may
-     * require for some view.
-     *
-     * @param string $sViewName - the view being requested
-     * @param string $sViewType - the location of the view (Core, Custom-Core, Customer)
-     *
-     * @return array
-     */
-    protected function GetAdditionalViewVariables($sViewName, $sViewType)
-    {
-        return array();
-    }
-
-    /**
      * returns the number of search hits for a manufacturer.
      *
      * @param int  $iShopSearchCacheId

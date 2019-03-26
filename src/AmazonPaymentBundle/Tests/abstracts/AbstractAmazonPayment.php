@@ -37,9 +37,9 @@ abstract class AbstractAmazonPayment extends TestCase
 
         ServiceLocator::setContainer($containerBuilder);
 
-        $chameleon = new \chameleon();
-        $chameleon->setRequestType($chameleon::REQUEST_TYPE_UNITTEST);
-        $chameleon->run();
+//        $chameleon = new \chameleon();
+//        $chameleon->setRequestType($chameleon::REQUEST_TYPE_UNITTEST);
+//        $chameleon->run();
         self::$dbal = \Doctrine\DBAL\DriverManager::getConnection(array('driver' => 'pdo_mysql', 'pdo' => ServiceLocator::get('testpdo'), 'charset' => 'UTF8'));
     }
 

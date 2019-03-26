@@ -76,7 +76,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
             //$oPaymentHandler
             $oActivePaymentMethod = &$oBasket->GetActivePaymentMethod();
             if ($oActivePaymentMethod) {
-                $oPaymentHandler = &$oActivePaymentMethod->GetPaymentHandler();
+                $oPaymentHandler = &$oActivePaymentMethod->GetFieldShopPaymentHandler();
                 if ($oPaymentHandler) {
                     try {
                         if ($oPaymentHandler->postExecutePaymentInterruptedHook($oOrder, TCMSMessageManager::GLOBAL_CONSUMER_NAME) && $oBasket->OnPaymentSuccessHook($oOrder, $oPaymentHandler, TCMSMessageManager::GLOBAL_CONSUMER_NAME)) {

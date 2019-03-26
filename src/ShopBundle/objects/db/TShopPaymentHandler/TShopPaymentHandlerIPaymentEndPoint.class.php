@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
@@ -244,7 +246,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
         }
         $aParameter['redirect_url'] = $redirectUrl;
         $oIPNManager = new TPkgShopPaymentIPNManager();
-        $oPortal = TTools::GetActivePortal();
+        $oPortal = $this->getPortalDomainService()->getActivePortal();
         $aParameter['hidden_trigger_url'] = $oIPNManager->getIPNURL($oPortal, $oOrder);
         $aParameter['expire_datastorage'] = true;
         $aParameter['execute_order'] = true;
@@ -668,7 +670,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -676,7 +678,12 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      */
     private function getUrlUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ServiceLocator::get('chameleon_system_core.util.url');
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -684,6 +691,6 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

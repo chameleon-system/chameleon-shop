@@ -445,19 +445,6 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     }
 
     /**
-     * returns true if the file is in cache and valid (not outdated)
-     * returns false if file is not in cache or cache element is invalid - need regeneration.
-     *
-     * @deprecated - 6.1.4 method is no longer used since caching was moved to the calling module.
-     *
-     * @return bool
-     */
-    protected function FileIsCached()
-    {
-        return false;
-    }
-
-    /**
      * sends input to output buffer or to a file but only if a file to write was set via $this->SetFilePointer.
      *
      * @param string $sInput
@@ -489,14 +476,6 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function SetCacheFile($sCacheFile)
-    {
-        $this->sCacheFile = $sCacheFile;
-    }
-
-    /**
      * getter for $this->sCacheFile.
      *
      * @return string
@@ -507,14 +486,6 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function SetGenerateFile($bGenerateFile)
-    {
-        $this->bGenerateFile = $bGenerateFile;
-    }
-
-    /**
      * getter for $this->bGenerateFile.
      *
      * @return bool
@@ -522,31 +493,6 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     public function GetGenerateFile()
     {
         return $this->bGenerateFile;
-    }
-
-    /**
-     * setter for $this->fpFile.
-     *
-     * @param resource $fpFile
-     *
-     * @deprecated - 6.1.4 method is no longer used since caching was moved to the calling module.
-     */
-    public function SetFilePointer(&$fpFile)
-    {
-    }
-
-    /**
-     * getter for $this->fpFile.
-     *
-     * @return bool|resource
-     *
-     * @deprecated - 6.1.4 method is no longer used since caching was moved to the calling module.
-     */
-    public function &GetFilePointer()
-    {
-        $bool = false;
-
-        return $bool;
     }
 
     /**

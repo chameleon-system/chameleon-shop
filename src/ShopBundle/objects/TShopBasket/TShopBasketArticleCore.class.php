@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 
 /**
@@ -322,8 +324,8 @@ class TShopBasketArticleCore extends TdbShopArticle
     public function RefreshDataFromDatabase()
     {
         $this->ClearInternalCache();
-        $sActiveLanguageId = TGlobal::GetActiveLanguageId();
-        if (!is_null($sActiveLanguageId)) {
+        $sActiveLanguageId = self::getLanguageService()->getActiveLanguageId();
+        if (null !== $sActiveLanguageId) {
             $this->SetLanguage($sActiveLanguageId);
         }
         $bEnableObjectCaching = $this->GetEnableObjectCaching();
@@ -355,25 +357,11 @@ class TShopBasketArticleCore extends TdbShopArticle
     }
 
     /**
-     * add cache parameters (trigger clear for render).
-     *
-     * @param array $aCacheParameters
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddCacheParameters(&$aCacheParameters)
-    {
-        parent::AddCacheParameters($aCacheParameters);
-        // need to add ordered amount since this may affect things like shipping time
-        $aCacheParameters['basket_article_stock_ordered'] = $this->dAmount;
-    }
-
-    /**
      * @return ActivePageServiceInterface
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -381,6 +369,6 @@ class TShopBasketArticleCore extends TdbShopArticle
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }

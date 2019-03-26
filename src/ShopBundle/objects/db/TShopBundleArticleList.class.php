@@ -48,33 +48,6 @@ class TShopBundleArticleList extends TAdbShopBundleArticleList
     }
 
     /**
-     * Add view based clear cache triggers for the Render method here.
-     *
-     * @param array  $aClearTriggers - clear trigger array (with current contents)
-     * @param string $sViewName      - view being requested
-     * @param string $sViewType      - location of the view (Core, Custom-Core, Customer)
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
-    {
-    }
-
-    /**
-     * used to set the id of a clear cache (ie. related table).
-     *
-     * @param string $sTableName - the table name
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    protected function GetClearCacheTriggerTableValue($sTableName)
-    {
-        return '';
-    }
-
-    /**
      * returns an array with all table names that are relevant for the render function.
      *
      * @param string $sViewName - the view name being requested (if know by the caller)

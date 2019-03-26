@@ -17,20 +17,6 @@ interface ShopProductExportHandlerInterface
 
     public function SetArticleList(\TIterator $articleList);
 
-    /**
-     * @param string $cacheFile
-     *
-     * @deprecated 6.1.4 - the exporter no longer manages caching. calling the method has no effect
-     */
-    public function SetCacheFile($cacheFile);
-
-    /**
-     * @param bool $enableFileGeneration
-     *
-     * @deprecated 6.1.4 - the exporter no longer manages caching. calling the method has no effect
-     */
-    public function SetGenerateFile($enableFileGeneration);
-
     public function SetDebug($debug);
 
     public function Run();
