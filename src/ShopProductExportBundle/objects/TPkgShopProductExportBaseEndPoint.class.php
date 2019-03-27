@@ -445,7 +445,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     }
 
     /**
-     * sends input to output buffer or to a file but only if a file to write was set via $this->SetFilePointer.
+     * sends input to output buffer.
      *
      * @param string $sInput
      */

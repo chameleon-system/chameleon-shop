@@ -94,9 +94,6 @@ class ShopCurrencyService implements ShopCurrencyServiceInterface
             return null;
         }
 
-        /*
-        * NOTE: if we change this, we also need to change TPkgShopCurrency_CmsConfig::GetGlobalCacheKeyParameter()
-        */
         $sActiveId = null;
         // try user
         if (null === $sActiveId) {
