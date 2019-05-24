@@ -158,13 +158,9 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             return $this->processArticleResponse($aResponse, $request, $key);
         }
 
-        if (false === $article->AllowDetailviewInShop()) {
-            $aResponse = $this->prepareArticleResponseWhenDetailViewNotAllowed($aResponse, $article, $catid);
-
-            return $this->processArticleResponse($aResponse, $request, $key);
-        }
-
         $category = $this->getValidCategoryForArticle($catid, $article);
+
+        $canShowCategory = true;
 
         if (null === $category && null !== $article->GetPrimaryCategory()) {
             $currentArticlePath = $article->getLink(false);
@@ -173,6 +169,16 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
                 $aResponse['redirectURL'] = $article->getLink(true);
                 $aResponse['fullURL'] = $aResponse['redirectURL'];
                 $aResponse['redirectPermanent'] = true;
+            }
+
+            $canShowCategory = false;
+        }
+
+        $canShowDetails = true === $article->AllowDetailviewInShop();
+
+        if (false === $canShowDetails || false === $canShowCategory) {
+            if (false === $canShowDetails) {
+                $aResponse = $this->prepareArticleResponseWhenDetailViewNotAllowed($aResponse, $article, $catid);
             }
 
             return $this->processArticleResponse($aResponse, $request, $key);
