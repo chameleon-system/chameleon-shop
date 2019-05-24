@@ -9,6 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use esono\pkgCoreValidatorConstraints\finance\Bic;
+use Symfony\Component\Validator\Constraints\Iban;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 /**
  * the paymenthandlers are used to handle the different payment methods. They ensure that the right
  * information is collected from the user, and that the payment is executed (as may be the case for online payment)
@@ -138,11 +143,9 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
     private function validateIBAN($iban)
     {
         $oMsgManager = TCMSMessageManager::GetInstance();
-        $validator = \ChameleonSystem\CoreBundle\ServiceLocator::get('validator');
-        $result = $validator->validateValue($iban, new \Symfony\Component\Validator\Constraints\Iban());
+        $result = $this->getValidator()->validate($iban, new Iban());
 
         if ($result->count() > 0) {
-            // invalid iban
             $oMsgManager->AddMessage(self::MSG_MANAGER_NAME.'-iban', 'VALIDATOR_CONSTRAINT_FINANCE_IBAN', array('value' => $iban));
 
             return false;
@@ -158,16 +161,19 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
         }
 
         $oMsgManager = TCMSMessageManager::GetInstance();
-        $validator = \ChameleonSystem\CoreBundle\ServiceLocator::get('validator');
-        $result = $validator->validateValue($bic, new \esono\pkgCoreValidatorConstraints\finance\Bic());
+        $result = $this->getValidator()->validate($bic, new Bic());
 
         if ($result->count() > 0) {
-            // invalid iban
             $oMsgManager->AddMessage(self::MSG_MANAGER_NAME.'-bic', $result->get(0)->getMessageTemplate(), array('value' => $bic));
 
             return false;
         }
 
         return true;
+    }
+
+    private function getValidator(): ValidatorInterface
+    {
+        return ServiceLocator::get('validator');
     }
 }
