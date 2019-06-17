@@ -490,7 +490,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
             return false;
         }
 
-        if (true === $this->isEmptyAndShouldNotBeShown()) {
+        if (false === $this->shouldShowEmptyCategories() && true === $this->isEmpty()) {
             return false;
         }
 
@@ -507,16 +507,15 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
         return true;
     }
 
-    private function isEmptyAndShouldNotBeShown(): bool
+    private function shouldShowEmptyCategories(): bool
     {
-        $oShop = TdbShop::GetInstance();
-        if (null !== $oShop && false === $oShop->fieldShowEmptyCategories) {
-            if (0 === $this->GetNumberOfArticlesInCategory(true)) {
-                return true;
-            }
-        }
+        $shop = TdbShop::GetInstance();
+        return null !== $shop && true === $shop->fieldShowEmptyCategories;
+    }
 
-        return false;
+    private function isEmpty(): bool
+    {
+        return 0 === $this->GetNumberOfArticlesInCategory(true);
     }
 
     /**
