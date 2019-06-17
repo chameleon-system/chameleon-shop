@@ -486,29 +486,37 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     public function AllowDisplayInShop()
     {
-        $bShowCat = false;
-
-        $oShop = TdbShop::GetInstance();
-        if (!is_null($oShop) && !$oShop->fieldShowEmptyCategories) {
-            $bShowCat = ($this->GetNumberOfArticlesInCategory(true) > 0);
-        } else {
-            $bShowCat = true;
+        if (true === $this->isEmptyAndShouldNotBeShown()) {
+            return false;
         }
 
         if (false == $this->fieldActive || false == $this->fieldTreeActive) {
-            $bShowCat = false;
+            return false;
         }
 
         $targetPage = $this->getTargetPage();
         if (null === $targetPage || false === $targetPage) {
             return true;
         }
+
         // show only if the user has access to the category target page
         if (false === $targetPage->AllowAccessByCurrentUser()) {
             return false;
         }
 
-        return $bShowCat;
+        return true;
+    }
+
+    private function isEmptyAndShouldNotBeShown(): bool
+    {
+        $oShop = TdbShop::GetInstance();
+        if (null !== $oShop && false === $oShop->fieldShowEmptyCategories) {
+            if (0 === $this->GetNumberOfArticlesInCategory(true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -639,8 +647,10 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
                 return null;
             }
 
-            $pageService = self::getPageService();
-            $defaultPage = $pageService->getById($defaultSystemPage->id);
+            $node = static::getTreeService()->getById($defaultSystemPage->fieldCmsTreeId);
+            if (null !== $node) {
+                //$defaultPage = $node->GetLinkedPageObject();
+            }
 
             $targetPage = $defaultPage;
         }
