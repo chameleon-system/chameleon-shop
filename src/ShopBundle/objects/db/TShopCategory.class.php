@@ -486,11 +486,11 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     public function AllowDisplayInShop()
     {
-        if (true === $this->isEmptyAndShouldNotBeShown()) {
+        if (false === $this->fieldActive || false === $this->fieldTreeActive) {
             return false;
         }
 
-        if (false == $this->fieldActive || false == $this->fieldTreeActive) {
+        if (true === $this->isEmptyAndShouldNotBeShown()) {
             return false;
         }
 
@@ -649,7 +649,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
 
             $node = static::getTreeService()->getById($defaultSystemPage->fieldCmsTreeId);
             if (null !== $node) {
-                //$defaultPage = $node->GetLinkedPageObject();
+                $defaultPage = $node->GetLinkedPageObject();
             }
 
             $targetPage = $defaultPage;
