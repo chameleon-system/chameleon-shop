@@ -255,12 +255,10 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
         $oOrder = &$oListConfig->GetFieldShopModuleArticlelistOrderby();
         if (!is_null($oOrder)) {
             $sQuery = $oOrder->GetOrderByString();
-        //if ($oOrder->fieldInternalname == 'random') $this->bAllowCache = false;
         } else {
-            //      if (empty($sQuery)) $sQuery = 'cms_search_weight DESC'; // do not add a default
-            // add default order by for manuel lists
+            // add default order by for manual lists
             $oFilter = $oListConfig->GetFieldShopModuleArticleListFilter();
-            if ('TdbShopModuleArticleListFilter' == get_class($oFilter)) {
+            if (null !== $oFilter && 'TdbShopModuleArticleListFilter' === \get_class($oFilter)) {
                 if (!empty($sQuery)) {
                     $sQuery = ', '.$sQuery;
                 }
