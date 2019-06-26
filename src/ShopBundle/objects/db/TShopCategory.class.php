@@ -646,12 +646,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
                 return null;
             }
 
-            $node = static::getTreeService()->getById($defaultSystemPage->fieldCmsTreeId);
-            if (null !== $node) {
-                $defaultPage = $node->GetLinkedPageObject();
-            }
-
-            $targetPage = $defaultPage;
+            $targetPage = self::getPageService()->getByTreeId($defaultSystemPage->fieldCmsTreeId);
         }
 
         $this->SetInternalCache('target_page', $targetPage);
