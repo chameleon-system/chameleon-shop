@@ -147,7 +147,10 @@ class TShopBasketArticleCore extends TdbShopArticle
             }
             $oShopDiscount->dRealValueUsed = $dUsedValue;
         } else {
-            $oShopDiscount->dRealValueUsed = round($this->dPriceTotalAfterDiscount * ($oShopDiscount->fieldValue / 100), 2);
+            $oShopDiscount->dRealValueUsed = round($this->dPriceTotal * ($oShopDiscount->fieldValue / 100), 2);
+            if($oShopDiscount->dRealValueUsed > $this->dPriceTotalAfterDiscount) {
+                $oShopDiscount->dRealValueUsed = $this->dPriceTotalAfterDiscount;
+            }
         }
         $this->dPriceTotalAfterDiscount = $this->dPriceTotalAfterDiscount - $oShopDiscount->dRealValueUsed;
         $this->dPriceAfterDiscount = $this->dPriceTotalAfterDiscount / $this->dAmount;

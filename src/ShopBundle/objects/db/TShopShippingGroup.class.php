@@ -423,18 +423,21 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         if (is_null($oVat)) {
             $oVat = null;
             $oShopConf = TdbShop::GetInstance();
-            if (!$oShopConf->fieldShippingVatDependsOnBasketContents) {
-                $oVat = $this->GetFieldShopVat();
-                if (is_null($oVat)) {
-                    $oShopConf = TdbShop::GetInstance();
-                    $oVat = $oShopConf->GetVat();
-                }
-                $this->SetInternalCache('ovat', $oVat);
-            } else {
-                // use max vat in basket... if we have contents
+            if (true === $oShopConf->fieldShippingVatDependsOnBasketContents) {
                 $oBasket = TShopBasket::GetInstance();
                 $oVat = $oBasket->GetLargestVATObject();
+                if(null !== $oVat) {
+                    $this->SetInternalCache('ovat', $oVat);
+                    return $oVat;
+                }
             }
+
+            $oVat = $this->GetFieldShopVat();
+            if (is_null($oVat)) {
+                $oShopConf = TdbShop::GetInstance();
+                $oVat = $oShopConf->GetVat();
+            }
+            $this->SetInternalCache('ovat', $oVat);
         }
 
         return $oVat;
