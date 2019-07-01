@@ -81,4 +81,9 @@ interface ShopServiceInterface
     public function getActiveBasket();
 
     public function resetBasket();
+
+    /**
+     * @return null|\TdbShopManufacturer
+     */
+    public function getActiveManufacturer();
 }

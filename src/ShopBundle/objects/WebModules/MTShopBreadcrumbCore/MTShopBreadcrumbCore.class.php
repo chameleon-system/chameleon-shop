@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
+
 class MTShopBreadcrumbCore extends MTBreadcrumbCore
 {
     protected $bAllowHTMLDivWrapping = true;
@@ -24,8 +27,8 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
         // if we have an active category... generate path there
         if (!is_null($oActiveCategory) || !is_null($oActiveItem)) {
             // we want to use the normal breadcrum view... so we need to generate a breadcrumb class that can simulate the required methos (getlink, gettarget and getname)
-            $oBreadCrum = new TCMSPageBreadcrumb();
-            /** @var $oBreadCrum TCMSPageBreadcrumb */
+            $breadcrumb = new TCMSPageBreadcrumb();
+            /** @var $breadcrumb TCMSPageBreadcrumb */
             $aList = array();
 
             if (!is_null($oActiveCategory)) {
@@ -45,10 +48,24 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
             }
 
             foreach (array_keys($aList) as $index) {
-                $oBreadCrum->AddItem($aList[$index]);
+                $breadcrumb->AddItem($aList[$index]);
             }
 
-            $this->data['oBreadcrumb'] = &$oBreadCrum;
+            $this->data['oBreadcrumb'] = &$breadcrumb;
+
+            return $this->data;
+        }
+
+        $activeManufacturer = $this->getShopService()->getActiveManufacturer();
+        if (null !== $activeManufacturer) {
+            $breadcrumb = new TCMSPageBreadcrumb();
+
+            $breadcrumbItem = new TShopBreadcrumbItemManufacturer($activeManufacturer);
+            $breadcrumb->AddItem($breadcrumbItem);
+
+            $this->data['oBreadcrumb'] = $breadcrumb;
+
+            return $this->data;
         }
 
         return $this->data;
@@ -62,6 +79,9 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
     public function _GetCacheParameters()
     {
         $aParameters = parent::_GetCacheParameters();
+
+        // TODO doesn't _GetCacheTableInfos() handle this completely?
+
         $oShop = TdbShop::GetInstance();
         $oActiveCategory = $oShop->GetActiveCategory();
         $oActiveItem = $oShop->GetActiveItem();
@@ -101,6 +121,16 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
             $aTables[] = array('table' => 'shop_article', 'id' => $oActiveItem->id);
         }
 
+        $activeManufacturer = $this->getShopService()->getActiveManufacturer();
+        if (null !== $activeManufacturer) {
+            $aTables[] = array('table' => 'shop_manufacturer', 'id' => $activeManufacturer->id);
+        }
+
         return $aTables;
+    }
+
+    private function getShopService(): ShopServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }
