@@ -263,11 +263,6 @@
                 <target>Manufacturer</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_shop.products_of_manufacturer">
-                <source>chameleon_system_shop.products_of_manufacturer</source>
-                <target>Products of</target>
-            </trans-unit>
-
         </body>
     </file>
 </xliff>

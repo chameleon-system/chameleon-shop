@@ -58,12 +58,8 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
 
         $activeManufacturer = $this->getShopService()->getActiveManufacturer();
         if (null !== $activeManufacturer) {
-            $breadcrumb = new TCMSPageBreadcrumb();
-
-            $breadcrumbItem = new TShopBreadcrumbItemManufacturer($activeManufacturer);
-            $breadcrumb->AddItem($breadcrumbItem);
-
-            $this->data['oBreadcrumb'] = $breadcrumb;
+            $existingBreadcrumb = $this->data['oBreadcrumb'] ?? new TCMSPageBreadcrumb();
+            $this->data['oBreadcrumb'] = $this->replaceLastBreadcrumbItem($existingBreadcrumb, $activeManufacturer);
 
             return $this->data;
         }
@@ -71,16 +67,30 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
         return $this->data;
     }
 
+    private function replaceLastBreadcrumbItem(TCMSPageBreadcrumb $existingBreadcrumb, TdbShopManufacturer $activeManufacturer): TCMSPageBreadcrumb
+    {
+        $replacedBreadcrumb = new TCMSPageBreadcrumb();
+
+        while (false !== ($item = $existingBreadcrumb->next())) {
+            if (true === $existingBreadcrumb->IsLast()) {
+                break; // omit last one
+            }
+
+            $replacedBreadcrumb->AddItem($item);
+        }
+
+        $breadcrumbItem = new TShopBreadcrumbItemManufacturer($activeManufacturer);
+        $replacedBreadcrumb->AddItem($breadcrumbItem);
+
+        return $replacedBreadcrumb;
+    }
+
     /**
-     * return an assoc array of parameters that describe the state of the module.
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function _GetCacheParameters()
     {
         $aParameters = parent::_GetCacheParameters();
-
-        // TODO doesn't _GetCacheTableInfos() handle this completely?
 
         $oShop = TdbShop::GetInstance();
         $oActiveCategory = $oShop->GetActiveCategory();
@@ -92,19 +102,16 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
             $aParameters['iactiveitemid'] = $oActiveItem->id;
         }
 
+        $activeManufacturer = $this->getShopService()->getActiveManufacturer();
+        if (null !== $activeManufacturer) {
+            $aParameters['activemanufacturer'] = $activeManufacturer->id;
+        }
+
         return $aParameters;
     }
 
     /**
-     * if the content that is to be cached comes from the database (as ist most often the case)
-     * then this function should return an array of assoc arrays that point to the
-     * tables and records that are associated with the content. one table entry has
-     * two fields:
-     *   - table - the name of the table
-     *   - id    - the record in question. if this is empty, then any record change in that
-     *             table will result in a cache clear.
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function _GetCacheTableInfos()
     {
