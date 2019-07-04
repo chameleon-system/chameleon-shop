@@ -51,7 +51,7 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
                 $breadcrumb->AddItem($aList[$index]);
             }
 
-            $this->data['oBreadcrumb'] = &$breadcrumb;
+            $this->data['oBreadcrumb'] = $breadcrumb;
 
             return $this->data;
         }
@@ -104,7 +104,7 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
 
         $activeManufacturer = $this->getShopService()->getActiveManufacturer();
         if (null !== $activeManufacturer) {
-            $aParameters['activemanufacturer'] = $activeManufacturer->id;
+            $aParameters['activemanufacturerid'] = $activeManufacturer->id;
         }
 
         return $aParameters;
