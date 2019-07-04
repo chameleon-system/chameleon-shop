@@ -486,29 +486,36 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     public function AllowDisplayInShop()
     {
-        $bShowCat = false;
-
-        $oShop = TdbShop::GetInstance();
-        if (!is_null($oShop) && !$oShop->fieldShowEmptyCategories) {
-            $bShowCat = ($this->GetNumberOfArticlesInCategory(true) > 0);
-        } else {
-            $bShowCat = true;
+        if (false === $this->fieldActive || false === $this->fieldTreeActive) {
+            return false;
         }
 
-        if (false == $this->fieldActive || false == $this->fieldTreeActive) {
-            $bShowCat = false;
+        if (false === $this->shouldShowEmptyCategories() && true === $this->isEmpty()) {
+            return false;
         }
 
         $targetPage = $this->getTargetPage();
         if (null === $targetPage || false === $targetPage) {
             return true;
         }
+
         // show only if the user has access to the category target page
         if (false === $targetPage->AllowAccessByCurrentUser()) {
             return false;
         }
 
-        return $bShowCat;
+        return true;
+    }
+
+    private function shouldShowEmptyCategories(): bool
+    {
+        $shop = TdbShop::GetInstance();
+        return null !== $shop && true === $shop->fieldShowEmptyCategories;
+    }
+
+    private function isEmpty(): bool
+    {
+        return 0 === $this->GetNumberOfArticlesInCategory(true);
     }
 
     /**
@@ -639,10 +646,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
                 return null;
             }
 
-            $pageService = self::getPageService();
-            $defaultPage = $pageService->getById($defaultSystemPage->id);
-
-            $targetPage = $defaultPage;
+            $targetPage = self::getPageService()->getByTreeId($defaultSystemPage->fieldCmsTreeId);
         }
 
         $this->SetInternalCache('target_page', $targetPage);
