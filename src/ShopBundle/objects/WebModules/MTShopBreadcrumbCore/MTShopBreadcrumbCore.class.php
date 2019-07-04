@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
+
 class MTShopBreadcrumbCore extends MTBreadcrumbCore
 {
     protected $bAllowHTMLDivWrapping = true;
@@ -24,8 +27,8 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
         // if we have an active category... generate path there
         if (!is_null($oActiveCategory) || !is_null($oActiveItem)) {
             // we want to use the normal breadcrum view... so we need to generate a breadcrumb class that can simulate the required methos (getlink, gettarget and getname)
-            $oBreadCrum = new TCMSPageBreadcrumb();
-            /** @var $oBreadCrum TCMSPageBreadcrumb */
+            $breadcrumb = new TCMSPageBreadcrumb();
+            /** @var $breadcrumb TCMSPageBreadcrumb */
             $aList = array();
 
             if (!is_null($oActiveCategory)) {
@@ -45,23 +48,50 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
             }
 
             foreach (array_keys($aList) as $index) {
-                $oBreadCrum->AddItem($aList[$index]);
+                $breadcrumb->AddItem($aList[$index]);
             }
 
-            $this->data['oBreadcrumb'] = &$oBreadCrum;
+            $this->data['oBreadcrumb'] = $breadcrumb;
+
+            return $this->data;
+        }
+
+        $activeManufacturer = $this->getActiveManufacturer();
+        if (null !== $activeManufacturer) {
+            $existingBreadcrumb = $this->data['oBreadcrumb'] ?? new TCMSPageBreadcrumb();
+            $this->data['oBreadcrumb'] = $this->replaceLastBreadcrumbItem($existingBreadcrumb, $activeManufacturer);
+
+            return $this->data;
         }
 
         return $this->data;
     }
 
+    private function replaceLastBreadcrumbItem(TCMSPageBreadcrumb $existingBreadcrumb, TdbShopManufacturer $activeManufacturer): TCMSPageBreadcrumb
+    {
+        $replacedBreadcrumb = new TCMSPageBreadcrumb();
+
+        while (false !== ($item = $existingBreadcrumb->next())) {
+            if (true === $existingBreadcrumb->IsLast()) {
+                break; // omit last one
+            }
+
+            $replacedBreadcrumb->AddItem($item);
+        }
+
+        $breadcrumbItem = new TShopBreadcrumbItemManufacturer($activeManufacturer);
+        $replacedBreadcrumb->AddItem($breadcrumbItem);
+
+        return $replacedBreadcrumb;
+    }
+
     /**
-     * return an assoc array of parameters that describe the state of the module.
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function _GetCacheParameters()
     {
         $aParameters = parent::_GetCacheParameters();
+
         $oShop = TdbShop::GetInstance();
         $oActiveCategory = $oShop->GetActiveCategory();
         $oActiveItem = $oShop->GetActiveItem();
@@ -72,19 +102,16 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
             $aParameters['iactiveitemid'] = $oActiveItem->id;
         }
 
+        $activeManufacturer = $this->getActiveManufacturer();
+        if (null !== $activeManufacturer) {
+            $aParameters['activemanufacturerid'] = $activeManufacturer->id;
+        }
+
         return $aParameters;
     }
 
     /**
-     * if the content that is to be cached comes from the database (as ist most often the case)
-     * then this function should return an array of assoc arrays that point to the
-     * tables and records that are associated with the content. one table entry has
-     * two fields:
-     *   - table - the name of the table
-     *   - id    - the record in question. if this is empty, then any record change in that
-     *             table will result in a cache clear.
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function _GetCacheTableInfos()
     {
@@ -101,6 +128,16 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
             $aTables[] = array('table' => 'shop_article', 'id' => $oActiveItem->id);
         }
 
+        $activeManufacturer = $this->getActiveManufacturer();
+        if (null !== $activeManufacturer) {
+            $aTables[] = array('table' => 'shop_manufacturer', 'id' => $activeManufacturer->id);
+        }
+
         return $aTables;
+    }
+
+    private function getActiveManufacturer()
+    {
+        return \TShop::GetActiveManufacturer();
     }
 }

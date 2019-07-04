@@ -239,7 +239,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
      */
     private function processResponse($aResponse, $request)
     {
-        $redirectUrl = (null !== $aResponse['redirectURL']) ? $aResponse['redirectURL'] : null;
+        $redirectUrl = $this->getRedirectUrlFromResponse($aResponse);
         if (null !== $redirectUrl) {
             if (isset($aResponse['queryParameter']) && is_array($aResponse['queryParameter'])) {
                 $redirectUrl .= $this->urlUtil->getArrayAsUrl($aResponse['queryParameter'], '?', '&');
@@ -269,6 +269,15 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
         }
 
         return $this->mainController->__invoke();
+    }
+
+    private function getRedirectUrlFromResponse(array $response): ?string
+    {
+        if (false === \array_key_exists('redirectURL', $response)) {
+            return null;
+        }
+
+        return $response['redirectURL']; // could be null
     }
 
     /**
@@ -331,6 +340,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
         }
 
         $oPathCat = TdbShopCategoryList::GetCategoryForCategoryPath(explode('/', $catPath));
+        $cacheKey = null;
 
         if (null !== $oPathCat && true === $oPathCat->AllowDisplayInShop()) {
             $aKey = array(
@@ -339,8 +349,8 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
                 'path' => $category,
             );
             $cache = $this->getCache();
-            $key = $cache->getKey($aKey);
-            $aResponse = $cache->get($key);
+            $cacheKey = $cache->getKey($aKey);
+            $aResponse = $cache->get($cacheKey);
             if (null !== $aResponse) {
                 return $this->processCategoryResponse($aResponse, $request);
             }
@@ -376,7 +386,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             if (false === $this->compareRelativeAndPrefixedURL($fullPath, $url)) {
                 $aResponse['redirectURL'] = $oPathCat->GetLink(true);
                 $aResponse['redirectPermanent'] = true;
-                $key = null; // skip caching on redirect, otherwise we could lose URL parameters.
+                $cacheKey = null; // skip caching on redirect, otherwise we could lose URL parameters.
             }
 
             $aResponse['activeShopCategory'] = $oPathCat;
@@ -393,7 +403,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             $aResponse['noMatch'] = true;
         }
 
-        return $this->processCategoryResponse($aResponse, $request, $key);
+        return $this->processCategoryResponse($aResponse, $request, $cacheKey);
     }
 
     /**
