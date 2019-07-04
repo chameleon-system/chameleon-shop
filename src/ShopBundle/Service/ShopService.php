@@ -224,13 +224,4 @@ class ShopService implements ShopServiceInterface
 
         return $this->getActiveShop()->GetBasketLink(true, $bTargetBasketPageWithoutRedirect);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getActiveManufacturer()
-    {
-        // TODO really keep the old implementation (and smart url handler \TCMSSmartURLHandler_ShopManufacturerProducts::GetPageDef())?
-        return \TShop::GetActiveManufacturer();
-    }
 }

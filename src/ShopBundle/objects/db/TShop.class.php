@@ -164,8 +164,6 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * Returns the active manufacturer.
      *
      * @return null|TdbShopManufacturer
-     *
-     * @deprecated since 6.2.11 - use ShopService::getActiveManufacturer()
      */
     public static function GetActiveManufacturer()
     {

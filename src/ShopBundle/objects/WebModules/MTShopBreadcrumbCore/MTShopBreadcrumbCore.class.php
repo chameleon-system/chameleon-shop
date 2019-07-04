@@ -56,7 +56,7 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
             return $this->data;
         }
 
-        $activeManufacturer = $this->getShopService()->getActiveManufacturer();
+        $activeManufacturer = $this->getActiveManufacturer();
         if (null !== $activeManufacturer) {
             $existingBreadcrumb = $this->data['oBreadcrumb'] ?? new TCMSPageBreadcrumb();
             $this->data['oBreadcrumb'] = $this->replaceLastBreadcrumbItem($existingBreadcrumb, $activeManufacturer);
@@ -102,7 +102,7 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
             $aParameters['iactiveitemid'] = $oActiveItem->id;
         }
 
-        $activeManufacturer = $this->getShopService()->getActiveManufacturer();
+        $activeManufacturer = $this->getActiveManufacturer();
         if (null !== $activeManufacturer) {
             $aParameters['activemanufacturerid'] = $activeManufacturer->id;
         }
@@ -128,7 +128,7 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
             $aTables[] = array('table' => 'shop_article', 'id' => $oActiveItem->id);
         }
 
-        $activeManufacturer = $this->getShopService()->getActiveManufacturer();
+        $activeManufacturer = $this->getActiveManufacturer();
         if (null !== $activeManufacturer) {
             $aTables[] = array('table' => 'shop_manufacturer', 'id' => $activeManufacturer->id);
         }
@@ -136,8 +136,8 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
         return $aTables;
     }
 
-    private function getShopService(): ShopServiceInterface
+    private function getActiveManufacturer()
     {
-        return ServiceLocator::get('chameleon_system_shop.shop_service');
+        return \TShop::GetActiveManufacturer();
     }
 }
