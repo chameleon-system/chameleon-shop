@@ -18,6 +18,9 @@ use IMapperRequirementsRestricted;
 use IMapperVisitorRestricted;
 use TdbCmsLanguage;
 
+/**
+ * @deprecated since 6.2.11 - not used anymore
+ */
 class TPkgShopMapper_SocialSharePrivacy extends AbstractViewMapper
 {
     /**
