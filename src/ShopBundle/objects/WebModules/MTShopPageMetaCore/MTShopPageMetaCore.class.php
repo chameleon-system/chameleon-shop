@@ -78,40 +78,75 @@ class MTShopPageMetaCore extends MTPageMetaCore
         $oActiveItem = $oShop->GetActiveItem();
 
         if (!is_null($oActiveCategory) || !is_null($oActiveItem)) {
-            // add keywords from category
-            $sDescription = '';
-            if (!is_null($oActiveItem)) {
-                $sDescription .= $oActiveItem->GetMetaDescription();
-            } elseif (!is_null($oActiveCategory)) {
-                $sDescription .= $oActiveCategory->GetMetaDescription();
-            }
-            $sDescription = trim($sDescription);
-
-            if (!is_null($oActiveCategory)) {
-                $aKeywords = $oActiveCategory->GetMetaKeywords();
-            }
-            if (!is_null($oActiveItem)) {
-                $aTmpKeywords = $oActiveItem->GetMetaKeywords();
-                //$aKeywords = array_merge($aKeywords,$aTmpKeywords);
-                $aKeywords = $aTmpKeywords;
-            }
-            // remove doubles
-            $aClean = array();
-            foreach ($aKeywords as $sWord) {
-                if (!in_array($sWord, $aClean) && strlen($sWord) > 3) {
-                    $aClean[] = $sWord;
-                }
-            }
-
-            if (!empty($sDescription)) {
-                $aMetaData['name']['description'] = $sDescription;
-            }
-            if (count($aClean) > 0) {
-                $aMetaData['name']['keywords'] = implode(', ', $aClean);
-            }
+            $aMetaData = $this->addDescription($aMetaData, $oActiveCategory, $oActiveItem);
+            $aMetaData = $this->addKeywords($aMetaData, $oActiveCategory, $oActiveItem);
+            $aMetaData = $this->addSharingArticleImage($aMetaData, $oActiveItem);
         }
 
         return $aMetaData;
+    }
+
+    private function addDescription(array $metadata, ?TdbShopCategory $category, ?TdbShopArticle $product): array
+    {
+        $description = '';
+
+        if (null !== $product) {
+            $description .= $product->GetMetaDescription();
+        } elseif (null !== $category) {
+            $description .= $category->GetMetaDescription();
+        }
+        $description = trim($description);
+
+        if (!empty($description)) {
+            $metadata['name']['description'] = $description;
+        }
+
+        return $metadata;
+    }
+
+    private function addKeywords(array $metadata, ?TdbShopCategory $category, ?TdbShopArticle $product): array
+    {
+        $keywords = [];
+
+        if (null !== $product) {
+            $keywords = $product->GetMetaKeywords();
+        } else if (null !== $category) {
+            $keywords = $category->GetMetaKeywords();
+        }
+
+        $filteredKeywords = [];
+        foreach ($keywords as $word) {
+            if (!in_array($word, $filteredKeywords) && strlen($word) > 3) {
+                $filteredKeywords[] = $word;
+            }
+        }
+
+        if (\count($filteredKeywords) > 0) {
+            $metadata['name']['keywords'] = implode(', ', $filteredKeywords);
+        }
+
+        return $metadata;
+    }
+
+    private function addSharingArticleImage(array $metadata, ?TdbShopArticle $product): array
+    {
+        if (null === $product) {
+            return $metadata;
+        }
+
+        $imageEntry = $product->GetPrimaryImage();
+        if (null !== $imageEntry && '1' !== $imageEntry->fieldCmsMediaId) {
+            $image = new TCMSImage();
+            $loadSuccess = $image->Load($imageEntry->fieldCmsMediaId);
+            if (true === $loadSuccess) {
+                $imageUrl = $image->GetFullURL();
+                $metadata['itemprop']['image'] = $imageUrl;
+                $metadata['property']['og:image'] = $imageUrl;
+                $metadata['name']['twitter:image'] = $imageUrl;
+            }
+        }
+
+        return $metadata;
     }
 
     /**
