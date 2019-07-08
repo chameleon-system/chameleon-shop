@@ -861,7 +861,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $this->GetActiveVATList()->GoToStart();
 
         $oShopConf = TdbShop::GetInstance();
-        if ($oShopConf->fieldShippingVatDependsOnBasketContents) {
+        if (true === $oShopConf->fieldShippingVatDependsOnBasketContents && $this->dCostVATWithoutShipping > 0) {
             if (is_null($this->GetActiveVouchers()) || !$this->GetActiveVouchers()->HasFreeShippingVoucher()) {
                 // need to add the shipping costs to the max vat group
                 $oVatMax = $this->GetLargestVATObject();
