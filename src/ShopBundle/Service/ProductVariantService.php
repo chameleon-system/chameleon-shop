@@ -13,6 +13,8 @@ class ProductVariantService implements ProductVariantServiceInterface
     {
         // TODO compare  \TShopVariantDisplayHandler::GetArticleMatchingCurrentSelection() and \TShopArticle::GetVariantFromValues()?
 
+        // TODO \TShop::GetActiveItemVariant() is similar but still assumes that an article must be "fully" selected (all variant types clicked)
+
         // shop_article -> shop_variant_set -> shop_variant_type -> shop_variant_type_value
 
         foreach ($typeSelection as $typeId => $valueId) {

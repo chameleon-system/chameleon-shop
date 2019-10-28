@@ -42,6 +42,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
                     $aSelectedTypeValues[$typeValue->fieldShopVariantTypeId] = $typeValue->id;
                 }
             } else {
+                // TODO doubled to \TPkgShopRouteControllerArticle::shopArticle
                 $aSelectedTypeValues = ServiceLocator::get('chameleon_system_core.util.input_filter')->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
             }
 
