@@ -11,8 +11,6 @@ class ProductVariantService implements ProductVariantServiceInterface
      */
     public function getProductBasedOnSelection(\TdbShopArticle $shopArticle, array $typeSelection): \TdbShopArticle
     {
-        // TODO does this need caching? (modules (and mappers?) might be cached?)
-
         // shop_article -> shop_variant_set -> shop_variant_type -> shop_variant_type_value
 
         if (true === $shopArticle->IsVariant()) {
@@ -45,9 +43,6 @@ class ProductVariantService implements ProductVariantServiceInterface
             //   This is for example implemented in \TPkgShopMapper_ArticleGetOneVariantType::Accept() ($aTmpSelectValue / bAllowSelection).
 
             $availableValues = $shopArticle->GetVariantValuesAvailableForType($variantType, $properlySelected);
-
-            // TODO what about 0 === $availableValues => early exit?
-
             $availableValues->GoToStart();
 
             if (true === \array_key_exists($variantType->id, $typeSelection)) {

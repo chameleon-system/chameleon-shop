@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\ServiceLocator;
-
 class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
 {
     const VIEW_PATH_BASE = 'pkgShop/views/db/TShopVariantDisplayHandler';
@@ -42,11 +40,11 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      * @param bool $bOnlyCheckPost
      *
      * @return array
+     *
+     * @deprecated since 6.2.13 - usages removed (replaced by ProductVariantServiceInterface::getProductBasedOnSelection())
      */
     public static function GetActiveVariantTypeSelection($bOnlyCheckPost = false)
     {
-        // TODO make deprecated
-
         static $aVariantTypeSelection = array(null, null);
         $index = $bOnlyCheckPost ? 1 : 0;
         $aSelectedTypeValues = $aVariantTypeSelection[$index];
@@ -154,24 +152,10 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
     {
         $oView = new TViewParser();
 
-        $aSelectedTypeValues = [];
-        if (true === $oArticle->IsVariant()) {
-            $typeValueList = $oArticle->GetFieldShopVariantTypeValueList();
-            $typeValueList->GoToStart();
-
-            while (false !== ($typeValue = $typeValueList->Next())) {
-                $aSelectedTypeValues[$typeValue->fieldShopVariantTypeId] = $typeValue->id;
-            }
-        } else {
-            // TODO doubled to \TPkgShopRouteControllerArticle::shopArticle
-            // TODO ServiceLocator
-            $aSelectedTypeValues = ServiceLocator::get('chameleon_system_core.util.input_filter')->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
-        }
-
         $oVariantSet = &$oArticle->GetFieldShopVariantSet();
 
         $oView->AddVar('oDisplayHandler', $this);
-        $oView->AddVar('aSelectedTypeValues', $aSelectedTypeValues);
+        $oView->AddVar('aSelectedTypeValues', self::GetActiveVariantTypeSelection());
         $oView->AddVar('oVariantSet', $oVariantSet);
         $oView->AddVar('oArticle', $oArticle);
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);

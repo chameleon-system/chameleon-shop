@@ -37,7 +37,6 @@ class MTShopArticleDetails extends MTPkgViewRendererAbstractModuleMapper
         if ($this->global->UserDataExists('imageid')) {
             $this->sActiveImageId = $this->global->GetUserData('imageid');
         }
-        // TODO probably/hopefully not used? -> Only as cache parameters
         if ($this->global->UserDataExists(\TShopVariantType::URL_PARAMETER)) {
             $this->aVariantTypeValues = $this->global->GetUserData(\TShopVariantType::URL_PARAMETER);
         }

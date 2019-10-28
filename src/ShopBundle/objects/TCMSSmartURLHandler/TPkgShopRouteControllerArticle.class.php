@@ -84,14 +84,11 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             return $this->processArticleResponse($aResponse, null);
         }
 
-        // TODO using \TShopVariantType::URL_PARAMETER makes no sense for quick shop (current parameters should be wrong for other products)
         $variantSelection = $this->inputFilterUtil->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
         $article = $this->productVariantService->getProductBasedOnSelection($article, $variantSelection);
         $aResponse['activeShopArticle'] = $article;
 
-        /** @var PortalDomainServiceInterface $portalDomainService */
-        $portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
-        $activePortal = $portalDomainService->getActivePortal();
+        $activePortal = $this->portalDomainService->getActivePortal();
         $aResponse['pagedef'] = $activePortal->GetSystemPageId('quickshop');
 
         return $this->processArticleResponse($aResponse, $request, null);
@@ -125,11 +122,8 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             $queryParameter = null;
         }
 
-        $cmsident = $identifier;
-
-        // TODO move to service? - also see above
         $variantSelection = $this->inputFilterUtil->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
-        $aKey = array('class' => __CLASS__, 'fnc' => 'shopArticle', 'catid' => $catid, 'cmsident' => $cmsident, 'variantSelection' => $variantSelection);
+        $aKey = array('class' => __CLASS__, 'fnc' => 'shopArticle', 'catid' => $catid, 'cmsident' => $identifier, 'variantSelection' => $variantSelection);
         $cache = $this->getCache();
         $key = $cache->getKey($aKey);
 
@@ -162,7 +156,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             'queryParameter' => $queryParameter,
         );
 
-        $article = $this->createArticleFromIdentificationToken($cmsident);
+        $article = $this->createArticleFromIdentificationToken($identifier);
         if (null === $article) {
             $aResponse['noMatch'] = true;
 
@@ -195,21 +189,18 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             return $this->processArticleResponse($aResponse, $request, $key);
         }
 
-        // TODO check for variant service or input filter util (setter injection)?
+        $article = $this->productVariantService->getProductBasedOnSelection($article, $variantSelection);
 
-        $variantArticle = $this->productVariantService->getProductBasedOnSelection($article, $variantSelection);
+        $articleUrl = $this->getArticleFullUrlForRequest($category, $article);
+        $requestedUrl = $request->getPathInfo();
 
-        $realItemURL = $this->getArticleFullUrlForRequest($category, $variantArticle);
-        $aResponse['fullURL'] = $realItemURL;
-        $currentFullURL = $request->getPathInfo();
+        $aResponse['fullURL'] = $articleUrl;
 
-        // TODO only check cmsident/id here? also: could be the same article so url check might be too much
-
-        if ($realItemURL !== $currentFullURL && $variantArticle->AllowDetailviewInShop()) {
-            $aResponse['redirectURL'] = $realItemURL;
+        $redirectUrl = $this->getRedirectUrl($article, $articleUrl, $requestedUrl);
+        if (null !== $redirectUrl) {
+            $aResponse['redirectURL'] = $redirectUrl;
             $aResponse['redirectPermanent'] = true;
         }
-        $article = $variantArticle;
 
         $aResponse['activeShopArticle'] = $article;
         if (null !== $category) {
@@ -217,6 +208,27 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
         }
 
         return $this->processArticleResponse($aResponse, $request, $key);
+    }
+
+    /**
+     * A redirect is necessary in multiple cases. E. g. to a variant or to the parent product or because the category has changed.
+     *
+     * @param TdbShopArticle $article
+     * @param string         $articleUrl
+     * @param string         $requestedUrl
+     * @return string|null - null if no redirect is necessary
+     */
+    private function getRedirectUrl(\TdbShopArticle $article, string $articleUrl, string $requestedUrl): ?string
+    {
+        if ($articleUrl === $requestedUrl) {
+            return null;
+        }
+
+        if (false === $article->AllowDetailviewInShop()) {
+            return null;
+        }
+
+        return $articleUrl;
     }
 
     /**
