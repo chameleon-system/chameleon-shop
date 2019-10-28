@@ -152,10 +152,15 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
     {
         $oView = new TViewParser();
 
+        $aSelectedTypeValues = TdbShopVariantDisplayHandler::GetActiveVariantTypeSelection();
+        if (!is_array($aSelectedTypeValues)) {
+            $aSelectedTypeValues = array();
+        }
+
         $oVariantSet = &$oArticle->GetFieldShopVariantSet();
 
         $oView->AddVar('oDisplayHandler', $this);
-        $oView->AddVar('aSelectedTypeValues', self::GetActiveVariantTypeSelection());
+        $oView->AddVar('aSelectedTypeValues', $aSelectedTypeValues);
         $oView->AddVar('oVariantSet', $oVariantSet);
         $oView->AddVar('oArticle', $oArticle);
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);
