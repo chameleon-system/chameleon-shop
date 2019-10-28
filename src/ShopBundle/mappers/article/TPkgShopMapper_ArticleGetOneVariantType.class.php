@@ -31,10 +31,6 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
         if ($oVariantSet) {
             $aSelectedTypeValues = [];
             if (true === $oArticle->IsVariant()) {
-                // TODO move to i. e. \TShopVariantDisplayHandler::GetActiveVariantTypeSelection ?
-
-                // TODO make \TShopVariantDisplayHandler::GetActiveVariantTypeSelection deprecated
-
                 $typeValueList = $oArticle->GetFieldShopVariantTypeValueList();
                 $typeValueList->GoToStart();
 

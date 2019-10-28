@@ -43,6 +43,8 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      */
     public static function GetActiveVariantTypeSelection($bOnlyCheckPost = false)
     {
+        // TODO make deprecated
+
         static $aVariantTypeSelection = array(null, null);
         $index = $bOnlyCheckPost ? 1 : 0;
         $aSelectedTypeValues = $aVariantTypeSelection[$index];
@@ -123,6 +125,8 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      *                                                       user selection (such as color) exists
      *
      * @return TdbShopArticle
+     *
+     * @deprecated since 6.2.13 - replaced by ProductVariantServiceInterface::getProductBasedOnSelection()
      */
     public static function GetArticleMatchingCurrentSelection(TdbShopArticle &$oParentArticle, $bOnlyIfAPartialSelectionExists = true)
     {
@@ -148,6 +152,7 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
     {
         $oView = new TViewParser();
 
+        // TODO remove this - only usage left for GetActiveVariantTypeSelection()
         $aSelectedTypeValues = TdbShopVariantDisplayHandler::GetActiveVariantTypeSelection();
         if (!is_array($aSelectedTypeValues)) {
             $aSelectedTypeValues = array();

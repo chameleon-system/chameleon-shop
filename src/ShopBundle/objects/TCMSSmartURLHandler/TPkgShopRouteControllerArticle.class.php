@@ -84,12 +84,10 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             return $this->processArticleResponse($aResponse, null);
         }
 
-        $variantArticle = TdbShopVariantDisplayHandler::GetArticleMatchingCurrentSelection($article);
-        if (null !== $variantArticle) {
-            $aResponse['activeShopArticle'] = $variantArticle;
-        } else {
-            $aResponse['activeShopArticle'] = $article;
-        }
+        // TODO using \TShopVariantType::URL_PARAMETER makes no sense for quick shop (current parameters should be wrong for other products)
+        $variantSelection = $this->inputFilterUtil->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
+        $article = $this->productVariantService->getProductBasedOnSelection($article, $variantSelection);
+        $aResponse['activeShopArticle'] = $article;
 
         /** @var PortalDomainServiceInterface $portalDomainService */
         $portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
@@ -129,7 +127,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
 
         $cmsident = $identifier;
 
-        // TODO move to service?
+        // TODO move to service? - also see above
         $variantSelection = $this->inputFilterUtil->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
         $aKey = array('class' => __CLASS__, 'fnc' => 'shopArticle', 'catid' => $catid, 'cmsident' => $cmsident, 'variantSelection' => $variantSelection);
         $cache = $this->getCache();
@@ -200,11 +198,6 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
         // TODO check for variant service or input filter util (setter injection)?
 
         $variantArticle = $this->productVariantService->getProductBasedOnSelection($article, $variantSelection);
-
-//        $variantArticle = $article;
-//        if (!is_null($article) && (false !== $variantSelection || false === $article->IsVariant())) {
-//            $variantArticle = TdbShop::GetActiveItemVariant($article);
-//        }
 
         $realItemURL = $this->getArticleFullUrlForRequest($category, $variantArticle);
         $aResponse['fullURL'] = $realItemURL;

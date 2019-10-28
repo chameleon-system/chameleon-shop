@@ -1637,6 +1637,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param array $aTypeValuePairs
      *
      * @return TdbShopArticle
+     *
+     * @deprecated since 6.2.13 - replaced by ProductVariantServiceInterface::getProductBasedOnSelection()
      */
     public function GetVariantFromValues($aTypeValuePairs)
     {
