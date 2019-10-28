@@ -129,7 +129,8 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
 
         $cmsident = $identifier;
 
-        $variantSelection = TdbShopVariantDisplayHandler::GetActiveVariantTypeSelection(true);
+        // TODO move to service?
+        $variantSelection = $this->inputFilterUtil->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
         $aKey = array('class' => __CLASS__, 'fnc' => 'shopArticle', 'catid' => $catid, 'cmsident' => $cmsident, 'variantSelection' => $variantSelection);
         $cache = $this->getCache();
         $key = $cache->getKey($aKey);
@@ -198,7 +199,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
 
         // TODO check for variant service or input filter util (setter injection)?
 
-        $variantArticle = $this->productVariantService->getProductBasedOnSelection($article, $this->inputFilterUtil->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []));
+        $variantArticle = $this->productVariantService->getProductBasedOnSelection($article, $variantSelection);
 
 //        $variantArticle = $article;
 //        if (!is_null($article) && (false !== $variantSelection || false === $article->IsVariant())) {

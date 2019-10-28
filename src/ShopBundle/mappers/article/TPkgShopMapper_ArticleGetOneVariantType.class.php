@@ -9,18 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Article
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
-    {
-        parent::GetRequirements($oRequirements);
-
-        $oRequirements->NeedsSourceObject('aSelectedTypeValues', 'array', TdbShopVariantDisplayHandler::GetActiveVariantTypeSelection());
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -37,10 +29,26 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
 
         $oVariantSet = $oArticle->GetFieldShopVariantSet();
         if ($oVariantSet) {
+            $aSelectedTypeValues = [];
+            if (true === $oArticle->IsVariant()) {
+                // TODO move to i. e. \TShopVariantDisplayHandler::GetActiveVariantTypeSelection ?
+
+                // TODO make \TShopVariantDisplayHandler::GetActiveVariantTypeSelection deprecated
+
+                $typeValueList = $oArticle->GetFieldShopVariantTypeValueList();
+                $typeValueList->GoToStart();
+
+                while (false !== ($typeValue = $typeValueList->Next())) {
+                    $aSelectedTypeValues[$typeValue->fieldShopVariantTypeId] = $typeValue->id;
+                }
+            } else {
+                $aSelectedTypeValues = ServiceLocator::get('chameleon_system_core.util.input_filter')->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
+            }
+
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oVariantSet->table, $oVariantSet->id);
             }
-            $aSelectedTypeValues = $oVisitor->GetSourceObject('aSelectedTypeValues');
+            //$aSelectedTypeValues = $oVisitor->GetSourceObject('aSelectedTypeValues');
 
             $bLoadInactiveItems = false;
             $oShop = TShop::GetInstance();
