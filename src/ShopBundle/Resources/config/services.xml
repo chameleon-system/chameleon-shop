@@ -146,6 +146,12 @@
             <call method="setCache">
                 <argument type="service" id="chameleon_system_cms_cache.cache" />
             </call>
+            <call method="setProductVariantService">
+                <argument type="service" id="chameleon_system_shop.product_variant_service"/>
+            </call>
+            <call method="setInputFilterUtil">
+                <argument type="service" id="chameleon_system_core.util.input_filter"/>
+            </call>
         </service>
         <service id="chameleon_system_shop.shop_route_article_factory" class="%chameleon_system_shop.shop_route_article_factory.class%">
         </service>
@@ -265,7 +271,9 @@
         </service>
 
         <service id="chameleon_system_shop.product_variant.product_variant_name_generator" class="ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGenerator">
+        </service>
 
+        <service id="chameleon_system_shop.product_variant_service" class="ChameleonSystem\ShopBundle\Service\ProductVariantService">
         </service>
 
     </services>

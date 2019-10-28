@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\ShopBundle\Interfaces\ProductVariantServiceInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopRouteArticleFactoryInterface;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -32,6 +34,16 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
      * @var CacheInterface
      */
     private $cache;
+
+    /**
+     * @var ProductVariantServiceInterface
+     */
+    private $productVariantService;
+
+    /**
+     * @var InputFilterUtilInterface
+     */
+    private $inputFilterUtil;
 
     /**
      * @param Request $request
@@ -184,14 +196,21 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             return $this->processArticleResponse($aResponse, $request, $key);
         }
 
-        $variantArticle = $article;
-        if (!is_null($article) && (false !== $variantSelection || false === $article->IsVariant())) {
-            $variantArticle = TdbShop::GetActiveItemVariant($article);
-        }
+        // TODO check for variant service or input filter util (setter injection)?
+
+        $variantArticle = $this->productVariantService->getProductBasedOnSelection($article, $this->inputFilterUtil->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []));
+
+//        $variantArticle = $article;
+//        if (!is_null($article) && (false !== $variantSelection || false === $article->IsVariant())) {
+//            $variantArticle = TdbShop::GetActiveItemVariant($article);
+//        }
 
         $realItemURL = $this->getArticleFullUrlForRequest($category, $variantArticle);
         $aResponse['fullURL'] = $realItemURL;
         $currentFullURL = $request->getPathInfo();
+
+        // TODO only check cmsident/id here? also: could be the same article so url check might be too much
+
         if ($realItemURL !== $currentFullURL && $variantArticle->AllowDetailviewInShop()) {
             $aResponse['redirectURL'] = $realItemURL;
             $aResponse['redirectPermanent'] = true;
@@ -478,5 +497,15 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
         }
 
         return $category;
+    }
+
+    public function setProductVariantService(ProductVariantServiceInterface $productVariantService): void
+    {
+        $this->productVariantService = $productVariantService;
+    }
+
+    public function setInputFilterUtil(InputFilterUtilInterface $inputFilterUtil): void
+    {
+        $this->inputFilterUtil = $inputFilterUtil;
     }
 }
