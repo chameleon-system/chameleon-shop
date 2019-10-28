@@ -11,11 +11,19 @@ class ProductVariantService implements ProductVariantServiceInterface
      */
     public function getProductBasedOnSelection(\TdbShopArticle $shopArticle, array $typeSelection): \TdbShopArticle
     {
-        // TODO compare  \TShopVariantDisplayHandler::GetArticleMatchingCurrentSelection() and \TShopArticle::GetVariantFromValues()?
-
-        // TODO \TShop::GetActiveItemVariant() is similar but still assumes that an article must be "fully" selected (all variant types clicked)
+        // TODO does this need caching? (modules (and mappers?) might be cached?)
 
         // shop_article -> shop_variant_set -> shop_variant_type -> shop_variant_type_value
+
+        if (true === $shopArticle->IsVariant()) {
+            $shopArticle = $shopArticle->GetFieldVariantParent();
+        }
+
+        $variantSet = $shopArticle->GetFieldShopVariantSet();
+
+        if (null === $variantSet) {
+            return $shopArticle;
+        }
 
         foreach ($typeSelection as $typeId => $valueId) {
             if (null === $valueId || '' === $valueId) {
@@ -23,33 +31,22 @@ class ProductVariantService implements ProductVariantServiceInterface
             }
         }
 
-        if (true === $shopArticle->IsVariant()) {
-            $shopArticle = $shopArticle->GetFieldVariantParent();
-        }
-
-        // TODO does this need to be set?
-        $variantSet = $shopArticle->GetFieldShopVariantSet();
-
-        if (null === $variantSet) {
-            return $shopArticle;
-        }
-
         $variantTypes = $variantSet->GetFieldShopVariantTypeList();
         $variantTypes->GoToStart();
 
         $properlySelected = [];
 
-        // copied from \TShopVariantDisplayHandler::GetActiveVariantTypeSelection() (= second half)
-        // Adds OR filters entries to/from $typeSelection
+        // Adds OR removes entries to/from $typeSelection
         while (false !== ($variantType = $variantTypes->Next())) {
-            // query article repeatedly and fill $properlySelected, if there is only one option: auto pick it
+            // query article repeatedly for variant values and fill $properlySelected, if there is only one value: pick it
 
             // TODO / NOTE in order for this to work the selection logic in the frontend must first select type first in this list
             //   and not allow later ones to be selected
+            //   This is for example implemented in \TPkgShopMapper_ArticleGetOneVariantType::Accept() ($aTmpSelectValue / bAllowSelection).
 
             $availableValues = $shopArticle->GetVariantValuesAvailableForType($variantType, $properlySelected);
 
-            // TODO what about null === $availableValues => early exit?
+            // TODO what about 0 === $availableValues => early exit?
 
             $availableValues->GoToStart();
 
@@ -70,8 +67,6 @@ class ProductVariantService implements ProductVariantServiceInterface
                 $properlySelected[$variantType->id] = $typeSelection[$variantType->id];
             }
         }
-
-        // this part copied from \TShop::GetActiveItemVariant($shopArticle)
 
         $variantList = $shopArticle->GetFieldShopArticleVariantsList($typeSelection);
 

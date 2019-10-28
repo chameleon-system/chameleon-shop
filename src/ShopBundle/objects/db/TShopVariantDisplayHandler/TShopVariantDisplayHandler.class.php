@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
 {
     const VIEW_PATH_BASE = 'pkgShop/views/db/TShopVariantDisplayHandler';
@@ -152,10 +154,18 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
     {
         $oView = new TViewParser();
 
-        // TODO remove this - only usage left for GetActiveVariantTypeSelection()
-        $aSelectedTypeValues = TdbShopVariantDisplayHandler::GetActiveVariantTypeSelection();
-        if (!is_array($aSelectedTypeValues)) {
-            $aSelectedTypeValues = array();
+        $aSelectedTypeValues = [];
+        if (true === $oArticle->IsVariant()) {
+            $typeValueList = $oArticle->GetFieldShopVariantTypeValueList();
+            $typeValueList->GoToStart();
+
+            while (false !== ($typeValue = $typeValueList->Next())) {
+                $aSelectedTypeValues[$typeValue->fieldShopVariantTypeId] = $typeValue->id;
+            }
+        } else {
+            // TODO doubled to \TPkgShopRouteControllerArticle::shopArticle
+            // TODO ServiceLocator
+            $aSelectedTypeValues = ServiceLocator::get('chameleon_system_core.util.input_filter')->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
         }
 
         $oVariantSet = &$oArticle->GetFieldShopVariantSet();
