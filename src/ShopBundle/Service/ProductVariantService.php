@@ -21,10 +21,6 @@ class ProductVariantService implements ProductVariantServiceInterface
             }
         }
 
-        if (0 === \count($typeSelection)) {
-            return $shopArticle;
-        }
-
         if (true === $shopArticle->IsVariant()) {
             $shopArticle = $shopArticle->GetFieldVariantParent();
         }
