@@ -143,7 +143,6 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
         $selectedTypeValues = [];
         if (true === $article->IsVariant()) {
             $typeValueList = $article->GetFieldShopVariantTypeValueList();
-            $typeValueList->GoToStart();
 
             while (false !== ($typeValue = $typeValueList->Next())) {
                 $selectedTypeValues[$typeValue->fieldShopVariantTypeId] = $typeValue->id;

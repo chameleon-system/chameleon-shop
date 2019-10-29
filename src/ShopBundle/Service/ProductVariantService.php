@@ -23,45 +23,10 @@ class ProductVariantService implements ProductVariantServiceInterface
             return $shopArticle;
         }
 
-        foreach ($typeSelection as $typeId => $valueId) {
-            if (null === $valueId || '' === $valueId) {
-                unset($typeSelection[$typeId]);
-            }
-        }
-
         $variantTypes = $variantSet->GetFieldShopVariantTypeList();
         $variantTypes->GoToStart();
 
-        $properlySelected = [];
-
-        // Adds OR removes entries to/from $typeSelection
-        while (false !== ($variantType = $variantTypes->Next())) {
-            // query article repeatedly for variant values and fill $properlySelected, if there is only one value: pick it
-
-            // TODO / NOTE in order for this to work the selection logic in the frontend must first select type first in this list
-            //   and not allow later ones to be selected
-            //   This is for example implemented in \TPkgShopMapper_ArticleGetOneVariantType::Accept() ($aTmpSelectValue / bAllowSelection).
-
-            $availableValues = $shopArticle->GetVariantValuesAvailableForType($variantType, $properlySelected);
-            $availableValues->GoToStart();
-
-            if (true === \array_key_exists($variantType->id, $typeSelection)) {
-                if (false === $availableValues->IsInList($typeSelection[$variantType->id])) {
-                    unset($typeSelection[$variantType->id]);
-                }
-            }
-            $availableValues->GoToStart();
-
-            if (false === \array_key_exists($variantType->id, $typeSelection)) {
-                if (1 === $availableValues->Length()) {
-                    $typeSelection[$variantType->id] = $availableValues->Current()->id;
-                }
-            }
-
-            if (true === \array_key_exists($variantType->id, $typeSelection)) {
-                $properlySelected[$variantType->id] = $typeSelection[$variantType->id];
-            }
-        }
+        $typeSelection = $this->matchUserSelectionToAvailableVariantValues($shopArticle, $typeSelection, $variantTypes);
 
         $variantList = $shopArticle->GetFieldShopArticleVariantsList($typeSelection);
 
@@ -70,5 +35,53 @@ class ProductVariantService implements ProductVariantServiceInterface
         }
 
         return $shopArticle;
+    }
+
+    /**
+     * @param \TdbShopArticle         $shopArticle
+     * @param array                   $userSelection
+     * @param \TdbShopVariantTypeList $variantTypes
+     * @return array - the matched selection
+     */
+    private function matchUserSelectionToAvailableVariantValues(
+        \TdbShopArticle $shopArticle,
+        array $userSelection,
+        \TdbShopVariantTypeList $variantTypes
+    ): array {
+
+        $tmpSelected = [];
+        $calculatedSelection = $userSelection;
+
+        foreach ($calculatedSelection as $typeId => $valueId) {
+            if (null === $valueId || '' === $valueId) {
+                unset($calculatedSelection[$typeId]);
+            }
+        }
+
+        while (false !== ($variantType = $variantTypes->Next())) {
+            // query article repeatedly for variant values and fill $tmpSelected, if there is only one value: pick it
+
+            $availableValues = $shopArticle->GetVariantValuesAvailableForType($variantType, $tmpSelected);
+            $availableValues->GoToStart();
+
+            if (true === \array_key_exists($variantType->id, $calculatedSelection)) {
+                if (false === $availableValues->IsInList($calculatedSelection[$variantType->id])) {
+                    unset($calculatedSelection[$variantType->id]);
+                }
+            }
+            $availableValues->GoToStart();
+
+            if (false === \array_key_exists($variantType->id, $calculatedSelection)) {
+                if (1 === $availableValues->Length()) {
+                    $calculatedSelection[$variantType->id] = $availableValues->Current()->id;
+                }
+            }
+
+            if (true === \array_key_exists($variantType->id, $calculatedSelection)) {
+                $tmpSelected[$variantType->id] = $calculatedSelection[$variantType->id];
+            }
+        }
+
+        return $calculatedSelection;
     }
 }
