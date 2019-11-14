@@ -30,6 +30,7 @@ if(!TGlobal::IsCMSMode()) {
                 $this->sqlData[$currencyTypeFieldNameSql] = $oActiveCurrency->id;
             } else {
                 $this-><?= $sFieldName; ?> = $this->sqlData['<?= $sFieldDatabaseName; ?>'];
+                $this-><?= $sFieldName; ?>Formated = $oActiveCurrency->GetFormattedCurrency($this->sqlData['<?= $sFieldDatabaseName; ?>']);
             }
         }
     }
