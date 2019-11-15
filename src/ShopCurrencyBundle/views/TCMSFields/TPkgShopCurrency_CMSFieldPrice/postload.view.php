@@ -25,13 +25,11 @@ if(!TGlobal::IsCMSMode()) {
                 $this->sqlData['<?= $sFieldDatabaseName; ?>'] = TdbPkgShopCurrency::ConvertToActiveCurrency($this->sqlData['<?= $sFieldDatabaseName; ?>']);
                 <?php
     } ?>
-                $this-><?= $sFieldName; ?> = $this->sqlData['<?= $sFieldDatabaseName; ?>'];
-                $this-><?= $sFieldName; ?>Formated = $oActiveCurrency->GetFormattedCurrency($this->sqlData['<?= $sFieldDatabaseName; ?>']);
+
                 $this->sqlData[$currencyTypeFieldNameSql] = $oActiveCurrency->id;
-            } else {
-                $this-><?= $sFieldName; ?> = $this->sqlData['<?= $sFieldDatabaseName; ?>'];
-                $this-><?= $sFieldName; ?>Formated = $oActiveCurrency->GetFormattedCurrency($this->sqlData['<?= $sFieldDatabaseName; ?>']);
             }
+            $this-><?= $sFieldName; ?> = $this->sqlData['<?= $sFieldDatabaseName; ?>'];
+            $this-><?= $sFieldName; ?>Formated = $oActiveCurrency->GetFormattedCurrency($this->sqlData['<?= $sFieldDatabaseName; ?>']);
         }
     }
 
