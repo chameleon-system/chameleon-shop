@@ -51,7 +51,7 @@ class TPkgShopPaymentTransaction_TPkgShopOrderStatusManager extends TPkgShopPaym
         $paymentHandler = $oOrder->GetPaymentHandler();
 
         if (false === ($paymentHandler instanceof \esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface)) {
-            throw new TPkgShopPaymentTransactionException_PaymentHandlerDoesNotSupportTransaction('payment handler '.get_class($paymentHandler).' must implement \esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface',
+            throw new TPkgShopPaymentTransactionException_PaymentHandlerDoesNotSupportTransaction('payment handler '.get_class($paymentHandler).' does not support \esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface',
                 array('status' => $oStatus)
             );
         }
