@@ -1285,7 +1285,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             $sKey .= 'inactive';
         }
         $oVariantList = &$this->GetFromInternalCache($sKey);
-        if (is_null($oVariantList)) {
+        if (null === $oVariantList) {
             $connection = $this->getDatabaseConnection();
             $query = '';
 
@@ -1299,32 +1299,20 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
                 $aRestriction = array();
                 foreach ($aSelectedTypeValues as $sShopVariantTypeId => $sShopVariantTypeValueId) {
                     $aRestriction[] = sprintf(
-                        "(`shop_variant_type_value`.`shop_variant_type_id` = %s AND `shop_variant_type_value`.`id` = %s)",
+                        '(`shop_variant_type_value`.`shop_variant_type_id` = %s AND `shop_variant_type_value`.`id` = %s)',
                         $connection->quote($sShopVariantTypeId),
                         $connection->quote($sShopVariantTypeValueId)
                     );
                 }
                 $query .= ' AND ('.implode(' OR ', $aRestriction).')';
-
-                if ($bLoadOnlyActive) {
-                    $sActiveArticleRestriction = TdbShopArticleList::GetActiveArticleQueryRestriction(false);
-                    if (!empty($sActiveArticleRestriction)) {
-                        $query .= ' AND ('.$sActiveArticleRestriction.')';
-                    }
-                }
+                $query .= $this->getActiveRestriction($bLoadOnlyActive);
                 $query .= ' GROUP BY `shop_article`.`id` HAVING COUNT(`shop_article`.`id`) = '.count($aSelectedTypeValues);
-
             } else {
                 $query = 'SELECT `shop_article`.*
                             FROM `shop_article`
                            WHERE `shop_article`.`variant_parent_id` = %s ';
                 $query = sprintf($query, $connection->quote($this->id));
-                if ($bLoadOnlyActive) {
-                    $sActiveArticleRestriction = TdbShopArticleList::GetActiveArticleQueryRestriction(false);
-                    if (!empty($sActiveArticleRestriction)) {
-                        $query .= ' AND ('.$sActiveArticleRestriction.')';
-                    }
-                }
+                $query .= $this->getActiveRestriction($bLoadOnlyActive, $query);
             }
 
             $oVariantList = TdbShopArticleList::GetList($query);
@@ -1334,6 +1322,20 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $oVariantList->GoToStart();
 
         return $oVariantList;
+    }
+
+    private function getActiveRestriction(bool $loadOnlyActive): string
+    {
+        if (false === $loadOnlyActive) {
+            return '';
+        }
+
+        $activeArticleQueryRestriction = TdbShopArticleList::GetActiveArticleQueryRestriction(false);
+        if ('' === $activeArticleQueryRestriction) {
+            return '';
+        }
+
+        return ' AND ('.$activeArticleQueryRestriction.')';
     }
 
     /**
