@@ -11,8 +11,6 @@ class ProductVariantService implements ProductVariantServiceInterface
      */
     public function getProductBasedOnSelection(\TdbShopArticle $shopArticle, array $typeSelection): \TdbShopArticle
     {
-        // shop_article -> shop_variant_set -> shop_variant_type -> shop_variant_type_value
-
         if (true === $shopArticle->IsVariant() && \count($typeSelection) === 0) {
             return $shopArticle;
         }
