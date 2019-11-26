@@ -20,11 +20,14 @@ class ProductVariantService implements ProductVariantServiceInterface
         }
 
         $variantList = $shopArticle->GetFieldShopArticleVariantsList($typeSelection);
+        $oldLimit = $variantList->GetActiveListLimit();
         $variantList->SetActiveListLimit(2);
 
         if (1 === $variantList->Length()) {
-            return $variantList->Current();
+            $shopArticle = $variantList->Current();
         }
+
+        $variantList->SetActiveListLimit($oldLimit);
 
         return $shopArticle;
     }
