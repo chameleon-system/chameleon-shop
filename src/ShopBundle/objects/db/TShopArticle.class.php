@@ -1312,7 +1312,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
                             FROM `shop_article`
                            WHERE `shop_article`.`variant_parent_id` = %s ';
                 $query = sprintf($query, $connection->quote($this->id));
-                $query .= $this->getActiveRestriction($bLoadOnlyActive, $query);
+                $query .= $this->getActiveRestriction($bLoadOnlyActive);
             }
 
             $oVariantList = TdbShopArticleList::GetList($query);
