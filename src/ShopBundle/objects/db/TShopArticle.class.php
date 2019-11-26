@@ -1286,16 +1286,23 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         }
         $oVariantList = &$this->GetFromInternalCache($sKey);
         if (is_null($oVariantList)) {
+            $connection = $this->getDatabaseConnection();
+            $query = '';
+
             if (count($aSelectedTypeValues) > 0) {
-                $query = "SELECT `shop_article`.*
-                      FROM `shop_article`
-                 LEFT JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_article`.`id` = `shop_article_shop_variant_type_value_mlt`.`source_id`
-                 LEFT JOIN `shop_variant_type_value` ON `shop_article_shop_variant_type_value_mlt`.`target_id` = `shop_variant_type_value`.`id`
-                     WHERE `shop_article`.`variant_parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                   ";
+                $query = 'SELECT `shop_article`.*
+                            FROM `shop_article`
+                       LEFT JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_article`.`id` = `shop_article_shop_variant_type_value_mlt`.`source_id`
+                       LEFT JOIN `shop_variant_type_value` ON `shop_article_shop_variant_type_value_mlt`.`target_id` = `shop_variant_type_value`.`id`
+                           WHERE `shop_article`.`variant_parent_id` = %s';
+                $query = sprintf($query, $connection->quote($this->id));
                 $aRestriction = array();
                 foreach ($aSelectedTypeValues as $sShopVariantTypeId => $sShopVariantTypeValueId) {
-                    $aRestriction[] = "(`shop_variant_type_value`.`shop_variant_type_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sShopVariantTypeId)."' AND `shop_variant_type_value`.`id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sShopVariantTypeValueId)."')";
+                    $aRestriction[] = sprintf(
+                        "(`shop_variant_type_value`.`shop_variant_type_id` = %s AND `shop_variant_type_value`.`id` = %s)",
+                        $connection->quote($sShopVariantTypeId),
+                        $connection->quote($sShopVariantTypeValueId)
+                    );
                 }
                 $query .= ' AND ('.implode(' OR ', $aRestriction).')';
 
@@ -1306,21 +1313,21 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
                     }
                 }
                 $query .= ' GROUP BY `shop_article`.`id` HAVING COUNT(`shop_article`.`id`) = '.count($aSelectedTypeValues);
-                $oVariantList = TdbShopArticleList::GetList($query);
+
             } else {
-                $query = "SELECT `shop_article`.*
-                      FROM `shop_article`
-                     WHERE `shop_article`.`variant_parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                   ";
+                $query = 'SELECT `shop_article`.*
+                            FROM `shop_article`
+                           WHERE `shop_article`.`variant_parent_id` = %s ';
+                $query = sprintf($query, $connection->quote($this->id));
                 if ($bLoadOnlyActive) {
                     $sActiveArticleRestriction = TdbShopArticleList::GetActiveArticleQueryRestriction(false);
                     if (!empty($sActiveArticleRestriction)) {
                         $query .= ' AND ('.$sActiveArticleRestriction.')';
                     }
                 }
-                $oVariantList = TdbShopArticleList::GetList($query);
             }
 
+            $oVariantList = TdbShopArticleList::GetList($query);
             $oVariantList->bAllowItemCache = true;
             $this->SetInternalCache($sKey, $oVariantList);
         }
