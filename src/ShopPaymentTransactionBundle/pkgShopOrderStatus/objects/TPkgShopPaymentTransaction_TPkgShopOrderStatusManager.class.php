@@ -19,6 +19,13 @@ class TPkgShopPaymentTransaction_TPkgShopOrderStatusManager extends TPkgShopPaym
         return $aList;
     }
 
+    /**
+     * @param TdbShopOrderStatus $oStatus
+     *
+     * @throws TPkgCmsException_Log
+     * @throws TPkgCmsException_LogAndMessage
+     * @throws TPkgShopPaymentTransactionException_PaymentHandlerDoesNotSupportTransaction
+     */
     protected function triggerTransactionBasedOnStatus(TdbShopOrderStatus $oStatus)
     {
         $oStatusCode = $oStatus->GetFieldShopOrderStatusCode();
@@ -44,7 +51,7 @@ class TPkgShopPaymentTransaction_TPkgShopOrderStatusManager extends TPkgShopPaym
         $paymentHandler = $oOrder->GetPaymentHandler();
 
         if (false === ($paymentHandler instanceof \esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface)) {
-            throw new TPkgCmsException_Log('payment handler '.get_class($paymentHandler).' must implement \esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface',
+            throw new TPkgShopPaymentTransactionException_PaymentHandlerDoesNotSupportTransaction('payment handler '.get_class($paymentHandler).' does not support \esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface',
                 array('status' => $oStatus)
             );
         }
