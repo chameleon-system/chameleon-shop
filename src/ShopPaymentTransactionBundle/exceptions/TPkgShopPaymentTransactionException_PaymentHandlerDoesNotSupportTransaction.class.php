@@ -9,6 +9,6 @@
  * file that was distributed with this source code.
  */
 
-class TPkgShopPaymentTransactionException_PaymentHandlerDoesNotSupportTransaction extends TPkgShopPaymentTransactionException
+class TPkgShopPaymentTransactionException_PaymentHandlerDoesNotSupportTransaction extends \TPkgCmsException
 {
 }

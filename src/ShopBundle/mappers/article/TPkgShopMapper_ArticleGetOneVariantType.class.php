@@ -9,18 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+
 class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Article
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
-    {
-        parent::GetRequirements($oRequirements);
-
-        $oRequirements->NeedsSourceObject('aSelectedTypeValues', 'array', TdbShopVariantDisplayHandler::GetActiveVariantTypeSelection());
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -40,7 +33,8 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oVariantSet->table, $oVariantSet->id);
             }
-            $aSelectedTypeValues = $oVisitor->GetSourceObject('aSelectedTypeValues');
+
+            $aSelectedTypeValues = $this->getSelectedTypeValues($oArticle);
 
             $bLoadInactiveItems = false;
             $oShop = TShop::GetInstance();
@@ -136,5 +130,32 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
             }
         }
         $oVisitor->SetMappedValue('aVariantTypes', $aReturnData);
+    }
+
+    /**
+     * Can be either from the current article (variant) or the user's selection (URL).
+     *
+     * @param TdbShopArticle $article
+     * @return array
+     */
+    private function getSelectedTypeValues(\TdbShopArticle $article): array
+    {
+        $selectedTypeValues = [];
+        if (true === $article->IsVariant()) {
+            $typeValueList = $article->GetFieldShopVariantTypeValueList();
+
+            while (false !== ($typeValue = $typeValueList->Next())) {
+                $selectedTypeValues[$typeValue->fieldShopVariantTypeId] = $typeValue->id;
+            }
+        } else {
+            $selectedTypeValues = $this->getInputFilterUtil()->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
+        }
+
+        return $selectedTypeValues;
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

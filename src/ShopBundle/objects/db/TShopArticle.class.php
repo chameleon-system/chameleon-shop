@@ -1285,48 +1285,57 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             $sKey .= 'inactive';
         }
         $oVariantList = &$this->GetFromInternalCache($sKey);
-        if (is_null($oVariantList)) {
+        if (null === $oVariantList) {
+            $connection = $this->getDatabaseConnection();
+            $query = '';
+
             if (count($aSelectedTypeValues) > 0) {
-                $query = "SELECT `shop_article`.*
-                      FROM `shop_article`
-                 LEFT JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_article`.`id` = `shop_article_shop_variant_type_value_mlt`.`source_id`
-                 LEFT JOIN `shop_variant_type_value` ON `shop_article_shop_variant_type_value_mlt`.`target_id` = `shop_variant_type_value`.`id`
-                     WHERE `shop_article`.`variant_parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                   ";
+                $query = 'SELECT `shop_article`.*
+                            FROM `shop_article`
+                       LEFT JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_article`.`id` = `shop_article_shop_variant_type_value_mlt`.`source_id`
+                       LEFT JOIN `shop_variant_type_value` ON `shop_article_shop_variant_type_value_mlt`.`target_id` = `shop_variant_type_value`.`id`
+                           WHERE `shop_article`.`variant_parent_id` = %s';
+                $query = sprintf($query, $connection->quote($this->id));
                 $aRestriction = array();
                 foreach ($aSelectedTypeValues as $sShopVariantTypeId => $sShopVariantTypeValueId) {
-                    $aRestriction[] = "(`shop_variant_type_value`.`shop_variant_type_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sShopVariantTypeId)."' AND `shop_variant_type_value`.`id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sShopVariantTypeValueId)."')";
+                    $aRestriction[] = sprintf(
+                        '(`shop_variant_type_value`.`shop_variant_type_id` = %s AND `shop_variant_type_value`.`id` = %s)',
+                        $connection->quote($sShopVariantTypeId),
+                        $connection->quote($sShopVariantTypeValueId)
+                    );
                 }
                 $query .= ' AND ('.implode(' OR ', $aRestriction).')';
-
-                if ($bLoadOnlyActive) {
-                    $sActiveArticleRestriction = TdbShopArticleList::GetActiveArticleQueryRestriction(false);
-                    if (!empty($sActiveArticleRestriction)) {
-                        $query .= ' AND ('.$sActiveArticleRestriction.')';
-                    }
-                }
+                $query .= $this->getActiveRestriction($bLoadOnlyActive);
                 $query .= ' GROUP BY `shop_article`.`id` HAVING COUNT(`shop_article`.`id`) = '.count($aSelectedTypeValues);
-                $oVariantList = TdbShopArticleList::GetList($query);
             } else {
-                $query = "SELECT `shop_article`.*
-                      FROM `shop_article`
-                     WHERE `shop_article`.`variant_parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                   ";
-                if ($bLoadOnlyActive) {
-                    $sActiveArticleRestriction = TdbShopArticleList::GetActiveArticleQueryRestriction(false);
-                    if (!empty($sActiveArticleRestriction)) {
-                        $query .= ' AND ('.$sActiveArticleRestriction.')';
-                    }
-                }
-                $oVariantList = TdbShopArticleList::GetList($query);
+                $query = 'SELECT `shop_article`.*
+                            FROM `shop_article`
+                           WHERE `shop_article`.`variant_parent_id` = %s ';
+                $query = sprintf($query, $connection->quote($this->id));
+                $query .= $this->getActiveRestriction($bLoadOnlyActive);
             }
 
+            $oVariantList = TdbShopArticleList::GetList($query);
             $oVariantList->bAllowItemCache = true;
             $this->SetInternalCache($sKey, $oVariantList);
         }
         $oVariantList->GoToStart();
 
         return $oVariantList;
+    }
+
+    private function getActiveRestriction(bool $loadOnlyActive): string
+    {
+        if (false === $loadOnlyActive) {
+            return '';
+        }
+
+        $activeArticleQueryRestriction = TdbShopArticleList::GetActiveArticleQueryRestriction(false);
+        if ('' === $activeArticleQueryRestriction) {
+            return '';
+        }
+
+        return ' AND ('.$activeArticleQueryRestriction.')';
     }
 
     /**
@@ -1637,6 +1646,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param array $aTypeValuePairs
      *
      * @return TdbShopArticle
+     *
+     * @deprecated since 6.2.13 - replaced by ProductVariantServiceInterface::getProductBasedOnSelection()
      */
     public function GetVariantFromValues($aTypeValuePairs)
     {

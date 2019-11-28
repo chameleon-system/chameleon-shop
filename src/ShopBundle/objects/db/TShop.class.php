@@ -321,6 +321,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * @param TdbShopArticle $oArticle
      *
      * @return TdbShopArticle
+     *
+     * @deprecated since 6.2.13 - replaced by ProductVariantServiceInterface::getProductBasedOnSelection()
      */
     public static function GetActiveItemVariant($oArticle)
     {
