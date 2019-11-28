@@ -271,6 +271,7 @@
         </service>
 
         <service id="chameleon_system_shop.product_variant.product_variant_name_generator" class="ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGenerator" public="true">
+        </service>
 
         <service id="chameleon_system_shop.product_variant_service" class="ChameleonSystem\ShopBundle\Service\ProductVariantService">
         </service>
