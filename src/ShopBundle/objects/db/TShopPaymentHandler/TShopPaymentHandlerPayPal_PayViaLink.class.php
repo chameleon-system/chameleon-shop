@@ -165,7 +165,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         if ($oPaymentParameterList->Length() > 0) {
             while ($oPaymentParameter = $oPaymentParameterList->Next()) {
                 if ('Completed' == $oPaymentParameter->fieldValue) {
-                    $logger->error(
+                    $logger->info(
                         "PayPal IPN: the txn '{$sTxnId}' has been processed before and was already set to completed.",
                         [
                             'url_parameters' => $aURLParameter,
