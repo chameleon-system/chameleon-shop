@@ -147,6 +147,8 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
             $logger->error(
                 'PayPal IPN: unable to send notify-validate response.',
                 [
+                    'order_id' => $oOrder->id,
+                    'order_number' => $oOrder->fieldOrdernumber,
                     'domain' => $sDomain,
                     'path' => $sPath,
                     'url_parameters' => $aURLParameter,
@@ -166,8 +168,11 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
             while ($oPaymentParameter = $oPaymentParameterList->Next()) {
                 if ('Completed' == $oPaymentParameter->fieldValue) {
                     $logger->info(
-                        "PayPal IPN: the txn '{$sTxnId}' has been processed before and was already set to completed.",
+                        'PayPal IPN: the txn has been processed before and was already set to completed.',
                         [
+                            'order_id' => $oOrder->id,
+                            'order_number' => $oOrder->fieldOrdernumber,
+                            'txn_id' => $sTxnId,
                             'url_parameters' => $aURLParameter,
                             'data' => $sData,
                         ]
@@ -195,6 +200,8 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
             $logger->error(
                 'PayPal IPN: returned payment status not recognized.',
                 [
+                    'order_id' => $oOrder->id,
+                    'order_number' => $oOrder->fieldOrdernumber,
                     'url_parameters' => $aURLParameter,
                     'data' => $sData,
                 ]
@@ -212,10 +219,11 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         $sCurrency = $this->GetCurrencyIdentifier($oCurrency);
 
         if (0 != strcasecmp($sCurrency, $sPaymentCurrency)) {
-            // invalid currency
             $logger->error(
                 'PayPal IPN: invalid currency in request.',
                 [
+                    'order_id' => $oOrder->id,
+                    'order_number' => $oOrder->fieldOrdernumber,
                     'url_parameters' => $aURLParameter
                 ]
             );
@@ -246,8 +254,12 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
                 $bPaymentCompleted = true;
             } else {
                 $logger->error(
-                    "PayPal IPN: invalid amount paid: required = {$oOrder->fieldValueTotal}, paid = {$dPaymentValue}.",
+                    'PayPal IPN: invalid amount paid.',
                     [
+                        'order_id' => $oOrder->id,
+                        'order_number' => $oOrder->fieldOrdernumber,
+                        'amount_required' => $oOrder->fieldValueTotal,
+                        'amount_payed' => $dPaymentValue,
                         'url_parameters' => $aURLParameter
                     ]
                 );
@@ -274,6 +286,8 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
             $logger->error(
                 'PayPal IPN: payment invalid.',
                 [
+                    'order_id' => $oOrder->id,
+                    'order_number' => $oOrder->fieldOrdernumber,
                     'url_parameters' => $aURLParameter
                 ]
             );
