@@ -142,7 +142,18 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         $sData = 'cmd=_notify-validate&'.str_replace('&amp;', '&', TTools::GetArrayAsURL($aVerifyData));
         $sResponse = $this->sendRequest($sDomain, $sPath, $sData);
         if (0 != strcmp($sResponse, 'VERIFIED')) {
-            $logger->error("PayPal IPN: unable to send notify-validate response. Domain:{$sDomain}\nPath:{$sPath}\nParameter: ".print_r($aURLParameter, true)."\ndata: {$sData}\nRESPONSE: ".$sResponse);
+            $logger->error(
+                'PayPal IPN: unable to send notify-validate response.',
+                [
+                    'order_id' => $oOrder->id,
+                    'order_number' => $oOrder->fieldOrdernumber,
+                    'domain' => $sDomain,
+                    'path' => $sPath,
+                    'url_parameters' => $aURLParameter,
+                    'data' => $sData,
+                    'response' => $sResponse,
+                ]
+            );
 
             return false;
         }
@@ -154,7 +165,16 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         if ($oPaymentParameterList->Length() > 0) {
             while ($oPaymentParameter = $oPaymentParameterList->Next()) {
                 if ('Completed' == $oPaymentParameter->fieldValue) {
-                    $logger->error("PayPal IPN: the txn '{$sTxnId}' has been processed before and was set to completed".print_r($aURLParameter, true).' data: '.$sData);
+                    $logger->info(
+                        'PayPal IPN: the txn has been processed before and was already set to completed.',
+                        [
+                            'order_id' => $oOrder->id,
+                            'order_number' => $oOrder->fieldOrdernumber,
+                            'txn_id' => $sTxnId,
+                            'url_parameters' => $aURLParameter,
+                            'data' => $sData,
+                        ]
+                    );
 
                     return false;
                 }
@@ -175,7 +195,15 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
 
         if (false === $bIsComplete) {
             // some other response other than is paid - we log the info
-            $logger->error("PayPal IPN: returned payment status '{$aURLParameter['payment_status']}'! ".$aURLParameter.' data: '.$sData);
+            $logger->error(
+                'PayPal IPN: returned payment status not recognized.',
+                [
+                    'order_id' => $oOrder->id,
+                    'order_number' => $oOrder->fieldOrdernumber,
+                    'url_parameters' => $aURLParameter,
+                    'data' => $sData,
+                ]
+            );
 
             return false;
         }
@@ -189,8 +217,14 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         $sCurrency = $this->GetCurrencyIdentifier($oCurrency);
 
         if (0 != strcasecmp($sCurrency, $sPaymentCurrency)) {
-            // invalid currency
-            $logger->error('PayPal IPN: invalid currency in request '.print_r($aURLParameter, true));
+            $logger->error(
+                'PayPal IPN: invalid currency in request.',
+                [
+                    'order_id' => $oOrder->id,
+                    'order_number' => $oOrder->fieldOrdernumber,
+                    'url_parameters' => $aURLParameter
+                ]
+            );
             $aInfo = array('shop_order_id' => $oOrder->id, 'name' => 'IPN '.date('Y-m-d H:i:s'), 'value' => 'invalid currency: '.$sPaymentCurrency);
             $oPaymentInfo = TdbShopOrderPaymentMethodParameter::GetNewInstance($aInfo);
             $oPaymentInfo->AllowEditByAll(true);
@@ -217,7 +251,16 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
                 $bPaymentOk = true;
                 $bPaymentCompleted = true;
             } else {
-                $logger->error("PayPal IPN: invalid amount paid: required = {$oOrder->fieldValueTotal}, paid = {$dPaymentValue}. Rawdata: ".print_r($aURLParameter, true));
+                $logger->error(
+                    'PayPal IPN: invalid amount paid.',
+                    [
+                        'order_id' => $oOrder->id,
+                        'order_number' => $oOrder->fieldOrdernumber,
+                        'amount_required' => $oOrder->fieldValueTotal,
+                        'amount_payed' => $dPaymentValue,
+                        'url_parameters' => $aURLParameter
+                    ]
+                );
             }
         } else {
             $bPaymentOk = true;
@@ -238,7 +281,14 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         }
 
         if (false == $bPaymentOk) {
-            $logger->error('PayPal IPN: payment invalid '.print_r($aURLParameter, true));
+            $logger->error(
+                'PayPal IPN: payment invalid.',
+                [
+                    'order_id' => $oOrder->id,
+                    'order_number' => $oOrder->fieldOrdernumber,
+                    'url_parameters' => $aURLParameter
+                ]
+            );
         } else {
             if ($bPaymentCompleted) {
                 $oOrder->SetStatusPaid(true);

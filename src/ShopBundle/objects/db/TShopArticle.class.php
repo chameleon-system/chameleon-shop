@@ -1897,7 +1897,13 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $this->getDatabaseConnection()->executeUpdate($query, array('active' => $activeValue, 'id' => $this->id));
 
         if ($affectedRows > 0) {
-            $this->getCache()->callTrigger('shop_article', $this->id);
+            $cache = $this->getCache();
+
+            $cache->callTrigger('shop_article', $this->id);
+
+            if (true === $this->IsVariant()) {
+                $cache->callTrigger('shop_article', $this->fieldVariantParentId);
+            }
         }
     }
 

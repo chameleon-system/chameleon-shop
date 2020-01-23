@@ -38,8 +38,8 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
 
             $aURLData = array('module_fnc' => array($oExecutingModulePointer->sModuleSpotName => 'ExecuteAjaxCall'), '_fnc' => 'CreateVoucherCodes', '_noModuleFunction' => 'true', 'pagedef' => $oGlobal->GetUserData('pagedef'), 'id' => $this->sId, 'tableid' => $this->oTableConf->id);
             $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aURLData);
-            $sNumberOfVouchersToCreatePromptText = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.voucher.prompt_number_of_vouchers_to_create'));
-            $sVoucherCodeToCreatePromptText = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.voucher.prompt_voucher_code_to_create'));
+            $sNumberOfVouchersToCreatePromptText = TGlobal::OutJS(TGlobal::Translate('chameleon_system_shop.voucher.prompt_number_of_vouchers_to_create'));
+            $sVoucherCodeToCreatePromptText = TGlobal::OutJS(TGlobal::Translate('chameleon_system_shop.voucher.prompt_voucher_code_to_create'));
             $sJS = "TCMSShopTableEditor_ShopVoucherSeries_CreateVouchers('{$sURL}','".$sNumberOfVouchersToCreatePromptText."','".$sVoucherCodeToCreatePromptText."');";
             $oMenuItem->sOnClick = $sJS;
             $this->oMenuItems->AddItem($oMenuItem);
