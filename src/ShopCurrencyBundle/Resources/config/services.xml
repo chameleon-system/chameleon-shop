@@ -3,7 +3,7 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="chameleon_system_shop_currency.mapper.shop_currency_mapper" class="TPkgShopCurrencyMapper">
+        <service id="chameleon_system_shop_currency.mapper.shop_currency_mapper" class="TPkgShopCurrencyMapper" public="true">
         </service>
 
         <service id="chameleon_system_shop_currency.shop_currency" class="ChameleonSystem\ShopCurrencyBundle\Service\ShopCurrencyService" public="true">
