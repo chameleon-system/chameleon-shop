@@ -14,14 +14,14 @@
             <argument type="service" id="chameleon_system_shop.shop_service" />
         </service>
 
-        <service id="chameleon_system_shop.mapper.system_page_links" class="TPkgShopMapper_SystemPageLinks">
+        <service id="chameleon_system_shop.mapper.system_page_links" class="TPkgShopMapper_SystemPageLinks" public="true">
             <argument type="service" id="chameleon_system_shop.shop_service" />
         </service>
 
         <service id="chameleon_system_shop.mapper.list.article_list_header" class="TPkgShopMapper_ArticleListHeader" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.list.article_list_order_by" class="TPkgShopMapper_ArticleListOrderBy">
+        <service id="chameleon_system_shop.mapper.list.article_list_order_by" class="TPkgShopMapper_ArticleListOrderBy" public="true">
         </service>
 
         <service id="chameleon_system_shop.mapper.list.article_list_result_info" class="TPkgShopMapper_ArticleListResultInfo" public="true">
@@ -30,16 +30,16 @@
         <service id="chameleon_system_shop.mapper.list.article_list_pager" class="TPkgShopMapper_ArticleListPager" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.manufacturer_intro" class="TPkgShopManufacturerMapper_Intro">
+        <service id="chameleon_system_shop.mapper.manufacturer_intro" class="TPkgShopManufacturerMapper_Intro" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.manufacturer_overview" class="TPkgShopManufacturerMapper_Overview">
+        <service id="chameleon_system_shop.mapper.manufacturer_overview" class="TPkgShopManufacturerMapper_Overview" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.manufacturer_overview_navigation" class="TPkgShopManufacturerMapper_OverviewNavigation">
+        <service id="chameleon_system_shop.mapper.manufacturer_overview_navigation" class="TPkgShopManufacturerMapper_OverviewNavigation" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.my_account.my_account_mapper_newsletter" class="MTMyAccountMapper_Newsletter">
+        <service id="chameleon_system_shop.mapper.my_account.my_account_mapper_newsletter" class="MTMyAccountMapper_Newsletter" public="true">
         </service>
 
         <service id="chameleon_system_shop.mapper.notice_list.article_remove" class="TPkgShopMapper_ArticleRemoveNoticeList" public="true">
@@ -48,34 +48,34 @@
         <service id="chameleon_system_shop.mapper.notice_list.article_add" class="TPkgShopMapper_ArticleToNoticeList" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.order.order" class="TPkgShopMapper_Order">
+        <service id="chameleon_system_shop.mapper.order.order" class="TPkgShopMapper_Order" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.order.order_article_list" class="TPkgShopMapper_OrderArticleList" shared="false">
+        <service id="chameleon_system_shop.mapper.order.order_article_list" class="TPkgShopMapper_OrderArticleList" shared="false" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.order.order_article_list_summary" class="TPkgShopMapper_OrderArticleListSummary">
+        <service id="chameleon_system_shop.mapper.order.order_article_list_summary" class="TPkgShopMapper_OrderArticleListSummary" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.order.order_payment" class="TPkgShopMapper_OrderPayment">
+        <service id="chameleon_system_shop.mapper.order.order_payment" class="TPkgShopMapper_OrderPayment" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.order.order_user_data" class="TPkgShopMapper_OrderUserData">
+        <service id="chameleon_system_shop.mapper.order.order_user_data" class="TPkgShopMapper_OrderUserData" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.orderwizard.order_completed" class="TPkgShopMapper_OrderCompleted">
+        <service id="chameleon_system_shop.mapper.orderwizard.order_completed" class="TPkgShopMapper_OrderCompleted" public="true">
         </service>
 
         <service id="chameleon_system_shop.mapper.orderwizard.order_step" class="TPkgShopMapper_OrderStep" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.orderwizard.payment_list" class="TPkgShopMapper_PaymentList">
+        <service id="chameleon_system_shop.mapper.orderwizard.payment_list" class="TPkgShopMapper_PaymentList" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.orderwizard.address_selection" class="TPkgShopMapperOrderwizard_AddressSelection">
+        <service id="chameleon_system_shop.mapper.orderwizard.address_selection" class="TPkgShopMapperOrderwizard_AddressSelection" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.shipping_group.shipping_group_list" class="TPkgShopMapper_ShippingGroupList">
+        <service id="chameleon_system_shop.mapper.shipping_group.shipping_group_list" class="TPkgShopMapper_ShippingGroupList" public="true">
         </service>
 
         <service id="chameleon_system_shop.mapper.social.social_share_privacy" class="ChameleonSystem\ShopBundle\mappers\social\TPkgShopMapper_SocialSharePrivacy" public="true">
@@ -91,7 +91,7 @@
         <service id="chameleon_system_shop.mapper.objects.article_list.item_mapper_standard" class="ChameleonSystem\ShopBundle\objects\ArticleList\Mapper\ItemMapperStandard" public="true">
         </service>
 
-        <service id="chameleon_system_shop.mapper.view_my_order_details.view_my_order_details_order_object_as_string" class="MTShopViewMyOrderDetailsOrderObjectAsStringMapper">
+        <service id="chameleon_system_shop.mapper.view_my_order_details.view_my_order_details_order_object_as_string" class="MTShopViewMyOrderDetailsOrderObjectAsStringMapper" public="true">
         </service>
     </services>
 </container>
