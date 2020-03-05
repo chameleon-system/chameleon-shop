@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use esono\pkgCmsCache\CacheInterface;
+
 class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
 {
     /**
@@ -104,7 +107,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
                 $oVoucherCodeEditor->Init($oVoucherCodeTableConf->id, null);
 
                 $oVoucher->AllowEditByAll(true);
-                TCacheManager::SetDisableCaching(true);
+                $this->getCache()->disable();
                 for ($i = 0; $i < $iNumberOfVouchers; ++$i) {
                     if ($bUseRandomCode) {
                         do {
@@ -118,8 +121,8 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
                     // save entrie...
                     $oVoucherCodeEditor->Save($aData);
                 }
-                TCacheManager::SetDisableCaching(false);
-                TCacheManager::PerformeTableChange('shop_voucher', null); // flush all cache entries related to the voucher table
+                $this->getCache()->enable();
+                $this->getCache()->callTrigger('shop_voucher', null); // flush all cache entries related to the voucher table
             }
         }
 
@@ -213,5 +216,10 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
         } else {
             echo 'Keine Berechtigung';
         }
+    }
+
+    private function getCache(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use esono\pkgCmsCache\CacheInterface;
+
 /**
  * generate shop product search word index.
 /**/
@@ -16,7 +19,7 @@ class TCMSCronJob_ShopSearchIndex extends TdbCmsCronjobs
 {
     protected function _ExecuteCron()
     {
-        TCacheManager::SetDisableCaching(true);
+        $this->getCache()->disable();
         $oIndexers = &TdbShopSearchIndexerList::GetList();
         $oIndex = null;
         if ($oIndexers->Length() < 1) {
@@ -37,6 +40,11 @@ class TCMSCronJob_ShopSearchIndex extends TdbCmsCronjobs
         if (!$oIndex->IndexerHasFinished()) {
             $oIndex->ProcessNextIndexStep(false);
         }
-        TCacheManager::SetDisableCaching(false);
+        $this->getCache()->enable();
+    }
+
+    private function getCache(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

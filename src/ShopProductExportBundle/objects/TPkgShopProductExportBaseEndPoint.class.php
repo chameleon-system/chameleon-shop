@@ -9,8 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopProductExportBundle\Interfaces\ShopProductExportHandlerInterface;
 use Doctrine\DBAL\Connection;
+use esono\pkgCmsCache\CacheInterface;
 
 class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInterface
 {
@@ -87,13 +89,13 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
         $bSuccess = false;
 
         set_time_limit(1800);
-        TCacheManager::SetDisableCaching(true);
+        $this->getCache()->disable();
         TCacheManagerRuntimeCache::SetEnableAutoCaching(false);
         if ($this->Prepare()) {
             $bSuccess = $this->Perform();
         }
         $this->Cleanup($bSuccess);
-        TCacheManager::SetDisableCaching(false);
+        $this->getCache()->enable();
         TCacheManagerRuntimeCache::SetEnableAutoCaching(true);
 
         return $bSuccess;
@@ -674,6 +676,11 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
+    }
+
+    private function getCache(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }
