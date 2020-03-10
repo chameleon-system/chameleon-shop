@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
+use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
 
 if (!defined('PKG_SEARCH_USE_SEARCH_QUEUE')) {
@@ -139,7 +140,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      */
     public function ProcessNextIndexStep($bIndexUsingTicker = true)
     {
-        TCacheManager::SetDisableCaching(true);
+        $this->getCache()->disable();
         // if no index is running, prepare the indexer
         $iTickerSize = self::INDEX_SET_SIZE;
         if (!$bIndexUsingTicker) {
@@ -174,7 +175,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             } while (!$this->IndexerHasFinished() && (($iRecordsProcessed < self::INDEX_SET_SIZE) || ($iTickerSize < 0)));
         }
         $this->CommitProcessData();
-        TCacheManager::SetDisableCaching(false);
+        $this->getCache()->enable();
     }
 
     protected function IndexCompletedHook()
@@ -887,6 +888,11 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      */
     private static function getDatabaseConnectionStatic()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
+    }
+
+    private function getCache(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }
