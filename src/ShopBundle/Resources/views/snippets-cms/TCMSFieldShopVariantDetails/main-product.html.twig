@@ -67,11 +67,6 @@
             toasterMessage('{{ 'chameleon_system_shop.variants.error_to_many_combinations_possible'|trans({'%max%': maxPossibleVariantCombinations})|e('js') }}', 'ERROR');
         } else {
             CreateModalIFrameDialogFromContent(data,800,800,'{{ 'chameleon_system_shop.variants.action_create_variants'|trans|e('js') }}',true,true);
-
-            $(".generateVariantCheckall").click(function() {
-                var checkBoxes = $("#generateVariantTable input.generateVariantItem[type=checkbox]").not(':disabled');
-                checkBoxes.prop("checked", !checkBoxes.prop("checked"));
-            });
         }
     }
 </script>

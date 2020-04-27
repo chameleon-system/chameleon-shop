@@ -881,6 +881,10 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         if ($bDataValid) {
             $oExistingItem = $oBasket->FindItemByBasketItemKey($basketItemKey);
             if ($oExistingItem) {
+                $customData = $oExistingItem->getCustomData();
+                if (true === \is_array($customData) && 0 !== \count($customData)) {
+                    $oArticle->setCustomData($oExistingItem->getCustomData());
+                }
                 $iAlreadyInBasket = $oExistingItem->dAmount;
             } else {
                 $oExistingItem = null;
