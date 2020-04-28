@@ -62,14 +62,76 @@ final class BasketVariableReplacer
     {
         $request = $event->getRequest();
         $queryParameters = $request->query->all();
+        $paramsToRender = $this->filterKeys($queryParameters, ['basket']);
+        $paramsToRender = $this->flattenQueryParameters($paramsToRender);
+
         try {
             $hiddenFieldsHtml = $this->twigEnvironment->render(
                 self::HIDDEN_FIELDS_SNIPPET,
-                ['values' => $queryParameters]
+                ['values' => $paramsToRender]
             );
             \TTools::AddStaticPageVariables([self::BASKET_HIDDEN_FIELDS_PLACEHOLDER => $hiddenFieldsHtml]);
         } catch(Error $error) {
             $this->logger->error('Error rendering hidden fields for basket forms: ' . $error->getMessage());
         }
+    }
+
+    /**
+     * flattenQueryParameters will flatten the query to a form that can be rendered to an html form.
+     *
+     * Example:
+     * [
+     *   "foo" => ["bar" => "baz"]
+     * ]
+     * will become:
+     * [
+     *   "foo[bar]" => "baz"
+     * ]
+     *
+     * It will work recursively for deeper nested structures.
+     *
+     * @param array $queryParameters
+     * @return array
+     */
+    private function flattenQueryParameters(array $queryParameters): array
+    {
+        $params = [];
+        foreach ($queryParameters as $key => $value) {
+            if (is_string($value)) {
+                $params[$key] = $value;
+                continue;
+            }
+            if (is_array($value)) {
+                $subParameters = [];
+                foreach ($value as $subKey => $subValue) {
+                    $subParameters[sprintf('%s[%s]', $key, $subKey)] = $subValue;
+                }
+                $subRendered = $this->flattenQueryParameters($subParameters);
+                foreach ($subRendered as $subKeyRendered => $subValueRendered) {
+                    $params[$subKeyRendered] = $subValueRendered;
+                }
+            }
+        }
+
+        return $params;
+    }
+
+    /**
+     * filterKeys will filter all the keys given.
+     * Use this method before flattening the list with flattenQueryParameters.
+     *
+     * @param array $input
+     * @param array $filter
+     * @return array
+     */
+    private function filterKeys(array $input, array $filter): array
+    {
+        return array_filter(
+            $input,
+            static function (string $key) use ($filter): bool {
+                return !in_array($key, $filter, true);
+                },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 }
