@@ -72,7 +72,10 @@ final class BasketVariableReplacer
             );
             \TTools::AddStaticPageVariables([self::BASKET_HIDDEN_FIELDS_PLACEHOLDER => $hiddenFieldsHtml]);
         } catch(Error $error) {
-            $this->logger->error('Error rendering hidden fields for basket forms: ' . $error->getMessage());
+            $this->logger->error(
+                sprintf('Error rendering hidden fields for basket forms: %s', $error->getMessage()),
+                ['exception' => $error]
+            );
         }
     }
 
