@@ -280,7 +280,6 @@
                 id="chameleon_system_shop.basket.basket_variable_replacer"
                 class="ChameleonSystem\ShopBundle\Basket\BasketVariableReplacer"
         >
-            <argument type="service" id="request_stack"/>
             <argument type="service" id="twig"/>
             <argument type="service" id="logger" on-invalid="ignore"/>
             <tag name="monolog.logger" channel="request"/>

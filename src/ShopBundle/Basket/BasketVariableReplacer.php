@@ -13,6 +13,7 @@ namespace ChameleonSystem\ShopBundle\Basket;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Twig\Environment;
 use Twig\Error\Error;
 
@@ -35,10 +36,6 @@ final class BasketVariableReplacer
     private const HIDDEN_FIELDS_SNIPPET = '@ChameleonSystemShop/snippets/ShopBundle/BasketForm/hiddenBasketFields.html.twig';
 
     /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
      * @var Environment
      */
     private $twigEnvironment;
@@ -48,11 +45,9 @@ final class BasketVariableReplacer
     private $logger;
 
     public function __construct(
-        RequestStack $requestStack,
         Environment $twigEnvironment,
         LoggerInterface $logger)
     {
-        $this->requestStack = $requestStack;
         $this->twigEnvironment = $twigEnvironment;
         $this->logger = $logger;
     }
@@ -60,14 +55,12 @@ final class BasketVariableReplacer
     /**
      * handleRequest will be invoked on kernel.request and add the hidden fields to the replacer.
      * On error it will log to the request channel and move on. It will not halt execution.
+     *
+     * @param GetResponseEvent $event
      */
-    public function handleRequest(): void
+    public function handleRequest(GetResponseEvent $event): void
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            $this->logger->error('Tried to get the current request, but there was none. Additional hidden fields for the basket form will not be added.');
-            return;
-        }
+        $request = $event->getRequest();
         $queryParameters = $request->query->all();
         try {
             $hiddenFieldsHtml = $this->twigEnvironment->render(
