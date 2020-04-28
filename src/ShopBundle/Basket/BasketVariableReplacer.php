@@ -11,8 +11,7 @@
 
 namespace ChameleonSystem\ShopBundle\Basket;
 
-use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 use Twig\Error\Error;
@@ -44,14 +43,14 @@ final class BasketVariableReplacer
      */
     private $twigEnvironment;
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
     public function __construct(
         RequestStack $requestStack,
         Environment $twigEnvironment,
-        Logger $logger)
+        LoggerInterface $logger)
     {
         $this->requestStack = $requestStack;
         $this->twigEnvironment = $twigEnvironment;
@@ -66,7 +65,7 @@ final class BasketVariableReplacer
     {
         $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {
-            $this->logger->addError('Tried to get the current request, but there was none. Additional hidden fields for the basket form will not be added.');
+            $this->logger->error('Tried to get the current request, but there was none. Additional hidden fields for the basket form will not be added.');
             return;
         }
         $queryParameters = $request->query->all();
@@ -77,7 +76,7 @@ final class BasketVariableReplacer
             );
             \TTools::AddStaticPageVariables([self::BASKET_HIDDEN_FIELDS_PLACEHOLDER => $hiddenFieldsHtml]);
         } catch(Error $error) {
-            $this->logger->addError('Error rendering hidden fields for basket forms: ' . $error->getMessage());
+            $this->logger->error('Error rendering hidden fields for basket forms: ' . $error->getMessage());
         }
     }
 }
