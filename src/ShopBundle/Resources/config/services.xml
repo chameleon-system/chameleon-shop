@@ -279,6 +279,7 @@
         <service
                 id="chameleon_system_shop.basket.basket_variable_replacer"
                 class="ChameleonSystem\ShopBundle\Basket\BasketVariableReplacer"
+                public="true"
         >
             <argument type="service" id="twig"/>
             <argument type="service" id="logger" on-invalid="ignore"/>
