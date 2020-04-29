@@ -62,7 +62,7 @@ final class BasketVariableReplacer
     {
         $request = $event->getRequest();
         $queryParameters = $request->query->all();
-        $paramsToRender = $this->filterKeys($queryParameters, ['basket']);
+        $paramsToRender = $this->filterKeys($queryParameters, [\MTShopBasketCoreEndpoint::URL_REQUEST_PARAMETER]);
         $paramsToRender = $this->flattenQueryParameters($paramsToRender);
 
         try {
