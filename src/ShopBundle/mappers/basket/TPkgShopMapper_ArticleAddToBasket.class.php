@@ -41,7 +41,7 @@ class TPkgShopMapper_ArticleAddToBasket extends AbstractViewMapper
         $bRedirectToBasket = $oVisitor->GetSourceObject('bRedirectToBasket');
 
         $oVisitor->SetMappedValue('sAddToBasketLink', $oArticle->GetToBasketLink(false, $bRedirectToBasket, false, false, MTShopBasketCore::MSG_CONSUMER_NAME));
-        $aBasketParameters = $oArticle->GetToBasketLinkParameters($bRedirectToBasket, false, false, MTShopBasketCore::MSG_CONSUMER_NAME);
+        $aBasketParameters = $oArticle->GetToBasketLinkBasketParameters($bRedirectToBasket, false, false, MTShopBasketCore::MSG_CONSUMER_NAME);
         unset($aBasketParameters[MTShopBasketCore::URL_REQUEST_PARAMETER][MTShopBasketCore::URL_ITEM_AMOUNT_NAME]);
         $sAddToBasketHiddenFields = TTools::GetArrayAsFormInput($aBasketParameters);
         $oVisitor->SetMappedValue('sAddToBasketHiddenFields', $sAddToBasketHiddenFields);

@@ -276,6 +276,17 @@
         <service id="chameleon_system_shop.product_variant_service" class="ChameleonSystem\ShopBundle\Service\ProductVariantService">
         </service>
 
+        <service
+                id="chameleon_system_shop.basket.basket_variable_replacer"
+                class="ChameleonSystem\ShopBundle\Basket\BasketVariableReplacer"
+                public="true"
+        >
+            <argument type="service" id="twig"/>
+            <argument type="service" id="logger" on-invalid="ignore"/>
+            <tag name="monolog.logger" channel="request"/>
+            <tag name="kernel.event_listener" event="kernel.request" method="handleRequest" priority="253"/>
+        </service>
+
     </services>
 
 </container>
