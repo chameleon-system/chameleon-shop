@@ -961,14 +961,16 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     protected function RecalculateNoneSponsoredVouchers()
     {
-        $this->dCostNoneSponsoredVouchers = 0;
+        if (!is_null($this->GetActiveVouchers())) {
+            $this->dCostNoneSponsoredVouchers = 0;
+            $this->GetActiveVouchers()->RemoveInvalidVouchers(MTShopBasketCore::MSG_CONSUMER_NAME, $this);
 
-        $noneSponsoredVouchers = $this->getActiveNoneSponsoredVouchers();
-        $noneSponsoredVouchers->RemoveInvalidVouchers(MTShopBasketCore::MSG_CONSUMER_NAME, $this);
-        $this->dCostNoneSponsoredVouchers = $noneSponsoredVouchers->GetVoucherValue(false);
-
-        if ($this->dCostNoneSponsoredVouchers > $this->dCostArticlesTotalAfterDiscounts) {
-            $this->dCostNoneSponsoredVouchers = $this->dCostArticlesTotalAfterDiscounts;
+            $this->dCostNoneSponsoredVouchers = $this->GetActiveVouchers()->GetVoucherValue(false);
+            if ($this->dCostNoneSponsoredVouchers > $this->dCostArticlesTotalAfterDiscounts) {
+                $this->dCostNoneSponsoredVouchers = $this->dCostArticlesTotalAfterDiscounts;
+            }
+        } else {
+            $this->dCostNoneSponsoredVouchers = 0;
         }
     }
 
@@ -1578,22 +1580,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         }
 
         return $this->oActiveVouchers;
-    }
-
-    protected function getActiveNoneSponsoredVouchers(): TShopBasketVoucherList
-    {
-        $activeVouchers = $this->GetActiveVouchers();
-        $noneSponsoredVouchers = new TShopBasketVoucherList();
-
-        while (false !== ($voucher = $activeVouchers->next())) {
-            if (true === $voucher->IsSponsored()) {
-                continue;
-            }
-
-            $noneSponsoredVouchers->AddItem($voucher);
-        }
-
-        return $noneSponsoredVouchers;
     }
 
     protected function reloadVouchers()
