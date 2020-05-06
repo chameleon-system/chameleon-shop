@@ -12,7 +12,7 @@
 class TShopBasketVoucherCoreList extends TIterator
 {
 
-    protected $checkedAndValid = [];
+    private $checkedAndValid = [];
 
     /**
      * Adds a voucher to the list. note that it wil not check if the voucher is valid (this must be done by the calling method)
