@@ -755,6 +755,11 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $this->RecalculateVAT();
         $this->dCostTotal = $this->dCostArticlesTotalAfterDiscounts + $this->dCostShipping + $this->dCostPaymentMethodSurcharge;
         $this->RecalculateVouchers();
+        // Since vouchers are recalculated twice, we need to remember all calls to RemoveInvalidVouchers internally to not
+        // check valid vouchers twice.
+        // At this point we are done with all recalculations and can tell the voucher list to reset its internal state to be ready
+        // for the next time vouchers are being recalculated.
+        $this->GetActiveVouchers()->allRemoveRunsDone();
         $this->dCostTotal = $this->dCostTotal - $this->dCostVouchers; // - $this->dCostDiscounts;
         $this->dCostTotalWithoutShipping = $this->dCostTotal - $this->dCostShipping;
 

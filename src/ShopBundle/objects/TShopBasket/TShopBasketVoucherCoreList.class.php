@@ -11,6 +11,9 @@
 
 class TShopBasketVoucherCoreList extends TIterator
 {
+
+    protected $checkedAndValid = [];
+
     /**
      * Adds a voucher to the list. note that it wil not check if the voucher is valid (this must be done by the calling method)
      * Returns the voucher key generated when adding the voucher.
@@ -85,6 +88,12 @@ class TShopBasketVoucherCoreList extends TIterator
         return $dValue;
     }
 
+    // allRemoveRunsDone should be called as soon as all calls to RemoveInvalidVouchers are done for one recalculation
+    public function allRemoveRunsDone()
+    {
+        $this->checkedAndValid = [];
+    }
+
     /**
      * Removes all vouchers from the basket, that are not valid based on the contents of the basket and the current user
      * Returns the number of vouchers removed.
@@ -108,12 +117,24 @@ class TShopBasketVoucherCoreList extends TIterator
         // get copy of vouchers
         $aVoucherList = $this->_items;
         $this->Destroy();
+
+        // we re-add all already checked vouchers as we will ignore them in the checks later.
+        foreach ($aVoucherList as $voucher) {
+            if (in_array($voucher->id, $this->checkedAndValid, true)) {
+                $this->AddItem($voucher);
+            }
+        }
         $bInvalidVouchersFound = false;
         foreach ($aVoucherList as $iVoucherKey => $oVoucher) {
+            if (in_array($voucher->id, $this->checkedAndValid, true)) {
+                continue;
+            }
             /** @var $oVoucher TdbShopVoucher */
             $cVoucherAllowUseCode = $oVoucher->AllowUseOfVoucher();
             if (TdbShopVoucher::ALLOW_USE == $cVoucherAllowUseCode) {
                 $this->AddItem($oVoucher);
+                // we remember all already successfully checked vouchers so we do not recheck them in second runs.
+                $this->checkedAndValid[] = $oVoucher->id;
             } else {
                 $bInvalidVouchersFound = true;
                 $this->RemoveInvalidVoucherHook($oVoucher, $oBasket);
