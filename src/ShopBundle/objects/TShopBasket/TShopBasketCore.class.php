@@ -1542,6 +1542,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             $oMessageManager->AddMessage($sMessageHandler, 'VOUCHER-ERROR-'.$cAllowUseOfVoucherResult, $aMessageData);
         } else {
             $this->GetActiveVouchers()->AddItem($oVoucher);
+            $this->GetActiveVouchers()->markAsValid($oVoucher);
             $oMessageManager->AddMessage($sMessageHandler, 'VOUCHER-ADDED', $aMessageData);
             $bVoucherAdded = true;
             $this->SetBasketRecalculationFlag();
