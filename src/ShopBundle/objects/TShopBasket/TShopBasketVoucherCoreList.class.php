@@ -94,6 +94,16 @@ class TShopBasketVoucherCoreList extends TIterator
         $this->checkedAndValid = [];
     }
 
+    // markAsValid will prevent a voucher from being checked until the next call to allRemoveRunsDone
+    // This is used when a voucher is checked and added outside of this class, like in \TShopBasketCore::AddVoucher.
+    // AddVoucher will check if the use of the voucher is allowed and if it is, we do not want to check it here again
+    // at the next recalculation of the basket.
+    // This fixes https://github.com/chameleon-system/chameleon-system/issues/540
+    public function markAsValid(TdbShopVoucher $voucher)
+    {
+        $this->checkedAndValid[] = $voucher->id;
+    }
+
     /**
      * Removes all vouchers from the basket, that are not valid based on the contents of the basket and the current user
      * Returns the number of vouchers removed.
@@ -134,7 +144,7 @@ class TShopBasketVoucherCoreList extends TIterator
             if (TdbShopVoucher::ALLOW_USE == $cVoucherAllowUseCode) {
                 $this->AddItem($oVoucher);
                 // we remember all already successfully checked vouchers so we do not recheck them in second runs.
-                $this->checkedAndValid[] = $oVoucher->id;
+                $this->markAsValid($oVoucher);
             } else {
                 $bInvalidVouchersFound = true;
                 $this->RemoveInvalidVoucherHook($oVoucher, $oBasket);
