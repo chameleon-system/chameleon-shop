@@ -1,0 +1,3 @@
+{% for name, value in values %}
+<input type="hidden" name="{{name | e('html_attr')}}" value="{{value | e('html_attr')}}" />
+{% endfor %}

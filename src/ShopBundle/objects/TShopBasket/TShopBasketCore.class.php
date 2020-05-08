@@ -743,6 +743,11 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $this->RecalculateVAT();
         $this->dCostTotal = $this->dCostArticlesTotalAfterDiscounts + $this->dCostShipping + $this->dCostPaymentMethodSurcharge;
         $this->RecalculateVouchers();
+        // Since vouchers are recalculated twice, we need to remember all calls to RemoveInvalidVouchers internally to not
+        // check valid vouchers twice.
+        // At this point we are done with all recalculations and can tell the voucher list to reset its internal state to be ready
+        // for the next time vouchers are being recalculated.
+        $this->GetActiveVouchers()->allRemoveRunsDone();
         $this->dCostTotal = $this->dCostTotal - $this->dCostVouchers; // - $this->dCostDiscounts;
         $this->dCostTotalWithoutShipping = $this->dCostTotal - $this->dCostShipping;
 
@@ -961,14 +966,16 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     protected function RecalculateNoneSponsoredVouchers()
     {
-        $this->dCostNoneSponsoredVouchers = 0;
+        if (!is_null($this->GetActiveVouchers())) {
+            $this->dCostNoneSponsoredVouchers = 0;
+            $this->GetActiveVouchers()->RemoveInvalidVouchers(MTShopBasketCore::MSG_CONSUMER_NAME, $this);
 
-        $noneSponsoredVouchers = $this->getActiveNoneSponsoredVouchers();
-        $noneSponsoredVouchers->RemoveInvalidVouchers(MTShopBasketCore::MSG_CONSUMER_NAME, $this);
-        $this->dCostNoneSponsoredVouchers = $noneSponsoredVouchers->GetVoucherValue(false);
-
-        if ($this->dCostNoneSponsoredVouchers > $this->dCostArticlesTotalAfterDiscounts) {
-            $this->dCostNoneSponsoredVouchers = $this->dCostArticlesTotalAfterDiscounts;
+            $this->dCostNoneSponsoredVouchers = $this->GetActiveVouchers()->GetVoucherValue(false);
+            if ($this->dCostNoneSponsoredVouchers > $this->dCostArticlesTotalAfterDiscounts) {
+                $this->dCostNoneSponsoredVouchers = $this->dCostArticlesTotalAfterDiscounts;
+            }
+        } else {
+            $this->dCostNoneSponsoredVouchers = 0;
         }
     }
 
@@ -1522,6 +1529,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             $oMessageManager->AddMessage($sMessageHandler, 'VOUCHER-ERROR-'.$cAllowUseOfVoucherResult, $aMessageData);
         } else {
             $this->GetActiveVouchers()->AddItem($oVoucher);
+            $this->GetActiveVouchers()->markAsValid($oVoucher);
             $oMessageManager->AddMessage($sMessageHandler, 'VOUCHER-ADDED', $aMessageData);
             $bVoucherAdded = true;
             $this->SetBasketRecalculationFlag();
@@ -1578,22 +1586,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         }
 
         return $this->oActiveVouchers;
-    }
-
-    protected function getActiveNoneSponsoredVouchers(): TShopBasketVoucherList
-    {
-        $activeVouchers = $this->GetActiveVouchers();
-        $noneSponsoredVouchers = new TShopBasketVoucherList();
-
-        while (false !== ($voucher = $activeVouchers->next())) {
-            if (true === $voucher->IsSponsored()) {
-                continue;
-            }
-
-            $noneSponsoredVouchers->AddItem($voucher);
-        }
-
-        return $noneSponsoredVouchers;
     }
 
     protected function reloadVouchers()
