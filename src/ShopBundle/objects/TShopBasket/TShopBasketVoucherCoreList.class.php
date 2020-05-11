@@ -111,14 +111,13 @@ class TShopBasketVoucherCoreList extends TIterator
         $this->Destroy();
 
         $bInvalidVouchersFound = false;
-        $skippedVouchers = [];
         foreach ($aVoucherList as $iVoucherKey => $oVoucher) {
             // skip all vouchers that are not of the current type that is being calculated.
             if (
                 (TShopBasket::VOUCHER_NOT_SPONSORED === $oBasket->getVoucherTypeCurrentlyRecalculating() && $oVoucher->IsSponsored()) ||
                 (TShopBasket::VOUCHER_SPONSORED === $oBasket->getVoucherTypeCurrentlyRecalculating() && !$oVoucher->IsSponsored())
             ) {
-                $skippedVouchers[] = $oVoucher;
+                $this->AddItem($oVoucher);
                 continue;
             }
 
@@ -133,11 +132,6 @@ class TShopBasketVoucherCoreList extends TIterator
                 $aMessageData['iRemoveReasoneCode'] = $cVoucherAllowUseCode;
                 $oMessageManager->AddMessage($sMessangerName, 'VOUCHER-ERROR-NO-LONGER-VALID-FOR-BASKET', $aMessageData);
             }
-        }
-
-        // add the skipped vouchers back to the list
-        foreach ($skippedVouchers as $skippedVoucher) {
-            $this->AddItem($skippedVoucher);
         }
 
         if ($bInvalidVouchersFound) {
