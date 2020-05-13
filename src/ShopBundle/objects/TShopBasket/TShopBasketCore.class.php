@@ -203,6 +203,12 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     const SESSION_KEY_LAST_CREATED_ORDER_ID = 'basketobjectlastorderid';
 
+    public const VOUCHER_TYPE_NOT_SET = -1;
+    public const VOUCHER_SPONSORED = 0;
+    public const VOUCHER_NOT_SPONSORED = 1;
+
+    private $voucherTypeCurrentlyRecalculating = self::VOUCHER_TYPE_NOT_SET;
+
     /**
      * if set to true, the basket will recalculate its contents on destruction or reinitialization
      * use SetBasketRecalculationFlag and BasketRequiresRecalculation to access.
@@ -747,7 +753,13 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $this->reloadVouchers();
 
         // now calculate the voucher values that act as discounts (vouchers NOT sponsored)
+        // We need to set the type here because the current method to remove invalid vouchers does not take a type which
+        // we can use to filter the vouchers being recalculated at the moment.
+        // This fixes https://github.com/chameleon-system/chameleon-system/issues/540
+        $this->setVoucherTypeCurrentlyRecalculating(self::VOUCHER_NOT_SPONSORED);
         $this->RecalculateNoneSponsoredVouchers();
+        $this->setVoucherTypeCurrentlyRecalculating(self::VOUCHER_TYPE_NOT_SET);
+
         $this->dCostArticlesTotalAfterDiscounts = $this->dCostArticlesTotalAfterDiscounts - $this->dCostNoneSponsoredVouchers;
 
         $this->RecalculateShipping();
@@ -755,12 +767,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
         $this->RecalculateVAT();
         $this->dCostTotal = $this->dCostArticlesTotalAfterDiscounts + $this->dCostShipping + $this->dCostPaymentMethodSurcharge;
+        $this->setVoucherTypeCurrentlyRecalculating(self::VOUCHER_SPONSORED);
         $this->RecalculateVouchers();
-        // Since vouchers are recalculated twice, we need to remember all calls to RemoveInvalidVouchers internally to not
-        // check valid vouchers twice.
-        // At this point we are done with all recalculations and can tell the voucher list to reset its internal state to be ready
-        // for the next time vouchers are being recalculated.
-        $this->GetActiveVouchers()->allRemoveRunsDone();
+        $this->setVoucherTypeCurrentlyRecalculating(self::VOUCHER_TYPE_NOT_SET);
         $this->dCostTotal = $this->dCostTotal - $this->dCostVouchers; // - $this->dCostDiscounts;
         $this->dCostTotalWithoutShipping = $this->dCostTotal - $this->dCostShipping;
 
@@ -982,7 +991,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         if (!is_null($this->GetActiveVouchers())) {
             $this->dCostNoneSponsoredVouchers = 0;
             $this->GetActiveVouchers()->RemoveInvalidVouchers(MTShopBasketCore::MSG_CONSUMER_NAME, $this);
-
             $this->dCostNoneSponsoredVouchers = $this->GetActiveVouchers()->GetVoucherValue(false);
             if ($this->dCostNoneSponsoredVouchers > $this->dCostArticlesTotalAfterDiscounts) {
                 $this->dCostNoneSponsoredVouchers = $this->dCostArticlesTotalAfterDiscounts;
@@ -1501,6 +1509,18 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         return $this->oBasketArticles;
     }
 
+    /**
+     * @return int - TShopBasketCore::VOUCHER_TYPE_NOT_SET|TShopBasketCore::VOUCHER_NOT_SPONSORED|TShopBasketCore::VOUCHER_SPONSORED
+     */
+    public function getVoucherTypeCurrentlyRecalculating(): int
+    {
+        return $this->voucherTypeCurrentlyRecalculating;
+    }
+
+    private function setVoucherTypeCurrentlyRecalculating(int $type) {
+        $this->voucherTypeCurrentlyRecalculating = $type;
+    }
+
     protected function setBasketArticles($oArticles)
     {
         $this->oBasketArticles = $oArticles;
@@ -1542,7 +1562,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             $oMessageManager->AddMessage($sMessageHandler, 'VOUCHER-ERROR-'.$cAllowUseOfVoucherResult, $aMessageData);
         } else {
             $this->GetActiveVouchers()->AddItem($oVoucher);
-            $this->GetActiveVouchers()->markAsValid($oVoucher);
             $oMessageManager->AddMessage($sMessageHandler, 'VOUCHER-ADDED', $aMessageData);
             $bVoucherAdded = true;
             $this->SetBasketRecalculationFlag();
