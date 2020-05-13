@@ -12,8 +12,6 @@
 class TShopBasketVoucherCoreList extends TIterator
 {
 
-    private $checkedAndValid = [];
-
     /**
      * Adds a voucher to the list. note that it wil not check if the voucher is valid (this must be done by the calling method)
      * Returns the voucher key generated when adding the voucher.
@@ -88,22 +86,6 @@ class TShopBasketVoucherCoreList extends TIterator
         return $dValue;
     }
 
-    // allRemoveRunsDone should be called as soon as all calls to RemoveInvalidVouchers are done for one recalculation
-    public function allRemoveRunsDone()
-    {
-        $this->checkedAndValid = [];
-    }
-
-    // markAsValid will prevent a voucher from being checked until the next call to allRemoveRunsDone
-    // This is used when a voucher is checked and added outside of this class, like in \TShopBasketCore::AddVoucher.
-    // AddVoucher will check if the use of the voucher is allowed and if it is, we do not want to check it here again
-    // at the next recalculation of the basket.
-    // This fixes https://github.com/chameleon-system/chameleon-system/issues/540
-    public function markAsValid(TdbShopVoucher $voucher)
-    {
-        $this->checkedAndValid[] = $voucher->id;
-    }
-
     /**
      * Removes all vouchers from the basket, that are not valid based on the contents of the basket and the current user
      * Returns the number of vouchers removed.
@@ -128,23 +110,20 @@ class TShopBasketVoucherCoreList extends TIterator
         $aVoucherList = $this->_items;
         $this->Destroy();
 
-        // we re-add all already checked vouchers as we will ignore them in the checks later.
-        foreach ($aVoucherList as $voucher) {
-            if (in_array($voucher->id, $this->checkedAndValid, true)) {
-                $this->AddItem($voucher);
-            }
-        }
         $bInvalidVouchersFound = false;
         foreach ($aVoucherList as $iVoucherKey => $oVoucher) {
-            if (in_array($voucher->id, $this->checkedAndValid, true)) {
+            // skip all vouchers that are not of the current type that is being calculated.
+            if (
+                (TShopBasket::VOUCHER_NOT_SPONSORED === $oBasket->getVoucherTypeCurrentlyRecalculating() && $oVoucher->IsSponsored()) ||
+                (TShopBasket::VOUCHER_SPONSORED === $oBasket->getVoucherTypeCurrentlyRecalculating() && !$oVoucher->IsSponsored())
+            ) {
+                $this->AddItem($oVoucher);
                 continue;
             }
-            /** @var $oVoucher TdbShopVoucher */
+
             $cVoucherAllowUseCode = $oVoucher->AllowUseOfVoucher();
             if (TdbShopVoucher::ALLOW_USE == $cVoucherAllowUseCode) {
                 $this->AddItem($oVoucher);
-                // we remember all already successfully checked vouchers so we do not recheck them in second runs.
-                $this->markAsValid($oVoucher);
             } else {
                 $bInvalidVouchersFound = true;
                 $this->RemoveInvalidVoucherHook($oVoucher, $oBasket);
