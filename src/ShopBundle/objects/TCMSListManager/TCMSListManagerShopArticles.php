@@ -25,19 +25,28 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
     {
         parent::PostCreateTableObjectHook();
 
-        $isActive = $this->tableObj->getCustomSearchFieldParameter('is_active');
-
-        if (null === $isActive) {
-            $isActive = '';
-        }
-
-        $filterArticleType = $this->tableObj->getCustomSearchFieldParameter('filterArticleType');
-
-        if (null === $filterArticleType) {
-            $filterArticleType = 'all';
+        // TODO see TFullGroupTable.class.php:893 for the handling of "search_term" (only from post data)
+        $customParameterNames = ['filterArticleType', 'is_active'];
+        foreach ($customParameterNames as $parameterName) {
+            if (true === \array_key_exists($parameterName, $this->tableObj->_postData)) {
+                $this->tableObj->AddCustomSearchFieldParameter([$parameterName => $this->tableObj->_postData[$parameterName]]);
+            }
         }
 
         $request = $this->getRequest();
+
+        $isActive = $this->tableObj->getCustomSearchFieldParameter('is_active');
+        if (null === $isActive) {
+            $isActive = '';
+        }
+        if ($request->query->has('is_active')) {
+            $isActive = $request->query->get('is_active');
+        }
+
+        $filterArticleType = $this->tableObj->getCustomSearchFieldParameter('filterArticleType');
+        if (null === $filterArticleType) {
+            $filterArticleType = 'all';
+        }
         if (true === $request->query->has('filterArticleType')) {
             $filterArticleType = $request->query->get('filterArticleType');
         }
@@ -50,9 +59,9 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
         $filterSection .= "\n</div>\n";
 
         $this->tableObj->searchBoxContent = $filterSection;
-        $this->tableObj->aHiddenFieldIgnoreList = array('filterArticleType', 'is_active');
+        $this->tableObj->aHiddenFieldIgnoreList = $customParameterNames;
 
-        $customSearchFieldParams = array('filterArticleType' => $filterArticleType, 'is_active' => $isActive);
+        $customSearchFieldParams = ['filterArticleType' => $filterArticleType, 'is_active' => $isActive];
         $this->tableObj->AddCustomSearchFieldParameter($customSearchFieldParams);
     }
 
@@ -89,12 +98,6 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
      */
     private function getFilterFieldActive($isActive)
     {
-        $request = $this->getRequest();
-
-        if ($request->query->has('is_active')) {
-            $isActive = $request->query->get('is_active');
-        }
-
         $oViewRenderer = new ViewRenderer();
         $oViewRenderer->AddSourceObject('sInputClass', 'form-control input-sm submitOnSelect');
         $oViewRenderer->AddSourceObject('sName', 'is_active');
