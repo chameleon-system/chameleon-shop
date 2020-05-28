@@ -646,6 +646,15 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         return $bWasAdded;
     }
 
+    public function updateCustomData(string $basketIdentifier, array $customData): void
+    {
+        $item = $this->FindItemByBasketItemKey($basketIdentifier);
+        if (false === $item) {
+            return;
+        }
+        $item->setCustomData($customData);
+    }
+
     /**
      * searches for the item passed. if found, we return the item found, else we return false.
      *

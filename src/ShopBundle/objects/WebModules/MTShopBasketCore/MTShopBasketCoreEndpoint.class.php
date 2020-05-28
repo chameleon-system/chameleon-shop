@@ -941,6 +941,11 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
             } else {
                 $bItemWasUpdated = $oBasket->AddItem($oArticle);
             }
+            if (null !== $oExistingItem) {
+                if (($oArticle instanceof IPkgShopBasketArticleWithCustomData) && true === $oArticle->isConfigurableArticle()) {
+                    $oBasket->updateCustomData($oArticle->sBasketItemKey, $oArticle->getCustomData());
+                }
+            }
 
             $this->PostUpdateItemInBasketEvent($oArticle, $bItemWasUpdated);
 
