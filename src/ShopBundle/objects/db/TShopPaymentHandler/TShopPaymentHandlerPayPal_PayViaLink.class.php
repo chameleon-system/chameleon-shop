@@ -130,7 +130,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
      */
     public function ProcessIPNRequest($oOrder, $aURLParameter)
     {
-        $logger = $this->getLogger();
+        $logger = $this->getPaypalLogger();
 
         $sPayPalURL = $this->GetConfigParameter('url');
         $sPayPalURL = str_replace(array('https://', 'http://'), '', $sPayPalURL);
@@ -401,7 +401,10 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         return ServiceLocator::get('chameleon_system_core.util.url');
     }
 
-    private function getLogger(): LoggerInterface
+    /**
+     * @return LoggerInterface
+     */
+    private function getPaypalLogger(): LoggerInterface
     {
         return ServiceLocator::get('monolog.logger.order');
     }
