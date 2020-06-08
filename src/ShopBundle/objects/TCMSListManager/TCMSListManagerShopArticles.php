@@ -26,6 +26,9 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
         parent::PostCreateTableObjectHook();
 
         // TODO see TFullGroupTable.class.php:893 for the handling of "search_term" (only from post data)
+        // TODO would be tripple indirect: cache is merged with post data, here it is extracted from post data and add
+        //    to table object to be again checked below with getCustomSearchFieldParameter() and THEN maybe taken from current request.
+
         $customParameterNames = ['filterArticleType', 'is_active'];
         foreach ($customParameterNames as $parameterName) {
             if (true === \array_key_exists($parameterName, $this->tableObj->_postData)) {
