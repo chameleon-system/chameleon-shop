@@ -25,33 +25,18 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
     {
         parent::PostCreateTableObjectHook();
 
-        // TODO see TFullGroupTable.class.php:893 for the handling of "search_term" (only from post data)
-        // TODO would be tripple indirect: cache is merged with post data, here it is extracted from post data and add
-        //    to table object to be again checked below with getCustomSearchFieldParameter() and THEN maybe taken from current request.
-
-        $customParameterNames = ['filterArticleType', 'is_active'];
-        foreach ($customParameterNames as $parameterName) {
-            if (true === \array_key_exists($parameterName, $this->tableObj->_postData)) {
-                $this->tableObj->AddCustomSearchFieldParameter([$parameterName => $this->tableObj->_postData[$parameterName]]);
-            }
-        }
-
         $request = $this->getRequest();
 
-        $isActive = $this->tableObj->getCustomSearchFieldParameter('is_active');
-        if (null === $isActive) {
-            $isActive = '';
-        }
         if ($request->query->has('is_active')) {
             $isActive = $request->query->get('is_active');
+        } else {
+            $isActive = $this->tableObj->_postData['is_active'] ?? '';
         }
 
-        $filterArticleType = $this->tableObj->getCustomSearchFieldParameter('filterArticleType');
-        if (null === $filterArticleType) {
-            $filterArticleType = 'all';
-        }
         if (true === $request->query->has('filterArticleType')) {
             $filterArticleType = $request->query->get('filterArticleType');
+        } else {
+            $filterArticleType = $this->tableObj->_postData['filterArticleType'] ?? 'all';
         }
 
         $filterSection = "<div class=\"form-group mr-2\">\n";
@@ -62,9 +47,10 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
         $filterSection .= "\n</div>\n";
 
         $this->tableObj->searchBoxContent = $filterSection;
-        $this->tableObj->aHiddenFieldIgnoreList = $customParameterNames;
 
         $customSearchFieldParams = ['filterArticleType' => $filterArticleType, 'is_active' => $isActive];
+        $this->tableObj->aHiddenFieldIgnoreList = \array_keys($customSearchFieldParams);
+
         $this->tableObj->AddCustomSearchFieldParameter($customSearchFieldParams);
     }
 
