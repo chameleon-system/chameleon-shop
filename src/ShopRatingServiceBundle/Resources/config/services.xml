@@ -16,7 +16,8 @@
             <argument type="service" id="database_connection" />
         </service>
 
-        <service id="chameleon_system_shop_rating_service.mapper.ekomi" class="TPkgRatingServiceEkomiMapper" public="true">
+        <service id="chameleon_system_shop_rating_service.mapper.ekomi" class="TPkgRatingServiceEkomiMapper">
+            <tag name="chameleon_system.mapper"/>
         </service>
 
         <service id="chameleon_system_shop_rating_service.util.cache" class="ChameleonSystem\ShopRatingService\Util\CacheUtil" public="true">
