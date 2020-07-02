@@ -25,21 +25,18 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
     {
         parent::PostCreateTableObjectHook();
 
-        $isActive = $this->tableObj->getCustomSearchFieldParameter('is_active');
-
-        if (null === $isActive) {
-            $isActive = '';
-        }
-
-        $filterArticleType = $this->tableObj->getCustomSearchFieldParameter('filterArticleType');
-
-        if (null === $filterArticleType) {
-            $filterArticleType = 'all';
-        }
-
         $request = $this->getRequest();
+
+        if ($request->query->has('is_active')) {
+            $isActive = $request->query->get('is_active');
+        } else {
+            $isActive = $this->tableObj->_postData['is_active'] ?? '';
+        }
+
         if (true === $request->query->has('filterArticleType')) {
             $filterArticleType = $request->query->get('filterArticleType');
+        } else {
+            $filterArticleType = $this->tableObj->_postData['filterArticleType'] ?? 'all';
         }
 
         $filterSection = "<div class=\"form-group mr-2\">\n";
@@ -50,9 +47,10 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
         $filterSection .= "\n</div>\n";
 
         $this->tableObj->searchBoxContent = $filterSection;
-        $this->tableObj->aHiddenFieldIgnoreList = array('filterArticleType', 'is_active');
 
-        $customSearchFieldParams = array('filterArticleType' => $filterArticleType, 'is_active' => $isActive);
+        $customSearchFieldParams = ['filterArticleType' => $filterArticleType, 'is_active' => $isActive];
+        $this->tableObj->aHiddenFieldIgnoreList = \array_keys($customSearchFieldParams);
+
         $this->tableObj->AddCustomSearchFieldParameter($customSearchFieldParams);
     }
 
@@ -89,12 +87,6 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
      */
     private function getFilterFieldActive($isActive)
     {
-        $request = $this->getRequest();
-
-        if ($request->query->has('is_active')) {
-            $isActive = $request->query->get('is_active');
-        }
-
         $oViewRenderer = new ViewRenderer();
         $oViewRenderer->AddSourceObject('sInputClass', 'form-control input-sm submitOnSelect');
         $oViewRenderer->AddSourceObject('sName', 'is_active');
