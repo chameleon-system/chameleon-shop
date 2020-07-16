@@ -131,7 +131,7 @@
             <argument type="service" id="chameleon_system_shop.product_inventory_service_provider" />
         </service>
 
-        <service id="chameleon_system_shop.product_controller" class="%chameleon_system_shop.product_controller.class%">
+        <service id="chameleon_system_shop.product_controller" class="%chameleon_system_shop.product_controller.class%" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.language_service" />
             <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
@@ -156,7 +156,7 @@
         <service id="chameleon_system_shop.shop_route_article_factory" class="%chameleon_system_shop.shop_route_article_factory.class%">
         </service>
 
-        <service id="chameleon_system_shop.basket_step_controller" class="TPkgShopBasketStepsRouteController">
+        <service id="chameleon_system_shop.basket_step_controller" class="TPkgShopBasketStepsRouteController" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.language_service" />
             <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
@@ -197,7 +197,7 @@
             <argument type="service" id="chameleon_system_shop.payment.handler_data_access_request_level_cache_decorator.inner" />
         </service>
 
-        <service id="chameleon_system_shop.payment.handler_factory" class="ChameleonSystem\ShopBundle\Payment\PaymentHandler\ShopPaymentHandlerFactory">
+        <service id="chameleon_system_shop.payment.handler_factory" class="ChameleonSystem\ShopBundle\Payment\PaymentHandler\ShopPaymentHandlerFactory" public="true">
             <argument type="service" id="chameleon_system_shop.payment.config_loader" />
             <argument type="service" id="chameleon_system_shop.payment.handler_data_access" />
         </service>
