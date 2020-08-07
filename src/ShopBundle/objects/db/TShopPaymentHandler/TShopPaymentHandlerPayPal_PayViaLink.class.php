@@ -318,10 +318,8 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
                 ->setUser(null)
                 ->setPassword(null);
 
-            $response = $oToHostHandler->executeRequest();
-            $response = \substr($response, \strpos($response, "\r\n\r\n") + 4);
+            return $oToHostHandler->executeRequest();
 
-            return $oToHostHandler->getLastResponseHeader().$response;
         } catch (TPkgCmsException_Log $e) {
             return '';
         }
