@@ -65,18 +65,21 @@ final class BasketVariableReplacer
         $paramsToRender = $this->filterKeys($queryParameters, [\MTShopBasketCoreEndpoint::URL_REQUEST_PARAMETER]);
         $paramsToRender = $this->flattenQueryParameters($paramsToRender);
 
-        try {
-            $hiddenFieldsHtml = $this->twigEnvironment->render(
-                self::HIDDEN_FIELDS_SNIPPET,
-                ['values' => $paramsToRender]
-            );
-            \TTools::AddStaticPageVariables([self::BASKET_HIDDEN_FIELDS_PLACEHOLDER => $hiddenFieldsHtml]);
-        } catch(Error $error) {
-            $this->logger->error(
-                sprintf('Error rendering hidden fields for basket forms: %s', $error->getMessage()),
-                ['exception' => $error]
-            );
+        $hiddenFieldsHtml = [];
+        foreach ($paramsToRender as $name => $value ) {
+            try {
+                $hiddenFieldsHtml[] = $this->twigEnvironment->render(
+                    self::HIDDEN_FIELDS_SNIPPET,
+                    ['name' => $name, 'value' => $value]
+                );
+            } catch(Error $error) {
+                $this->logger->error(
+                    sprintf('Error rendering hidden field for basket forms. %s => %s, Error: %s', $name, $value, $error->getMessage()),
+                    ['exception' => $error]
+                );
+            }
         }
+        \TTools::AddStaticPageVariables([self::BASKET_HIDDEN_FIELDS_PLACEHOLDER => implode('', $hiddenFieldsHtml)]);
     }
 
     /**
