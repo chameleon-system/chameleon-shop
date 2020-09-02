@@ -284,7 +284,7 @@
             <argument type="service" id="twig"/>
             <argument type="service" id="logger" on-invalid="ignore"/>
             <tag name="monolog.logger" channel="request"/>
-            <tag name="kernel.event_listener" event="kernel.request" method="handleRequest" priority="253"/>
+            <tag name="kernel.event_listener" event="chameleon_system_core.pre_output" method="handleContentOutput" priority="253"/>
         </service>
 
     </services>
