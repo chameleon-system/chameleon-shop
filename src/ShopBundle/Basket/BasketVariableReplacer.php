@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\ShopBundle\Basket;
 
-use ChameleonSystem\CoreBundle\Event\FilterResponseEvent;
+use ChameleonSystem\CoreBundle\Event\FilterContentEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
@@ -64,12 +64,12 @@ final class BasketVariableReplacer
     }
 
     /**
-     * filterResponse will be invoked on chameleon_system_core.filter_response and add the hidden fields to the basket form.
+     * filterResponse will be invoked on chameleon_system_core.filter_content and add the hidden fields to the basket form.
      * On error it will log to the request channel and move on. It will not halt execution.
      *
-     * @param FilterResponseEvent $event
+     * @param FilterContentEvent $event
      */
-    public function filterResponse(FilterResponseEvent $event): void
+    public function filterResponse(FilterContentEvent $event): void
     {
         $content = $event->getContent();
         if (false === strpos($content, self::BASKET_HIDDEN_FIELDS_PLACEHOLDER)) {

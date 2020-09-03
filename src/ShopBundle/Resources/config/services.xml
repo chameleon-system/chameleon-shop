@@ -285,7 +285,7 @@
             <argument type="service" id="request_stack" />
             <argument type="service" id="logger" on-invalid="ignore"/>
             <tag name="monolog.logger" channel="request"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.filter_response" method="filterResponse" priority="0"/>
+            <tag name="kernel.event_listener" event="chameleon_system_core.filter_content" method="filterResponse" priority="0"/>
         </service>
 
     </services>
