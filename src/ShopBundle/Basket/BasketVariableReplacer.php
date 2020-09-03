@@ -72,7 +72,7 @@ final class BasketVariableReplacer
     public function filterResponse(FilterResponseEvent $event): void
     {
         $content = $event->getContent();
-        if (strpos($content, self::BASKET_HIDDEN_FIELDS_PLACEHOLDER) === false) {
+        if (false === strpos($content, self::BASKET_HIDDEN_FIELDS_PLACEHOLDER)) {
             return;
         }
 
@@ -83,10 +83,11 @@ final class BasketVariableReplacer
             $this->logger->info(
                 sprintf('Could not render hidden fields for basket forms. Request was null.')
             );
+
             return;
         }
 
-        if ($this->paramsRuntimeCache === null) {
+        if (null === $this->paramsRuntimeCache) {
 
             $queryParameters = $request->query->all();
             $this->paramsRuntimeCache = $this->filterKeys($queryParameters, [\MTShopBasketCoreEndpoint::URL_REQUEST_PARAMETER]);
