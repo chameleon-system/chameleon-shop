@@ -64,7 +64,7 @@ final class BasketVariableReplacer
     }
 
     /**
-     * handleContentOutput will be invoked on chameleon_system_core.pre_output and add the hidden fields to the basket form.
+     * filterResponse will be invoked on chameleon_system_core.filter_response and add the hidden fields to the basket form.
      * On error it will log to the request channel and move on. It will not halt execution.
      *
      * @param FilterResponseEvent $event
