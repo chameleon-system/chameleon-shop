@@ -640,6 +640,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             return;
         }
         $item->setCustomData($customData);
+
+        // this may result in items with the same basket ident - in that case we should merge them
+        $this->oBasketArticles->mergeIdenticalBasketItems();
     }
 
     /**

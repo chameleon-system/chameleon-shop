@@ -801,4 +801,31 @@ class TShopBasketArticleCoreList extends TIterator
             $this->aObservers[$sObserverName]->OnBasketItemDeleteEvent($oDeletedItem);
         }
     }
+
+    /**
+     * items with the same sBasketItemKey will be merged into one item.
+     */
+    public function mergeIdenticalBasketItems(): void
+    {
+        /** @var TShopBasketArticle[] $items */
+        $items = [];
+        $mergedItems = false;
+        $this->setItemPointer(0);
+        while (false !== ($item = $this->next())) {
+            $key = $item->sBasketItemKey;
+            if (isset($items[$key])) {
+                $items[$key]->ChangeAmount($items[$key]->dAmount + $item->dAmount);
+                $mergedItems = true;
+                continue;
+            }
+            $items[$key] = $item;
+        }
+        $this->setItemPointer(0);
+
+        if (false === $mergedItems) {
+            return;
+        }
+
+        $this->_items = array_values($items);
+    }
 }
