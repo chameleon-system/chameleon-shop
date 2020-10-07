@@ -921,13 +921,11 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
             }
         }
 
+        $customData = [];
         if (($oArticle instanceof IPkgShopBasketArticleWithCustomData) && true === $oArticle->isConfigurableArticle()) {
             $customData = $this->getCustomDataFromRequest($oArticle, $aRequestData, $oExistingItem);
             if (null !== $customData) {
                 $bDataValid = $this->customDataIsValid($oArticle, $customData, $oMessage, $sMessageHandler);
-                if ($bDataValid) {
-                    $oArticle->setCustomData($customData);
-                }
             }
         }
 
@@ -941,10 +939,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
             } else {
                 $bItemWasUpdated = $oBasket->AddItem($oArticle);
             }
-            if (null !== $oExistingItem) {
-                if (($oArticle instanceof IPkgShopBasketArticleWithCustomData) && true === $oArticle->isConfigurableArticle()) {
-                    $oBasket->updateCustomData($oArticle->sBasketItemKey, $oArticle->getCustomData());
-                }
+            if (($oArticle instanceof IPkgShopBasketArticleWithCustomData) && true === $oArticle->isConfigurableArticle()) {
+                $oBasket->updateCustomData($oArticle->sBasketItemKey, $customData);
             }
 
             $this->PostUpdateItemInBasketEvent($oArticle, $bItemWasUpdated);

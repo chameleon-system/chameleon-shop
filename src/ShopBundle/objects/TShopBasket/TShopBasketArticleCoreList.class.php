@@ -776,6 +776,19 @@ class TShopBasketArticleCoreList extends TIterator
         return $bValid;
     }
 
+    public function updateCustomData(string $basketIdentifier, array $customData): bool
+    {
+        $item = $this->FindItemWithProperty('sBasketItemKey', $basketIdentifier);
+        if (false === $item) {
+            return false;
+        }
+        $item->setCustomData($customData);
+
+        $this->mergeIdenticalBasketItems();
+
+        return true;
+    }
+
     /**
      * called whenever an item in the basket item list is changed.
      *
@@ -800,5 +813,32 @@ class TShopBasketArticleCoreList extends TIterator
         foreach (array_keys($this->aObservers) as $sObserverName) {
             $this->aObservers[$sObserverName]->OnBasketItemDeleteEvent($oDeletedItem);
         }
+    }
+
+    /**
+     * items with the same sBasketItemKey will be merged into one item.
+     */
+    private function mergeIdenticalBasketItems(): void
+    {
+        /** @var TShopBasketArticle[] $items */
+        $items = [];
+        $mergedItems = false;
+        $this->setItemPointer(0);
+        while (false !== ($item = $this->next())) {
+            $key = $item->sBasketItemKey;
+            if (isset($items[$key])) {
+                $items[$key]->ChangeAmount($items[$key]->dAmount + $item->dAmount);
+                $mergedItems = true;
+                continue;
+            }
+            $items[$key] = $item;
+        }
+        $this->setItemPointer(0);
+
+        if (false === $mergedItems) {
+            return;
+        }
+
+        $this->_items = array_values($items);
     }
 }
