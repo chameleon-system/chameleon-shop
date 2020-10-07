@@ -633,16 +633,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         return $bWasAdded;
     }
 
-    public function updateCustomData(string $basketIdentifier, array $customData): void
+    public function updateCustomData(string $basketIdentifier, array $customData): bool
     {
-        $item = $this->FindItemByBasketItemKey($basketIdentifier);
-        if (false === $item) {
-            return;
-        }
-        $item->setCustomData($customData);
-
-        // this may result in items with the same basket ident - in that case we should merge them
-        $this->oBasketArticles->mergeIdenticalBasketItems();
+        return $this->oBasketArticles->updateCustomData($basketIdentifier, $customData);
     }
 
     /**

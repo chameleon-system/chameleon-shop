@@ -776,6 +776,19 @@ class TShopBasketArticleCoreList extends TIterator
         return $bValid;
     }
 
+    public function updateCustomData(string $basketIdentifier, array $customData): bool
+    {
+        $item = $this->FindItemWithProperty('sBasketItemKey', $basketIdentifier);
+        if (false === $item) {
+            return false;
+        }
+        $item->setCustomData($customData);
+
+        $this->mergeIdenticalBasketItems();
+
+        return true;
+    }
+
     /**
      * called whenever an item in the basket item list is changed.
      *
@@ -805,7 +818,7 @@ class TShopBasketArticleCoreList extends TIterator
     /**
      * items with the same sBasketItemKey will be merged into one item.
      */
-    public function mergeIdenticalBasketItems(): void
+    private function mergeIdenticalBasketItems(): void
     {
         /** @var TShopBasketArticle[] $items */
         $items = [];
