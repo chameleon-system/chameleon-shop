@@ -1092,6 +1092,14 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         return $aIncludes;
     }
 
+    public function GetPostRenderVariables(): array
+    {
+        $variables = parent::GetPostRenderVariables();
+        $variables['basketUrl'] = $this->getShopService()->getBasketLink(false);
+
+        return $variables;
+    }
+
     private function getBasketItemKeyFromUserInput($aRequestData)
     {
         if (true === isset($aRequestData[self::URL_ITEM_BASKET_KEY_NAME])) {
