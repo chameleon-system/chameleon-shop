@@ -391,7 +391,7 @@ class AmazonReferenceIdManagerPersistenceTest extends \PHPUnit_Extensions_Databa
         $manager = AmazonReferenceIdManager::createFromLocalId($dbal, '223454545');
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         $containerBuilder = new \Symfony\Component\DependencyInjection\ContainerBuilder();
@@ -415,7 +415,7 @@ class AmazonReferenceIdManagerPersistenceTest extends \PHPUnit_Extensions_Databa
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         self::$pdo->query('drop table '.self::AMAZON_ID_MANAGER_TABLE);

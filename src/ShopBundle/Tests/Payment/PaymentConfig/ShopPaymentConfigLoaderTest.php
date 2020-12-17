@@ -414,7 +414,7 @@ class ShopPaymentConfigLoaderTest extends TestCase
         return $loader;
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

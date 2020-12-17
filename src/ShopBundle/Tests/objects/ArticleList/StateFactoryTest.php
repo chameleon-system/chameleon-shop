@@ -64,13 +64,13 @@ class StateFactoryTest extends TestCase
         return $stateFactory;
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->stateFactory = clone self::getStateFactory();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

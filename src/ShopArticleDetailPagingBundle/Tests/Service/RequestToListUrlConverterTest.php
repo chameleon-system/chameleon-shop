@@ -40,7 +40,7 @@ class RequestToListUrlConverterTest extends TestCase
      */
     private $pagerParameters;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         if (!defined('TCMSUSERINPUT_DEFAULTFILTER')) {
@@ -48,7 +48,7 @@ class RequestToListUrlConverterTest extends TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->referrer = null;

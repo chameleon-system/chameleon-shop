@@ -30,7 +30,7 @@ class StateTest extends TestCase
     private $varyingParameters = null;
     private $queryParameter;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->stateString = null;

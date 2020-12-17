@@ -45,7 +45,7 @@ class DetailPagingServiceTest extends TestCase
     private $currentItemId;
     private $backToListUrl;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -56,7 +56,7 @@ class DetailPagingServiceTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->listSpotName = null;
