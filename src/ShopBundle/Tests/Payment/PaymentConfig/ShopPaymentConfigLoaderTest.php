@@ -17,9 +17,12 @@ use ChameleonSystem\ShopBundle\Payment\DataModel\OrderPaymentInfo;
 use ChameleonSystem\ShopBundle\Payment\PaymentConfig\ShopPaymentConfigLoader;
 use ChameleonSystem\ShopBundle\Payment\PaymentConfig\ShopPaymentConfigRawValue;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class ShopPaymentConfigLoaderTest extends TestCase
 {
+    use ProphecyTrait;
+
     private $shopPaymentConfigLoaderDataAccess;
     private $shopPaymentConfigProvider;
 

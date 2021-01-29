@@ -19,10 +19,13 @@ use ChameleonSystem\ShopArticleDetailPagingBundle\Service\AddParametersToUrlServ
 use ChameleonSystem\ShopArticleDetailPagingBundle\Service\DetailPagingService;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class DetailPagingServiceTest extends TestCase
 {
+    use ProphecyTrait;
+
     private $listSpotName;
     private $currentListPageUrl;
     /**

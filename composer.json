@@ -25,14 +25,15 @@
         "screenshotfolder_id": ""
     },
     "require": {
-        "chameleon-system/chameleon-base": "~7.1.0",
+        "chameleon-system/chameleon-base": "dev-feature/668-php8-compatibility as 7.1.0",
         "simplepie/simplepie": "~1.3"
     },
     "require-dev": {
         "chameleon-system/code-style-config": "dev-master@dev",
         "chameleon-system/sanitycheck": "~7.1.0",
         "chameleon-system/sanitycheck-bundle": "~7.1.0",
-        "phpunit/phpunit": "^8.5.13"
+        "phpspec/prophecy-phpunit": "^2.0.0",
+        "phpunit/phpunit": "^9.5.1"
     },
     "conflict": {
         "sebastian/comparator": "<1.2.4"

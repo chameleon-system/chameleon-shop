@@ -16,10 +16,13 @@ use ChameleonSystem\ShopArticleDetailPagingBundle\Bridge\Service\RequestToListUr
 use ChameleonSystem\ShopArticleDetailPagingBundle\Interfaces\RequestToListUrlConverterInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class RequestToListUrlConverterTest extends TestCase
 {
+    use ProphecyTrait;
+
     private $referrer = null;
     /**
      * @var InputFilterUtilInterface

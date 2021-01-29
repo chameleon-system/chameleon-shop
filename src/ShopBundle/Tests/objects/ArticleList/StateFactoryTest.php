@@ -16,10 +16,13 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\State;
 use ChameleonSystem\ShopBundle\objects\ArticleList\StateFactory;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class StateFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var array
      */
