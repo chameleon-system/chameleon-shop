@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+
 /*
  * This file is part of the Chameleon System (https://www.chameleonsystem.com).
  *
