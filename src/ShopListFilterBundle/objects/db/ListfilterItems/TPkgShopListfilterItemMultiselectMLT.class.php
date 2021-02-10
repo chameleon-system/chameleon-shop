@@ -21,8 +21,7 @@ class TPkgShopListfilterItemMultiselectMLT extends TPkgShopListfilterItemMultise
     {
         $sQuery = $this->GetFromInternalCache('sQueryRestrictionForActiveFilter');
         if (is_null($sQuery)) {
-            $aValues = $this->aActiveFilterData;
-            if (count($aValues) > 0) {
+            if (true === is_array($this->aActiveFilterData) && count($this->aActiveFilterData) > 0) {
                 $sItemListQuery = $this->GetSQLQueryForQueryRestrictionForActiveFilter();
                 $aIdList = array();
                 if (!empty($sItemListQuery)) {
