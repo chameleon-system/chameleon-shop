@@ -14,33 +14,42 @@ class EcommerceStatsTable implements EcommerceStatsTableInterface
     /**
      * @var EcommerceStatsGroup[]
      */
-    private array $blocks = [];
-
-    private bool $showDiffColumn = false;
-
-    private ?string $blockName = null;
+    private $blocks = [];
 
     /**
-     * @var array string[]
+     * @var bool
      */
-    private array $columnNames;
+    private $showDiffColumn = false;
 
-    private int $maxGroupCount;
+    /**
+     * @var string|null
+     */
+    private $blockName = null;
+
+    /**
+     * @var string[]
+     */
+    private $columnNames;
+
+    /**
+     * @var int
+     */
+    private $maxGroupCount;
 
     /**
      * @var Connection
      */
-    private Connection $connection;
+    private $connection;
 
     /**
      * @var TranslatorInterface
      */
-    private TranslatorInterface $translator;
+    private $translator;
 
     /**
      * @var LoggerInterface
      */
-    private LoggerInterface $logger;
+    private $logger;
 
     public function __construct(
         Connection $connection, 

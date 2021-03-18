@@ -7,7 +7,10 @@ use Twig\TwigFilter;
 
 class FormatterTwigExtension extends AbstractExtension
 {
-    static array $weekLocaleFormatMap = ['de' => '%1$d-KW%2d', 'en' => 'W%2$d/%1$d'];
+    /**
+     * @var array<string, string>
+     */
+    const WEEK_LOCALE_FORMAT_MAP = ['de' => '%1$d-KW%2d', 'en' => 'W%2$d/%1$d'];
 
     /**
      * {@inheritdoc}
@@ -54,7 +57,7 @@ class FormatterTwigExtension extends AbstractExtension
             $cmsLanguage = \TCMSLanguage::GetNewInstance();
             if (true === $cmsLanguage->LoadFromField('cmsident', $language)) {
                 $locale = $cmsLanguage->fieldIso6391;
-                $formatStr = self::$weekLocaleFormatMap[$locale] ?? null;
+                $formatStr = self::WEEK_LOCALE_FORMAT_MAP[$locale] ?? null;
                 if (null !== $formatStr) {
                     $dateTimeObj = new \DateTime($dateTime);
                     if (false !== $dateTimeObj) {

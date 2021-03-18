@@ -13,25 +13,62 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
 {
+    private const SEPARATOR = ';';
 
-    const SEPARATOR = ';';
+    /**
+     * @var string|null
+     */
+    protected $startDate = null;
 
-    protected ?string $startDate = null;
-    protected ?string $endDate = null;
-    protected string $dateGroupType = EcommerceStatsTableInterface::DATA_GROUP_TYPE_DAY;
-    protected bool $showChange = false;
-    protected ?string $viewName = 'html.table';
-    protected string $selectedPortalId = '';
+    /**
+     * @var string|null
+     */
+    protected $endDate = null;
+
+    /**
+     * @var string
+     */
+    protected $dateGroupType = EcommerceStatsTableInterface::DATA_GROUP_TYPE_DAY;
+
+    /**
+     * @var bool
+     */
+    protected $showChange = false;
+
+    /**
+     * @var string|null
+     */
+    protected $viewName = 'html.table';
+
+    /**
+     * @var string
+     */
+    protected $selectedPortalId = '';
 
     /**
      * @var EcommerceStatsTableInterface
      */
-    private EcommerceStatsTableInterface $stats;
+    private $stats;
 
-    private TranslatorInterface $translator;
-    private InputFilterUtilInterface $inputFilterUtil;
-    private UrlUtil $urlUtil;
-    private Connection $connection;
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * @var InputFilterUtilInterface
+     */
+    private $inputFilterUtil;
+
+    /**
+     * @var UrlUtil
+     */
+    private $urlUtil;
+
+    /**
+     * @var Connection
+     */
+    private $connection;
 
     /**
      * @var false|object|\TCMSLocal|\TdbCmsLocals|null

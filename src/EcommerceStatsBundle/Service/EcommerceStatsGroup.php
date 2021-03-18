@@ -5,13 +5,35 @@ namespace ChameleonSystem\EcommerceStatsBundle\Service;
 class EcommerceStatsGroup
 {
 
-    protected ?string $groupTitle = null;
-    protected array $groupTotals = [];
-    protected array $subGroups = [];
-    protected array $columnNames = [];
-    protected ?array $groupData = null;
+    /**
+     * @var string|null
+     */
+    protected $groupTitle = null;
 
-    public string $subGroupColumn = '';
+    /**
+     * @var array<string, int>
+     */
+    protected $groupTotals = [];
+
+    /**
+     * @var EcommerceStatsGroup[]
+     */
+    protected $subGroups = [];
+
+    /**
+     * @var string[]
+     */
+    protected $columnNames = [];
+
+    /**
+     * @var array<string, mixed>|null
+     */
+    protected $groupData = null;
+
+    /**
+     * @var string
+     */
+    public $subGroupColumn = '';
 
     public function init(string $groupTitle, string $subGroupColumn = ''): void
     {
@@ -22,9 +44,11 @@ class EcommerceStatsGroup
         $this->columnNames = [];
     }
 
-    /*
-    * return all column names used in this and any sub groups
-    */
+    /**
+     * Return all column names used in this and any sub groups
+     *
+     * @return string[]
+     */
     public function getColumnNames(): array
     {
         $names = $this->columnNames;
@@ -54,9 +78,9 @@ class EcommerceStatsGroup
         return max($this->groupTotals);
     }
 
-    /*
-    * return the max group depth for all sub groups
-    */
+    /**
+     * Return the max group depth for all sub groups
+     */
     public function getMaxGroupDepth(): int
     {
         $maxDepth = 0;
@@ -86,6 +110,9 @@ class EcommerceStatsGroup
         return $depth;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function evaluateGroupData(array $columnNames, ?int $maxGroupDepth = null, $showDiffColumn = false, $rowPrefix = '', $separator = ';'): array
     {
         if (null === $this->groupData) {
@@ -110,11 +137,11 @@ class EcommerceStatsGroup
         return $this->groupData;
     }
 
-    /*
-     * add data to the group structure
+    /**
+     * Add data to the group structure
      * @param array $subGroupDef - group name list
      * @param array $dataCell
-    */
+     */
     public function addRow(array $subGroupDef, array $dataCell): void
     {
         // update total
@@ -140,7 +167,7 @@ class EcommerceStatsGroup
     }
 
     /**
-     * update the totals for the group.
+     * Update the totals for the group.
      *
      * @param array $dataRow
      */
@@ -155,7 +182,7 @@ class EcommerceStatsGroup
     }
 
     /**
-     * add a column of data.
+     * Add a column of data.
      *
      * @param array $dataRow
      */
