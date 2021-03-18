@@ -1,0 +1,27 @@
+/* Basic */
+@media print {
+  header, footer,
+  #cmsbreadcrumb,
+  #processingModal,
+  #cmscontainer .sidebar,
+  .module-shop-statistic .standard .filters,
+  .module-shop-statistic .standard .actionLinks {
+    display: none;
+  }
+}
+
+@page { size:landscape; }
+.filters,
+.actionLinks {
+  visibility:hidden;
+  display:none;
+}
+.barchart-body {
+  page-break-after: always;
+}
+
+/* Barchart */
+
+.bar {
+  background-color: #185EA8;
+}

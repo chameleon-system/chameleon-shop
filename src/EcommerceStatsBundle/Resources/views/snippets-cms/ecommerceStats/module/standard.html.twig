@@ -1,0 +1,51 @@
+{#
+    @var string moduleSpotName
+    @var bool showChange
+    @var string portalId
+    @var string selectedPortalId
+    @var array portalList
+    @var array viewList
+    @var string activeViewName
+    @var string activeDateGroupType
+    @var array dateGroupTypeList
+    @var string csvDownloadUrl
+    @var string topSellerDownloadUrl
+    @var string [] tableData
+#}
+
+<br/>
+<div class="module-shop-statistic">
+    <div class="card standard">
+        <div class="card-header">
+            <h3 class="mb-0"><i class="fas fa-chart-pie mr-2"></i>{{ 'chameleon_system_ecommerce_stats.headline'|trans }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="filters">
+                {% include '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/filter-form.html.twig' %}
+            </div>
+
+            {% if tableData %}
+                {% if tableData.maxGroupCount == 1 %}
+                    <div class="no-data">{{ 'chameleon_system_ecommerce_stats.no_data'| trans }}</div>
+                {% else %}
+                <div class="actionLinks d-flex mt-4 flex-column flex-sm-row">
+                    <button class="btn btn-secondary mt-1 mr-sm-1" onclick="window.print()">{{ 'chameleon_system_ecommerce_stats.action_print'|trans }}</button>
+                    <a class="btn btn-secondary mt-1 mr-sm-1" href="{{ csvDownloadUrl| raw }}">{{ 'chameleon_system_ecommerce_stats.action_download'|trans }}</a>
+                    <a class="btn btn-secondary mt-1 mr-sm-1" href="{{ topSellerDownloadUrl| raw }}">{{ 'chameleon_system_ecommerce_stats.action_download_top_seller'|trans }}</a>
+                </div>
+
+                <div class="statistics mt-4">
+                    {% set includeFileName = '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/' ~ (activeViewName == 'html.barchart' ? 'html-barchart.html.twig' : 'html-table.html.twig') %}
+                    {% include includeFileName with {
+                        level: tableData.level,
+                        blocks: tableData.blocks,
+                        columnNames: tableData.columnNames,
+                        showDiffColumn: tableData.showDiffColumn,
+                        maxGroupCount: tableData.maxGroupCount
+                    } %}
+                </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>

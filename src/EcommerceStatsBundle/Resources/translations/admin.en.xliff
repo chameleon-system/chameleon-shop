@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages.en.xliff">
+        <body>
+
+            <trans-unit id="chameleon_system_ecommerce_stats.field_article_number">
+                <source>chameleon_system_ecommerce_stats.field_article_number</source>
+                <target>Article number</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.field_article_name">
+                <source>chameleon_system_ecommerce_stats.field_article_name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.field_order_count">
+                <source>chameleon_system_ecommerce_stats.field_order_count</source>
+                <target>Order count</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.field_value">
+                <source>chameleon_system_ecommerce_stats.field_value</source>
+                <target>Value</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.field_category">
+                <source>chameleon_system_ecommerce_stats.field_category</source>
+                <target>Category</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.headline">
+                <source>chameleon_system_ecommerce_stats.headline</source>
+                <target>Analysis</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_show_change">
+                <source>chameleon_system_ecommerce_stats.form_show_change</source>
+                <target>Show change</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_portal">
+                <source>chameleon_system_ecommerce_stats.form_portal</source>
+                <target>Show for portal</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.all_portals">
+                <source>chameleon_system_ecommerce_stats.all_portals</source>
+                <target>All portals</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.date_year">
+                <source>chameleon_system_ecommerce_stats.date_year</source>
+                <target>Year</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.date_day">
+                <source>chameleon_system_ecommerce_stats.date_day</source>
+                <target>Day</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.date_month">
+                <source>chameleon_system_ecommerce_stats.date_month</source>
+                <target>Month</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.date_week">
+                <source>chameleon_system_ecommerce_stats.date_week</source>
+                <target>Week</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_date_from">
+                <source>chameleon_system_ecommerce_stats.form_date_from</source>
+                <target>From</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_date_to">
+                <source>chameleon_system_ecommerce_stats.form_date_to</source>
+                <target>To</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_output_type">
+                <source>chameleon_system_ecommerce_stats.form_output_type</source>
+                <target>Output type</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_output_type_table">
+                <source>chameleon_system_ecommerce_stats.form_output_type_table</source>
+                <target>Table</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_output_type_chart">
+                <source>chameleon_system_ecommerce_stats.form_output_type_chart</source>
+                <target>Bar chart</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.action_show">
+                <source>chameleon_system_ecommerce_stats.action_show</source>
+                <target>Show</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.action_print">
+                <source>chameleon_system_ecommerce_stats.action_print</source>
+                <target>Print</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.action_download">
+                <source>chameleon_system_ecommerce_stats.action_download</source>
+                <target>Download analysis</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.action_download_top_seller">
+                <source>chameleon_system_ecommerce_stats.action_download_top_seller</source>
+                <target>Download top 50 selling products</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.column_total">
+                <source>chameleon_system_ecommerce_stats.column_total</source>
+                <target>Total</target>
+            </trans-unit>            
+            <trans-unit id="chameleon_system_ecommerce_stats.nothing_assigned">
+                <source>chameleon_system_ecommerce_stats.nothing_assigned</source>
+                <target>Nothing assigned</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.group_by">
+                <source>chameleon_system_ecommerce_stats.group_by</source>
+                <target>Group by</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.delta">
+                <source>chameleon_system_ecommerce_stats.delta</source>
+                <target>Δ</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.total">
+                <source>chameleon_system_ecommerce_stats.total</source>
+                <target>Total</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.no_data">
+                <source>chameleon_system_ecommerce_stats.no_data</source>
+                <target>No data available</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

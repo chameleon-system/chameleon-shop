@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults public="true" />
+
+        <service id="chameleon_system_ecommerce_stats.backend_module.ecommerce_stats" class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule" shared="false">
+            <argument type="service" id="chameleon_system_ecommerce_stats.ecommerce_stats_table" />
+            <argument type="service" id="database_connection" />
+            <argument type="service" id="chameleon_system_core.translator" />
+            <argument type="service" id="chameleon_system_core.util.input_filter" />
+            <argument type="service" id="chameleon_system_core.util.url" />
+            <tag name="chameleon_system.module"/>
+        </service>
+
+        <service id="chameleon_system_ecommerce_stats.ecommerce_stats_table" class="ChameleonSystem\EcommerceStatsBundle\Service\EcommerceStatsTable" public="true">
+            <argument type="service" id="database_connection" />
+            <argument type="service" id="chameleon_system_core.translator" />
+            <argument type="service" id="logger" />
+        </service>
+
+        <service class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Twig\FormatterTwigExtension" id="chameleon_system_ecommerce_stats.twig.formatter" public="false">
+            <tag name="twig.extension"/>
+        </service>
+
+    </services>
+</container>

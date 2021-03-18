@@ -1,0 +1,90 @@
+{#
+    @var string moduleSpotName
+    @var bool showChange
+    @var string portalId
+    @var string selectedPortalId
+    @var array portalList
+    @var array viewList
+    @var string activeViewName
+    @var string activeDateGroupType
+    @var array dateGroupTypeList
+    @var string csvDownloadUrl
+    @var string topSellerDownloadUrl
+#}
+
+<form method="post" action="">
+    <div class="d-flex align-items-center mb-4">
+        <label class="switch switch-label switch-pill switch-success mb-0 mr-2">
+            <input class="switch-input" type="checkbox" value="1" name="{{ moduleSpotName }}[showChange]" {% if showChange %} checked="checked"{% endif %} />
+            <span class="switch-slider" data-checked="✓" data-unchecked="✕"></span>
+        </label>
+        <span>{{ 'chameleon_system_ecommerce_stats.form_show_change'|trans }}</span>
+    </div>
+
+    {% if portalList|length > 1 %}
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <label class="font-weight-bold">
+                    {{ 'chameleon_system_ecommerce_stats.form_portal'|trans }}:
+                </label>
+                <select class="form-control" name="{{ moduleSpotName }}[portalId]">
+                    <option value="" {% if selectedPortalId %} selected="selected" {% endif %}>{{ 'chameleon_system_ecommerce_stats.all_portals'|trans }}</option>
+                    {% for portalId, portalName in portalList %}
+                        <option value="{{ portalId|e('html_attr') }}" {% if selectedPortalId == portalId %} selected="selected"{% endif %}>{{ portalName }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+   {% endif %}
+    <div class="row">
+        <div class="col-12 col-sm-6">
+            <div class="form-group">
+                <label class="font-weight-bold">
+                    {{ 'chameleon_system_ecommerce_stats.form_output_type'|trans }}:
+                </label>
+                <select class="form-control" name="{{ moduleSpotName }}[viewName]">
+                    {% for viewName, viewTranslation in viewList %}
+                        <option value="{{ viewName|e('html_attr') }}" {% if viewName == activeViewName %} selected="selected"{% endif %}>{{ viewTranslation }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-group">
+                <label class="font-weight-bold">
+                    {{ 'chameleon_system_ecommerce_stats.group_by'|trans }}:
+                </label>
+                <select class="form-control" name="{{ moduleSpotName }}[dateGroupType]">
+                    {% for dateGroupType, dateGroupTypeTranslation in dateGroupTypeList %}
+                        <option value="{{ dateGroupType|e('html_attr') }}" {% if dateGroupType == activeDateGroupType %} selected="selected"{% endif %}>{{ dateGroupTypeTranslation }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-sm-6">
+            <div class="form-group">
+                <label class="font-weight-bold">
+                    {{ 'chameleon_system_ecommerce_stats.form_date_from'|trans }}:
+                </label>
+                <div>
+                    <input class="form-control" type="text" name="{{ moduleSpotName }}[startDate]" value="{{ startDate| format_date }}"/>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-group">
+                <label class="font-weight-bold">
+                    {{ 'chameleon_system_ecommerce_stats.form_date_to'|trans }}:
+                </label>
+
+                <input class="form-control" type="text" name="{{ moduleSpotName }}[endDate]" value="{{ endDate| format_date }}"/>
+            </div>
+        </div>
+    </div>
+    <input class="btn btn-primary" type="submit" name="submit" value="{{ 'chameleon_system_ecommerce_stats.action_show'|trans|e('html_attr') }}" onclick="this.form.classList.add('show-loader-image')" />
+</form>

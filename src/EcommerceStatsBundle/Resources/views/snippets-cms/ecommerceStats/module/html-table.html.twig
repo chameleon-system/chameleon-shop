@@ -1,0 +1,34 @@
+{#
+    -- tableData:
+    @var int level
+    @var array blocks
+    @var string[] columnNames
+    @var bool showDiffColumn
+    @var int maxGroupCount
+#}
+
+<div class="TCMSGroupedStatistics">
+    <div class="table-responsive html-table">
+        <table border="1" class="table statsTable">
+            <tr>
+                {% for i in 1..maxGroupCount %}
+                    <th class="colHeader">&nbsp;</th>
+                {% endfor %}
+
+                {% for name in columnNames %}
+                    <th class="colHeader text-center">{{ name }}</th>
+                    {% if showDiffColumn %}
+                        <th class="colHeader text-center">{{ 'chameleon_system_ecommerce_stats.delta'| trans }}</th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+
+            {% set totalWidth = maxGroupCount + (columnNames | length) * (showDiffColumn ? 2 : 1) %}
+
+            {% for block in blocks %}
+                {% include '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/html-body.html.twig' with { group: block, level: level + 1 } %}
+                <tr><td colspan="{{ totalWidth }}">&nbsp;</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
