@@ -5,75 +5,65 @@
 </div>
 <?php
 
-function createOrUpdate(\ChameleonSystem\DatabaseMigration\Query\MigrationQueryData $data) {
-    $query = TCMSLogChange::getDatabaseConnection()->createQueryBuilder();
-    $conditions = [];
-    foreach ($data->getWhereEquals() as $column => $value) {
-        $conditions[] = $query->expr()->eq($column, $query->expr()->literal($value));
-    }
-    $count = (int) $query
-        ->select('COUNT(*)')
-        ->from($data->getTableName())
-        ->where($query->expr()->andX(...$conditions))
-        ->execute()
-        ->fetchColumn(0);
+$data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
+  ->setFields([
+      'classname' => 'chameleon_system_ecommerce_stats.backend_module.ecommerce_stats',
+      'name' => 'Shop Umsatzstatistiken Backendmodul',
+      'description' => '',
+      'icon_font_css_class' => 'fas fa-chart-pie',
+      'view_mapper_config' => 'standard=ecommerceStats/module/standard.html.twig',
+      'mapper_chain' => '',
+      'view_mapping' => '',
+      'revision_management_active' => '0',
+      'is_copy_allowed' => '0',
+      'show_in_template_engine' => '0',
+      'is_restricted' => '1',
+      'id' => '90eae2e0-796c-4b25-b3c8-62324df047d4',
+  ]);
+TCMSLogChange::insert(__LINE__, $data);
 
-    if (0 === $count) {
-        TCMSLogChange::insert(__LINE__, $data);
-    } else {
-        TCMSLogChange::update(__LINE__, $data);
-    }
-}
+$data = TCMSLogChange::createMigrationQueryData('cms_tpl_module_cms_usergroup_mlt', 'de')
+  ->setFields([
+      'source_id' => '90eae2e0-796c-4b25-b3c8-62324df047d4',
+      'target_id' => '11',
+      'entry_sort' => '0',
+  ]);
+TCMSLogChange::insert(__LINE__, $data);
 
-createOrUpdate(
-    TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
-        ->setFields([
-            'classname' => 'chameleon_system_ecommerce_stats.backend_module.ecommerce_stats',
-            'name' => 'Shop Umsatzstatistiken Backendmodul',
-            'description' => '',
-            'icon_font_css_class' => 'fas fa-chart-pie',
-            'view_mapper_config' => 'standard=ecommerceStats/module/standard.html.twig',
-            'mapper_chain' => '',
-            'view_mapping' => '',
-            'revision_management_active' => '0',
-            'is_copy_allowed' => '0',
-            'show_in_template_engine' => '0',
-            'is_restricted' => '1',
-            'id' => '45e3813d-0aee-2c22-f18a-5c571eb30371',
-        ])->setWhereEquals([ 'id' => '45e3813d-0aee-2c22-f18a-5c571eb30371' ])
-);
+$data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item', 'de')
+  ->setFields([
+      'name' => 'Umsatzstatistiken',
+      'url' => '/cms?pagedef=ecommerceStats&_pagedefType=@ChameleonSystemEcommerceStatsBundle',
+      'id' => '9c06702f-7ffb-426d-afe9-5ffd5a9cd122',
+  ]);
+TCMSLogChange::insert(__LINE__, $data);
 
-createOrUpdate(
-    TCMSLogChange::createMigrationQueryData('cms_tpl_module_cms_usergroup_mlt', 'de')
-        ->setFields([
-            'source_id' => '45e3813d-0aee-2c22-f18a-5c571eb30371',
-            'target_id' => '11',
-            'entry_sort' => '0',
-        ])->setWhereEquals([
-            'source_id' => '45e3813d-0aee-2c22-f18a-5c571eb30371',
-            'target_id' => '11',
-            'entry_sort' => '0',
-        ])
-);
+$data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item_cms_right_mlt', 'de')
+  ->setFields([
+      'source_id' => '9c06702f-7ffb-426d-afe9-5ffd5a9cd122',
+      'target_id' => '1',
+      'entry_sort' => '0',
+  ]);
+TCMSLogChange::insert(__LINE__, $data);
 
-createOrUpdate(
-    TCMSLogChange::createMigrationQueryData('cms_menu_custom_item', 'de')
-        ->setFields([
-            'name' => 'Umsatzstatistiken',
-            'url' => '/cms?pagedef=ecommerceStats&_pagedefType=@ChameleonSystemEcommerceStatsBundle',
-            'id' => 'd5ab4158-98db-8944-75c5-4af914a4a0c5',
-        ])->setWhereEquals([ 'id' => 'd5ab4158-98db-8944-75c5-4af914a4a0c5' ])
-);
+$data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item_cms_right_mlt', 'de')
+  ->setWhereEquals([
+      'source_id' => '9c06702f-7ffb-426d-afe9-5ffd5a9cd122',
+      'target_id' => '1',
+  ]);
+TCMSLogChange::delete(__LINE__, $data);
 
-createOrUpdate(
-    TCMSLogChange::createMigrationQueryData('cms_menu_item', 'de')
-        ->setFields([
-            'name' => 'Umsätze',
-            'target' => 'd5ab4158-98db-8944-75c5-4af914a4a0c5',
-            'icon_font_css_class' => 'fas fa-chart-pie',
-            'position' => '22',
-            'cms_menu_category_id' => 'ce1c9b6f-fcb7-1934-fed8-8bc825ad37eb',
-            'target_table_name' => 'cms_menu_custom_item',
-        ])
-        ->setWhereEquals([ 'id' => '101fafdf-7a01-aac1-14ee-8275dc18667a' ])
-);
+$data = TCMSLogChange::createMigrationQueryData('cms_menu_item', 'de')
+  ->setFields([
+      'name' => 'Umsätze',
+      'target' => '9c06702f-7ffb-426d-afe9-5ffd5a9cd122',
+      'icon_font_css_class' => 'fas fa-chart-pie',
+      'position' => '22',
+      'cms_menu_category_id' => 'ce1c9b6f-fcb7-1934-fed8-8bc825ad37eb',
+  ])->setWhereEquals([ 'id' => '101fafdf-7a01-aac1-14ee-8275dc18667a' ]);
+TCMSLogChange::update(__LINE__, $data);
+
+$data = TCMSLogChange::createMigrationQueryData('cms_menu_item', 'de')
+  ->setFields([ 'target_table_name' => 'cms_menu_custom_item' ])
+  ->setWhereEquals([ 'id' => '101fafdf-7a01-aac1-14ee-8275dc18667a' ]);
+TCMSLogChange::update(__LINE__, $data);
