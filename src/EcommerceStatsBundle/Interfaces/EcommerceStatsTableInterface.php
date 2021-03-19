@@ -2,6 +2,8 @@
 
 namespace ChameleonSystem\EcommerceStatsBundle\Interfaces;
 
+use ChameleonSystem\EcommerceStatsBundle\DataModel\TableDataModel;
+
 interface EcommerceStatsTableInterface
 {
     const DATA_GROUP_TYPE_YEAR = 'year';

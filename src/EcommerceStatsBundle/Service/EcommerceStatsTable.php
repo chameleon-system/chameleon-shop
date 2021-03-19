@@ -2,6 +2,7 @@
 
 namespace ChameleonSystem\EcommerceStatsBundle\Service;
 
+use ChameleonSystem\EcommerceStatsBundle\DataModel\TableDataModel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;

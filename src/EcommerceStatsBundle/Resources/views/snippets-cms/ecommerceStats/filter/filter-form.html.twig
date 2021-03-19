@@ -71,7 +71,12 @@
                     {{ 'chameleon_system_ecommerce_stats.form_date_from'|trans }}:
                 </label>
                 <div>
-                    <input class="form-control" type="text" name="{{ moduleSpotName }}[startDate]" value="{{ startDate| format_date }}"/>
+                    <input
+                        class="form-control"
+                        type="date"
+                        name="{{ moduleSpotName }}[startDate]"
+                        value="{{ startDate }}"
+                    />
                 </div>
 
             </div>
@@ -82,7 +87,12 @@
                     {{ 'chameleon_system_ecommerce_stats.form_date_to'|trans }}:
                 </label>
 
-                <input class="form-control" type="text" name="{{ moduleSpotName }}[endDate]" value="{{ endDate| format_date }}"/>
+                <input
+                    class="form-control"
+                    type="date"
+                    name="{{ moduleSpotName }}[endDate]"
+                    value="{{ endDate }}"
+                />
             </div>
         </div>
     </div>

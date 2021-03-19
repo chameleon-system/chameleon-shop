@@ -9,18 +9,23 @@ use ChameleonSystem\EcommerceStatsBundle\Interfaces\EcommerceStatsTableInterface
 use IMapperCacheTriggerRestricted;
 use IMapperVisitorRestricted;
 use MTPkgViewRendererAbstractModuleMapper;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Translation\TranslatorInterface;
+use TCMSLocal;
 
 class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
 {
     private const SEPARATOR = ';';
 
     /**
+     * Date in format `Y-m-d`
      * @var string|null
      */
     protected $startDate = null;
 
     /**
+     * Date in format `Y-m-d`
      * @var string|null
      */
     protected $endDate = null;
@@ -71,7 +76,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     private $connection;
 
     /**
-     * @var false|object|\TCMSLocal|\TdbCmsLocals|null
+     * @var TCMSLocal
      */
     private $local;
 
@@ -94,21 +99,10 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
      */
     public function Init(): void
     {
-        $this->local = \TCMSLocal::GetActive();
+        $this->local = TCMSLocal::GetActive();
 
-        $startDate = $this->GetUserInput('startDate');
-        if (null === $startDate) {
-            $this->startDate = date('Y-m-01');
-        } else {
-            $this->startDate = $this->local->StringToDate($startDate);
-        }
-
-        $endDate = $this->GetUserInput('endDate');
-        if (null === $endDate) {
-            $this->endDate = date('Y-m-d');
-        } else {
-            $this->endDate = $this->local->StringToDate($endDate);
-        }
+        $this->startDate = $this->GetUserInput('startDate') ?? date('Y-m-01');
+        $this->endDate = $this->GetUserInput('endDate') ?? date('Y-m-d');
 
         $this->dateGroupType = $this->GetUserInput('dateGroupType', EcommerceStatsTableInterface::DATA_GROUP_TYPE_DAY);
         $this->showChange = '1' === $this->GetUserInput('showChange', '0');
@@ -126,8 +120,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
             $oVisitor->SetMappedValue('tableData', $this->stats->getTableData());
         }
 
-        static $moduleUrlParameter = ['pagedef', '_pagedefType', 'contentmodule'];
-        $filteredRequestData = $this->getFilteredRequestParameterList($moduleUrlParameter);
+        $filteredRequestData = $this->getFilteredRequestParameterList(['pagedef', '_pagedefType', 'contentmodule']);
 
         $csvUrlParameter = ['module_fnc' => [$this->sModuleSpotName => 'getAsCsv']];
         $csvDownloadUrl = $this->urlUtil->getArrayAsUrl(\array_merge($csvUrlParameter, $filteredRequestData));
@@ -198,6 +191,9 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
         ];
     }
 
+    /**
+     * @return never-returns - Uses `exit()` to finish the current request
+     */
     protected function downloadTopsellers(): void
     {
         $topSellerOrderItems = $this->getTopsellers();
@@ -229,19 +225,25 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
         }
 
         $filename = $this->getCsvFilename('topseller');
-        $this->generateCsv($data, $filename, self::SEPARATOR);
+        $csv = $this->generateCsv($data, self::SEPARATOR);
+        $this->outputAsDownload($csv, $filename, 'text/csv');
     }
 
     protected function getTopsellers(int $limit = 50): \TdbShopOrderItemList
     {
-        $query = 'SELECT SUM(`shop_order_item`.`order_amount`) AS totalordered,
-                       SUM(`shop_order_item`.`order_price_after_discounts`) AS totalorderedvalue,
-                       `shop_category`.`url_path` AS categorypath, `shop_order_item`.*
-                  FROM `shop_order_item`
-             LEFT JOIN `shop_order` ON `shop_order_item`.`shop_order_id` = `shop_order`.`id`
-             LEFT JOIN `shop_article_shop_category_mlt` ON `shop_order_item`.`shop_article_id` = `shop_article_shop_category_mlt`.`source_id`
-             LEFT JOIN `shop_category` ON `shop_article_shop_category_mlt`.`target_id` = `shop_category`.`id`
-
+        $query = '
+            SELECT 
+                SUM(`shop_order_item`.`order_amount`) AS totalordered,
+                SUM(`shop_order_item`.`order_price_after_discounts`) AS totalorderedvalue,
+                `shop_category`.`url_path` AS categorypath, 
+                `shop_order_item`.*
+            FROM `shop_order_item`
+                LEFT JOIN `shop_order`
+                    ON `shop_order_item`.`shop_order_id` = `shop_order`.`id`
+                LEFT JOIN `shop_article_shop_category_mlt` 
+                    ON `shop_order_item`.`shop_article_id` = `shop_article_shop_category_mlt`.`source_id`
+                LEFT JOIN `shop_category` 
+                    ON `shop_article_shop_category_mlt`.`target_id` = `shop_category`.`id`
                ';
         $baseConditionList = [];
         if (null !== $this->startDate) {
@@ -269,25 +271,28 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         return sprintf('%s-%s-%s.csv',
             $basename,
-            $this->local->FormatDate($this->startDate, \TCMSLocal::DATEFORMAT_SHOW_DATE),
-            $this->local->FormatDate($this->endDate, \TCMSLocal::DATEFORMAT_SHOW_DATE)
+            $this->local->FormatDate($this->startDate, TCMSLocal::DATEFORMAT_SHOW_DATE),
+            $this->local->FormatDate($this->endDate, TCMSLocal::DATEFORMAT_SHOW_DATE)
         );
     }
 
+    /**
+     * @return never-returns - Uses `exit()` to finish the current request
+     */
     protected function getAsCsv(): void
     {
         $this->stats->evaluate($this->startDate, $this->endDate, $this->dateGroupType, $this->showChange, $this->selectedPortalId);
         $data = $this->stats->getCSVData();
         $filename = $this->getCsvFilename('stats');
-        $this->generateCsv($data, $filename, self::SEPARATOR);
+        $csv = $this->generateCsv($data, self::SEPARATOR);
+        $this->outputAsDownload($csv, $filename, 'text/csv');
     }
 
     /**
      * @param string[][] $data array of string rows
-     * @param string $filename csv file name
      * @param string $separator cell delimiter
      */
-    protected function generateCsv(array $data, string $filename, string $separator = self::SEPARATOR): void
+    protected function generateCsv(array $data, string $separator = self::SEPARATOR): string
     {
         $csv = fopen('php://temp/maxmemory:'. 1024*1024, 'r+');
 
@@ -296,21 +301,37 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
         }
 
         rewind($csv);
-        $this->outputAsDownload(stream_get_contents($csv), $filename);
-        exit(0);
+
+        return (string) stream_get_contents($csv);
     }
 
-    protected function outputAsDownload(string $content, string $fileName)
+    /**
+     * @return never-returns - Uses `exit()` to finish the current request
+     */
+    protected function outputAsDownload(string $content, string $fileName, string $contentType): void
     {
-        header('Pragma: public'); // required
-        header('Expires: 0'); // no cache
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Cache-Control: private', false);
-        header('Content-Type: application/force-download');
-        header('Content-Disposition: attachment; filename="'.$fileName.'"');
-        header('Content-Transfer-Encoding: binary');
-        header('Content-Length: '.strlen($content)); // provided file size
-        echo $content;
+        $response = new Response($content, 200, [
+            'Pragma' => 'public',
+            'Expires' => 0,
+
+            'Content-Type' => $contentType,
+            'Content-Transfer-Encoding' => 'binary',
+        ]);
+
+        // Disable caching
+        $response->setPrivate();
+        $response->headers->addCacheControlDirective('must-revalidate');
+        $response->headers->addCacheControlDirective('post-check', '0');
+        $response->headers->addCacheControlDirective('pre-check', '0');
+        $response->headers->addCacheControlDirective('private');
+
+        // Force download
+        $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $fileName
+        ));
+
+        $response->send();
         exit(0);
     }
 
@@ -320,8 +341,11 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     public function GetHtmlHeadIncludes()
     {
         $includes = parent::GetHtmlHeadIncludes();
-        $includes[] = '<link href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats.css').'" rel="stylesheet" type="text/css" /> ';
-        $includes[] = '<link href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats-print.css').'" rel="stylesheet" type="text/css" media="print" /> ';
+
+        $cssPath = \TGlobal::GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats.css');
+        $printCssPath = \TGlobal::GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats-print.css');
+        $includes[] = sprintf('<link href="%s" rel="stylesheet" type="text/css">', $cssPath);
+        $includes[] = sprintf('<link href="%s" rel="stylesheet" type="text/css" media="print">', $printCssPath);
 
         return $includes;
     }
