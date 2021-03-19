@@ -1,13 +1,14 @@
 {#
     @var ChameleonSystem\EcommerceStatsBundle\Service\EcommerceStatsGroup group
+    @var int level
+    @var string[] columnNames
+    @var int maxGroupCount
 #}
 
-{% set groupData = group.groupData %}
-
 <tr>
-    <th rowspan="{{ groupData.rowCount }}">{{ groupData.groupTitle }}</th>
+    <th rowspan="{{ group.rowCount }}">{{ group.groupTitle }}</th>
 
-    {% set emptyGroups = groupData.maxGroupDepth - level %}
+    {% set emptyGroups = maxGroupCount - level %}
 
     {% if emptyGroups > 0 %}
         {% for i in 1..emptyGroups %}
@@ -16,8 +17,8 @@
     {% endif %}
 
     {% set oldVal = 0 %}
-    {% for name in groupData.columnNames %}
-        {% set newVal = groupData.groupTotals[name] ?: 0 %}
+    {% for name in columnNames %}
+        {% set newVal = group.getTotals(name) ?: 0 %}
         <td>{{ newVal | format_number(2) }}</td>
         {% set diff = newVal - oldVal %}
         {% if showDiffColumn %}
@@ -26,6 +27,11 @@
         {% set oldVal = newVal %}
     {% endfor %}
 </tr>
-{% for subGroup in groupData.subGroups %}
-    {% include '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/html-body.html.twig' with {group: subGroup, level: level + 1} %}
+{% for subGroup in group.subGroups %}
+    {% include '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/html-body.html.twig' with {
+        group: subGroup,
+        level: level + 1,
+        columnNames: columnNames,
+        maxGroupCount: maxGroupCount,
+    } %}
 {% endfor %}

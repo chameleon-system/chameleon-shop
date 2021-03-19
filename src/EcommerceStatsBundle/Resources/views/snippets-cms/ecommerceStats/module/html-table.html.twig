@@ -1,7 +1,6 @@
 {#
-    -- tableData:
     @var int level
-    @var array blocks
+    @var ChameleonSystem\EcommerceStatsBundle\Service\EcommerceStatsGroup[] blocks
     @var string[] columnNames
     @var bool showDiffColumn
     @var int maxGroupCount
@@ -26,7 +25,12 @@
             {% set totalWidth = maxGroupCount + (columnNames | length) * (showDiffColumn ? 2 : 1) %}
 
             {% for block in blocks %}
-                {% include '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/html-body.html.twig' with { group: block, level: level + 1 } %}
+                {% include '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/html-body.html.twig' with {
+                    group: block,
+                    level: level + 1,
+                    columnNames: columnNames,
+                    maxGroupCount: maxGroupCount,
+                } %}
                 <tr><td colspan="{{ totalWidth }}">&nbsp;</td></tr>
             {% endfor %}
         </table>

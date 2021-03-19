@@ -12,6 +12,7 @@
         <testsuite name="Project Test Suite">
             <directory>src/SearchBundle/Tests</directory>
             <directory>src/ShopArticleDetailPagingBundle/Tests</directory>
+            <directory>src/EcommerceStatsBundle/Tests</directory>
             <!-- Amazon Pay tests do not work currently -->
             <!--<directory>src/AmazonPaymentBundle/Tests</directory>-->
         </testsuite>

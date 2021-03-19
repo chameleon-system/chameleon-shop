@@ -1,3 +1,12 @@
+{#
+    @var int level
+    @var ChameleonSystem\EcommerceStatsBundle\Service\EcommerceStatsGroup[] group
+    @var string[] columnNames
+    @var bool showDiffColumn
+    @var int maxGroupCount
+#}
+
+
 {% set barHeight = 200 %}     {# in pixel #}
 {% set totalBarWidth = 20 %}     {# in pixel #}
 {% set subBarWidth = 10 %}       {# in pixel #}
@@ -6,12 +15,10 @@
 {% set mainBarColor = '#185EA8'%}       {# color for the first bar (total value) #}
 {% set colors = ['#5E98FF', '#807D9A', '#92C1F0', '#A2ACB3', '#7ADEFF'] %}       {# colors for the bars #}
 
-{% set groupData = group.groupData %}
-
 <div class="groupcontainer-barchart">
 
     {% set oldVal = 0 %}
-    {% set maxVal = groupData.maxValue %}
+    {% set maxVal = group.maxValue %}
     {% set divideThrough = maxVal / gridCount %}
     {% set divideThrough = (divideThrough | round) + (gridDivider - (divideThrough | round) % gridDivider) %}
     {% if divideThrough == 0 %}
@@ -39,19 +46,19 @@
         <div class="barchart-item">
             <div class="columnHeader"><strong>{{ name }}</strong></div>
             <div class="columnBars" style="height: {{ barHeight }}px;">
-                {% set newVal = groupData.groupTotals[name] %}
+                {% set newVal = group.getTotals(name) %}
 
                 <div class="bar-wrapper" style="height: {{ barHeight }}px;">
                     <div class="bar" style="background-color: {{ mainBarColor }}; width: {{ totalBarWidth }}px; height: {{ barHeight / maxVal * newVal }}px;"></div>
                 </div>
 
-                {% if groupData.subGroups | length > 0 %}
+                {% if group.subGroups | length > 0 %}
                     {% set colorCount = 0 %}
                     {% set subHeight = [] %}
                     {% set oldSubHeight = [] %}
                     {% set barHTML = {} %}
 
-                    {% for subGroupName, subGroup in groupData.subGroups %}
+                    {% for subGroupName, subGroup in group.subGroups %}
                         {% set subGroupColumn = subGroup.subGroupColumn %}
 
                         {% if subHeight[subGroupColumn] is not defined %}
@@ -70,7 +77,7 @@
                             {% set colorCount = 0 %}
                         {% endif %}
 
-                        {% set value = subGroup.groupData.groupTotals[name] %}
+                        {% set value = subGroup.getTotals(name) %}
 
                         {% if not subHeight[subGroupColumn] == null %}
                             {% set oldSubHeight = oldSubHeight | merge({(subGroupColumn): subHeight[subGroupColumn]}) %}

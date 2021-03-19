@@ -2,14 +2,15 @@
 
 namespace ChameleonSystem\EcommerceStatsBundle\Interfaces;
 
+use ChameleonSystem\EcommerceStatsBundle\DataModel\StatsTableDataModel;
 use ChameleonSystem\EcommerceStatsBundle\DataModel\TableDataModel;
 
-interface EcommerceStatsTableInterface
+interface StatsTableServiceInterface
 {
-    const DATA_GROUP_TYPE_YEAR = 'year';
-    const DATA_GROUP_TYPE_MONTH = 'month';
-    const DATA_GROUP_TYPE_WEEK = 'week';
-    const DATA_GROUP_TYPE_DAY = 'day';
+    public const DATA_GROUP_TYPE_YEAR = 'year';
+    public const DATA_GROUP_TYPE_MONTH = 'month';
+    public const DATA_GROUP_TYPE_WEEK = 'week';
+    public const DATA_GROUP_TYPE_DAY = 'day';
 
     /**
      * evaluates the statistics.
@@ -23,9 +24,8 @@ interface EcommerceStatsTableInterface
 
     /**
      * structure of the evaluated table.
-     * @return strng[] assoc. array
      */
-    public function getTableData(): array;
+    public function getTableData(): StatsTableDataModel;
 
     /**
      * exports csv rows as string array.

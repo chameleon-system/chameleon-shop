@@ -2,18 +2,20 @@
 
 namespace ChameleonSystem\EcommerceStatsBundle\Service;
 
+use ChameleonSystem\EcommerceStatsBundle\DataModel\StatsGroupDataModel;
+use ChameleonSystem\EcommerceStatsBundle\DataModel\StatsTableDataModel;
 use ChameleonSystem\EcommerceStatsBundle\DataModel\TableDataModel;
+use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;
-use ChameleonSystem\EcommerceStatsBundle\Interfaces\EcommerceStatsTableInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class EcommerceStatsTable implements EcommerceStatsTableInterface
+class StatsTableService implements StatsTableServiceInterface
 {
     /**
-     * @var EcommerceStatsGroup[]
+     * @var StatsGroupDataModel[]
      */
     private $blocks = [];
 
@@ -144,7 +146,7 @@ class EcommerceStatsTable implements EcommerceStatsTableInterface
         }
 
         if (false === array_key_exists($blockName, $this->blocks)) {
-            $ecommerceStatsGroup = new EcommerceStatsGroup();
+            $ecommerceStatsGroup = new StatsGroupDataModel();
             $ecommerceStatsGroup->init($blockName);
             $this->blocks[$blockName] = $ecommerceStatsGroup;
         }
@@ -165,21 +167,14 @@ class EcommerceStatsTable implements EcommerceStatsTableInterface
     /**
      * {@inheritdoc}
      */
-    public function getTableData(): array
+    public function getTableData(): StatsTableDataModel
     {
-        $columnNames = $this->columnNames;
-        $maxGroupCount = $this->maxGroupCount;
-
-        foreach ($this->blocks as $block) {
-            $block->evaluateGroupData($columnNames, $maxGroupCount, $this->showDiffColumn, '', ';');
-        }
-
-        return [
-            'blocks' => $this->blocks,
-            'columnNames' => $columnNames,
-            'showDiffColumn' => $this->showDiffColumn,
-            'maxGroupCount' => $maxGroupCount,
-        ];
+        return new StatsTableDataModel(
+            $this->blocks,
+            $this->columnNames,
+            $this->showDiffColumn,
+            $this->maxGroupCount
+        );
     }
 
     public function getColumnNames(): array
@@ -224,7 +219,7 @@ class EcommerceStatsTable implements EcommerceStatsTableInterface
     }
 
     /**
-     * @return EcommerceStatsGroup[]
+     * @return StatsGroupDataModel[]
      */
     public function getBlocks(): array
     {
@@ -254,10 +249,10 @@ class EcommerceStatsTable implements EcommerceStatsTableInterface
         return $data;
     }
 
-    protected function exportBlockCSV(array &$data, EcommerceStatsGroup $group, int $level = 1): void
+    protected function exportBlockCSV(array &$data, StatsGroupDataModel $group, int $level = 1): void
     {
         $row = array_fill(0, $level - 1, '');
-        $row[] = $group->getGroupName();
+        $row[] = $group->getGroupTitle();
 
         $emptyGroups = $this->maxGroupCount - $level;
 

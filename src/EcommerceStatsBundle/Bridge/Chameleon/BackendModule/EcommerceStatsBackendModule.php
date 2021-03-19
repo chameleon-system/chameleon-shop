@@ -5,7 +5,7 @@ namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Doctrine\DBAL\Connection;
-use ChameleonSystem\EcommerceStatsBundle\Interfaces\EcommerceStatsTableInterface;
+use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface;
 use IMapperCacheTriggerRestricted;
 use IMapperVisitorRestricted;
 use MTPkgViewRendererAbstractModuleMapper;
@@ -33,7 +33,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @var string
      */
-    protected $dateGroupType = EcommerceStatsTableInterface::DATA_GROUP_TYPE_DAY;
+    protected $dateGroupType = StatsTableServiceInterface::DATA_GROUP_TYPE_DAY;
 
     /**
      * @var bool
@@ -51,7 +51,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     protected $selectedPortalId = '';
 
     /**
-     * @var EcommerceStatsTableInterface
+     * @var StatsTableServiceInterface
      */
     private $stats;
 
@@ -81,12 +81,14 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     private $local;
 
     public function __construct(
-        EcommerceStatsTableInterface $stats,
+        StatsTableServiceInterface $stats,
         Connection $connection,
         TranslatorInterface $translator,
         InputFilterUtilInterface $inputFilterUtil,
         UrlUtil $urlUtil)
     {
+        parent::__construct();
+
         $this->stats = $stats;
         $this->connection = $connection;
         $this->translator = $translator;
@@ -104,7 +106,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->startDate = $this->GetUserInput('startDate') ?? date('Y-m-01');
         $this->endDate = $this->GetUserInput('endDate') ?? date('Y-m-d');
 
-        $this->dateGroupType = $this->GetUserInput('dateGroupType', EcommerceStatsTableInterface::DATA_GROUP_TYPE_DAY);
+        $this->dateGroupType = $this->GetUserInput('dateGroupType', StatsTableServiceInterface::DATA_GROUP_TYPE_DAY);
         $this->showChange = '1' === $this->GetUserInput('showChange', '0');
         $this->viewName = $this->GetUserInput('viewName', null);
         $this->selectedPortalId = $this->GetUserInput('portalId', '');
@@ -184,10 +186,10 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     private function getDateGroupTypeList(): array
     {
         return [
-            EcommerceStatsTableInterface::DATA_GROUP_TYPE_YEAR => $this->translator->trans('chameleon_system_ecommerce_stats.date_year'),
-            EcommerceStatsTableInterface::DATA_GROUP_TYPE_MONTH => $this->translator->trans('chameleon_system_ecommerce_stats.date_month'),
-            EcommerceStatsTableInterface::DATA_GROUP_TYPE_WEEK => $this->translator->trans('chameleon_system_ecommerce_stats.date_week'),
-            EcommerceStatsTableInterface::DATA_GROUP_TYPE_DAY => $this->translator->trans('chameleon_system_ecommerce_stats.date_day')
+            StatsTableServiceInterface::DATA_GROUP_TYPE_YEAR => $this->translator->trans('chameleon_system_ecommerce_stats.date_year'),
+            StatsTableServiceInterface::DATA_GROUP_TYPE_MONTH => $this->translator->trans('chameleon_system_ecommerce_stats.date_month'),
+            StatsTableServiceInterface::DATA_GROUP_TYPE_WEEK => $this->translator->trans('chameleon_system_ecommerce_stats.date_week'),
+            StatsTableServiceInterface::DATA_GROUP_TYPE_DAY => $this->translator->trans('chameleon_system_ecommerce_stats.date_day')
         ];
     }
 

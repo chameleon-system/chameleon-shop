@@ -1,3 +1,11 @@
+{#
+    @var int level
+    @var ChameleonSystem\EcommerceStatsBundle\Service\EcommerceStatsGroup[] blocks
+    @var string[] columnNames
+    @var bool showDiffColumn
+    @var int maxGroupCount
+#}
+
 <div class="TCMSGroupedStatistics">
     <div class="html-barchart">
         {% for block in blocks %}
