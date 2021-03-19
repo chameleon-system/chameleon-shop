@@ -9,7 +9,7 @@ use JetBrains\PhpStorm\ArrayShape;
  * Statistic groups are organized in a 'tree' fashion where each group in the tree can have
  * subgroups. This is done in order to support 'drilling' down into more detailed values or
  * getting rough overviews by looking at sums of grouped statistics. Each category can contain
- * multiple values for multiple slices of time (displayed in columns in the backend)
+ * multiple values for multiple slices of time (displayed in columns in the backend).
  *
  * Fundamentally, there can be 2 types of statistic groups:
  * - Value holders are the leaves of the tree that have no further statistics in them. As such, they
@@ -62,7 +62,7 @@ class StatsGroupDataModel
     }
 
     /**
-     * Return all column names used in this and any sub groups
+     * Return all column names used in this and any sub groups.
      *
      * @return string[]
      */
@@ -96,7 +96,7 @@ class StatsGroupDataModel
     }
 
     /**
-     * Return the max group depth for all sub groups
+     * Return the max group depth for all sub groups.
      */
     public function getMaxGroupDepth(): int
     {
@@ -112,8 +112,6 @@ class StatsGroupDataModel
 
     /**
      * Returns the number of rows that this group contains.
-     *
-     * @return int
      */
     public function getRowCount(): int
     {
@@ -130,7 +128,7 @@ class StatsGroupDataModel
     /**
      * Add data to the group structure by adding subgroups of the given names.
      * If one group name is specified, then a single sub group is added. If multiple group names
-     * are specified, then values are added in 2 places in the graph:
+     * are specified, then values are added in 2 places in the graph:.
      *
      * 1. As nested elements in order to track specific values
      * 2. As neighboring elements in order to track category totals
@@ -155,7 +153,6 @@ class StatsGroupDataModel
      * //    stats of category (foo AND baz) and once to track those of just category baz.
      *
      * @param string[] $groupNames - group name list
-     * @param array $groupDef
      */
     public function addRow(
         array $groupNames,
@@ -187,8 +184,6 @@ class StatsGroupDataModel
 
     /**
      * Update the totals for the group.
-     *
-     * @param array $groupDef
      */
     protected function updateGroupTotals(
         #[ArrayShape(self::GROUP_DEF_SHAPE)]
@@ -204,8 +199,6 @@ class StatsGroupDataModel
 
     /**
      * Add a column of data.
-     *
-     * @param array $dataRow
      */
     protected function addDataColumn(array $dataRow): void
     {

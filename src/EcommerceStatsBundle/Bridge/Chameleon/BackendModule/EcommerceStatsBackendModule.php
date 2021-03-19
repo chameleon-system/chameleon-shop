@@ -4,8 +4,8 @@ namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule;
 
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use Doctrine\DBAL\Connection;
 use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface;
+use Doctrine\DBAL\Connection;
 use IMapperCacheTriggerRestricted;
 use IMapperVisitorRestricted;
 use MTPkgViewRendererAbstractModuleMapper;
@@ -19,13 +19,15 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     private const SEPARATOR = ';';
 
     /**
-     * Date in format `Y-m-d`
+     * Date in format `Y-m-d`.
+     *
      * @var string|null
      */
     protected $startDate = null;
 
     /**
-     * Date in format `Y-m-d`
+     * Date in format `Y-m-d`.
+     *
      * @var string|null
      */
     protected $endDate = null;
@@ -179,7 +181,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         return [
             'html.table' => $this->translator->trans('chameleon_system_ecommerce_stats.form_output_type_table'),
-            'html.barchart' => $this->translator->trans('chameleon_system_ecommerce_stats.form_output_type_chart')
+            'html.barchart' => $this->translator->trans('chameleon_system_ecommerce_stats.form_output_type_chart'),
         ];
     }
 
@@ -189,7 +191,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
             StatsTableServiceInterface::DATA_GROUP_TYPE_YEAR => $this->translator->trans('chameleon_system_ecommerce_stats.date_year'),
             StatsTableServiceInterface::DATA_GROUP_TYPE_MONTH => $this->translator->trans('chameleon_system_ecommerce_stats.date_month'),
             StatsTableServiceInterface::DATA_GROUP_TYPE_WEEK => $this->translator->trans('chameleon_system_ecommerce_stats.date_week'),
-            StatsTableServiceInterface::DATA_GROUP_TYPE_DAY => $this->translator->trans('chameleon_system_ecommerce_stats.date_day')
+            StatsTableServiceInterface::DATA_GROUP_TYPE_DAY => $this->translator->trans('chameleon_system_ecommerce_stats.date_day'),
         ];
     }
 
@@ -206,7 +208,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
             'name' => $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_article_name'),
             'totalordered' => $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_order_count'),
             'totalorderedvalue' => $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_value'),
-            'categorypath' => $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_category')
+            'categorypath' => $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_category'),
         ];
 
         $numbers = ['totalordered' => 0, 'totalorderedvalue' => 2];
@@ -291,12 +293,12 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @param string[][] $data array of string rows
-     * @param string $separator cell delimiter
+     * @param string[][] $data      array of string rows
+     * @param string     $separator cell delimiter
      */
     protected function generateCsv(array $data, string $separator = self::SEPARATOR): string
     {
-        $csv = fopen('php://temp/maxmemory:'. 1024*1024, 'r+');
+        $csv = fopen('php://temp/maxmemory:'. 1024 * 1024, 'r+');
 
         foreach ($data as $row) {
             fputcsv($csv, $row, $separator);

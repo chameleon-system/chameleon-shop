@@ -60,10 +60,10 @@ $data = TCMSLogChange::createMigrationQueryData('cms_menu_item', 'de')
       'icon_font_css_class' => 'fas fa-chart-pie',
       'position' => '22',
       'cms_menu_category_id' => 'ce1c9b6f-fcb7-1934-fed8-8bc825ad37eb',
-  ])->setWhereEquals([ 'id' => '101fafdf-7a01-aac1-14ee-8275dc18667a' ]);
+  ])->setWhereEquals(['id' => '101fafdf-7a01-aac1-14ee-8275dc18667a']);
 TCMSLogChange::update(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_menu_item', 'de')
-  ->setFields([ 'target_table_name' => 'cms_menu_custom_item' ])
-  ->setWhereEquals([ 'id' => '101fafdf-7a01-aac1-14ee-8275dc18667a' ]);
+  ->setFields(['target_table_name' => 'cms_menu_custom_item'])
+  ->setWhereEquals(['id' => '101fafdf-7a01-aac1-14ee-8275dc18667a']);
 TCMSLogChange::update(__LINE__, $data);

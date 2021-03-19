@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\DataModel;
 
@@ -26,7 +28,7 @@ class StatsTableDataModel
 
     /**
      * @param StatsGroupDataModel[] $blocks
-     * @param string[] $columnNames
+     * @param string[]              $columnNames
      */
     public function __construct(array $blocks, array $columnNames, bool $showDiffColumn, int $maxGroupCount)
     {
@@ -35,7 +37,6 @@ class StatsTableDataModel
         $this->showDiffColumn = $showDiffColumn;
         $this->maxGroupCount = $maxGroupCount;
     }
-
 
     /**
      * @return StatsGroupDataModel[]

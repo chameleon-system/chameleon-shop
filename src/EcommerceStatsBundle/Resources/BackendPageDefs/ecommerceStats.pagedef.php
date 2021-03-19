@@ -6,7 +6,7 @@ $moduleList = [
         'model' => 'chameleon_system_ecommerce_stats.backend_module.ecommerce_stats',
         'view' => 'standard',
         'moduleType' => '@ChameleonSystemEcommerceStatsBundle',
-        '_suppressHistory' => true
+        '_suppressHistory' => true,
     ],
 ];
 

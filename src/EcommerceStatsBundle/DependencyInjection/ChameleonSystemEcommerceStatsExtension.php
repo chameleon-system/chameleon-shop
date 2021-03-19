@@ -1,8 +1,6 @@
 <?php
 
-
 namespace ChameleonSystem\EcommerceStatsBundle\DependencyInjection;
-
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

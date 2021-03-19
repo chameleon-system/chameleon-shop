@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\Tests\Unit\DataModel;
 
@@ -7,13 +9,12 @@ use PHPUnit\Framework\TestCase;
 
 class EcommerceStatsGroupTest extends TestCase
 {
-
     public function testAddsCategoryGroupingElementsWhenAddingMoreThanOneCategoryInDepth(): void
     {
         $group = new StatsGroupDataModel();
-        $group->addRow([ 'foo', 'bar' ], [ 'sColumnName' => 'test', 'dColumnValue' => 1 ]);
-        $group->addRow([ 'foo', 'baz' ], [ 'sColumnName' => 'test', 'dColumnValue' => 2 ]);
-        $group->addRow([ 'foo', 'bar', 'baz' ], [ 'sColumnName' => 'test', 'dColumnValue' => 4 ]);
+        $group->addRow(['foo', 'bar'], ['sColumnName' => 'test', 'dColumnValue' => 1]);
+        $group->addRow(['foo', 'baz'], ['sColumnName' => 'test', 'dColumnValue' => 2]);
+        $group->addRow(['foo', 'bar', 'baz'], ['sColumnName' => 'test', 'dColumnValue' => 4]);
 
         $subGroups = $group->getSubGroups();
 

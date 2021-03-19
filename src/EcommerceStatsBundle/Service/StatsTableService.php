@@ -4,7 +4,6 @@ namespace ChameleonSystem\EcommerceStatsBundle\Service;
 
 use ChameleonSystem\EcommerceStatsBundle\DataModel\StatsGroupDataModel;
 use ChameleonSystem\EcommerceStatsBundle\DataModel\StatsTableDataModel;
-use ChameleonSystem\EcommerceStatsBundle\DataModel\TableDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
@@ -55,11 +54,10 @@ class StatsTableService implements StatsTableServiceInterface
     private $logger;
 
     public function __construct(
-        Connection $connection, 
-        TranslatorInterface $translator, 
+        Connection $connection,
+        TranslatorInterface $translator,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->connection = $connection;
         $this->translator = $translator;
         $this->logger = $logger;
