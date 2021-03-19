@@ -11,6 +11,11 @@ use Doctrine\DBAL\FetchMode;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
+/**
+ * Note: This service is not shared because it is stateful.
+ *       As such every time you inject it you'll get a new instance
+ *       of it without any data.
+ */
 class StatsTableService implements StatsTableServiceInterface
 {
     /**
@@ -158,7 +163,17 @@ class StatsTableService implements StatsTableServiceInterface
                     $realNames[] = $this->translator->trans('chameleon_system_ecommerce_stats.nothing_assigned');
                 }
             }
-            $this->blocks[$blockName]->addRow($realNames, $dataRow);
+
+            if (!\array_key_exists('sColumnName', $dataRow) || !\array_key_exists('dColumnValue', $dataRow)) {
+                $this->logger->error(sprintf(
+                    'Could not add block `%s` to table: Query must select at least `sColumnName` and `dColumnValue`',
+                    $blockName
+                ));
+
+                return;
+            }
+
+            $this->blocks[$blockName]->addRow($realNames, $dataRow['sColumnName'], $dataRow['dColumnValue'], $dataRow);
         }
     }
 

@@ -2,8 +2,6 @@
 
 namespace ChameleonSystem\EcommerceStatsBundle\DataModel;
 
-use JetBrains\PhpStorm\ArrayShape;
-
 /**
  * Main data model used in order to display a group of statistics.
  * Statistic groups are organized in a 'tree' fashion where each group in the tree can have
@@ -22,11 +20,6 @@ use JetBrains\PhpStorm\ArrayShape;
  */
 class StatsGroupDataModel
 {
-    public const GROUP_DEF_SHAPE = [
-        'sColumnName' => 'string',
-        'dColumnValue' => 'int',
-    ];
-
     /**
      * @var string|null
      */
@@ -135,8 +128,8 @@ class StatsGroupDataModel
      *
      * @example
      * // Assuming an empty group, the following 2 calls
-     * $root->addRow([ 'foo', 'bar' ], [ 'dColumnName' => '2020-12-21', 'dColumnValue' => 1 ]);
-     * $root->addRow([ 'bar', 'baz' ], [ 'dColumnName' => '2020-12-21', 'dColumnValue' => 2 ]);
+     * $root->addRow([ 'foo', 'bar' ], '2020-12-21', 1);
+     * $root->addRow([ 'bar', 'baz' ], '2020-12-21', 2);
      *
      * // Will create the following structure:
      * // (root)
@@ -152,19 +145,21 @@ class StatsGroupDataModel
      * // 2. The item `baz` was pulled to the root as well and now exists twice: Once in order to track all
      * //    stats of category (foo AND baz) and once to track those of just category baz.
      *
-     * @param string[] $groupNames - group name list
+     * @param string[] $groupNames
+     * @param array<string, string> $nameToColumnMapping - group name list
      */
     public function addRow(
         array $groupNames,
-        #[ArrayShape(self::GROUP_DEF_SHAPE)]
-        array $groupDef
+        string $columnName,
+        int $columnValue,
+        array $nameToColumnMapping = []
     ): void {
         // update total
-        $this->updateGroupTotals($groupDef);
+        $this->updateGroupTotals($columnName, $columnValue);
 
         if (0 === count($groupNames)) {
-            if (false === in_array($groupDef['sColumnName'], $this->columnNames)) {
-                $this->columnNames[] = $groupDef['sColumnName'];
+            if (false === in_array($columnName, $this->columnNames)) {
+                $this->columnNames[] = $columnName;
             }
             //$this->AddDataColumn($dataCell); // disabled to keep low footprint
             return;
@@ -174,23 +169,18 @@ class StatsGroupDataModel
             $subGroupName = array_shift($groupNames);
             if (false === array_key_exists($subGroupName, $this->subGroups)) {
                 $this->subGroups[$subGroupName] = new self();
-                $subGroupColumn = array_search($subGroupName, $groupDef) ?? '';
+                $subGroupColumn = array_search($subGroupName, $nameToColumnMapping) ?? '';
                 $this->subGroups[$subGroupName]->init($subGroupName, $subGroupColumn);
             }
 
-            $this->subGroups[$subGroupName]->addRow($groupNames, $groupDef);
+            $this->subGroups[$subGroupName]->addRow($groupNames, $columnName, $columnValue, $nameToColumnMapping);
         }
     }
 
     /**
      * Update the totals for the group.
      */
-    protected function updateGroupTotals(
-        #[ArrayShape(self::GROUP_DEF_SHAPE)]
-        array $groupDef
-    ): void {
-        $columnName = $groupDef['sColumnName'];
-        $columnValue = $groupDef['dColumnValue'];
+    protected function updateGroupTotals(string $columnName, int $columnValue): void {
         if (false === array_key_exists($columnName, $this->groupTotals)) {
             $this->groupTotals[$columnName] = 0;
         }

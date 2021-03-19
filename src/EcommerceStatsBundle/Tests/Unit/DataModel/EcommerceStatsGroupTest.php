@@ -12,9 +12,9 @@ class EcommerceStatsGroupTest extends TestCase
     public function testAddsCategoryGroupingElementsWhenAddingMoreThanOneCategoryInDepth(): void
     {
         $group = new StatsGroupDataModel();
-        $group->addRow(['foo', 'bar'], ['sColumnName' => 'test', 'dColumnValue' => 1]);
-        $group->addRow(['foo', 'baz'], ['sColumnName' => 'test', 'dColumnValue' => 2]);
-        $group->addRow(['foo', 'bar', 'baz'], ['sColumnName' => 'test', 'dColumnValue' => 4]);
+        $group->addRow(['foo', 'bar'], 'test', 1);
+        $group->addRow(['foo', 'baz'], 'test', 2);
+        $group->addRow(['foo', 'bar', 'baz'], 'test', 4);
 
         $subGroups = $group->getSubGroups();
 

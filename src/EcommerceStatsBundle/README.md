@@ -15,8 +15,3 @@ And
     $ cd src/extensions/snippets-cms
     $ ln -s ../../../vendor/chameleon-system/chameleon-shop/src/EcommerceStatsBundle/Resources/views/snippets-cms/ecommerceStats/
 
-
-## Data Structure
-
-This bundle uses a deeply nested stats data structure in order to allow 'drilling down' into
-statistics if needed. At the center of this drillin
