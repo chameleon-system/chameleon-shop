@@ -6,21 +6,25 @@
 <?php
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
-  ->setFields([
-      'classname' => 'chameleon_system_ecommerce_stats.backend_module.ecommerce_stats',
-      'name' => 'Shop Umsatzstatistiken Backendmodul',
-      'description' => '',
-      'icon_font_css_class' => 'fas fa-chart-pie',
-      'view_mapper_config' => 'standard=ecommerceStats/module/standard.html.twig',
-      'mapper_chain' => '',
-      'view_mapping' => '',
-      'revision_management_active' => '0',
-      'is_copy_allowed' => '0',
-      'show_in_template_engine' => '0',
-      'is_restricted' => '1',
-      'id' => '90eae2e0-796c-4b25-b3c8-62324df047d4',
-  ]);
+    ->setFields([
+        'classname' => 'chameleon_system_ecommerce_stats.backend_module.ecommerce_stats',
+        'name' => 'Shop Umsatzstatistiken Backendmodul',
+        'description' => '',
+        'icon_font_css_class' => 'fas fa-chart-pie',
+        'view_mapper_config' => 'standard=ecommerceStats/module/standard.html.twig',
+        'mapper_chain' => '',
+        'view_mapping' => '',
+        'revision_management_active' => '0',
+        'is_copy_allowed' => '0',
+        'show_in_template_engine' => '0',
+        'is_restricted' => '1',
+        'id' => '90eae2e0-796c-4b25-b3c8-62324df047d4',
+    ]);
 TCMSLogChange::insert(__LINE__, $data);
+
+$data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'en')
+    ->setFields([ 'name' => 'Shop Sales Statistics Backendmodule' ]);
+TCMSLogChange::update(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module_cms_usergroup_mlt', 'de')
   ->setFields([
@@ -31,12 +35,16 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module_cms_usergroup_ml
 TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item', 'de')
-  ->setFields([
-      'name' => 'Umsatzstatistiken',
-      'url' => '/cms?pagedef=ecommerceStats&_pagedefType=@ChameleonSystemEcommerceStatsBundle',
-      'id' => '9c06702f-7ffb-426d-afe9-5ffd5a9cd122',
-  ]);
+    ->setFields([
+        'name' => 'Umsatzstatistiken',
+        'url' => '/cms?pagedef=ecommerceStats&_pagedefType=@ChameleonSystemEcommerceStatsBundle',
+        'id' => '9c06702f-7ffb-426d-afe9-5ffd5a9cd122',
+    ]);
 TCMSLogChange::insert(__LINE__, $data);
+
+$data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item', 'en')
+    ->setFields([ 'name' => 'Sales statistics' ]);
+TCMSLogChange::update(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item_cms_right_mlt', 'de')
   ->setFields([
