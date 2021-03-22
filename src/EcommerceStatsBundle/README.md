@@ -1,6 +1,7 @@
 # eCommerce Statistics Bundle
 
-This CMS bundle serves chameleon's shop statistic stuff.
+This bundle generates statistics reports and exposes them in multiple ways
+in the backend.
 
 After installation, ensure to create these sym links:
 
