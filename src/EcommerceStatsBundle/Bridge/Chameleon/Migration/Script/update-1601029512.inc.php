@@ -46,24 +46,9 @@ $data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item', 'en')
     ->setFields([ 'name' => 'Sales statistics' ]);
 TCMSLogChange::update(__LINE__, $data);
 
-$data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item_cms_right_mlt', 'de')
-  ->setFields([
-      'source_id' => '9c06702f-7ffb-426d-afe9-5ffd5a9cd122',
-      'target_id' => '1',
-      'entry_sort' => '0',
-  ]);
-TCMSLogChange::insert(__LINE__, $data);
-
-$data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item_cms_right_mlt', 'de')
-  ->setWhereEquals([
-      'source_id' => '9c06702f-7ffb-426d-afe9-5ffd5a9cd122',
-      'target_id' => '1',
-  ]);
-TCMSLogChange::delete(__LINE__, $data);
-
 $menuCategoryId = (string) TCMSLogChange::getDatabaseConnection()
     ->executeQuery('SELECT id FROM cms_menu_category WHERE system_name="analytics"')
-    ->fetch(\Doctrine\DBAL\FetchMode::COLUMN);
+    ->fetchColumn();
 $data = TCMSLogChange::createMigrationQueryData('cms_menu_item', 'de')
     ->setFields([
         'name' => 'Umsätze',
