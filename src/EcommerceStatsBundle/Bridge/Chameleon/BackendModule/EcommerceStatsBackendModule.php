@@ -87,7 +87,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @return array<string, string> id => name
      */
-    protected function getPortalList(): array
+    private function getPortalList(): array
     {
         $portalIdList = [];
         $portalList = TdbCmsPortalList::GetList();

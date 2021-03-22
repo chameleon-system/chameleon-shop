@@ -23,22 +23,22 @@ class StatsGroupDataModel
     /**
      * @var string|null
      */
-    protected $groupTitle = null;
+    private $groupTitle = null;
 
     /**
      * @var array<string, int>
      */
-    protected $groupTotals = [];
+    private $groupTotals = [];
 
     /**
      * @var StatsGroupDataModel[]
      */
-    protected $subGroups = [];
+    private $subGroups = [];
 
     /**
      * @var string[]
      */
-    protected $columnNames = [];
+    private $columnNames = [];
 
     /**
      * @var string
@@ -180,7 +180,7 @@ class StatsGroupDataModel
     /**
      * Update the totals for the group.
      */
-    protected function updateGroupTotals(string $columnName, int $columnValue): void
+    private function updateGroupTotals(string $columnName, int $columnValue): void
     {
         if (false === array_key_exists($columnName, $this->groupTotals)) {
             $this->groupTotals[$columnName] = 0;
@@ -191,7 +191,7 @@ class StatsGroupDataModel
     /**
      * Add a column of data.
      */
-    protected function addDataColumn(array $dataRow): void
+    private function addDataColumn(array $dataRow): void
     {
         $columnName = $dataRow['sColumnName'];
         if (false === in_array($columnName, $this->columnNames)) {

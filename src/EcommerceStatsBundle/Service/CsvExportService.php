@@ -60,7 +60,7 @@ class CsvExportService implements CsvExportServiceInterface
         return $row;
     }
 
-    protected function exportBlockCSV(
+    private function exportBlockCSV(
         array &$data,
         StatsTableDataModel $statsTable,
         StatsGroupDataModel $group,
