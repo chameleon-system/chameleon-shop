@@ -46,13 +46,4 @@ class CsvResponse extends Response
             $fileName
         ));
     }
-
-    /**
-     * @return never-returns - Uses `exit()` to finish the current request
-     */
-    public function sendAndExit(): void
-    {
-        $this->send();
-        exit(0);
-    }
 }

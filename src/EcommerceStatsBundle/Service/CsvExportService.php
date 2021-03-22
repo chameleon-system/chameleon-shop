@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\Service;
 
+use ChameleonSystem\EcommerceStatsBundle\DataModel\ShopOrderItemDataModel;
 use ChameleonSystem\EcommerceStatsBundle\DataModel\StatsGroupDataModel;
 use ChameleonSystem\EcommerceStatsBundle\DataModel\StatsTableDataModel;
-use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableCsvExportServiceInterface;
+use ChameleonSystem\EcommerceStatsBundle\Interfaces\CsvExportServiceInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use TCMSLocal;
 
-class StatsTableCsvExportService implements StatsTableCsvExportServiceInterface
+class CsvExportService implements CsvExportServiceInterface
 {
     private const TRANSLATION_TOTAL = 'chameleon_system_ecommerce_stats.total';
     private const TRANSLATION_DELTA = 'chameleon_system_ecommerce_stats.delta';
@@ -31,7 +32,7 @@ class StatsTableCsvExportService implements StatsTableCsvExportServiceInterface
         $this->local = TCMSLocal::GetActive();
     }
 
-    public function getCSVData(StatsTableDataModel $statsTable): array
+    public function getCsvDataFromStatsTable(StatsTableDataModel $statsTable): array
     {
         $data = [
             $this->getHeaderRow($statsTable),
@@ -92,5 +93,30 @@ class StatsTableCsvExportService implements StatsTableCsvExportServiceInterface
         foreach ($group->getSubGroups() as $subGroup) {
             $this->exportBlockCSV($data, $statsTable, $subGroup, $level + 1);
         }
+    }
+
+    public function getCsvDataFromTopsellers(array $topsellers): array
+    {
+        // header
+        // TODO Why are the language labels not resolved correctly?
+        $data = [[
+            $this->translator->trans('chameleon_system_ecommerce_stats.field_article_number'),
+            $this->translator->trans('chameleon_system_ecommerce_stats.field_article_name'),
+            $this->translator->trans('chameleon_system_ecommerce_stats.field_order_count'),
+            $this->translator->trans('chameleon_system_ecommerce_stats.field_value'),
+            $this->translator->trans('chameleon_system_ecommerce_stats.field_category'),
+        ]];
+
+        foreach ($topsellers as $topseller) {
+            $data[] = [
+                $topseller->getArticlenumber(),
+                $topseller->getName(),
+                $this->local->FormatNumber($topseller->getTotalOrdered(), 0),
+                $this->local->FormatNumber($topseller->getTotalOrderedValue(), 2),
+                $topseller->getCategoryPath(),
+            ];
+        }
+
+        return $data;
     }
 }

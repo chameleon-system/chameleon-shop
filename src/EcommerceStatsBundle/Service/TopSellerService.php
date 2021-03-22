@@ -23,8 +23,8 @@ class TopSellerService implements TopSellerServiceInterface
      * @return ShopOrderItemDataModel[]
      */
     public function getTopsellers(
-        ?string $startDate,
-        ?string $endDate,
+        ?\DateTime $startDate,
+        ?\DateTime $endDate,
         string $portalId,
         int $limit = 50
     ): array {
@@ -44,10 +44,10 @@ class TopSellerService implements TopSellerServiceInterface
                ';
         $baseConditionList = [];
         if (null !== $startDate) {
-            $baseConditionList[] = '`shop_order`.`datecreated` >= '.$this->connection->quote($startDate);
+            $baseConditionList[] = '`shop_order`.`datecreated` >= '.$this->connection->quote($startDate->format('Y-m-d'));
         }
         if (null !== $endDate) {
-            $baseConditionList[] = '`shop_order`.`datecreated` <= '.$this->connection->quote($endDate.' 23:59:59');
+            $baseConditionList[] = '`shop_order`.`datecreated` <= '.$this->connection->quote($endDate->format('Y-m-d').' 23:59:59');
         }
         if ('' !== $portalId) {
             $baseConditionList[] = '`shop_order`.`cms_portal_id` = '.$this->connection->quote($portalId);

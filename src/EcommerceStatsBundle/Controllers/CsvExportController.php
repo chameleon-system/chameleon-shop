@@ -1,0 +1,119 @@
+<?php declare(strict_types=1);
+
+namespace ChameleonSystem\EcommerceStatsBundle\Controllers;
+
+use ChameleonSystem\EcommerceStatsBundle\DataModel\CsvResponse;
+use ChameleonSystem\EcommerceStatsBundle\Interfaces\CsvExportServiceInterface;
+use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface;
+use ChameleonSystem\EcommerceStatsBundle\Interfaces\TopSellerServiceInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\VarDumper\VarDumper;
+
+class CsvExportController
+{
+
+    /**
+     * @var CsvExportServiceInterface
+     */
+    private $csvExportService;
+
+    /**
+     * @var StatsTableServiceInterface
+     */
+    private $statsTableService;
+
+    /**
+     * @var TopSellerServiceInterface
+     */
+    private $topSellerService;
+
+    public function __construct(
+        CsvExportServiceInterface $csvExportService,
+        StatsTableServiceInterface $statsTableService,
+        TopSellerServiceInterface $topSellerService
+    ) {
+        $this->csvExportService = $csvExportService;
+        $this->statsTableService = $statsTableService;
+        $this->topSellerService = $topSellerService;
+    }
+
+    public function exportStatistics(Request $request): Response
+    {
+        $this->throwIfNoBackendUserLoggedIn();
+
+        $dateGroupType = $request->get('dateGroupType', StatsTableServiceInterface::DATA_GROUP_TYPE_DAY);
+        $showChange = $request->request->getBoolean('showChange');
+        $selectedPortalId = $request->get('portalId', '');
+        $startDate = $this->getRequiredDate($request, 'startDate');
+        $endDate = $this->getRequiredDate($request, 'endDate');
+
+        $statsTable = $this->statsTableService->evaluate($startDate, $endDate, $dateGroupType, $showChange, $selectedPortalId);
+        $csvData = $this->csvExportService->getCsvDataFromStatsTable($statsTable);
+        $fileName = $this->getCsvFilename('stats', $startDate, $endDate);
+
+        return CsvResponse::fromRows($fileName, $csvData);
+    }
+
+    public function exportTopSellers(Request $request): Response
+    {
+        $this->throwIfNoBackendUserLoggedIn();
+
+        $startDate = $this->getRequiredDate($request, 'startDate');
+        $endDate = $this->getRequiredDate($request, 'endDate');
+        $selectedPortalId = $request->get('portalId', '');
+        $limit = $request->request->getInt('limit', 50);
+
+        $topSellers = $this->topSellerService->getTopsellers($startDate, $endDate, $selectedPortalId, $limit);
+        $csvData = $this->csvExportService->getCsvDataFromTopsellers($topSellers);
+        $fileName = $this->getCsvFilename('topsellers', $startDate, $endDate);
+
+        return CsvResponse::fromRows($fileName, $csvData);
+    }
+
+    private function getRequiredDate(Request $request, string $parameter): \DateTime
+    {
+        $dateString = $request->get($parameter);
+        if (null === $dateString) {
+            throw new BadRequestHttpException(sprintf(
+                'Request argument `%s` is required.',
+                $parameter
+            ));
+        }
+
+        $dateInstance = \DateTime::createFromFormat('Y-m-d', $dateString);
+        if (false === $dateInstance) {
+            throw new BadRequestHttpException(sprintf(
+                'Date in argument `%s` must be in format `Y-m-d` - `%s` is not.',
+                $parameter,
+                $dateString
+            ));
+        }
+
+        return $dateInstance;
+    }
+
+    private function getCsvFilename(string $basename, \DateTime $startDate, \DateTime $endDate): string
+    {
+        return sprintf(
+            '%s-%s-%s.csv',
+            $basename,
+            $startDate->format('d.m.Y'),
+            $endDate->format('d.m.Y')
+        );
+    }
+
+    private function throwIfNoBackendUserLoggedIn(): void
+    {
+        $user = \TCMSUser::GetActiveUser();
+
+        if (null !== $user && null !== $user->id) {
+            return;
+        }
+
+        throw new AccessDeniedHttpException();
+    }
+
+}

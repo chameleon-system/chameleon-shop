@@ -53,7 +53,7 @@ class StatsTableService implements StatsTableServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function evaluate(string $startDate, string $endDate, string $dateGroupType, bool $showDiffColumn, string $portalId = ''): StatsTableDataModel
+    public function evaluate(\DateTime $startDate, \DateTime $endDate, string $dateGroupType, bool $showDiffColumn, string $portalId = ''): StatsTableDataModel
     {
         $blocks = [];
 
@@ -83,16 +83,20 @@ class StatsTableService implements StatsTableServiceInterface
         );
     }
 
-    private function getBaseConditions(TdbPkgShopStatisticGroup $group, string $startDate, string $endDate, string $portalId): array
-    {
+    private function getBaseConditions(
+        TdbPkgShopStatisticGroup $group,
+        \DateTime $startDate,
+        \DateTime $endDate,
+        string $portalId
+    ): array {
         $baseConditionList = [];
         $params = [];
 
         $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldDateRestrictionField)).' >= :from';
-        $params[':from'] = $startDate;
+        $params[':from'] = $startDate->format('Y-m-d');
 
         $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldDateRestrictionField)).' <= :to';
-        $params[':to'] = $endDate;
+        $params[':to'] = $endDate->format('Y-m-d');
 
         if ('' !== $group->fieldPortalRestrictionField && '' !== $portalId) {
             $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldPortalRestrictionField)).' = :portalId';

@@ -10,8 +10,8 @@ interface TopSellerServiceInterface
      * @return ShopOrderItemDataModel[]
      */
     public function getTopsellers(
-        ?string $startDate,
-        ?string $endDate,
+        ?\DateTime $startDate,
+        ?\DateTime $endDate,
         string $portalId,
         int $limit = 50
     ): array;

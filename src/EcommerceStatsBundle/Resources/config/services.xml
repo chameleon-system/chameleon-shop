@@ -6,18 +6,22 @@
     <services>
         <defaults public="true" />
 
+        <!-- Controller -->
+        <service
+            id="chameleon_system_ecommerce_stats.controller.csv_export"
+            class="ChameleonSystem\EcommerceStatsBundle\Controllers\CsvExportController"
+            autowire="true"
+        />
+
+        <!-- Module -->
         <service
             id="chameleon_system_ecommerce_stats.backend_module.ecommerce_stats"
             class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule"
             shared="false"
+            autowire="true"
         >
-            <argument type="service" id="chameleon_system_ecommerce_stats.ecommerce_stats_table" />
-            <argument type="service" id="chameleon_system_ecommerce_stats.stats_table_csv_export" />
-            <argument type="service" id="chameleon_system_ecommerce_stats.top_seller" />
-            <argument type="service" id="database_connection" />
-            <argument type="service" id="chameleon_system_core.translator" />
-            <argument type="service" id="chameleon_system_core.util.input_filter" />
-            <argument type="service" id="chameleon_system_core.util.url" />
+            <argument key="$translator" type="service" id="chameleon_system_core.translator" />
+            <argument key="$urlUtil" type="service" id="chameleon_system_core.util.url" />
             <tag name="chameleon_system.module"/>
         </service>
 
@@ -31,8 +35,8 @@
             <argument type="service" id="logger" />
         </service>
         <service
-            id="chameleon_system_ecommerce_stats.stats_table_csv_export"
-            class="ChameleonSystem\EcommerceStatsBundle\Service\StatsTableCsvExportService"
+            id="chameleon_system_ecommerce_stats.csv_export"
+            class="ChameleonSystem\EcommerceStatsBundle\Service\CsvExportService"
             public="true"
         >
             <argument type="service" id="chameleon_system_core.translator" />
@@ -55,7 +59,7 @@
 
         <!-- Support for autowiring interfaces -->
         <service id="ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface" alias="chameleon_system_ecommerce_stats.ecommerce_stats_table" />
-        <service id="ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableCsvExportInterface" alias="chameleon_system_ecommerce_stats.stats_table_csv_export" />
+        <service id="ChameleonSystem\EcommerceStatsBundle\Interfaces\CsvExportInterface" alias="chameleon_system_ecommerce_stats.csv_export" />
         <service id="ChameleonSystem\EcommerceStatsBundle\Interfaces\TopSellerServiceInterface" alias="chameleon_system_ecommerce_stats.top_seller" />
 
     </services>

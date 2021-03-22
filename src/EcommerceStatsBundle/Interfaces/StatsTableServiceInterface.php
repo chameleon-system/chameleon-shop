@@ -17,8 +17,8 @@ interface StatsTableServiceInterface
      * @param string $dateGroupType one of self::DATA_GROUP_TYPE_*
      */
     public function evaluate(
-        string $startDate,
-        string $endDate,
+        \DateTime $startDate,
+        \DateTime $endDate,
         string $dateGroupType,
         bool $showDiffColumn,
         string $portalId = ''
