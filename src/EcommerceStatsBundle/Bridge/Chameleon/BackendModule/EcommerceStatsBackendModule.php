@@ -4,6 +4,7 @@ namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule;
 
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\EcommerceStatsBundle\DataModel\CsvResponse;
 use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Service\StatsTableCsvExportService;
 use Doctrine\DBAL\Connection;
@@ -240,8 +241,8 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
         }
 
         $filename = $this->getCsvFilename('topseller');
-        $csv = $this->generateCsv($data, self::SEPARATOR);
-        $this->outputAsDownload($csv, $filename, 'text/csv');
+
+        CsvResponse::fromRows($filename, $data)->sendAndExit();
     }
 
     protected function getTopsellers(int $limit = 50): TdbShopOrderItemList
@@ -300,55 +301,8 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
 
         $data = $this->csvExportService->getCSVData($tableData);
         $filename = $this->getCsvFilename('stats');
-        $csv = $this->generateCsv($data, self::SEPARATOR);
-        $this->outputAsDownload($csv, $filename, 'text/csv');
-    }
 
-    /**
-     * @param string[][] $data      array of string rows
-     * @param string     $separator cell delimiter
-     */
-    protected function generateCsv(array $data, string $separator = self::SEPARATOR): string
-    {
-        $csv = fopen('php://temp/maxmemory:'. 1024 * 1024, 'r+');
-
-        foreach ($data as $row) {
-            fputcsv($csv, $row, $separator);
-        }
-
-        rewind($csv);
-
-        return (string) stream_get_contents($csv);
-    }
-
-    /**
-     * @return never-returns - Uses `exit()` to finish the current request
-     */
-    protected function outputAsDownload(string $content, string $fileName, string $contentType): void
-    {
-        $response = new Response($content, 200, [
-            'Pragma' => 'public',
-            'Expires' => 0,
-
-            'Content-Type' => $contentType,
-            'Content-Transfer-Encoding' => 'binary',
-        ]);
-
-        // Disable caching
-        $response->setPrivate();
-        $response->headers->addCacheControlDirective('must-revalidate');
-        $response->headers->addCacheControlDirective('post-check', '0');
-        $response->headers->addCacheControlDirective('pre-check', '0');
-        $response->headers->addCacheControlDirective('private');
-
-        // Force download
-        $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $fileName
-        ));
-
-        $response->send();
-        exit(0);
+        CsvResponse::fromRows($filename, $data)->sendAndExit();
     }
 
     /**
