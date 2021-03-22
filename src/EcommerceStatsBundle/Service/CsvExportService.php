@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace ChameleonSystem\EcommerceStatsBundle\Service;
 
 use ChameleonSystem\EcommerceStatsBundle\DataModel\ShopOrderItemDataModel;
