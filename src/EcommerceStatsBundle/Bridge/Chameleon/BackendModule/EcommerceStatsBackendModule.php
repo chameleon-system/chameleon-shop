@@ -5,14 +5,13 @@ namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\EcommerceStatsBundle\DataModel\CsvResponse;
+use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableCsvExportServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface;
-use ChameleonSystem\EcommerceStatsBundle\Service\StatsTableCsvExportService;
+use ChameleonSystem\EcommerceStatsBundle\Interfaces\TopSellerServiceInterface;
 use Doctrine\DBAL\Connection;
 use IMapperCacheTriggerRestricted;
 use IMapperVisitorRestricted;
 use MTPkgViewRendererAbstractModuleMapper;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Translation\TranslatorInterface;
 use TCMSLocal;
 use TdbCmsPortalList;
@@ -63,9 +62,14 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     private $stats;
 
     /**
-     * @var StatsTableCsvExportService
+     * @var StatsTableCsvExportServiceInterface
      */
     private $csvExportService;
+
+    /**
+     * @var TopSellerServiceInterface
+     */
+    private $topSellerService;
 
     /**
      * @var TranslatorInterface
@@ -94,16 +98,18 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
 
     public function __construct(
         StatsTableServiceInterface $stats,
-        StatsTableCsvExportService $csvExportService,
+        StatsTableCsvExportServiceInterface $csvExportService,
+        TopSellerServiceInterface $topSellerService,
         Connection $connection,
         TranslatorInterface $translator,
         InputFilterUtilInterface $inputFilterUtil,
-        UrlUtil $urlUtil)
-    {
+        UrlUtil $urlUtil
+    ) {
         parent::__construct();
 
         $this->stats = $stats;
         $this->csvExportService = $csvExportService;
+        $this->topSellerService = $topSellerService;
         $this->connection = $connection;
         $this->translator = $translator;
         $this->inputFilterUtil = $inputFilterUtil;
@@ -128,6 +134,9 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * {@inheritDoc}
+     *
+     * @uses getAsCsv as module_fnc
+     * @uses downloadTopsellers as module_fnc
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
@@ -212,75 +221,33 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
      */
     protected function downloadTopsellers(): void
     {
-        $topSellerOrderItems = $this->getTopsellers();
-        $topSellerOrderItems->GoToStart();
+        // header
+        $data = [[
+            $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_article_number'),
+            $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_article_name'),
+            $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_order_count'),
+            $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_value'),
+            $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_category'),
+        ]];
 
-        $columnHeaders = [
-            'articlenumber' => $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_article_number'),
-            'name' => $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_article_name'),
-            'totalordered' => $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_order_count'),
-            'totalorderedvalue' => $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_value'),
-            'categorypath' => $this->translator->trans('chameleon_system_shop.cms_module_shop_statistic.field_category'),
-        ];
+        $topSellerItems = $this->topSellerService->getTopsellers(
+            $this->startDate,
+            $this->endDate,
+            $this->selectedPortalId
+        );
 
-        $numbers = ['totalordered' => 0, 'totalorderedvalue' => 2];
-
-        $data = [array_values($columnHeaders)]; // header
-
-        while ($orderItem = $topSellerOrderItems->Next()) {
-            $row = [];
-            foreach ($columnHeaders as $fieldName => $fieldTitle) {
-                $fieldValue = $orderItem->sqlData[$fieldName];
-                if (true === array_key_exists($fieldName, $numbers)) {
-                    $fieldValue = $this->local->FormatNumber($fieldValue, $numbers[$fieldName]);
-                }
-                $row[] = str_replace('"', "'", $fieldValue);
-            }
-
-            $data[] = $row;
+        foreach ($topSellerItems as $topSellerItem) {
+            $data[] = [
+                $topSellerItem->getArticlenumber(),
+                $topSellerItem->getName(),
+                $this->local->FormatNumber($topSellerItem->getTotalOrdered(), 0),
+                $this->local->FormatNumber($topSellerItem->getTotalOrderedValue(), 2),
+                $topSellerItem->getCategoryPath(),
+            ];
         }
 
         $filename = $this->getCsvFilename('topseller');
-
         CsvResponse::fromRows($filename, $data)->sendAndExit();
-    }
-
-    protected function getTopsellers(int $limit = 50): TdbShopOrderItemList
-    {
-        $query = '
-            SELECT 
-                SUM(`shop_order_item`.`order_amount`) AS totalordered,
-                SUM(`shop_order_item`.`order_price_after_discounts`) AS totalorderedvalue,
-                `shop_category`.`url_path` AS categorypath, 
-                `shop_order_item`.*
-            FROM `shop_order_item`
-                LEFT JOIN `shop_order`
-                    ON `shop_order_item`.`shop_order_id` = `shop_order`.`id`
-                LEFT JOIN `shop_article_shop_category_mlt` 
-                    ON `shop_order_item`.`shop_article_id` = `shop_article_shop_category_mlt`.`source_id`
-                LEFT JOIN `shop_category` 
-                    ON `shop_article_shop_category_mlt`.`target_id` = `shop_category`.`id`
-               ';
-        $baseConditionList = [];
-        if (null !== $this->startDate) {
-            $baseConditionList[] = '`shop_order`.`datecreated` >= '.$this->connection->quote($this->startDate);
-        }
-        if (null !== $this->endDate) {
-            $baseConditionList[] = '`shop_order`.`datecreated` <= '.$this->connection->quote($this->endDate.' 23:59:59');
-        }
-        if ('' !== $this->selectedPortalId) {
-            $baseConditionList[] = '`shop_order`.`cms_portal_id` = '.$this->connection->quote($this->selectedPortalId);
-        }
-
-        if (count($baseConditionList) > 0) {
-            $query .= ' WHERE ('.implode(') AND (', $baseConditionList).')';
-        }
-
-        $query .= ' GROUP BY `shop_category`.`id`, `shop_order_item`.`shop_article_id`';
-        $query .= ' ORDER BY totalordered DESC ';
-        $query .= ' LIMIT 0,'.$limit;
-
-        return TdbShopOrderItemList::GetList($query);
     }
 
     protected function getCsvFilename(string $basename): string
