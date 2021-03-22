@@ -1,7 +1,7 @@
 <h1>Build #1605192409</h1>
 <h2>Date: 2020-09-25</h2>
 <div class="changelog">
-    - ref #50493: Add a composite index key for faster requests
+    - ref #636: Add a composite index key for faster requests
 </div>
 <?php
 

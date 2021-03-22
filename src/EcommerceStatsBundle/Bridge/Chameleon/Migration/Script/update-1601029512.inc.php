@@ -1,7 +1,7 @@
 <h1>Build #1601029512</h1>
 <h2>Date: 2020-09-25</h2>
 <div class="changelog">
-    - ref #50493: New backend module for statistics
+    - ref #636: New backend module for statistics
 </div>
 <?php
 
@@ -53,17 +53,21 @@ $data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item_cms_right_
   ]);
 TCMSLogChange::delete(__LINE__, $data);
 
+$menuCategoryId = (string) TCMSLogChange::getDatabaseConnection()
+    ->executeQuery('SELECT id FROM cms_menu_category WHERE system_name="analytics"')
+    ->fetch(\Doctrine\DBAL\FetchMode::COLUMN);
 $data = TCMSLogChange::createMigrationQueryData('cms_menu_item', 'de')
-  ->setFields([
-      'name' => 'Umsätze',
-      'target' => '9c06702f-7ffb-426d-afe9-5ffd5a9cd122',
-      'icon_font_css_class' => 'fas fa-chart-pie',
-      'position' => '22',
-      'cms_menu_category_id' => 'ce1c9b6f-fcb7-1934-fed8-8bc825ad37eb',
-  ])->setWhereEquals(['id' => '101fafdf-7a01-aac1-14ee-8275dc18667a']);
-TCMSLogChange::update(__LINE__, $data);
+    ->setFields([
+        'name' => 'Umsätze',
+        'target' => '9c06702f-7ffb-426d-afe9-5ffd5a9cd122',
+        'target_table_name' => 'cms_menu_custom_item',
+        'icon_font_css_class' => 'fas fa-chart-pie',
+        'position' => '22',
+        'cms_menu_category_id' => $menuCategoryId,
+        'id' => '552424ec-8131-4102-8406-3f56dad583e6'
+    ]);
+TCMSLogChange::insert(__LINE__, $data);
 
-$data = TCMSLogChange::createMigrationQueryData('cms_menu_item', 'de')
-  ->setFields(['target_table_name' => 'cms_menu_custom_item'])
-  ->setWhereEquals(['id' => '101fafdf-7a01-aac1-14ee-8275dc18667a']);
+$data = TCMSLogChange::createMigrationQueryData('cms_menu_item', 'en')
+    ->setFields([ 'name' => 'Sales' ]);
 TCMSLogChange::update(__LINE__, $data);
