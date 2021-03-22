@@ -145,7 +145,7 @@ class StatsGroupDataModel
      * // 2. The item `baz` was pulled to the root as well and now exists twice: Once in order to track all
      * //    stats of category (foo AND baz) and once to track those of just category baz.
      *
-     * @param string[] $groupNames
+     * @param string[]              $groupNames
      * @param array<string, string> $nameToColumnMapping - group name list
      */
     public function addRow(
@@ -180,7 +180,8 @@ class StatsGroupDataModel
     /**
      * Update the totals for the group.
      */
-    protected function updateGroupTotals(string $columnName, int $columnValue): void {
+    protected function updateGroupTotals(string $columnName, int $columnValue): void
+    {
         if (false === array_key_exists($columnName, $this->groupTotals)) {
             $this->groupTotals[$columnName] = 0;
         }

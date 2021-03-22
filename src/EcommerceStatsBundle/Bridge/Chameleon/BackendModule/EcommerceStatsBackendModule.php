@@ -5,6 +5,7 @@ namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface;
+use ChameleonSystem\EcommerceStatsBundle\Service\StatsTableCsvExportService;
 use Doctrine\DBAL\Connection;
 use IMapperCacheTriggerRestricted;
 use IMapperVisitorRestricted;
@@ -13,6 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Translation\TranslatorInterface;
 use TCMSLocal;
+use TdbCmsPortalList;
+use TdbShopOrderItemList;
+use TGlobal;
 
 class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
 {
@@ -58,6 +62,11 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     private $stats;
 
     /**
+     * @var StatsTableCsvExportService
+     */
+    private $csvExportService;
+
+    /**
      * @var TranslatorInterface
      */
     private $translator;
@@ -84,6 +93,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
 
     public function __construct(
         StatsTableServiceInterface $stats,
+        StatsTableCsvExportService $csvExportService,
         Connection $connection,
         TranslatorInterface $translator,
         InputFilterUtilInterface $inputFilterUtil,
@@ -92,6 +102,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
         parent::__construct();
 
         $this->stats = $stats;
+        $this->csvExportService = $csvExportService;
         $this->connection = $connection;
         $this->translator = $translator;
         $this->inputFilterUtil = $inputFilterUtil;
@@ -120,8 +131,8 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
         if (null !== $this->viewName) {
-            $this->stats->evaluate($this->startDate, $this->endDate, $this->dateGroupType, $this->showChange, $this->selectedPortalId);
-            $oVisitor->SetMappedValue('tableData', $this->stats->getTableData());
+            $tableData = $this->stats->evaluate($this->startDate, $this->endDate, $this->dateGroupType, $this->showChange, $this->selectedPortalId);
+            $oVisitor->SetMappedValue('tableData', $tableData);
         }
 
         $filteredRequestData = $this->getFilteredRequestParameterList(['pagedef', '_pagedefType', 'contentmodule']);
@@ -169,7 +180,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     protected function getPortalList(): array
     {
         $portalIdList = [];
-        $portalList = \TdbCmsPortalList::GetList();
+        $portalList = TdbCmsPortalList::GetList();
         while ($portal = $portalList->Next()) {
             $portalIdList[$portal->id] = $portal->GetName();
         }
@@ -233,7 +244,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $this->outputAsDownload($csv, $filename, 'text/csv');
     }
 
-    protected function getTopsellers(int $limit = 50): \TdbShopOrderItemList
+    protected function getTopsellers(int $limit = 50): TdbShopOrderItemList
     {
         $query = '
             SELECT 
@@ -268,7 +279,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $query .= ' ORDER BY totalordered DESC ';
         $query .= ' LIMIT 0,'.$limit;
 
-        return \TdbShopOrderItemList::GetList($query);
+        return TdbShopOrderItemList::GetList($query);
     }
 
     protected function getCsvFilename(string $basename): string
@@ -285,8 +296,9 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
      */
     protected function getAsCsv(): void
     {
-        $this->stats->evaluate($this->startDate, $this->endDate, $this->dateGroupType, $this->showChange, $this->selectedPortalId);
-        $data = $this->stats->getCSVData();
+        $tableData = $this->stats->evaluate($this->startDate, $this->endDate, $this->dateGroupType, $this->showChange, $this->selectedPortalId);
+
+        $data = $this->csvExportService->getCSVData($tableData);
         $filename = $this->getCsvFilename('stats');
         $csv = $this->generateCsv($data, self::SEPARATOR);
         $this->outputAsDownload($csv, $filename, 'text/csv');
@@ -346,8 +358,8 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $includes = parent::GetHtmlHeadIncludes();
 
-        $cssPath = \TGlobal::GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats.css');
-        $printCssPath = \TGlobal::GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats-print.css');
+        $cssPath = TGlobal::GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats.css');
+        $printCssPath = TGlobal::GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats-print.css');
         $includes[] = sprintf('<link href="%s" rel="stylesheet" type="text/css">', $cssPath);
         $includes[] = sprintf('<link href="%s" rel="stylesheet" type="text/css" media="print">', $printCssPath);
 

@@ -2,46 +2,28 @@
 
 namespace ChameleonSystem\EcommerceStatsBundle\Service;
 
+use function array_key_exists;
 use ChameleonSystem\EcommerceStatsBundle\DataModel\StatsGroupDataModel;
 use ChameleonSystem\EcommerceStatsBundle\DataModel\StatsTableDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;
+use Generator;
+use function in_array;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use TdbPkgShopStatisticGroup;
+use TdbPkgShopStatisticGroupList;
 
-/**
- * Note: This service is not shared because it is stateful.
- *       As such every time you inject it you'll get a new instance
- *       of it without any data.
- */
 class StatsTableService implements StatsTableServiceInterface
 {
-    /**
-     * @var StatsGroupDataModel[]
-     */
-    private $blocks = [];
-
-    /**
-     * @var bool
-     */
-    private $showDiffColumn = false;
-
-    /**
-     * @var string|null
-     */
-    private $blockName = null;
-
-    /**
-     * @var string[]
-     */
-    private $columnNames;
-
-    /**
-     * @var int
-     */
-    private $maxGroupCount;
+    private const DATE_QUERY_PARTS = [
+        self::DATA_GROUP_TYPE_YEAR => 'YEAR(datecreated)',
+        self::DATA_GROUP_TYPE_MONTH => "DATE_FORMAT(datecreated,'%Y-%m')",
+        self::DATA_GROUP_TYPE_WEEK => "CONCAT(YEAR(datecreated), '-KW', WEEK(datecreated, 7))",
+        self::DATA_GROUP_TYPE_DAY => 'DATE(datecreated)',
+    ];
 
     /**
      * @var Connection
@@ -71,74 +53,113 @@ class StatsTableService implements StatsTableServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function evaluate(string $startDate, string $endDate, string $dateGroupType, bool $showDiffColumn, string $portalId = ''): void
+    public function evaluate(string $startDate, string $endDate, string $dateGroupType, bool $showDiffColumn, string $portalId = ''): StatsTableDataModel
     {
-        $this->blocks = [];
-        $this->blockName = null;
-        $this->dateGroupType = $dateGroupType;
-        $this->setShowDiffColumn($showDiffColumn);
+        $blocks = [];
 
-        switch ($this->dateGroupType) {
-            case self::DATA_GROUP_TYPE_YEAR:
-                $dateQueryPart = 'YEAR(datecreated)';
-                break;
+        $dateQueryPart = $this->getDateQueryPart($dateGroupType);
 
-            case self::DATA_GROUP_TYPE_MONTH:
-                $dateQueryPart = "DATE_FORMAT(datecreated,'%Y-%m')";
-                break;
+        foreach ($this->fetchStatistics() as $group) {
+            [ $conditionList, $params ] = $this->getBaseConditions($group, $startDate, $endDate, $portalId);
 
-            case self::DATA_GROUP_TYPE_WEEK:
-                $dateQueryPart = "CONCAT(YEAR(datecreated), '-KW', WEEK(datecreated, 7))";
-                break;
-
-            case self::DATA_GROUP_TYPE_DAY:
-            default:
-                $dateQueryPart = 'DATE(datecreated)';
-                break;
-        }
-
-        $groups = \TdbPkgShopStatisticGroupList::GetList();
-        while ($group = $groups->Next()) {
-            $params = [];
-            $baseConditionList = [];
-
-            if (null !== $startDate) {
-                $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldDateRestrictionField)).' >= :from';
-                $params[':from'] = $startDate;
-            }
-
-            if (null !== $endDate) {
-                $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldDateRestrictionField)).' <= :to';
-                $params[':to'] = $endDate;
-            }
-
-            if ('' !== $group->fieldPortalRestrictionField && '' !== $portalId) {
-                $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldPortalRestrictionField)).' = :portalId';
-                $params[':portalId'] = $portalId;
-            }
-
-            $conditionList = $baseConditionList;
             $baseQuery = $group->fieldQuery;
             $condition = '';
             if (count($conditionList) > 0) {
                 $condition = 'WHERE ('.implode(') AND (', $conditionList).')';
             }
+
             $blockQuery = str_replace(['[{sColumnName}]', '[{sCondition}]'], [$dateQueryPart, $condition], $baseQuery);
             $groupFields = explode(',', $group->fieldGroups);
             $realGroupFields = array_filter(array_map('trim', $groupFields));
 
-            $this->addBlock($group->fieldName, $blockQuery, $realGroupFields, $params);
+            $this->addBlock($blocks, $group->fieldName, $blockQuery, $realGroupFields, $params);
         }
 
-        $this->columnNames = $this->getColumnNames();
-        $this->maxGroupCount = $this->getMaxGroupColumnCount();
-        $this->showDiffColumn = $this->isShowDiffColumn();
+        return new StatsTableDataModel(
+            $blocks,
+            $this->getColumnNames($blocks),
+            $showDiffColumn,
+            $this->getMaxGroupColumnCount($blocks)
+        );
     }
 
-    /*
-     * add a new block to the list
-    */
-    protected function addBlock(string $blockName, string $query, array $subGroups = [], array $params = []): void
+    private function getBaseConditions(TdbPkgShopStatisticGroup $group, string $startDate, string $endDate, string $portalId): array
+    {
+        $baseConditionList = [];
+        $params = [];
+
+        $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldDateRestrictionField)).' >= :from';
+        $params[':from'] = $startDate;
+
+        $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldDateRestrictionField)).' <= :to';
+        $params[':to'] = $endDate;
+
+        if ('' !== $group->fieldPortalRestrictionField && '' !== $portalId) {
+            $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldPortalRestrictionField)).' = :portalId';
+            $params[':portalId'] = $portalId;
+        }
+
+        return [$baseConditionList, $params];
+    }
+
+    /**
+     * @return Generator<TdbPkgShopStatisticGroup>
+     */
+    private function fetchStatistics(): Generator
+    {
+        $groups = TdbPkgShopStatisticGroupList::GetList();
+        while ($group = $groups->Next()) {
+            yield $group;
+        }
+    }
+
+    private function getDateQueryPart(string $dateGroupType): string
+    {
+        return self::DATE_QUERY_PARTS[$dateGroupType]
+            ?? self::DATE_QUERY_PARTS[self::DATA_GROUP_TYPE_DAY];
+    }
+
+    /**
+     * add a new block to the list.
+     *
+     * @param array<string, StatsGroupDataModel> $blocks
+     * @param string[]                           $subGroups
+     * @param array<string, string>              $params
+     */
+    protected function addBlock(
+        array &$blocks,
+        string $blockName,
+        string $query,
+        array $subGroups = [],
+        array $params = []
+    ): void {
+        if (false === array_key_exists($blockName, $blocks)) {
+            $ecommerceStatsGroup = new StatsGroupDataModel();
+            $ecommerceStatsGroup->init($blockName);
+            $blocks[$blockName] = $ecommerceStatsGroup;
+        }
+
+        foreach ($this->fetchRows($query, $params) as $dataRow) {
+            if (!array_key_exists('sColumnName', $dataRow) || !array_key_exists('dColumnValue', $dataRow)) {
+                $this->logger->error(sprintf(
+                    'Could not add block `%s` to table: Query must select at least `sColumnName` and `dColumnValue`',
+                    $blockName
+                ));
+
+                return;
+            }
+
+            $realNames = $this->subGroupsToRealNames($subGroups, $dataRow);
+            $blocks[$blockName]->addRow($realNames, $dataRow['sColumnName'], $dataRow['dColumnValue'], $dataRow);
+        }
+    }
+
+    /**
+     * @param array<string, string> $params
+     *
+     * @return Generator<array>
+     */
+    private function fetchRows(string $query, array $params): Generator
     {
         try {
             $sqlStatement = $this->connection->executeQuery($query, $params);
@@ -148,55 +169,38 @@ class StatsTableService implements StatsTableServiceInterface
             return;
         }
 
-        if (false === array_key_exists($blockName, $this->blocks)) {
-            $ecommerceStatsGroup = new StatsGroupDataModel();
-            $ecommerceStatsGroup->init($blockName);
-            $this->blocks[$blockName] = $ecommerceStatsGroup;
-        }
-
         while ($dataRow = $sqlStatement->fetch(FetchMode::ASSOCIATIVE)) {
-            $realNames = [];
-            foreach ($subGroups as $groupName) {
-                if (strlen($dataRow[$groupName]) > 0) {
-                    $realNames[] = $dataRow[$groupName];
-                } else {
-                    $realNames[] = $this->translator->trans('chameleon_system_ecommerce_stats.nothing_assigned');
-                }
-            }
-
-            if (!\array_key_exists('sColumnName', $dataRow) || !\array_key_exists('dColumnValue', $dataRow)) {
-                $this->logger->error(sprintf(
-                    'Could not add block `%s` to table: Query must select at least `sColumnName` and `dColumnValue`',
-                    $blockName
-                ));
-
-                return;
-            }
-
-            $this->blocks[$blockName]->addRow($realNames, $dataRow['sColumnName'], $dataRow['dColumnValue'], $dataRow);
+            yield $dataRow;
         }
+    }
+
+    private function subGroupsToRealNames(array $subGroups, array $dataRow): array
+    {
+        $realNames = [];
+        foreach ($subGroups as $groupName) {
+            if (strlen($dataRow[$groupName]) > 0) {
+                $realNames[] = $dataRow[$groupName];
+            } else {
+                $realNames[] = $this->translator->trans('chameleon_system_ecommerce_stats.nothing_assigned');
+            }
+        }
+
+        return $realNames;
     }
 
     /**
-     * {@inheritdoc}
+     * @param array<string, StatsGroupDataModel> $blocks
+     *
+     * @return string[]
      */
-    public function getTableData(): StatsTableDataModel
-    {
-        return new StatsTableDataModel(
-            $this->blocks,
-            $this->columnNames,
-            $this->showDiffColumn,
-            $this->maxGroupCount
-        );
-    }
-
-    public function getColumnNames(): array
+    private function getColumnNames(array $blocks): array
     {
         $nameColumns = [];
-        foreach ($this->blocks as $block) {
+
+        foreach ($blocks as $block) {
             $tmpNames = $block->getColumnNames();
             foreach ($tmpNames as $name) {
-                if (false === in_array($name, $nameColumns)) {
+                if (false === in_array($name, $nameColumns, true)) {
                     $nameColumns[] = $name;
                 }
             }
@@ -206,88 +210,16 @@ class StatsTableService implements StatsTableServiceInterface
         return $nameColumns;
     }
 
-    public function getMaxGroupColumnCount(): int
+    /**
+     * @param array<string, StatsGroupDataModel> $blocks
+     */
+    private function getMaxGroupColumnCount(array $blocks): int
     {
         $maxCount = 0;
-        foreach ($this->blocks as $block) {
+        foreach ($blocks as $block) {
             $maxCount = max($block->getMaxGroupDepth() + 1, $maxCount);
         }
 
         return $maxCount;
-    }
-
-    public function setShowDiffColumn(bool $showDiffColumn): void
-    {
-        $this->showDiffColumn = $showDiffColumn;
-    }
-
-    public function isShowDiffColumn(): bool
-    {
-        return $this->showDiffColumn;
-    }
-
-    public function setBlockName(?string $blockName): void
-    {
-        $this->blockName = $blockName;
-    }
-
-    /**
-     * @return StatsGroupDataModel[]
-     */
-    public function getBlocks(): array
-    {
-        return $this->blocks;
-    }
-
-    public function getCSVData(): array
-    {
-        $this->local = \TCMSLocal::GetActive();
-
-        $row = array_fill(0, $this->maxGroupCount, '');
-
-        foreach ($this->columnNames as $name) {
-            $row[] = $name;
-            if ($this->showDiffColumn) {
-                $row[] = $this->translator->trans('chameleon_system_ecommerce_stats.delta');
-            }
-        }
-
-        $data = [$row]; // header
-
-        foreach ($this->blocks as $block) {
-            $this->exportBlockCSV($data, $block, 1);
-            $data[] = [];
-        }
-
-        return $data;
-    }
-
-    protected function exportBlockCSV(array &$data, StatsGroupDataModel $group, int $level = 1): void
-    {
-        $row = array_fill(0, $level - 1, '');
-        $row[] = $group->getGroupTitle();
-
-        $emptyGroups = $this->maxGroupCount - $level;
-
-        for ($i = 0; $i < $emptyGroups; ++$i) {
-            $row[] = $this->translator->trans('chameleon_system_ecommerce_stats.total');
-        }
-
-        $oldVal = 0;
-        foreach ($this->columnNames as $name) {
-            $newVal = $group->getTotals($name) ?? 0;
-            $row[] = $this->local->FormatNumber($newVal, 2);
-            $dDiff = $newVal - $oldVal;
-            if ($this->showDiffColumn) {
-                $row[] = $this->local->FormatNumber($dDiff, 2);
-            }
-            $oldVal = $newVal;
-        }
-
-        $data[] = $row;
-
-        foreach ($group->getSubGroups() as $subGroup) {
-            $this->exportBlockCSV($data, $subGroup, $level + 1);
-        }
     }
 }

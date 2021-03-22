@@ -16,17 +16,5 @@ interface StatsTableServiceInterface
      *
      * @param string $dateGroupType one of self::DATA_GROUP_TYPE_*
      */
-    public function evaluate(string $startDate, string $endDate, string $dateGroupType, bool $showDiffColumn, string $portalId = ''): void;
-
-    /**
-     * structure of the evaluated table.
-     */
-    public function getTableData(): StatsTableDataModel;
-
-    /**
-     * exports csv rows as string array.
-     *
-     * @return string[][]
-     */
-    public function getCSVData(): array;
+    public function evaluate(string $startDate, string $endDate, string $dateGroupType, bool $showDiffColumn, string $portalId = ''): StatsTableDataModel;
 }

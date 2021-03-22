@@ -12,6 +12,7 @@
             shared="false"
         >
             <argument type="service" id="chameleon_system_ecommerce_stats.ecommerce_stats_table" />
+            <argument type="service" id="chameleon_system_ecommerce_stats.stats_table_csv_export" />
             <argument type="service" id="database_connection" />
             <argument type="service" id="chameleon_system_core.translator" />
             <argument type="service" id="chameleon_system_core.util.input_filter" />
@@ -23,11 +24,17 @@
             id="chameleon_system_ecommerce_stats.ecommerce_stats_table"
             class="ChameleonSystem\EcommerceStatsBundle\Service\StatsTableService"
             public="true"
-            shared="false"
         >
             <argument type="service" id="database_connection" />
             <argument type="service" id="chameleon_system_core.translator" />
             <argument type="service" id="logger" />
+        </service>
+        <service
+            id="chameleon_system_ecommerce_stats.stats_table_csv_export"
+            class="ChameleonSystem\EcommerceStatsBundle\Service\StatsTableCsvExportService"
+            public="true"
+        >
+            <argument type="service" id="chameleon_system_core.translator" />
         </service>
 
         <service
@@ -40,6 +47,7 @@
 
         <!-- Support for autowiring interfaces -->
         <service id="ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface" alias="chameleon_system_ecommerce_stats.ecommerce_stats_table" />
+        <service id="ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableCsvExportInterface" alias="chameleon_system_ecommerce_stats.stats_table_csv_export" />
 
     </services>
 </container>
