@@ -13,13 +13,13 @@ namespace ChameleonSystem\EcommerceStatsBundle\Controllers;
 
 use ChameleonSystem\EcommerceStatsBundle\DataModel\CsvResponse;
 use ChameleonSystem\EcommerceStatsBundle\Interfaces\CsvExportServiceInterface;
+use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsProviderInterface;
 use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Interfaces\TopSellerServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\VarDumper\VarDumper;
 
 class CsvExportController
 {
@@ -53,7 +53,7 @@ class CsvExportController
     {
         $this->throwIfNoBackendUserLoggedIn();
 
-        $dateGroupType = $request->get('dateGroupType', StatsTableServiceInterface::DATA_GROUP_TYPE_DAY);
+        $dateGroupType = $request->get('dateGroupType', StatsProviderInterface::DATA_GROUP_TYPE_DAY);
         $showChange = $request->request->getBoolean('showChange');
         $selectedPortalId = $request->get('portalId', '');
         $startDate = $this->getRequiredDate($request, 'startDate')->setTime(0, 0, 0);

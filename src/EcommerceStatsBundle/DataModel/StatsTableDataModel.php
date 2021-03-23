@@ -14,36 +14,24 @@ namespace ChameleonSystem\EcommerceStatsBundle\DataModel;
 class StatsTableDataModel
 {
     /**
-     * @var StatsGroupDataModel[]
+     * @var array<string, StatsGroupDataModel>
      */
-    private $blocks;
+    private $blocks = [];
 
     /**
      * @var string[]
      */
-    private $columnNames;
+    private $columnNames = [];
 
     /**
      * @var bool
      */
-    private $showDiffColumn;
+    private $showDiffColumn = false;
 
     /**
      * @var int
      */
-    private $maxGroupCount;
-
-    /**
-     * @param StatsGroupDataModel[] $blocks
-     * @param string[]              $columnNames
-     */
-    public function __construct(array $blocks, array $columnNames, bool $showDiffColumn, int $maxGroupCount)
-    {
-        $this->blocks = $blocks;
-        $this->columnNames = $columnNames;
-        $this->showDiffColumn = $showDiffColumn;
-        $this->maxGroupCount = $maxGroupCount;
-    }
+    private $maxGroupCount = 0;
 
     /**
      * @return StatsGroupDataModel[]
@@ -51,6 +39,16 @@ class StatsTableDataModel
     public function getBlocks(): array
     {
         return $this->blocks;
+    }
+
+    public function getBlock(string $name): ?StatsGroupDataModel
+    {
+        return $this->blocks[$name] ?? null;
+    }
+
+    public function addBlock(string $name, StatsGroupDataModel $block): void
+    {
+        $this->blocks[$name] = $block;
     }
 
     /**
@@ -61,13 +59,28 @@ class StatsTableDataModel
         return $this->columnNames;
     }
 
+    public function setColumnNames(array $columnName): void
+    {
+        $this->columnNames = $columnName;
+    }
+
     public function isShowDiffColumn(): bool
     {
         return $this->showDiffColumn;
     }
 
+    public function setShowDiffColumn(bool $showDiffColumn): void
+    {
+        $this->showDiffColumn = $showDiffColumn;
+    }
+
     public function getMaxGroupCount(): int
     {
         return $this->maxGroupCount;
+    }
+
+    public function setMaxGroupCount(int $maxGroupCount): void
+    {
+        $this->maxGroupCount = $maxGroupCount;
     }
 }

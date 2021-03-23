@@ -11,8 +11,8 @@
 
 namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule;
 
-use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsProviderInterface;
 use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface;
 use IMapperCacheTriggerRestricted;
 use IMapperVisitorRestricted;
@@ -59,7 +59,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $startDate = $this->getDateUserInput('startDate', 'Y-m-01')->setTime(0, 0, 0);
         $endDate = $this->getDateUserInput('endDate', 'Y-m-d')->setTime(23, 59, 59);
-        $dateGroupType = $this->GetUserInput('dateGroupType', StatsTableServiceInterface::DATA_GROUP_TYPE_DAY);
+        $dateGroupType = $this->GetUserInput('dateGroupType', StatsProviderInterface::DATA_GROUP_TYPE_DAY);
         $showChange = '1' === $this->GetUserInput('showChange', '0');
         $viewName = $this->GetUserInput('viewName', null);
         $portalId = $this->GetUserInput('portalId', '');
@@ -125,10 +125,10 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
     private function getDateGroupTypeList(): array
     {
         return [
-            StatsTableServiceInterface::DATA_GROUP_TYPE_YEAR => $this->translator->trans('chameleon_system_ecommerce_stats.date_year'),
-            StatsTableServiceInterface::DATA_GROUP_TYPE_MONTH => $this->translator->trans('chameleon_system_ecommerce_stats.date_month'),
-            StatsTableServiceInterface::DATA_GROUP_TYPE_WEEK => $this->translator->trans('chameleon_system_ecommerce_stats.date_week'),
-            StatsTableServiceInterface::DATA_GROUP_TYPE_DAY => $this->translator->trans('chameleon_system_ecommerce_stats.date_day'),
+            StatsProviderInterface::DATA_GROUP_TYPE_YEAR => $this->translator->trans('chameleon_system_ecommerce_stats.date_year'),
+            StatsProviderInterface::DATA_GROUP_TYPE_MONTH => $this->translator->trans('chameleon_system_ecommerce_stats.date_month'),
+            StatsProviderInterface::DATA_GROUP_TYPE_WEEK => $this->translator->trans('chameleon_system_ecommerce_stats.date_week'),
+            StatsProviderInterface::DATA_GROUP_TYPE_DAY => $this->translator->trans('chameleon_system_ecommerce_stats.date_day'),
         ];
     }
 

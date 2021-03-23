@@ -35,7 +35,7 @@ class StatsGroupDataModel
     private $groupTitle = null;
 
     /**
-     * @var array<string, int>
+     * @var array<string, float>
      */
     private $groupTotals = [];
 
@@ -160,7 +160,7 @@ class StatsGroupDataModel
     public function addRow(
         array $groupNames,
         string $columnName,
-        int $columnValue,
+        float $columnValue,
         array $nameToColumnMapping = []
     ): void {
         // update total
@@ -189,7 +189,7 @@ class StatsGroupDataModel
     /**
      * Update the totals for the group.
      */
-    private function updateGroupTotals(string $columnName, int $columnValue): void
+    private function updateGroupTotals(string $columnName, float $columnValue): void
     {
         if (false === array_key_exists($columnName, $this->groupTotals)) {
             $this->groupTotals[$columnName] = 0;
