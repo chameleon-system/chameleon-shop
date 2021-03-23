@@ -13,7 +13,11 @@ class FormatterTwigExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('format_number', [$this, 'formatNumber'], ['is_safe' => ['html']]),
+            new TwigFilter(
+                'chameleon_system_ecommerce_stats_format_number',
+                [$this, 'formatNumber'],
+                ['is_safe' => ['html']]
+            ),
         ];
     }
 

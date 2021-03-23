@@ -19,10 +19,10 @@
     {% set oldVal = 0 %}
     {% for name in columnNames %}
         {% set newVal = group.getTotals(name) ?: 0 %}
-        <td>{{ newVal | format_number(2) }}</td>
+        <td>{{ newVal | chameleon_system_ecommerce_stats_format_number(2) }}</td>
         {% set diff = newVal - oldVal %}
         {% if showDiffColumn %}
-            <td>{{ diff | format_number(2) }}</td>
+            <td>{{ diff | chameleon_system_ecommerce_stats_format_number(2) }}</td>
         {% endif %}
         {% set oldVal = newVal %}
     {% endfor %}
