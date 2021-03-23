@@ -66,7 +66,7 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
 
         $urlParameters = [
             'startDate' => $startDate->format('Y-m-d'),
-            'endDate' => $startDate->format('Y-m-d'),
+            'endDate' => $endDate->format('Y-m-d'),
             'dateGroupType' => $dateGroupType,
             'showChange' => $showChange ? '1' : '0',
             'portalId' => $portalId,
