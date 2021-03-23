@@ -137,7 +137,7 @@ class StatsTableService implements StatsTableServiceInterface
      * @param string[]                           $subGroups
      * @param array<string, string>              $params
      */
-    protected function addBlock(
+    public function addBlock(
         array &$blocks,
         string $blockName,
         string $query,
