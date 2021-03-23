@@ -105,7 +105,6 @@ class CsvExportService implements CsvExportServiceInterface
     public function getCsvDataFromTopsellers(array $topsellers): array
     {
         // header
-        // TODO Why are the language labels not resolved correctly?
         $data = [[
             $this->translator->trans('chameleon_system_ecommerce_stats.field_article_number'),
             $this->translator->trans('chameleon_system_ecommerce_stats.field_article_name'),
