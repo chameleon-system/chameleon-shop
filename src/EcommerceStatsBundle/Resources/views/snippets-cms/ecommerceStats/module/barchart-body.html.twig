@@ -88,7 +88,7 @@
                         {% set barHTML = barHTML | merge({(subGroupColumn): (barHTML[subGroupColumn] ?: {}) | merge(subBarData) }) %}
 
                         {% set color = colors[colorCount] %}
-                        {% set colorSubcategory = colorSubcategory | merge( {(subGroupColumn): (colorSubcategory[subGroupColumn] ?: {}) | merge({(color): subGroup.groupName}) }) %}
+                        {% set colorSubcategory = colorSubcategory | merge( {(subGroupColumn): (colorSubcategory[subGroupColumn] ?: {}) | merge({(color): subGroup.groupTitle}) }) %}
 
                         {% set colorCount = colorCount + 1 %}
                     {% endfor %}

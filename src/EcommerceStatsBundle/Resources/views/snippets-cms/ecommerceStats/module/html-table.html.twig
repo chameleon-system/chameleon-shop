@@ -5,10 +5,10 @@
     @var bool showDiffColumn
     @var int maxGroupCount
 #}
-
 <div class="TCMSGroupedStatistics">
     <div class="table-responsive html-table">
-        <table border="1" class="table statsTable">
+        <table border="1" class="table table-bordered">
+            <thead class="thead-dark">
             <tr>
                 {% for i in 1..maxGroupCount %}
                     <th class="colHeader">&nbsp;</th>
@@ -21,6 +21,8 @@
                     {% endif %}
                 {% endfor %}
             </tr>
+            </thead>
+
 
             {% set totalWidth = maxGroupCount + (columnNames | length) * (showDiffColumn ? 2 : 1) %}
 

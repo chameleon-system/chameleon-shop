@@ -9,7 +9,7 @@
 <div class="TCMSGroupedStatistics">
     <div class="html-barchart">
         {% for block in blocks %}
-            <div class="barchart-groupname">{{ block.groupName }}</div> <br />
+            <div class="barchart-groupname">{{ block.groupTitle }}</div> <br />
                 <div class="barchart-body">
                     {% include '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig' with {group: block} %}
                 </div>
