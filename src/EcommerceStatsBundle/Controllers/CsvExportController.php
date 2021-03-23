@@ -56,8 +56,8 @@ class CsvExportController
         $dateGroupType = $request->get('dateGroupType', StatsTableServiceInterface::DATA_GROUP_TYPE_DAY);
         $showChange = $request->request->getBoolean('showChange');
         $selectedPortalId = $request->get('portalId', '');
-        $startDate = $this->getRequiredDate($request, 'startDate');
-        $endDate = $this->getRequiredDate($request, 'endDate');
+        $startDate = $this->getRequiredDate($request, 'startDate')->setTime(0, 0, 0);
+        $endDate = $this->getRequiredDate($request, 'endDate')->setTime(23, 59, 59);
 
         $statsTable = $this->statsTableService->evaluate($startDate, $endDate, $dateGroupType, $showChange, $selectedPortalId);
         $csvData = $this->csvExportService->getCsvDataFromStatsTable($statsTable);
@@ -70,8 +70,8 @@ class CsvExportController
     {
         $this->throwIfNoBackendUserLoggedIn();
 
-        $startDate = $this->getRequiredDate($request, 'startDate');
-        $endDate = $this->getRequiredDate($request, 'endDate');
+        $startDate = $this->getRequiredDate($request, 'startDate')->setTime(0, 0, 0);
+        $endDate = $this->getRequiredDate($request, 'endDate')->setTime(23, 59, 59);
         $selectedPortalId = $request->get('portalId', '');
         $limit = $request->request->getInt('limit', 50);
 

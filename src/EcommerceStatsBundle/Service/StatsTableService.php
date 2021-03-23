@@ -102,10 +102,10 @@ class StatsTableService implements StatsTableServiceInterface
         $params = [];
 
         $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldDateRestrictionField)).' >= :from';
-        $params[':from'] = $startDate->format('Y-m-d');
+        $params[':from'] = $startDate->format('Y-m-d H:i:s');
 
         $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldDateRestrictionField)).' <= :to';
-        $params[':to'] = $endDate->format('Y-m-d');
+        $params[':to'] = $endDate->format('Y-m-d H:i:s');
 
         if ('' !== $group->fieldPortalRestrictionField && '' !== $portalId) {
             $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldPortalRestrictionField)).' = :portalId';

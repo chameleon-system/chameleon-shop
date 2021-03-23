@@ -53,10 +53,10 @@ class TopSellerService implements TopSellerServiceInterface
                ';
         $baseConditionList = [];
         if (null !== $startDate) {
-            $baseConditionList[] = '`shop_order`.`datecreated` >= '.$this->connection->quote($startDate->format('Y-m-d'));
+            $baseConditionList[] = '`shop_order`.`datecreated` >= '.$this->connection->quote($startDate->format('Y-m-d H:i:s'));
         }
         if (null !== $endDate) {
-            $baseConditionList[] = '`shop_order`.`datecreated` <= '.$this->connection->quote($endDate->format('Y-m-d').' 23:59:59');
+            $baseConditionList[] = '`shop_order`.`datecreated` <= '.$this->connection->quote($endDate->format('Y-m-d H:i:s'));
         }
         if ('' !== $portalId) {
             $baseConditionList[] = '`shop_order`.`cms_portal_id` = '.$this->connection->quote($portalId);

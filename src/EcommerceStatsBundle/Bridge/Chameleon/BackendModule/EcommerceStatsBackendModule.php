@@ -57,8 +57,8 @@ class EcommerceStatsBackendModule extends MTPkgViewRendererAbstractModuleMapper
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        $startDate = $this->getDateUserInput('startDate', 'Y-m-01');
-        $endDate = $this->getDateUserInput('endDate', 'Y-m-d');
+        $startDate = $this->getDateUserInput('startDate', 'Y-m-01')->setTime(0, 0, 0);
+        $endDate = $this->getDateUserInput('endDate', 'Y-m-d')->setTime(23, 59, 59);
         $dateGroupType = $this->GetUserInput('dateGroupType', StatsTableServiceInterface::DATA_GROUP_TYPE_DAY);
         $showChange = '1' === $this->GetUserInput('showChange', '0');
         $viewName = $this->GetUserInput('viewName', null);
