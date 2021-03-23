@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\EcommerceStatsBundle\Service;
 
-use function array_key_exists;
 use ChameleonSystem\EcommerceStatsBundle\DataModel\StatsGroupDataModel;
 use ChameleonSystem\EcommerceStatsBundle\DataModel\StatsTableDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Interfaces\StatsTableServiceInterface;
@@ -19,7 +18,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;
 use Generator;
-use function in_array;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use TdbPkgShopStatisticGroup;
@@ -146,14 +144,14 @@ class StatsTableService implements StatsTableServiceInterface
         array $subGroups = [],
         array $params = []
     ): void {
-        if (false === array_key_exists($blockName, $blocks)) {
+        if (false === \array_key_exists($blockName, $blocks)) {
             $ecommerceStatsGroup = new StatsGroupDataModel();
             $ecommerceStatsGroup->init($blockName);
             $blocks[$blockName] = $ecommerceStatsGroup;
         }
 
         foreach ($this->fetchRows($query, $params) as $dataRow) {
-            if (!array_key_exists('sColumnName', $dataRow) || !array_key_exists('dColumnValue', $dataRow)) {
+            if (!\array_key_exists('sColumnName', $dataRow) || !\array_key_exists('dColumnValue', $dataRow)) {
                 $this->logger->error(sprintf(
                     'Could not add block `%s` to table: Query must select at least `sColumnName` and `dColumnValue`',
                     $blockName
@@ -213,7 +211,7 @@ class StatsTableService implements StatsTableServiceInterface
         foreach ($blocks as $block) {
             $tmpNames = $block->getColumnNames();
             foreach ($tmpNames as $name) {
-                if (false === in_array($name, $nameColumns, true)) {
+                if (false === \in_array($name, $nameColumns, true)) {
                     $nameColumns[] = $name;
                 }
             }
