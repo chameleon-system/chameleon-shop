@@ -16,8 +16,22 @@
 <br/>
 <div class="module-shop-statistic">
     <div class="card standard">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="mb-0"><i class="fas fa-chart-pie mr-2"></i>{{ 'chameleon_system_ecommerce_stats.headline'|trans }}</h3>
+            <div class="actionLink">
+                <button class="btn btn-secondary ml-2" onclick="window.print()">
+                    <i class="fa fa-print pr-2"></i>
+                    {{ 'chameleon_system_ecommerce_stats.action_print'|trans }}
+                </button>
+                <a class="btn btn-secondary ml-2" href="{{ csvDownloadUrl| raw }}">
+                    <i class="fa fa-download pr-2"></i>
+                    {{ 'chameleon_system_ecommerce_stats.action_download'|trans }}
+                </a>
+                <a class="btn btn-secondary ml-2" href="{{ topSellerDownloadUrl| raw }}">
+                    <i class="fa fa-download pr-2"></i>
+                    {{ 'chameleon_system_ecommerce_stats.action_download_top_seller'|trans }}
+                </a>
+            </div>
         </div>
         <div class="card-body">
             <div class="filters">
@@ -28,11 +42,6 @@
                 {% if tableData.maxGroupCount == 1 %}
                     <div class="no-data">{{ 'chameleon_system_ecommerce_stats.no_data'| trans }}</div>
                 {% else %}
-                <div class="actionLinks d-flex mt-4 flex-column flex-sm-row">
-                    <button class="btn btn-secondary mt-1 mr-sm-1" onclick="window.print()">{{ 'chameleon_system_ecommerce_stats.action_print'|trans }}</button>
-                    <a class="btn btn-secondary mt-1 mr-sm-1" href="{{ csvDownloadUrl| raw }}">{{ 'chameleon_system_ecommerce_stats.action_download'|trans }}</a>
-                    <a class="btn btn-secondary mt-1 mr-sm-1" href="{{ topSellerDownloadUrl| raw }}">{{ 'chameleon_system_ecommerce_stats.action_download_top_seller'|trans }}</a>
-                </div>
 
                 <div class="statistics mt-4">
                     {% set includeFileName = '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/' ~ (activeViewName == 'html.barchart' ? 'html-barchart.html.twig' : 'html-table.html.twig') %}
