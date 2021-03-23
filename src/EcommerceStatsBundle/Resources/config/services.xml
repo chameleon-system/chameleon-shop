@@ -4,7 +4,6 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <defaults public="true" />
 
         <!-- Controller -->
         <service
@@ -28,7 +27,6 @@
         <service
             id="chameleon_system_ecommerce_stats.ecommerce_stats_table"
             class="ChameleonSystem\EcommerceStatsBundle\Service\StatsTableService"
-            public="true"
         >
             <argument type="service" id="database_connection" />
             <argument type="service" id="chameleon_system_core.translator" />
@@ -37,14 +35,12 @@
         <service
             id="chameleon_system_ecommerce_stats.csv_export"
             class="ChameleonSystem\EcommerceStatsBundle\Service\CsvExportService"
-            public="true"
         >
             <argument type="service" id="chameleon_system_core.translator" />
         </service>
         <service
             id="chameleon_system_ecommerce_stats.top_seller"
             class="ChameleonSystem\EcommerceStatsBundle\Service\TopSellerService"
-            public="true"
         >
             <argument type="service" id="database_connection" />
         </service>
@@ -52,7 +48,6 @@
         <service
             class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Twig\FormatterTwigExtension"
             id="chameleon_system_ecommerce_stats.twig.formatter"
-            public="false"
         >
             <tag name="twig.extension"/>
         </service>
