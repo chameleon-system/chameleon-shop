@@ -27,7 +27,7 @@ class TCMSCronJob_ShopSendOrderNotifications extends TCMSCronJob
      */
     public function __construct($developmentEmailAddress)
     {
-        parent::__construct($developmentEmailAddress);
+        parent::__construct();
         $this->developmentEmailAddress = $developmentEmailAddress;
     }
 
