@@ -26,7 +26,7 @@ class AmazonPaymentGroupConfigTest extends AbstractAmazonPayment
      */
     private $order = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         /** @var $mockOrder \TdbShopOrder|\PHPUnit_Framework_MockObject_MockObject */
@@ -48,7 +48,7 @@ class AmazonPaymentGroupConfigTest extends AbstractAmazonPayment
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->order = null;
