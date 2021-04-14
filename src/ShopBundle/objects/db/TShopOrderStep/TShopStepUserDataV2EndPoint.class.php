@@ -455,7 +455,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
                 return $oUser->Save();
 
             default:
-                return false;
+                return true; // this is no validation
         }
     }
 
