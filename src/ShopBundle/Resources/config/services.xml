@@ -264,6 +264,7 @@
 
         <service id="chameleon_system_shop.controller.search_suggest" class="ChameleonSystem\ShopBundle\Controller\SearchSuggestController">
             <argument type="service" id="chameleon_system_shop.shop_search_suggest" />
+            <tag name="controller.service_arguments" />
         </service>
 
         <service id="chameleon_system_shop.shop_search_suggest" class="ChameleonSystem\ShopBundle\Service\ShopSearchSuggest">
