@@ -16,6 +16,12 @@
 /**/
 class TCMSCronJob_ShopCleanShopOrderBasketLog extends TCMSCronJob
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     protected function _ExecuteCron()
     {
         $iMaxAgeInSeconds = (SHOP_ORDER_BASKET_MAX_LOG_AGE_IN_DAYS * (60 * 60 * 24));

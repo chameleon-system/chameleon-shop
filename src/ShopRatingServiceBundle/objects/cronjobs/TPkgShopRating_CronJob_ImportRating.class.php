@@ -16,6 +16,12 @@
 /**/
 class TPkgShopRating_CronJob_ImportRating extends TCMSCronJob
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * executes the cron job (add your custom method calls here).
      */

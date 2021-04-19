@@ -11,6 +11,12 @@
 
 class TCMSCronJob_CleanWishlist extends TCMSCronJob
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     protected function _ExecuteCron()
     {
         $Select = 'SELECT * FROM `pkg_shop_wishlist_article` WHERE 1=1';

@@ -33,6 +33,12 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
     private $sCountryID = null;
     private $sUserCountryID = null;
 
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     protected function Init()
     {
         $this->GetConfigValues();
