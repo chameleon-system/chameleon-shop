@@ -12,7 +12,7 @@
 /**
  * cleanup old search results.
 /**/
-class TCMSCronJob_ShopSearchCacheGarbageCollector extends TCMSCronJob
+class TCMSCronJob_ShopSearchCacheGarbageCollector extends TdbCmsCronjobs
 {
     const MAX_CACHE_AGE_IN_SECONDS = 3600;
 

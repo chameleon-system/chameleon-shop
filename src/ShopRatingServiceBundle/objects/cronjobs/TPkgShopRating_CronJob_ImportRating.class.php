@@ -14,7 +14,7 @@
  * see #10260.
  *
 /**/
-class TPkgShopRating_CronJob_ImportRating extends TCMSCronJob
+class TPkgShopRating_CronJob_ImportRating extends TdbCmsCronjobs
 {
 
     public function __construct()

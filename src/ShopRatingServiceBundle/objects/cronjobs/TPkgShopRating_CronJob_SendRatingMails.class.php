@@ -14,7 +14,7 @@
  * see #10393.
  *
 /**/
-class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
+class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
 {
     private $bDebug = true; //set to true - for debugging output!
     /**

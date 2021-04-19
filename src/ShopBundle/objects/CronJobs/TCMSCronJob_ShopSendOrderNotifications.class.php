@@ -12,7 +12,7 @@
 /**
  * resend unsent order emails flagged by TShopOrder (try n times).
 /**/
-class TCMSCronJob_ShopSendOrderNotifications extends TCMSCronJob
+class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
 {
     const MAX_AGE_DAYS = 5; //only fetch orders newer than n-days
     const MAX_TRIES = 3; //try to resend notification n-times

@@ -14,7 +14,7 @@
  * delete all entries from the table that are older than n-days (n>x)
  * compress session objects in shop_order where entries older than n-days.
 /**/
-class TCMSCronJob_ShopCleanShopOrderBasketLog extends TCMSCronJob
+class TCMSCronJob_ShopCleanShopOrderBasketLog extends TdbCmsCronjobs
 {
 
     public function __construct()

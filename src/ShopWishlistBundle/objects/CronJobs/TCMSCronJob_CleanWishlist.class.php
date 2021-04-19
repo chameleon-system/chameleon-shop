@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-class TCMSCronJob_CleanWishlist extends TCMSCronJob
+class TCMSCronJob_CleanWishlist extends TdbCmsCronjobs
 {
 
     public function __construct()
