@@ -16,11 +16,6 @@ class TCMSCronJob_ShopSearchCacheGarbageCollector extends TdbCmsCronjobs
 {
     const MAX_CACHE_AGE_IN_SECONDS = 3600;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     protected function _ExecuteCron()
     {
         $now = time();

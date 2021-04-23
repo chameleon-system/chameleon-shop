@@ -20,11 +20,6 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TdbCmsCronjobs
     private $sTotalBaskets = 0;
     private $sTotalMoneyCanceled = 0;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /**
      * Get all none processed shop baskets and send generated statistics to shop owner.
      */
