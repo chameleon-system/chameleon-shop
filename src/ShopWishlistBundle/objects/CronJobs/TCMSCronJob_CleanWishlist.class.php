@@ -9,8 +9,14 @@
  * file that was distributed with this source code.
  */
 
-class TCMSCronJob_CleanWishlist extends TCMSCronJob
+class TCMSCronJob_CleanWishlist extends TdbCmsCronjobs
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     protected function _ExecuteCron()
     {
         $Select = 'SELECT * FROM `pkg_shop_wishlist_article` WHERE 1=1';
