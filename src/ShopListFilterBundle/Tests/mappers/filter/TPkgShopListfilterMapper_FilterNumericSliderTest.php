@@ -14,14 +14,15 @@ class TPkgShopListfilterMapper_FilterNumericSliderTest extends TestCase
     public function provideMinAndMax(): array
     {
         $minMaxValues = [[]];
-        for($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 1000; ++$i) {
             $min = rand(0, 100);
             $max = rand();
-            if($max > $min) {
+            if ($max > $min) {
                 $minMaxValues[$i][] = $min;
                 $minMaxValues[$i][] = $max;
             }
         }
+
         return $minMaxValues;
     }
 
