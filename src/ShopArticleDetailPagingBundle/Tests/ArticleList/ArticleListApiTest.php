@@ -17,10 +17,13 @@ use ChameleonSystem\ShopArticleDetailPagingBundle\Interfaces\ListResultInterface
 use ChameleonSystem\ShopArticleDetailPagingBundle\Service\AddParametersToUrlService;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class ArticleListApiTest extends TestCase
 {
+    use ProphecyTrait;
+
     private $listSpotName;
     private $listUrl;
     private $responsePayload;

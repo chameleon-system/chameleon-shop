@@ -15,6 +15,8 @@
 /**/
 class TShopAuskunftAPI
 {
+    use \ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
+
     // XML-Parsing vars
     protected $parser;
 
@@ -34,7 +36,7 @@ class TShopAuskunftAPI
      * Constructor.
      */
     //-------------------------------------------------------------------------
-    public function TShopAuskunftAPI()
+    public function __construct()
     {
         //-------------------------------------------------------------------------
         if (!($this->parser = xml_parser_create())) {
@@ -44,6 +46,15 @@ class TShopAuskunftAPI
         xml_set_object($this->parser, $this);
         xml_set_element_handler($this->parser, 'start_tag', 'end_tag');
         xml_set_character_data_handler($this->parser, 'tag_contents');
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TShopAuskunftAPI()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     //-------------------------------------------------------------------------
