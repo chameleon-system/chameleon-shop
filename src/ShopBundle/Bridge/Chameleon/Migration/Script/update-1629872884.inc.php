@@ -1,7 +1,7 @@
 <h1>Build #1629872884</h1>
 <h2>Date: 2021-08-25</h2>
 <div class="changelog">
-    - ref #584: Change voucher message if needed
+    - ref #584: Change voucher message if yet unchanged
 </div>
 <?php
 
