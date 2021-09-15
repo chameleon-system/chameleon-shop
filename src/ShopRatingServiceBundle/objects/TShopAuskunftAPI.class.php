@@ -94,7 +94,7 @@ class TShopAuskunftAPI
 
         if ('RATING' == $name) {
             if (is_array($attribs)) {
-                while (list($key, $val) = each($attribs)) {
+                foreach ($attribs as $key => $val) {
                     //echo strtolower($key)."=\"".$val."\"";
                     if ('id' === strtolower($key)) {
                         $this->aRatingItem['id'] = $val;
