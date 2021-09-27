@@ -181,7 +181,7 @@
             <argument type="service" id="database_connection" />
         </service>
 
-        <service id="chameleon_system_shop.payment.config_loader" class="ChameleonSystem\ShopBundle\Payment\PaymentConfig\ShopPaymentConfigLoader">
+        <service id="chameleon_system_shop.payment.config_loader" class="ChameleonSystem\ShopBundle\Payment\PaymentConfig\ShopPaymentConfigLoader" public="true">
             <argument type="service" id="chameleon_system_shop.payment.config_loader_data_access" />
             <argument type="expression">(container.getParameter('kernel.environment') === 'prod') ? constant('IPkgShopOrderPaymentConfig::ENVIRONMENT_PRODUCTION') : constant('IPkgShopOrderPaymentConfig::ENVIRONMENT_SANDBOX')</argument>
         </service>
