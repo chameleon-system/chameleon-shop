@@ -24,8 +24,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 /**/
 class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAutoParent
 {
-
-    CONST MSG_CONSUMER_LOGIN_PAGE = 'loginBox';
+    const MSG_CONSUMER_LOGIN_PAGE = 'loginBox';
 
     protected function DefineInterface()
     {
@@ -49,7 +48,7 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
     {
         if (null === $sSuccessURL) {
             if ($this->global->UserDataExists('sSuccessURL')) {
-                $sSuccessURL = $this->global->GetUserData('sSuccessURL', array(), TCMSUserInput::FILTER_URL);
+                $sSuccessURL = $this->global->GetUserData('sSuccessURL', [], TCMSUserInput::FILTER_URL);
             }
 
             if (empty($sSuccessURL)) {
@@ -60,7 +59,7 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
 
         if (null === $sFailureURL) {
             if ($this->global->UserDataExists('sFailureURL')) {
-                $sFailureURL = $this->global->GetUserData('sFailureURL', array(), TCMSUserInput::FILTER_URL);
+                $sFailureURL = $this->global->GetUserData('sFailureURL', [], TCMSUserInput::FILTER_URL);
             }
             if (empty($sFailureURL)) {
                 $user = $this->getExtranetUserProvider()->getActiveUser();
