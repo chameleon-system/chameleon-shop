@@ -10,7 +10,11 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Use this package module to register user after creating order with guest account.
@@ -96,15 +100,20 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
     }
 
     /**
-     * if user is not allowed to be register redirect to access denied page.
+     * If the user is not allowed to be registered, show access denied page instead.
      */
     protected function HandleRegisterAfterShopping()
     {
-        if ($this->ActivePageIsRegisterAfterShopping()) {
-            if (!$this->IsAllowedToShowRegisterAfterShoppingPage()) {
-                $oExtranetConfig = TdbDataExtranet::GetInstance();
-                $this->controller->HeaderURLRedirect($oExtranetConfig->GetLinkAccessDeniedPage(), true);
-            }
+        if (true === $this->getRequestInfoService()->isCmsTemplateEngineEditMode()) {
+            return;
+        }
+
+        if (false === $this->ActivePageIsRegisterAfterShopping()) {
+            return;
+        }
+
+        if (false === $this->IsAllowedToShowRegisterAfterShoppingPage()) {
+            throw new AccessDeniedHttpException('user is not a guest user and has no access to the post sale registration page');
         }
     }
 
@@ -165,31 +174,39 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
      */
     protected function ActivePageIsRegisterAfterShopping()
     {
-        $bActivePageIsRegisterAfterShopping = false;
-        $oURLData = TCMSSmartURLData::GetActive();
-        $oShop = TdbShop::GetInstance($oURLData->iPortalId);
-        $sNodeId = $oShop->GetSystemPageNodeId('register-after-shopping');
-        $oActivePage = $this->getActivePageService()->getActivePage();
-        if ($oActivePage && $sNodeId == $oActivePage->GetMainTreeId()) {
-            $bActivePageIsRegisterAfterShopping = true;
+        $registerAfterShoppingPage = $this->getSystemPageService()->getSystemPage('register-after-shopping');
+
+        if (null === $registerAfterShoppingPage) {
+            return false;
         }
 
-        return $bActivePageIsRegisterAfterShopping;
+        $registerAfterShoppingPageTreeNodeId = $registerAfterShoppingPage->fieldCmsTreeId;
+        $activePage = $this->getActivePageService()->getActivePage();
+
+        if (null === $activePage) {
+            return false;
+        }
+
+        return $registerAfterShoppingPageTreeNodeId === $activePage->GetMainTreeId();
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return ExtranetUserProviderInterface
-     */
-    private function getExtranetUserProvider()
+    private function getExtranetUserProvider(): ExtranetUserProviderInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+    }
+
+    private function getRequestInfoService(): RequestInfoServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.request_info_service');
+    }
+
+    private function getSystemPageService(): SystemPageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 }
