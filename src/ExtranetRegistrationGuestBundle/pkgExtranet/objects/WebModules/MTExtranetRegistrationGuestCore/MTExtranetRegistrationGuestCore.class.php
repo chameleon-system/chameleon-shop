@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
@@ -23,6 +24,9 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 /**/
 class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAutoParent
 {
+
+    CONST MSG_CONSUMER_LOGIN_PAGE = 'loginBox';
+
     protected function DefineInterface()
     {
         parent::DefineInterface();
@@ -130,25 +134,35 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
      */
     protected function IsAllowedToShowRegisterAfterShoppingPage()
     {
-        $oStep = TdbShopOrderStep::GetStep('thankyou');
-        $bUserIsValid = false;
-        if (!is_null($oStep)) {
-            $oUser = $oStep->GetLastUserBoughtFromSession();
-            if (!is_null($oUser)) {
-                $bUserIsValid = $this->ValidateGivenUserData($oUser);
-                if ($bUserIsValid) {
-                    $oUserOrder = &TShopBasket::GetLastCreatedOrder();
-                    if ($oUser->LoginExists()) {
-                        $bUserIsValid = false;
-                    }
-                    if (is_null($oUserOrder)) {
-                        $bUserIsValid = false;
-                    }
-                }
-            }
+        $activeStep = TdbShopOrderStep::GetStep('thankyou');
+
+        if (null === $activeStep) {
+            return false;
         }
 
-        return $bUserIsValid;
+        $lastUserOrderedInSession = $activeStep->GetLastUserBoughtFromSession();
+        if (null === $lastUserOrderedInSession) {
+            return false;
+        }
+
+        if (true === $lastUserOrderedInSession->LoginExists()) {
+            $this->triggerUserAlreadyRegisteredMessage();
+
+            return false;
+        }
+
+        $userOrder = &TShopBasket::GetLastCreatedOrder();
+        if (null === $userOrder) {
+            return false;
+        }
+
+        return $this->ValidateGivenUserData($lastUserOrderedInSession);
+    }
+
+    protected function triggerUserAlreadyRegisteredMessage(): void
+    {
+        $parameters = ['forgotPwdLinkStart' => '<a href="'.\TdbDataExtranet::GetInstance()->GetLinkForgotPasswordPage().'">', 'forgotPwdLinkEnd' => '</a>'];
+        $this->getFlashMessageService()->addMessage(self::MSG_CONSUMER_LOGIN_PAGE, 'ERROR-USER-EXISTS', $parameters);
     }
 
     /**
@@ -158,19 +172,21 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
      */
     protected function ValidateGivenUserData($oUser)
     {
-        $bIsValid = true;
-        $oMessages = TCMSMessageManager::GetInstance();
-        $aRequiredFields = array('data_extranet_salutation_id', 'firstname', 'lastname', 'street', 'postalcode', 'city', 'data_country_id');
+        $userDataValid = true;
+
+        $flashMessageService = $this->getFlashMessageService();
+
+        $aRequiredFields = ['data_extranet_salutation_id', 'firstname', 'lastname', 'street', 'postalcode', 'city', 'data_country_id'];
         foreach ($aRequiredFields as $sField) {
             $sValue = trim($oUser->sqlData[$sField]);
 
             if (!array_key_exists($sField, $oUser->sqlData) || empty($sValue)) {
-                $bIsValid = false;
-                $oMessages->AddMessage(TdbDataExtranetUser::MSG_FORM_FIELD.'-'.$sField, 'ERROR-USER-REQUIRED-FIELD-MISSING');
+                $userDataValid = false;
+                $flashMessageService->addMessage(TdbDataExtranetUser::MSG_FORM_FIELD.'-'.$sField, 'ERROR-USER-REQUIRED-FIELD-MISSING');
             }
         }
 
-        return $bIsValid;
+        return $userDataValid;
     }
 
     /**
@@ -214,6 +230,11 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
     private function getRequestInfoService(): RequestInfoServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.request_info_service');
+    }
+
+    private function getFlashMessageService(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
     private function getSystemPageService(): SystemPageServiceInterface
