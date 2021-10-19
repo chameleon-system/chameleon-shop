@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="chameleon_system_shop_payment_transaction.transaction_helper" class="ChameleonSystem\ShopPaymentTransactionBundle\Service\PaymentTransactionHelper">
+        <service id="chameleon_system_shop_payment_transaction.transaction_helper" class="ChameleonSystem\ShopPaymentTransactionBundle\Service\PaymentTransactionHelper" public="true">
         </service>
     </services>
 </container>
