@@ -118,7 +118,12 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
 
             $stepCount = 20;
 
-            $stepSize = round(($highestArticlePrice - $lowestArticlePrice) / $stepCount);
+            $delta = $highestArticlePrice - $lowestArticlePrice;
+            $stepSize = round($delta / $stepCount);
+            if ($stepSize < 1) {
+                $stepSize = 1;
+                $stepCount = round($delta);
+            }
 
             for ($i = 0; $i <= $stepCount; ++$i) {
                 $priceOption = $lowestArticlePrice + $i * $stepSize;
