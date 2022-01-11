@@ -12,40 +12,61 @@
 namespace ChameleonSystem\SearchBundle\Bridge;
 
 use ChameleonSystem\SearchBundle\Interfaces\ShopSearchSessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
+     * @var RequestStack
      */
-    private $session;
+    private $requestStack;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->session = $session;
+        $this->requestStack = $requestStack;
     }
 
     public function addSearch(array $searchRequest)
     {
+        $session = $this->getSession();
+        if (null === $session) {
+            return;
+        }
+
         $searchKey = md5($this->getArrayAsString($searchRequest));
-        $searches = $this->session->get(ShopSearchSessionInterface::SESSION_KEY, array());
+        $searches = $session->get(ShopSearchSessionInterface::SESSION_KEY, []);
         $searches[] = $searchKey;
-        $this->session->set(ShopSearchSessionInterface::SESSION_KEY, $searches);
+        $session->set(ShopSearchSessionInterface::SESSION_KEY, $searches);
+    }
+
+    private function getSession(): ?SessionInterface
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return null;
+        }
+
+        return $request->getSession();
     }
 
     public function hasSearchedFor(array $searchRequest)
     {
+        $session = $this->getSession();
+        if (null === $session) {
+            return false;
+        }
+
         $searchKey = md5($this->getArrayAsString($searchRequest));
 
-        $searches = $this->session->get(ShopSearchSessionInterface::SESSION_KEY, array());
+        $searches = $session->get(ShopSearchSessionInterface::SESSION_KEY, []);
 
         return in_array($searchKey, $searches);
     }
 
     private function getArrayAsString($data)
     {
-        $parts = array();
+        $parts = [];
         ksort($data);
         foreach ($data as $key => $value) {
             if (is_array($value)) {

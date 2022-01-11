@@ -11,7 +11,7 @@
         </service>
 
         <service id="chameleon_system_search.session" class="ChameleonSystem\SearchBundle\Bridge\ShopSearchSessionChameleonBridge">
-            <argument type="service" id="session" />
+            <argument type="service" id="request_stack" />
         </service>
 
         <service id="chameleon_system_search.logger" class="ChameleonSystem\SearchBundle\Bridge\ShopSearchLoggerBridge">
