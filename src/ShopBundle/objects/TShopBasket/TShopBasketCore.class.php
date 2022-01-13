@@ -457,7 +457,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             TdbDataExtranetUser::GetInstance(),
             $this
         );
-        $this->getEventDispatcher()->dispatch(\ChameleonSystem\ShopBundle\ShopEvents::BASKET_CLEAR, $event);
+        $this->getEventDispatcher()->dispatch($event, \ChameleonSystem\ShopBundle\ShopEvents::BASKET_CLEAR);
     }
 
     /**
@@ -1973,7 +1973,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             $this,
             $oBasketItemChanged
         );
-        $this->getEventDispatcher()->dispatch(\ChameleonSystem\ShopBundle\ShopEvents::BASKET_UPDATE_ITEM, $event);
+        $this->getEventDispatcher()->dispatch($event, \ChameleonSystem\ShopBundle\ShopEvents::BASKET_UPDATE_ITEM);
     }
 
     /**
@@ -1988,7 +1988,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             $this,
             $oBasketItemRemoved
         );
-        $this->getEventDispatcher()->dispatch(\ChameleonSystem\ShopBundle\ShopEvents::BASKET_DELETE_ITEM, $event);
+        $this->getEventDispatcher()->dispatch($event, \ChameleonSystem\ShopBundle\ShopEvents::BASKET_DELETE_ITEM);
     }
 
     public function custom_wakeup()
