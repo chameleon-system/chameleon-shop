@@ -119,11 +119,12 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
             $stepCount = 20;
 
             $delta = $highestArticlePrice - $lowestArticlePrice;
-            $stepSize = $delta / $stepCount;
+            $stepSize = \floor($delta / $stepCount);
             if ($stepSize < 1) {
                 $stepSize = 1;
-                $stepCount = round($delta);
+                //$stepCount = round($delta); // delta is nearly an integer: avoid floating rounding errors here
             }
+            $stepCount = \ceil($delta / $stepSize); // consider now a slightly different step count due to rounded step size
 
             for ($i = 0; $i <= $stepCount; ++$i) {
                 $priceOption = round($lowestArticlePrice + $i * $stepSize);
