@@ -17,7 +17,7 @@ class TShopBasketArticleDiscountCoreList extends TIterator
     /**
      * return next itme.
      *
-     * @return TdbShopDiscount
+     * @return TdbShopDiscount|false
      */
     public function &next()
     {
@@ -27,7 +27,7 @@ class TShopBasketArticleDiscountCoreList extends TIterator
     /**
      * return previous itme.
      *
-     * @return TdbShopDiscount
+     * @return TdbShopDiscount|false
      */
     public function &Previous()
     {

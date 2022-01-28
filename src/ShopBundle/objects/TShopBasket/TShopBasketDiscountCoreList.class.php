@@ -12,7 +12,7 @@
 class TShopBasketDiscountCoreList extends TIterator
 {
     /**
-     * @return TdbShopDiscount
+     * @return TdbShopDiscount|false
      */
     public function &next()
     {
@@ -45,7 +45,7 @@ class TShopBasketDiscountCoreList extends TIterator
      *
      * @param string $sMessangerName - optional message manager to which we output why a discount was removed
      *
-     * @return int
+     * @return void
      */
     public function RemoveInvalidDiscounts($sMessangerName = null)
     {

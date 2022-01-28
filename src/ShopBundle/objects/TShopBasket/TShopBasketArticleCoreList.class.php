@@ -305,7 +305,7 @@ class TShopBasketArticleCoreList extends TIterator
     /**
      * overwrote the method so that the id could type hint properly.
      *
-     * @return TShopBasketArticle
+     * @return TShopBasketArticle|false
      */
     public function &next()
     {

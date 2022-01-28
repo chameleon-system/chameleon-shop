@@ -18,7 +18,7 @@ class TShopBasketVoucherCoreList extends TIterator
      *
      * @param TdbShopVoucher $oVoucher
      *
-     * @return string
+     * @return void
      */
     public function AddItem(&$oVoucher)
     {
@@ -51,7 +51,7 @@ class TShopBasketVoucherCoreList extends TIterator
     /**
      * return voucher.
      *
-     * @return TdbShopVoucher
+     * @return TdbShopVoucher|false
      */
     public function &next()
     {
@@ -93,7 +93,7 @@ class TShopBasketVoucherCoreList extends TIterator
      * @param string      $sMessangerName
      * @param TShopBasket $oBasket
      *
-     * @return int
+     * @return void
      */
     public function RemoveInvalidVouchers($sMessangerName, $oBasket = null)
     {
