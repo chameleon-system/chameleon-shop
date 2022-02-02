@@ -93,9 +93,10 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
 
         $sUserName = 'UNKNOWN USER';
         $request = $this->getCurrentRequest();
-        $session = $request->getSession();
 
-        if ($session && $session->isStarted()) {
+        $session = true === $request->hasSession() ? $request->getSession() : null;
+
+        if (null !== $session && true === $session->isStarted()) {
             if (class_exists('TdbDataExtranetUser', false)) {
                 $oUser = TdbDataExtranetUser::GetInstance();
                 if ($oUser && !empty($oUser->fieldName)) {
