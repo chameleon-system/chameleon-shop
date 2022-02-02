@@ -1875,7 +1875,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         if ($oldStock !== $newStock || true === $bForceUpdate) {
             $this->StockWasUpdatedHook($oldStock, $newStock);
-            $this->getEventDispatcher()->dispatch(ShopEvents::UPDATE_PRODUCT_STOCK, new UpdateProductStockEvent($this->id, $newStock, $oldStock));
+            $this->getEventDispatcher()->dispatch(new UpdateProductStockEvent($this->id, $newStock, $oldStock), ShopEvents::UPDATE_PRODUCT_STOCK);
         }
 
         return $oldStock !== $newStock;
