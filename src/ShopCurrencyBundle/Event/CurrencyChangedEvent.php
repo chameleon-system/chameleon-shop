@@ -2,7 +2,7 @@
 
 namespace ChameleonSystem\ShopCurrencyBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class CurrencyChangedEvent extends Event
 {
