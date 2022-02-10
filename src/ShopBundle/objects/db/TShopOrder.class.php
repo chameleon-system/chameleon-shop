@@ -488,7 +488,7 @@ class TShopOrder extends TShopOrderAutoParent
      */
     public function SendOrderNotification($sSendToMail = null, $sSendToName = null)
     {
-        if ('0' === $this->sqlData['system_order_notification_send']) {
+        if ('1' === $this->sqlData['system_order_notification_send']) {
             return false;
         }
 
