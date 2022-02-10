@@ -488,7 +488,11 @@ class TShopOrder extends TShopOrderAutoParent
      */
     public function SendOrderNotification($sSendToMail = null, $sSendToName = null)
     {
-        $this->SetSendOrderNotificationState(true);
+        if ('0' === $this->sqlData['system_order_notification_send']) {
+            return false;
+        }
+
+        $this->updateSendOrderNotificationState(true);
         $bOrderSend = false;
 
         if (is_null($sSendToMail)) {
@@ -502,7 +506,7 @@ class TShopOrder extends TShopOrderAutoParent
 
         TCMSImage::ForceNonSSLURLs(true); // force image urls to non ssl for use in order email
         if (is_null($oMail)) {
-            $this->SetSendOrderNotificationState(false);
+            $this->updateSendOrderNotificationState(false);
             $bOrderSend = TGlobal::Translate('chameleon_system_shop.order_notification.error_mail_template_not_found', array('%emailTemplate%' => self::MAIL_CONFIRM_ORDER));
         } else {
             $aMailData = $this->sqlData;
@@ -534,7 +538,7 @@ class TShopOrder extends TShopOrderAutoParent
         if ($bOrderSend && !TGlobal::IsCMSMode()) {
             $aData = $this->AddOrderNotificationDataForOrderSuccess($aData);
         } elseif (!$bOrderSend && !TGlobal::IsCMSMode()) {
-            $aData = $this->AddOrderNotificationDataForOrderNotDone($aData);
+            $aData['system_order_notification_send'] = '0';
             $aData = $this->AddOrderNotificationDataForOrderFailure($aData, $oMail, $sSendToMail);
         }
         $this->LoadFromRow($aData);
@@ -543,30 +547,19 @@ class TShopOrder extends TShopOrderAutoParent
         $this->AllowEditByAll(false);
     }
 
-    protected function SetSendOrderNotificationState(bool $orderSend): void
+    protected function updateSendOrderNotificationState(bool $state): void
     {
-        if (true === TGlobal::IsCMSMode()) {
-            return;
-        }
-
         $aData = $this->sqlData;
-        if (true === $orderSend) {
+        if (true === $state) {
             $aData = $this->AddOrderNotificationDataForOrderSuccess($aData);
         } else {
-            $aData = $this->AddOrderNotificationDataForOrderNotDone($aData);
+            $aData['system_order_notification_send'] = '0';
         }
 
         $this->LoadFromRow($aData);
         $this->AllowEditByAll(true);
         $this->Save();
         $this->AllowEditByAll(false);
-    }
-
-    protected function AddOrderNotificationDataForOrderNotDone(array $aData): array
-    {
-        $aData['system_order_notification_send'] = '0';
-
-        return $aData;
     }
 
     /**
