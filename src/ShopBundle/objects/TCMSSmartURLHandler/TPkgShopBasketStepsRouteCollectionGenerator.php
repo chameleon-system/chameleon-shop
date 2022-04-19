@@ -128,7 +128,7 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
         $stepCheckoutPageId = $linkedPage->id;
         $basketStepPattern = "(?i:/{$orderStep->fieldUrlName})/?";
         if ($stepNameOptional) {
-            $basketStepPattern = "(?i:|/|/{$orderStep->fieldUrlName})/?";
+            $basketStepPattern = "|/";
         }
 
         return new \Symfony\Component\Routing\Route("/{$checkoutBaseUrl}{basketStep}",
