@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+
 /**
  * resend unsent order emails flagged by TShopOrder (try n times).
 /**/
@@ -21,14 +23,16 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
      * @var string
      */
     private $developmentEmailAddress;
-
     /**
-     * @param string $developmentEmailAddress
+     * @var LanguageServiceInterface
      */
-    public function __construct($developmentEmailAddress)
+    private $languageService;
+
+    public function __construct(string $developmentEmailAddress, LanguageServiceInterface $languageService)
     {
         parent::__construct();
         $this->developmentEmailAddress = $developmentEmailAddress;
+        $this->languageService = $languageService;
     }
 
     protected function _ExecuteCron()
@@ -40,9 +44,18 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
                                                    AND `system_order_notification_send` = '0'
                                                    AND `datecreated` > '".$sMinDate."'
                                                    AND `canceled` = '0'
-                                              ORDER BY `datecreated`
-                                             ASC LIMIT 1000");
+                                              GROUP BY `cms_language_id`
+                                              ORDER BY `datecreated` ASC
+                                                 LIMIT 1000");
+        $currentLanguageId = $this->languageService->getActiveLanguageId();
+        $initialLanguageId = $currentLanguageId;
+
         while ($oShopOrder = $oShopOrders->Next()) {
+            if ('' !== $oShopOrder->fieldCmsLanguageId && $oShopOrder->fieldCmsLanguageId !== $currentLanguageId) {
+                $this->languageService->setActiveLanguage($oShopOrder->fieldCmsLanguageId);
+                $currentLanguageId = $oShopOrder->fieldCmsLanguageId;
+            }
+
             if (!empty($oShopOrder->fieldObjectMail)) {
                 $oMail = unserialize(base64_decode($oShopOrder->fieldObjectMail));
                 if ($oMail->SendUsingObjectView('emails', 'Customer')) {
@@ -98,6 +111,7 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
                 MySqlLegacySupport::getInstance()->query($sQuery);
             }
         } // while
+        $this->languageService->setActiveLanguage($initialLanguageId);
     }
 
     // function
