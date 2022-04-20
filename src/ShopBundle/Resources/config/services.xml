@@ -210,6 +210,7 @@
             <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
             <argument type="service" id="chameleon_system_core.util.url" />
             <argument type="service" id="chameleon_system_core.util.routing" />
+            <argument id="database_connection" type="service"/>
         </service>
 
         <service id="chameleon_system_shop.event_listener.update_variant_parent_stock" class="ChameleonSystem\ShopBundle\EventListener\UpdateVariantParentStockListener">

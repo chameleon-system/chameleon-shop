@@ -14,6 +14,7 @@ namespace ChameleonSystem\ShopBundle\Service;
 use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
 use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use TdbCmsLanguage;
 use TdbCmsPortal;
@@ -21,6 +22,8 @@ use TShopOrderStep;
 
 class OrderStepPageService implements OrderStepPageServiceInterface
 {
+    public const SHOP_CHECKOUT_ROUTE_PREFIX = 'shop_checkout_';
+
     /**
      * @var PortalAndLanguageAwareRouterInterface
      */
@@ -34,16 +37,19 @@ class OrderStepPageService implements OrderStepPageServiceInterface
      */
     private $routingUtil;
 
+    private Connection $databaseConnection;
+
     /**
      * @param PortalAndLanguageAwareRouterInterface $router
      * @param UrlUtil                               $urlUtil
      * @param RoutingUtilInterface                  $routingUtil
      */
-    public function __construct(PortalAndLanguageAwareRouterInterface $router, UrlUtil $urlUtil, RoutingUtilInterface $routingUtil)
+    public function __construct(PortalAndLanguageAwareRouterInterface $router, UrlUtil $urlUtil, RoutingUtilInterface $routingUtil, Connection $databaseConnection)
     {
         $this->router = $router;
         $this->urlUtil = $urlUtil;
         $this->routingUtil = $routingUtil;
+        $this->databaseConnection = $databaseConnection;
     }
 
     /**
@@ -83,7 +89,11 @@ class OrderStepPageService implements OrderStepPageServiceInterface
      */
     private function addBasketStepParameter(array &$parameters, TShopOrderStep $orderStep)
     {
-        $parameters['basketStep'] = '/'.$orderStep->fieldUrlName;
+        if ('1' === $orderStep->fieldPosition) {
+            $parameters['basketStep'] = '/';
+        } else {
+            $parameters['basketStep'] = '/'.$orderStep->fieldUrlName;
+        }
     }
 
     /**
@@ -93,7 +103,7 @@ class OrderStepPageService implements OrderStepPageServiceInterface
      */
     private function getBasketStepRouteName(TShopOrderStep $orderStep)
     {
-        return 'shop_checkout_'.$orderStep->fieldSystemname;
+        return self::SHOP_CHECKOUT_ROUTE_PREFIX.$orderStep->fieldSystemname;
     }
 
     /**
@@ -131,4 +141,5 @@ class OrderStepPageService implements OrderStepPageServiceInterface
 
         return $url;
     }
+
 }
