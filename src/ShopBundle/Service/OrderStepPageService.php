@@ -14,7 +14,6 @@ namespace ChameleonSystem\ShopBundle\Service;
 use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
 use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use TdbCmsLanguage;
 use TdbCmsPortal;
@@ -37,19 +36,16 @@ class OrderStepPageService implements OrderStepPageServiceInterface
      */
     private $routingUtil;
 
-    private Connection $databaseConnection;
-
     /**
      * @param PortalAndLanguageAwareRouterInterface $router
      * @param UrlUtil                               $urlUtil
      * @param RoutingUtilInterface                  $routingUtil
      */
-    public function __construct(PortalAndLanguageAwareRouterInterface $router, UrlUtil $urlUtil, RoutingUtilInterface $routingUtil, Connection $databaseConnection)
+    public function __construct(PortalAndLanguageAwareRouterInterface $router, UrlUtil $urlUtil, RoutingUtilInterface $routingUtil)
     {
         $this->router = $router;
         $this->urlUtil = $urlUtil;
         $this->routingUtil = $routingUtil;
-        $this->databaseConnection = $databaseConnection;
     }
 
     /**
