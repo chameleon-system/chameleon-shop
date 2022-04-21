@@ -16,7 +16,7 @@ class TPkgShopAffiliateList extends TPkgShopAffiliateListAutoParent
      *
      * @param array $aData
      *
-     * @return TCMSRecord
+     * @return TdbPkgShopAffiliate
      */
     protected function &_NewElement(&$aData)
     {

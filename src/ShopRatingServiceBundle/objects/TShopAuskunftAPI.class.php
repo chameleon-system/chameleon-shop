@@ -29,14 +29,14 @@ class TShopAuskunftAPI
     public $aAPIData = array();
     public $xmlParsingError;
 
-    //-------------------------------------------------------------------------
     /**
      * Constructor.
+     *
+     * @psalm-suppress UndefinedFunction
+     * @FIXME callbacks should be specified as `[$this, 'function']`
      */
-    //-------------------------------------------------------------------------
     public function TShopAuskunftAPI()
     {
-        //-------------------------------------------------------------------------
         if (!($this->parser = xml_parser_create())) {
             die('Cannot create parser');
         }
@@ -45,8 +45,6 @@ class TShopAuskunftAPI
         xml_set_element_handler($this->parser, 'start_tag', 'end_tag');
         xml_set_character_data_handler($this->parser, 'tag_contents');
     }
-
-    //-------------------------------------------------------------------------
 
     /**
      * Get content from URL.

@@ -18,6 +18,8 @@ use ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGeneratorInterfa
  * {@inheritdoc}
  *
  * manages the variant type and value details for an article
+ *
+ * @property TdbShopArticle $oTableRow
  */
 class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
 {

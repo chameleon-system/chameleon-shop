@@ -336,6 +336,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      * @param bool $bRefresh - set to true to force a regeneration of the list
      *
      * @return TdbShopPaymentMethodList
+     * @psalm-suppress InvalidNullableReturnType, NullableReturnStatement - In this instance we know that the return type cannot be null
      */
     public function &GetValidPaymentMethods($bRefresh = false)
     {
@@ -415,11 +416,13 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
     /**
      * return the vat group for this shipping group.
      *
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function GetVat()
     {
+        /** @var TdbShopVat|null $oVat */
         $oVat = $this->GetFromInternalCache('ovat');
+
         if (is_null($oVat)) {
             $oVat = null;
             $oShopConf = TdbShop::GetInstance();

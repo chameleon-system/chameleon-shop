@@ -102,6 +102,10 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
                 $this->Set3DSecureFormToSession($this->aXMLResponseData['HTML_ANSWER']);
                 $oShop = TdbShop::GetInstance();
                 $sTargetURL = $oShop->GetLinkToSystemPage($s3DSecurePage, null, true);
+                /**
+                 * @psalm-suppress UndefinedInterfaceMethod
+                 * @FIXME `HeaderURLRedirect` only exists in a single implementatino of the interface
+                 */
                 TGlobal::GetController()->HeaderURLRedirect($sTargetURL);
             }
         }

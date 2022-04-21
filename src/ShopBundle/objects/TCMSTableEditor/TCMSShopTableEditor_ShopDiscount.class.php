@@ -11,7 +11,9 @@
 
 /**
  * overwritten to handle variant management.
- * /**/
+ *
+ * @property TdbShopDiscount $oTable
+ */
 class TCMSShopTableEditor_ShopDiscount extends TCMSTableEditor
 {
     /**

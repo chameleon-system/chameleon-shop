@@ -35,7 +35,7 @@ interface ShopCurrencyServiceInterface
     public function reset();
 
     /**
-     * @return TdbPkgShopCurrency
+     * @return TdbPkgShopCurrency|false
      */
     public function getObject();
 

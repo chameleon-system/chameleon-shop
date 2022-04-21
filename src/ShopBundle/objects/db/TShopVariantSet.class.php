@@ -68,14 +68,15 @@ class TShopVariantSet extends TAdbShopVariantSet
      *
      * @param string $sVariantTypeIdentifier
      *
-     * @return TdbShopVariantType
+     * @return TdbShopVariantType|null
      */
     public function GetVariantTypeForIdentifier($sVariantTypeIdentifier)
     {
+        /** @var TdbShopVariantType|null $oType */
         $oType = &$this->GetFromInternalCache('VariantTypeForIdentifier'.$sVariantTypeIdentifier);
+
         if (is_null($oType)) {
             $oType = TdbShopVariantType::GetNewInstance();
-            /** @var $oType TdbShopVariantType */
             if (!$oType->Loadfromfields(array('shop_variant_set_id' => $this->id, 'identifier' => $sVariantTypeIdentifier))) {
                 $oType = null;
             }

@@ -87,7 +87,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      * Returns virtual comment module config. Was needed to comment reviews
      * note: this function will be used only if package pkg comment was installed.
      *
-     * @return TdbPkgCommentModuleConfig
+     * @return TdbPkgCommentModuleConfig|null
      */
     protected function GetPkgCommentModuleConfiguration()
     {
@@ -100,9 +100,29 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
             $oPkgCommentModuleConfig->fieldNumberOfCommentsPerPage = 0;
             $oPkgCommentModuleConfig->fieldGuestCommentAllowed = !$oModuleConfiguration->fieldAllowWriteReviewLoggedinUsersOnly;
             $oPkgCommentModuleConfig->fieldPkgCommentTypeId = $this->GetCommentTypeId();
+
+            /**
+             * @psalm-suppress InvalidPropertyAssignmentValue
+             * @FIXME field is `bool` but assigned `int` - This could yield unwanted behaviour, especially with strict checks
+             */
             $oPkgCommentModuleConfig->fieldUseSimpleReporting = 1;
+
+            /**
+             * @psalm-suppress InvalidPropertyAssignmentValue
+             * @FIXME field is `bool` but assigned `int` - This could yield unwanted behaviour, especially with strict checks
+             */
             $oPkgCommentModuleConfig->fieldShowReportedComments = 0;
+
+            /**
+             * @psalm-suppress UndefinedPropertyAssignment
+             * @FIXME Does `fieldCountShowReviews` exist?
+             */
             $oPkgCommentModuleConfig->fieldCountShowReviews = $oModuleConfiguration->fieldCountShowReviews;
+
+            /**
+             * @psalm-suppress UndefinedPropertyAssignment
+             * @FIXME Does `fieldAllowReportComments` exist?
+             */
             $oPkgCommentModuleConfig->fieldAllowReportComments = $this->AllowReportReviews();
         }
 
@@ -130,7 +150,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * Get the comment type for article reviews.
      *
-     * @return TdbPkgCommentType
+     * @return string
      */
     protected function GetCommentTypeId()
     {
@@ -720,7 +740,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     }
 
     /**
-     * @return TdbShopArticle
+     * @return TdbShopArticle|null
      */
     protected function GetArticleToReview()
     {
@@ -893,9 +913,9 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * Gets the author name from post data or form logged in user.
      *
-     * @param string $sUserPostName
+     * @param string|false $sUserPostName
      *
-     * @return bool|string
+     * @return false|string
      */
     protected function GetAuthorName($sUserPostName = false)
     {
@@ -951,7 +971,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * Generates new captcha.
      *
-     * @return bool
+     * @return string|false
      */
     protected function GenerateCaptcha()
     {

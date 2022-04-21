@@ -25,7 +25,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
     /**
      * return the vat group of the category.
      *
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function GetVat()
     {
@@ -221,7 +221,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
     /**
      * return the parent category, or null if no parent is found.
      *
-     * @return TdbShopCategory
+     * @return TdbShopCategory|null
      */
     public function &GetParent()
     {
@@ -241,10 +241,11 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      * returns true if this category is in the active category path (ie is the active
      * category, or a parent of the active category).
      *
-     * @return bool
+     * @return true|null
      */
     public function IsInActivePath()
     {
+        /** @var true|null $bIsInActivePath */
         $bIsInActivePath = $this->GetFromInternalCache('bIsInActivePath');
         if (is_null($bIsInActivePath)) {
             $aCatPath = TdbShop::GetActiveCategoryPath();
@@ -310,10 +311,13 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     public function &GetRootCategory()
     {
+        /** @var TdbShopCategory|null $oRootCategory */
         $oRootCategory = &$this->GetFromInternalCache('oRootCategory');
+
         if (is_null($oRootCategory)) {
             $oRootCategory = clone $this;
             while (!empty($oRootCategory->fieldShopCategoryId)) {
+                /** @var TdbShopCategory $oRootCategory */
                 $oRootCategory = &$oRootCategory->GetParent();
             }
             $this->SetInternalCache('oRootCategory', $oRootCategory);

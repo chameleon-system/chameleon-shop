@@ -109,6 +109,10 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
                     $oMsgManager->AddMessage(self::MSG_CONSUMER_NAME, 'WISHLIST-SEND-MAIL', $this->aUserInput);
                     $oShop = TdbShop::GetInstance();
                     $sURL = $oShop->GetLinkToSystemPage('wishlist');
+                    /**
+                     * @psalm-suppress UndefinedInterfaceMethod
+                     * @FIXME `HeaderURLRedirect` only exists on one of the implementations of the interface
+                     */
                     $this->controller->HeaderURLRedirect($sURL);
                     $oMsgManager->AddMessage(self::MSG_CONSUMER_NAME, 'WISHLIST-UNABLE-TO-SEND-MAIL', $this->aUserInput);
                 }

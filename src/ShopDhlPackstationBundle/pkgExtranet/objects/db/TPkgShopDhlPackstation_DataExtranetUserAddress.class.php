@@ -39,7 +39,7 @@ class TPkgShopDhlPackstation_DataExtranetUserAddress extends TPkgShopDhlPackstat
     /**
      * return array with required fields.
      *
-     * @return array
+     * @return string[]
      */
     public function GetRequiredFields()
     {

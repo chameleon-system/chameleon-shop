@@ -201,6 +201,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         }
 
         // check AGB
+        /** @var array|null $input */
         $input = $this->getInputFilterUtil()->getFilteredPostInput('aInput');
         if (false === is_array($input)) {
             $input = array();

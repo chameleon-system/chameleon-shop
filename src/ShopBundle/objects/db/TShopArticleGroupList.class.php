@@ -36,7 +36,7 @@ class TShopArticleGroupList extends TAdbShopArticleGroupList
     /**
      * returns the max vat from the group list.
      *
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function &GetMaxVat()
     {

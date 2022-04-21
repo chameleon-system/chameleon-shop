@@ -309,8 +309,10 @@ class TShopVoucher extends TShopVoucherAutoParent
      * @param bool  $bCalculateVoucher - set to true when we calculate the voucher value for the basket
      *                                 this should only be set to true when calling the method through the TShopBasketVoucherList::GetVoucherValue
      * @param float $dMaxValueAllowed  - if a value is passed, then the voucher will never exceed the value passed
+     * @param bool $bSponsoredVouchers
      *
-     * @return float
+     * @return float|null
+     * @psalm-return ($bCalculateVoucher is true ? float : float|null)
      */
     public function GetValue($bCalculateVoucher = false, $dMaxValueAllowed = null, $bSponsoredVouchers = false)
     {
@@ -357,7 +359,7 @@ class TShopVoucher extends TShopVoucherAutoParent
     /**
      * return the amount of the voucher used up in previous orders.
      *
-     * @return float
+     * @return int
      */
     public function GetValuePreviouslyUsed()
     {

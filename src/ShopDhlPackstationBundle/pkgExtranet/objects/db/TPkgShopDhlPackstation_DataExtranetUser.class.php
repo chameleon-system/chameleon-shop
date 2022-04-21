@@ -16,7 +16,7 @@ class TPkgShopDhlPackstation_DataExtranetUser extends TPkgShopDhlPackstation_Dat
      *
      * @param $sAddressId
      *
-     * @return TdbDataExtranetUserAddress
+     * @return TdbDataExtranetUserAddress|null|false
      */
     public function SetAddressAsBillingAddress($sAddressId)
     {

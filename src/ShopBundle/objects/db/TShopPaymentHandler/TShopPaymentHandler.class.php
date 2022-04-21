@@ -82,7 +82,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      *
      * @param int $id
      *
-     * @return TdbShopPaymentHandler
+     * @return TdbShopPaymentHandler|null
      */
     public static function &GetInstance($id)
     {
@@ -130,7 +130,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
     /**
      * html head includes to use in the shipping step if the payment method is available.
      *
-     * @return array
+     * @return string[]
      */
     public function GetHtmlHeadIncludes()
     {

@@ -45,6 +45,9 @@ class TShopStockMessage extends TAdbShopStockMessage
         $oShopStockMessageTrigger = null;
         $sMessage = $this->RenderStockMessage();
         if (is_object($this->GetArticle()) && property_exists($this->GetArticle(), 'dAmount') && is_null($this->aMessagesForQuantity)) {
+            /**
+             * @psalm-suppress UndefinedPropertyFetch - We are explicitly checking if the property exists above
+             */
             $this->aMessagesForQuantity = $this->GetMessagesFromTriggerForQuantity($this->GetArticle()->dAmount);
         }
         if (is_array($this->aMessagesForQuantity)) {
@@ -154,7 +157,7 @@ class TShopStockMessage extends TAdbShopStockMessage
     }
 
     /**
-     * @return TdbShopArticle
+     * @return TdbShopArticle|false
      */
     public function GetArticle()
     {
@@ -175,11 +178,13 @@ class TShopStockMessage extends TAdbShopStockMessage
      * if there is a Match it will return this matching one in the other case
      * it will return a null object.
      *
-     * @return TdbShopStockMessageTrigger
+     * @return TdbShopStockMessageTrigger|null
      */
     public function &GetFieldShopStockMessageTrigger()
     {
+        /** @var TdbShopStockMessageTrigger|null $oShopStockMessageTrigger */
         $oShopStockMessageTrigger = $this->GetFromInternalCache('oActive_shop_stock_message_trigger_id');
+
         if (is_null($oShopStockMessageTrigger)) {
             $sQuery = "SELECT *
                      FROM `shop_stock_message_trigger`

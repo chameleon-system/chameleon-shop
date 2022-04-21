@@ -23,7 +23,10 @@ class TCMSSmartURLHandler_ShopPaymentOgone extends TCMSSmartURLHandler_ShopBaske
      *
      * If response from Ogone contains "ogone_cms_call" the trigger der parent function to get pagedefid.
      *
-     * @return bool
+     * @return bool|string
+     *
+     * @psalm-suppress UndefinedPropertyAssignment
+     * @FIXME Writing data into `$OURLData` when there is no magic `__set` method for them defined.
      */
     public function GetPageDef()
     {
@@ -46,11 +49,12 @@ class TCMSSmartURLHandler_ShopPaymentOgone extends TCMSSmartURLHandler_ShopBaske
                 TTools::WriteLogEntry('OGONE: incoming notify message parameter missing: '.print_r($oGlobal->GetUserData(), true), 1, __FILE__, __LINE__);
             }
             if ($bNotifyIsValid) {
-                /** @var $oPaymentHandler TShopPaymentHandlerOgone */
+                /** @var TShopPaymentHandlerOgone $oPaymentHandler */
                 $oPaymentHandler = TdbShopPaymentHandler::GetNewInstance();
                 $oPaymentHandler->LoadFromField('cmsident', $sPaymentHandlerCMSIdent);
                 $activePortal = $this->getPortalDomainService()->getActivePortal();
                 try {
+                    /** @var TShopPaymentHandlerOgone $oPaymentHandler */
                     $oPaymentHandler = $this->getShopPaymentHandlerFactory()->createPaymentHandler($oPaymentHandler->id, $activePortal->id);
                     $oGlobal = TGlobal::instance();
                     if ($oPaymentHandler->HandleNotifyMessage($oGlobal->GetUserData())) {

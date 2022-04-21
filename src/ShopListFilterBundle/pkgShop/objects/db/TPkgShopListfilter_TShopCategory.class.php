@@ -49,6 +49,10 @@ class TPkgShopListfilter_TShopCategory extends TPkgShopListfilter_TShopCategoryA
                     ORDER BY lft DESC
                        LIMIT 1
                         ";
+        /**
+         * @psalm-suppress UndefinedThisPropertyFetch
+         * @FIXME Property `fieldLft` does not exist - maybe `fieldPkgShopListfilterId` is meant?
+         */
         $match = $this->getDatabaseConnection()->fetchArray($query, array('activeLeft' => $this->fieldLft));
         if (false === $match) {
             return '';

@@ -76,7 +76,7 @@ class MTPkgCmsSubNavigation_PkgShop extends MTPkgCmsSubNavigation_PkgShopAutoPar
     }
 
     /**
-     * @return TdbShopCategory
+     * @return TdbShopCategory|null
      */
     private function getActiveRootCategory()
     {

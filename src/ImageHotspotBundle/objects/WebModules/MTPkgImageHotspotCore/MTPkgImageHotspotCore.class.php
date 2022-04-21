@@ -139,7 +139,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
      * return the hotspot following the current active spot. if the active spot is the
      * last spot, then we will return the first step.
      *
-     * @return TdbPkgImageHotspotItem|null
+     * @return TdbPkgImageHotspotItem|null|false
      */
     protected function &GetNextItem()
     {
@@ -171,7 +171,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
     /**
      * return config for the instance.
      *
-     * @return TdbPkgImageHotspot
+     * @return TdbPkgImageHotspot|null
      */
     protected function &GetHotspotConfig()
     {
@@ -188,7 +188,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
     /**
      * return the active item.
      *
-     * @return TdbPkgImageHotspotItem
+     * @return TdbPkgImageHotspotItem|null
      */
     protected function &GetActiveItem()
     {

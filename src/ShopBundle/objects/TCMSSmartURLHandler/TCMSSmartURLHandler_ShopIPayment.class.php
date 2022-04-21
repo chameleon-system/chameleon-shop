@@ -13,7 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * assumes the path in the TCMSSmartURLData is a simple tree path.
-/**/
+ *
+ * @psalm-suppress UndefinedPropertyAssignment
+ * @FIXME Writing data into `$OURLData` when there is no magic `__set` method for them defined.
+ */
 class TCMSSmartURLHandler_ShopIPayment extends TCMSSmartURLHandler_ShopBasketSteps
 {
     public function GetPageDef()

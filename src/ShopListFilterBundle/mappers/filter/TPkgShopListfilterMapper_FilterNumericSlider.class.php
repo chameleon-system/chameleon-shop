@@ -194,7 +194,11 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
 
 class Slider
 {
-    /** @var bool */
+    /**
+     * String representation of the boolean
+     * @var string
+     * @psalm-var 'true'|'false'
+     */
     private $disabled = 'false';
     /** @var int */
     private $valueLow = null;
@@ -221,7 +225,8 @@ class Slider
     }
 
     /**
-     * @return bool
+     * @return string
+     * @psalm-return 'true'|'false'
      */
     public function getDisabled()
     {

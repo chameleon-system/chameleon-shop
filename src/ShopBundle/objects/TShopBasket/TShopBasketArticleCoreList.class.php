@@ -13,7 +13,9 @@
  * The TIterator based article list overwrites the standard add item method in such a way that if
  * the same article is added again, it simply increases the amout of that item. same goes for the
  * remove function.
-/**/
+ *
+ * @extends TIterator<TShopBasketArticle>
+ */
 class TShopBasketArticleCoreList extends TIterator
 {
     const VIEW_PATH = 'pkgShop/views/TShopBasket/TShopBasketArticleList';
@@ -237,7 +239,7 @@ class TShopBasketArticleCoreList extends TIterator
     /**
      * return true if the item is in the list (uses the IsSameAs method).
      *
-     * @param varObj $oItem
+     * @param TShopBasketArticle $oItem
      *
      * @return bool
      */

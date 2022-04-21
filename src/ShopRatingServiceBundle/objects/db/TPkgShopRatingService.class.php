@@ -18,7 +18,7 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
      *
      * @param string $sSystemName
      *
-     * @return TdbPkgShopRatingService
+     * @return TdbPkgShopRatingService|null
      */
     public static function GetInstanceFromSystemName($sSystemName)
     {

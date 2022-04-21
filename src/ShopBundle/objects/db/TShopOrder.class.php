@@ -584,7 +584,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @param string $sProfileName
      *
-     * @return TdbDataMailProfile
+     * @return TdbDataMailProfile|null
      */
     protected function GetOrderNotificationEmailProfile($sProfileName)
     {

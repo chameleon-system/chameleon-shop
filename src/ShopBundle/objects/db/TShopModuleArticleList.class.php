@@ -15,7 +15,7 @@ class TShopModuleArticleList extends TAdbShopModuleArticleList
      * set a new order by id - we need to do this using a method so that we can
      * reset the internal cache for the connected lookup.
      *
-     * @param int $iId
+     * @param string $iId
      */
     public function UpdateOrderById($iId)
     {

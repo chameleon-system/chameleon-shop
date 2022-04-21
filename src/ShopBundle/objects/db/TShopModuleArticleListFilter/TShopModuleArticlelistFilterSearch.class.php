@@ -74,7 +74,7 @@ class TShopModuleArticlelistFilterSearch extends TdbShopModuleArticleListFilter
      * fetch the query string parameters based on the get/post data.
      *
      * @param string $sQueryString  - the query string that is searched for in all fields
-     * @param array  $aQueryStrings - query strings that search only specific fields
+     * @param mixed  $aQueryStrings - query strings that search only specific fields
      * @param array  $aFilter       - any additional filters (such as manufacturer)
      */
     protected function GetQuerySearchPostParameters(&$sQueryString, &$aQueryStrings, &$aFilter)
@@ -140,8 +140,12 @@ class TShopModuleArticlelistFilterSearch extends TdbShopModuleArticleListFilter
         parent::ModuleInitHook();
         $oShop = TdbShop::GetInstance();
         if ($oShop->fieldRedirectToNotFoundPageProductSearchOnNoResults) {
-            // in this case the shop may redirect after running the search. since this occurs in the Execute of the module, we need
-            // to prevent any other output from being auto-sent to the browser
+            /**
+             * in this case the shop may redirect after running the search. since this occurs in the Execute of the
+             * module, we need to prevent any other output from being auto-sent to the browser
+             * @psalm-suppress UndefinedInterfaceMethod
+             * @FIXME Method `SetBlockAutoFlushToBrowser` only exist on a single implementation of the interface
+             */
             TGlobal::GetController()->SetBlockAutoFlushToBrowser(true);
         }
     }

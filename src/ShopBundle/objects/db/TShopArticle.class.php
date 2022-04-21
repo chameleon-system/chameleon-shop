@@ -191,11 +191,13 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * return the vat group of the article.
      *
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function GetVat()
     {
+        /** @var TdbShopVat|null $oVat */
         $oVat = $this->GetFromInternalCache('ovat');
+
         if (is_null($oVat)) {
             $oVat = $this->getOwnVat();
             if (is_null($oVat)) {
@@ -642,7 +644,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * return the primary category of the article (usually just the first one found.
      *
-     * @return TdbShopCategory
+     * @return TdbShopCategory|null
      */
     public function &GetPrimaryCategory()
     {
@@ -659,6 +661,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             $oCategories = &$this->GetFieldShopCategoryList();
             $oCategories->GoToStart();
             if ($oCategories->Length() > 0) {
+                /** @var TdbShopCategory $oCategory */
                 $oCategory = &$oCategories->Current();
             }
         }
@@ -825,11 +828,13 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * return the primary image object of the shop article. this is either the cms_media_default_preview_image_id
      * or the  first image in the image list.
      *
-     * @return TdbShopArticleImage
+     * @return TdbShopArticleImage|null
      */
     public function GetPrimaryImage()
     {
+        /** @var TdbShopArticleImage|null $oPrimaryImage */
         $oPrimaryImage = &$this->GetFromInternalCache('oPrimaryImage');
+
         if (is_null($oPrimaryImage)) {
             if (!empty($this->fieldCmsMediaDefaultPreviewImageId) && (!is_numeric($this->fieldCmsMediaDefaultPreviewImageId) || intval($this->fieldCmsMediaDefaultPreviewImageId) > 1000)) {
                 $oShop = TdbShop::GetInstance();
@@ -870,13 +875,13 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @param string $sImageSizeName - the image size name (found in shop_article_image_size)
      *
-     * @return TdbShopArticlePreviewImage
+     * @return TdbShopArticlePreviewImage|null
      */
     public function &GetImagePreviewObject($sImageSizeName)
     {
         // check if the type has been defined...
         $oPreviewObject = TdbShopArticlePreviewImage::GetNewInstance();
-        /** @var $oPreviewObject TdbShopArticlePreviewImage */
+
         if (!$oPreviewObject->LoadByName($this, $sImageSizeName)) {
             // if the article is a varaint, try the parent
             if ($this->IsVariant()) {
@@ -1112,11 +1117,13 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * loads the owning bundle order item IF this item belongs to a bundle. returns false if it is not.
      *
-     * @return TdbShopOrderItem
+     * @return TdbShopArticle|false
      */
     public function &GetOwningBundleItem()
     {
+        /** @var TdbShopArticle|null $oOwningBundleItem */
         $oOwningBundleItem = $this->GetFromInternalCache('oOwningBundleItem');
+
         if (is_null($oOwningBundleItem)) {
             $oOwningBundleItem = false;
             if (!is_null($this->id)) {
@@ -1127,7 +1134,6 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
                    ";
                 if ($aOwner = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
                     $oOwningBundleItem = TdbShopArticle::GetNewInstance();
-                    /** @var $oOwningBundleItem TdbShopArticle */
                     $oOwningBundleItem->LoadFromRow($aOwner);
                 }
             }
@@ -1140,11 +1146,13 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * if this order item belongs to a bundle, then this method will return the connecting table.
      *
-     * @return TdbShopBundleArticle
+     * @return TdbShopBundleArticle|false
      */
     public function GetOwningBundleConnection()
     {
+        /** @var TdbShopBundleArticle|null $oOwningBundleConnection */
         $oOwningBundleConnection = $this->GetFromInternalCache('oOwningBundleConnection');
+
         if (is_null($oOwningBundleConnection)) {
             $oOwningBundleConnection = false;
             if (!is_null($this->id)) {
@@ -1282,7 +1290,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * return variant with the lowest price.
      *
-     * @return TdbShopArticle
+     * @return TdbShopArticle|null
      */
     public function GetLowestPricedVariant()
     {
@@ -1355,7 +1363,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param TdbShopVariantType $oVariantType
      * @param array              $aSelectedTypeValues - restrict list to values matching this preselection (format: array(shop_variant_type_id=>shop_variant_type_value_id,...)
      *
-     * @return TdbShopVariantTypeValueList
+     * @return TdbShopVariantTypeValueList|null
      */
     public function GetVariantValuesAvailableForType($oVariantType, $aSelectedTypeValues = array())
     {
@@ -1412,11 +1420,13 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @param string $sVariantTypeIdentifier
      *
-     * @return TdbShopArticleList
+     * @return TdbShopArticleList|null
      */
     public function GetVariantsForVariantTypeName($sVariantTypeIdentifier)
     {
+        /** @var TdbShopArticleList|null $oArticleList */
         $oArticleList = &$this->GetFromInternalCache('VariantsForVariantTypeName'.$sVariantTypeIdentifier);
+
         if (is_null($oArticleList)) {
             $oArticleList = null;
             $oVariantSet = &$this->GetFieldShopVariantSet();
@@ -1469,12 +1479,18 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @param string $sVariantTypeIdentifier
      *
-     * @return TdbShopVariantTypeValue - returns null if $sVariantTypeIdentifier was not found
+     * @return TdbShopVariantTypeValue|null - returns null if $sVariantTypeIdentifier was not found
      */
     public function GetActiveVariantValue($sVariantTypeIdentifier)
     {
         $oVariantValueObject = null;
+
+        /**
+         * Use variant type name as key
+         * @var array<string, TdbShopVariantTypeValue>|null $aVariantValues
+         */
         $aVariantValues = &$this->GetFromInternalCache('aActiveVariantValues');
+
         if (is_null($aVariantValues)) {
             $query = "SELECT `shop_variant_type_value`.*, `shop_variant_type`.`identifier` AS variantTypeName
                     FROM `shop_variant_type_value`
@@ -1500,12 +1516,18 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @param string $sVariantTypeId
      *
-     * @return string
+     * @return string|false
      */
     public function GetVariantTypeActiveValue($sVariantTypeId)
     {
         $sValue = false;
+
+        /**
+         * Mapping of variant type id => variant type values id
+         * @var array<string, string>|null $aVariantValueIds
+         */
         $aVariantValueIds = $this->GetFromInternalCache('aActiveVariantValueIds');
+
         if (is_null($aVariantValueIds)) {
             $oValueList = &$this->GetFieldShopVariantTypeValueList();
             while ($oValue = $oValueList->Next()) {
@@ -1553,7 +1575,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @param array $aTypeValuePairs
      *
-     * @return TdbShopArticle
+     * @return TdbShopArticle|null
      *
      * @deprecated since 6.2.13 - replaced by ProductVariantServiceInterface::getProductBasedOnSelection()
      */
@@ -1765,11 +1787,13 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * Using variant sets it is possible to set variant types for the article variants
      * (e.g. Color and Size).
      *
-     * @return TdbShopVariantSet
+     * @return TdbShopVariantSet|null
      */
     public function &GetFieldShopVariantSet()
     {
+        /** @var TdbShopVariantSet|null $oItem */
         $oItem = &$this->GetFromInternalCache('oFieldShopVariantSet');
+
         if (null === $oItem) {
             $oItem = &parent::GetFieldShopVariantSet();
             if (null === $oItem && $this->IsVariant()) {
@@ -2066,7 +2090,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * returns the real amount available.
      *
-     * @return int
+     * @return int|false
      */
     public function getAvailableStock()
     {
@@ -2285,7 +2309,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param bool   $bGetAjaxParameter      - set to true if you want to get basket link for ajax call
      * @param string $sMessageConsumer       - set custom message consumer
      *
-     * @return array
+     * @return string
      */
     public function getToBasketLinkBasketParametersOnly($bIncludePortalLink = false, $bRedirectToBasket = false, $bReplaceBasketContents = false, $bGetAjaxParameter = false, $sMessageConsumer = MTShopBasketCore::MSG_CONSUMER_NAME_MINIBASKET)
     {

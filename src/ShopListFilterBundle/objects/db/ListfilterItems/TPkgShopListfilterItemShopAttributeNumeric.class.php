@@ -33,7 +33,7 @@ class TPkgShopListfilterItemShopAttributeNumeric extends TPkgShopListfilterItemM
     /**
      * return active start value.
      *
-     * @return float
+     * @return float|false
      */
     public function GetActiveStartValue()
     {
@@ -48,7 +48,7 @@ class TPkgShopListfilterItemShopAttributeNumeric extends TPkgShopListfilterItemM
     /**
      * return active end value.
      *
-     * @return float
+     * @return float|false
      */
     public function GetActiveEndValue()
     {

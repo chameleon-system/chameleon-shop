@@ -134,6 +134,10 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
      */
     public function GetActiveSettingAsHiddenInputField()
     {
+        /**
+         * @psalm-suppress InvalidArgument
+         * @FIXME Passing an array (`aActiveFilterData`) to `TGlobal::OutHTML` which expects a string. Due to `htmlentities` being used in that method, this will return an empty string up to PHP7.4 but result in an fatal error in PHP8+
+         */
         return '<input type="hidden" name="'.TGlobal::OutHTML($this->GetURLInputName()).'" value="'.TGlobal::OutHTML($this->aActiveFilterData).'" />';
     }
 
@@ -255,7 +259,7 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
      * return the query restriction for active filter. returns false if there
      * is no active restriction for this item.
      *
-     * @return string
+     * @return string|false
      */
     public function GetQueryRestrictionForActiveFilter()
     {

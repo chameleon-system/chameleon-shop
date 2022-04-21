@@ -437,7 +437,7 @@ class TShopPaymentHandlerSofortueberweisung extends TdbShopPaymentHandler
      *
      * @param array $aParameter
      *
-     * @return bool
+     * @return true|string
      */
     protected function NotifyPayloadIsValid($aParameter)
     {
@@ -452,7 +452,7 @@ class TShopPaymentHandlerSofortueberweisung extends TdbShopPaymentHandler
             $bIsValid = false;
         }
 
-        /** @var $oOrder TdbShopOrder */
+        /** @var TdbShopOrder $oOrder */
         $oOrder = null;
         if ($bIsValid) {
             // order id exists?

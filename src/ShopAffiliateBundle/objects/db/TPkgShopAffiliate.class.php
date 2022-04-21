@@ -43,14 +43,22 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
      * if a paramter was passed (now or any time before in the session), return
      * the object for that paramter - else return null.
      *
-     * @return TdbPkgShopAffiliate
+     * @return TdbPkgShopAffiliate|null
      */
     public static function &GetActiveInstance()
     {
+        /** @var TdbPkgShopAffiliate|null $oInstance */
         static $oInstance = null;
+
         if (is_null($oInstance) && array_key_exists(TdbPkgShopAffiliate::SESSION_AFFILIATE_PROGRAM_CODE, $_SESSION)) {
+
+            /**
+             * @FIXME Setting `$oInstance = false` and immediately overriding it with a different value only confuses the typing in this method.
+             */
             $oInstance = false;
             $aData = $_SESSION[TdbPkgShopAffiliate::SESSION_AFFILIATE_PROGRAM_CODE];
+
+            /** @var TdbPkgShopAffiliate $oInstance */
             $oInstance = TdbPkgShopAffiliate::GetInstance($aData['id']);
             $oInstance->sCode = $aData['sCode'];
         }

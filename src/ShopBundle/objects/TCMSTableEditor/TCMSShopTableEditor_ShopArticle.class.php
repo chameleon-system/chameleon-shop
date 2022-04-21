@@ -14,7 +14,9 @@ use ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGeneratorInterfa
 
 /**
  * overwritten to handle variant management.
-/**/
+ *
+ * @property TdbShopArticle $oTable
+ */
 class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
 {
     /**
@@ -176,6 +178,9 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
     /**
      * we overwrite the insert method, so that when inserting variants, we realy perform
      * a copy of the parent.
+     *
+     * @psalm-suppress InvalidReturnType
+     * @FIXME This method should return TCMSstdClass with the object data similar to it's parent, not `void`.
      */
     public function Insert()
     {

@@ -58,6 +58,10 @@ class TPkgShopPaymentIpnMessage extends TPkgShopPaymentIpnMessageAutoParent
             header($e->getResponseHeader());
         }
 
+        /**
+         * @psalm-suppress UndefinedVariable
+         * @FIXME `$responseString` does not exist?
+         */
         return (empty($responseString)) ? true : $responseString;
     }
 

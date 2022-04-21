@@ -98,7 +98,7 @@ class TShopStepOrderCompletedCore extends TShopStepUserData
     /**
      * Returns last user bought from session.
      *
-     * @return TdbDataExtranetUser
+     * @return TdbDataExtranetUser|null
      */
     public function GetLastUserBoughtFromSession()
     {

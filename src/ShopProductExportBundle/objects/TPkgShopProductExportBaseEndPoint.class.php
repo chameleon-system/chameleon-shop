@@ -197,7 +197,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * @param TdbShopArticle $oArticle
      * @param array          $aAdditionalData
      *
-     * @return string|float
+     * @return string|false
      */
     protected function GetDeliveryCosts(&$oArticle, $aAdditionalData = array())
     {
@@ -242,8 +242,12 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      */
     public function getAttributeName($sIdentifier)
     {
+        /** @var array<string, string> $aAttributesForSystemNames */
         static $aAttributesForSystemNames = null;
+
+        /** @var array<string, string> $aAttributesForIds */
         static $aAttributesForIds = null;
+
         if (null === $aAttributesForSystemNames && null === $aAttributesForIds) {
             $oAttributesList = TdbShopAttributeList::GetList();
             while ($oAttribute = &$oAttributesList->Next()) {
@@ -470,7 +474,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     /**
      * getter for $this->oArticleList.
      *
-     * @return TIterator
+     * @return TIterator|null
      */
     public function GetArticleList()
     {
@@ -480,7 +484,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     /**
      * getter for $this->sCacheFile.
      *
-     * @return string
+     * @return string|null
      */
     public function GetCacheFile()
     {

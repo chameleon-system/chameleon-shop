@@ -36,7 +36,7 @@ class ContentFromUrlLoaderService implements ContentFromUrlLoaderServiceInterfac
     /**
      * @param string $url
      *
-     * @return string
+     * @return string|false
      */
     public function load($url)
     {

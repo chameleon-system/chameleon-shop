@@ -82,7 +82,8 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
      */
     private $cache;
     /**
-     * @var array
+     * Mapping of viewname => twig template path
+     * @var array<string, string>
      */
     private $viewToListViewMapping;
     /**
@@ -107,7 +108,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     private $moduleListResult;
 
     /**
-     * @param array                                    $viewToListViewMapping
+     * @param array<string, string>                    $viewToListViewMapping - Mapping of template name to twig template path
      * @param RequestStack                             $requestStack
      * @param StateFactoryInterface                    $stateFactory
      * @param DbAdapterInterface                       $dbAdapter
@@ -155,6 +156,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @return Request
+     * @psalm-suppress NullableReturnStatement, InvalidNullableReturnType - We know that a request exists here
      */
     protected function getCurrentRequest()
     {
@@ -431,6 +433,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @return TdbCmsLocals
+     * @psalm-suppress FalsableReturnStatement - `GetActive` only returns `false` during the bootstrapping phase, which is not the case here
      */
     private function getActiveLocal()
     {
@@ -438,7 +441,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @return TdbPkgShopCurrency
+     * @return TdbPkgShopCurrency|false
      */
     private function getActiveCurrency()
     {
@@ -651,7 +654,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @param string $viewName
      *
-     * @return array
+     * @return string
      */
     private function getListTemplateFromConfigName($viewName)
     {

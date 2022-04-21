@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!--
+    Note about this configuration file:
+    This configuration is meant to be used while chameleon-base is installed in a fully
+    functional chameleon system since it requires autoclasses to do static analysis.
+-->
+
+<psalm
+    errorLevel="5"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    cacheDirectory="/tmp"
+    autoloader="../../autoload.php"
+    phpVersion="7.1"
+>
+
+    <projectFiles>
+        <directory name="./src" />
+        <ignoreFiles>
+            <directory name="src/**/views/" />
+            <directory name="src/**/Tests/" />
+            <directory name="src/**/Resources/" />
+            <directory name="src/**/installation" />
+            <directory name="src/**/objects/**/**/views" />
+            <directory name="src/**/Bridge/Chameleon/Migration" />
+
+            <!-- Third party code or portions of the code that touch a lot of third party code -->
+            <directory name="src/**/lib/" />
+            <directory name="src/AmazonPaymentBundle/" />
+            <file name="src/ShopRatingServiceBundle/objects/AbstractXmlStreamer.php" />
+        </ignoreFiles>
+    </projectFiles>
+
+    <extraFiles>
+        <directory name="../../../app/cache/autoclasses" />
+        <file name="../../../app/config/config.inc.php" />
+        <file name="../chameleon-base/src/CoreBundle/Resources/config/defaults.inc.php" />
+    </extraFiles>
+
+    <universalObjectCrates>
+        <!-- TCMSstdClass can have dynamic properties -->
+        <class name="TCMSstdClass"/>
+    </universalObjectCrates>
+
+    <issueHandlers>
+
+        <!-- Ignore undefined constants for now: psalm is not picking up the declarations in `*.inc.php` files? -->
+        <UndefinedConstant errorLevel="suppress" />
+
+        <!-- We switch param names from hungarian notation to regular quite often -->
+        <ParamNameMismatch errorLevel="suppress" />
+
+        <!-- Redundant type casts can help add more meaning to the code -->
+        <RedundantCastGivenDocblockType errorLevel="suppress" />
+
+        <UnusedPsalmSuppress errorLevel="error" />
+<!--        <MissingReturnType errorLevel="error" />-->
+<!--        <MissingParamType errorLevel="error" />-->
+<!--        <MissingPropertyType errorLevel="error" />-->
+
+        <!-- TODO Not supress? -->
+        <MoreSpecificImplementedParamType errorLevel="suppress" />
+
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <!-- Symfony references enum that only exists in later PHP versions -->
+                <referencedClass name="UnitEnum" />
+
+                <!-- Third party code -->
+                <referencedClass name="PaymentStatus" />
+                <referencedClass name="OrderReferenceDetails" />
+                <referencedClass name="CaptureDetails" />
+                <referencedClass name="RefundDetails" />
+            </errorLevel>
+        </UndefinedDocblockClass>
+
+        <!-- Some Tdbs don't exist in demo shop -->
+        <UndefinedClass>
+            <errorLevel type="suppress">
+                <referencedClass name="TdbPkgNewsletterUnsubscribeCodeList" />
+                <referencedClass name="TPkgArticle_BreadcrumbItem" />
+                <referencedClass name="TPkgArticleCategory_BreadcrumbItem" />
+                <referencedClass name="MTShopRemoteSearchCore" />
+                <referencedClass name="TdbPkgArticle" />
+                <referencedClass name="TdbPkgArticleCategory" />
+
+                <!-- Missing auto parents -->
+                <referencedClass name="TPkgShopCurrency_ShopDiscountListAutoParent" />
+                <referencedClass name="TPkgShopCurrency_ShopPaymentMethodListAutoParent" />
+                <referencedClass name="TPkgShopCurrency_ShopShippingTypeListAutoParent" />
+            </errorLevel>
+        </UndefinedClass>
+
+    </issueHandlers>
+</psalm>

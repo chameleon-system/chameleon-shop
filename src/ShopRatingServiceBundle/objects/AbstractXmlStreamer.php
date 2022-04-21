@@ -82,7 +82,7 @@ abstract class XmlStreamer
      * @param $elementName   Name of the node for easy access
      * @param $nodeIndex     Zero-based index that increments for every node
      *
-     * @return If false is returned, the streaming will stop
+     * @return bool - If false is returned, the streaming will stop
      */
     abstract public function processNode($xmlString, $elementName, $nodeIndex);
 

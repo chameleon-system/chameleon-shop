@@ -45,7 +45,7 @@ class DetailPagingService implements DetailPagingServiceInterface
     /**
      * @param $currentArticleId
      *
-     * @return ListItemInterface
+     * @return ListItemInterface|null
      *
      * @throws ArticleListException
      */
@@ -65,7 +65,7 @@ class DetailPagingService implements DetailPagingServiceInterface
     /**
      * @param $currentArticleId
      *
-     * @return ListItemInterface
+     * @return ListItemInterface|null
      */
     public function getPreviousItem($currentArticleId, $pagerSpotName)
     {

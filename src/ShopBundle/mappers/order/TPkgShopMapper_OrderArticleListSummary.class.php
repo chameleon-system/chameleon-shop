@@ -156,6 +156,10 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
                         $aVoucherList[] = $aVoucher;
                     }
                 } else {
+                    /**
+                     * @psalm-suppress TooFewArguments
+                     * @FIXME `$bCachingEnabled` should be passed as a parameter here
+                     */
                     $aVoucher = $this->getDataFromVoucher($oVoucherUse, null, $oCacheTriggerManager);
                     $aVoucherList[] = $aVoucher;
                 }

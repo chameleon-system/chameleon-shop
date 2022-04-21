@@ -133,7 +133,7 @@ class OffAmazonPaymentsNotifications_Model_BillingAgreementLimits extends OffAma
      * Sets the value of the TimePeriodStartDate property.
      * 
      * @param string TimePeriodStartDate
-     * @return this instance
+     * @return $this instance
      */
     public function setTimePeriodStartDate ($value)
     {
@@ -177,7 +177,7 @@ class OffAmazonPaymentsNotifications_Model_BillingAgreementLimits extends OffAma
      * Sets the value of the TimePeriodEndDate property.
      * 
      * @param string TimePeriodEndDate
-     * @return this instance
+     * @return $this instance
      */
     public function setTimePeriodEndDate ($value)
     {

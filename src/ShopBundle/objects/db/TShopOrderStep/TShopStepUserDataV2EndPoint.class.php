@@ -332,7 +332,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * validate user/Address entry using the data passed. if valid, allow user to continue.
      *
-     * @return bool
+     * @return bool|string - `true` or id if success, `false` otherwise
      */
     protected function ProcessStep()
     {
@@ -425,7 +425,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      * will be registered.
      *
      * @param array $aUserData
-     * @return bool
+     * @return bool|string - `false` if update did not succeed, `true` if it did, id of the record if it did and userMode has been set to `user`.
      */
     protected function UpdateUser($aUserData)
     {
@@ -673,9 +673,10 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * get user base data. the date will be filtered / update based on the mode.
      *
-     * @param string $sReturnThisParameterOnly - if set, then only that field of the address is returned. if that field is not found, we return false
+     * @param string|null $sReturnThisParameterOnly - if set, then only that field of the address is returned. if that field is not found, we return false
      *
-     * @return array|bool
+     * @return array|string|false
+     * @psalm-return ($sReturnThisParameterOnly is string ? string|false : array|false)
      */
     protected function GetUserData($sReturnThisParameterOnly = null)
     {
@@ -754,9 +755,10 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * return shipping address data from user post.
      *
-     * @param string $sReturnThisParameterOnly - if set, then only that field of the address is returned. if that field is not found, we return false
+     * @param string|null $sReturnThisParameterOnly - if set, then only that field of the address is returned. if that field is not found, we return false
      *
-     * @return array|bool
+     * @return array|string|false
+     * @psalm-return ($sReturnThisParameterOnly is string ? string|false : array|false)
      */
     protected function GetShippingAddressData($sReturnThisParameterOnly = null)
     {
@@ -792,9 +794,10 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * return billing address data from user post.
      *
-     * @param string $sReturnThisParameterOnly - if set, then only that field of the address is returned. if that field is not found, we return false
+     * @param string|null $sReturnThisParameterOnly - if set, then only that field of the address is returned. if that field is not found, we return false
      *
-     * @return array|bool
+     * @return array|string|false
+     * @psalm-return ($sReturnThisParameterOnly is string ? string|false : array|false)
      */
     protected function GetBillingAddressData($sReturnThisParameterOnly = null)
     {
@@ -836,7 +839,9 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
         // the method only works if the user is logged in
         $oUser = self::getExtranetUserProvider()->getActiveUser();
         if ($oUser->IsLoggedIn()) {
+            /** @var string $sNewShippingAddressId */
             $sNewShippingAddressId = $this->GetShippingAddressData('selectedAddressId');
+            /** @var string $sNewBillingAddressId */
             $sNewBillingAddressId = $this->GetBillingAddressData('selectedAddressId');
 
             if ('1' == $this->GetShipToBillingAddress()) {

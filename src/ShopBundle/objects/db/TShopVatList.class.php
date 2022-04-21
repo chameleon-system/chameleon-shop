@@ -68,11 +68,11 @@ class TShopVatList extends TShopVatListAutoParent
     /**
      * return largest item in list.
      *
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function GetMaxItem()
     {
-        /** @var $oMaxItem null|TdbShopVat */
+        /** @var null|TdbShopVat $oMaxItem */
         $oMaxItem = null;
         $iPt = $this->getItemPointer();
         $this->GoToStart();

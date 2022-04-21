@@ -29,7 +29,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     /**
      * Transaction id for DataTrans authorisation. Needed for settlement authorised transactions.
      *
-     * @var bool/string
+     * @var bool|string
      */
     protected $sTransactionId = false;
 
@@ -39,7 +39,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      * Reference number was build with crc32 from basket identifier__payment type identifier__count
      * Count was needed because the first to parts are not unique.
      *
-     * @var bool/string
+     * @var false|int
      */
     protected $sRefNo = false;
 
@@ -139,7 +139,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      *
      * @param bool $bForAuthorisation
      *
-     * @return bool|string
+     * @return false|int
      */
     protected function GetRefNoParameter($bForAuthorisation = true)
     {
@@ -276,7 +276,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     /**
      * Get error message form DataTrans authorisation response.
      *
-     * @return string $SReturnMessage
+     * @return string|false
      */
     protected function GetErrorCodesFromResponse()
     {

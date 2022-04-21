@@ -30,6 +30,12 @@ class TPkgShopRatingService_EkomiEndPoint extends TdbPkgShopRatingService
         return true;
     }
 
+    /**
+     * @return bool
+     *
+     * @psalm-suppress NullArgument
+     * @FIXME Second argument to `fgetcsv` does not accept `null` anymore as of PHP 5.x. Supplying `0` should behave exactly the same.
+     */
     public function Import()
     {
         $bSuccess = false;

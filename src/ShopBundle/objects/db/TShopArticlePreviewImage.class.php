@@ -39,7 +39,7 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
      * @param TdbShopArticle $oArticle      - the article object
      * @param string         $sInternalName - image size name
      *
-     * @return true
+     * @return bool
      */
     public function LoadByName(&$oArticle, $sInternalName)
     {
@@ -96,7 +96,7 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
      * Note: we provide a separate method for this (instead of using GetLookup) because we want
      * to make sure that these objects are properly cached.
      *
-     * @return TdbShopArticle
+     * @return TdbShopArticle|null
      */
     public function &GetArticleObject()
     {
@@ -115,7 +115,7 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
      * Note: we provide a separate method for this (instead of using GetLookup) because we want
      * to make sure that these objects are properly cached.
      *
-     * @return TCMSImage
+     * @return TCMSImage|null
      */
     public function &GetImageObject()
     {
@@ -154,7 +154,7 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
      * Note: we provide a separate method for this (instead of using GetLookup) because we want
      * to make sure that these objects are properly cached.
      *
-     * @return TdbShopArticleImageSize
+     * @return TdbShopArticleImageSize|null
      */
     public function &GetImageSizeObject()
     {

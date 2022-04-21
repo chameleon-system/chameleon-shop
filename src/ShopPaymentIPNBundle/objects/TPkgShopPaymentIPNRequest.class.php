@@ -195,7 +195,7 @@ class TPkgShopPaymentIPNRequest
     /**
      * @param TdbPkgShopPaymentIpnMessage $oMessage
      *
-     * @return bool
+     * @return void
      */
     private function addTrigger(TdbPkgShopPaymentIpnMessage $oMessage)
     {

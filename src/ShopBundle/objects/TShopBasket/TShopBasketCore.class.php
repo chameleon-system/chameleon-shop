@@ -139,11 +139,11 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     public $sBasketIdentifier = null;
 
     /**
-     * @var TShopWrappingCard|null
+     * @var TdbShopWrappingCard|null
      */
     protected $oWrappingCard = null;
     /**
-     * @var TShopWrapping|null
+     * @var TdbShopWrapping|null
      */
     protected $oWrapping = null;
     /**
@@ -333,7 +333,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return the active shipping group - will set the shipping group to the default group, if none is set.
      *
-     * @return TdbShopShippingGroup
+     * @return TdbShopShippingGroup|null
      */
     public function &GetActiveShippingGroup()
     {
@@ -376,7 +376,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return all payment methods for the active shipping group.
      *
-     * @return TdbShopPaymentMethodList
+     * @return TdbShopPaymentMethodList|null
      */
     public function GetAvailablePaymentMethods()
     {
@@ -391,7 +391,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return all payment methods for the active shipping group that are selectable by the user.
      *
-     * @return TdbShopPaymentMethodList
+     * @return TdbShopPaymentMethodList|null
      */
     public function GetValidPaymentMethodsSelectableByTheUser()
     {
@@ -925,12 +925,12 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return the largest vat object from the active vat group.
      *
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function GetLargestVATObject()
     {
         $oActiveVatList = $this->GetActiveVATList();
-        /** @var $oMaxItem TdbShopVat */
+
         $oMaxItem = null;
         if (is_object($oActiveVatList)) {
             $oMaxItem = $oActiveVatList->GetMaxItem();
@@ -1032,7 +1032,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * @param string $sMessageConsumer - who should recieve error messages
      * @param bool   $bForcePayment    - set to true if you want to force the selected payment EVEN if it is not allowed for the current user
      *
-     * @return TdbShopOrder
+     * @return TdbShopOrder|false
      */
     public function CreateOrder($sMessageConsumer, $bForcePayment = false)
     {
@@ -1252,7 +1252,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * called when the payment handler returns something other than true
      * The method should return the error string to display.
      *
-     * @param string                $bPaymentErrorCode - the error code
+     * @param bool                  $bPaymentErrorCode
      * @param TdbShopOrder          $oOrder            - the order just created
      * @param TdbShopPaymentHandler $oPaymentHandler
      *
@@ -1272,11 +1272,12 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      *
      * @param bool $bResetValue - set to true if you want to reset the session item
      *
-     * @return TdbShopOrder
+     * @return TdbShopOrder|null
      */
     public static function &GetLastCreatedOrder($bResetValue = false)
     {
         $oOrder = null;
+
         if (array_key_exists(self::SESSION_KEY_LAST_CREATED_ORDER_ID, $_SESSION)) {
             $oOrder = TdbShopOrder::GetNewInstance();
             /** @var $oOrder TdbShopOrder */
@@ -1587,7 +1588,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return a COPY of the active voucher list - for EXTERNAL use.
      *
-     * @return TShopBasketVoucherList
+     * @return TShopBasketVoucherList|null
      */
     public function GetVoucherList()
     {
@@ -1915,7 +1916,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * @param string $sSeriesId
      * @param string $sMessageConsumer
      *
-     * @return TdbShopVoucher
+     * @return TdbShopVoucher|null
      */
     protected function GetNextAvailableVoucher($sVoucherCode, $sSeriesId, $sMessageConsumer)
     {
@@ -2048,8 +2049,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * @param IPkgCmsEvent $oEvent
      *
-     * @return IPkgCmsEvent
-     *                      the method is called when an event is triggered
+     * @return void
      */
     public function sessionWakeupHook()
     {

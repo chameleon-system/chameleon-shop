@@ -118,7 +118,7 @@ class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
     }
 
     /**
-     * @return TdbDataExtranetUser
+     * @return TdbDataExtranetUser|null
      */
     protected function getActiveUser()
     {

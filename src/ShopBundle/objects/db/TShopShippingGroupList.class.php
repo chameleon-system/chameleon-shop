@@ -32,7 +32,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
      *
      * @param string $sPaymentInternalName
      *
-     * @return bool
+     * @return TdbShopShippingGroup|false
      */
     public static function &GetShippingGroupsThatAllowPaymentWith($sPaymentInternalName)
     {
@@ -50,6 +50,8 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
         if (!$bFound) {
             $oShippingGroup = false;
         }
+
+        /** @var TdbShopShippingGroup|false $oShippingGroup */
 
         return $oShippingGroup;
     }

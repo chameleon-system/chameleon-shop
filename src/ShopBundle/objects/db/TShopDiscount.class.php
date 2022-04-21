@@ -80,7 +80,8 @@ class TShopDiscount extends TShopDiscountAutoParent
      *
      * @param int $iCheckFlag - send a bitmask to enable/disable individual checks. example - disable basket value and quantity check: TdbShopDiscount::DISABLE_CHECK_CURRENT_BASKET_VALUE | TdbShopDiscount::DISABLE_CHECK_CURRENT_BASKET_QUANTITY
      *
-     * @return bool
+     * @return int
+     * @psalm-return TdbShopDiscount::*
      */
     public function AllowUseOfDiscount($iCheckFlag = 0)
     {

@@ -75,17 +75,19 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     /**
      * returns the index status (false=not running, number = percent done).
      *
-     * @return float
+     * @return float|false
      */
     public function GetIndexStatus()
     {
         $dStatus = false;
+
         if ($this->IsRunning()) {
             $iRemainingRows = $this->GetRemainingRowCount();
             if (0 == $iRemainingRows) {
                 $dStatus = false;
                 $this->IndexCompletedHook();
             } else {
+                /** @var float $dStatus */
                 $dStatus = (($this->fieldTotalRowsToProcess - $iRemainingRows) / $this->fieldTotalRowsToProcess) * 100;
             }
         }
@@ -96,7 +98,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     /**
      * return the number of rows still to process.
      *
-     * @return unknown
+     * @return int
      */
     protected function GetRemainingRowCount()
     {
@@ -269,7 +271,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      * get the shop we use for config data for the indexer... for now we just take
      * the first we find. later we need some way to connect the two.
      *
-     * @return TdbShop
+     * @return TdbShop|false
      */
     protected static function &GetShopConfigForIndexer()
     {

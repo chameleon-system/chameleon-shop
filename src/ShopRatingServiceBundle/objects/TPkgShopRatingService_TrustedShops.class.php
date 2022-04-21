@@ -148,7 +148,7 @@ class TPkgShopRatingService_TrustedShops extends TdbPkgShopRatingService
     }
 
     /**
-     * @return bool
+     * @return bool|null - bool if `fieldRatingUrl` is a valid URL, `null` (no return) otherwise
      */
     protected function LoadFeed()
     {

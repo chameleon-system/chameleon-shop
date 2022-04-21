@@ -100,7 +100,7 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
      * HEADS UP! the OUT key in the shop config has to match the IN Key in the Ogone backend
      * and vice versa
      *
-     * @param string $aURLParameter
+     * @param array $aURLParameter
      *
      * @return bool
      */

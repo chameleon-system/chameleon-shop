@@ -16,11 +16,13 @@ class TShopOrderItem extends TAdbShopOrderItem
     /**
      * loads the owning bundle order item IF this item belongs to a bundle. returns false if it is not.
      *
-     * @return TdbShopOrderItem
+     * @return TdbShopOrderItem|false
      */
     public function &GetOwningBundleOrderItem()
     {
+        /** @var TdbShopOrderItem|null $oOwningOrderItem */
         $oOwningOrderItem = $this->GetFromInternalCache('oOwningOrderItem');
+
         if (is_null($oOwningOrderItem)) {
             $oOwningOrderItem = false;
             if (!is_null($this->id)) {
@@ -44,11 +46,13 @@ class TShopOrderItem extends TAdbShopOrderItem
     /**
      * if this order item belongs to a bundle, then this method will return the connecting table.
      *
-     * @return TdbShopOrderBundleArticle
+     * @return TdbShopOrderBundleArticle|false
      */
     public function GetOwningBundleConnection()
     {
+        /** @var TdbShopOrderBundleArticle|null $oOwningBundleConnection */
         $oOwningBundleConnection = $this->GetFromInternalCache('oOwningBundleConnection');
+
         if (is_null($oOwningBundleConnection)) {
             $oOwningBundleConnection = false;
             if (!is_null($this->id)) {

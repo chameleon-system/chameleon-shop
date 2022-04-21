@@ -12,6 +12,9 @@
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @psalm-suppress UndefinedClass - financegate* classes do not exist
+ */
 class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
 {
     /**

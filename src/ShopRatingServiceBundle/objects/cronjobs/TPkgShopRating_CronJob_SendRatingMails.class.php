@@ -379,6 +379,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
             echo __LINE__.'iNumberOfCompletedOrders: '.$iNumberOfCompletedOrders."\n<br />\n";
         }
 
+        /** @var int $iNumberOfReviewMailsToBeSend */
         $iNumberOfReviewMailsToBeSend = ceil(($iPercentageToBeSend / 100) * $iNumberOfCompletedOrders);
 
         if ($this->bDebug) {

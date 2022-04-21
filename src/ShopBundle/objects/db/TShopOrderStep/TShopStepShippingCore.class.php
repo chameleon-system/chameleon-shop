@@ -316,7 +316,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
      * define any head includes the step needs
      * loads includes from payment handlers.
      *
-     * @return array
+     * @return string[]
      */
     public function GetHtmlHeadIncludes()
     {

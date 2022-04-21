@@ -16,7 +16,7 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
     /**
      * set to the owning article id, if list is generated via GetPublishedReviews.
      *
-     * @var int
+     * @var string
      */
     protected $iArticleId = null;
 

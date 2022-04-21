@@ -36,6 +36,9 @@ class TShopInterface_ImportOrderStatus extends TCMSInterfaceManagerBase
         return $bEverythingOk;
     }
 
+    /**
+     * @return void
+     */
     public function PerformImport()
     {
         $this->fp = fopen($this->sFileName, 'rb');
@@ -85,7 +88,7 @@ class TShopInterface_ImportOrderStatus extends TCMSInterfaceManagerBase
     /**
      * get a line from the file.
      *
-     * @return array
+     * @return array|false
      */
     protected function GetLine()
     {

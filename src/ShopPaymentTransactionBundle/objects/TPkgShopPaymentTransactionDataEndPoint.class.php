@@ -238,7 +238,7 @@ class TPkgShopPaymentTransactionDataEndPoint extends AbstractPkgCmsCoreParameter
      *
      * @param $sType - must be one of TPkgShopPaymentTransactionItemData::TYPE_*
      *
-     * @return int
+     * @return float
      */
     public function getTotalValueForItemType($sType)
     {

@@ -49,7 +49,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
                 $itemList[$orderItem->id] = $orderItem->fieldOrderAmount;
             }
             $orderItems->GoToStart();
-            /** @var $paymentHandler PaymentHandlerWithTransactionSupportInterface|\TdbShopPaymentHandler */
+            /** @var PaymentHandlerWithTransactionSupportInterface|\TdbShopPaymentHandler $paymentHandler */
             $paymentHandler = $oOrder->GetPaymentHandler();
             $paymentTransactionHandler = $paymentHandler->paymentTransactionHandlerFactory($oOrder->fieldCmsPortalId);
 
@@ -101,7 +101,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
                 $itemList[$orderItem->id] = $orderItem->fieldOrderAmount;
             }
             $orderItems->GoToStart();
-            /** @var $paymentHandler PaymentHandlerWithTransactionSupportInterface|\TdbShopPaymentHandler */
+            /** @var PaymentHandlerWithTransactionSupportInterface&\TdbShopPaymentHandler $paymentHandler */
             $paymentHandler = $oOrder->GetPaymentHandler();
             $paymentTransactionHandler = $paymentHandler->paymentTransactionHandlerFactory($oOrder->fieldCmsPortalId);
 
@@ -162,7 +162,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         }
 
         try {
-            /** @var $paymentHandler PaymentHandlerWithTransactionSupportInterface|\TdbShopPaymentHandler */
+            /** @var PaymentHandlerWithTransactionSupportInterface&\TdbShopPaymentHandler $paymentHandler */
             $paymentHandler = $oOrder->GetPaymentHandler();
             $paymentTransactionHandler = $paymentHandler->paymentTransactionHandlerFactory($oOrder->fieldCmsPortalId);
 

@@ -259,7 +259,7 @@ class MTShopStatistic extends TCMSModelBase
      * the controller (the controller will replace the tag "<!--#CMSHEADERCODE#-->" with
      * the results).
      *
-     * @return array()
+     * @return string[]
      */
     public function GetHtmlHeadIncludes()
     {

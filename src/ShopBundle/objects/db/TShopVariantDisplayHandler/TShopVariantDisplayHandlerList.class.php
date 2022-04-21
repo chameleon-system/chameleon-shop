@@ -16,7 +16,7 @@ class TShopVariantDisplayHandlerList extends TAdbShopVariantDisplayHandlerList
      *
      * @param array $aData
      *
-     * @return TCMSRecord
+     * @return TdbShopVariantDisplayHandler
      */
     protected function &_NewElement(&$aData)
     {

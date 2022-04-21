@@ -16,7 +16,10 @@ use Psr\Log\LoggerInterface;
 
 /**
  * takes sofortueberweisung return urls and maps them to chameleon urls.
-/**/
+ *
+ * @psalm-suppress UndefinedPropertyAssignment
+ * @FIXME Writing data into `$OURLData` when there is no magic `__set` method for them defined.
+ */
 class TCMSSmartURLHandler_ShopPaymentSofortueberweisungAPI extends TCMSSmartURLHandler_ShopBasketSteps
 {
     public function GetPageDef()
@@ -60,11 +63,12 @@ class TCMSSmartURLHandler_ShopPaymentSofortueberweisungAPI extends TCMSSmartURLH
                 $oGlobal = TGlobal::instance();
                 $oGlobal->SetUserData('cmsPaymentMessage', $sPaymentMethod);
                 TTools::WriteLogEntry('sofortueberweisung Payment notify Response', 4, __FILE__, __LINE__);
-                /** @var $oPaymentHandler TShopPaymentHandlerSofortueberweisung */
+                /** @var TShopPaymentHandlerSofortueberweisung $oPaymentHandler */
                 $oPaymentHandler = TdbShopPaymentHandler::GetNewInstance();
                 $oPaymentHandler->LoadFromField('cmsident', $aPaymentPayLoad['idnt']);
                 $activePortal = $this->getPortalDomainService()->getActivePortal();
                 try {
+                    /** @var TShopPaymentHandlerSofortueberweisung $oPaymentHandler */
                     $oPaymentHandler = $this->getShopPaymentHandlerFactory()->createPaymentHandler($oPaymentHandler->id, $activePortal->id);
                     $oPaymentHandler->HandleNotifyMessage($oGlobal->GetUserData());
                     TTools::WriteLogEntry('sofortueberweisung Payment notify Response completed', 4, __FILE__, __LINE__);

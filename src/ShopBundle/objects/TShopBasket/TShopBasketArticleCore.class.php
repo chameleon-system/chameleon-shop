@@ -96,7 +96,7 @@ class TShopBasketArticleCore extends TdbShopArticle
     /**
      * return timestamp when the item was last updated.
      *
-     * @return int
+     * @return int|null
      */
     public function GetLastUpdatedTimestamp()
     {
@@ -130,7 +130,7 @@ class TShopBasketArticleCore extends TdbShopArticle
      * may be applied - it assumes you checked that using the function in TShopDiscount.
      *
      * @param TdbShopDiscount $oShopDiscount
-     * @param dobule          $dMaxValueUsable - for absolute value discounts, this parameter defines how much may be at most applied to the article
+     * @param double          $dMaxValueUsable - for absolute value discounts, this parameter defines how much may be at most applied to the article
      *
      * @return float - returns the remaining discount value to distribute (0 if the discount is a percent discount)
      */
@@ -276,6 +276,9 @@ class TShopBasketArticleCore extends TdbShopArticle
      * Also updates the dPriceTotalAfterDiscount value.
      *
      * @param TdbShopDiscount $oActingShopDiscount
+     *
+     * @psalm-suppress UndefinedThisPropertyAssignment
+     * @FIXME `oActingShopDiscount` is set dynamically here and does not seem to be used anywhere. Also, `SetActingDiscount` does not seem to be called anywhere.
      */
     public function SetActingDiscount(TdbShopDiscount $oActingShopDiscount)
     {

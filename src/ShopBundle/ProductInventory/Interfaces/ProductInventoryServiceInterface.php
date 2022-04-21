@@ -19,7 +19,7 @@ interface ProductInventoryServiceInterface
      *
      * @param string $shopArticleId
      *
-     * @return int|bool may return false if the query does not find a stock record
+     * @return int|false may return false if the query does not find a stock record
      */
     public function getAvailableStock($shopArticleId);
 

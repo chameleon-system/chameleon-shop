@@ -1005,7 +1005,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     /**
      * redirects the user to the requested node after performing some action.
      *
-     * @param string|int $iRequestRedirectNodeId
+     * @param string|int|null $iRequestRedirectNodeId
      */
     protected function RedirectAfterEvent($iRequestRedirectNodeId)
     {

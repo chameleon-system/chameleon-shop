@@ -208,7 +208,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
     /**
      * Get the active oder step neede for redirect url.
      *
-     * @return TdbShopOrderStep $oActiveOrderStep
+     * @return TdbShopOrderStep|null
      */
     protected function GetActiveOrderStep()
     {
@@ -398,7 +398,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
     /**
      * Get error message sent by IPayment to cms.
      *
-     * @return string $SReturnMessage
+     * @return string|false
      */
     protected function GetErrorCodesFromResponse()
     {

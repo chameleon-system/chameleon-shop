@@ -52,7 +52,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
      *
      * @param string $sMessageConsumer - the name of the message handler that can display messages if an error occurs (assuming you return false)
      *
-     * @return string
+     * @return bool
      */
     protected function CallPayPalExpressCheckout($sMessageConsumer)
     {

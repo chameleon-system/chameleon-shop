@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @property TdbPkgShopListfilterItem $oTable
+ */
 class TCMSTableEditor_PkgShopListfilterItem extends TCMSTableEditor
 {
     /**

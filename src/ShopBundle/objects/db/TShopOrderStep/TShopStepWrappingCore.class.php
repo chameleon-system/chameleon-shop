@@ -111,9 +111,17 @@ class TShopStepWrappingCore extends TdbShopOrderStep
 
             $oBasket = TShopBasket::GetInstance();
             if ($sWrappId) {
+                /**
+                 * @psalm-suppress UndefinedMethod
+                 * @FIXME Method `AddWrapping` does not exist?
+                 */
                 $oBasket->AddWrapping($sWrappId, $aArticleIds);
             }
             if ($sCardId) {
+                /**
+                 * @psalm-suppress UndefinedMethod
+                 * @FIXME Method `AddWrappingCard` does not exist?
+                 */
                 $oBasket->AddWrappingCard($sCardId, $aArticleIds);
             }
         }

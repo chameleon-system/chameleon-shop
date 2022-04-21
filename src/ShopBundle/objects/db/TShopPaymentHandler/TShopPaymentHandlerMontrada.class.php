@@ -107,7 +107,7 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
      *
      * @param string $sMessageConsumer - the name of the message handler that can display messages if an error occurs (assuming you return false)
      *
-     * @return string
+     * @return bool
      */
     protected function CallMontradaFormService($sMessageConsumer)
     {
@@ -189,6 +189,8 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
      * Send Call per POST to montrada. Response is a moved permanently header which we pass through.
      *
      * @param array $aData - the post data to be send to montrada
+     *
+     * @return bool
      */
     public function GetAnswerFromServer($aData, $sMessageConsumer)
     {

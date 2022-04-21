@@ -13,7 +13,11 @@ namespace ChameleonSystem\ShopListFilterBundle\Slider;
 
 class Slider
 {
-    /** @var bool */
+    /**
+     * @var string
+     * @psalm-var 'true'|'false'
+     * String representation of the disabled state.
+     */
     private $disabled = 'false';
     /** @var int */
     private $valueLow = null;
@@ -40,7 +44,8 @@ class Slider
     }
 
     /**
-     * @return bool
+     * @return string
+     * @psalm-return 'true'|'false'
      */
     public function getDisabled()
     {

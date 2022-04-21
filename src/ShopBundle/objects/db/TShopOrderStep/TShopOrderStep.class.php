@@ -100,7 +100,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @param string $sStepName
      *
-     * @return TdbShopOrderStep
+     * @return TdbShopOrderStep|null
      */
     public static function &GetStep($sStepName)
     {
@@ -110,6 +110,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
             // fetch the first step instead..
             $oSteps = TdbShopOrderStepList::GetList();
             if ($oSteps->Length() > 0) {
+                /** @var TdbShopOrderStep $oStep */
                 $oStep = $oSteps->Current();
             }
         } else {
@@ -126,6 +127,11 @@ class TShopOrderStep extends TShopOrderStepAutoParent
         return $oStep;
     }
 
+    /**
+     * @param string|array $sData - either the id of the object to load, or the row with which the instance should be initialized
+     * @param string $sLanguage - init with the language passed
+     * @return TdbShopOrderStep|null
+     */
     public static function GetNewInstance($sData = null, $sLanguage = null)
     {
         if (null === $sData) {
@@ -185,7 +191,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Returns the calling step name (set by JumpToStep).
      *
-     * @return string
+     * @return string|null
      */
     public static function GetCallingStepName()
     {
@@ -261,7 +267,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Returns the link to the previous step (or false if there is none).
      *
-     * @return string
+     * @return string|false
      */
     protected function GetReturnToLastStepURL()
     {
@@ -331,7 +337,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Returns name of next step in line.
      *
-     * @return TdbShopOrderStep
+     * @return TdbShopOrderStep|null
      */
     public function &GetNextStep()
     {
@@ -346,7 +352,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Returns the previous step (null if this is the first step).
      *
-     * @return TdbShopOrderStep
+     * @return TdbShopOrderStep|null
      */
     protected function &GetPreviousStep()
     {
@@ -371,7 +377,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Defines any head includes the step needs.
      *
-     * @return array
+     * @return string[]
      */
     public function GetHtmlHeadIncludes()
     {

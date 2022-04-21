@@ -61,6 +61,7 @@ class TPkgShopPaymentTransaction_TPkgShopOrderStatusManager extends TPkgShopPaym
         $aOrderItemRestriction = null;
         $oStatusItemList = $oStatus->GetFieldShopOrderStatusItemList();
         if ($oStatusItemList->Length() > 0) {
+            /** @var array<string, int> $aOrderItemRestriction */
             $aOrderItemRestriction = array();
             while ($oStatusItem = $oStatusItemList->Next()) {
                 $aOrderItemRestriction[$oStatusItem->fieldShopOrderItemId] = $oStatusItem->fieldAmount;

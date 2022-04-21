@@ -39,7 +39,7 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      *
      * @param bool $bOnlyCheckPost
      *
-     * @return array
+     * @return array<string, string>|false
      *
      * @deprecated since 6.2.13 - usages removed (replaced by ProductVariantServiceInterface::getProductBasedOnSelection())
      */
@@ -124,7 +124,7 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      * @param bool           $bOnlyIfAPartialSelectionExists - set to true if you also want to fetch the first variant if no
      *                                                       user selection (such as color) exists
      *
-     * @return TdbShopArticle
+     * @return TdbShopArticle|null
      *
      * @deprecated since 6.2.13 - replaced by ProductVariantServiceInterface::getProductBasedOnSelection()
      */

@@ -10,8 +10,8 @@
  */
 
 /**
- * process auto groups.
-/**/
+ * @property TdbDataExtranetGroup $oTable
+ */
 class TCMSShopTableEditor_DataExtranetGroup extends TCMSTableEditor
 {
     /**

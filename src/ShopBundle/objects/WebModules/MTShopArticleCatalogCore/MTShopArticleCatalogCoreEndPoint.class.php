@@ -50,21 +50,21 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     /**
      * current item.
      *
-     * @var int
+     * @var string
      */
     protected $iItemId = null;
     /**
      * current category - if not set and an item is set, then the items primary category will be used.
      * if neither item nor category is set, then the first root category will be used.
      *
-     * @var int
+     * @var string
      */
     protected $iCategoryId = null;
 
     /**
      * holds the current order by id.
      *
-     * @var int
+     * @var string
      */
     protected $iActiveShopModuleArticlelistOrderbyId = null;
 
@@ -256,7 +256,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     /**
      * Get the current active item.
      *
-     * @return TdbShopArticle
+     * @return TdbShopArticle|null
      */
     public static function GetActiveItem()
     {
@@ -266,7 +266,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     /**
      * Get the current active item.
      *
-     * @return TdbShopCategory
+     * @return TdbShopCategory|null
      */
     public static function GetActiveCategory()
     {
@@ -381,6 +381,10 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
                 $iActiveCategoryId = $oActiveCategory->id;
             }
             $sURL = $oActiveItm->GetDetailLink(true, $iActiveCategoryId);
+            /**
+             * @psalm-suppress UndefinedInterfaceMethod
+             * @FIXME `HeaderURLRedirect` only exists on a single interface implementation.
+             */
             $this->controller->HeaderURLRedirect($sURL);
         }
     }
@@ -439,7 +443,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     /**
      * load the article list and store it in $this->oList.
      *
-     * @return int - number of items found
+     * @return void
      */
     protected function LoadArticleList()
     {
@@ -509,16 +513,18 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     /**
      * return the active order by id based on session or url parameter.
      *
-     * @return int
+     * @return string|null
      */
     public function GetActiveShopModuleArticlelistOrderbyId($sInstanceId = '')
     {
         $iActiveShopModuleArticlelistOrderbyId = null;
         $oGlobal = TGlobal::instance();
         if ($oGlobal->UserDataExists(self::URL_ORDER_BY)) {
+            /** @var string $iActiveShopModuleArticlelistOrderbyId */
             $iActiveShopModuleArticlelistOrderbyId = $oGlobal->GetUserData(self::URL_ORDER_BY);
         } else {
             if (array_key_exists(self::SESSION_ACTIVE_ORDER_BY.$sInstanceId, $_SESSION)) {
+                /** @var string $iActiveShopModuleArticlelistOrderbyId */
                 $iActiveShopModuleArticlelistOrderbyId = $_SESSION[self::SESSION_ACTIVE_ORDER_BY.$sInstanceId];
             }
         }

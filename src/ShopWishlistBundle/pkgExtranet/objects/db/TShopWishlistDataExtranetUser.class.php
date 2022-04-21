@@ -51,19 +51,22 @@ class TShopWishlistDataExtranetUser extends TShopWishlistDataExtranetUserAutoPar
      *
      * @param bool $bCreateIfNotExists
      *
-     * @return TdbPkgShopWishlist
+     * @return TdbPkgShopWishlist|null
      */
     public function &GetWishlist($bCreateIfNotExists = false)
     {
+        /** @var TdbPkgShopWishlist|null $oWishlist */
         $oWishlist = &$this->GetFromInternalCache('oUserWishlist');
+
         if (is_null($oWishlist)) {
             $oWishlists = $this->GetFieldPkgShopWishlistList();
             if ($oWishlists->Length() > 0) {
+                /** @var TdbPkgShopWishlist $oWishlist */
                 $oWishlist = $oWishlists->Current();
             }
+
             if (is_null($oWishlist) && $bCreateIfNotExists) {
                 $oWishlist = TdbPkgShopWishlist::GetNewInstance();
-                /** @var $oWishlist TdbPkgShopWishlist */
                 if (!$oWishlist->LoadFromField('data_extranet_user_id', $this->id)) {
                     $aBaseData = array('data_extranet_user_id' => $this->id, 'is_public' => '0');
                     $oWishlist->LoadFromRow($aBaseData);

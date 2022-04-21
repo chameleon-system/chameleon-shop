@@ -103,7 +103,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     /**
      * returns the users customer number, if set.
      *
-     * @return string
+     * @return int
      */
     public function GetCustomerNumber()
     {
@@ -422,7 +422,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
      * @param int   $iArticleId
      * @param float $iAmount
      *
-     * @return float - new amount on list
+     * @return float|false - new amount on list
      */
     public function AddArticleIdToNoticeList($iArticleId, $iAmount = 1)
     {
@@ -474,6 +474,8 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
 
     /**
      * save user notice list to cookie.
+     *
+     * @return void
      */
     protected function CommitNoticeListToCookie()
     {

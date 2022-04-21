@@ -16,7 +16,7 @@ use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
  * Note: The class could have extended from MTWizardCore, however the shop ordering process
  * was deemed so imported, that a new class was conceived to prevent changes in MTWizardCore from
  * leaking into the process.
-/**/
+ */
 class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
 {
     /**
@@ -186,7 +186,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
     /**
      * define any head includes the step needs.
      *
-     * @return array
+     * @return string[]
      */
     public function GetHtmlHeadIncludes()
     {

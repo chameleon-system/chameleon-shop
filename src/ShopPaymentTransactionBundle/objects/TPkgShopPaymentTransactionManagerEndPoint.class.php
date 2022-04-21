@@ -118,7 +118,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
      * @param $transactionId
      * @param $iConfirmedDate
      *
-     * @return TdbPkgShopPaymentTransaction
+     * @return TdbPkgShopPaymentTransaction|null
      */
     public function confirmTransactionById($transactionId, $iConfirmedDate)
     {
@@ -377,7 +377,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
     /**
      * returns true if there are transactions for the order (pending or not).
      *
-     * @param null $sTransactionType - must be one of self::TRANSACTION_TYPE_*
+     * @param null|string $sTransactionType - must be one of self::TRANSACTION_TYPE_*
+     * @psalm-param null|self::TRANSACTION_TYPE_* $sTransactionType
      *
      * @return bool
      */
@@ -566,7 +567,9 @@ class TPkgShopPaymentTransactionManagerEndPoint
      * return the transaction details for a completed order.
      *
      * @param string $sTransactionType          - must be one of TPkgShopPaymentTransactionData::TYPE_*
-     * @param null   $aProductAmountRestriction
+     * @param null|array<string, int> $aProductAmountRestriction
+     *
+     * @psalm-param TPkgShopPaymentTransactionData::TYPE_* $sTransactionType
      *
      * @return TPkgShopPaymentTransactionData
      */

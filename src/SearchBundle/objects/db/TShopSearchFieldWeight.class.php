@@ -49,12 +49,22 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
 
     public static function &GetFilePointer($sTableName, $sMode = null)
     {
+        /**
+         * Uses the table name as a string and the opened resource as a value.
+         * @var array<string, resource|false> $aPointer
+         */
         static $aPointer = array();
+
         $pPointer = null;
         switch ($sMode) {
             case 'close':
                 reset($aPointer);
                 foreach (array_keys($aPointer) as $pointer) {
+
+                    /**
+                     * @psalm-suppress InvalidArgument
+                     * @FIXME This passes the table name to `fclose` - we probably want to iterate over `array_values` here.
+                     */
                     fclose($pointer);
                 }
                 break;

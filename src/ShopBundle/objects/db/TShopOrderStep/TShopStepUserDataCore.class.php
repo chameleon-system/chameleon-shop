@@ -203,7 +203,7 @@ class TShopStepUserDataCore extends TdbShopOrderStep
     protected function CallExtranetModuleMethod($sMethodName, $aParameter = array())
     {
         $oExtranetConfig = &TdbDataExtranet::GetInstance();
-        /** @var $oExtranet MTExtranet */
+        /** @var MTExtranet $oExtranet */
         $oExtranet = TTools::GetModuleObject('MTExtranet', 'standard', array(), $oExtranetConfig->fieldExtranetSpotName);
         $oExtranet->SetPreventRedirects(true);
 

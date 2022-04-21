@@ -88,7 +88,7 @@ class MTShopManufacturerArticleCatalogCore extends MTShopArticleCatalogCore
     /**
      * define any head includes the step needs.
      *
-     * @return array
+     * @return string[]
      */
     public function GetHtmlHeadIncludes()
     {

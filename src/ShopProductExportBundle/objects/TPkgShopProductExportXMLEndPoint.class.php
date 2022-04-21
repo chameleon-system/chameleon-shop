@@ -35,7 +35,7 @@ class TPkgShopProductExportXMLEndPoint extends TPkgShopProductExportBase
      *
      * @param TdbShopArticle $oArticle
      *
-     * @return string
+     * @return void
      */
     protected function HandleArticle(&$oArticle)
     {

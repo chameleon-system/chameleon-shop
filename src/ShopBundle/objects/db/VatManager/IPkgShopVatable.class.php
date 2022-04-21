@@ -15,7 +15,7 @@
 interface IPkgShopVatable
 {
     /**
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function GetVat();
 }

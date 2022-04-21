@@ -81,7 +81,7 @@ class TShopStepBasketCore extends TdbShopOrderStep
     /**
      * overwrite this to jump directly to the payment page for signed in users.
      *
-     * @return TdbShopOrderStep
+     * @return TdbShopOrderStep|null
      */
     public function &GetNextStep()
     {

@@ -30,7 +30,7 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
      */
     private $statusTimestamp = null;
     /**
-     * @var string
+     * @var string|null
      */
     private $info = null;
 
@@ -43,7 +43,7 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
      * @param TdbShopOrder $order
      * @param string       $shopOrderStatusCode - system_name of shop_order_status_code
      * @param int          $iStatusTimestamp
-     * @param null         $info
+     * @param string|null  $info
      */
     public function __construct(TdbShopOrder $order, $shopOrderStatusCode, $iStatusTimestamp, $info = null)
     {
@@ -55,7 +55,7 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
     }
 
     /**
-     * @param string $info
+     * @param string|null $info
      *
      * @return $this
      */
@@ -115,7 +115,7 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getInfo()
     {

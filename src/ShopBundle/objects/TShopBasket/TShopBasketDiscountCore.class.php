@@ -12,7 +12,10 @@
 /**
  * The object is used to collect all articles in the basket to which the Discount applies. the object is managed by
  * TShopBasket.
-/**/
+ *
+ * @psalm-suppress InvalidReturnType
+ * @FIXME This class is not implemented
+ */
 class TShopBasketDiscountCore extends TdbShopDiscount
 {
     /**

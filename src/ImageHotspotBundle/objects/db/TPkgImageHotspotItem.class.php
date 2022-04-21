@@ -76,16 +76,19 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
      * if the current item is the last in line, the method will return the first item. returns false if
      * no next item exists.
      *
-     * @return TdbPkgImageHotspotItem
+     * @return TdbPkgImageHotspotItem|false|null
      */
     public function GetNextItem()
     {
+        /** @var TdbPkgImageHotspotItem|null $oNextItem */
         $oNextItem = &$this->GetFromInternalCache('oNextItem');
         if (is_null($oNextItem)) {
             $oItemList = TdbPkgImageHotspotItemList::GetListForPkgImageHotspotId($this->fieldPkgImageHotspotId);
             $oItemList->bAllowItemCache = true;
             if ($oItemList->Length() > 1) {
                 $oNextItem = null;
+
+                /** @var TdbPkgImageHotspotItem $oFirst */
                 $oFirst = $oItemList->Current();
                 while (is_null($oNextItem) && ($oTmpItem = $oItemList->Next())) {
                     if ($oTmpItem->IsSameAs($this)) {
@@ -110,10 +113,11 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
      * if the current item is the first in line, the method will return the last item. returns false if
      * no previous item exists.
      *
-     * @return TdbPkgImageHotspotItem
+     * @return TdbPkgImageHotspotItem|null|false
      */
     public function GetPreviousItem()
     {
+        /** @var TdbPkgImageHotspotItem|null $oPreviousItem */
         $oPreviousItem = &$this->GetFromInternalCache('oPreviousItem');
         if (is_null($oPreviousItem)) {
             $oItemList = TdbPkgImageHotspotItemList::GetListForPkgImageHotspotId($this->fieldPkgImageHotspotId);

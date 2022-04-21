@@ -84,6 +84,7 @@ class ResultData implements ResultDataInterface
 
     /**
      * @return int
+     * @psalm-suppress InvalidReturnType, InvalidReturnStatement
      */
     public function getNumberOfPages()
     {

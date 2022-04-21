@@ -30,6 +30,8 @@ class TPkgShopListfilterItemCategoryTree extends TPkgShopListfilterItemMultisele
      * returns std class as tree from the current active category to all available options.
      *
      * @return stdClass
+     * @psalm-suppress UndefinedVariable, InvalidReturnType
+     * @FIXME ???
      */
     public function GetTreeFromValueList()
     {

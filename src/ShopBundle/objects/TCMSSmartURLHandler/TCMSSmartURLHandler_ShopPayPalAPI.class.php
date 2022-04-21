@@ -14,7 +14,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * takes paypal return urls and mapps them to chameleon urls.
-/**/
+ *
+ * @psalm-suppress UndefinedPropertyAssignment
+ * @FIXME Writing data into `$OURLData` when there is no magic `__set` method for them defined.
+ */
 class TCMSSmartURLHandler_ShopPayPalAPI extends TCMSSmartURLHandler_ShopBasketSteps
 {
     public function GetPageDef()
@@ -36,6 +39,7 @@ class TCMSSmartURLHandler_ShopPayPalAPI extends TCMSSmartURLHandler_ShopBasketSt
             $sPayPalMessage = substr($sPayPalMethod, 0, strpos($sPayPalMethod, '/'));
             $sPayPalPayload = substr($sPayPalMethod, strlen($sPayPalMessage) + 1);
             $aPayPalPayLoadTmp = explode('-', $sPayPalPayload);
+
             $aPayPalPayLoad = array();
             foreach ($aPayPalPayLoadTmp as $sPayLoadItem) {
                 $sSplitOffset = strpos($sPayLoadItem, '_');
@@ -43,6 +47,8 @@ class TCMSSmartURLHandler_ShopPayPalAPI extends TCMSSmartURLHandler_ShopBasketSt
                     $aPayPalPayLoad[substr($sPayLoadItem, 0, $sSplitOffset)] = substr($sPayLoadItem, $sSplitOffset + 1);
                 }
             }
+
+            /** @var array<string, string> $aPayPalPayLoad */
 
             $aRedirectParameter = $oURLData->aParameters;
             switch ($sPayPalMessage) {

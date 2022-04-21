@@ -72,6 +72,7 @@ class TPkgShopOrderPaymentConfig implements IPkgShopOrderPaymentConfig
      * @param mixed  $default
      *
      * @return string|bool
+     * @psalm-return ($default is bool ? bool : string)
      */
     public function getValue($key, $default = null)
     {
