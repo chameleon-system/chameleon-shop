@@ -114,7 +114,7 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
         $checkoutBaseUrl,
         $defaultCheckoutPageId,
         $defaultCheckoutNodeId,
-        $stepNameOptional = false
+        $isFirstStep = false
     ) {
         $stepCheckoutNodeId = ('' !== $orderStep->fieldTemplateNodeCmsTreeId) ? $orderStep->fieldTemplateNodeCmsTreeId : $defaultCheckoutNodeId;
 
@@ -127,7 +127,7 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
 
         $stepCheckoutPageId = $linkedPage->id;
         $basketStepPattern = "(?i:/{$orderStep->fieldUrlName})/?";
-        if ($stepNameOptional) {
+        if (true === $isFirstStep) {
             $basketStepPattern = "|/";
         }
 
