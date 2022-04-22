@@ -18,8 +18,8 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('chameleon_system_amazon_payment');
+        $treeBuilder = new TreeBuilder('chameleon_system_amazon_payment');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
@@ -33,8 +33,8 @@ class Configuration implements ConfigurationInterface
 
     protected function getCommon()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('common')->addDefaultsIfNotSet();
+        $treeBuilder = new TreeBuilder('common');
+        $rootNode = $treeBuilder->getRootNode()->addDefaultsIfNotSet();
         $rootNode->children()
                     ->scalarNode('applicationName')
                         ->defaultValue('Chameleon Amazon API')
@@ -49,8 +49,8 @@ class Configuration implements ConfigurationInterface
 
     protected function getProduction()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('production')->addDefaultsIfNotSet();
+        $treeBuilder = new TreeBuilder('production');
+        $rootNode = $treeBuilder->getRootNode()->addDefaultsIfNotSet();
         $rootNode->children()
                     ->scalarNode('payWithAmazonButtonURL')
                       ->defaultValue('https://payments.amazon.de/gp/widgets/button')
@@ -62,8 +62,8 @@ class Configuration implements ConfigurationInterface
 
     protected function getSandBox()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('sandbox')->addDefaultsIfNotSet();
+        $treeBuilder = new TreeBuilder('sandbox');
+        $rootNode = $treeBuilder->getRootNode()->addDefaultsIfNotSet();
         $rootNode->children()
                     ->scalarNode('payWithAmazonButtonURL')
                         ->defaultValue('https://payments-sandbox.amazon.de/gp/widgets/button')

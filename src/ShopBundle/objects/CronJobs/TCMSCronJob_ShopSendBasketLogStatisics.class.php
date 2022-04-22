@@ -12,7 +12,7 @@
 /**
  * sends stats about basket.
 /**/
-class TCMSCronJob_ShopSendBasketLogStatisics extends TCMSCronJob
+class TCMSCronJob_ShopSendBasketLogStatisics extends TdbCmsCronjobs
 {
     const MAIL_SYSTEM_NAME = 'basketstatistics';
 

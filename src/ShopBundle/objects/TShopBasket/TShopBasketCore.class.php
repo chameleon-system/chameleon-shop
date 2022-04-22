@@ -12,6 +12,8 @@
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
+use ChameleonSystem\ShopBundle\objects\TShopBasket\BasketItemEvent;
+use ChameleonSystem\ShopBundle\ShopEvents;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Psr\Log\LoggerInterface;
@@ -497,11 +499,11 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         $request->getSession()->remove(self::SESSION_KEY_NAME);
 
-        $event = new \ChameleonSystem\ShopBundle\objects\TShopBasket\BasketItemEvent(
+        $event = new BasketItemEvent(
             TdbDataExtranetUser::GetInstance(),
             $this
         );
-        $this->getEventDispatcher()->dispatch(\ChameleonSystem\ShopBundle\ShopEvents::BASKET_CLEAR, $event);
+        $this->getEventDispatcher()->dispatch($event, ShopEvents::BASKET_CLEAR);
     }
 
     /**
@@ -2070,12 +2072,12 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     public function OnBasketItemUpdateEvent($oBasketItemChanged)
     {
-        $event = new \ChameleonSystem\ShopBundle\objects\TShopBasket\BasketItemEvent(
+        $event = new BasketItemEvent(
             TdbDataExtranetUser::GetInstance(),
             $this,
             $oBasketItemChanged
         );
-        $this->getEventDispatcher()->dispatch(\ChameleonSystem\ShopBundle\ShopEvents::BASKET_UPDATE_ITEM, $event);
+        $this->getEventDispatcher()->dispatch($event, ShopEvents::BASKET_UPDATE_ITEM);
     }
 
     /**
@@ -2087,12 +2089,12 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     public function OnBasketItemDeleteEvent($oBasketItemRemoved)
     {
-        $event = new \ChameleonSystem\ShopBundle\objects\TShopBasket\BasketItemEvent(
+        $event = new BasketItemEvent(
             TdbDataExtranetUser::GetInstance(),
             $this,
             $oBasketItemRemoved
         );
-        $this->getEventDispatcher()->dispatch(\ChameleonSystem\ShopBundle\ShopEvents::BASKET_DELETE_ITEM, $event);
+        $this->getEventDispatcher()->dispatch($event, ShopEvents::BASKET_DELETE_ITEM);
     }
 
     /**

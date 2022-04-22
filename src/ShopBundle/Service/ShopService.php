@@ -175,9 +175,13 @@ class ShopService implements ShopServiceInterface
             return null;
         }
 
+        if (false === $request->hasSession()) {
+            return null;
+        }
+
         $session = $request->getSession();
 
-        if (null === $session || false === $session->isStarted()) {
+        if (false === $session->isStarted()) {
             return null;
         }
 

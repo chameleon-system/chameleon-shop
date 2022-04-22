@@ -20,6 +20,7 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultDataInterfac
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 if (false === class_exists('TShopModuleArticleListFilterAutoParent')) {
@@ -28,6 +29,8 @@ if (false === class_exists('TShopModuleArticleListFilterAutoParent')) {
 
 class SearchResultLoggerListenerTest extends TestCase
 {
+    use ProphecyTrait;
+
     private $userHasSearchedBefore;
     private $numberOfResults;
     private $searchParameter;

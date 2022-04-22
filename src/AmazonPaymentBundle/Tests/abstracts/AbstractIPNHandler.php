@@ -34,7 +34,7 @@ abstract class AbstractIPNHandler extends AbstractAmazonPayment
      */
     protected $idReferenceManager = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -51,7 +51,7 @@ abstract class AbstractIPNHandler extends AbstractAmazonPayment
         $this->idReferenceManager = $this->getMockBuilder('\ChameleonSystem\AmazonPaymentBundle\ReferenceIdMapping\AmazonReferenceIdManager')->setConstructorArgs(array('AMAZON-ORDER-REFERENCE', 'SHOP-ORDER-ID'))->getMock();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->ipnRequest = null;

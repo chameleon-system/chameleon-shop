@@ -11,9 +11,9 @@
 
 namespace ChameleonSystem\ShopBundle\Basket;
 
+use ChameleonSystem\CoreBundle\Event\FilterContentEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Twig\Environment;
 use Twig\Error\Error;
 
@@ -43,30 +43,59 @@ final class BasketVariableReplacer
      * @var LoggerInterface
      */
     private $logger;
+    /**
+     * @var array
+     */
+    private $paramsRuntimeCache;
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
 
     public function __construct(
         Environment $twigEnvironment,
-        LoggerInterface $logger)
+        RequestStack $requestStack,
+        LoggerInterface $logger
+    )
     {
         $this->twigEnvironment = $twigEnvironment;
         $this->logger = $logger;
+        $this->requestStack = $requestStack;
     }
 
     /**
-     * handleRequest will be invoked on kernel.request and add the hidden fields to the replacer.
+     * filterResponse will be invoked on chameleon_system_core.filter_content and add the hidden fields to the basket form.
      * On error it will log to the request channel and move on. It will not halt execution.
      *
-     * @param GetResponseEvent $event
+     * @param FilterContentEvent $event
      */
-    public function handleRequest(GetResponseEvent $event): void
+    public function filterResponse(FilterContentEvent $event): void
     {
-        $request = $event->getRequest();
-        $queryParameters = $request->query->all();
-        $paramsToRender = $this->filterKeys($queryParameters, [\MTShopBasketCoreEndpoint::URL_REQUEST_PARAMETER]);
-        $paramsToRender = $this->flattenQueryParameters($paramsToRender);
+        $content = $event->getContent();
+        if (false === strpos($content, self::BASKET_HIDDEN_FIELDS_PLACEHOLDER)) {
+            return;
+        }
+
+        $replacer = new \TPkgCmsStringUtilities_VariableInjection();
+        $request = $this->requestStack->getCurrentRequest();
+
+        if (null === $request) {
+            $this->logger->info(
+                sprintf('Could not render hidden fields for basket forms. Request was null.')
+            );
+
+            return;
+        }
+
+        if (null === $this->paramsRuntimeCache) {
+
+            $queryParameters = $request->query->all();
+            $this->paramsRuntimeCache = $this->filterKeys($queryParameters, [\MTShopBasketCoreEndpoint::URL_REQUEST_PARAMETER]);
+            $this->paramsRuntimeCache = $this->flattenQueryParameters($this->paramsRuntimeCache);
+        }
 
         $hiddenFieldsHtml = [];
-        foreach ($paramsToRender as $name => $value ) {
+        foreach ($this->paramsRuntimeCache as $name => $value ) {
             try {
                 $hiddenFieldsHtml[] = $this->twigEnvironment->render(
                     self::HIDDEN_FIELDS_SNIPPET,
@@ -79,7 +108,10 @@ final class BasketVariableReplacer
                 );
             }
         }
-        \TTools::AddStaticPageVariables([self::BASKET_HIDDEN_FIELDS_PLACEHOLDER => implode('', $hiddenFieldsHtml)]);
+
+        $content = $replacer->replace($content, [self::BASKET_HIDDEN_FIELDS_PLACEHOLDER => implode('', $hiddenFieldsHtml)]);
+
+        $event->setContent($content);
     }
 
     /**

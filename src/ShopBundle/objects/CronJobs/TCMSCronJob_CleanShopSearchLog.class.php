@@ -12,7 +12,7 @@
 /**
  * clear shop search log entries older than x days. x = CHAMELEON_SHOP_SEARCH_LOG_MAX_AGE_IN_DAYS.
 /**/
-class TCMSCronJob_CleanShopSearchLog extends TCMSCronJob
+class TCMSCronJob_CleanShopSearchLog extends TdbCmsCronjobs
 {
     /**
      * @return void

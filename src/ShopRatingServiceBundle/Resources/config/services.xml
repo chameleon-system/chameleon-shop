@@ -12,14 +12,15 @@
             <tag name="chameleon_system.cronjob" />
         </service>
 
-        <service id="chameleon_system_shop_rating_service.data_access.trusted_shops" class="ChameleonSystem\ShopRatingServiceBundle\Bridge\Chameleon\DataAccess\ShopRatingServiceTrustedShopsDataAccess">
+        <service id="chameleon_system_shop_rating_service.data_access.trusted_shops" class="ChameleonSystem\ShopRatingServiceBundle\Bridge\Chameleon\DataAccess\ShopRatingServiceTrustedShopsDataAccess" public="true">
             <argument type="service" id="database_connection" />
         </service>
 
         <service id="chameleon_system_shop_rating_service.mapper.ekomi" class="TPkgRatingServiceEkomiMapper">
+            <tag name="chameleon_system.mapper"/>
         </service>
 
-        <service id="chameleon_system_shop_rating_service.util.cache" class="ChameleonSystem\ShopRatingService\Util\CacheUtil">
+        <service id="chameleon_system_shop_rating_service.util.cache" class="ChameleonSystem\ShopRatingService\Util\CacheUtil" public="true">
             <argument type="constant">PATH_CMS_CUSTOMER_DATA</argument>
         </service>
     </services>

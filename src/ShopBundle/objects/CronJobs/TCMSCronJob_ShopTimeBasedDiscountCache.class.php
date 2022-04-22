@@ -15,7 +15,7 @@
  * we need to know, if the discount has been processed for the current time window so we avoid clearing the cache on each call.
  *
 /**/
-class TCMSCronJob_ShopTimeBasedDiscountCache extends TCMSCronJob
+class TCMSCronJob_ShopTimeBasedDiscountCache extends TdbCmsCronjobs
 {
     /**
      * @return void

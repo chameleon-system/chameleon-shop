@@ -11,6 +11,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Class TPkgShopViewMyOrderDetailsTest.
@@ -19,6 +20,8 @@ use Prophecy\Prophecy\ObjectProphecy;
  */
 class TPkgShopViewMyOrderDetailsTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var IPkgShopViewMyOrderDetailsDbAdapter|ObjectProphecy
      */
@@ -28,7 +31,7 @@ class TPkgShopViewMyOrderDetailsTest extends TestCase
      */
     private $mockSessionAdapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -36,7 +39,7 @@ class TPkgShopViewMyOrderDetailsTest extends TestCase
         $this->mockSessionAdapter = $this->prophesize('IPkgShopViewMyOrderDetailsSessionAdapter');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->mockDbAdapter = null;
