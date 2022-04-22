@@ -410,6 +410,8 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
 
     /**
      * sets methods that are allowed to be called via URL (ajax call).
+     *
+     * @return void
      */
     protected function DefineInterface()
     {

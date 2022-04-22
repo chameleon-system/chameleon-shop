@@ -23,6 +23,9 @@ class MTPkgShopArticlePreorder_ShopCentralHandlerCore extends MTPkgShopArticlePr
         $this->methodCallAllowed[] = 'PreorderArticle';
     }
 
+    /**
+     * @return false|null
+     */
     public function PreorderArticle()
     {
         $oGlobal = TGlobal::instance();

@@ -139,6 +139,11 @@ class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
         return $shopProvider->getActiveShop();
     }
 
+    /**
+     * @param array $aData
+     *
+     * @return void
+     */
     protected function addFormattedValues(&$aData)
     {
         foreach (array_keys($aData) as $sField) {
@@ -163,6 +168,9 @@ class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getDataFromVoucher(TdbShopVoucher $oVoucher)
     {
         $oVoucherSeries = $oVoucher->GetFieldShopVoucherSeries();

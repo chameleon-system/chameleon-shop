@@ -31,6 +31,10 @@ class TPkgShopAffiliateList extends TPkgShopAffiliateListAutoParent
         }
     }
 
+    /**
+     * @param string $sQuery
+     * @param string $sLanguageId
+     */
     public function __construct($sQuery = null, $sLanguageId = null)
     {
         parent::__construct($sQuery, $sLanguageId);

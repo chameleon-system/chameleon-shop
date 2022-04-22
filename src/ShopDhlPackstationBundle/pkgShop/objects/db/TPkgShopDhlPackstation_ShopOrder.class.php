@@ -16,6 +16,8 @@ class TPkgShopDhlPackstation_ShopOrder extends TPkgShopDhlPackstation_ShopOrderA
      *
      * @param TShopBasket $oBasket
      * @param array       $aOrderData
+     *
+     * @return void
      */
     protected function LoadFromBasketPostProcessData($oBasket, &$aOrderData)
     {

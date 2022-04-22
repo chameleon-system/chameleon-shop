@@ -102,6 +102,7 @@ class TShopArticleReview extends TAdbShopArticleReview
      * @param string $sViewName     - the view to use
      * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
      * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param bool $bAllowCache
      *
      * @return string
      */
@@ -116,6 +117,12 @@ class TShopArticleReview extends TAdbShopArticleReview
         return $oView->RenderObjectPackageView($sViewName, self::VIEW_PATH, $sViewType);
     }
 
+    /**
+     * @param string $id
+     * @param array $aCallTimeVars
+     *
+     * @return array
+     */
     protected function GetCacheTrigger($id, $aCallTimeVars = array())
     {
         $aCacheTrigger = $this->GetCacheRelatedTables($id);
@@ -152,6 +159,8 @@ class TShopArticleReview extends TAdbShopArticleReview
      * load data from row, only allowing user-changeable fields.
      *
      * @param array $aRow
+     *
+     * @return void
      */
     public function LoadFromRowProtected($aRow)
     {
@@ -176,6 +185,8 @@ class TShopArticleReview extends TAdbShopArticleReview
 
     /**
      * send a review notification to the shop owner.
+     *
+     * @return void
      */
     public function SendNewReviewNotification()
     {
@@ -192,6 +203,8 @@ class TShopArticleReview extends TAdbShopArticleReview
      * while the original is still in the database.
      *
      * @param bool $bIsInsert - set to true if this is an insert
+     *
+     * @return void
      */
     protected function PreSaveHook($bIsInsert)
     {
@@ -205,6 +218,9 @@ class TShopArticleReview extends TAdbShopArticleReview
         }
     }
 
+    /**
+     * @return void
+     */
     protected function PostInsertHook()
     {
         parent::PostInsertHook();

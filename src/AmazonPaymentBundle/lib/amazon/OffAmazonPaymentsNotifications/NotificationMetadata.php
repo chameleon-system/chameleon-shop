@@ -39,7 +39,7 @@ interface OffAmazonPaymentsNotifications_NotificationMetadata
     /**
      * Returns true if a parent notification is defined
      * 
-     * @return true if parent notification is defined
+     * @return bool - true if parent notification is defined
      */
     public function hasParentNotificationMetadata();
 }

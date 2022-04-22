@@ -109,6 +109,14 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
         return $steps;
     }
 
+    /**
+     * @param false|null|string $checkoutBaseUrl
+     * @param string $defaultCheckoutPageId
+     * @param string $defaultCheckoutNodeId
+     * @param bool $stepNameOptional
+     *
+     * @return \Symfony\Component\Routing\Route
+     */
     private function getRouteForBasketStep(
         TdbShopOrderStep $orderStep,
         $checkoutBaseUrl,

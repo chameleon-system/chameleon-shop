@@ -136,6 +136,9 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
         return $aTables;
     }
 
+    /**
+     * @return TdbShopManufacturer|null
+     */
     private function getActiveManufacturer()
     {
         return \TShop::GetActiveManufacturer();

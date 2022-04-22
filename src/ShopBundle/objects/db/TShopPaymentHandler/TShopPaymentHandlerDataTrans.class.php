@@ -328,6 +328,10 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
         return $sReturnMessage;
     }
 
+    /**
+     * @param string $sErrorCode
+     * @return string
+     */
     protected function TransformDataTransMessages($sErrorCode)
     {
         $sErrorMessage = 'ERROR_PAYMENT_DATA_TRANS_DEFAULT_ERROR';
@@ -427,7 +431,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     /**
      * Get payment handler parameter depending on live or test mode.
      *
-     * @param $sParameterName
+     * @param string $sParameterName
      *
      * @return string
      */
@@ -538,7 +542,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      * Checks the response from settlement request.
      * No sign check on settlement response because DataTrans do not send sign in settlement response.
      *
-     * @param $sResponse
+     * @param string $sResponse
      *
      * @return bool
      */
@@ -624,7 +628,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     /**
      * Converts hex to string. Was needed for the sign check.
      *
-     * @param $hex
+     * @param string $hex
      *
      * @return string
      */
@@ -638,6 +642,12 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
         return $string;
     }
 
+    /**
+     * @param string $key
+     * @param string $data
+     *
+     * @return string
+     */
     protected function hmac($key, $data)
     {
         // RFC 2104 HMAC implementation for php.
@@ -656,6 +666,15 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
         return md5($k_opad.pack('H*', md5($k_ipad.$data)));
     }
 
+    /**
+     * @param string $key
+     * @param string $merchId
+     * @param float $amount
+     * @param string $ccy
+     * @param string $idno
+     *
+     * @return string
+     */
     protected function GetSecurityHash($key, $merchId, $amount, $ccy, $idno)
     {
         $str = $merchId.$amount.$ccy.$idno;

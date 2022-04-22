@@ -141,6 +141,9 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
     /**
      * render the step list.
      *
+     * @param string $sViewType
+     * @param string $sViewName
+     * @param string $sSpotName
      * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string

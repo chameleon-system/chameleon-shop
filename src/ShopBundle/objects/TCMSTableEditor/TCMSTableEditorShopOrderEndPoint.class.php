@@ -50,6 +50,8 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
      * send the current order to the email.
      *
      * @param string $sMail - can also be passed via get/post
+     *
+     * @return TCMSstdClass
      */
     public function ShopOrderSendConfirmOrderMail($sMail = null)
     {
@@ -111,6 +113,8 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
 
     /**
      * set public methods here that may be called from outside.
+     *
+     * @return void
      */
     public function DefineInterface()
     {

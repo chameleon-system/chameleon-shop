@@ -41,8 +41,8 @@ class TPkgShopPaymentIPNRequest
     private $oStatus = null;
 
     /**
-     * @param $sURL
-     * @param $aRequestPayload
+     * @param string $sURL
+     * @param array $aRequestPayload
      */
     public function __construct($sURL, $aRequestPayload)
     {
@@ -50,6 +50,12 @@ class TPkgShopPaymentIPNRequest
         $this->requestPayload = $aRequestPayload;
     }
 
+    /**
+     * @param array<string, mixed> $aRequestPayload
+     * @param null|string $sSourceCharset
+     *
+     * @return array<string, mixed>
+     */
     private function convertCharset($aRequestPayload, $sSourceCharset)
     {
         foreach ($aRequestPayload as $sKey => $data) {
@@ -89,6 +95,8 @@ class TPkgShopPaymentIPNRequest
      * @throws TPkgShopPaymentIPNException_InvalidPaymentHandlerGroupInRequest
      * @throws TPkgShopPaymentIPNException_OrderNotFound
      * @throws TPkgShopPaymentIPNException_RequestError
+     *
+     * @return void
      */
     public function parseRequest(TdbPkgShopPaymentIpnMessage $oMessage)
     {
@@ -233,7 +241,7 @@ class TPkgShopPaymentIPNRequest
     }
 
     /**
-     * @param $sRequestIP
+     * @param null|string $sRequestIP
      *
      * @return bool
      */

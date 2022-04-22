@@ -46,6 +46,8 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     protected function PostLoadHook()
     {
@@ -55,6 +57,8 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
 
     /**
      * called when an object recovers from serialization.
+     *
+     * @return void
      */
     protected function PostWakeUpHook()
     {
@@ -62,6 +66,9 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
         $this->InitDataFromPostGet();
     }
 
+    /**
+     * @return void
+     */
     protected function InitDataFromPostGet()
     {
         $this->aActiveFilterData = null;
@@ -80,6 +87,11 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
         $this->OverloadViewSettings();
     }
 
+    /**
+     * @param array<string, mixed>|string $aData
+     * @psalm-param array<string, mixed>|'' $aData
+     * @return array<string, mixed>|null - Returns `null` if the resulting array would be empty or if an empty string was passed as input.
+     */
     protected function RemoveEmptyValues($aData)
     {
         if (is_array($aData)) {
@@ -103,6 +115,8 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
 
     /**
      * overload view settings from filter-type if nothing is set in this filter-item.
+     *
+     * @return void
      */
     protected function OverloadViewSettings()
     {
@@ -160,6 +174,8 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
      * return url that sets the current filter to some value.
      *
      * @param string $sValue
+     *
+     * @return string
      */
     public function GetAddFilterURL($sValue)
     {
@@ -176,6 +192,8 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
      * set the item list filtered by all other filter items aside from this one.
      *
      * @param TCMSRecordList $oItemListFilteredByOtherItems
+     *
+     * @return void
      */
     public function SetFilteredItemList($oItemListFilteredByOtherItems)
     {
@@ -289,11 +307,19 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
         return $sBaseQuery;
     }
 
+    /**
+     * @return bool
+     */
     public function IsActive()
     {
         return $this->bIsActive;
     }
 
+    /**
+     * @param array<string, mixed> $aOptions
+     *
+     * @return void
+     */
     protected function OrderOptions(&$aOptions)
     {
         $SortOrder = SORT_NUMERIC;

@@ -61,6 +61,8 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
      * @param array  $aClearTriggers - clear trigger array (with current contents)
      * @param string $sViewName      - view being requested
      * @param string $sViewType      - location of the view (Core, Custom-Core, Customer)
+     *
+     * @return void
      */
     protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
     {
@@ -172,6 +174,12 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
 
     /**
      * return the url request needed to fetch the spot using ajax.
+     *
+     * @param string|null $sViewName
+     * @param string|null $sType
+     * @param array<string, string> $aParameter
+     *
+     * @return string
      */
     public function GetAjaxLink($sViewName = 'standard', $sType = 'Core', $aParameter = array())
     {

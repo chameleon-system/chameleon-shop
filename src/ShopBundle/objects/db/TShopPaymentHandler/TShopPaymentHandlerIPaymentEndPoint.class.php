@@ -33,7 +33,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
     /**
      * id for saved payment data on ipayment server.
      *
-     * @var $sStorageId
+     * @var string|false|null
      */
     protected $sStorageId = false;
 
@@ -85,7 +85,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
     /**
      * return the default payment data for the handler.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function GetDefaultUserPaymentData()
     {
@@ -168,7 +168,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
     /**
      * return the security hash for the input data.
      *
-     * @param $aParameter
+     * @param array<string, string> $aParameter
      *
      * @return string
      */
@@ -183,6 +183,9 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
         return $trx_securityhash;
     }
 
+    /**
+     * @return string
+     */
     protected function GetRedirectUrl()
     {
         return $this->getActivePageService()->getActivePage()->GetRealURLPlain(array(), true);
@@ -224,6 +227,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      * Get parameter to pay a transaction on IPayment with saved storage id.
      *
      * @param array $aParameter
+     * @param TdbShopOrder $oOrder
      *
      * @return array $aParameter
      */
@@ -390,6 +394,8 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
 
     /**
      * Overwrite this to generate messages.
+     *
+     * @return void
      */
     protected function SetErrorCodesFromResponseToMessageManager()
     {
@@ -467,6 +473,10 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
         $bPaymentOk = parent::ExecutePayment($oOrder);
         if ($bPaymentOk) {
             TdbShopPaymentHandler::SetExecutePaymentInterrupt(true);
+            /**
+             * @psalm-suppress NoValue
+             * @FIXME `ExecuteIPaymentCall` never returns since it redirects, there is no return value to track.
+             */
             $bPaymentOk = $this->ExecuteIPaymentCall($oOrder);
         }
 
@@ -516,6 +526,10 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
 
     /**
      * Send payment call to IPayment and check if payment was successfully done.
+     *
+     * @param TdbShopOrder $oOrder
+     *
+     * @return never
      */
     protected function ExecuteIPaymentCall($oOrder)
     {

@@ -61,6 +61,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     protected $aPriceBeforeDiscount = null;
 
+    /**
+     * @return void
+     */
     protected function PostLoadHook()
     {
         parent::PostLoadHook();
@@ -517,10 +520,10 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     }
 
     /**
-     *Creates to basket link from given to basket parameters.
+     * Creates to basket link from given to basket parameters.
      *
      * @param array $aParameters
-     * @param $bIncludePortalLink
+     * @param bool $bIncludePortalLink
      *
      * @return string
      */
@@ -612,6 +615,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
     /**
      * return link that can be used to remove the item from the notice list.
+     *
+     * @param bool $bIncludePortalLink
+     * @param string|false $sMsgConsumerName
      *
      * @return string
      */
@@ -752,7 +758,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * uses message manager to render messages and return them as string.
      *
-     * @param $aMessageConsumerToCheck
+     * @param string[] $aMessageConsumerToCheck
      *
      * @return string
      */
@@ -774,6 +780,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * add cache parameters (trigger clear for render).
      *
      * @param array $aCacheParameters
+     *
+     * @return void
      */
     protected function AddCacheParameters(&$aCacheParameters)
     {
@@ -804,6 +812,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param string $sImageSizeName - sImageSizeName is a system name defined in the shop_article_image_size table
      * @param string $sViewName      - use view name to render the image using different views (views can be found in ./objectviews/shop/TShopArticlePreviewImage)
      * @param string $sViewType      - defines in which objectviews dir the system looks for the view (Core, Custom-Core, or Customer)
+     * @param string[] $aEffects
      *
      * @return string
      */
@@ -898,7 +907,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         return $oPreviewObject;
     }
 
-    /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD
+    /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD */
 
     /**
      * returns an array with all table names that are relevant for the render function.
@@ -906,7 +915,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param string $sViewName - the view name being requested (if know by the caller)
      * @param string $sViewType - the view type (core, custom-core, customer) being requested (if know by the caller)
      *
-     * @return array
+     * @return string[]
      */
     public static function GetCacheRelevantTables($sViewName = null, $sViewType = null)
     {
@@ -1055,6 +1064,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
     /**
      * increase the product view counter by one.
+     *
+     * @return void
      */
     public function UpdateProductViewCount()
     {
@@ -1065,6 +1076,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
     /**
      * updates the review stats for the article.
+     *
+     * @return void
      */
     public function UpdateStatsReviews()
     {
@@ -1741,6 +1754,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
     /**
      * return the name formated for the breadcrumb.
+     *
+     * @return string
      */
     public function GetBreadcrumbName()
     {
@@ -1907,6 +1922,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
     /**
      * @param bool $isActive
+     *
+     * @return void
      */
     public function setIsActive($isActive)
     {
@@ -1934,6 +1951,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * @param string $parentId
      * @param bool   $isActive
+     *
+     * @return void
      */
     public function setVariantParentActive($parentId, $isActive)
     {
@@ -1960,6 +1979,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $this->UpdateVariantParentActiveField();
     }
 
+    /**
+     * @return void
+     */
     protected function UpdateVariantParentActiveField()
     {
         $bParentActiveChanged = false;
@@ -1998,6 +2020,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @param float $dOldValue
      * @param float $dNewValue
+     *
+     * @return void
      */
     protected function StockWasUpdatedHook($dOldValue, $dNewValue)
     {
@@ -2071,6 +2095,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     * count, OR 999.999 if an unlimited number of items may be purchased.
     * @return double
     */
+    /**
+     * @return false|int
+     */
     public function TotalStockAvailable()
     {
         $bStock = $this->getAvailableStock();
@@ -2128,14 +2155,15 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         return $oDiscountList;
     }
 
-    /*
-    * returns what the product would cost, if the discounts defined through $this->GetDiscountList are applied.
-    * (this is the price that a user ends up paying, if the item is added to the basket - ignoring basket specific discounts (they will be applied in the baske))
-    * use this, if you want to show the user what the could save
-    *
-    * If there are no discounts, we instead return the standard price of the imte
-    * @return double
-    */
+    /**
+     * returns what the product would cost, if the discounts defined through $this->GetDiscountList are applied.
+     * (this is the price that a user ends up paying, if the item is added to the basket - ignoring basket specific discounts (they will be applied in the baske))
+     * use this, if you want to show the user what the could save
+     *
+     * If there are no discounts, we instead return the standard price of the item
+     *
+     * @return float
+     */
     public function GetPriceIfDiscounted()
     {
         $dPrice = $this->GetFromInternalCache('dDiscountedPrice');
@@ -2167,6 +2195,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * if called, we update fieldPrice and fieldPriceReference based on the GetPriceIfDiscounted() value.
      * Note: call this method whenever you want to show the savings that could result from a discount.
+     *
+     * @return void
      */
     public function SetPriceBasedOnActiveDiscounts()
     {

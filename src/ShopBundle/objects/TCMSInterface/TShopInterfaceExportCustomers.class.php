@@ -9,12 +9,15 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @extends TCMSInterfaceManagerBaseExportCSV<TCMSRecord>
+ */
 class TShopInterfaceExportCustomers extends TCMSInterfaceManagerBaseExportCSV
 {
     /**
      * OVERWRITE THIS TO FETCH THE DATA. MUST RETURN A TCMSRecordList.
      *
-     * @return TCMSRecordList
+     * @return TCMSRecordList<TCMSRecord>
      */
     protected function GetDataList()
     {
@@ -60,7 +63,6 @@ class TShopInterfaceExportCustomers extends TCMSInterfaceManagerBaseExportCSV
               LEFT JOIN `pkg_newsletter_user` ON (`data_extranet_user`.`id` = `pkg_newsletter_user`.`data_extranet_user_id`)
                ';
         $oTCMSRecordList = new TCMSRecordList();
-        /** @var $oTCMSRecordList TCMSRecordList */
         $oTCMSRecordList->sTableName = 'data_extranet_user';
         $oTCMSRecordList->Load($query);
 

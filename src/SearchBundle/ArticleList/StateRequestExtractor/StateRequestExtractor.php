@@ -18,9 +18,10 @@ class StateRequestExtractor implements StateRequestExtractorInterface
 {
     /**
      * @param array $configuration
-     * @param array $requestData
+     * @param array<string, mixed> $requestData
+     * @param string $listSpotName
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function extract(array $configuration, array $requestData, $listSpotName)
     {
@@ -43,11 +44,19 @@ class StateRequestExtractor implements StateRequestExtractorInterface
         return $returnData;
     }
 
+    /**
+     * @param array<string, mixed> $requestData
+     * @return string|null
+     */
     private function getSearchQuery($requestData)
     {
         return (isset($requestData[\TShopModuleArticlelistFilterSearch::PARAM_QUERY])) ? $requestData[\TShopModuleArticlelistFilterSearch::PARAM_QUERY] : null;
     }
 
+    /**
+     * @param array<string, mixed> $requestData
+     * @return array|null
+     */
     private function getSearchFilter($requestData)
     {
         return (isset($requestData[\TShopModuleArticlelistFilterSearch::URL_FILTER])) ? $requestData[\TShopModuleArticlelistFilterSearch::URL_FILTER] : null;

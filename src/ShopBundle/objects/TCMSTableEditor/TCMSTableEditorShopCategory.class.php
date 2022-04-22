@@ -32,6 +32,8 @@ class TCMSTableEditorShopCategory extends TCMSTableEditor
      *
      * @param TdbShopCategory $oRootCategory
      * @param TdbShopCategory $oCategory
+     *
+     * @return void
      */
     protected function UpdateInheritablePropertiesManager($oRootCategory, $oCategory)
     {
@@ -47,6 +49,8 @@ class TCMSTableEditorShopCategory extends TCMSTableEditor
      *
      * @param TdbShopCategory $oOwningCategory
      * @param TdbShopCategory $oCategory
+     *
+     * @return void
      */
     protected function UpdateInheritableProperties($oOwningCategory, $oCategory)
     {
@@ -62,6 +66,8 @@ class TCMSTableEditorShopCategory extends TCMSTableEditor
     /**
      * makes it possible to modify the contents written to database after the copy
      * is commited.
+     *
+     * @return void
      */
     protected function OnAfterCopy()
     {
@@ -71,6 +77,8 @@ class TCMSTableEditorShopCategory extends TCMSTableEditor
 
     /**
      * update the page navi breadcrumb.
+     *
+     * @return void
      */
     public function UpdatePageNaviBreadCrumb()
     {

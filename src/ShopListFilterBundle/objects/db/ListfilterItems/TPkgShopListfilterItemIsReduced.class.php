@@ -35,6 +35,14 @@ class TPkgShopListfilterItemIsReduced extends TPkgShopListfilterItemBoolean
         return $aOptions;
     }
 
+    /**
+     * @param string $sFieldName
+     * @param string $sValue
+     * @param array<string, string> $aRow
+     * @return string
+     *
+     * @psalm-return '0'|'1'
+     */
     public function ArticleIsReduced($sFieldName, $sValue, $aRow)
     {
         if ($aRow['price_reference'] > $aRow['price']) {

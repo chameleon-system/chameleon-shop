@@ -69,6 +69,8 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
      *
      * @param string $sView - the view
      * @param string $type  - Core, Custom-Core, Customer
+     * @param string[] $aEffects
+     * @param bool $bHideNewMarker
      *
      * @return string
      */
@@ -129,6 +131,7 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
     /**
      * return thumbnail for current size.
      *
+     * @param string[] $aEffects
      * @return TCMSImage
      */
     public function GetImageThumbnailObject($aEffects = array())

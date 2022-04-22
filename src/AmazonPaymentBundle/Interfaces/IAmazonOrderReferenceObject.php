@@ -146,7 +146,7 @@ interface IAmazonOrderReferenceObject
     public function getOrderReferenceDetails(array $constraintsThatShouldBeIgnored = null);
 
     /**
-     * @param $amazonAuthorizationId
+     * @param string $amazonAuthorizationId
      *
      * @return \OffAmazonPaymentsService_Model_AuthorizationDetails
      *
@@ -198,7 +198,7 @@ interface IAmazonOrderReferenceObject
      * will be returned so as that the refundable sum of the items most closely matches the requested refund.
      *
      * @param AmazonReferenceIdList $captureIdList
-     * @param $refundValue
+     * @param float $refundValue
      *
      * @return array [amazonCaptureId => refundableValue]
      */

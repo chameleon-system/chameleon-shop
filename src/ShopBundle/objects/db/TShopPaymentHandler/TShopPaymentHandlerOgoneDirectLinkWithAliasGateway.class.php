@@ -283,6 +283,8 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      * Write 3D-Secure form data send by OGONE to session, so it can be displayed on any page.
      *
      * @param string $s3DSecureForm
+     *
+     * @return void
      */
     protected function Set3DSecureFormToSession($s3DSecureForm)
     {
@@ -309,6 +311,8 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      * parse the xml response from the DirectLink API.
      *
      * @param string $sResult - xml response as string
+     *
+     * @return void
      */
     protected function ParseXMLResponse($sResult)
     {

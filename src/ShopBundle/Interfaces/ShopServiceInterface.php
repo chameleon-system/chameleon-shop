@@ -45,7 +45,7 @@ interface ShopServiceInterface
     public function getCheckoutLink($useRedirect = true);
 
     /**
-     * @param $cmsPortalId
+     * @param string $cmsPortalId
      *
      * @return TdbShop
      *
@@ -80,5 +80,8 @@ interface ShopServiceInterface
      */
     public function getActiveBasket();
 
+    /**
+     * @return void
+     */
     public function resetBasket();
 }

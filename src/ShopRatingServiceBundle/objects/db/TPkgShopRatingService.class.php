@@ -154,6 +154,11 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
         return $sRetLink;
     }
 
+    /**
+     * @param array<string, mixed> $aOrder
+     * @param TdbDataExtranetUser $oUser
+     * @return bool
+     */
     public function SendShopRatingEmail($oUser, $aOrder)
     {
         $oMailProfile = TdbDataMailProfile::GetProfile('shop_rating_request');

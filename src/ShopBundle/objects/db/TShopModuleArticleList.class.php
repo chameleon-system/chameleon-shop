@@ -16,6 +16,8 @@ class TShopModuleArticleList extends TAdbShopModuleArticleList
      * reset the internal cache for the connected lookup.
      *
      * @param string $iId
+     *
+     * @return void
      */
     public function UpdateOrderById($iId)
     {

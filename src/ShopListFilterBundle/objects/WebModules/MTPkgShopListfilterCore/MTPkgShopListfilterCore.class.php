@@ -89,6 +89,9 @@ class MTPkgShopListfilterCore extends TUserCustomModelBase
         return array_merge($aTrigger, $listTrigger);
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();

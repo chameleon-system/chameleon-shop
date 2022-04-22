@@ -65,6 +65,9 @@ class MTPkgCmsSubNavigation_PkgShop extends MTPkgCmsSubNavigation_PkgShopAutoPar
         return $parameters;
     }
 
+    /**
+     * @return null|string
+     */
     private function getActiveRootCategoryId()
     {
         $rootCategory = $this->getActiveRootCategory();
@@ -83,6 +86,9 @@ class MTPkgCmsSubNavigation_PkgShop extends MTPkgCmsSubNavigation_PkgShopAutoPar
         return TdbShop::GetActiveRootCategory();
     }
 
+    /**
+     * @return null|string
+     */
     private function getActiveCategoryId()
     {
         $category = $this->getActiveCategory();

@@ -89,9 +89,6 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
     }
 
     /**
-     * @param $activeCategory
-     * @param $oShop
-     *
      * @return TdbPkgShopListfilter|null
      */
     private static function getInstanceForCategory(TdbShopCategory $activeCategory, TdbShop $oShop)
@@ -130,6 +127,8 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
 
     /**
      * @param string $staticFilter
+     *
+     * @return void
      */
     private function setStaticFilter($staticFilter)
     {
@@ -141,6 +140,9 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
         }
     }
 
+    /**
+     * @return bool
+     */
     public function isStaticFilter(TdbPkgShopListfilterItem $filter)
     {
         if (!is_array($this->staticFilter)) {
@@ -153,6 +155,9 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
         return false;
     }
 
+    /**
+     * @return array|null
+     */
     protected function getStaticFilter()
     {
         return $this->staticFilter;
@@ -237,6 +242,8 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
      * @param string $sViewName     - name of the view
      * @param string $sViewType     - where to look for the view
      * @param array  $aCallTimeVars - optional parameters to pass to render method
+     *
+     * @return string
      */
     public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
     {

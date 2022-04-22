@@ -28,6 +28,9 @@ class MTPkgShopOrderViaPhone_MTShopOrderWizard extends MTPkgShopOrderViaPhone_MT
         parent::Init();
     }
 
+    /**
+     * @return void
+     */
     protected function OrderViaPhone()
     {
         $oGlobal = TGlobal::instance();
@@ -42,6 +45,10 @@ class MTPkgShopOrderViaPhone_MTShopOrderWizard extends MTPkgShopOrderViaPhone_MT
         }
     }
 
+    /**
+     * @param array<string, mixed> $aUserData
+     * @return bool
+     */
     protected function OrderViaPhoneDataValid($aUserData)
     {
         $bValid = true;
@@ -61,6 +68,10 @@ class MTPkgShopOrderViaPhone_MTShopOrderWizard extends MTPkgShopOrderViaPhone_MT
         return $bValid;
     }
 
+    /**
+     * @param array<string, mixed> $aUserData
+     * @return bool
+     */
     protected function OrderViaPhoneSendEmail($aUserData)
     {
         $oMail = TdbDataMailProfile::GetProfile('order-via-phone');
@@ -77,12 +88,18 @@ class MTPkgShopOrderViaPhone_MTShopOrderWizard extends MTPkgShopOrderViaPhone_MT
         return $oMail->SendUsingObjectView('emails', 'Customer');
     }
 
+    /**
+     * @return never
+     */
     protected function OrderViaPhoneRedirectToThankYouPage()
     {
         $url = $this->getSystemPageService()->getLinkToSystemPageRelative('order-via-phone');
         $this->getRedirect()->redirect($url);
     }
 
+    /**
+     * @return string[]
+     */
     protected function OrderViaPhoneGetRequiredFields()
     {
         return array('firstname', 'lastname', 'tel');

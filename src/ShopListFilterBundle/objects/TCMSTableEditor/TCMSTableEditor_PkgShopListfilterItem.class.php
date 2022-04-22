@@ -20,6 +20,8 @@ class TCMSTableEditor_PkgShopListfilterItem extends TCMSTableEditor
      * save hidden and readonly fields).
      *
      * @param TIterator $oFields
+     *
+     * @return void
      */
     protected function PrepareFieldsForSave(&$oFields)
     {
@@ -32,6 +34,8 @@ class TCMSTableEditor_PkgShopListfilterItem extends TCMSTableEditor
      * TCMSTableEditor class or children to modify the fields before they are shown to the user.
      *
      * @param TIterator $oFields
+     *
+     * @return void
      */
     public function ProcessFieldsBeforeDisplay(&$oFields)
     {
@@ -39,6 +43,11 @@ class TCMSTableEditor_PkgShopListfilterItem extends TCMSTableEditor
         $this->RemoveDisabledFields($oFields);
     }
 
+    /**
+     * @param TIterator $oFields
+     *
+     * @return void
+     */
     protected function RemoveDisabledFields(&$oFields)
     {
         // hide fields for type

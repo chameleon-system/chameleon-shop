@@ -110,6 +110,8 @@ class ProductInventoryService implements ProductInventoryServiceInterface
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {

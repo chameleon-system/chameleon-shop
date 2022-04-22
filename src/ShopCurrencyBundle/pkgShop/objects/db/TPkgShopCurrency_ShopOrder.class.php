@@ -16,6 +16,8 @@ class TPkgShopCurrency_ShopOrder extends TPkgShopCurrency_ShopOrderAutoParent
      *
      * @param TShopBasket $oBasket
      * @param array       $aOrderData
+     *
+     * @return void
      */
     protected function LoadFromBasketPostProcessData($oBasket, &$aOrderData)
     {

@@ -31,12 +31,18 @@ class TPkgShopPaymentIPN_TCMSTableEditor_PkgShopPaymentIpnMessage extends TCMSTa
         $this->oMenuItems->AddItem($oMenuItem);
     }
 
+    /**
+     * @return void
+     */
     public function DefineInterface()
     {
         parent::DefineInterface();
         $this->methodCallAllowed[] = 'ReplayIPN';
     }
 
+    /**
+     * @return string|true
+     */
     public function ReplayIPN()
     {
         /** @var TdbPkgShopPaymentIpnMessage $oMsg */

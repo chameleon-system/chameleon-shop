@@ -34,6 +34,9 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
      */
     private $info = null;
 
+    /**
+     * @var TPkgShopOrderStatusItemData[]
+     */
     private $items = array();
 
     /** @var null | \Symfony\Component\HttpFoundation\ParameterBag */

@@ -56,7 +56,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
     /**
      * return the default payment data for the handler.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function GetDefaultUserPaymentData()
     {
@@ -104,6 +104,8 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
      * store user payment data in order.
      *
      * @param int $iOrderId
+     *
+     * @return void
      */
     public function SaveUserPaymentDataToOrder($iOrderId)
     {
@@ -139,6 +141,9 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
         }
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlHeadIncludes()
     {
         $aIncludes[] = '<script src="https://secure.pay1.de/client-api/js/ajax.js" type="text/javascript"></script>';
@@ -552,7 +557,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
     /**
      * 3D-Secure - 3dScheck.
      *
-     * @return $response array
+     * @return array<string, mixed>
      */
     protected function PayOne3dSecure_3dScheck()
     {
@@ -658,6 +663,8 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
     /**
      * After 3dscheck exec this function for "preauthorization".
      *
+     * @param array<string, mixed> $aParams
+     * @param TdbShopOrder $oOrder
      * @return array
      */
     protected function PayOnePreauthorization($aParams = array(), &$oOrder)
@@ -741,6 +748,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
     /**
      * perform the API redirect to PayOne using Server-API.
      *
+     * @param mixed $fresponse
      * @return array $fresponse - params to handle request/redirect
      */
     protected function ExecuteExternalPayOneCall($fresponse)

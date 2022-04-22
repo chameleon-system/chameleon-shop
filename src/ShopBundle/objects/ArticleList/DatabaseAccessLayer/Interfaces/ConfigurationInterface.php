@@ -25,8 +25,14 @@ interface ConfigurationInterface
      */
     public function getDefaultSortId();
 
+    /**
+     * @return string
+     */
     public function getDefaultFilterId();
 
+    /**
+     * @return string
+     */
     public function getId();
 
     /**
@@ -39,5 +45,8 @@ interface ConfigurationInterface
      */
     public function getDatabaseObject();
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getAsArray();
 }

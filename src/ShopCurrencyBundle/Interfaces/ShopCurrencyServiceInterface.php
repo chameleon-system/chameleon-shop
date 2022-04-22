@@ -32,6 +32,9 @@ interface ShopCurrencyServiceInterface
      */
     public function formatNumber($value);
 
+    /**
+     * @return void
+     */
     public function reset();
 
     /**

@@ -15,10 +15,19 @@
 /**/
 class TShopInterface_ImportOrderStatus extends TCMSInterfaceManagerBase
 {
+    /** @var string */
     protected $sFileName = '';
+
+    /** @var string */
     protected $sPathName = '';
+
+    /** @var resource|false */
     protected $fp = null;
+
+    /** @var array|false */
     protected $aHeaderFields = array();
+
+    /** @var string */
     protected $sLineSplit = ';';
 
     protected function PrepareImport()
@@ -62,6 +71,8 @@ class TShopInterface_ImportOrderStatus extends TCMSInterfaceManagerBase
      * process one row from the file.
      *
      * @param array $aRow
+     *
+     * @return void
      */
     protected function ProcessRow($aRow)
     {

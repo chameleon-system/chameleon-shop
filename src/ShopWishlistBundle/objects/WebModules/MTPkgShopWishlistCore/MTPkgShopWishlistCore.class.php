@@ -17,8 +17,19 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
     const URL_MODE_PARAMETER_NAME = 'sMode';
     const MSG_CONSUMER_NAME = 'MTPkgShopWishlistCore';
 
+    /**
+     * @var string
+     */
     protected $sActiveMode = '';
+
+    /**
+     * @var array|false
+     */
     protected $aUserInput = false;
+
+    /**
+     * @var bool
+     */
     protected $bAllowHTMLDivWrapping = true;
 
     public function Init()
@@ -45,6 +56,8 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
 
     /**
      * Init method called when the module is in the SendForm Mode.
+     *
+     * @return void
      */
     protected function InitSendFormMode()
     {
@@ -69,6 +82,8 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
 
     /**
      * Execute method called when the module is in the SendForm mode.
+     *
+     * @return void
      */
     protected function ExecuteSendFormMode()
     {
@@ -93,6 +108,8 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
     /**
      * sends the wishlist to the user specified in $this->aUserInput. redirectes
      * back to the wishlist page of the current user on success.
+     *
+     * @return void
      */
     protected function SendWishlist()
     {
@@ -145,12 +162,17 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
         return $bIsValid;
     }
 
+    /**
+     * @return void
+     */
     protected function RemoveArticle()
     {
     }
 
     /**
      * Updates the wishlist comment, the lists item amount an comments using the data from post.
+     *
+     * @return void
      */
     protected function UpdateWishlist()
     {

@@ -89,6 +89,9 @@ class TPkgShopPrimaryNavigation_TPkgCmsNavigationNode_Category extends AbstractP
         return $this->aChildren;
     }
 
+    /**
+     * @return void
+     */
     private function setFromShopCategory(TdbShopCategory $oNode)
     {
         $this->sLink = $oNode->GetLink();

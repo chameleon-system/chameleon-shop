@@ -26,7 +26,7 @@ class TShopPaymentHandlerCreditCard extends TdbShopPaymentHandler
     /**
      * return the default payment data for the handler.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function GetDefaultUserPaymentData()
     {
@@ -89,6 +89,8 @@ class TShopPaymentHandlerCreditCard extends TdbShopPaymentHandler
      * store user payment data in order.
      *
      * @param int $iOrderId
+     *
+     * @return void
      */
     public function SaveUserPaymentDataToOrder($iOrderId)
     {

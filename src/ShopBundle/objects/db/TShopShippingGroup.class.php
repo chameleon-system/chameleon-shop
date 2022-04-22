@@ -22,7 +22,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
     const VIEW_PATH = 'pkgShop/views/db/TShopShippingGroup';
 
     /**
-     * @param TShopBasketShippingList
+     * @var TdbShopShippingTypeList
      */
     protected $oActingShippingTypeList = null;
 
@@ -33,6 +33,9 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      */
     protected $oValidPaymentMethods = null;
 
+    /**
+     * @var float|null
+     */
     protected $dPrice = null;
 
     public function __sleep()
@@ -104,6 +107,9 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         return $bIsValid;
     }
 
+    /**
+     * @return bool
+     */
     protected function hasShippingTypeThatStopsTypeChain()
     {
         $item = $this->GetActingShippingTypes()->FindItemWithProperty('fieldEndShippingTypeChain', true);
@@ -598,7 +604,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
     /**
      * @param TShopBasketArticleList $oBasketArticleList
-     * @param $sDataCountryId
+     * @param string $sDataCountryId
      *
      * @return TdbShopShippingGroupList
      */

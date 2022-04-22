@@ -10,7 +10,7 @@
  */
 
 /**
- * @extends TCMSInterfaceManagerBaseExportCSV<TdbShopSearchLog, TdbShopSearchLogList>
+ * @extends TCMSInterfaceManagerBaseExportCSV<TdbShopSearchLog>
  */
 class TShopInterfaceExportSearchWords extends TCMSInterfaceManagerBaseExportCSV
 {

@@ -11,14 +11,23 @@
 
 /**
  * item is used to simulate a breadcrumb node.
-/**/
+ *
+ * @extends TShopBreadcrumbItem<TdbShopCategory>
+ */
 class TShopBreadcrumbItemCategory extends TShopBreadcrumbItem
 {
+    /**
+     * @param bool $bForcePortal
+     * @return string
+     */
     public function GetLink($bForcePortal = false)
     {
         return $this->oItem->GetLink($bForcePortal);
     }
 
+    /**
+     * @return string
+     */
     public function GetName()
     {
         return $this->oItem->GetBreadcrumbName();

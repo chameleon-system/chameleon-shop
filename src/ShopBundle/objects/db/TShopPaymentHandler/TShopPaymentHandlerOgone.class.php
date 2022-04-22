@@ -78,6 +78,11 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
         return $sExternalHandlerURL;
     }
 
+    /**
+     * @param array<string, mixed> $parameter
+     *
+     * @return void
+     */
     protected function AddCustomParameter(&$parameter)
     {
     }

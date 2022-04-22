@@ -15,21 +15,39 @@
  */
 class TPkgShopPaymentIPN_TransactionDetails
 {
+    /** @var float */
     private $amount = null;
+
+    /**
+     * @var string
+     * @psalm-var TPkgShopPaymentTransactionManager::TRANSACTION_TYPE_*
+     */
     private $transactionType = null;
+
+    /** @var string */
     private $context = null;
+
+    /** @var string */
     private $sequenceNumber = null;
+
+    /** @var int */
     private $transactionTimestamp = null;
+
+    /** @var float|null */
     private $resultingBalance = null;
+
+    /** @var array<string, mixed> */
     private $additionalData = array();
 
     /**
-     * @param $amount
-     * @param $transactionType - must be a valid type (one of TPkgShopPaymentTransactionManager::TRANSACTION_TYPE_*)
+     * @param float $amount
+     * @param string $transactionType - must be a valid type (one of TPkgShopPaymentTransactionManager::TRANSACTION_TYPE_*)
      * @param string $context - a string explaining what caused the transaction
-     * @param $sequenceNumber
-     * @param $iTransactionTimestamp
-     * @param null $dBalance - if the IPN sends you a balance (amount remaining after transaction) then you can pass it here
+     * @param string $sequenceNumber
+     * @param int $iTransactionTimestamp
+     * @param float $dBalance - if the IPN sends you a balance (amount remaining after transaction) then you can pass it here
+     *
+     * @psalm-param TPkgShopPaymentTransactionManager::TRANSACTION_TYPE_* $transactionType
      */
     public function __construct($amount, $transactionType, $context, $sequenceNumber, $iTransactionTimestamp, $dBalance = null)
     {
@@ -59,22 +77,32 @@ class TPkgShopPaymentIPN_TransactionDetails
 
     /**
      * @return string
+     * @psalm-return TPkgShopPaymentTransactionManager::TRANSACTION_TYPE_*
      */
     public function getTransactionType()
     {
         return $this->transactionType;
     }
 
+    /**
+     * @return string
+     */
     public function getSequenceNumber()
     {
         return $this->sequenceNumber;
     }
 
+    /**
+     * @return int
+     */
     public function getTransactionTimestamp()
     {
         return $this->transactionTimestamp;
     }
 
+    /**
+     * @return float|null
+     */
     public function getResultingBalance()
     {
         return $this->resultingBalance;
@@ -98,7 +126,9 @@ class TPkgShopPaymentIPN_TransactionDetails
      * here you can set additional data like the transaction id to the transaction details.
      *
      * @param string $key
-     * @param $value
+     * @param mixed $value
+     *
+     * @return void
      */
     public function setAdditionalData($key, $value)
     {
@@ -109,7 +139,7 @@ class TPkgShopPaymentIPN_TransactionDetails
      * here you can get additional data like the transaction id from the transaction details,
      * If key not exists return null.
      *
-     * @param $key
+     * @param string $key
      *
      * @return mixed|null
      */

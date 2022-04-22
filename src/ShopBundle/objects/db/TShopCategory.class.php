@@ -52,6 +52,10 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      * to that page, instead of the link to the category (this allows us to create category entry pages).
      *
      * @param bool $bAbsolute - set to true if you want to include the domain in the link (absolute link)
+     * @param string $sAnchor - Anchor to add to the link (Part after #)
+     * @param array<string, mixed> $aOptionalParameters
+     * @param TdbCmsPortal $portal
+     * @param TdbCmsLanguage $language
      *
      * @return string
      */
@@ -213,6 +217,12 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
         return $oCategoryArticles;
     }
 
+    /**
+     * @param null|string $sOrderBy
+     * @param array $aFilter
+     *
+     * @return string
+     */
     private function getCacheKeyForArticleList($sOrderBy, $aFilter)
     {
         return md5('oArticleListIncludingSubcategories'.serialize($sOrderBy).serialize($aFilter));
@@ -378,7 +388,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
         return array();
     }
 
-    /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD
+    /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD */
 
     /**
      * returns an array with all table names that are relevant for the render function.
@@ -386,7 +396,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      * @param string $sViewName - the view name being requested (if know by the caller)
      * @param string $sViewType - the view type (core, custom-core, customer) being requested (if know by the caller)
      *
-     * @return array
+     * @return string[]
      */
     public static function GetCacheRelevantTables($sViewName = null, $sViewType = null)
     {
@@ -497,6 +507,8 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
 
     /**
      * return the name formated for the breadcrumb.
+     *
+     * @return string
      */
     public function GetBreadcrumbName()
     {

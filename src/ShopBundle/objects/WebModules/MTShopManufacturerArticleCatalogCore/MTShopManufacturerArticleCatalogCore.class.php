@@ -18,11 +18,15 @@ class MTShopManufacturerArticleCatalogCore extends MTShopArticleCatalogCore
 {
     const URL_MANUFACTURER_ID = 'manufacturerid';
 
+    /**
+     * @var string|null
+     */
     protected $iActiveManufacturerId = null;
+
     /**
      * current active manufacturer.
      *
-     * @var TdbShopManufacturer
+     * @var TdbShopManufacturer|null
      */
     protected $oActiveManufacturer = null;
 
@@ -39,6 +43,8 @@ class MTShopManufacturerArticleCatalogCore extends MTShopArticleCatalogCore
 
     /**
      * load manufacturer and related data.
+     *
+     * @return void
      */
     protected function LoadManufacturer()
     {
@@ -67,6 +73,8 @@ class MTShopManufacturerArticleCatalogCore extends MTShopArticleCatalogCore
 
     /**
      * method is called when the module is unable to find the requested manufacturer.
+     *
+     * @return void
      */
     protected function ManufacturerNotFoundHook()
     {
@@ -105,6 +113,11 @@ class MTShopManufacturerArticleCatalogCore extends MTShopArticleCatalogCore
         return $aIncludes;
     }
 
+    /**
+     * @param string $sOrderListBy
+     * @param array $filter
+     * @return TdbShopArticleList
+     */
     protected function getListWhenNoCategoryDefined($sOrderListBy, $filter)
     {
         return TdbShopArticleList::LoadArticleList($sOrderListBy, -1, $filter);

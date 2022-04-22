@@ -80,6 +80,8 @@ class TCMSSmartURLHandler_ShopIPayment extends TCMSSmartURLHandler_ShopBasketSte
      * Delete existing order if payment wasnt done correctly.
      *
      * @param string $sUniqId
+     *
+     * @return void
      */
     protected function DeleteNotExecutedOrder($sUniqId)
     {

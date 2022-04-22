@@ -174,6 +174,8 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
      * @param string       $sPaymentState state of the notified transaction
      * @param array        $aParameter
      * @param TdbShopOrder $oOrder
+     *
+     * @return void
      */
     protected function HandleNotifyMessageForPaymentState($sPaymentState, $aParameter, $oOrder)
     {
@@ -210,6 +212,8 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
      * @param bool         $bAllowExportWawi
      * @param bool         $bAllowSendNotificationEmail
      * @param bool         $bAllowSaveNewPaymentData
+     *
+     * @return void
      */
     protected function HandleNotifyOrderOnChange($oOrder, $bAllowExportWawi, $bAllowSendNotificationEmail, $bAllowSaveNewPaymentData)
     {

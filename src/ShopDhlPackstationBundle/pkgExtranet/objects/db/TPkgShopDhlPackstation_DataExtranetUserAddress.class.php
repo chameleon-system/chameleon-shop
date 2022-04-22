@@ -14,6 +14,8 @@ class TPkgShopDhlPackstation_DataExtranetUserAddress extends TPkgShopDhlPackstat
     /**
      * @param bool $bIsPackstation
      * @param bool $bSave          set to false if you not want to save cleard fiel values
+     *
+     * @return void
      */
     public function SetIsDhlPackstation($bIsPackstation, $bSave = true)
     {

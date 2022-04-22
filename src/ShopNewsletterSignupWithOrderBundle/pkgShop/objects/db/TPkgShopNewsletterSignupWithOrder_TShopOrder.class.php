@@ -18,6 +18,8 @@ class TPkgShopNewsletterSignupWithOrder_TShopOrder extends TPkgShopNewsletterSig
      *
      * @param TShopBasket $oBasket
      * @param array       $aOrderData
+     *
+     * @return void
      */
     protected function LoadFromBasketPostProcessData($oBasket, &$aOrderData)
     {
@@ -35,6 +37,8 @@ class TPkgShopNewsletterSignupWithOrder_TShopOrder extends TPkgShopNewsletterSig
 
     /**
      * method is called after all data from the basket has been saved to the order tables.
+     *
+     * @return void
      */
     public function CreateOrderInDatabaseCompleteHook()
     {

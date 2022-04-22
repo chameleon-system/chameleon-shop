@@ -31,6 +31,9 @@ class TCMSCronJob_ShopSendOrderNotifications extends TCMSCronJob
         $this->developmentEmailAddress = $developmentEmailAddress;
     }
 
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         $sMinDate = date('Y-m-d H:i:s', time() - (self::MAX_AGE_DAYS * 24 * 3600));

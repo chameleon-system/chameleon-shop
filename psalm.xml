@@ -19,6 +19,8 @@
     <projectFiles>
         <directory name="./src" />
         <ignoreFiles>
+            <directory name="../chameleon-base" />
+
             <directory name="src/**/views/" />
             <directory name="src/**/Tests/" />
             <directory name="src/**/Resources/" />
@@ -56,11 +58,10 @@
         <RedundantCastGivenDocblockType errorLevel="suppress" />
 
         <UnusedPsalmSuppress errorLevel="error" />
-<!--        <MissingReturnType errorLevel="error" />-->
-<!--        <MissingParamType errorLevel="error" />-->
-<!--        <MissingPropertyType errorLevel="error" />-->
+        <MissingReturnType errorLevel="error" />
+        <MissingParamType errorLevel="error" />
+        <MissingPropertyType errorLevel="error" />
 
-        <!-- TODO Not supress? -->
         <MoreSpecificImplementedParamType errorLevel="suppress" />
 
         <UndefinedDocblockClass>

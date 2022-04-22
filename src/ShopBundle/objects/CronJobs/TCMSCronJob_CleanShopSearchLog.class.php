@@ -14,6 +14,9 @@
 /**/
 class TCMSCronJob_CleanShopSearchLog extends TCMSCronJob
 {
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         if (CHAMELEON_SHOP_SEARCH_LOG_MAX_AGE_IN_DAYS !== false && CHAMELEON_SHOP_SEARCH_LOG_MAX_AGE_IN_DAYS !== 0) {

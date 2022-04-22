@@ -59,6 +59,8 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      * set the owning payment method.
      *
      * @param string $sPaymentMethodId
+     *
+     * @return void
      */
     public function SetOwningPaymentMethodId($sPaymentMethodId)
     {
@@ -121,6 +123,8 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      * the payment handler for an order.
      *
      * @param array $aPaymentUserData - assoc array of the parameter
+     *
+     * @return void
      */
     public function SetPaymentUserData($aPaymentUserData)
     {
@@ -155,6 +159,8 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
 
     /**
      * @param IPkgShopOrderPaymentConfig $configData
+     *
+     * @return void
      */
     public function setConfigData(IPkgShopOrderPaymentConfig $configData)
     {
@@ -219,6 +225,8 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      * basket page will auto.
      *
      * @param bool $bActive
+     *
+     * @return void
      */
     public static function SetExecutePaymentInterrupt($bActive)
     {
@@ -304,6 +312,8 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      * store user payment data in order.
      *
      * @param int $iOrderId
+     *
+     * @return void
      */
     public function SaveUserPaymentDataToOrder($iOrderId)
     {
@@ -359,7 +369,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
     /**
      * return a variable from the user payment data. false if the variable is not found.
      *
-     * @param $sItemName
+     * @param string $sItemName
      *
      * @return bool|string
      */
@@ -388,7 +398,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
     /**
      * return the default payment data for the handler.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function GetDefaultUserPaymentData()
     {
@@ -471,6 +481,8 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
 
     /**
      * the method is called when an external payment handler returns successfully.
+     *
+     * @return bool
      */
     public function PostProcessExternalPaymentHandlerHook()
     {
@@ -509,6 +521,8 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
     /**
      * some payment methods allow the user to select a payment type (for example: a payment methods that accepts credit cards may accept visa and master card)
      * this method should return that identifier.
+     *
+     * @return string
      */
     public function GetExternalPaymentTypeIdentifier()
     {
@@ -521,6 +535,8 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      * user was redirected to the external payment page) but BEFORE we redirect to the
      * thank you page. this gives us the chance to redirect somewhere else instead (such as
      * a page that breaks out of an iframe via js).
+     *
+     * @return void
      */
     public function BeforeJumpToThankYouStepAfterInterruptedPaymentHook()
     {
@@ -531,6 +547,8 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      * AND if the return failed (ie. user aborted, entered wrong data, etc). Normally there would be no
      * redirect - instead we would show the page that was requested via url (ie the confirm page)
      * this hook could be used, to auto redirect back to the payment page, or to break out of an iframe.
+     *
+     * @return void
      */
     public function OnPaymentErrorAfterInterruptedPaymentHook()
     {
@@ -539,7 +557,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
     /**
      * return the currency identifier for the currency we pay in.
      *
-     * @param $oPkgShopCurrency TdbPkgShopCurrency
+     * @param TdbPkgShopCurrency $oPkgShopCurrency
      *
      * @return string
      */

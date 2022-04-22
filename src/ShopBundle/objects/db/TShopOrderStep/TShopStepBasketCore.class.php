@@ -16,6 +16,8 @@ class TShopStepBasketCore extends TdbShopOrderStep
 {
     /**
      * redirects the user to the wrapping step.
+     *
+     * @return void
      */
     public function JumpToWrapping()
     {

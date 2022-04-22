@@ -33,6 +33,11 @@ class TCMSSmartURLHandler_ShopBasketSteps extends TCMSSmartURLHandler
         return $iPageId;
     }
 
+    /**
+     * @param TCMSSmartURLData $oURLData
+     *
+     * @return TdbShopOrderStep|null
+     */
     protected function GetActiveStep($oURLData)
     {
         $oStep = null;

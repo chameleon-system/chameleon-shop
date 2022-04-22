@@ -72,6 +72,8 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
 
     /**
      * remove list items that are not permited for the current user or basket.
+     *
+     * @return void
      */
     public function RemoveInvalidItems()
     {
@@ -117,6 +119,8 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
 
     /**
      * remove list items that are restricted to some user or user group.
+     *
+     * @return void
      */
     public function RemoveRestrictedItems()
     {

@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TPkgShopPaymentIpnMessage extends TPkgShopPaymentIpnMessageAutoParent
 {
+    /**
+     * @return true|string - response string if exists, `true` otherwise
+     */
     public function replayIPN()
     {
         $oRequest = new TPkgShopPaymentIPNRequest($this->fieldRequestUrl, $this->fieldPayload);

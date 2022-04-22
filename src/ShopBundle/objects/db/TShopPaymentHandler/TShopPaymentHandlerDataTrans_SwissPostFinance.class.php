@@ -40,7 +40,7 @@ class TShopPaymentHandlerDataTrans_SwissPostFinance extends TShopPaymentHandlerD
     /**
      * return the default payment data for the handler.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function GetDefaultUserPaymentData()
     {

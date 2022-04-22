@@ -46,6 +46,10 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      */
     public $aFilter = null;
 
+    /**
+     * @param string $id
+     * @param string $sLanguageId
+     */
     public function __construct($id = null, $sLanguageId = null)
     {
         $this->SetChangeTriggerCacheChange(false);
@@ -73,6 +77,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      *
      * @param array $aExcludeFilterKeys - any filter keys (same as in $this->aFilter) you place in here
      *                                  will be excluded from the link
+     * @param array<string, string> $aFilterAddition
      *
      * @return string
      */
@@ -117,6 +122,10 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
         return $sLink;
     }
 
+    /**
+     * @param string $sTerm
+     * @return string
+     */
     public function GetSearchLinkForTerm($sTerm)
     {
         $aParams = array(TShopModuleArticlelistFilterSearch::PARAM_QUERY => $sTerm);
@@ -126,6 +135,12 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
         return $sLink;
     }
 
+    /**
+     * @param string $sKey
+     * @param null|string $sShopId
+     *
+     * @return TdbShopSearchCache|null
+     */
     protected static function GetSearchCacheItem($sKey, $sShopId = null)
     {
         $oItem = null;
@@ -183,6 +198,9 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      *
      * @param string $sKey   - key identifying the search
      * @param string $sQuery
+     * @param string $sSearchTerm
+     * @param array|null $aSearchTerms
+     * @param array $aFilter
      *
      * @return TdbShopSearchCache
      */
@@ -254,15 +272,19 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
     /**
      * callback usable to manipulate the search cache query before it is executed.
      *
-     * @param $sQuery
-     *
-     * @return mixed
+     * @param string $sQuery
+     * @return string
      */
     public function ProcessSearchQueryBeforeInsert($sQuery)
     {
         return $sQuery;
     }
 
+    /**
+     * @param string[] $aWords
+     * @return string
+     * @throws TPkgCmsException_Log
+     */
     public function GetBestSuggestion($aWords)
     {
         $sBestWord = '';
@@ -290,6 +312,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
     /**
      * return array with categorie ids and number of hits for that category.
      *
+     * @param string $sFilters
      * @return array
      */
     public function GetSearchResultCategoryHits($sFilters = '')
@@ -389,6 +412,8 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
     /**
      * clear cache item.
+     *
+     * @return void
      */
     public function ClearCache()
     {
@@ -400,6 +425,9 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
         $this->sqlData['id'] = null;
     }
 
+    /**
+     * @return void
+     */
     public static function ClearCompleteCache()
     {
         $query = 'TRUNCATE `shop_search_cache_item`';

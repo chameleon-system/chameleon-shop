@@ -83,6 +83,8 @@ class TShopOrderItem extends TAdbShopOrderItem
      * while the original is still in the database.
      *
      * @param bool $bIsInsert - set to true if this is an insert
+     *
+     * @return void
      */
     protected function PreSaveHook($bIsInsert)
     {
@@ -112,6 +114,8 @@ class TShopOrderItem extends TAdbShopOrderItem
 
     /**
      * use the method to up the sales count for the article.
+     *
+     * @return void
      */
     protected function PostInsertHook()
     {
@@ -126,6 +130,8 @@ class TShopOrderItem extends TAdbShopOrderItem
 
     /**
      * update the article counter.
+     *
+     * @return void
      */
     protected function PreDeleteHook()
     {
@@ -187,7 +193,7 @@ class TShopOrderItem extends TAdbShopOrderItem
         return array();
     }
 
-    /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD
+    /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD */
 
     /**
      * returns an array with all table names that are relevant for the render function.
@@ -195,7 +201,7 @@ class TShopOrderItem extends TAdbShopOrderItem
      * @param string $sViewName - the view name being requested (if know by the caller)
      * @param string $sViewType - the view type (core, custom-core, customer) being requested (if know by the caller)
      *
-     * @return array
+     * @return string[]
      */
     public static function GetCacheRelevantTables($sViewName = null, $sViewType = null)
     {

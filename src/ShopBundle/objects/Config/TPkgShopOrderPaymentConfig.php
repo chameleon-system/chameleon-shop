@@ -15,6 +15,7 @@ class TPkgShopOrderPaymentConfig implements IPkgShopOrderPaymentConfig
 {
     /**
      * @var string
+     * @psalm-var self::ENVIRONMENT_*
      */
     private $environment;
     /**
@@ -25,6 +26,7 @@ class TPkgShopOrderPaymentConfig implements IPkgShopOrderPaymentConfig
     /**
      * @param string   $environment self::ENVIRONMENT_SANDBOX or self::ENVIRONMENT_PRODUCTION
      * @param string[] $configData
+     * @psalm-param self::ENVIRONMENT_* $environment
      */
     public function __construct($environment, array $configData)
     {
@@ -40,6 +42,7 @@ class TPkgShopOrderPaymentConfig implements IPkgShopOrderPaymentConfig
 
     /**
      * @return string - self::ENVIRONMENT_PRODUCTION|self::ENVIRONMENT_SANDBOX
+     * @psalm-return self::ENVIRONMENT_*
      */
     public function getEnvironment()
     {
@@ -58,6 +61,8 @@ class TPkgShopOrderPaymentConfig implements IPkgShopOrderPaymentConfig
      * @param bool $captureOnShipment
      *
      * @throws InvalidArgumentException
+     *
+     * @return void
      */
     public function setCaptureOnShipment($captureOnShipment)
     {

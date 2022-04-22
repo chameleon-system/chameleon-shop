@@ -32,6 +32,8 @@ class TShopWishlistDataExtranetUser extends TShopWishlistDataExtranetUserAutoPar
      * remove an article form the wishlist.
      *
      * @param string $sPkgShopWishlistArticleId - the id of the item on the list
+     *
+     * @return void
      */
     public function RemoveArticleFromWishlist($sPkgShopWishlistArticleId)
     {

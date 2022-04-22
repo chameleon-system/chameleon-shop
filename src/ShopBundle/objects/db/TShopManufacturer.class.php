@@ -153,6 +153,7 @@ class TShopManufacturer extends TShopManufacturerAutoParent
     /**
      * return the icon for the manufacturer. returns false if none found.
      *
+     * @param bool $bReturnDefaultImageIfNoneSet
      * @return TCMSImage|false
      */
     public function GetIcon($bReturnDefaultImageIfNoneSet = false)
@@ -174,6 +175,7 @@ class TShopManufacturer extends TShopManufacturerAutoParent
      * return the logo for the manufacturer. if none has been set, it will return the icon instead
      * if there is no icon either, it will return false.
      *
+     * @param bool $bReturnDefaultImageIfNoneSet
      * @return TCMSImage|false
      */
     public function GetLogo($bReturnDefaultImageIfNoneSet = false)
@@ -194,6 +196,9 @@ class TShopManufacturer extends TShopManufacturerAutoParent
         return $oLogo;
     }
 
+    /**
+     * @return false|void
+     */
     protected function PostLoadHook()
     {
         if (!TGlobal::IsCMSMode() && is_array($this->sqlData) && in_array('active', $this->sqlData)) {

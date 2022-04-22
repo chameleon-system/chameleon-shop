@@ -15,7 +15,7 @@ class TPkgShopListfilterItemList extends TAdbPkgShopListfilterItemList
      * create a new instance.
      *
      * @param string $sQuery
-     * @param int    $iLanguage
+     * @param string|null $iLanguageId
      */
     public function __construct($sQuery = null, $iLanguageId = null)
     {

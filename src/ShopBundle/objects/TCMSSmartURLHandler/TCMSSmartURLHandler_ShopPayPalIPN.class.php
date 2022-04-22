@@ -103,6 +103,9 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
         return $iPageId;
     }
 
+    /**
+     * @return never
+     */
     private function handleError()
     {
         header('HTTP/1.1 400 Bad Request');

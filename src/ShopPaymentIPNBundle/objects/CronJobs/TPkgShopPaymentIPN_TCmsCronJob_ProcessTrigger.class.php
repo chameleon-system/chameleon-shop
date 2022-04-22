@@ -11,6 +11,9 @@
 
 class TPkgShopPaymentIPN_TCmsCronJob_ProcessTrigger extends TdbCmsCronjobs
 {
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         parent::_ExecuteCron();

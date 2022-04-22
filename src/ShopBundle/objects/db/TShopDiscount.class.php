@@ -242,6 +242,11 @@ class TShopDiscount extends TShopDiscountAutoParent
      * @param TdbDataExtranetUser $oUser
      * @return boolean
     */
+    /**
+     * @param TdbDataExtranetUser|null $oUser
+     *
+     * @return bool
+     */
     public function AllowDiscountForUser($oUser)
     {
         $bIsValid = $this->AllowDiscountForNonUsers();
@@ -313,6 +318,9 @@ class TShopDiscount extends TShopDiscountAutoParent
      * returns true, if the discount is restricted to some basket values/content
      * @return boolean
     */
+    /**
+     * @return bool
+     */
     public function HasBasketRestrictions()
     {
         $bRestrictedToBasket = (($this->fieldRestrictToArticlesFrom > 0) || ($this->fieldRestrictToArticlesTo > 0) || ($this->fieldRestrictToValueFrom > 0) || ($this->fieldRestrictToValueTo > 0));
@@ -320,10 +328,10 @@ class TShopDiscount extends TShopDiscountAutoParent
         return $bRestrictedToBasket;
     }
 
-    /*
+    /**
      * return true if the discount is restricted to the basket content (such as article or article category)
-     * return boolean
-    */
+     * @return bool
+     */
     public function HasBasketContentRestrictions()
     {
         $bHasArticleRestriction = $this->GetFromInternalCache('bHasArticleRestriction');
@@ -342,6 +350,8 @@ class TShopDiscount extends TShopDiscountAutoParent
 
     /**
      * trigger a clear cache on all related articles.
+     *
+     * @return void
      */
     public function ClearCacheOnAllAffectedArticles()
     {

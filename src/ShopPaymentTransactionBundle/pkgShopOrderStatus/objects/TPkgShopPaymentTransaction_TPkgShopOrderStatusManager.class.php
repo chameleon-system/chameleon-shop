@@ -25,6 +25,8 @@ class TPkgShopPaymentTransaction_TPkgShopOrderStatusManager extends TPkgShopPaym
      * @throws TPkgCmsException_Log
      * @throws TPkgCmsException_LogAndMessage
      * @throws TPkgShopPaymentTransactionException_PaymentHandlerDoesNotSupportTransaction
+     *
+     * @return void
      */
     protected function triggerTransactionBasedOnStatus(TdbShopOrderStatus $oStatus)
     {

@@ -13,15 +13,39 @@ namespace ChameleonSystem\ShopArticleDetailPagingBundle\Interfaces;
 
 interface ListItemInterface
 {
+    /**
+     * @return string|null
+     */
     public function getUrl();
 
+    /**
+     * @return string|null
+     */
     public function getName();
 
+    /**
+     * @return string|null
+     */
     public function getId();
 
+    /**
+     * @param string $url
+     *
+     * @return void
+     */
     public function setUrl($url);
 
+    /**
+     * @param null $name
+     *
+     * @return void
+     */
     public function setName($name);
 
+    /**
+     * @param string $id
+     *
+     * @return void
+     */
     public function setId($id);
 }

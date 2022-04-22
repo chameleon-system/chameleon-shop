@@ -68,7 +68,7 @@ class TShopPaymentHandlerDataTrans_CreditCard extends TShopPaymentHandlerDataTra
     /**
      * return the default payment data for the handler.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function GetDefaultUserPaymentData()
     {

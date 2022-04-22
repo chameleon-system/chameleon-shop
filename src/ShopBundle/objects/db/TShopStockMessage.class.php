@@ -11,7 +11,14 @@
 
 class TShopStockMessage extends TAdbShopStockMessage
 {
+    /**
+     * @var null|array{amount: int, range: float, oTrigger: TdbShopStockMessageTrigger}[]
+     */
     protected $aMessagesForQuantity = null;
+
+    /**
+     * @var string|null
+     */
     private $sArticleKey = null;
 
     /**
@@ -139,6 +146,8 @@ class TShopStockMessage extends TAdbShopStockMessage
 
     /**
      * @param TdbShopArticle $oArticle
+     *
+     * @return void
      */
     public function SetArticle($oArticle)
     {
@@ -217,7 +226,7 @@ class TShopStockMessage extends TAdbShopStockMessage
      *
      * @param int $dQuantityRequested
      *
-     * @return array
+     * @return array{amount: int, range: float, oTrigger: TdbShopStockMessageTrigger}[]
      */
     protected function GetMessagesFromTriggerForQuantity($dQuantityRequested)
     {
@@ -276,8 +285,9 @@ class TShopStockMessage extends TAdbShopStockMessage
         return $this->GetFieldShopStockMessageTriggerListOrdered();
     }
 
-    /*
-     * @param array|null $aOrderBy
+    /**
+     * @param array<string, string>|null $aOrderBy
+     * @psalm-param array<string, 'ASC'|'DESC'>|null $aOrderBy
      * @return TdbShopStockMessageTriggerList
      */
     public function &GetFieldShopStockMessageTriggerListOrdered(array $aOrderBy = null)

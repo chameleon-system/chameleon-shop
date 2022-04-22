@@ -13,11 +13,29 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TPkgShopPaymentTransactionContextEndPoint
 {
+    /**
+     * @var string
+     */
     private $context = null;
+
+    /**
+     * @var TdbDataExtranetUser
+     */
     private $extranetUser = null;
+
+    /**
+     * @var string|null
+     */
     private $ip = null;
+
+    /**
+     * @var TdbCmsUser|null
+     */
     private $cmsUser = null;
 
+    /**
+     * @param string $sContext
+     */
     public function __construct($sContext)
     {
         $this->context = $sContext;
@@ -28,7 +46,7 @@ class TPkgShopPaymentTransactionContextEndPoint
     }
 
     /**
-     * @return \TdbCmsUser|null
+     * @return TdbCmsUser|null
      */
     public function getCmsUser()
     {

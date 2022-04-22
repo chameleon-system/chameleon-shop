@@ -15,6 +15,12 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
      * update the group assignment for the user. return true if at least one group was changed
      * @return boolean
     */
+    /**
+     * @return bool
+     *
+     * @param string $sUserid
+     * @param float $dOrderValue
+     */
     public static function UpdateAutoAssignToUserQuick($sUserid, $dOrderValue)
     {
         $sEscapedUserid = MySqlLegacySupport::getInstance()->real_escape_string($sUserid);
@@ -63,6 +69,9 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
      * update ALL users
      * @return int
     */
+    /**
+     * @return int
+     */
     public function UpdateAutoAssignAllUsers()
     {
         // get all users that no longer apply
@@ -95,6 +104,11 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
      * update the group assignment for the user. return true if at least one group was changed
      * @return boolean
     */
+    /**
+     * @param TShopDataExtranetUser $oUser
+     *
+     * @return bool
+     */
     public static function UpdateAutoAssignToUser($oUser)
     {
         $dOrderValue = $oUser->GetTotalOrderValue();

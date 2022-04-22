@@ -19,6 +19,8 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      * @param string $sId
      *
      * @example TdbShopVariantDisplayHandler
+     *
+     * @return null|object
      */
     public static function GetInstance($sId)
     {
@@ -194,6 +196,8 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      * @param string         $sViewType      - location of the view (Core, Custom-Core, Customer)
      *
      * @deprecated since 6.2.0 - no longer used.
+     *
+     * @return void
      */
     protected function AddClearCacheTriggers(&$aClearTriggers, &$oArticle, $sViewName, $sViewType)
     {

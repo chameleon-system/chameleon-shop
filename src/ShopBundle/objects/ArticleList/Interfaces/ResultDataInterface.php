@@ -15,10 +15,20 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interface
 
 interface ResultDataInterface
 {
+    /**
+     * @param int $totalNumberOfResults
+     * @return void
+     */
     public function setTotalNumberOfResults($totalNumberOfResults);
 
+    /**
+     * @return int
+     */
     public function getTotalNumberOfResults();
 
+    /**
+     * @return int
+     */
     public function count();
 
     /**
@@ -27,7 +37,7 @@ interface ResultDataInterface
     public function getPage();
 
     /**
-     * @param $page
+     * @param int $page
      *
      * @return $this
      */
@@ -51,12 +61,15 @@ interface ResultDataInterface
     public function getNumberOfPages();
 
     /**
-     * @param $pageSize
+     * @param int $pageSize
      *
      * @return $this
      */
     public function setPageSize($pageSize);
 
+    /**
+     * @return int
+     */
     public function getPageSize();
 
     /**
@@ -64,5 +77,9 @@ interface ResultDataInterface
      */
     public function getRawResult();
 
+    /**
+     * @param ResultInterface $rawResult
+     * @return void
+     */
     public function setRawResult(ResultInterface $rawResult);
 }

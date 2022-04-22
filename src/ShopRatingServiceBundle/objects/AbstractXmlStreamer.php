@@ -33,10 +33,10 @@ abstract class XmlStreamer
     private $customRootNode;
 
     /**
-     * @param $mixed             Path to XML file OR file handle
-     * @param $chunkSize         Bytes to read per cycle (Optional, default is 16 KiB)
-     * @param $customRootNode    Specific root node to use (Optional)
-     * @param $totalBytes        Xml file size - Required if supplied file handle
+     * @param string|resource $mixed Path to XML file OR file handle
+     * @param int $chunkSize Bytes to read per cycle (Optional, default is 16 KiB)
+     * @param string|null $customRootNode Specific root node to use (Optional)
+     * @param int|null $totalBytes Xml file size - Required if supplied file handle
      */
     public function __construct($mixed, $chunkSize = 16384, $customRootNode = null, $totalBytes = null, $customChildNode = null)
     {
@@ -78,9 +78,9 @@ abstract class XmlStreamer
     /**
      * Gets called for every XML node that is found as a child to the root node.
      *
-     * @param $xmlString     Complete XML tree of the node as a string
-     * @param $elementName   Name of the node for easy access
-     * @param $nodeIndex     Zero-based index that increments for every node
+     * @param string $xmlString     Complete XML tree of the node as a string
+     * @param string $elementName   Name of the node for easy access
+     * @param int $nodeIndex     Zero-based index that increments for every node
      *
      * @return bool - If false is returned, the streaming will stop
      */

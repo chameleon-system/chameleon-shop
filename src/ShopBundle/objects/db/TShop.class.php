@@ -38,6 +38,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * set the affiliate partner code for the current session.
      *
      * @param string $sCode
+     *
+     * @return void
      */
     public function SetAffiliateCode($sCode)
     {
@@ -101,6 +103,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * store a copy of the active search object.
      *
      * @param TdbShopSearchCache $oActiveSearchCache
+     *
+     * @return void
      */
     public function SetActiveSearchCacheObject(TdbShopSearchCache $oActiveSearchCache)
     {
@@ -245,6 +249,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * return an sql string for the current filter.
      *
      * @return string
+     *
+     * @param string $sExcludeKey
      */
     public static function GetActiveFilterString($sExcludeKey = '')
     {
@@ -259,6 +265,14 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
         return implode(' AND ', $aTmp);
     }
 
+    /**
+     * @param string $sFilterKey
+     * @param string $sFilterVal
+     *
+     * @psalm-param string|TdbShopCategory::FILTER_KEY_* $sFilterKey
+     *
+     * @return string
+     */
     public static function GetFilterSQLString($sFilterKey, $sFilterVal)
     {
         $sSQL = '';
@@ -605,6 +619,10 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * render the shipping infos.
      *
+     * @param string $sViewName
+     * @param string $sViewType
+     * @param array $aCallTimeVars
+     *
      * @return string
      */
     public function RenderShippingInfo($sViewName, $sViewType, $aCallTimeVars = array())
@@ -686,6 +704,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * @param string $sSpotName
      * @param string $sParentId
      * @param string $sShopVariantArticleId
+     *
+     * @return void
      */
     public static function RegisterActiveVariantForSpot($sSpotName, $sParentId, $sShopVariantArticleId)
     {
@@ -725,6 +745,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
 
     /**
      * clear all registered varaints for alle spots.
+     *
+     * @return void
      */
     public static function ResetAllRegisteredActiveVariantsForAllSpots()
     {
@@ -764,6 +786,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * commit the current content to cache - need only be called if something relevant
      * changes in the object.
+     *
+     * @return void
      */
     public function CacheCommit()
     {

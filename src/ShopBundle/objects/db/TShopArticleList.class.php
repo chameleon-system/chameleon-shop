@@ -66,6 +66,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      * @param string $sOrderString
      * @param int    $iLimit
      * @param array  $aFilter                            - any filters you want to add to the list
+     * @param string $sCustomBaseQuery
      *
      * @return TdbShopArticleList
      */
@@ -240,6 +241,10 @@ class TShopArticleList extends TShopArticleListAutoParent
      * session cleanup method.
      *
      * @return string
+     *
+     * @param null|string $sViewName
+     * @param null|string $sViewType
+     * @param array|null $aCallTimeVars
      */
     public function StoreListObjectInSession($sViewName = null, $sViewType = null, $aCallTimeVars = null)
     {
@@ -359,6 +364,8 @@ class TShopArticleList extends TShopArticleListAutoParent
      *
      * @param int $iStartRecord
      * @param int $iPageSize
+     *
+     * @return void
      */
     public function RestorePagingInfoFromSession($iStartRecord, $iPageSize)
     {

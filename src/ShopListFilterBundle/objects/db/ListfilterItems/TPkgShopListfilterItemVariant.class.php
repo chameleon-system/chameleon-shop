@@ -29,6 +29,9 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
      */
     protected $sItemFieldName = 'shop_variant_type_value_mlt';
 
+    /**
+     * @var string
+     */
     protected $sVariantTypeIdentifier = 'color';
 
     /**
@@ -60,6 +63,11 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
         return $oVariantType;
     }
 
+    /**
+     * @param array<string, mixed> $aOptions
+     *
+     * @return void
+     */
     protected function OrderOptions(&$aOptions)
     {
         // get the variant type based on the first value

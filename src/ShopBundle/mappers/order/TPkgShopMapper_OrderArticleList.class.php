@@ -11,6 +11,7 @@
 
 class TPkgShopMapper_OrderArticleList extends AbstractViewMapper
 {
+    /** @var bool */
     protected $bAbsoluteArticleUrls = false;
 
     /**
@@ -42,6 +43,7 @@ class TPkgShopMapper_OrderArticleList extends AbstractViewMapper
      * get the value map for the whole article list (order items) of the order.
      *
      * @param TdbShopOrder $oOrder
+     * @param bool|false $bCachingEnabled
      *
      * @return array
      */
@@ -63,6 +65,7 @@ class TPkgShopMapper_OrderArticleList extends AbstractViewMapper
      * the the value map for one article (order item).
      *
      * @param TdbShopOrderItem $oOrderItem
+     * @param bool $bCachingEnabled
      *
      * @return array
      */

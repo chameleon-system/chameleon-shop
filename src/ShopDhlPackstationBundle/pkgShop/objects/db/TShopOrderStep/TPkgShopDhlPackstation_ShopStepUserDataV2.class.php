@@ -28,6 +28,8 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
 
     /**
      * switch the current shipping address from being a packstation address to a normal address and back.
+     *
+     * @return void
      */
     public function ChangeShippingAddressIsPackstationState()
     {
@@ -90,7 +92,9 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
      *
      * if the user wants shipping=billing, then we can only allow this if the new target
      *
-     * @param $sShipToBillingAddress
+     * @param string $sShipToBillingAddress
+     *
+     * @return void
      */
     protected function SetShipToBillingAddress($sShipToBillingAddress)
     {
@@ -112,7 +116,7 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
     /**
      * returns an alternative address from the users address book other than the reference id passed.
      *
-     * @param $sReferenceAddressId
+     * @param string $sReferenceAddressId
      * @param string $sForAddressForm - billing or shipping (use TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING)
      *
      * @return int|string|null
@@ -139,7 +143,7 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
     /**
      * validate billing address.
      *
-     * @param $aAddress
+     * @param array<string, mixed> $aAddress
      *
      * @return bool
      */
@@ -175,6 +179,8 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
      * Set correct billing address if new selected shipping address is packstation.
      *
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function ChangeSelectedAddress()
     {
@@ -216,6 +222,8 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
      *
      * @param string $newShippingAddressId
      * @param string $newBillingAddressId
+     *
+     * @return void
      */
     private function updateStepAddressDataForAddressId($newShippingAddressId, $newBillingAddressId)
     {

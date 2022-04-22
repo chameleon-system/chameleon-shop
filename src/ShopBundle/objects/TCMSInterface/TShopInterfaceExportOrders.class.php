@@ -10,7 +10,7 @@
  */
 
 /**
- * @extends TCMSInterfaceManagerBaseExportCSV<TdbShopOrder, TdbShopOrderList>
+ * @extends TCMSInterfaceManagerBaseExportCSV<TdbShopOrder>
  */
 class TShopInterfaceExportOrders extends TCMSInterfaceManagerBaseExportCSV
 {

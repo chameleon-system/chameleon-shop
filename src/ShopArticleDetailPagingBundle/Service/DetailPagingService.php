@@ -43,7 +43,8 @@ class DetailPagingService implements DetailPagingServiceInterface
     }
 
     /**
-     * @param $currentArticleId
+     * @param string $currentArticleId
+     * @param string $pagerSpotName
      *
      * @return ListItemInterface|null
      *
@@ -63,7 +64,8 @@ class DetailPagingService implements DetailPagingServiceInterface
     }
 
     /**
-     * @param $currentArticleId
+     * @param string $currentArticleId
+     * @param string $pagerSpotName
      *
      * @return ListItemInterface|null
      */
@@ -81,7 +83,7 @@ class DetailPagingService implements DetailPagingServiceInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getBackToListUrl($pagerSpotName)
     {
@@ -181,7 +183,7 @@ class DetailPagingService implements DetailPagingServiceInterface
 
     /**
      * @param ListItemInterface $item
-     * @param $listPageUrl
+     * @param string $listPageUrl
      *
      * @return ListItemInterface
      */

@@ -14,6 +14,10 @@ class TShopModuleArticlelistFilterSearch extends TdbShopModuleArticleListFilter
     const PARAM_QUERY = 'q';
     const SESSION_NAME_QUERY_CALL = 'TShopModuleArticlelistFilterSearchQUERYCALL';
     const URL_FILTER = 'lf';
+
+    /**
+     * @var bool
+     */
     private $hasSearch = false;
 
     /**
@@ -76,6 +80,8 @@ class TShopModuleArticlelistFilterSearch extends TdbShopModuleArticleListFilter
      * @param string $sQueryString  - the query string that is searched for in all fields
      * @param mixed  $aQueryStrings - query strings that search only specific fields
      * @param array  $aFilter       - any additional filters (such as manufacturer)
+     *
+     * @return void
      */
     protected function GetQuerySearchPostParameters(&$sQueryString, &$aQueryStrings, &$aFilter)
     {
@@ -134,6 +140,8 @@ class TShopModuleArticlelistFilterSearch extends TdbShopModuleArticleListFilter
 
     /**
      * is called when the module initializes.
+     *
+     * @return void
      */
     public function ModuleInitHook()
     {

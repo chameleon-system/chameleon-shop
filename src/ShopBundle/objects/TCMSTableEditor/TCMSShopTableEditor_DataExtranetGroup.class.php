@@ -19,6 +19,8 @@ class TCMSShopTableEditor_DataExtranetGroup extends TCMSTableEditor
      *
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
+     *
+     * @return void
      */
     protected function PostSaveHook(&$oFields, &$oPostTable)
     {

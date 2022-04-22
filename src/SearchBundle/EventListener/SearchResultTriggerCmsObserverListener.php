@@ -15,6 +15,9 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Event\ArticleListFilterExecut
 
 class SearchResultTriggerCmsObserverListener
 {
+    /**
+     * @return void
+     */
     public function onArticleListResultGenerated(ArticleListFilterExecutedEvent $event)
     {
         if (false === $this->isSearchEvent($event)) {
@@ -25,6 +28,9 @@ class SearchResultTriggerCmsObserverListener
         $oSearchObserver->AddSearch('pkgShop', $this->getNumberOfResults($event));
     }
 
+    /**
+     * @return bool
+     */
     private function isSearchEvent(ArticleListFilterExecutedEvent $event)
     {
         $searchClass = '\TShopModuleArticlelistFilterSearch';
@@ -32,6 +38,9 @@ class SearchResultTriggerCmsObserverListener
         return $event->getFilter() instanceof $searchClass;
     }
 
+    /**
+     * @return int
+     */
     private function getNumberOfResults(ArticleListFilterExecutedEvent $event)
     {
         return $event->getResultData()->getTotalNumberOfResults();

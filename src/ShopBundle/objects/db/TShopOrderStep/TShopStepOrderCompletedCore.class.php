@@ -13,6 +13,8 @@ class TShopStepOrderCompletedCore extends TShopStepUserData
 {
     /**
      * we deactivate the basket step... after all, at this point, it has been reset.
+     *
+     * @return void
      */
     protected function CheckBasketContents()
     {
@@ -74,6 +76,7 @@ class TShopStepOrderCompletedCore extends TShopStepUserData
     /**
      * used to display the step.
      *
+     * @param string $sSpotName
      * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
@@ -114,6 +117,8 @@ class TShopStepOrderCompletedCore extends TShopStepUserData
      * Set last user bought into session.
      *
      * @param TdbDataExtranetUser $oUser
+     *
+     * @return void
      */
     protected function SetLastUserBoughtToSession($oUser)
     {
@@ -122,6 +127,8 @@ class TShopStepOrderCompletedCore extends TShopStepUserData
 
     /**
      * Removes last user bought into session.
+     *
+     * @return void
      */
     public function RemoveLastUserBoughtFromSession()
     {

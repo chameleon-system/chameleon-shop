@@ -21,6 +21,7 @@ interface IPkgShopOrderPaymentConfig
 
     /**
      * @return string - self::ENVIRONMENT_PRODUCTION|self::ENVIRONMENT_SANDBOX
+     * @psalm-return self::ENVIRONMENT_*
      */
     public function getEnvironment();
 
@@ -31,7 +32,7 @@ interface IPkgShopOrderPaymentConfig
 
     /**
      * @param bool $captureOnShipment
-     *
+     * @return void
      * @throws InvalidArgumentException
      */
     public function setCaptureOnShipment($captureOnShipment);

@@ -78,6 +78,8 @@ class TPkgImageHotspotItemSpot extends TAdbPkgImageHotspotItemSpot
      * @param string $sViewName     - name of the view
      * @param string $sViewType     - where to look for the view
      * @param array  $aCallTimeVars - optional parameters to pass to render method
+     *
+     * @return string
      */
     public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
     {

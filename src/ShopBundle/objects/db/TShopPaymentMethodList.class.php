@@ -13,6 +13,9 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 
 class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
 {
+    /**
+     * @var float|null
+     */
     protected $dPrice = null;
 
     /**
@@ -102,6 +105,9 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
         return $oList;
     }
 
+    /**
+     * @return void
+     */
     public function RemoveInvalidItems()
     {
         // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
@@ -127,6 +133,8 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
 
     /**
      * remove list items that are restricted to some user or user group.
+     *
+     * @return void
      */
     public function RemoveRestrictedItems()
     {

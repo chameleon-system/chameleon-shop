@@ -102,6 +102,9 @@ class TCMSSmartURLHandler_ShopPaymentOgone extends TCMSSmartURLHandler_ShopBaske
         return $iPageId;
     }
 
+    /**
+     * @return never
+     */
     private function handleError()
     {
         header('HTTP/1.1 404 Not Found');

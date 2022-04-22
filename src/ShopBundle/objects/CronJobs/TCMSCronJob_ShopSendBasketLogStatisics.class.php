@@ -16,12 +16,22 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TCMSCronJob
 {
     const MAIL_SYSTEM_NAME = 'basketstatistics';
 
+    /**
+     * Uses error message as a key and a counter as a value
+     * @var array<array-key, positive-int>
+     */
     private $aCancelStep = array();
+
+    /** @var int */
     private $sTotalBaskets = 0;
+
+    /** @var float */
     private $sTotalMoneyCanceled = 0;
 
     /**
      * Get all none processed shop baskets and send generated statistics to shop owner.
+     *
+     * @return void
      */
     protected function _ExecuteCron()
     {
@@ -45,6 +55,8 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TCMSCronJob
      * Mark order basket as processed. So no statistics for this order basket will be generated next time.
      *
      * @param TdbShopOrderBasket $oOrderBasket
+     *
+     * @return void
      */
     protected function MarkOrderBasketAsProcessed($oOrderBasket)
     {
@@ -124,6 +136,8 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TCMSCronJob
 
     /**
      * If basket was finished completely add it to overfiew statistics.
+     *
+     * @return void
      */
     protected function AddCompleteOrderToStatistics()
     {
@@ -224,6 +238,8 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TCMSCronJob
      * Send complete statisticreport to shop owner.
      *
      * @param string $sStatistics
+     *
+     * @return void
      */
     protected function SendBasketStatistics($sStatistics)
     {

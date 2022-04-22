@@ -11,6 +11,9 @@
 
 class TPkgShopListfilter_TShopModuleArticleListFilter extends TPkgShopListfilter_TShopModuleArticleListFilterAutoParent
 {
+    /**
+     * @var bool
+     */
     private $bCanBeFiltered = false;
 
     /**

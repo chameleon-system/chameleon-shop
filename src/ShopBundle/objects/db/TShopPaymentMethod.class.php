@@ -23,7 +23,11 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
 {
     const VIEW_PATH = 'pkgShop/views/db/TShopPaymentMethod';
 
+    /**
+     * @var float|null
+     */
     protected $dPrice = null;
+
     /**
      * payment handler.
      *
@@ -57,7 +61,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
      * @param TdbShop             $oShop
      * @param TShopBasket         $oBasket
      * @param TdbDataExtranetUser $oUser
-     * @param $sMessageConsumer
+     * @param string $sMessageConsumer
      *
      * @return bool
      */
@@ -491,6 +495,8 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
     /**
      * the method should be called when returning from an external payment handler such as paypal
      * Note: you should not need to change this method - instead, work with the same method in the payment handler.
+     *
+     * @return bool
      */
     public function PostProcessExternalPaymentHandlerHook()
     {

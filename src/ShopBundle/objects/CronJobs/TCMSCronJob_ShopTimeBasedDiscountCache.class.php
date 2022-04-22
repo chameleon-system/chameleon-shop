@@ -17,6 +17,9 @@
 /**/
 class TCMSCronJob_ShopTimeBasedDiscountCache extends TCMSCronJob
 {
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         $sToday = MySqlLegacySupport::getInstance()->real_escape_string(date('Y-m-d H:i:s'));

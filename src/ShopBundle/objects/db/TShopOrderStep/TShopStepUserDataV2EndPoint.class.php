@@ -89,7 +89,9 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * prevent the ProcessStepMethod from executing.
      *
-     * @param $bState
+     * @param bool $bState
+     *
+     * @return void
      */
     protected function SetPreventProcessStepMethodFromExecuting($bState)
     {
@@ -122,6 +124,8 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      * @static
      *
      * @param string $sMode - must be one of register, user, or guest
+     *
+     * @return void
      */
     public static function SetUserMode($sMode)
     {
@@ -182,9 +186,12 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * initialize user data and set the state of UserDataSubmission to true if submitted
      * if no data was submitted the user data will be loaded by the data of the user object.
+     *
+     * @return void
      */
     protected function InitUserData()
     {
+        /** @var array<string, mixed>|null $userData */
         $userData = $this->getInputFilterUtil()->getFilteredPostInput('aUser');
         if (null === $userData) {
             $oUser = self::getExtranetUserProvider()->getActiveUser();
@@ -198,10 +205,14 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * initialize shipping address data and set the state of UserDataSubmission to true if data was submitted
      * if no data was submitted the shipping address data will be loaded by shipping address of user.
+     *
+     * @return void
      */
     protected function InitShippingAddress()
     {
         $inputFilterUtil = $this->getInputFilterUtil();
+
+        /** @var array<string, mixed>|null $shippingAddressData */
         $shippingAddressData = $inputFilterUtil->getFilteredPostInput(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
         if (null !== $shippingAddressData) {
             $this->SetShippingAddressData($shippingAddressData);
@@ -225,10 +236,14 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * initialize billing address data and set the state of UserDataSubmission to true if data was submitted
      * if no data was submitted the billing address data will be loaded by billing address of user.
+     *
+     * @return void
      */
     protected function InitBillingAddress()
     {
         $inputFilterUtil = $this->getInputFilterUtil();
+
+        /** @var array<string, mixed> $billingAddressData */
         $billingAddressData = $inputFilterUtil->getFilteredPostInput(TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING);
         if (null !== $billingAddressData) {
             $this->SetBillingAddressData($billingAddressData);
@@ -256,6 +271,8 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      *
      * if no data was submitted because the browser will submit nothing if a checkbox is not checked but other post data was submitted
      * we have a submit request so the the SetShipToBillingAddress will be called with value 1 (true) by default if you don't want this - overwrite this method
+     *
+     * @return void
      */
     protected function InitChangeShipToBillingState()
     {
@@ -463,6 +480,8 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      * update the billing address of the user.
      *
      * @param array $aBillingAddress
+     *
+     * @return void
      */
     protected function UpdateBillingAddress($aBillingAddress)
     {
@@ -474,6 +493,8 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      * update the shipping address of the user.
      *
      * @param array $aShippingAddress
+     *
+     * @return void
      */
     protected function UpdateShippingAddress($aShippingAddress)
     {
@@ -512,6 +533,10 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
         return $bValid;
     }
 
+    /**
+     * @param string $mail
+     * @return bool
+     */
     protected function validateUserEMail($mail)
     {
         if (false === TTools::IsValidEMail($mail)) {
@@ -541,7 +566,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * validate billing address.
      *
-     * @param $aAddress
+     * @param array<string, mixed> $aAddress
      *
      * @return bool
      */
@@ -555,7 +580,9 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * write user base data (such as login and password... etc) to our user data array.
      *
-     * @param $aUserData
+     * @param array<string, mixed> $aUserData
+     *
+     * @return void
      */
     protected function SetUserData($aUserData)
     {
@@ -565,7 +592,9 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * store shipping address for local access.
      *
-     * @param $aAddressData
+     * @param array $aAddressData
+     *
+     * @return void
      */
     protected function SetShippingAddressData($aAddressData)
     {
@@ -575,7 +604,9 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * store billing address for local access.
      *
-     * @param $aAddressData
+     * @param array $aAddressData
+     *
+     * @return void
      */
     protected function SetBillingAddressData($aAddressData)
     {
@@ -585,7 +616,9 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * set state of ship to billing yes/no.
      *
-     * @param $sShipToBillingAddress
+     * @param string $sShipToBillingAddress
+     *
+     * @return void
      */
     protected function SetShipToBillingAddress($sShipToBillingAddress)
     {
@@ -631,10 +664,10 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * returns an alternative address from the users address book other than the reference id passed.
      *
-     * @param $sReferenceAddressId
-     * @param string $sForAddressForm - billing or shipping (use TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING)
+     * @param string $sForAddressForm
+     * @param string $sReferenceAddressId
      *
-     * @return int|string|null
+     * @return string
      */
     protected function GetAnotherAddressFromUser($sReferenceAddressId, $sForAddressForm = TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING)
     {
@@ -832,6 +865,8 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     /**
      * the method will update the user with the shipping and billing address IDs passed. calling the
      * method will cause the ProcessStep method from being called.
+     *
+     * @return void
      */
     public function ChangeSelectedAddress()
     {

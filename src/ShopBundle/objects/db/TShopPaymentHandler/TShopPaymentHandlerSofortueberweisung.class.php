@@ -126,7 +126,9 @@ class TShopPaymentHandlerSofortueberweisung extends TdbShopPaymentHandler
     /**
      * return SEO URL for the requested response.
      *
-     * @param $sResponseName string
+     * @param string $sResponse
+     *
+     * @return string
      */
     protected function GetResponseURL($sResponse)
     {
@@ -248,6 +250,8 @@ class TShopPaymentHandlerSofortueberweisung extends TdbShopPaymentHandler
      * @param array        $aResponseData
      * @param TdbShopOrder $oOrder
      * @param string       $sMessageConsumer
+     *
+     * @return bool
      */
     protected function ValidateResponseData($aResponseData, TdbShopOrder &$oOrder, $sMessageConsumer)
     {
@@ -350,6 +354,9 @@ class TShopPaymentHandlerSofortueberweisung extends TdbShopPaymentHandler
     /**
      * method handles the server response from sofortueberweisung - this will set/update the status of the
      * order.
+     *
+     * @param array<string, mixed> $aParameter
+     * @return void
      */
     public function HandleNotifyMessage($aParameter)
     {

@@ -23,7 +23,14 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
      */
     const PAYPAL_API_VERSION = '84.0';
 
+    /**
+     * @var string|null
+     */
     protected $sPayPalToken = null;
+
+    /**
+     * @var array<string, mixed>|null
+     */
     protected $aCheckoutDetails = null;
 
     /**
@@ -114,7 +121,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     /**
      * renders a paypal response error message.
      *
-     * @param $aMessageData
+     * @param array<string, string> $aMessageData
      *
      * @return string
      */
@@ -336,7 +343,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     /**
      * return the currency identifier for the currency we pay in.
      *
-     * @param $oPkgShopCurrency TdbPkgShopCurrency
+     * @param TdbPkgShopCurrency|null $oPkgShopCurrency
      *
      * @return string
      */

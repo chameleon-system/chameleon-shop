@@ -24,7 +24,7 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
     private $databaseConnection;
 
     /**
-     * @param $articleId
+     * @param string $articleId
      *
      * @return ProductStatisticsInterface
      */
@@ -41,6 +41,11 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
         return $stats;
     }
 
+    /**
+     * @param array<string, mixed> $row
+     *
+     * @return ProductStatistics
+     */
     private function createStatsObject($row)
     {
         $stats = new ProductStatistics();
@@ -52,6 +57,13 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
         return $stats;
     }
 
+    /**
+     * @param string $articleId
+     * @param int $type
+     * @param float $amount
+     * @psalm-param self::TYPE_* $type
+     * @return void
+     */
     public function add($articleId, $type, $amount)
     {
         $field = $this->getTargetField($type);
@@ -68,6 +80,13 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
         );
     }
 
+    /**
+     * @param string $articleId
+     * @param int $type
+     * @param float $amount
+     * @psalm-param self::TYPE_* $type
+     * @return void
+     */
     public function set($articleId, $type, $amount)
     {
         $field = $this->getTargetField($type);
@@ -84,6 +103,10 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
         );
     }
 
+    /**
+     * @param string $parentArticleId
+     * @return void
+     */
     public function updateAllBasedOnVariants($parentArticleId)
     {
         $query = 'SELECT
@@ -125,12 +148,19 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {
         $this->databaseConnection = $connection;
     }
 
+    /**
+     * @return null|string
+     *
+     * @param int $type
+     */
     private function getTargetField($type)
     {
         switch ($type) {

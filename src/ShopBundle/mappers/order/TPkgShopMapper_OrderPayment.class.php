@@ -40,6 +40,7 @@ class TPkgShopMapper_OrderPayment extends AbstractViewMapper
 
     /**
      * @param TdbShopOrder $oOrder
+     * @param bool|false $bCachingEnabled
      *
      * @return array
      */

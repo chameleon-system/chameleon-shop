@@ -31,6 +31,8 @@ class TShopSearchQuery extends TAdbShopSearchQuery
      * prepare the index table.
      *
      * @param bool $bRegenerateCompleteIndex
+     *
+     * @return void
      */
     public function StartIndex($bRegenerateCompleteIndex = true)
     {
@@ -187,6 +189,8 @@ class TShopSearchQuery extends TAdbShopSearchQuery
 
     /**
      * stop the current index operation.
+     *
+     * @return void
      */
     public function StopIndex()
     {

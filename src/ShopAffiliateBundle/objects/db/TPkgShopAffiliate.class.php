@@ -14,9 +14,11 @@ use esono\pkgCmsCache\CacheInterface;
 
 class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
 {
-    public $sCode = null;
     const SESSION_AFFILIATE_PROGRAM_CODE = 'TdbPkgShopAffiliate-data';
     const COOKIE_NAME = 'chameleon-affiliate-marker';
+
+    /** @var string|null */
+    public $sCode = null;
 
     /**
      * return instance of class (casted as correct type.
@@ -172,6 +174,8 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
      *
      * @param string $sCode               - code found
      * @param bool   $bRestoredFromCookie - set to true, if the data was restored from a cookie
+     *
+     * @return void
      */
     public function FoundCodeHook($sCode, $bRestoredFromCookie = false)
     {
@@ -225,6 +229,8 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
      *
      * @param TdbShopOrder $oOrder
      * @param array        $aParameter
+     *
+     * @return void
      */
     protected function GetAdditionalViewVariables(&$oOrder, &$aParameter)
     {

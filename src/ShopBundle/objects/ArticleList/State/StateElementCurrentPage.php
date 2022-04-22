@@ -14,8 +14,14 @@ namespace ChameleonSystem\ShopBundle\objects\ArticleList\State;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Exceptions\InvalidPageNumberException;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateElementInterface;
 
+/**
+ * @implements StateElementInterface<positive-int|0|null>
+ */
 class StateElementCurrentPage implements StateElementInterface
 {
+    /**
+     * @return string
+     */
     public function getKey()
     {
         return 'p';
@@ -39,6 +45,7 @@ class StateElementCurrentPage implements StateElementInterface
 
         return true;
     }
+
 
     public function normalize($value)
     {

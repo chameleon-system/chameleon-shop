@@ -22,7 +22,7 @@ class ResultModification implements ResultModificationInterface
     /**
      * @param ResultInterface $result
      * @param array           $configuration
-     * @param $filterDepth
+     * @param int $filterDepth
      *
      * @return ResultInterface
      */
@@ -37,6 +37,11 @@ class ResultModification implements ResultModificationInterface
         return $result;
     }
 
+    /**
+     * @return bool
+     *
+     * @param int $filterDepth
+     */
     private function listAllowsUseOfPostSearchFilter(array $configuration, $filterDepth)
     {
         if (false === $this->postSearchFilterEnabled($configuration)) {
@@ -50,16 +55,28 @@ class ResultModification implements ResultModificationInterface
         return true;
     }
 
+    /**
+     * @param array $configuration
+     *
+     * @return bool
+     */
     private function postSearchFilterEnabled($configuration)
     {
         return true === isset($configuration[self::CONFIG_CAN_BE_FILTERED]) && '1' === $configuration[self::CONFIG_CAN_BE_FILTERED];
     }
 
+    /**
+     * @param int $filterDepth
+     * @return bool
+     */
     private function isTheResultSetOfAFallbackFilter($filterDepth)
     {
         return $filterDepth > 0;
     }
 
+    /**
+     * @return string
+     */
     private function getFilterQueryString()
     {
         return \TdbPkgShopListfilter::GetActiveInstance()->getActiveFilterAsQueryString();

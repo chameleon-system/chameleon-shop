@@ -14,8 +14,10 @@ class TDataExtranetUserShopArticleHistoryList extends TAdbDataExtranetUserShopAr
     /**
      * @static
      *
-     * @param $iNumberOfRecords
-     * @param $sExtranetUserId
+     * @param positive-int $iNumberOfRecords
+     * @param string $sExtranetUserId
+     *
+     * @return void
      */
     public static function ReducedListForUser($iNumberOfRecords, $sExtranetUserId)
     {

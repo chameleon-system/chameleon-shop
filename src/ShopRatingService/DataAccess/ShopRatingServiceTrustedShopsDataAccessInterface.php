@@ -13,7 +13,26 @@ namespace ChameleonSystem\ShopRatingService\DataAccess;
 
 interface ShopRatingServiceTrustedShopsDataAccessInterface
 {
+    /**
+     * @param string $remoteKey
+     * @return int
+     */
     public function getItemCountForRemoteKey($remoteKey);
 
+    /**
+     * @param array<string, mixed> $data
+     * @psalm-param array{
+     *     insertId: string,
+     *     pkgShopRatingServiceId: string,
+     *     remoteKey: string,
+     *     score: int|'',
+     *     rawData: string,
+     *     ratingUser: string,
+     *     ratingText: string,
+     *     ratingDate: string,
+     * } $data
+     *
+     * @return void
+     */
     public function insertItem(array $data);
 }

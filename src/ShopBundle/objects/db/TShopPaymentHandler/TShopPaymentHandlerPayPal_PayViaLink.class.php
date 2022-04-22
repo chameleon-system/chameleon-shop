@@ -127,6 +127,8 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
     /**
      * @param TdbShopOrder $oOrder
      * @param array        $aURLParameter
+     *
+     * @return bool
      */
     public function ProcessIPNRequest($oOrder, $aURLParameter)
     {
@@ -333,6 +335,8 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
      * @param TdbShopOrder $oOrder
      * @param float        $dPaymentValue
      * @param string       $sPaymentCurrency
+     *
+     * @return void
      */
     protected function IPNPaymentReceivedHook($oOrder, $dPaymentValue)
     {
@@ -343,11 +347,17 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
         return parent::GetViewPath().'/TShopPaymentHandlerPayPal_PayViaLink';
     }
 
-    /** This function will take NVPString and convert it to an Associative Array and it will decode the response.
+    /**
+     * This function will take NVPString and convert it to an Associative Array and it will decode the response.
      * It is usefull to search for a particular key and displaying arrays.
      *
      * @nvpstr is NVPString.
+     *
      * @nvpArray is Associative Array.
+     *
+     * @param bool|string $nvpstr
+     *
+     * @return array<string, string>
      */
     public function ExtractPayPalNVPResponse($nvpstr)
     {

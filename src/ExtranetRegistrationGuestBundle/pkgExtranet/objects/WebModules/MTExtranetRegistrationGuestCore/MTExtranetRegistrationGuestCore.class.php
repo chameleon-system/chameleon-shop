@@ -37,6 +37,8 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
      *
      * @param null $sSuccessURL
      * @param null $sFailureURL
+     *
+     * @return void
      */
     protected function RegisterGuestUser($sSuccessURL = null, $sFailureURL = null)
     {
@@ -101,6 +103,8 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
 
     /**
      * if user is not allowed to be register redirect to access denied page.
+     *
+     * @return void
      */
     protected function HandleRegisterAfterShopping()
     {
@@ -145,6 +149,8 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
      * validate the extranet user data (in the current extranet object).
      *
      * @return bool
+     *
+     * @param TdbDataExtranetUser $oUser
      */
     protected function ValidateGivenUserData($oUser)
     {

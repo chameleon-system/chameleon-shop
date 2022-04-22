@@ -23,11 +23,13 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     const INDEX_SET_SIZE = 500; // indicates how many records are processed by each index step
     const INDEX_TBL_PREFIX = '_index_';
 
+    /** @var string[] */
     protected $aTablesToProcess = array();
+
     /**
      * set to false, if you want to update the index only for those objects that changed.
      *
-     * @var $bRegenerateCompleteIndex boolean
+     * @var bool
      */
     protected $bRegenerateCompleteIndex = true;
 
@@ -35,6 +37,8 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      * set index mode (full or partial).
      *
      * @param bool $bRegenerateCompleteIndex - set to true if you want a full reindexing or false if you do not
+     *
+     * @return void
      */
     public function SetRegenerateCompleteIndex($bRegenerateCompleteIndex)
     {
@@ -46,6 +50,9 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         }
     }
 
+    /**
+     * @return void
+     */
     protected function PostLoadHook()
     {
         parent::PostLoadHook();
@@ -60,6 +67,8 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
     /**
      * commit processing data to database.
+     *
+     * @return void
      */
     protected function CommitProcessData()
     {
@@ -125,6 +134,9 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         return '0000-00-00 00:00:00' == $this->fieldCompleted;
     }
 
+    /**
+     * @return bool|false
+     */
     public function IndexerHasFinished()
     {
         $bIsDone = (!is_array($this->aTablesToProcess) || count($this->aTablesToProcess) < 1);
@@ -139,6 +151,8 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      * performs the next index set.
      *
      * @param bool $bIndexUsingTicker - if set to true, each call to this method will only index as many rows as defined by INDEX_SET_SIZE
+     *
+     * @return void
      */
     public function ProcessNextIndexStep($bIndexUsingTicker = true)
     {
@@ -180,6 +194,9 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         $this->getCache()->enable();
     }
 
+    /**
+     * @return void
+     */
     protected function IndexCompletedHook()
     {
         $this->aTablesToProcess = array();
@@ -204,6 +221,8 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
     /**
      * initialize indexer.
+     *
+     * @return void
      */
     public function InitializeIndexer()
     {
@@ -289,6 +308,9 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     * returns true, if ALL index tables exists
     * @return boolean
     */
+    /**
+     * @return bool
+     */
     public function IndexHasContent()
     {
         $bHasContent = true;
@@ -302,6 +324,8 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
     /**
      * create all index tables for the field and drop tables no longer needed.
+     *
+     * @return void
      */
     public function CreateIndexTables()
     {
@@ -341,6 +365,9 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         }
     }
 
+    /**
+     * @return false|null
+     */
     protected function CopyIndexTables()
     {
         /**
@@ -484,6 +511,8 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      * @param array  $aSearchTerms - assoc array with shop_search_field_weight_id as key - search only the specified fields
      * @param array  $aFilter      - any sql filters you want to add
      * @param string $sLanguageId  - the language we search in. if null, we get the language from TGlobal
+     *
+     * @return string
      */
     public static function GetSearchQuery($sSearchTerm, $aSearchTerms = null, $aFilter = array(), $sLanguageId = null)
     {
@@ -629,6 +658,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      * @param string $sLanguage               - search in which language?
      * @param array  $aFieldRestrictions
      * @param string $sTypeOfFieldRestriction - if the field restrictions are ORed or ANDed
+     * @param string $sLanguageId
      *
      * @return array - returns an array with one parameter holding the query, the other a list of relevant table names
      */
@@ -702,6 +732,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      *
      * @param string $sWords
      * @param bool   $bFilterIgnoreWords - removes ignore words form the list if set
+     * @param string $sOrigianlString
      *
      * @return array
      */
@@ -821,6 +852,12 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         return soundex($sWord);
     }
 
+    /**
+     * @param string $sTable
+     * @param string $sId
+     * @param string $sType
+     * @return false|null
+     */
     public static function UpdateIndex($sTable, $sId, $sType)
     {
         if (PKG_SEARCH_USE_SEARCH_QUEUE == false) {

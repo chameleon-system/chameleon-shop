@@ -21,7 +21,7 @@ class ShopShippingTypeDataAccessRuntimeCacheDecorator implements ShopShippingTyp
      */
     private $subject;
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $cache = array();
 

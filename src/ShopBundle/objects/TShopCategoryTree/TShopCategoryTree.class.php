@@ -27,6 +27,9 @@ class TShopCategoryTree
      */
     protected $oRealCategory = null;
 
+    /**
+     * @var bool
+     */
     public $bIsActive = false;
 
     /**
@@ -76,7 +79,9 @@ class TShopCategoryTree
     /**
      * Loads Category tree from given master category id.
      *
-     * @param  $sChildCategoryId
+     * @param string $sChildCategoryId
+     *
+     * @return void
      */
     protected function LoadChildTreeExecute($sChildCategoryId)
     {
@@ -109,7 +114,7 @@ class TShopCategoryTree
      * Returns query to get all child categories for given category id.
      * If given category id is empty then returns query to get master categories.
      *
-     * @param  $sChildCategoryId
+     * @param string $sChildCategoryId
      *
      * @return string
      */
@@ -126,6 +131,8 @@ class TShopCategoryTree
 
     /**
      * Resets all item count in all category trees.
+     *
+     * @return void
      */
     public function ResetCounter()
     {
@@ -144,7 +151,7 @@ class TShopCategoryTree
      * Function not uses external views. Html was rendered in class for better performance.
      * If you want to change something on the html overwrite one of the render functions.
      *
-     * @param bool $sListFilterItemId
+     * @param string|false $sListFilterItemId
      * @param bool $bHideEmptyCategories
      * @param bool $bShowArticleCount
      * @param int  $iLevelCount
@@ -188,7 +195,7 @@ class TShopCategoryTree
     /**
      * Renders list of child categories recursively.
      *
-     * @param bool $sListFilterItemId
+     * @param string|false $sListFilterItemId
      * @param bool $bHideEmptyCategories
      * @param bool $bShowArticleCount
      * @param int  $iLevelCount
@@ -211,7 +218,7 @@ class TShopCategoryTree
     /**
      * Renders the category name and item count.
      *
-     * @param bool $sListFilterItemId
+     * @param string|false $sListFilterItemId
      * @param bool $bShowArticleCount
      * @param int  $iLevelCount
      *
@@ -249,7 +256,7 @@ class TShopCategoryTree
      * If tree was used as a filter function returns url to filter for the category.
      * If tree was used as normal category tree then function returns link to category detail page.
      *
-     * @param bool $sListFilterItemId
+     * @param string|false $sListFilterItemId
      *
      * @return string
      */
@@ -270,7 +277,9 @@ class TShopCategoryTree
     /**
      * return url that sets the filter to the current category.
      *
-     * @param string $sValue
+     * @param string|false $sListFilterItemId
+     *
+     * @return string
      */
     public function GetAddFilterURL($sListFilterItemId)
     {
@@ -287,8 +296,8 @@ class TShopCategoryTree
      * Clear active category filter for the filter url.
      * You can filter onyl for one category.
      *
-     * @param  $aURLData
-     * @param  $sListFilterItemId
+     * @param array $aURLData
+     * @param string|false $sListFilterItemId
      *
      * @return array
      */
@@ -305,8 +314,8 @@ class TShopCategoryTree
     /**
      * Add item count to category in tree and add it to all parent categories.
      *
-     * @param  $sCategoryId
-     * @param  $iArticleCount
+     * @param int $iArticleCount
+     * @param string $sCategoryId
      *
      * @return bool
      */
@@ -336,7 +345,7 @@ class TShopCategoryTree
     /**
      * mark categories and their parents as active if they are in the array.
      *
-     * @param $aActiveCategories
+     * @param array $aActiveCategories
      *
      * @return bool
      */

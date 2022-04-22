@@ -113,8 +113,8 @@ class TShopPaymentHandlerEasyCash_Debit extends TShopPaymentHandlerEasyCash
     /**
      * returns true if the transaction confirmation was successfully send to EasyCash.
      *
-     * @param $sPayId
-     * @param $sXID
+     * @param string $sPayId
+     * @param string $sXID
      *
      * @return bool
      */
@@ -159,7 +159,7 @@ class TShopPaymentHandlerEasyCash_Debit extends TShopPaymentHandlerEasyCash
     /**
      * return the default payment data for the handler.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function GetDefaultUserPaymentData()
     {

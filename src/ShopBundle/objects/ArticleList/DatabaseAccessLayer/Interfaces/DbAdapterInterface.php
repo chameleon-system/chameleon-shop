@@ -14,14 +14,14 @@ namespace ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Int
 interface DbAdapterInterface
 {
     /**
-     * @param $instanceID
+     * @param string $instanceID
      *
      * @return ConfigurationInterface
      */
     public function getConfigurationFromInstanceId($instanceID);
 
     /**
-     * @param $filterId
+     * @param string $filterId
      *
      * @return FilterDefinitionInterface
      */
@@ -36,14 +36,14 @@ interface DbAdapterInterface
     public function getListResults(ConfigurationInterface $moduleConfiguration, FilterInterface $filter);
 
     /**
-     * @param $sortTypeId
+     * @param string $sortTypeId
      *
      * @return SortTypeInterface
      */
     public function getSortTypeFromId($sortTypeId);
 
     /**
-     * @param $configurationId
+     * @param string $configurationId
      *
      * @return array
      */

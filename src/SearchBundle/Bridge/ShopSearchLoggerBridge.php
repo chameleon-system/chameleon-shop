@@ -35,6 +35,14 @@ class ShopSearchLoggerBridge implements ShopSearchLoggerInterface
         $this->languageService = $languageService;
     }
 
+
+    /**
+     * @param string $searchString
+     * @param array<string, string> $searchFilter
+     * @param int $numberOfMatches
+     * @return void
+     * @throws \ErrorException
+     */
     public function logSearch($searchString, array $searchFilter, $numberOfMatches)
     {
         $searchString = $this->convertSearchToString($searchString, $searchFilter);
@@ -56,6 +64,11 @@ class ShopSearchLoggerBridge implements ShopSearchLoggerInterface
         $oLog->Save();
     }
 
+    /**
+     * @param string $searchString
+     * @param array<string, string> $searchFilter
+     * @return string
+     */
     private function convertSearchToString($searchString, array $searchFilter)
     {
         $parts = array();

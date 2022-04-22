@@ -13,16 +13,17 @@ use ChameleonSystem\ShopRatingService\Util\CacheUtil;
 
 class TPkgShopRatingService_EkomiEndPoint extends TdbPkgShopRatingService
 {
+    /** @var bool */
     public $bDebug = true;
 
+    /** @var string */
     protected $sCsvFilePath = '';
 
     /**
      * Don't send usual rating email, but send a copy of the order email to eKomi.
      *
-     * @param $oUser
-     * @param $aOrder
-     *
+     * @param array<string, mixed> $aOrder
+     * @param TdbDataExtranetUser $oUser
      * @return bool
      */
     public function SendShopRatingEmail($oUser, $aOrder)
@@ -63,6 +64,8 @@ class TPkgShopRatingService_EkomiEndPoint extends TdbPkgShopRatingService
 
     /**
      * @param array $aCSV
+     *
+     * @return void
      */
     protected function ImportLine($aCSV)
     {
@@ -117,6 +120,8 @@ class TPkgShopRatingService_EkomiEndPoint extends TdbPkgShopRatingService
     /**
      * @param string $sMessage
      * @param int    $iLine
+     *
+     * @return void
      */
     protected function WriteLogEntry($sMessage, $iLine)
     {

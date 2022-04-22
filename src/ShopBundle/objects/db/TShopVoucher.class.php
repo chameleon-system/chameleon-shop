@@ -164,6 +164,9 @@ class TShopVoucher extends TShopVoucherAutoParent
         ));
     }
 
+    /**
+     * @return void
+     */
     protected function PostWakeUpHook()
     {
         // the series holds info about the voucher - including for example min value. changes in this should affect the voucher right away. so clear the internal cache on wakeup
@@ -386,6 +389,8 @@ class TShopVoucher extends TShopVoucherAutoParent
      * in the shop_voucher_use table.
      *
      * @param int $iShopOrderId - the order for which the voucher is being used
+     *
+     * @return void
      */
     public function CommitVoucherUseForCurrentUser($iShopOrderId)
     {
@@ -446,6 +451,8 @@ class TShopVoucher extends TShopVoucherAutoParent
      * method can be used to process the use data before the commit is called.
      *
      * @param array $aData
+     *
+     * @return void
      */
     protected function CommitVoucherUseForCurrentUserPreSaveHook(&$aData)
     {
@@ -453,6 +460,8 @@ class TShopVoucher extends TShopVoucherAutoParent
 
     /**
      * mark the voucher as Completely used.
+     *
+     * @return void
      */
     public function MarkVoucherAsCompletelyUsed()
     {
@@ -567,10 +576,10 @@ class TShopVoucher extends TShopVoucherAutoParent
         return substr(implode('', $aPasswordChars), 0, $iLength);
     }
 
-    /*
+    /**
      * return true if the voucher is sponsored - else return false
-     * @return boolean
-    */
+     * @return bool
+     */
     public function IsSponsored()
     {
         $bIsSponsored = $this->GetFromInternalCache('bVoucherIsSponsored');
