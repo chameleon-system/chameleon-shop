@@ -132,8 +132,8 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     }
 
     /**
-     * @param string|array $sData - either the id of the object to load, or the row with which the instance should be initialized
-     * @param string $sLanguage - init with the language passed
+     * @param string|array|null $sData - either the id of the object to load, or the row with which the instance should be initialized
+     * @param string|null $sLanguage - init with the language passed
      * @return TdbShopOrderStep|null
      */
     public static function GetNewInstance($sData = null, $sLanguage = null)

@@ -75,9 +75,12 @@ class TPkgShopOrderPaymentConfig implements IPkgShopOrderPaymentConfig
     /**
      * @param string $key
      * @param mixed  $default
+     * @return mixed
      *
-     * @return string|bool
-     * @psalm-return ($default is bool ? bool : string)
+     * Assumption: The return type is defined by the default parameter.
+     * @psalm-template T
+     * @psalm-param T $default
+     * @psalm-return (T is null ? mixed : T)
      */
     public function getValue($key, $default = null)
     {

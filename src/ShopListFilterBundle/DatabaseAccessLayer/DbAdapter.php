@@ -35,7 +35,7 @@ class DbAdapter
                      AND `cms_tpl_page_cms_master_pagedef_spot`.`cms_tpl_page_id` = :pageId
                  ";
 
-        /** @var false|non-empty-list<string> $instanceData */
+        /** @psalm-var false|non-empty-list<string> $instanceData */
         $instanceData = $this->getDatabaseConnection()->fetchArray($query, array('pageId' => $pageId));
         if (false === $instanceData) {
             return null;

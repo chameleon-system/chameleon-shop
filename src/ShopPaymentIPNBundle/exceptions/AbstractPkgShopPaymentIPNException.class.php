@@ -21,7 +21,8 @@ abstract class AbstractPkgShopPaymentIPNException extends Exception
     }
 
     /**
-     * @return class-string<self>
+     * @return string
+     * @psalm-return class-string<self>
      */
     public function getErrorType()
     {
