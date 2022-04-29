@@ -67,7 +67,8 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
         ];
         $url .= $this->getUrlUtil()->getArrayAsUrl($params, '', '&');
 
-        $menuItem->sOnClick = "if (confirm(".$translator->trans('chameleon_system_shop.orders.export_confirm').")) { GetAjaxCall('".$url."',DisplayAjaxMessage); }";
+        $confirmText = \TGlobal::OutJS($translator->trans('chameleon_system_shop.orders.export_confirm'));
+        $menuItem->sOnClick = "if (confirm('$confirmText')) { GetAjaxCall('".$url."',DisplayAjaxMessage); }";
 
         return $menuItem;
     }
