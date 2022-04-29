@@ -90,7 +90,7 @@ class ShopCurrencyService implements ShopCurrencyServiceInterface
     public function getActiveCurrencyId($bUseDefaultIfNotDefinedForUser = true)
     {
         $request = $this->requestStack->getCurrentRequest();
-        if (null === $request || !$request->getSession() || false === $request->getSession()->isStarted()) {
+        if (false === $request->hasSession() || false === $request->getSession()->isStarted()) {
             return null;
         }
 

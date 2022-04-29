@@ -518,7 +518,8 @@ class TShopOrder extends TShopOrderAutoParent
      */
     public function SendOrderNotification($sSendToMail = null, $sSendToName = null)
     {
-        $bOrderSend = false;
+        $orderNotificationBeforeSendStatus = $this->fieldSystemOrderNotificationSend;
+        $this->updateSendOrderNotificationState(true);
 
         if (is_null($sSendToMail)) {
             $sSendToMail = $this->fieldUserEmail;
@@ -531,6 +532,9 @@ class TShopOrder extends TShopOrderAutoParent
 
         TCMSImage::ForceNonSSLURLs(true); // force image urls to non ssl for use in order email
         if (is_null($oMail)) {
+            if(false === $orderNotificationBeforeSendStatus) {
+                $this->updateSendOrderNotificationState(false);
+            }
             $bOrderSend = TGlobal::Translate('chameleon_system_shop.order_notification.error_mail_template_not_found', array('%emailTemplate%' => self::MAIL_CONFIRM_ORDER));
         } else {
             $aMailData = $this->sqlData;
@@ -566,6 +570,17 @@ class TShopOrder extends TShopOrderAutoParent
         } elseif (!$bOrderSend && !TGlobal::IsCMSMode()) {
             $aData = $this->AddOrderNotificationDataForOrderFailure($aData, $oMail, $sSendToMail);
         }
+        $this->LoadFromRow($aData);
+        $this->AllowEditByAll(true);
+        $this->Save();
+        $this->AllowEditByAll(false);
+    }
+
+    protected function updateSendOrderNotificationState(bool $state): void
+    {
+        $aData = $this->sqlData;
+        $aData['system_order_notification_send'] = true === $state ? '1' : '0';
+
         $this->LoadFromRow($aData);
         $this->AllowEditByAll(true);
         $this->Save();
@@ -608,6 +623,7 @@ class TShopOrder extends TShopOrderAutoParent
             $aData = array();
         }
         $aData['object_mail'] = base64_encode(serialize($oMail));
+        $aData['system_order_notification_send'] = '0';
 
         return $aData;
     }

@@ -16,10 +16,13 @@ use ChameleonSystem\ShopArticleDetailPagingBundle\Bridge\Service\RequestToListUr
 use ChameleonSystem\ShopArticleDetailPagingBundle\Interfaces\RequestToListUrlConverterInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class RequestToListUrlConverterTest extends TestCase
 {
+    use ProphecyTrait;
+
     private $referrer = null;
     /**
      * @var InputFilterUtilInterface
@@ -40,7 +43,7 @@ class RequestToListUrlConverterTest extends TestCase
      */
     private $pagerParameters;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         if (!defined('TCMSUSERINPUT_DEFAULTFILTER')) {
@@ -48,7 +51,7 @@ class RequestToListUrlConverterTest extends TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->referrer = null;

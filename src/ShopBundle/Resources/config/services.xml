@@ -131,7 +131,7 @@
             <argument type="service" id="chameleon_system_shop.product_inventory_service_provider" />
         </service>
 
-        <service id="chameleon_system_shop.product_controller" class="%chameleon_system_shop.product_controller.class%">
+        <service id="chameleon_system_shop.product_controller" class="%chameleon_system_shop.product_controller.class%" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.language_service" />
             <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
@@ -156,7 +156,7 @@
         <service id="chameleon_system_shop.shop_route_article_factory" class="%chameleon_system_shop.shop_route_article_factory.class%">
         </service>
 
-        <service id="chameleon_system_shop.basket_step_controller" class="TPkgShopBasketStepsRouteController">
+        <service id="chameleon_system_shop.basket_step_controller" class="TPkgShopBasketStepsRouteController" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.language_service" />
             <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
@@ -181,7 +181,7 @@
             <argument type="service" id="database_connection" />
         </service>
 
-        <service id="chameleon_system_shop.payment.config_loader" class="ChameleonSystem\ShopBundle\Payment\PaymentConfig\ShopPaymentConfigLoader">
+        <service id="chameleon_system_shop.payment.config_loader" class="ChameleonSystem\ShopBundle\Payment\PaymentConfig\ShopPaymentConfigLoader" public="true">
             <argument type="service" id="chameleon_system_shop.payment.config_loader_data_access" />
             <argument type="expression">(container.getParameter('kernel.environment') === 'prod') ? constant('IPkgShopOrderPaymentConfig::ENVIRONMENT_PRODUCTION') : constant('IPkgShopOrderPaymentConfig::ENVIRONMENT_SANDBOX')</argument>
         </service>
@@ -197,7 +197,7 @@
             <argument type="service" id="chameleon_system_shop.payment.handler_data_access_request_level_cache_decorator.inner" />
         </service>
 
-        <service id="chameleon_system_shop.payment.handler_factory" class="ChameleonSystem\ShopBundle\Payment\PaymentHandler\ShopPaymentHandlerFactory">
+        <service id="chameleon_system_shop.payment.handler_factory" class="ChameleonSystem\ShopBundle\Payment\PaymentHandler\ShopPaymentHandlerFactory" public="true">
             <argument type="service" id="chameleon_system_shop.payment.config_loader" />
             <argument type="service" id="chameleon_system_shop.payment.handler_data_access" />
         </service>
@@ -264,6 +264,7 @@
 
         <service id="chameleon_system_shop.controller.search_suggest" class="ChameleonSystem\ShopBundle\Controller\SearchSuggestController">
             <argument type="service" id="chameleon_system_shop.shop_search_suggest" />
+            <tag name="controller.service_arguments" />
         </service>
 
         <service id="chameleon_system_shop.shop_search_suggest" class="ChameleonSystem\ShopBundle\Service\ShopSearchSuggest">
@@ -282,9 +283,10 @@
                 public="true"
         >
             <argument type="service" id="twig"/>
+            <argument type="service" id="request_stack" />
             <argument type="service" id="logger" on-invalid="ignore"/>
             <tag name="monolog.logger" channel="request"/>
-            <tag name="kernel.event_listener" event="kernel.request" method="handleRequest" priority="253"/>
+            <tag name="kernel.event_listener" event="chameleon_system_core.filter_content" method="filterResponse" priority="0"/>
         </service>
 
     </services>

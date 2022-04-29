@@ -162,6 +162,6 @@ class ResultFactoryCache implements ResultFactoryInterface
             $state,
             true
         );
-        $this->eventDispatcher->dispatch(ShopEvents::ARTICLE_LIST_FILTER_EXECUTED, $event);
+        $this->eventDispatcher->dispatch($event, ShopEvents::ARTICLE_LIST_FILTER_EXECUTED);
     }
 }

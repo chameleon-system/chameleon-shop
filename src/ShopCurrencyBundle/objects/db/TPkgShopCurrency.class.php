@@ -194,8 +194,8 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
         TdbPkgShopCurrency::GetActiveInstance(true);
 
         $this->getEventDispatcher()->dispatch(
-            ShopCurrencyEvents::CURRENCY_CHANGED,
-            new CurrencyChangedEvent($sCurrencyId)
+            new CurrencyChangedEvent($sCurrencyId),
+            ShopCurrencyEvents::CURRENCY_CHANGED
         );
         // also mark basket as "requires recalculation"
         $oBasket = TShopBasket::GetInstance();

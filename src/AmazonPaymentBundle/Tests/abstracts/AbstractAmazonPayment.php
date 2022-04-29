@@ -25,7 +25,7 @@ abstract class AbstractAmazonPayment extends TestCase
     private $config = null;
     protected static $dbal = null;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         $containerBuilder = new \Symfony\Component\DependencyInjection\ContainerBuilder();
@@ -53,7 +53,7 @@ abstract class AbstractAmazonPayment extends TestCase
         return $this->getMockBuilder('TPkgShopPaymentTransactionManager')->setConstructorArgs(array($order))->getMock();
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -66,7 +66,7 @@ abstract class AbstractAmazonPayment extends TestCase
         $request->setSession($sessionMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->config = null;

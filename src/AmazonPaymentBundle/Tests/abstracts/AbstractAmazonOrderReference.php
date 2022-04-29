@@ -20,7 +20,7 @@ class AbstractAmazonOrderReference extends AbstractAmazonPayment
      */
     protected $order = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -44,7 +44,7 @@ class AbstractAmazonOrderReference extends AbstractAmazonPayment
         $this->order = $order;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->order = null;

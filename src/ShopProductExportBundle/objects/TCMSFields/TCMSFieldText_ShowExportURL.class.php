@@ -10,7 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * varchar field with javascript to set the blog post url onblur.
