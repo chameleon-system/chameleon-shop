@@ -144,18 +144,25 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
         return $sURL;
     }
 
-    public function exportOrderToWaWi(): string
+    public function exportOrderToWaWi(): array
     {
         $translator = $this->getTranslator();
 
         if (false !== $this->oTable->ExportOrderForWaWiHook($this->oTable->GetPaymentHandler())) {
             $this->oTable->MarkOrderAsExportedToWaWi(true);
 
-            return $translator->trans('chameleon_system_shop.orders.export_success');
+            return [
+                'messageType' => 'SUCCESS',
+                'message' => $translator->trans('chameleon_system_shop.orders.export_success')
+            ];
         }
 
-        // TODO this should however be a proper error?
-        return $translator->trans('chameleon_system_shop.orders.export_failure');
+        // TODO this should however be an http error response; which would then use AjaxError() on js side
+        return [
+            'messageType' => 'ERROR',
+            'message' => $translator->trans('chameleon_system_shop.orders.export_failure')
+        ];
+
     }
 
     /**
