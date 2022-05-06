@@ -59,7 +59,7 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
         $url = URL_CMS_CONTROLLER.'?';
         $params = [
             'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
-            '_fnc' => 'exportOrderToWaWi',
+            '_fnc' => 'exportOrder',
             '_noModuleFunction' => 'true',
             'pagedef' => 'tableeditor',
             'tableid' => $this->oTableConf->id,
@@ -144,7 +144,7 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
         return $sURL;
     }
 
-    public function exportOrderToWaWi(): array
+    public function exportOrder(): array
     {
         $translator = $this->getTranslator();
 
@@ -173,7 +173,7 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
         parent::DefineInterface();
         $this->methodCallAllowed[] = 'ShopOrderSendConfirmOrderMail';
         $this->methodCallAllowed[] = 'GetFrontendActionUrlToSendOrderEmail';
-        $this->methodCallAllowed[] = 'exportOrderToWaWi';
+        $this->methodCallAllowed[] = 'exportOrder';
     }
 
     /**
