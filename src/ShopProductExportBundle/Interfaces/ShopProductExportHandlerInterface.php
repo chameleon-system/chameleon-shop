@@ -34,7 +34,6 @@ interface ShopProductExportHandlerInterface
 
     /**
      * Run the export. returns true if the export was successful, otherwise false
-     * this method should not be overwritten in child classes.
      *
      * @return bool
      */

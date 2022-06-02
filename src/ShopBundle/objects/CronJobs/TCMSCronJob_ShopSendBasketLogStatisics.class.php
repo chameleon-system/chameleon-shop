@@ -18,7 +18,8 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TdbCmsCronjobs
 
     /**
      * Uses error message as a key and a counter as a value
-     * @var array<array-key, positive-int>
+     * @var array<mixed, int>
+     * @psalm-var array<array-key, positive-int>
      */
     private $aCancelStep = array();
 

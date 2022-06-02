@@ -54,7 +54,7 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
     /**
      * Get the payment service URL to redirect or send post request.
      *
-     * @return string
+     * @return string|false
      */
     protected function GetPaymentURL()
     {

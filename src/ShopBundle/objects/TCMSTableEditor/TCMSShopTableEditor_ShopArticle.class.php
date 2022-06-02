@@ -185,7 +185,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
      * a copy of the parent.
      *
      * @psalm-suppress InvalidReturnType
-     * @FIXME This method should return TCMSstdClass with the object data similar to it's parent, not `void`.
+     * @FIXME This method should return TCMSstdClass with the object data similar to its parent, not `void`.
      */
     public function Insert()
     {

@@ -440,7 +440,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      * Get the direct query service URL - this is the endpoint to fetch data for
      * the current transaction.
      *
-     * @return string
+     * @return string|false
      */
     protected function GetDirectQueryURL()
     {
@@ -457,7 +457,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      * Get the maintenance service URL - this is the endpoint to edit the
      * current transaction, to commit it for example.
      *
-     * @return string
+     * @return string|false
      */
     protected function GetDirectMaintenanceURL()
     {

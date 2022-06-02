@@ -172,7 +172,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      *
      * @param string $sParameterName - the system name of the handler
      *
-     * @return string
+     * @return string|false
      *
      * @throws ConfigurationException
      */

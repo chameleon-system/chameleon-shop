@@ -431,7 +431,8 @@ class MTShopStatistic_Statblock
     }
 
     /**
-     * @return positive-int
+     * @return int
+     * @psalm-return positive-int
      */
     public function GetColumnGroupDepth()
     {
