@@ -143,7 +143,7 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
     }
 
     /**
-     * @return string
+     * @return string|false
      */
     protected function GetRequestURL()
     {

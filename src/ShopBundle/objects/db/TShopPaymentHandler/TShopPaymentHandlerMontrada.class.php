@@ -244,7 +244,7 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
      *
      * @param string $sParameterName - the system name of the handler
      *
-     * @return string
+     * @return string|false
      */
     public function GetConfigParameter($sParameterName)
     {
