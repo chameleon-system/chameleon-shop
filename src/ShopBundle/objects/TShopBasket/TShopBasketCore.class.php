@@ -141,43 +141,43 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     public $sBasketIdentifier = null;
 
     /**
-     * @var TShopWrappingCard
+     * @var TShopWrappingCard|null
      */
     protected $oWrappingCard = null;
     /**
-     * @var TShopWrapping
+     * @var TShopWrapping|null
      */
     protected $oWrapping = null;
     /**
      * use GetActiveVatList to access the property.
      *
-     * @var TdbShopVatList
+     * @var TdbShopVatList|null
      */
     private $oActiveVatList = null;
     /**
      * holds the articles of the basket - NOT: you should NOT access this directly. instead use GetBasketArticles().
      *
-     * @var TShopBasketArticleList
+     * @var TShopBasketArticleList|null
      */
     protected $oBasketArticles = null;
     /**
      * use GetActiveDiscounts to access the property.
      *
-     * @var TShopBasketDiscountList
+     * @var TShopBasketDiscountList|null
      */
     private $oActiveDiscounts = null;
 
     /**
      * use GetActiveShippingGroup to access this property.
      *
-     * @var TdbShopShippingGroup
+     * @var TdbShopShippingGroup|null
      */
     private $oActiveShippingGroup = null;
 
     /**
      * use GetActivePaymentMethod to access the property.
      *
-     * @var TShopPaymentMethod
+     * @var TdbShopPaymentMethod|null
      */
     private $oActivePaymentMethod = null;
 
@@ -305,7 +305,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * set the active shipping group - return false, if an invalid group is selected.
      *
-     * @param TdbShopShippingGroup $oShippingGroup
+     * @param TdbShopShippingGroup|null $oShippingGroup
      *
      * @return bool
      */
@@ -414,7 +414,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * set the active payment method. return true on succes - false if the method is not allowed
      * Note: you hast set a shipping group first!
      *
-     * @param TdbShopPaymentMethod $oShopPayment
+     * @param TdbShopPaymentMethod|null $oShopPayment
      *
      * @return bool
      */
@@ -438,7 +438,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return the active payment method.
      *
-     * @return TdbShopPaymentMethod
+     * @return TdbShopPaymentMethod|null
      */
     public function &GetActivePaymentMethod()
     {
