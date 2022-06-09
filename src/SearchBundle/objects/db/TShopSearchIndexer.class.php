@@ -340,15 +340,14 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
                 $query = "DROP TABLE `{$sTableName}`";
                 MySqlLegacySupport::getInstance()->query($query);
             }
-            $sPrimaryKey = '';
             $query = 'CREATE TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` (
+                    `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     `shop_article_id` CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'the shop article',
                     `substring` CHAR( {$iLength} ) NOT NULL COMMENT 'the substring',
                     `cms_language_id` CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'language of substring',
                     `occurrences` INT NOT NULL COMMENT 'Number of times the substring occured in the field for that article',
                     `weight` FLOAT NOT NULL COMMENT 'calculated weight for the substring',
                     `shop_search_field_weight_id` CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'field for which the search term was made'
-                    {$sPrimaryKey}
                   )";
             MySqlLegacySupport::getInstance()->query($query);
         }
