@@ -11,9 +11,30 @@
 
 class MTShopArticleListResponse
 {
+    /**
+     * @var string|null
+     */
     public $iListKey = null;
+
+    /**
+     * @var int
+     * @psalm-var positive-int|0
+     */
     public $iNumberOfResults = 0;
+
+    /**
+     * @var bool
+     */
     public $bHasNextPage = false;
+
+    /**
+     * @var bool
+     */
     public $bHasPreviousPage = false;
+
+    /**
+     * The rendered page.
+     * @var string
+     */
     public $sItemPage = '';
 }

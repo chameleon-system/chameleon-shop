@@ -16,10 +16,29 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
  */
 class MTRatingListCore extends TUserCustomModelBase
 {
+    /**
+     * @var int
+     */
     protected $iActivePage = 0;
+
+    /**
+     * @var int
+     */
     protected $iPageSize = 3;
+
+    /**
+     * @var int[]
+     */
     protected $aPageSizes = array(20, 40, 60); //array(3,6,9,-1); -1=All
+
+    /**
+     * @var array{name: string, id: string}[]
+     */
     protected $aPageSort = array(array('name' => 'Neueste zuerst', 'id' => 'new_first'), array('name' => 'Beste zuerst', 'id' => 'best_first'), array('name' => 'Schlechteste zuerst', 'id' => 'bad_first'));
+
+    /**
+     * @var string
+     */
     protected $sActivePageSort = '';
 
     public function Init()
@@ -28,8 +47,13 @@ class MTRatingListCore extends TUserCustomModelBase
 
         // get page size from session
         $this->iPageSize = intval($this->GetModuleSessionParameter('pagesize', $this->iPageSize));
+
+        /** @psalm-suppress InvalidPropertyAssignmentValue */
         $this->iActivePage = $this->GetUserInput('page', $this->iActivePage, TCMSUserInput::FILTER_INT);
+
+        /** @psalm-suppress InvalidPropertyAssignmentValue */
         $this->iPageSize = $this->GetUserInput('pagesize', $this->iPageSize, TCMSUserInput::FILTER_INT);
+
         if (!in_array($this->iPageSize, $this->aPageSizes)) {
             $this->iPageSize = $this->aPageSizes[0];
         }
@@ -39,6 +63,8 @@ class MTRatingListCore extends TUserCustomModelBase
 
     /**
      * Set active page sort, load from user input, session, default.
+     *
+     * @return void
      */
     protected function SetActivePageSort()
     {
@@ -65,11 +91,20 @@ class MTRatingListCore extends TUserCustomModelBase
         }
     }
 
+    /**
+     * @return string
+     */
     protected function GetPageSortDefaultValue()
     {
         return $this->aPageSort[1]['id'];
     }
 
+    /**
+     * @param string $sName
+     * @param mixed $vDefault
+     *
+     * @return mixed
+     */
     protected function GetModuleSessionParameter($sName, $vDefault = null)
     {
         $sResult = $vDefault;
@@ -80,6 +115,12 @@ class MTRatingListCore extends TUserCustomModelBase
         return $sResult;
     }
 
+    /**
+     * @param string $sName
+     * @param mixed $sValue
+     *
+     * @return void
+     */
     protected function SetModuleSessionParameter($sName, $sValue)
     {
         if (!array_key_exists('cmsMTRatingListCore', $_SESSION)) {

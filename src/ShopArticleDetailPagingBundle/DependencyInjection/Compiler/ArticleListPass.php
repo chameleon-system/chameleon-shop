@@ -22,6 +22,8 @@ class ArticleListPass implements CompilerPassInterface
      * @param ContainerBuilder $container
      *
      * @api
+     *
+     * @return void
      */
     public function process(ContainerBuilder $container)
     {

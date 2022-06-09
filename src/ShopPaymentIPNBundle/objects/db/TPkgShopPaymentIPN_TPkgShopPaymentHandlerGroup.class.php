@@ -14,7 +14,7 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
     /**
      * return true if the ip may send IPN to this payment type.
      *
-     * @param $sIP
+     * @param string $sIP
      *
      * @return bool
      */
@@ -55,7 +55,10 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
      * extending AbstractPkgShopPaymentIPNHandlerException.
      *
      * @param TPkgShopPaymentIPNRequest $oRequest
+     *
      * @trows AbstractPkgShopPaymentIPNHandlerException
+     *
+     * @return void
      */
     final public function handleIPN(TPkgShopPaymentIPNRequest $oRequest)
     {
@@ -89,6 +92,8 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
      * extend this method if you want to do things for incoming ipn.
      *
      * @param TPkgShopPaymentIPNRequest $oRequest
+     *
+     * @return void
      */
     protected function handleIPNHook(TPkgShopPaymentIPNRequest $oRequest)
     {
@@ -99,6 +104,8 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
      *
      * @param IPkgShopPaymentIPNHandler $oHandler
      * @param TPkgShopPaymentIPNRequest $oRequest
+     *
+     * @return void
      */
     protected function handleTransactionHook(IPkgShopPaymentIPNHandler $oHandler, TPkgShopPaymentIPNRequest $oRequest)
     {
@@ -163,7 +170,7 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
      * overwrite this if you need to grab the order from the request data instead of getting it from the URL
      * is only called if getting the order from the URL fails.
      *
-     * @param $aRequestData
+     * @param array|null $aRequestData
      *
      * @return TdbShopOrder|null
      */
@@ -196,8 +203,8 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
     }
 
     /**
-     * @param null $sData
-     * @param null $sLanguage
+     * @param string|array $sData - either the id of the object to load, or the row with which the instance should be initialized
+     * @param string $sLanguage - init with the language passed
      *
      * @return TdbShopPaymentHandlerGroup|void
      */

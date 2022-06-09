@@ -9,12 +9,15 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @extends TCMSInterfaceManagerBaseExportCSV<TdbShopOrderItem>
+ */
 class TShopInterfaceExportOrderItems extends TCMSInterfaceManagerBaseExportCSV
 {
     /**
      * OVERWRITE THIS TO FETCH THE DATA. MUST RETURN A TCMSRecordList.
      *
-     * @return TCMSRecordList
+     * @return TdbShopOrderItemList
      */
     protected function GetDataList()
     {

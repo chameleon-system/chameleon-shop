@@ -25,6 +25,11 @@ class AddParametersToUrlService
         $this->urlUtility = $urlUtility;
     }
 
+    /**
+     * @return string
+     *
+     * @param null|string $url
+     */
     public function addParameterToUrl($url, array $parameter)
     {
         return $this->urlUtility->addParameterToUrl($url, $parameter);

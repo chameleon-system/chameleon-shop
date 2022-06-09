@@ -30,11 +30,12 @@ class TPkgShopListfilterItemManufacturer extends TPkgShopListfilterItemMultisele
      * return the query restriction for active filter. returns false if there
      * is no active restriction for this item.
      *
-     * @return string
+     * @return string|null
      */
     public function GetQueryRestrictionForActiveFilter()
     {
         $sQuery = parent::GetQueryRestrictionForActiveFilter();
+
         if (is_null($sQuery)) {
             $aValues = $this->aActiveFilterData;
             if (is_array($aValues) && count($aValues) > 0) {

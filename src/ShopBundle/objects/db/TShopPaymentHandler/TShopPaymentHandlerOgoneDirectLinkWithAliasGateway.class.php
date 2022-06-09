@@ -102,6 +102,10 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
                 $this->Set3DSecureFormToSession($this->aXMLResponseData['HTML_ANSWER']);
                 $oShop = TdbShop::GetInstance();
                 $sTargetURL = $oShop->GetLinkToSystemPage($s3DSecurePage, null, true);
+                /**
+                 * @psalm-suppress UndefinedInterfaceMethod
+                 * @FIXME `HeaderURLRedirect` only exists in a single implementatino of the interface
+                 */
                 TGlobal::GetController()->HeaderURLRedirect($sTargetURL);
             }
         }
@@ -279,6 +283,8 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      * Write 3D-Secure form data send by OGONE to session, so it can be displayed on any page.
      *
      * @param string $s3DSecureForm
+     *
+     * @return void
      */
     protected function Set3DSecureFormToSession($s3DSecureForm)
     {
@@ -305,6 +311,8 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      * parse the xml response from the DirectLink API.
      *
      * @param string $sResult - xml response as string
+     *
+     * @return void
      */
     protected function ParseXMLResponse($sResult)
     {
@@ -432,7 +440,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      * Get the direct query service URL - this is the endpoint to fetch data for
      * the current transaction.
      *
-     * @return string
+     * @return string|false
      */
     protected function GetDirectQueryURL()
     {
@@ -449,7 +457,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      * Get the maintenance service URL - this is the endpoint to edit the
      * current transaction, to commit it for example.
      *
-     * @return string
+     * @return string|false
      */
     protected function GetDirectMaintenanceURL()
     {

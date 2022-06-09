@@ -20,6 +20,8 @@ class ChameleonSystemShopRatingServiceExtension extends ConfigurableExtension
 {
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {

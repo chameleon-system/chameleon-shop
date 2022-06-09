@@ -16,7 +16,7 @@ use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
  * Note: The class could have extended from MTWizardCore, however the shop ordering process
  * was deemed so imported, that a new class was conceived to prevent changes in MTWizardCore from
  * leaking into the process.
-/**/
+ */
 class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
 {
     /**
@@ -143,6 +143,8 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
      * save the url in the session so we can use it later to return to the calling page.
      *
      * @param string $sURL
+     *
+     * @return void
      */
     public static function SetCallingURL($sURL)
     {
@@ -157,6 +159,8 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
      * the value from get/post from self::URL_PARAM_STEP_METHOD = xx.
      *
      * @param string $sStepMethod - method to execute. defaults to ExecuteStep
+     *
+     * @return false|null
      */
     public function ExecuteStep($sStepMethod = null)
     {
@@ -186,7 +190,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
     /**
      * define any head includes the step needs.
      *
-     * @return array
+     * @return string[]
      */
     public function GetHtmlHeadIncludes()
     {
@@ -269,6 +273,8 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
     /**
      * the method should be called when returning from an external payment handler such as paypal
      * note: make sure you pass the session to the URL that is called by the external handler when the process is completed!
+     *
+     * @return void
      */
     protected function PostProcessExternalPaymentHandlerHook()
     {
@@ -293,6 +299,8 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
      *
      * @param string $sPaymentMethodId
      * @param string $sPaymentMethodNameInternal
+     *
+     * @return bool
      */
     protected function JumpSelectPaymentMethod($sPaymentMethodId = null, $sPaymentMethodNameInternal = null)
     {

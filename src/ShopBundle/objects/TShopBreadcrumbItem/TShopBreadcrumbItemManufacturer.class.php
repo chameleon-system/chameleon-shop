@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @extends TShopBreadcrumbItem<TdbShopManufacturer>
+ */
 class TShopBreadcrumbItemManufacturer extends TShopBreadcrumbItem
 {
     public function __construct(TdbShopManufacturer $manufacturer)
@@ -17,6 +20,7 @@ class TShopBreadcrumbItemManufacturer extends TShopBreadcrumbItem
     }
 
     /**
+     * @param bool $bForcePortal
      * {@inheritDoc}
      */
     public function GetLink($bForcePortal = false)

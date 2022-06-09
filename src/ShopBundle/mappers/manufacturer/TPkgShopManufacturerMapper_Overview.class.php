@@ -79,6 +79,7 @@ class TPkgShopManufacturerMapper_Overview extends AbstractViewMapper
 
     /**
      * @param TdbShopManufacturerList $oManufacturerList
+     * @param bool|false $bCachingEnabled
      *
      * @return array
      */

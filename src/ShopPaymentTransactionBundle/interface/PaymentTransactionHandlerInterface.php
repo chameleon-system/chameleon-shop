@@ -85,6 +85,8 @@ interface PaymentTransactionHandlerInterface
      * @param string                             $cancellationReason
      *
      * @throws \TPkgCmsException_LogAndMessage
+     *
+     * @return void
      */
     public function cancelOrder(
         \TPkgShopPaymentTransactionManager $transactionManager,

@@ -33,7 +33,7 @@ class ShopRouteArticleFactory implements ShopRouteArticleFactoryInterface
     /**
      * @param string $identificationToken
      *
-     * @return \TdbShopArticle
+     * @return \TdbShopArticle|null
      */
     public function createArticleFromIdentificationToken($identificationToken)
     {

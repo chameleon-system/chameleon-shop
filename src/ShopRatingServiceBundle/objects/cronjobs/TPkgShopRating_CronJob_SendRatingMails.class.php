@@ -16,6 +16,7 @@
 /**/
 class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
 {
+    /** @var bool */
     private $bDebug = true; //set to true - for debugging output!
     /**
      * set to true if you do not want to insert the info into the db if the mail was sent.
@@ -24,15 +25,31 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
      */
     private $bDisableSentHistory = false;
 
+    /** @var int */
     private $Shopreviewmail_MailDelay;
+
+    /** @var float */
     private $Shopreviewmail_PercentOfCustomers;
+
+    /** @var bool */
     private $Shopreviewmail_SendForEachOrder;
 
+
+    /** @var string */
     private $sShopID = null;
+
+    /** @var string */
     private $sLanguageID = null;
+
+    /** @var string */
     private $sCountryID = null;
+
+    /** @var string */
     private $sUserCountryID = null;
 
+    /**
+     * @return void
+     */
     protected function Init()
     {
         $this->GetConfigValues();
@@ -55,6 +72,8 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
 
     /**
      * executes the cron job (add your custom method calls here).
+     *
+     * @return void
      */
     protected function _ExecuteCron()
     {
@@ -65,6 +84,8 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
 
     /**
      * Read rating-mail-config.
+     *
+     * @return void
      */
     protected function GetConfigValues()
     {
@@ -74,6 +95,9 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
         $this->Shopreviewmail_SendForEachOrder = $oShopConfig->fieldShopreviewmailSendForEachOrder;
     }
 
+    /**
+     * @return void
+     */
     protected function ProcessCompletedOrders()
     {
         $iSendForShippingDateNewerThan = $this->GetShippingDateLowerBound();
@@ -140,6 +164,9 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
         return $iLowerBound;
     }
 
+    /**
+     * @return bool
+     */
     public function SendCustomersMailOnlyOnce()
     {
         return '0' == $this->Shopreviewmail_SendForEachOrder;
@@ -236,7 +263,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
     /**
      * Try to cleanup incomming shop_order.affiliate_code.
      *
-     * @param $sAffiliateCode
+     * @param string $sAffiliateCode
      *
      * @return string
      */
@@ -272,8 +299,8 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
     /**
      * Get all rating services available for this user.
      *
-     * @param $oUser
-     * @param $aOrder array - table row from `shop_order`
+     * @param TdbDataExtranetUser $oUser
+     * @param array $aOrder - table row from `shop_order`
      *
      * @return TdbPkgShopRatingServiceList
      */
@@ -289,6 +316,12 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
         return $oRatingServiceList;
     }
 
+    /**
+     * @param TdbDataExtranetUser $oUser
+     * @param array $aOrder
+     *
+     * @return TdbPkgShopRatingService|null
+     */
     protected function GetSuitableRatingService($oUser, $aOrder)
     {
         $oAvailableRatingServiceList = $this->GetAvailableRatingServices($oUser, $aOrder);
@@ -296,6 +329,9 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
         if (!empty($aOrder['affiliate_code'])) {
             $sAffiliateCode = $this->CleanupAffiliateCode(strtolower(trim($aOrder['affiliate_code'])));
         }
+        /**
+         * @var array{weight: int, value: TdbPkgShopRatingService}[]
+         */
         $aRatingServices = array();
         while ($oRatingService = $oAvailableRatingServiceList->Next()) {
             if (strtolower(trim($oRatingService->fieldAffiliateValue)) === $sAffiliateCode) {
@@ -316,7 +352,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
      * returns the number of review mails that should be send out. this is relevant
      * if only a specified percentages of all orders should get a mail.
      *
-     * @param $iSendForShippingDateNewerThan
+     * @param int $iSendForShippingDateNewerThan
      *
      * @return int
      */
@@ -379,6 +415,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
             echo __LINE__.'iNumberOfCompletedOrders: '.$iNumberOfCompletedOrders."\n<br />\n";
         }
 
+        /** @var int $iNumberOfReviewMailsToBeSend */
         $iNumberOfReviewMailsToBeSend = ceil(($iPercentageToBeSend / 100) * $iNumberOfCompletedOrders);
 
         if ($this->bDebug) {
@@ -394,6 +431,10 @@ class TPkgShopRating_CronJob_SendRatingMails extends TCMSCronJob
         return $iNumberOfReviewMailsToBeSend;
     }
 
+    /**
+     * @param bool $bDisableSentHistory
+     * @return void
+     */
     public function SetDisableSentHistory($bDisableSentHistory)
     {
         $this->bDisableSentHistory = $bDisableSentHistory;

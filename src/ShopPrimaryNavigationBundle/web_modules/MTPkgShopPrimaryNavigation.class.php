@@ -43,6 +43,9 @@ class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
         return $parameters;
     }
 
+    /**
+     * @return null|string
+     */
     private function getActivePageId()
     {
         /** @var ActivePageServiceInterface $activePageService */
@@ -52,6 +55,9 @@ class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
         return $activePage->id;
     }
 
+    /**
+     * @return string[]
+     */
     private function getActiveUserGroups()
     {
         $user = $this->getActiveExtranetUser();
@@ -70,6 +76,9 @@ class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
         return TdbDataExtranetUser::GetInstance();
     }
 
+    /**
+     * @return null|string
+     */
     private function getActiveCategoryId()
     {
         $activeCategory = $this->getActiveCategory();

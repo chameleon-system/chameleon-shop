@@ -41,7 +41,7 @@ class TShopUnitOfMeasurement extends TShopUnitOfMeasurementAutoParent
     }
 
     /**
-     * @return TdbShopUnitOfMeasurement
+     * @return TdbShopUnitOfMeasurement|null
      */
     public function &GetFieldShopUnitOfMeasurement()
     {

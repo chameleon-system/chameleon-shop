@@ -11,8 +11,13 @@
 
 class CMSShopArticleIndex extends TCMSModelBase
 {
+    /** @var bool */
     protected $bIndexCompleted = false;
+
+    /** @var bool */
     protected $bIndexIsRunning = false;
+
+    /** @var float|false */
     protected $bPercentDone = 0;
 
     protected function DefineInterface()
@@ -21,6 +26,9 @@ class CMSShopArticleIndex extends TCMSModelBase
         $this->methodCallAllowed[] = 'TickerIndexGeneration';
     }
 
+    /**
+     * @return void
+     */
     public function TickerIndexGeneration()
     {
         $this->bIndexIsRunning = true;
@@ -60,6 +68,8 @@ class CMSShopArticleIndex extends TCMSModelBase
     /**
      * Deletes the system's search cache tables. This method is called after
      * the successfull creation of the shop's search article index.
+     *
+     * @return void
      */
     public function ClearSearchCacheTables()
     {

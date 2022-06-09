@@ -14,6 +14,9 @@ use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopShippingTypeDataAccessI
 
 class TShopShippingType extends TShopShippingTypeAutoParent
 {
+    /**
+     * @var float|null
+     */
     protected $dPrice = null;
 
     /**
@@ -39,6 +42,9 @@ class TShopShippingType extends TShopShippingTypeAutoParent
         return $bIsValid;
     }
 
+    /**
+     * @return bool
+     */
     public function endShippingTypeChain()
     {
         return true === $this->fieldEndShippingTypeChain;
@@ -94,6 +100,8 @@ class TShopShippingType extends TShopShippingTypeAutoParent
      * return true if the shipping group is allowed for the current user.
      *
      * @return bool
+     *
+     * @param bool $bCheckShippingCountry
      */
     public function IsValidForCurrentUser($bCheckShippingCountry = true)
     {
@@ -149,6 +157,11 @@ class TShopShippingType extends TShopShippingTypeAutoParent
         return $bIsValidForUser && $bIsValidGroup && $bIsValidShippingCountry;
     }
 
+    /**
+     * @param null|string $sDataCountryId
+     *
+     * @return bool
+     */
     public function IsValidForCountry($sDataCountryId)
     {
         $bIsValidForCountry = false;
@@ -398,6 +411,8 @@ class TShopShippingType extends TShopShippingTypeAutoParent
 
     /**
      * @param TShopBasketArticleList $oBasketArticleList
+     *
+     * @return float|int
      */
     public function GetPriceForBasketArticleList($oBasketArticleList)
     {

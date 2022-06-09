@@ -26,7 +26,7 @@ interface FilterFactoryInterface
     /**
      * @param FilterInterface $filter
      *
-     * @return FilterInterface
+     * @return FilterInterface|null
      */
     public function createFallbackFilter(FilterInterface $filter);
 }

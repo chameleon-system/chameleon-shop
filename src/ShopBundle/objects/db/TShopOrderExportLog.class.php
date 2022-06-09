@@ -18,6 +18,8 @@ class TShopOrderExportLog extends TShopOrderExportLogAutoParent
      *
      * @param int    $iOrderId
      * @param string $sData
+     *
+     * @return void
      */
     public static function WriteLog($iOrderId, $sData)
     {

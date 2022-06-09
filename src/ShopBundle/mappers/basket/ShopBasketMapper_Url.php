@@ -43,6 +43,11 @@ class ShopBasketMapper_Url extends AbstractViewMapper
         $visitor->SetMappedValue('basketUrl', $url);
     }
 
+    /**
+     * @param string $url
+     *
+     * @return string
+     */
     private function removeModuleMethodCalls($url)
     {
         $url_params = explode('?', $url);

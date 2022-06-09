@@ -17,7 +17,10 @@ class TPkgShopArticlePreorder_ShopArticle extends TPkgShopArticlePreorder_ShopAr
      * @param float $dOldValue
      * @param float $dNewValue
      *
-     * @return bool
+     * @return void
+     *
+     * @psalm-suppress AssignmentToVoid, NullableReturnStatement, InvalidReturnStatement
+     * @FIXME Saving void return value of parent call.
      */
     protected function StockWasUpdatedHook($dOldValue, $dNewValue)
     {

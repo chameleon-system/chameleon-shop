@@ -11,11 +11,18 @@
 
 class TPkgShopOrderStatusException_OrderStatusCodeNotFound extends TPkgCmsException_Log
 {
+    /**
+     * @var string|null
+     */
     private $statusCode = null;
+
+    /**
+     * @var string|null
+     */
     private $shopId = null;
 
     /**
-     * @param null $shopId
+     * @param string|null $shopId
      *
      * @return $this
      */
@@ -26,13 +33,16 @@ class TPkgShopOrderStatusException_OrderStatusCodeNotFound extends TPkgCmsExcept
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getShopId()
     {
         return $this->shopId;
     }
 
     /**
-     * @param null $statusCode
+     * @param string|null $statusCode
      *
      * @return $this
      */
@@ -43,11 +53,17 @@ class TPkgShopOrderStatusException_OrderStatusCodeNotFound extends TPkgCmsExcept
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStatusCode()
     {
         return $this->statusCode;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         $sString = parent::__toString();

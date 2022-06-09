@@ -18,6 +18,11 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\FilterFactoryInter
 class FilterFactory implements FilterFactoryInterface
 {
     /**
+     * This works because `ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Filter` extends
+     * `ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\FilterDefinition`.
+     *
+     * @psalm-suppress InvalidReturnType, InvalidReturnStatement
+     *
      * @param FilterDefinitionInterface $filterDefinition
      *
      * @return FilterInterface
@@ -30,7 +35,7 @@ class FilterFactory implements FilterFactoryInterface
     /**
      * @param FilterInterface $filter
      *
-     * @return FilterInterface
+     * @return FilterInterface|null
      */
     public function createFallbackFilter(FilterInterface $filter)
     {

@@ -36,7 +36,7 @@ class MTShopInfoCore extends TShopUserCustomModelBase
     /**
      * return config record for modul instance.
      *
-     * @return TdbShopSystemInfoModuleConfig
+     * @return TdbShopSystemInfoModuleConfig|null
      */
     protected function &GetModuleConfig()
     {

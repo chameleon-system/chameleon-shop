@@ -52,6 +52,8 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
      * vote the review up or down.
      *
      * @param bool $bRateUp
+     *
+     * @return void
      */
     public function RateReview($bRateUp = true)
     {
@@ -132,6 +134,8 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
 
     /**
      * send a review notification to the shop owner.
+     *
+     * @return void
      */
     public function SendReviewReportNotification()
     {
@@ -157,6 +161,8 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
      * Send comment notification to owner only if owner set the option for the review.
      *
      * @param TdbPkgComment $oComment
+     *
+     * @return void
      */
     public function SendReviewCommentNotification($oComment)
     {
@@ -217,6 +223,8 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
     /**
      * Add new unique action id to the comment.
      * Action id was needed to run an action like unlock or delete via post.
+     *
+     * @return void
      */
     protected function SaveActionIdToComment()
     {
@@ -266,7 +274,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
     /**
      * Get cache trigger for comments.
      *
-     * @param  $id
+     * @param string $id
      * @param array $aCallTimeVars
      *
      * @return array

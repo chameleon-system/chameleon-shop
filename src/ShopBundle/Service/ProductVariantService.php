@@ -22,6 +22,9 @@ class ProductVariantService implements ProductVariantServiceInterface
         $variantList = $shopArticle->GetFieldShopArticleVariantsList($typeSelection);
 
         if (1 === $variantList->Length()) {
+            /**
+             * @psalm-suppress FalsableReturnStatement - `Current` return value cannot be false, we check the length above
+             */
             return $variantList->Current();
         }
 

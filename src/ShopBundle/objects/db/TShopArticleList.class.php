@@ -51,7 +51,6 @@ class TShopArticleList extends TShopArticleListAutoParent
      * @param string $sOrderString
      * @param int    $iLimit
      * @param array  $aFilter                            - any filters you want to add to the list
-     * @param bool   $bIncludeArticlesOfAllSubcategories
      *
      * @return TdbShopArticleList
      */
@@ -67,7 +66,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      * @param string $sOrderString
      * @param int    $iLimit
      * @param array  $aFilter                            - any filters you want to add to the list
-     * @param bool   $bIncludeArticlesOfAllSubcategories
+     * @param string $sCustomBaseQuery
      *
      * @return TdbShopArticleList
      */
@@ -242,6 +241,10 @@ class TShopArticleList extends TShopArticleListAutoParent
      * session cleanup method.
      *
      * @return string
+     *
+     * @param null|string $sViewName
+     * @param null|string $sViewType
+     * @param array|null $aCallTimeVars
      */
     public function StoreListObjectInSession($sViewName = null, $sViewType = null, $aCallTimeVars = null)
     {
@@ -280,9 +283,9 @@ class TShopArticleList extends TShopArticleListAutoParent
      * return list data for key stored in session. returns NULL if no item or no session is found
      * note: the item will be removed from session.
      *
-     * @param string $sSessionKey
+     * @param string $sListSessionKey
      *
-     * @return array
+     * @return array|null
      */
     public static function GetInstanceDataFromSession($sListSessionKey)
     {
@@ -301,9 +304,9 @@ class TShopArticleList extends TShopArticleListAutoParent
      * create a list based on the session data for the session key passed
      * returns NULL if the object can not be found.
      *
-     * @param string $sSessionKey
+     * @param string $sListSessionKey
      *
-     * @return TdbShopArticleList
+     * @return TdbShopArticleList|null
      */
     public static function &GetInstanceFromSession($sListSessionKey)
     {
@@ -330,6 +333,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      * remove serialized dump from session.
      *
      * @param string $sListSessionKey
+     * @return void
      */
     public static function removeInstanceFromSession($sListSessionKey)
     {
@@ -360,6 +364,8 @@ class TShopArticleList extends TShopArticleListAutoParent
      *
      * @param int $iStartRecord
      * @param int $iPageSize
+     *
+     * @return void
      */
     public function RestorePagingInfoFromSession($iStartRecord, $iPageSize)
     {
@@ -394,7 +400,7 @@ class TShopArticleList extends TShopArticleListAutoParent
     /**
      * return link to next page, or false if there is no next page.
      *
-     * @return string
+     * @return string|false
      */
     public function GetNextPageLink()
     {
@@ -414,7 +420,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      *
      * @param bool $bGetAsJSFunction - set to false if you just want the link
      *
-     * @return string
+     * @return string|false
      */
     public function GetNextPageLinkAsAJAXCall($bGetAsJSFunction = true)
     {
@@ -438,7 +444,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      *
      * @param bool $bGetAsJSFunction - set to false if you just want the link
      *
-     * @return string
+     * @return string|false
      */
     public function GetPreviousPageLinkAsAJAXCall($bGetAsJSFunction = true)
     {
@@ -460,7 +466,7 @@ class TShopArticleList extends TShopArticleListAutoParent
     /**
      * return link to previous page, or false if there is no next page.
      *
-     * @return string
+     * @return string|false
      */
     public function GetPreviousPageLink()
     {
@@ -481,7 +487,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      * @param int  $iPageNumber
      * @param bool $bGetAsJSFunction
      *
-     * @return string
+     * @return string|false
      */
     public function GetPageJumpLinkAsAJAXCall($iPageNumber, $bGetAsJSFunction = true)
     {
@@ -505,7 +511,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      *
      * @param int $iPageNumber
      *
-     * @return string
+     * @return string|false
      */
     public function GetPageJumpLink($iPageNumber)
     {
@@ -534,6 +540,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      *
      * @param string $sRequest
      * @param bool   $bCheckIdentKey
+     * @return void
      */
     public function HandleURLRequest($sRequest, $bCheckIdentKey = false)
     {

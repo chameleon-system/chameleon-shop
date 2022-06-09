@@ -17,9 +17,13 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 
 class State implements StateInterface
 {
-    private $stateData = array();
     /**
-     * @var \ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateElementInterface[]
+     * @var array<string, mixed>
+     */
+    private $stateData = array();
+
+    /**
+     * @var array<string, \ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateElementInterface>
      */
     private $stateElement = array();
 
@@ -39,6 +43,11 @@ class State implements StateInterface
         }
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
     public function setState($name, $value)
     {
         if ('' === $value) {
@@ -72,7 +81,7 @@ class State implements StateInterface
     /**
      * returns a string representation of the state, excluding the parameter specified by varyingStateParameter.
      *
-     * @param array|null $varyingStateParameter
+     * @param array<string, mixed>|null $varyingStateParameter
      *
      * @return string
      */
@@ -94,6 +103,11 @@ class State implements StateInterface
         return implode(',', $parts);
     }
 
+    /**
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
     public function getState($name, $default = null)
     {
         if (false === isset($this->stateData[$name])) {
@@ -106,13 +120,16 @@ class State implements StateInterface
     /**
      * does not include query parameter.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getStateArray()
     {
         return $this->stateData;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getStateArrayWithoutQueryParameter()
     {
         $stateData = $this->getStateArray();
@@ -135,13 +152,18 @@ class State implements StateInterface
         return array_merge($urlQueryData, $this->getQueryParameter());
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return bool
+     */
     private function validStateValue($name, $value)
     {
         return $this->stateElement[$name]->validate($value);
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getQueryParameter()
     {
@@ -153,11 +175,20 @@ class State implements StateInterface
         $this->stateElement[$element->getKey()] = $element;
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     private function stateElementExists($name)
     {
         return isset($this->stateElement[$name]);
     }
 
+    /**
+     * @param string $name
+     * @param int|string $value
+     * @return mixed
+     */
     private function getNormalizedStateValue($name, $value)
     {
         return $this->stateElement[$name]->normalize($value);
@@ -166,7 +197,9 @@ class State implements StateInterface
     /**
      * sets values in stateValues that have no value in the current state. ignores all others.
      *
-     * @param array $stateValues
+     * @param array<string, mixed> $stateValues
+     *
+     * @return void
      */
     public function setUnsetStatesOnly(array $stateValues)
     {

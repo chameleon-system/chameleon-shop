@@ -92,6 +92,12 @@ class ResultFactory implements ResultFactoryInterface
         return $result;
     }
 
+    /**
+     * @param ResultInterface $results
+     * @param array $moduleConfig
+     * @param StateInterface $state
+     * @return ResultInterface
+     */
     private function applyStateToResults(ResultInterface $results, array $moduleConfig, StateInterface $state)
     {
         try {
@@ -105,6 +111,9 @@ class ResultFactory implements ResultFactoryInterface
         }
     }
 
+    /**
+     * @return ResultInterface
+     */
     private function applyMaxAllowedResults(ResultInterface $results, ConfigurationInterface $moduleConfiguration)
     {
         if (null === $moduleConfiguration->getMaxResultLimitation()) {
@@ -184,6 +193,11 @@ class ResultFactory implements ResultFactoryInterface
         return $this->getFilter($moduleConfiguration)->getFilterQuery($moduleConfiguration);
     }
 
+    /**
+     * @param array $state
+     *
+     * @return string
+     */
     private function getHashFromArray($state)
     {
         ksort($state);
@@ -202,6 +216,9 @@ class ResultFactory implements ResultFactoryInterface
         $this->getFilter($moduleConfiguration)->ModuleInitHook();
     }
 
+    /**
+     * @return void
+     */
     private function triggerFilterExecutedEvent(ResultDataInterface $resultData, ConfigurationInterface $moduleConfiguration, StateInterface $state)
     {
         $event = new ArticleListFilterExecutedEvent(

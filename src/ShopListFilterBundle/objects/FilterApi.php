@@ -54,7 +54,7 @@ class FilterApi implements FilterApiInterface
      */
     private $activePageService;
     /**
-     * @var string
+     * @var string|null
      */
     private $articleListSpotName;
     /**
@@ -198,7 +198,9 @@ class FilterApi implements FilterApiInterface
     }
 
     /**
-     * @return string
+     * @return string|null
+     *
+     * @FIXME The result of `->getActivePage()` can be null, which means the property fetch on it may be null as well (currently yielding a warning, but may be a fatal error in future PHP Version?)
      */
     private function getActivePageId()
     {
@@ -221,7 +223,7 @@ class FilterApi implements FilterApiInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     private function getArticleListSpotName()
     {

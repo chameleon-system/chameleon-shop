@@ -27,7 +27,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      *
      * @param TdbShopOrderStep $oStep
      *
-     * @return TdbShopOrderStep
+     * @return TdbShopOrderStep|null
      */
     public static function &GetNextStep(&$oStep)
     {
@@ -35,6 +35,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
         $query = "SELECT * FROM `shop_order_step` WHERE `position` > '".MySqlLegacySupport::getInstance()->real_escape_string($oStep->fieldPosition)."' ORDER BY `position`";
         $oSteps = &TdbShopOrderStepList::GetList($query);
         if ($oSteps->Length() > 0) {
+            /** @var TdbShopOrderStep $oNextStep */
             $oNextStep = &$oSteps->Current();
             if ($oNextStep && !$oNextStep->IsActive()) {
                 $oNextStep = TdbShopOrderStepList::GetNextStep($oNextStep);
@@ -49,7 +50,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      *
      * @param TdbShopOrderStep $oStep
      *
-     * @return TdbShopOrderStep
+     * @return TdbShopOrderStep|null
      */
     public static function &GetPreviousStep(&$oStep)
     {
@@ -57,6 +58,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
         $query = "SELECT * FROM `shop_order_step` WHERE `position` < '".MySqlLegacySupport::getInstance()->real_escape_string($oStep->fieldPosition)."' ORDER BY `position` DESC";
         $oSteps = &TdbShopOrderStepList::GetList($query);
         if ($oSteps->Length() > 0) {
+            /** @var TdbShopOrderStep $oPreviousStep */
             $oPreviousStep = &$oSteps->Current();
         }
 
@@ -117,7 +119,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      * returns the position of the currently active step. if no step is marked as active,
      * it will return false. Step positions will start at 1 (not zero).
      *
-     * @return int
+     * @return int|false
      */
     public function GetActiveStepPosition()
     {
@@ -139,6 +141,9 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
     /**
      * render the step list.
      *
+     * @param string $sViewType
+     * @param string $sViewName
+     * @param string $sSpotName
      * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string

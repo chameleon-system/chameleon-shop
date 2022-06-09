@@ -48,6 +48,10 @@ class TShopBasketArticleCore extends TdbShopArticle
      * @var float
      */
     public $dPriceTotalAfterDiscountWithoutVouchers = 0;
+
+    /**
+     * @var float
+     */
     public $dPriceAfterDiscountWithoutVouchers = 0;
 
     /**
@@ -91,12 +95,15 @@ class TShopBasketArticleCore extends TdbShopArticle
      */
     private $iLastChangedTimestamp = null;
 
+    /**
+     * @var array
+     */
     private $customData = array();
 
     /**
      * return timestamp when the item was last updated.
      *
-     * @return int
+     * @return int|null
      */
     public function GetLastUpdatedTimestamp()
     {
@@ -115,6 +122,8 @@ class TShopBasketArticleCore extends TdbShopArticle
 
     /**
      * remove acting discounts.
+     *
+     * @return void
      */
     public function ResetDiscounts()
     {
@@ -130,7 +139,7 @@ class TShopBasketArticleCore extends TdbShopArticle
      * may be applied - it assumes you checked that using the function in TShopDiscount.
      *
      * @param TdbShopDiscount $oShopDiscount
-     * @param dobule          $dMaxValueUsable - for absolute value discounts, this parameter defines how much may be at most applied to the article
+     * @param double          $dMaxValueUsable - for absolute value discounts, this parameter defines how much may be at most applied to the article
      *
      * @return float - returns the remaining discount value to distribute (0 if the discount is a percent discount)
      */
@@ -175,6 +184,8 @@ class TShopBasketArticleCore extends TdbShopArticle
      * will set the custom data - if it is able to validate the data (you must overwrite the basket item and validate the data).
      *
      * @param array $customData
+     *
+     * @return void
      */
     public function setCustomData(array $customData)
     {
@@ -182,6 +193,9 @@ class TShopBasketArticleCore extends TdbShopArticle
         $this->UpdateBasketItemKey();
     }
 
+    /**
+     * @return void
+     */
     protected function PostLoadHook()
     {
         parent::PostLoadHook();
@@ -240,6 +254,8 @@ class TShopBasketArticleCore extends TdbShopArticle
 
     /**
      * update the price total of the object.
+     *
+     * @return void
      */
     protected function UpdateItemInfo()
     {
@@ -257,6 +273,8 @@ class TShopBasketArticleCore extends TdbShopArticle
      * no error message will be send when this occures - we include this as a safeguard only - the error handling should be managed in MTShopBasket.
      *
      * @param float $dNewAmount
+     *
+     * @return void
      */
     public function ChangeAmount($dNewAmount)
     {
@@ -276,6 +294,12 @@ class TShopBasketArticleCore extends TdbShopArticle
      * Also updates the dPriceTotalAfterDiscount value.
      *
      * @param TdbShopDiscount $oActingShopDiscount
+     *
+     * @psalm-suppress UndefinedThisPropertyAssignment
+     *
+     * @FIXME `oActingShopDiscount` is set dynamically here and does not seem to be used anywhere. Also, `SetActingDiscount` does not seem to be called anywhere.
+     *
+     * @return void
      */
     public function SetActingDiscount(TdbShopDiscount $oActingShopDiscount)
     {
@@ -286,6 +310,8 @@ class TShopBasketArticleCore extends TdbShopArticle
      * set the acting shipping type for the basket item.
      *
      * @param TdbShopShippingType $oShippingType
+     *
+     * @return void
      */
     public function SetActingShippingType(TdbShopShippingType &$oShippingType)
     {
@@ -305,6 +331,8 @@ class TShopBasketArticleCore extends TdbShopArticle
     /**
      * updates the sBasketItemKey. needs to be called anytime any of the relevant properties
      * for IsSameAs change.
+     *
+     * @return void
      */
     protected function UpdateBasketItemKey()
     {
@@ -314,6 +342,8 @@ class TShopBasketArticleCore extends TdbShopArticle
 
     /**
      * clear the shipping marker from the basket item (needed for recalculation.
+     *
+     * @return void
      */
     public function ResetShippingMarker()
     {
@@ -322,6 +352,8 @@ class TShopBasketArticleCore extends TdbShopArticle
 
     /**
      * reloads the article data from database if called.
+     *
+     * @return void
      */
     public function RefreshDataFromDatabase()
     {
@@ -346,6 +378,9 @@ class TShopBasketArticleCore extends TdbShopArticle
         return $aSleep;
     }
 
+    /**
+     * @return void
+     */
     protected function PostWakeupHook()
     {
         $this->RefreshDataFromDatabase();
@@ -353,6 +388,8 @@ class TShopBasketArticleCore extends TdbShopArticle
 
     /**
      * DISABLE the method for basket articles since we need the original price here!
+     *
+     * @return void
      */
     public function SetPriceBasedOnActiveDiscounts()
     {

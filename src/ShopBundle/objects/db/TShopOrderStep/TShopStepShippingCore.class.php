@@ -26,6 +26,10 @@ class TShopStepShippingCore extends TdbShopOrderStep
      * @var TdbShopPaymentMethod
      */
     protected $oActivePaymentMethod = null;
+
+    /**
+     * @var array
+     */
     protected $aRequestData = array();
 
     const MSG_SHIPPING_GROUP = 'shippinggroupmessage';
@@ -39,6 +43,8 @@ class TShopStepShippingCore extends TdbShopOrderStep
     {
         parent::Init();
         $inputFilterUtil = $this->getInputFilterUtil();
+
+        /** @var array|null $shippingData */
         $shippingData = $inputFilterUtil->getFilteredPostInput('aShipping');
         if (null !== $shippingData) {
             $this->aRequestData = $shippingData;
@@ -217,6 +223,8 @@ class TShopStepShippingCore extends TdbShopOrderStep
     /**
      * changes the shipping group to the one passed via post or get in
      * shippinggroupid=id.
+     *
+     * @return void
      */
     public function ChangeShippingGroup()
     {
@@ -247,6 +255,8 @@ class TShopStepShippingCore extends TdbShopOrderStep
 
     /**
      * loads the active payment method.
+     *
+     * @return void
      */
     protected function LoadActivePaymentMethod()
     {
@@ -316,7 +326,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
      * define any head includes the step needs
      * loads includes from payment handlers.
      *
-     * @return array
+     * @return string[]
      */
     public function GetHtmlHeadIncludes()
     {

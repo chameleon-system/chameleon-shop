@@ -15,13 +15,19 @@ use ChameleonSystem\ShopBundle\ProductStatistics\Interfaces\ProductStatisticsInt
 
 class ProductStatistics implements ProductStatisticsInterface
 {
+    /** @var int */
     private $sales = 0;
+    /** @var int */
     private $detailViews = 0;
+    /** @var int */
     private $reviews = 0;
+    /** @var int */
     private $reviewAverage = 0;
 
     /**
      * @param int $detailViews
+     *
+     * @return void
      */
     public function setDetailViews($detailViews)
     {
@@ -38,6 +44,8 @@ class ProductStatistics implements ProductStatisticsInterface
 
     /**
      * @param int $reviewAverage
+     *
+     * @return void
      */
     public function setReviewAverage($reviewAverage)
     {
@@ -54,6 +62,8 @@ class ProductStatistics implements ProductStatisticsInterface
 
     /**
      * @param int $reviews
+     *
+     * @return void
      */
     public function setReviews($reviews)
     {
@@ -70,6 +80,8 @@ class ProductStatistics implements ProductStatisticsInterface
 
     /**
      * @param int $sales
+     *
+     * @return void
      */
     public function setSales($sales)
     {

@@ -32,39 +32,46 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     const VIEW_PATH = 'pkgShop/views/TShopBasket';
 
     /**
+     * The calculated gross sum of all articles in the basket.
+     * This is the price calculated before discounts or vouchers have been applied
      * @var float
-     *            The calculated gross sum of all articles in the basket.
-     *            This is the price calculated before discounts or vouchers have been applied
      */
     public $dCostArticlesTotal = 0;
+
     /**
+     * the total delivery costs (gross)
      * @var float
-     *            the total delivery costs (gross)
      */
     public $dCostShipping = 0;
+
     /**
+     * the total wrapping costs for the basket (gross)
      * @var float
-     *            the total wrapping costs for the basket (gross)
      */
     public $dCostWrapping = 0;
+
     /**
+     * the total gross wrapping card costs
      * @var float
-     *            the total gross wrapping card costs
      */
     public $dCostWrappingCards = 0;
+
     /**
+     * total gross voucher value for the basket
+     * NOTE: includes ONLY sponsored vouchers
      * @var float
-     *            total gross voucher value for the basket
-     *            NOTE: includes ONLY sponsored vouchers
      */
     public $dCostVouchers = 0;
-    /*
+
+    /**
      * the total for all NONE sponsored vouchers (vouchers that act as discounts - so DO affect VAT).
+     * @var float
      */
     public $dCostNoneSponsoredVouchers = 0;
+
     /**
+     * the total gross discount sum
      * @var float
-     *            the total gross discount sum
      */
     public $dCostDiscounts = 0;
 
@@ -76,28 +83,32 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     public $dCostArticlesTotalAfterDiscounts = 0;
 
-    public $dCostArticlesTotalAfterDiscountsWithoutNoneSponsoredVouchers = 0;
     /**
      * @var float
-     *            the sum of all VAT costs
+     */
+    public $dCostArticlesTotalAfterDiscountsWithoutNoneSponsoredVouchers = 0;
+
+    /**
+     * the sum of all VAT costs
+     * @var float
      */
     public $dCostVAT = 0;
 
     /**
+     * the sum of all VAT costs excluding shipping costs
      * @var float
-     *            the sum of all VAT costs excluding shipping costs
      */
     public $dCostVATWithoutShipping = 0;
 
     /**
+     * the grand total for the basket
      * @var float
-     *            the grand total for the basket
      */
     public $dCostTotal = 0;
 
     /**
+     * the grand total for the basket excluding shipping costs
      * @var float
-     *            the grand total for the basket excluding shipping costs
      */
     public $dCostTotalWithoutShipping = 0;
 
@@ -119,7 +130,14 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     public $iTotalNumberOfUniqueArticles = 0;
 
+    /**
+     * @var float
+     */
     public $dTotalWeight = 0;
+
+    /**
+     * @var float
+     */
     public $dTotalVolume = 0;
 
     /**
@@ -139,11 +157,11 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     public $sBasketIdentifier = null;
 
     /**
-     * @var TShopWrappingCard|null
+     * @var TdbShopWrappingCard|null
      */
     protected $oWrappingCard = null;
     /**
-     * @var TShopWrapping|null
+     * @var TdbShopWrapping|null
      */
     protected $oWrapping = null;
     /**
@@ -186,6 +204,10 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     private $oActiveVouchers = null;
 
+    /**
+     * @FIXME private property that is never accessed.
+     * @var null
+     */
     private $rawBasket = null;
 
     const SESSION_KEY_NAME = 'esono/pkgShop/activeBasket';
@@ -207,6 +229,10 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     public const VOUCHER_SPONSORED = 0;
     public const VOUCHER_NOT_SPONSORED = 1;
 
+    /**
+     * @var int
+     * @psalm-var self::VOUCHER_*
+     */
     private $voucherTypeCurrentlyRecalculating = self::VOUCHER_TYPE_NOT_SET;
 
     /**
@@ -217,9 +243,20 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     private $bMarkAsRecalculationNeeded = false;
 
+    /**
+     * @var bool
+     */
     private $totalCostKnown = false;
+
+    /**
+     * @var int
+     * @psam-var positive-int|0
+     */
     private $recalculationDepth = 0;
 
+    /**
+     * @return bool
+     */
     public function isTotalCostKnown()
     {
         return $this->totalCostKnown;
@@ -236,6 +273,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * mark the basket as dirty - will be recalculated as soon as the basket is loaded from sessin.
      *
      * @param bool $bRecalculationNeeded
+     *
+     * @return void
      */
     public function SetBasketRecalculationFlag($bRecalculationNeeded = true)
     {
@@ -276,8 +315,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * remove these in a later version - kept for compatibility reasons.
      *
-     * @param  $sVar
-     * @param  $sVal
+     * @param string $sVar
+     * @param string $sVal
      */
     public function __set($sVar, $sVal)
     {
@@ -333,7 +372,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return the active shipping group - will set the shipping group to the default group, if none is set.
      *
-     * @return TdbShopShippingGroup
+     * @return TdbShopShippingGroup|null
      */
     public function &GetActiveShippingGroup()
     {
@@ -376,7 +415,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return all payment methods for the active shipping group.
      *
-     * @return TdbShopPaymentMethodList
+     * @return TdbShopPaymentMethodList|null
      */
     public function GetAvailablePaymentMethods()
     {
@@ -391,7 +430,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return all payment methods for the active shipping group that are selectable by the user.
      *
-     * @return TdbShopPaymentMethodList
+     * @return TdbShopPaymentMethodList|null
      */
     public function GetValidPaymentMethodsSelectableByTheUser()
     {
@@ -403,6 +442,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         return $oList;
     }
 
+    /**
+     * @return void
+     */
     public function ResetAllShippingMarkers()
     {
         $this->GetBasketArticles()->ResetAllShippingMarkers();
@@ -445,6 +487,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * deletes contents of basket.
+     *
+     * @return void
      */
     public function ClearBasket()
     {
@@ -530,6 +574,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * @param bool $bForce - overwrite session with basket data even if this is not the correct basket instance
      *                     if you use this to replace the basket object, make sure to call TShopBasket::GetInstance(false,true) after
      *                     to set the instance based on this new session
+     *
+     * @return void
      */
     public function CommitToSession($bForce = false)
     {
@@ -569,8 +615,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * applies the dVoucherValue evenly over all items affected by a voucher NOT sponsored (ie a voucher that has no real money value).
      *
-     * @param $oVoucher
-     * @param $dVoucherValue
+     * @param float $dVoucherValue
+     *
+     * @return void
      */
     public function ApplyNoneSponsoredVoucherValueToItems(TdbShopVoucher &$oVoucher, $dVoucherValue)
     {
@@ -705,6 +752,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * Recalculates the current basket contents (all dCost items).
+     *
+     * @return void
      */
     public function RecalculateBasket()
     {
@@ -792,6 +841,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      *     b.    Check if the discount is permitted for this value. If not, remove it.
      *     c.    Calculate the discount value based on this value
      * 2.    Sum up the results of all discounts.
+     *
+     * @return void
      */
     protected function RecalculateDiscounts()
     {
@@ -819,6 +870,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * fetches the shipping costs from the active shipping group.
+     *
+     * @return void
      */
     protected function RecalculateShipping()
     {
@@ -839,6 +892,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         }
     }
 
+    /**
+     * @return void
+     */
     protected function CalculatePaymentMethodCosts()
     {
         $this->dCostPaymentMethodSurcharge = 0;
@@ -854,6 +910,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * 3.    The system calculates the vat for each group. The resulting sum is the total vat.
      *
      * Note that each group takes the rebate into consideration
+     *
+     * @return void
      */
     protected function RecalculateVAT()
     {
@@ -925,12 +983,12 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return the largest vat object from the active vat group.
      *
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function GetLargestVATObject()
     {
         $oActiveVatList = $this->GetActiveVATList();
-        /** @var $oMaxItem TdbShopVat */
+
         $oMaxItem = null;
         if (is_object($oActiveVatList)) {
             $oMaxItem = $oActiveVatList->GetMaxItem();
@@ -944,6 +1002,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * group.
      *
      * @param TdbShopVat $oVat
+     * @param bool $bIncludePaymentAndShipping
      *
      * @return float
      */
@@ -977,6 +1036,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * calculates the value of NONE sponsored vouchers. The article prices for each item in the
      * basket affected by a voucher is reduced by the value calculated for the item.
+     *
+     * @return void
      */
     protected function RecalculateNoneSponsoredVouchers()
     {
@@ -999,6 +1060,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      *     b.    Check if the voucher is permited for this value. If not, remove it.
      *     c.    Calculate the vaucher value based on this value
      * 2.    Sum up the results of all vauchers.
+     *
+     * @return void
      */
     protected function RecalculateVouchers()
     {
@@ -1032,7 +1095,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * @param string $sMessageConsumer - who should recieve error messages
      * @param bool   $bForcePayment    - set to true if you want to force the selected payment EVEN if it is not allowed for the current user
      *
-     * @return TdbShopOrder
+     * @return TdbShopOrder|false
      */
     public function CreateOrder($sMessageConsumer, $bForcePayment = false)
     {
@@ -1145,6 +1208,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * if CMS_PAYMENT_REDIRECT_ON_FAILURE is defined with correct order step system name do redirect
      * to defined step.
      * This step should contain payment selection.
+     *
+     * @return void
      */
     protected function redirectToPaymentStep()
     {
@@ -1160,6 +1225,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * save the shipping user data.
      *
      * @param TdbShopOrder $oOrder
+     *
+     * @return void
      */
     protected function SaveShippingUserData(&$oOrder)
     {
@@ -1172,6 +1239,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * save the payment user data.
      *
      * @param TdbShopOrder $oOrder
+     *
+     * @return void
      */
     protected function SavePaymentUserData(&$oOrder)
     {
@@ -1200,6 +1269,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * via $this->GetLastCreatedOrder.
      *
      * @param TdbShopOrder $oOrder
+     *
+     * @return void
      */
     protected function SaveOrderIdAsLastCreatedOrderInSession($oOrder)
     {
@@ -1216,6 +1287,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      *
      * @param TdbShopOrder          $oOrder
      * @param TdbShopPaymentHandler $oPaymentHandler
+     * @param string $sMessageConsumer
      *
      * @return bool
      */
@@ -1252,7 +1324,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * called when the payment handler returns something other than true
      * The method should return the error string to display.
      *
-     * @param string                $bPaymentErrorCode - the error code
+     * @param bool                  $bPaymentErrorCode
      * @param TdbShopOrder          $oOrder            - the order just created
      * @param TdbShopPaymentHandler $oPaymentHandler
      *
@@ -1272,11 +1344,12 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      *
      * @param bool $bResetValue - set to true if you want to reset the session item
      *
-     * @return TdbShopOrder
+     * @return TdbShopOrder|null
      */
     public static function &GetLastCreatedOrder($bResetValue = false)
     {
         $oOrder = null;
+
         if (array_key_exists(self::SESSION_KEY_LAST_CREATED_ORDER_ID, $_SESSION)) {
             $oOrder = TdbShopOrder::GetNewInstance();
             /** @var $oOrder TdbShopOrder */
@@ -1301,6 +1374,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         return $oOrder;
     }
 
+    /**
+     * @return bool
+     */
     protected function isReorderDueToDoubleClick()
     {
         $bIsReorder = false;
@@ -1503,21 +1579,33 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * @return int - TShopBasketCore::VOUCHER_TYPE_NOT_SET|TShopBasketCore::VOUCHER_NOT_SPONSORED|TShopBasketCore::VOUCHER_SPONSORED
+     * @psalm-return self::VOUCHER_*
      */
     public function getVoucherTypeCurrentlyRecalculating(): int
     {
         return $this->voucherTypeCurrentlyRecalculating;
     }
 
+    /**
+     * @psalm-param self::VOUCHER_* $type
+     * @return void
+     */
     private function setVoucherTypeCurrentlyRecalculating(int $type) {
         $this->voucherTypeCurrentlyRecalculating = $type;
     }
 
+    /**
+     * @param TShopBasketArticleList $oArticles
+     * @return void
+     */
     protected function setBasketArticles($oArticles)
     {
         $this->oBasketArticles = $oArticles;
     }
 
+    /**
+     * @return void
+     */
     protected function resetArticles()
     {
         $this->oBasketArticles = null;
@@ -1587,7 +1675,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return a COPY of the active voucher list - for EXTERNAL use.
      *
-     * @return TShopBasketVoucherList
+     * @return TShopBasketVoucherList|null
      */
     public function GetVoucherList()
     {
@@ -1612,6 +1700,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         return $this->oActiveVouchers;
     }
 
+    /**
+     * @return void
+     */
     protected function reloadVouchers()
     {
         $voucherList = $this->GetActiveVouchers();
@@ -1793,6 +1884,11 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     * @param string $sMessageManager - the manager to which error messages should be sent
     * @return boolean
     */
+    /**
+     * @param null|string $sMessageManager
+     *
+     * @return bool
+     */
     public function ValidateBasketContents($sMessageManager = null)
     {
         /*
@@ -1825,7 +1921,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * return the next possible discount for the current user/basket value (ignores basket contents -
      * discounts restricted to product categories or products are ignored.
      *
-     * @return TdbShopDiscount;
+     * @return TdbShopDiscount|null
      */
     public function GetNextAvailableDiscount()
     {
@@ -1915,7 +2011,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * @param string $sSeriesId
      * @param string $sMessageConsumer
      *
-     * @return TdbShopVoucher
+     * @return TdbShopVoucher|null
      */
     protected function GetNextAvailableVoucher($sVoucherCode, $sSeriesId, $sMessageConsumer)
     {
@@ -1935,6 +2031,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      *
      * We need the locking mechanism to prevent a user from executing the same basket more than once
      * by, for example, double clicking the order button
+     *
+     * @return void
      */
     public function LockBasket()
     {
@@ -1943,6 +2041,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * remove the basekt lock. once the lock is removed, it is possible to create an an order again.
+     *
+     * @return void
      */
     public function UnlockBasket()
     {
@@ -1965,6 +2065,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * the hook is triggered when the basket item list contained in the basket changed an article.
      *
      * @param TShopBasketArticle $oBasketItemChanged
+     *
+     * @return void
      */
     public function OnBasketItemUpdateEvent($oBasketItemChanged)
     {
@@ -1980,6 +2082,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * the hook is triggered when the basket item list contained in the basket deletes an article.
      *
      * @param TShopBasketArticle $oBasketItemRemoved
+     *
+     * @return void
      */
     public function OnBasketItemDeleteEvent($oBasketItemRemoved)
     {
@@ -1991,6 +2095,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $this->getEventDispatcher()->dispatch(\ChameleonSystem\ShopBundle\ShopEvents::BASKET_DELETE_ITEM, $event);
     }
 
+    /**
+     * @return void
+     */
     public function custom_wakeup()
     {
         $requestInfoService = $this->getRequestInfoService();
@@ -2005,6 +2112,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $oUser->ObserverRegister('oUserBasket', $this);
     }
 
+    /**
+     * @return void
+     */
     private function checkLanguageChangesAfterWakeup()
     {
         if (false === ACTIVE_TRANSLATION) {
@@ -2048,8 +2158,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * @param IPkgCmsEvent $oEvent
      *
-     * @return IPkgCmsEvent
-     *                      the method is called when an event is triggered
+     * @return void
      */
     public function sessionWakeupHook()
     {

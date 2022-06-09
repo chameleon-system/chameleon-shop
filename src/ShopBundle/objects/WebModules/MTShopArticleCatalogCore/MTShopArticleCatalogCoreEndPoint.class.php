@@ -50,21 +50,21 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     /**
      * current item.
      *
-     * @var int
+     * @var string
      */
     protected $iItemId = null;
     /**
      * current category - if not set and an item is set, then the items primary category will be used.
      * if neither item nor category is set, then the first root category will be used.
      *
-     * @var int
+     * @var string
      */
     protected $iCategoryId = null;
 
     /**
      * holds the current order by id.
      *
-     * @var int
+     * @var string
      */
     protected $iActiveShopModuleArticlelistOrderbyId = null;
 
@@ -127,6 +127,8 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
      * send a paging signal to the list with iListIdent.
      *
      * @param string $iListIdent
+     *
+     * @return void
      */
     public function ChangePage($iListIdent = null)
     {
@@ -139,7 +141,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
      *
      * @param string $iListIdent
      *
-     * @return
+     * @return MTShopArticleListResponse
      */
     public function ChangePageAjax($iListIdent = null)
     {
@@ -234,6 +236,9 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         }
     }
 
+    /**
+     * @return int
+     */
     protected function GetActivePageSize()
     {
         $iPageSize = $this->oModuleConf->fieldPageSize;
@@ -256,7 +261,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     /**
      * Get the current active item.
      *
-     * @return TdbShopArticle
+     * @return TdbShopArticle|null
      */
     public static function GetActiveItem()
     {
@@ -266,7 +271,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     /**
      * Get the current active item.
      *
-     * @return TdbShopCategory
+     * @return TdbShopCategory|null
      */
     public static function GetActiveCategory()
     {
@@ -313,6 +318,8 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
 
     /**
      * write a review.
+     *
+     * @return void
      */
     public function WriteReview()
     {
@@ -381,10 +388,17 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
                 $iActiveCategoryId = $oActiveCategory->id;
             }
             $sURL = $oActiveItm->GetDetailLink(true, $iActiveCategoryId);
+            /**
+             * @psalm-suppress UndefinedInterfaceMethod
+             * @FIXME `HeaderURLRedirect` only exists on a single interface implementation.
+             */
             $this->controller->HeaderURLRedirect($sURL);
         }
     }
 
+    /**
+     * @return false|string
+     */
     protected function GetCaptchaValue()
     {
         $sCaptchaValue = false;
@@ -395,6 +409,9 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         return $sCaptchaValue;
     }
 
+    /**
+     * @return string
+     */
     protected function GenerateCaptcha()
     {
         $num1 = rand(1, 10);
@@ -409,6 +426,8 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
 
     /**
      * called if the user requested to view an item.
+     *
+     * @return void
      */
     protected function ViewArticleHook()
     {
@@ -439,7 +458,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     /**
      * load the article list and store it in $this->oList.
      *
-     * @return int - number of items found
+     * @return void
      */
     protected function LoadArticleList()
     {
@@ -474,6 +493,12 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         }
     }
 
+    /**
+     * @param string $sOrderListBy
+     * @param array $filter
+     *
+     * @return TdbShopArticleList
+     */
     protected function getListWhenNoCategoryDefined($sOrderListBy, $filter)
     {
         return TdbShopArticleList::LoadArticleList($sOrderListBy, 100, $filter);
@@ -481,6 +506,8 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
 
     /**
      * method is called just after loading the article list and BEFORE setting the paging data.
+     *
+     * @return void
      */
     protected function PostLoadArticleListHook()
     {
@@ -509,16 +536,20 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     /**
      * return the active order by id based on session or url parameter.
      *
-     * @return int
+     * @return string|null
+     *
+     * @param string $sInstanceId
      */
     public function GetActiveShopModuleArticlelistOrderbyId($sInstanceId = '')
     {
         $iActiveShopModuleArticlelistOrderbyId = null;
         $oGlobal = TGlobal::instance();
         if ($oGlobal->UserDataExists(self::URL_ORDER_BY)) {
+            /** @var string $iActiveShopModuleArticlelistOrderbyId */
             $iActiveShopModuleArticlelistOrderbyId = $oGlobal->GetUserData(self::URL_ORDER_BY);
         } else {
             if (array_key_exists(self::SESSION_ACTIVE_ORDER_BY.$sInstanceId, $_SESSION)) {
+                /** @var string $iActiveShopModuleArticlelistOrderbyId */
                 $iActiveShopModuleArticlelistOrderbyId = $_SESSION[self::SESSION_ACTIVE_ORDER_BY.$sInstanceId];
             }
         }
@@ -530,6 +561,9 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
      * return the current order string for the article lists.
      *
      * @return string
+     *
+     * @param null|string $sDefaultActiveShopModuleArticlelistOrderbyId
+     * @param null|string $sInstanceId
      */
     public function GetActiveOrderByString($sDefaultActiveShopModuleArticlelistOrderbyId = null, $sInstanceId = '')
     {

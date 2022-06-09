@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @implements IPkgCmsEvent<AbstractPkgShop_TPkgCmsEvent::CONTEXT_*, AbstractPkgShop_TPkgCmsEvent::NAME_*>
+ */
 abstract class AbstractPkgShop_TPkgCmsEvent extends TPkgCmsEvent
 {
     const CONTEXT_PKG_SHOP = 'pkgShop';

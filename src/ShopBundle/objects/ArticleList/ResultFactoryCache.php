@@ -94,6 +94,9 @@ class ResultFactoryCache implements ResultFactoryInterface
         return $resultData;
     }
 
+    /**
+     * @return string
+     */
     private function getKey(ConfigurationInterface $moduleConfiguration, StateInterface $state)
     {
         $keyData = array(
@@ -105,6 +108,9 @@ class ResultFactoryCache implements ResultFactoryInterface
         return $this->cache->getKey($keyData);
     }
 
+    /**
+     * @return array
+     */
     private function getTrigger(ConfigurationInterface $moduleConfiguration)
     {
         return $this->_GetCacheTableInfos($moduleConfiguration);
@@ -132,6 +138,10 @@ class ResultFactoryCache implements ResultFactoryInterface
 
     public function moduleInitHook(ConfigurationInterface $moduleConfiguration)
     {
+        /**
+         * @psalm-suppress InvalidReturnStatement
+         * @FIXME Returning `void` result
+         */
         return $this->resultFactory->moduleInitHook($moduleConfiguration);
     }
 
@@ -139,6 +149,8 @@ class ResultFactoryCache implements ResultFactoryInterface
      * @param ResultDataInterface    $resultData
      * @param ConfigurationInterface $moduleConfiguration
      * @param StateInterface         $state
+     *
+     * @return void
      */
     private function dispatchCachedFilterExecutedEvent(ResultDataInterface $resultData, ConfigurationInterface $moduleConfiguration, StateInterface $state)
     {

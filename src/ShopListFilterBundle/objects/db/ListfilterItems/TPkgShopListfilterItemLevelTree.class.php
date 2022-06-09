@@ -79,7 +79,7 @@ class TPkgShopListfilterItemLevelTree extends TPkgShopListfilterItemMultiselectM
     /**
      * Get all child category id from given master category.
      *
-     * @param  $sMasterCategoryId
+     * @param string $sMasterCategoryId
      *
      * @return array
      */

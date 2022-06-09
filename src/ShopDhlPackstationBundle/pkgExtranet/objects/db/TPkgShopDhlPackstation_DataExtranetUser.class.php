@@ -14,9 +14,9 @@ class TPkgShopDhlPackstation_DataExtranetUser extends TPkgShopDhlPackstation_Dat
     /**
      * set address as new billing address... will check if the address belongs to the user.
      *
-     * @param $sAddressId
+     * @param string $sAddressId
      *
-     * @return TdbDataExtranetUserAddress
+     * @return TdbDataExtranetUserAddress|null|false
      */
     public function SetAddressAsBillingAddress($sAddressId)
     {

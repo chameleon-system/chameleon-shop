@@ -22,8 +22,17 @@ use IMapperVisitorRestricted;
 class ShopProductExportModule extends \MTPkgViewRendererAbstractModuleMapper
 {
     const PARAM_RESET_CACHE = 'reset';
+
+    /**
+     * @var string
+     */
     private $exportKey;
+
+    /**
+     * @var string
+     */
     private $exportView;
+
     /**
      * @var \ChameleonSystem\ShopProductExportBundle\Interfaces\ShopProductExporterInterface
      */
@@ -41,10 +50,13 @@ class ShopProductExportModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     private $inputFilterUtil;
     /**
-     * @var
+     * @var string
      */
     private $cacheDir;
 
+    /**
+     * @param string $cacheDir
+     */
     public function __construct(ShopProductExporterInterface $productExporter, DbAdapterInterface $dbAdapter, InputFilterUtilInterface $inputFilterUtil, $cacheDir)
     {
         parent::__construct();
@@ -131,6 +143,9 @@ class ShopProductExportModule extends \MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('exportData', $exportData);
     }
 
+    /**
+     * @return void
+     */
     protected function configureCacheTrigger(IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
         $oCacheTriggerManager->addTrigger('shop_article');
@@ -145,27 +160,43 @@ class ShopProductExportModule extends \MTPkgViewRendererAbstractModuleMapper
         return false;
     }
 
+    /**
+     * @return void
+     */
     private function getStateDataFromRequest()
     {
         $this->getExportKeyFromRequest();
         $this->getViewFromRequest();
     }
 
+    /**
+     * @return void
+     */
     private function getExportKeyFromRequest()
     {
         $this->exportKey = $this->inputFilterUtil->getFilteredInput('key');
     }
 
+    /**
+     * @return void
+     */
     private function getViewFromRequest()
     {
         $this->exportView = $this->inputFilterUtil->getFilteredInput('view');
     }
 
+    /**
+     * @param string $exportKey
+     * @return bool
+     */
     private function isValidExportKey($exportKey)
     {
         return $this->productExporter->isValidExportKey($exportKey);
     }
 
+    /**
+     * @return void
+     */
     private function loadConfiguration()
     {
         $this->configuration = $this->dbAdapter->getConfigurationFromInstanceId($this->instanceID);

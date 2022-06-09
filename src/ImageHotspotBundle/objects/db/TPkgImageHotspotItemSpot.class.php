@@ -16,7 +16,7 @@ class TPkgImageHotspotItemSpot extends TAdbPkgImageHotspotItemSpot
     /**
      * return a pointer to the object assigned to the spot.
      *
-     * @return TCMSRecord
+     * @return TCMSRecord|null
      */
     public function &GetSpotObject()
     {
@@ -60,6 +60,8 @@ class TPkgImageHotspotItemSpot extends TAdbPkgImageHotspotItemSpot
                 $sLink = $oSpotObject->GetURL();
             }
         } else { //nothing that we know matched - try to use  generic method
+
+            /** @psalm-suppress UndefinedMethod */
             $sLink = $oSpotObject->GetURL();
             // still no url? trigger a user error
             if (empty($sLink)) {
@@ -76,6 +78,8 @@ class TPkgImageHotspotItemSpot extends TAdbPkgImageHotspotItemSpot
      * @param string $sViewName     - name of the view
      * @param string $sViewType     - where to look for the view
      * @param array  $aCallTimeVars - optional parameters to pass to render method
+     *
+     * @return string
      */
     public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
     {

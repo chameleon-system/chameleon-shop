@@ -32,6 +32,8 @@ class UpdateProductStatisticsListener
 
     /**
      * @param UpdateProductStockEvent $event
+     *
+     * @return void
      */
     public function onUpdateProductStock(UpdateProductStockEvent $event)
     {
@@ -46,6 +48,8 @@ class UpdateProductStatisticsListener
 
     /**
      * @param string $parentId
+     *
+     * @return void
      */
     private function updateProductStatistics($parentId)
     {

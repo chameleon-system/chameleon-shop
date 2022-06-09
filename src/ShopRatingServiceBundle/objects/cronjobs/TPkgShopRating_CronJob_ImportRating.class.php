@@ -18,6 +18,8 @@ class TPkgShopRating_CronJob_ImportRating extends TCMSCronJob
 {
     /**
      * executes the cron job (add your custom method calls here).
+     *
+     * @return void
      */
     protected function _ExecuteCron()
     {

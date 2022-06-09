@@ -20,6 +20,8 @@ class ChameleonSystemShopPaymentTransactionExtension extends Extension
 {
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function load(array $config, ContainerBuilder $container)
     {

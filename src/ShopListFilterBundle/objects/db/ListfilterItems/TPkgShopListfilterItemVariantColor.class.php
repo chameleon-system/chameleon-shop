@@ -14,6 +14,10 @@
 /**/
 class TPkgShopListfilterItemVariantColor extends TPkgShopListfilterItemVariant
 {
+    /**
+     * @param array<string, mixed> $aOptions
+     * @return void
+     */
     protected function OrderOptions(&$aOptions)
     {
         // get the variant type based on the first value

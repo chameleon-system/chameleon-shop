@@ -14,7 +14,7 @@ class TPkgShopArticleReviewShopArticleReviewList extends TPkgShopArticleReviewSh
     /**
      * Get reviews for aarticel sorted by positive rate.
      *
-     * @param  $iShopArticleId
+     * @param string $iShopArticleId
      *
      * @return TdbShopArticleReviewList
      */

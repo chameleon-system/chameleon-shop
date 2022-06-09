@@ -21,9 +21,9 @@ class DbAdapter
     private $databaseConnection;
 
     /**
-     * @param $pageId
+     * @param string $pageId
      *
-     * @return array|null
+     * @return string|null
      */
     public function getFilterableListInstanceIdOnPage($pageId)
     {
@@ -34,6 +34,8 @@ class DbAdapter
                    WHERE `shop_module_article_list`.`can_be_filtered` = '1'
                      AND `cms_tpl_page_cms_master_pagedef_spot`.`cms_tpl_page_id` = :pageId
                  ";
+
+        /** @psalm-var false|non-empty-list<string> $instanceData */
         $instanceData = $this->getDatabaseConnection()->fetchArray($query, array('pageId' => $pageId));
         if (false === $instanceData) {
             return null;
@@ -44,12 +46,17 @@ class DbAdapter
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {
         $this->databaseConnection = $connection;
     }
 
+    /**
+     * @return object
+     */
     protected function getDatabaseConnection()
     {
         if (null !== $this->databaseConnection) {

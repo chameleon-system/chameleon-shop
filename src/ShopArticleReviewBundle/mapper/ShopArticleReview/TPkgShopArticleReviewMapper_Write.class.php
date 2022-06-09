@@ -64,6 +64,11 @@ class TPkgShopArticleReviewMapper_Write extends AbstractViewMapper
         $oVisitor->SetMappedValue('sUserEmail', $sUserEmail);
     }
 
+    /**
+     * @param string $sFieldName
+     *
+     * @return string
+     */
     protected function GetMessageForField($sFieldName)
     {
         $sMessage = '';
@@ -75,6 +80,12 @@ class TPkgShopArticleReviewMapper_Write extends AbstractViewMapper
         return $sMessage;
     }
 
+    /**
+     * @template T
+     * @param string $sFieldName
+     * @param array<string, T> $aUserData
+     * @return T|'' - empty string if the field does not exist
+     */
     protected function GetValueForField($sFieldName, $aUserData)
     {
         $sValue = '';

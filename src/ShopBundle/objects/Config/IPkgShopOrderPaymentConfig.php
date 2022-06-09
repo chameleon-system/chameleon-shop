@@ -21,6 +21,7 @@ interface IPkgShopOrderPaymentConfig
 
     /**
      * @return string - self::ENVIRONMENT_PRODUCTION|self::ENVIRONMENT_SANDBOX
+     * @psalm-return self::ENVIRONMENT_*
      */
     public function getEnvironment();
 
@@ -31,7 +32,7 @@ interface IPkgShopOrderPaymentConfig
 
     /**
      * @param bool $captureOnShipment
-     *
+     * @return void
      * @throws InvalidArgumentException
      */
     public function setCaptureOnShipment($captureOnShipment);
@@ -39,8 +40,12 @@ interface IPkgShopOrderPaymentConfig
     /**
      * @param string $key
      * @param mixed  $default
-     *
      * @return mixed
+     *
+     * Assumption: The return type is defined by the default parameter.
+     * @psalm-template T
+     * @psalm-param T $default
+     * @psalm-return (T is null ? mixed : T)
      */
     public function getValue($key, $default = null);
 

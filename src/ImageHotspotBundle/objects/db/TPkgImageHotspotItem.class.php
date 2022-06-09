@@ -61,6 +61,8 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
      * @param array  $aClearTriggers - clear trigger array (with current contents)
      * @param string $sViewName      - view being requested
      * @param string $sViewType      - location of the view (Core, Custom-Core, Customer)
+     *
+     * @return void
      */
     protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
     {
@@ -76,16 +78,19 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
      * if the current item is the last in line, the method will return the first item. returns false if
      * no next item exists.
      *
-     * @return TdbPkgImageHotspotItem
+     * @return TdbPkgImageHotspotItem|false|null
      */
     public function GetNextItem()
     {
+        /** @var TdbPkgImageHotspotItem|null $oNextItem */
         $oNextItem = &$this->GetFromInternalCache('oNextItem');
         if (is_null($oNextItem)) {
             $oItemList = TdbPkgImageHotspotItemList::GetListForPkgImageHotspotId($this->fieldPkgImageHotspotId);
             $oItemList->bAllowItemCache = true;
             if ($oItemList->Length() > 1) {
                 $oNextItem = null;
+
+                /** @var TdbPkgImageHotspotItem $oFirst */
                 $oFirst = $oItemList->Current();
                 while (is_null($oNextItem) && ($oTmpItem = $oItemList->Next())) {
                     if ($oTmpItem->IsSameAs($this)) {
@@ -110,10 +115,11 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
      * if the current item is the first in line, the method will return the last item. returns false if
      * no previous item exists.
      *
-     * @return TdbPkgImageHotspotItem
+     * @return TdbPkgImageHotspotItem|null|false
      */
     public function GetPreviousItem()
     {
+        /** @var TdbPkgImageHotspotItem|null $oPreviousItem */
         $oPreviousItem = &$this->GetFromInternalCache('oPreviousItem');
         if (is_null($oPreviousItem)) {
             $oItemList = TdbPkgImageHotspotItemList::GetListForPkgImageHotspotId($this->fieldPkgImageHotspotId);
@@ -168,6 +174,12 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
 
     /**
      * return the url request needed to fetch the spot using ajax.
+     *
+     * @param string|null $sViewName
+     * @param string|null $sType
+     * @param array<string, string> $aParameter
+     *
+     * @return string
      */
     public function GetAjaxLink($sViewName = 'standard', $sType = 'Core', $aParameter = array())
     {

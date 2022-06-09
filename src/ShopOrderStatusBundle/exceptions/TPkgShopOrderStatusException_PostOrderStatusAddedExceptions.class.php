@@ -11,7 +11,11 @@
 
 class TPkgShopOrderStatusException_PostOrderStatusAddedExceptions extends TPkgCmsException
 {
+    /**
+     * @var TPkgCmsException[]
+     */
     private $exceptionList = array();
+
     /**
      * @var TdbShopOrderStatus
      */
@@ -38,7 +42,7 @@ class TPkgShopOrderStatusException_PostOrderStatusAddedExceptions extends TPkgCm
     }
 
     /**
-     * @param array $exceptionList
+     * @param TPkgCmsException[] $exceptionList
      *
      * @return $this
      */
@@ -50,7 +54,7 @@ class TPkgShopOrderStatusException_PostOrderStatusAddedExceptions extends TPkgCm
     }
 
     /**
-     * @return array
+     * @return TPkgCmsException[]
      */
     public function getExceptionList()
     {

@@ -32,7 +32,7 @@ class ResultModification implements ResultModificationInterface
     /**
      * @param ResultInterface $result
      * @param array           $configuration
-     * @param $filterDepth
+     * @param int $filterDepth
      *
      * @return ResultInterface
      */
@@ -61,7 +61,7 @@ class ResultModification implements ResultModificationInterface
 
     /**
      * @param ResultInterface $results
-     * @param $activeSortId
+     * @param string $activeSortId
      *
      * @return ResultInterface
      */

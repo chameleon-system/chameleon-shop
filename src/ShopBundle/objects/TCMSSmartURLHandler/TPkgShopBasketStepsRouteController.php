@@ -19,6 +19,9 @@ class TPkgShopBasketStepsRouteController extends \esono\pkgCmsRouting\AbstractRo
      */
     private $mainController;
 
+    /**
+     * @return void
+     */
     public function setMainController(ChameleonControllerInterface $mainController)
     {
         $this->mainController = $mainController;
@@ -26,11 +29,12 @@ class TPkgShopBasketStepsRouteController extends \esono\pkgCmsRouting\AbstractRo
 
     /**
      * @param Request $request
-     * @param $basketStepId
-     * @param $defaultCheckoutPageId
-     * @param $defaultCheckoutNodeId
-     * @param $stepCheckoutPageId
-     * @param $stepCheckoutNodeId
+     * @param string $basketStepId
+     * @param string $basketStepSystemName
+     * @param string $defaultCheckoutPageId
+     * @param string $stepCheckoutPageId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function basketStep(Request $request, $basketStepId, $basketStepSystemName, $defaultCheckoutPageId, $stepCheckoutPageId)
     {

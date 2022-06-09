@@ -58,6 +58,10 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     const URL_VOUCHER_BASKET_KEY = 'sBasketVoucherKey';
 
     protected $bAllowHTMLDivWrapping = true;
+
+    /**
+     * @var null|bool
+     */
     private $basketHasMessages = null;
 
     public function Init()
@@ -85,6 +89,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
 
     /**
      * clear all products from the basket and redirect to active page.
+     *
+     * @return void
      */
     protected function ClearBasket()
     {
@@ -106,6 +112,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * method looks for affiliate parter codes passed to the website (if none are set yet).
      * if a code is found, it is stored in the session. note: we check only ONCE for a session
      * if suche a code is passed!
+     *
+     * @return void
      */
     protected function ProcessAffiliatePartnerProgramms()
     {
@@ -151,6 +159,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * that it becomes possible to jump back to this page from the basket.
      *
      * @throws RouteNotFoundException
+     *
+     * @return void
      */
     public function JumpToBasketPage()
     {
@@ -263,6 +273,12 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      *          <input type="hidden" name="<?=TGlobal::OutHTML(MTShopBasketCore::URL_ACTION)?>[<?=TGlobal::OutHTML($iArticleId)?>]" value="copy" />
      *          <input type="hidden" name="<?=TGlobal::OutHTML(MTShopBasketCore::URL_ACTION)?>[<?=TGlobal::OutHTML($iArticleId2)?>]" value="move" />
      * if you are moving more than one, and want to keep the first and move the second
+     *
+     * @param array<string, int> $aArticleIdsToMove
+     * @param array<string, string> $aKeepOnNoticeList
+     * @param string $sMessageHandler
+     *
+     * @return void
      */
     public function TransferFromNoticeList($aArticleIdsToMove = null, $aKeepOnNoticeList = null, $sMessageHandler = null)
     {
@@ -349,6 +365,13 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         $this->RedirectAfterEvent($iRedirectNodeId);
     }
 
+    /**
+     * @param array  $aArticleIdsToMove
+     * @param string $sMessageHandler
+     * @param bool   $bIsInteralCall
+     *
+     * @return null|array<string, string>
+     */
     public function RemoveFromNoticeListAjax($aArticleIdsToMove = null, $sMessageHandler = null, $bIsInteralCall = false)
     {
         return $this->RemoveFromNoticeList($aArticleIdsToMove, $sMessageHandler, $bIsInteralCall, true);
@@ -360,6 +383,9 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * @param array  $aArticleIdsToMove
      * @param string $sMessageHandler
      * @param bool   $bIsInteralCall
+     * @param bool $bIsAjaxCall
+     *
+     * @return null|array<string, string>
      */
     public function RemoveFromNoticeList($aArticleIdsToMove = null, $sMessageHandler = null, $bIsInteralCall = false, $bIsAjaxCall = false)
     {
@@ -418,6 +444,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * @param int    $iAmount         - amount to add
      * @param string $sMessageHandler - info passed to this handler - uses the default message consumer for the shop if non passed (can also be passed via get/post)
      * @param bool   $bIsInternalCall
+     *
+     * @return void
      */
     public function TransferToNoticeList($iArticleId = null, $iAmount = null, $sMessageHandler = null, $bIsInternalCall = false)
     {
@@ -432,6 +460,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * @param int    $iAmount         - amount to add
      * @param string $sMessageHandler - info passed to this handler - uses the default message consumer for the shop if non passed (can also be passed via get/post)
      * @param bool   $bIsInternalCall
+     *
+     * @return void
      */
     public function AddToNoticeList($iArticleId = null, $iAmount = null, $sMessageHandler = null, $bIsInternalCall = false)
     {
@@ -504,6 +534,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * @param string $sMessageHandler        - name of the consumer to which any messages should be send
      * @param bool   $bIsInternalCall        - set to true, if you want to prevent redirection and get the success/failure as a boolean return value
      * @param int    $iRedirectSuccessNodeId - optional tree node to which we want to redirect on success to. if not set, we will redirect to the calling page
+     *
+     * @return bool
      */
     protected function AddVoucher($sShopVoucherCode = null, $sMessageHandler = null, $bIsInternalCall = false, $iRedirectSuccessNodeId = null)
     {
@@ -553,7 +585,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     /**
      * validates the voucher code and tries to load the voucher record.
      *
-     * @param $sShopVoucherCode
+     * @param string $sShopVoucherCode
      *
      * @return TdbShopVoucher|null
      */
@@ -617,6 +649,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * the consumer is optional and will be used to set the objects response message. if no consumer is given, the response will be send to the global consumer.
      *
      * @param array $aRequestData - you can pass the request data directly. if you do not, the data will be fetched from get/post
+     *
+     * @return void
      */
     public function AddToBasket($aRequestData = null)
     {
@@ -633,6 +667,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * the consumer is optional and will be used to set the objects response message. if no consumer is given, the response will be send to the global consumer.
      *
      * @param array $aRequestData - you can pass the request data directly. if you do not, the data will be fetched from get/post
+     *
+     * @return stdClass
      */
     public function AddToBasketAjax($aRequestData = null)
     {
@@ -722,6 +758,12 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * the consumer is optional and will be used to set the objects respons message. if no conumser is given, the repsonse will be send to the global consumer.
      *
      * @deprecated use RemoveFromBasketViaBasketItemKey whenever possible
+     *
+     * @param int|null $iArticleId
+     * @param null|string $sConsumer
+     * @param bool $bIsInternalCall
+     *
+     * @return void
      */
     public function RemoveFromBasket($iArticleId = null, $sConsumer = null, $bIsInternalCall = false)
     {
@@ -747,6 +789,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * @param string $sBasketItemKey
      * @param string $sConsumer       - optional. if no consumer is give, the response will be send to the global consumer.
      * @param bool   $bIsInternalCall
+     *
+     * @return void
      */
     protected function RemoveFromBasketViaBasketItemKey($sBasketItemKey = null, $sConsumer = null, $bIsInternalCall = false)
     {
@@ -988,6 +1032,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      *
      * @param TShopBasketArticle $oArticle
      * @param bool               $bItemWasUpdated
+     *
+     * @return void
      */
     protected function PostUpdateItemInBasketEvent($oArticle, $bItemWasUpdated)
     {
@@ -997,6 +1043,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * Hook is called after a successful removal in the basket... oArticle is what was removed from the basket.
      *
      * @param TShopBasketArticle $oArticle
+     *
+     * @return void
      */
     protected function PostRemoveItemInBasketHook($oArticle)
     {
@@ -1005,7 +1053,9 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     /**
      * redirects the user to the requested node after performing some action.
      *
-     * @param string|int $iRequestRedirectNodeId
+     * @param string|int|null $iRequestRedirectNodeId
+     *
+     * @return void
      */
     protected function RedirectAfterEvent($iRequestRedirectNodeId)
     {
@@ -1030,6 +1080,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     /**
      * redirects to the calling page, passing all parameters back again to that page (except for the parameters
      * needed to perform the shop basket operation).
+     *
+     * @return never
      */
     protected function RedirectToCallingPage()
     {
@@ -1065,6 +1117,9 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         return true;
     }
 
+    /**
+     * @return bool
+     */
     private function cacheDisabledBecauseBasketHasMessages()
     {
         if (null !== $this->basketHasMessages) {
@@ -1083,6 +1138,9 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         return $response;
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
@@ -1100,6 +1158,10 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         return $variables;
     }
 
+    /**
+     * @param array<string, mixed> $aRequestData
+     * @return string|null
+     */
     private function getBasketItemKeyFromUserInput($aRequestData)
     {
         if (true === isset($aRequestData[self::URL_ITEM_BASKET_KEY_NAME])) {
@@ -1115,6 +1177,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * @param TShopBasketArticle $oArticle
      * @param array              $aRequestData
      * @param TShopBasketArticle $oExistingItem
+     *
+     * @return array
      */
     private function getCustomDataFromRequest(TShopBasketArticle $oArticle, array $aRequestData, TShopBasketArticle $oExistingItem = null)
     {
@@ -1138,6 +1202,13 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         return $customData;
     }
 
+    /**
+     * @param IPkgShopBasketArticleWithCustomData $oArticle
+     * @param array $customData
+     * @param TCMSMessageManager $oMessage
+     * @param string $messageHandler
+     * @return bool
+     */
     private function customDataIsValid(IPkgShopBasketArticleWithCustomData $oArticle, array $customData, TCMSMessageManager $oMessage, $messageHandler)
     {
         /** @var $oArticle IPkgShopBasketArticleWithCustomData */

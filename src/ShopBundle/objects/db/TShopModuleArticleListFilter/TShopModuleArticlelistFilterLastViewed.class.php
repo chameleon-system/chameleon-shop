@@ -71,6 +71,11 @@ class TShopModuleArticlelistFilterLastViewed extends TdbShopModuleArticleListFil
         return $sQuery;
     }
 
+    /**
+     * @param array $aHistoryList
+     *
+     * @return void
+     */
     protected function CreateTempHistory($aHistoryList)
     {
         // create tmp table for items

@@ -15,10 +15,10 @@ interface StateRequestExtractorInterface
 {
     /**
      * @param array $configuration
-     * @param array $requestData
-     * @param $listSpotName
+     * @param array<string, mixed> $requestData
+     * @param string $listSpotName
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function extract(array $configuration, array $requestData, $listSpotName);
 }

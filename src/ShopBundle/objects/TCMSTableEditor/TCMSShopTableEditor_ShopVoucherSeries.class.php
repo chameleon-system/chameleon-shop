@@ -16,6 +16,8 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
 {
     /**
      * set public methods here that may be called from outside.
+     *
+     * @return void
      */
     public function DefineInterface()
     {
@@ -69,6 +71,8 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
      *
      * @param string $sCode             - the code to use. if empty, a random unique code will be generated
      * @param int    $iNumberOfVouchers - number of vouchers to create (will fetch this from user input if null given)
+     *
+     * @return stdClass
      */
     public function CreateVoucherCodes($sCode = null, $iNumberOfVouchers = null)
     {
@@ -172,6 +176,8 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
 
     /**
      * export all vouchers from a voucher series as csv-file with Code, Datecreated and UsedUp-Information.
+     *
+     * @return void
      */
     public function ExportVoucherCodes()
     {

@@ -13,6 +13,8 @@ class TPkgShopProductExportXMLEndPoint extends TPkgShopProductExportBase
 {
     /**
      * loop through the article list and handle each article.
+     *
+     * @return void
      */
     protected function HandleArticleList()
     {
@@ -35,7 +37,7 @@ class TPkgShopProductExportXMLEndPoint extends TPkgShopProductExportBase
      *
      * @param TdbShopArticle $oArticle
      *
-     * @return string
+     * @return void
      */
     protected function HandleArticle(&$oArticle)
     {
@@ -44,7 +46,7 @@ class TPkgShopProductExportXMLEndPoint extends TPkgShopProductExportBase
     /**
      * clean up the content replace all characters that could cause errors in the xml.
      *
-     * @param $sValue
+     * @param string $sValue
      *
      * @return string
      */

@@ -25,7 +25,7 @@ class StateRequestExtractorCollection implements StateRequestExtractorCollection
     /**
      * @param array $configuration
      * @param array $requestData
-     * @param $listSpotName
+     * @param string $listSpotName
      *
      * @return array
      */

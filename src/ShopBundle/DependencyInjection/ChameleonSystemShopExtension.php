@@ -21,6 +21,8 @@ class ChameleonSystemShopExtension extends Extension implements PrependExtension
 {
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function load(array $config, ContainerBuilder $container)
     {
@@ -33,6 +35,8 @@ class ChameleonSystemShopExtension extends Extension implements PrependExtension
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function prepend(ContainerBuilder $container)
     {

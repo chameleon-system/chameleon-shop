@@ -25,12 +25,14 @@ class ListResult implements ListResultInterface
      */
     private $previousPageUrl = null;
     /**
-     * @var ListItemInterface[] (key = id)
+     * @var array<string, ListItemInterface> (key = id)
      */
     private $itemList = array();
 
     /**
-     * @param ListItemInterface[] $itemList
+     * @param array<string, ListItemInterface> $itemList
+     *
+     * @return void
      */
     public function setItemList(array $itemList)
     {
@@ -38,7 +40,7 @@ class ListResult implements ListResultInterface
     }
 
     /**
-     * @return ListItemInterface[]
+     * @return array<string, ListItemInterface>
      */
     public function getItemList()
     {
@@ -47,6 +49,8 @@ class ListResult implements ListResultInterface
 
     /**
      * @param string $nextPageUrl
+     *
+     * @return void
      */
     public function setNextPageUrl($nextPageUrl)
     {
@@ -63,6 +67,8 @@ class ListResult implements ListResultInterface
 
     /**
      * @param string $previousPageUrl
+     *
+     * @return void
      */
     public function setPreviousPageUrl($previousPageUrl)
     {

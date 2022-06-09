@@ -17,6 +17,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class ChameleonSystemShopProductExportBundle extends Bundle
 {
+    /**
+     * @return void
+     */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);

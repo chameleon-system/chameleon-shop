@@ -13,7 +13,17 @@ interface IPkgShopViewMyOrderDetails
 {
     public function __construct(IPkgShopViewMyOrderDetailsDbAdapter $dbAdapter, IPkgShopViewMyOrderDetailsSessionAdapter $sessionAdapter);
 
+    /**
+     * @param string $orderId
+     * @param string|null $userId
+     * @return void
+     */
     public function addOrderIdToMyList($orderId, $userId = null);
 
+    /**
+     * @param string $orderId
+     * @param string|null $userId
+     * @return bool
+     */
     public function orderIdBelongsToUser($orderId, $userId = null);
 }

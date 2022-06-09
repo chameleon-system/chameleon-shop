@@ -161,6 +161,11 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
         $oVisitor->SetMappedValue('selectToPrice', $selectToPrice);
     }
 
+    /**
+     * @param float $value
+     *
+     * @return float
+     */
     protected function roundValueUp($value)
     {
         if ($value > 10000) {
@@ -178,6 +183,11 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
         return $value;
     }
 
+    /**
+     * @param float $value
+     *
+     * @return float
+     */
     protected function roundValueDown($value)
     {
         if ($value > 10000) {
@@ -194,7 +204,11 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
 
 class Slider
 {
-    /** @var bool */
+    /**
+     * String representation of the boolean
+     * @var string
+     * @psalm-var 'true'|'false'
+     */
     private $disabled = 'false';
     /** @var int */
     private $valueLow = null;
@@ -221,7 +235,8 @@ class Slider
     }
 
     /**
-     * @return bool
+     * @return string
+     * @psalm-return 'true'|'false'
      */
     public function getDisabled()
     {
@@ -334,7 +349,9 @@ class Select
     /** @var bool */
     private $disabled = true;
 
+    /** @var int[] */
     private $options = array();
+
     /** @var int */
     private $selectedOption = null;
 
@@ -379,7 +396,7 @@ class Select
     }
 
     /**
-     * @param array $options
+     * @param int[] $options
      *
      * @return Select
      */
@@ -405,7 +422,7 @@ class Select
     }
 
     /**
-     * @return array
+     * @return int[]
      */
     public function getOptions()
     {

@@ -95,9 +95,9 @@ class TPkgShopBasketMapper_BasketItemsEndPoint extends AbstractViewMapper
      * Get variant data if article is variant.
      *
      * @param TdbShopArticle $oArticle
-     * @param $aData
+     * @param array<string, mixed> $aData
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function GetVariantInfo($oArticle, $aData)
     {

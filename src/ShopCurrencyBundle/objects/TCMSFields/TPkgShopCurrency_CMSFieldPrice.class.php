@@ -11,6 +11,9 @@
 
 class TPkgShopCurrency_CMSFieldPrice extends TPkgShopCurrency_CMSFieldPriceAutoParent
 {
+    /**
+     * @return string
+     */
     public function RenderFieldPostLoadString()
     {
         $oViewParser = new TViewParser();
@@ -32,7 +35,6 @@ class TPkgShopCurrency_CMSFieldPrice extends TPkgShopCurrency_CMSFieldPriceAutoP
     public function RenderFieldPostWakeupString()
     {
         $oViewParser = new TViewParser();
-        /** @var $oViewParser TViewParser */
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
         $aData = $this->GetFieldWriterData();
         $aData['numberOfDecimals'] = $this->_GetNumberOfDecimals();
@@ -41,12 +43,14 @@ class TPkgShopCurrency_CMSFieldPrice extends TPkgShopCurrency_CMSFieldPriceAutoP
         return $oViewParser->RenderObjectPackageView('postwakeup', 'pkgShopCurrency/views/TCMSFields/TPkgShopCurrency_CMSFieldPrice');
     }
 
+    /**
+     * @return string
+     */
     public function RenderFieldPropertyString()
     {
         $sNormalfield = parent::RenderFieldPropertyString();
 
         $oViewParser = new TViewParser();
-        /** @var $oViewParser TViewParser */
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
         $aData = $this->GetFieldWriterData();
         $aData['sFieldName'] = $aData['sFieldName'].'Original';

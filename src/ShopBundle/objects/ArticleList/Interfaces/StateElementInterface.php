@@ -11,18 +11,30 @@
 
 namespace ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces;
 
+/**
+ * @template TNormalizedValue
+ */
 interface StateElementInterface
 {
+    /**
+     * @return string
+     */
     public function getKey();
 
     /**
-     * @param $value
+     * @param mixed $value
      *
      * @return bool
+     *
+     * @psalm-assert TNormalizedValue $value
      *
      * @throws \ChameleonSystem\ShopBundle\objects\ArticleList\Exceptions\StateParameterException
      */
     public function validate($value);
 
+    /**
+     * @param mixed $value
+     * @return TNormalizedValue
+     */
     public function normalize($value);
 }

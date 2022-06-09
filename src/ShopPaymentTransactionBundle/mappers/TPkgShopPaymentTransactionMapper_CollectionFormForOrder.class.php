@@ -142,6 +142,9 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getItemDetails(
         TdbShopOrder $order,
         TPkgShopPaymentTransactionManager $oTransactionManager,

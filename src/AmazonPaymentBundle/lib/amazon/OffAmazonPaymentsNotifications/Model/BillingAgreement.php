@@ -102,7 +102,7 @@ class OffAmazonPaymentsNotifications_Model_BillingAgreement extends OffAmazonPay
      * Sets the value of the AmazonBillingAgreementId property.
      * 
      * @param string AmazonBillingAgreementId
-     * @return this instance
+     * @return $this instance
      */
     public function setAmazonBillingAgreementId ($value)
     {
@@ -278,7 +278,7 @@ class OffAmazonPaymentsNotifications_Model_BillingAgreement extends OffAmazonPay
      * Sets the value of the CreationTimestamp property.
      * 
      * @param string CreationTimestamp
-     * @return this instance
+     * @return $this instance
      */
     public function setCreationTimestamp ($value)
     {
@@ -322,7 +322,7 @@ class OffAmazonPaymentsNotifications_Model_BillingAgreement extends OffAmazonPay
      * Sets the value of the BillingAgreementConsent property.
      * 
      * @param bool BillingAgreementConsent
-     * @return this instance
+     * @return $this instance
      */
     public function setBillingAgreementConsent ($value)
     {

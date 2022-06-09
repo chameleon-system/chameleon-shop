@@ -15,28 +15,47 @@
 /**/
 class TShopAuskunftAPI
 {
-    // XML-Parsing vars
+    /** @var resource */
     protected $parser;
 
+    /** @var bool  */
     protected $bRatingListInProgress = false;
+
+    /** @var array<string, string> */
     protected $aRatingItem = array();
+
+    /** @var bool */
     protected $bCriteriaInProgress = false;
+
+    /** @var array array<string, string> */
     protected $aCriteriaItem = array();
 
-    protected $current = ''; //current active tag!
+    /**
+     * Current active tag
+     * @var string
+     */
+    protected $current = '';
+
+    /** @var bool */
     protected $inside_data = false;
 
+    /** @var array<string, mixed> */
     public $aAPIData = array();
+
+    /** @var string|null */
     public $xmlParsingError;
 
-    //-------------------------------------------------------------------------
     /**
      * Constructor.
+     *
+     * @psalm-suppress UndefinedFunction
+     *
+     * @FIXME callbacks should be specified as `[$this, 'function']`
+     *
+     * @return void
      */
-    //-------------------------------------------------------------------------
     public function TShopAuskunftAPI()
     {
-        //-------------------------------------------------------------------------
         if (!($this->parser = xml_parser_create())) {
             die('Cannot create parser');
         }
@@ -46,12 +65,10 @@ class TShopAuskunftAPI
         xml_set_character_data_handler($this->parser, 'tag_contents');
     }
 
-    //-------------------------------------------------------------------------
-
     /**
      * Get content from URL.
      *
-     * @param $sURL
+     * @param string $sURL
      *
      * @return string
      */
@@ -73,9 +90,13 @@ class TShopAuskunftAPI
     }
 
     /**
-     * @param $parser
-     * @param $name
-     * @param $attribs
+     * @see https://www.php.net/manual/en/function.xml-set-element-handler.php
+     *
+     * @param resource $parser
+     * @param string $name
+     * @param array<string, string> $attribs
+     *
+     * @return void
      */
     public function start_tag($parser, $name, $attribs)
     {
@@ -105,8 +126,11 @@ class TShopAuskunftAPI
     }
 
     /**
-     * @param $parser
-     * @param $name
+     * @see https://www.php.net/manual/en/function.xml-set-element-handler.php
+     * @param resource $parser
+     * @param string $name
+     *
+     * @return void
      */
     public function end_tag($parser, $name)
     {
@@ -147,8 +171,12 @@ class TShopAuskunftAPI
     }
 
     /**
-     * @param $parser
-     * @param $data
+     * @see https://www.php.net/manual/en/function.xml-set-character-data-handler.php
+     *
+     * @param resource $parser
+     * @param string $data
+     *
+     * @return void
      */
     public function tag_contents($parser, $data)
     {
@@ -334,7 +362,7 @@ class TShopAuskunftAPI
     }
 
     /**
-     * @param $data
+     * @param string $data
      *
      * @return bool
      */
@@ -362,6 +390,8 @@ class TShopAuskunftAPI
 
     /**
      * @param null $data
+     *
+     * @return void
      */
     public function ParseXML($data = null)
     {
@@ -397,8 +427,10 @@ class TShopAuskunftAPI
 
 if (!function_exists('file_put_contents')) {
     /**
-     * @param $filename
-     * @param $data
+     * @FIXME This should be safe to remove
+     *
+     * @param string $filename
+     * @param string $data
      *
      * @return bool|int
      */

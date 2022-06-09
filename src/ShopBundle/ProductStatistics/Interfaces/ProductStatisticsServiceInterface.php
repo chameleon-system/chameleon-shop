@@ -19,15 +19,33 @@ interface ProductStatisticsServiceInterface
     const TYPE_REVIEW_COUNT = 4;
 
     /**
-     * @param $articleId
+     * @param string $articleId
      *
      * @return ProductStatisticsInterface
      */
     public function getStats($articleId);
 
+    /**
+     * @param string $articleId
+     * @param int $type
+     * @param float $amount
+     * @psalm-param self::TYPE_* $type
+     * @return void
+     */
     public function add($articleId, $type, $amount);
 
+    /**
+     * @param string $articleId
+     * @param int $type
+     * @param float $amount
+     * @psalm-param self::TYPE_* $type
+     * @return void
+     */
     public function set($articleId, $type, $amount);
 
+    /**
+     * @param string $parentArticleId
+     * @return void
+     */
     public function updateAllBasedOnVariants($parentArticleId);
 }

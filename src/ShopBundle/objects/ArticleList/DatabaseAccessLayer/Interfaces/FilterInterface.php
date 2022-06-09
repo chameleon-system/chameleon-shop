@@ -47,6 +47,8 @@ interface FilterInterface
 
     /**
      * called when the article list module has completed the initialization.
+     *
+     * @return void
      */
     public function ModuleInitHook();
 }

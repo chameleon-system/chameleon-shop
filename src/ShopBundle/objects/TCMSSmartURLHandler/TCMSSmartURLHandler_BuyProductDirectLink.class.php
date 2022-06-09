@@ -12,7 +12,10 @@
 /**
  * looks for URLS of the form /kaufen/ean/number... these will result in the article being
  * placed in the basket.
-/**/
+ *
+ * @psalm-suppress UndefinedPropertyAssignment
+ * @FIXME Writing data into `$OURLData` when there is no magic `__set` method for them defined.
+ */
 class TCMSSmartURLHandler_BuyProductDirectLink extends TCMSSmartURLHandler
 {
     public function GetPageDef()

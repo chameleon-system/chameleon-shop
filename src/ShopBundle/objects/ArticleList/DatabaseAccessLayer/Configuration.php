@@ -33,11 +33,17 @@ class Configuration extends \ChameleonSystemShopBundleobjectsArticleListDatabase
         return $this->fieldShopModuleArticlelistOrderbyId;
     }
 
+    /**
+     * @return string
+     */
     public function getDefaultFilterId()
     {
         return $this->fieldShopModuleArticleListFilterId;
     }
 
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
@@ -56,6 +62,9 @@ class Configuration extends \ChameleonSystemShopBundleobjectsArticleListDatabase
         return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getAsArray()
     {
         return $this->sqlData;

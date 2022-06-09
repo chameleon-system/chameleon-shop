@@ -26,7 +26,7 @@ class TShopPaymentHandlerDebitNoSEPA extends TdbShopPaymentHandler
     /**
      * return the default payment data for the handler.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function GetDefaultUserPaymentData()
     {

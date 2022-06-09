@@ -21,7 +21,7 @@ interface ResultModificationInterface
     /**
      * @param ResultInterface $result
      * @param array           $configuration
-     * @param $filterDepth
+     * @param int $filterDepth
      *
      * @return ResultInterface
      */

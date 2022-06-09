@@ -15,6 +15,9 @@ use esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterfac
 
 class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymentTransaction_TCMSTableEditorShopOrderAutoParent
 {
+    /**
+     * @return void
+     */
     public function DefineInterface()
     {
         parent::DefineInterface();
@@ -30,6 +33,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         $this->methodCallAllowed[] = 'pkgShopPaymentTransaction_PartialDebit';
     }
 
+    /**
+     * @return void
+     */
     public function paymentTransactionCollectAll()
     {
         if (false === $this->allowTransactions()) {
@@ -49,7 +55,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
                 $itemList[$orderItem->id] = $orderItem->fieldOrderAmount;
             }
             $orderItems->GoToStart();
-            /** @var $paymentHandler PaymentHandlerWithTransactionSupportInterface|\TdbShopPaymentHandler */
+            /** @var PaymentHandlerWithTransactionSupportInterface|\TdbShopPaymentHandler $paymentHandler */
             $paymentHandler = $oOrder->GetPaymentHandler();
             $paymentTransactionHandler = $paymentHandler->paymentTransactionHandlerFactory($oOrder->fieldCmsPortalId);
 
@@ -82,6 +88,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         $this->getRedirect()->redirect($sURL);
     }
 
+    /**
+     * @return void
+     */
     public function paymentTransactionRefundAll()
     {
         if (false === $this->allowTransactions()) {
@@ -101,7 +110,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
                 $itemList[$orderItem->id] = $orderItem->fieldOrderAmount;
             }
             $orderItems->GoToStart();
-            /** @var $paymentHandler PaymentHandlerWithTransactionSupportInterface|\TdbShopPaymentHandler */
+            /** @var PaymentHandlerWithTransactionSupportInterface&\TdbShopPaymentHandler $paymentHandler */
             $paymentHandler = $oOrder->GetPaymentHandler();
             $paymentTransactionHandler = $paymentHandler->paymentTransactionHandlerFactory($oOrder->fieldCmsPortalId);
 
@@ -135,6 +144,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         $this->getRedirect()->redirect($sURL);
     }
 
+    /**
+     * @return void
+     */
     public function pkgShopPaymentTransaction_PartialDebit()
     {
         if (false === $this->allowTransactions()) {
@@ -162,7 +174,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         }
 
         try {
-            /** @var $paymentHandler PaymentHandlerWithTransactionSupportInterface|\TdbShopPaymentHandler */
+            /** @var PaymentHandlerWithTransactionSupportInterface&\TdbShopPaymentHandler $paymentHandler */
             $paymentHandler = $oOrder->GetPaymentHandler();
             $paymentTransactionHandler = $paymentHandler->paymentTransactionHandlerFactory($oOrder->fieldCmsPortalId);
 
@@ -345,6 +357,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         return $oMenuItem;
     }
 
+    /**
+     * @return string
+     */
     public function pkgShopPaymentTransaction_getPartialCollectForm()
     {
         $oViewRenderer = new ViewRenderer();
@@ -355,6 +370,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         return $oViewRenderer->Render('pkgShopPaymentTransaction/collection-form.html.twig');
     }
 
+    /**
+     * @return string
+     */
     public function pkgShopPaymentTransaction_getPartialRefundForm()
     {
         $oViewRenderer = new ViewRenderer();
@@ -365,6 +383,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         return $oViewRenderer->Render('pkgShopPaymentTransaction/collection-form.html.twig');
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
@@ -377,6 +398,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         return $aIncludes;
     }
 
+    /**
+     * @return bool
+     */
     private function allowTransactions()
     {
         /** @var TdbShopOrder $oOrder */
@@ -386,6 +410,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         return $paymentHandler instanceof PaymentHandlerWithTransactionSupportInterface;
     }
 
+    /**
+     * @return bool
+     */
     protected function allowRefundTransaction()
     {
         /** @var TdbShopOrder $oOrder */
@@ -394,6 +421,9 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         return false === $oOrder->fieldCanceled;
     }
 
+    /**
+     * @return bool
+     */
     protected function allowPaymentTransactions()
     {
         /** @var TdbShopOrder $oOrder */

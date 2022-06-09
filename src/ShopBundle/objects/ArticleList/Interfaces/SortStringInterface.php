@@ -13,7 +13,13 @@ namespace ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces;
 
 interface SortStringInterface
 {
+    /**
+     * @param string $sqlOrderByString
+     */
     public function __construct($sqlOrderByString);
 
+    /**
+     * @return array<string, 'ASC'|'DESC'>
+     */
     public function getAsArray();
 }

@@ -19,11 +19,7 @@ class StateRequestExtractor implements StateRequestExtractorInterface
     const CONFIG_CAN_BE_FILTERED = 'can_be_filtered';
 
     /**
-     * @param array $configuration
-     * @param array $requestData
-     * @param $listSpotName
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function extract(array $configuration, array $requestData, $listSpotName)
     {
@@ -43,6 +39,11 @@ class StateRequestExtractor implements StateRequestExtractorInterface
         return $stateData;
     }
 
+    /**
+     * @param array $configuration
+     *
+     * @return bool
+     */
     private function postSearchFilterEnabled($configuration)
     {
         return true === isset($configuration[self::CONFIG_CAN_BE_FILTERED]) && '1' === $configuration[self::CONFIG_CAN_BE_FILTERED];

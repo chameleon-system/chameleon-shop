@@ -16,15 +16,21 @@ interface RequestToListUrlConverterInterface
     const URL_PARAMETER_SPOT_NAME = '_ref';
     const URL_PARAMETER_LIST_URL = 'url';
 
+    /**
+     * @return null|string
+     */
     public function getListUrl();
 
+    /**
+     * @return null|string
+     */
     public function getListSpotName();
 
     /**
-     * @param $listSpotName
-     * @param $listPageUrl
+     * @param string $listSpotName
+     * @param string $listPageUrl
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getPagerParameter($listSpotName, $listPageUrl);
 }

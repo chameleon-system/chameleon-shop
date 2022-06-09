@@ -16,7 +16,8 @@ use ChameleonSystem\ShopArticleDetailPagingBundle\Exception\ArticleListException
 interface DetailPagingServiceInterface
 {
     /**
-     * @param $currentArticleId
+     * @param string $currentArticleId
+     * @param string $pagerSpotName
      *
      * @return ListItemInterface
      *
@@ -25,7 +26,8 @@ interface DetailPagingServiceInterface
     public function getNextItem($currentArticleId, $pagerSpotName);
 
     /**
-     * @param $currentArticleId
+     * @param string $currentArticleId
+     * @param string $pagerSpotName
      *
      * @return ListItemInterface
      *
@@ -34,7 +36,8 @@ interface DetailPagingServiceInterface
     public function getPreviousItem($currentArticleId, $pagerSpotName);
 
     /**
-     * @return string
+     * @param string $pagerSpotName
+     * @return string|null
      */
     public function getBackToListUrl($pagerSpotName);
 }

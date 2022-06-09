@@ -39,7 +39,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
     /**
      * return the ISO-4217 code for the currency.
      *
-     * @return string|null
+     * @return string
      */
     public function getISO4217Code()
     {
@@ -65,9 +65,11 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
      *
      * @static
      *
-     * @return TdbPkgShopCurrency
+     * @return TdbPkgShopCurrency|false
      *
      * @deprecated use the service chameleon_system_shop_currency.shop_currency instead
+     *
+     * @param bool $bReset
      */
     public static function GetActiveInstance($bReset = false)
     {
@@ -88,7 +90,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
      *
      * @static
      *
-     * @return TdbPkgShopCurrency
+     * @return TdbPkgShopCurrency|false
      */
     public static function GetDefaultCurrency()
     {
@@ -110,7 +112,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
     /**
      * return the base currency relative to which all other currencies are calculated.
      *
-     * @return TdbPkgShopCurrency
+     * @return TdbPkgShopCurrency|false
      */
     public static function GetBaseCurrency()
     {
@@ -165,6 +167,8 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
 
     /**
      * set this currency object as the active object.
+     *
+     * @return void
      */
     public function SetAsActive()
     {

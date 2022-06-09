@@ -14,6 +14,8 @@ namespace ChameleonSystem\pkgshoplistfilter\Interfaces;
 interface FilterInterface
 {
     /**
+     * @psalm-suppress UndefinedDocblockClass
+     * @FIXME FilterFacetInterface does not exist - is this interface still in use and if yes: What should it return?
      * @return FilterFacetInterface[]
      */
     public function getFacets();

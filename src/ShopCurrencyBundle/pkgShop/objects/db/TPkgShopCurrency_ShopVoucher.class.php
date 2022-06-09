@@ -26,6 +26,8 @@ class TPkgShopCurrency_ShopVoucher extends TPkgShopCurrency_ShopVoucherAutoParen
      * we use it here to convert the value of the voucher used back to the base currency (since that is what we want to store.
      *
      * @param array $aData
+     *
+     * @return void
      */
     protected function CommitVoucherUseForCurrentUserPreSaveHook(&$aData)
     {

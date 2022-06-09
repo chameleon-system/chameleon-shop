@@ -73,6 +73,8 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
 
     /**
      * do any initialization work that needs to be done before you want to run the export.
+     *
+     * @return void
      */
     public function Init()
     {
@@ -83,6 +85,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * this method should not be overwritten in child classes.
      *
      * @return bool
+     * @final
      */
     public function Run()
     {
@@ -125,6 +128,8 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * you can overwrite these keys (and add custom keys) with the help of the virtual class manager.
      *
      * e.g.$this->aAttributes['brand'] = 'hersteller';
+     *
+     * @return void
      */
     protected function SetUpAttributes()
     {
@@ -150,6 +155,8 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
 
     /**
      * stuff you want to do before looping through $this->oArticleList.
+     *
+     * @return void
      */
     protected function PreArticleListHandling()
     {
@@ -160,6 +167,8 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * and do work with your articles.
      *
      * @see the csv export base class how you could do this
+     *
+     * @return void
      */
     protected function HandleArticleList()
     {
@@ -197,7 +206,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * @param TdbShopArticle $oArticle
      * @param array          $aAdditionalData
      *
-     * @return string|float
+     * @return string|false
      */
     protected function GetDeliveryCosts(&$oArticle, $aAdditionalData = array())
     {
@@ -242,8 +251,12 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      */
     public function getAttributeName($sIdentifier)
     {
+        /** @var array<string, string> $aAttributesForSystemNames */
         static $aAttributesForSystemNames = null;
+
+        /** @var array<string, string> $aAttributesForIds */
         static $aAttributesForIds = null;
+
         if (null === $aAttributesForSystemNames && null === $aAttributesForIds) {
             $oAttributesList = TdbShopAttributeList::GetList();
             while ($oAttribute = &$oAttributesList->Next()) {
@@ -415,7 +428,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * clean up the content e.g. for a field that comes from the database or something else
      * basically we only trim the content you should extend that method for each of your export types.
      *
-     * @param $sValue
+     * @param string $sValue
      *
      * @return string
      */
@@ -428,6 +441,8 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
 
     /**
      * stuff you want to do after looping through $this->oArticleList.
+     *
+     * @return void
      */
     protected function PostArticleListHandling()
     {
@@ -450,6 +465,8 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * sends input to output buffer.
      *
      * @param string $sInput
+     *
+     * @return void
      */
     protected function Write($sInput)
     {
@@ -461,6 +478,8 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * setter for $this->oArticleList.
      *
      * @param TdbShopArticleList $oArticleList
+     *
+     * @return void
      */
     public function SetArticleList(TIterator $oArticleList)
     {
@@ -470,7 +489,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     /**
      * getter for $this->oArticleList.
      *
-     * @return TIterator
+     * @return TIterator|null
      */
     public function GetArticleList()
     {
@@ -480,7 +499,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     /**
      * getter for $this->sCacheFile.
      *
-     * @return string
+     * @return string|null
      */
     public function GetCacheFile()
     {
@@ -501,6 +520,8 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * setter for $this->bDebug.
      *
      * @param bool $bDebug
+     *
+     * @return void
      */
     public function SetDebug($bDebug)
     {

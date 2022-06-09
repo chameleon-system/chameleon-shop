@@ -43,9 +43,10 @@ class DetailPagingService implements DetailPagingServiceInterface
     }
 
     /**
-     * @param $currentArticleId
+     * @param string $currentArticleId
+     * @param string $pagerSpotName
      *
-     * @return ListItemInterface
+     * @return ListItemInterface|null
      *
      * @throws ArticleListException
      */
@@ -63,9 +64,10 @@ class DetailPagingService implements DetailPagingServiceInterface
     }
 
     /**
-     * @param $currentArticleId
+     * @param string $currentArticleId
+     * @param string $pagerSpotName
      *
-     * @return ListItemInterface
+     * @return ListItemInterface|null
      */
     public function getPreviousItem($currentArticleId, $pagerSpotName)
     {
@@ -81,7 +83,7 @@ class DetailPagingService implements DetailPagingServiceInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getBackToListUrl($pagerSpotName)
     {
@@ -181,7 +183,7 @@ class DetailPagingService implements DetailPagingServiceInterface
 
     /**
      * @param ListItemInterface $item
-     * @param $listPageUrl
+     * @param string $listPageUrl
      *
      * @return ListItemInterface
      */

@@ -11,10 +11,26 @@
 
 class TShopBasketArticleCustomDataValidationError
 {
+    /**
+     * @var string
+     */
     private $itemName = null;
+
+    /**
+     * @var string
+     */
     private $errorMessageCode = null;
+
+    /**
+     * @var array
+     */
     private $additionalData = array();
 
+    /**
+     * @param string $itemName
+     * @param string $errorMessageCode
+     * @param array $additionalData
+     */
     public function __construct($itemName, $errorMessageCode, array $additionalData = array())
     {
         $this->itemName = $itemName;
@@ -24,6 +40,8 @@ class TShopBasketArticleCustomDataValidationError
 
     /**
      * @param array $additionalData
+     *
+     * @return void
      */
     public function setAdditionalData($additionalData)
     {
@@ -39,26 +57,36 @@ class TShopBasketArticleCustomDataValidationError
     }
 
     /**
-     * @param null $errorMessageCode
+     * @param string $errorMessageCode
+     *
+     * @return void
      */
     public function setErrorMessageCode($errorMessageCode)
     {
         $this->errorMessageCode = $errorMessageCode;
     }
 
+    /**
+     * @return string
+     */
     public function getErrorMessageCode()
     {
         return $this->errorMessageCode;
     }
 
     /**
-     * @param null $itemName
+     * @param string $itemName
+     *
+     * @return void
      */
     public function setItemName($itemName)
     {
         $this->itemName = $itemName;
     }
 
+    /**
+     * @return string
+     */
     public function getItemName()
     {
         return $this->itemName;

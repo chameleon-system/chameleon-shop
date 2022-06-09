@@ -53,7 +53,7 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
                 $orderLoaded = $oOrder->Load($sOrderId);
                 if ($orderLoaded) {
                     try {
-                        /** @var $oPaymentHandler TShopPaymentHandlerPayPal_PayViaLink */
+                        /** @var TShopPaymentHandlerPayPal_PayViaLink $oPaymentHandler */
                         $oPaymentHandler = $this->getShopPaymentHandlerFactory()->createPaymentHandler(
                             $sPaymentHandlerId,
                             $oOrder->fieldCmsPortalId
@@ -103,6 +103,9 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
         return $iPageId;
     }
 
+    /**
+     * @return never
+     */
     private function handleError()
     {
         header('HTTP/1.1 400 Bad Request');

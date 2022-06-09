@@ -25,6 +25,11 @@ class TCMSWizardStepShopAddressShipping extends TdbCmsWizardStep
         return $externalFunctions;
     }
 
+    /**
+     * @param bool $bState
+     *
+     * @return void
+     */
     protected function SetShowShippingAddressInputState($bState)
     {
         $oUser = TdbDataExtranetUser::GetInstance();
@@ -40,6 +45,8 @@ class TCMSWizardStepShopAddressShipping extends TdbCmsWizardStep
     /**
      * set state variable to show shipping address input. method returns false, so that
      * the same step is returned.
+     *
+     * @return void
      */
     public function ShowShippingAddressInput()
     {
@@ -49,6 +56,8 @@ class TCMSWizardStepShopAddressShipping extends TdbCmsWizardStep
     /**
      * set state variable to show shipping address input. method returns false, so that
      * the same step is returned.
+     *
+     * @return void
      */
     public function HideShippingAddressInput()
     {

@@ -20,6 +20,8 @@ class TPkgShopListfilterItemVariantDynamic extends TPkgShopListfilterItemVariant
 
     /**
      * Get variant system name and set it to sVariantTypeIdentifier.
+     *
+     * @return void
      */
     protected function PostLoadHook()
     {
