@@ -786,9 +786,9 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * removes an item from the basket via the items basket key. the method expects the data in the form:
      * basket[sBasketItemKey] =x, basket[consumer] = y.
      *
-     * @param string $sBasketItemKey
-     * @param string $sConsumer       - optional. if no consumer is give, the response will be send to the global consumer.
-     * @param bool   $bIsInternalCall
+     * @param string|null $sBasketItemKey
+     * @param string|null $sConsumer       - optional. if no consumer is give, the response will be send to the global consumer.
+     * @param bool $bIsInternalCall
      *
      * @return void
      */

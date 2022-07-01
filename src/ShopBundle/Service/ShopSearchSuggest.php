@@ -58,7 +58,7 @@ class ShopSearchSuggest implements ShopSearchSuggestInterface
             $isFirst = false;
         }
 
-        /** @var array{name:string}[] $results */
+        /** @var array{name:string, articlenumber: string}[] $results */
         $results = $this->databaseConnection->fetchAll($finalQuery);
         foreach ($results as $result) {
             $aSuggestions[] = $result['name'];

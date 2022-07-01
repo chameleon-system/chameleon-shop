@@ -135,6 +135,6 @@
         "chameleon-system/pkgtshoppaymenthandlersofortueberweisung": "*"
     },
     "scripts": {
-        "analyze": "psalm --output-format=compact"
+        "analyze": "psalm --no-cache"
     }
 }

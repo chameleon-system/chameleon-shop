@@ -24,8 +24,10 @@
         </service>
 
         <service class="TCMSCronJob_ShopSendOrderNotifications" id="chameleon_system_shop.cronjob.send_order_notifications_cronjob" shared="false">
-            <argument>%chameleon_system_core.development_email%</argument>
             <tag name="chameleon_system.cronjob" />
+
+            <argument>%chameleon_system_core.development_email%</argument>
+            <argument type="service" id="chameleon_system_core.language_service"/>
         </service>
 
         <service class="TCMSCronJob_ShopTimeBasedDiscountCache" id="chameleon_system_shop.cronjob.time_based_discount_cache_cronjob" shared="false">

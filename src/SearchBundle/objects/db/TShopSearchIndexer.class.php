@@ -135,7 +135,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     }
 
     /**
-     * @return bool|false
+     * @return bool
      */
     public function IndexerHasFinished()
     {

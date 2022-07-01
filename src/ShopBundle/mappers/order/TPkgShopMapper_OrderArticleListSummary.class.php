@@ -97,7 +97,7 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
      * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
      * @param bool $bCachingEnabled
      *
-     * @return array{sName: string, iPercent: int, sPercent: string, dValue: int, sValue: string}[]
+     * @return array{sName: string, iPercent: int, sPercent: string, dValue: float, sValue: string}[]
      */
     protected function getVatList(TdbShopOrder $oOrder, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {

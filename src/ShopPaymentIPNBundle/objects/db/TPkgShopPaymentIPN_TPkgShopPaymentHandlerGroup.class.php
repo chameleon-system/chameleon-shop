@@ -57,8 +57,10 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
      * @param TPkgShopPaymentIPNRequest $oRequest
      *
      * @trows AbstractPkgShopPaymentIPNHandlerException
+     *
+     * @return void
      */
-    final public function handleIPN(TPkgShopPaymentIPNRequest $oRequest): void
+    final public function handleIPN(TPkgShopPaymentIPNRequest $oRequest)
     {
         $aHandlerChain = $this->getIPNHandlerChain();
         $this->handleIPNHook($oRequest);

@@ -403,7 +403,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      * to go directly to, for example, the payment provider. if you return an empty string, the default target (ie the payment
      * data entry step) will be used.
      *
-     * @return string
+     * @return string|false
      */
     public function GetUserInputTargetURL()
     {
@@ -433,7 +433,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      *
      * @param string $sParameterName
      *
-     * @return string
+     * @return string|false
      */
     protected function GetTestLiveModeParameter($sParameterName)
     {

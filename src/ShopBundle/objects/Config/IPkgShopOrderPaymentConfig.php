@@ -40,8 +40,12 @@ interface IPkgShopOrderPaymentConfig
     /**
      * @param string $key
      * @param mixed  $default
-     *
      * @return mixed
+     *
+     * Assumption: The return type is defined by the default parameter.
+     * @psalm-template T
+     * @psalm-param T $default
+     * @psalm-return (T is null ? mixed : T)
      */
     public function getValue($key, $default = null);
 

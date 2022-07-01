@@ -512,8 +512,8 @@ class TShopOrder extends TShopOrderAutoParent
     /**
      * send an order notification for this order.
      *
-     * @param string $sSendToMail
-     * @param string $sSendToName
+     * @param string|null $sSendToMail
+     * @param string|null $sSendToName
      * @return bool|string
      */
     public function SendOrderNotification($sSendToMail = null, $sSendToName = null)
