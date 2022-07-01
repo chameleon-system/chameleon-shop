@@ -85,6 +85,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * this method should not be overwritten in child classes.
      *
      * @return bool
+     * @final
      */
     public function Run()
     {

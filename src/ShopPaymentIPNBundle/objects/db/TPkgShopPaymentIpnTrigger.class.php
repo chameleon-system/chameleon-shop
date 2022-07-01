@@ -130,8 +130,11 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
     }
 
     /**
-     * @param positive-int $iAttemptNumber
-     * @return positive-int|false
+     * @param int $iAttemptNumber
+     * @return int|false
+     *
+     * @psalm-param positive-int $iAttemptNumber
+     * @psalm-return positive-int|false
      */
     private function getNextAttemptTimestamp($iAttemptNumber)
     {

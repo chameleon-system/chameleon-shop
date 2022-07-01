@@ -636,7 +636,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
     /**
      * returns the payment currency in ISO 4217 (EUR, USD).
      *
-     * @return string
+     * @return string|false
      */
     protected function GetCurrency()
     {
