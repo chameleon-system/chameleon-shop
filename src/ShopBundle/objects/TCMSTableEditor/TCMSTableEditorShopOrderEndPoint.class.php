@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @property TdbShopOrder $oTable
@@ -24,7 +26,17 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
     protected function GetCustomMenuItems()
     {
         parent::GetCustomMenuItems();
-        $oMenuItem = new TCMSTableEditorMenuItem();
+
+        $sendConfirmMenuItem = $this->getSendConfirmMenuItem();
+        $this->oMenuItems->AddItem($sendConfirmMenuItem);
+
+        $exportMenuItem = $this->getExportMenuItem();
+        $this->oMenuItems->AddItem($exportMenuItem);
+    }
+
+    private function getSendConfirmMenuItem(): \TCMSTableEditorMenuItem
+    {
+        $oMenuItem = new \TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'sendordermail';
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_shop.orders.action_send_order_confirm_mail');
         $oMenuItem->sIcon = 'fas fa-envelope';
@@ -35,7 +47,34 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
         $sURL .= TTools::GetArrayAsURLForJavascript($aParams);
 
         $oMenuItem->sOnClick = "ShopOrderSendConfirmOrderMail('{$sURL}', '".TGlobal::OutHTML($this->oTable->sqlData['user_email'])."');";
-        $this->oMenuItems->AddItem($oMenuItem);
+
+        return $oMenuItem;
+    }
+
+    private function getExportMenuItem(): \TCMSTableEditorMenuItem
+    {
+        $translator = $this->getTranslator();
+
+        $menuItem = new \TCMSTableEditorMenuItem();
+        $menuItem->sItemKey = 'exportorder';
+        $menuItem->setTitle($translator->trans('chameleon_system_shop.orders.export_button_title'));
+        $menuItem->sIcon = 'fas fa-file-export';
+
+        $url = URL_CMS_CONTROLLER.'?';
+        $params = [
+            'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
+            '_fnc' => 'exportOrder',
+            '_noModuleFunction' => 'true',
+            'pagedef' => 'tableeditor',
+            'tableid' => $this->oTableConf->id,
+            'id' => $this->sId,
+        ];
+        $url .= $this->getUrlUtil()->getArrayAsUrl($params, '', '&');
+
+        $confirmText = \TGlobal::OutJS($translator->trans('chameleon_system_shop.orders.export_confirm'));
+        $menuItem->sOnClick = "if (confirm('$confirmText')) { GetAjaxCall('".$url."',DisplayAjaxMessage); }";
+
+        return $menuItem;
     }
 
     public function GetHtmlHeadIncludes()
@@ -111,6 +150,27 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
         return $sURL;
     }
 
+    public function exportOrder(): array
+    {
+        $translator = $this->getTranslator();
+
+        if (false !== $this->oTable->ExportOrderForWaWiHook($this->oTable->GetPaymentHandler())) {
+            $this->oTable->MarkOrderAsExportedToWaWi(true);
+
+            return [
+                'messageType' => 'SUCCESS',
+                'message' => $translator->trans('chameleon_system_shop.orders.export_success')
+            ];
+        }
+
+        // TODO this should however be an http error response; which would then use AjaxError() on js side
+        return [
+            'messageType' => 'ERROR',
+            'message' => $translator->trans('chameleon_system_shop.orders.export_failure')
+        ];
+
+    }
+
     /**
      * set public methods here that may be called from outside.
      *
@@ -121,6 +181,7 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
         parent::DefineInterface();
         $this->methodCallAllowed[] = 'ShopOrderSendConfirmOrderMail';
         $this->methodCallAllowed[] = 'GetFrontendActionUrlToSendOrderEmail';
+        $this->methodCallAllowed[] = 'exportOrder';
     }
 
     /**
@@ -183,5 +244,15 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
     private function getPortalDomainService(): PortalDomainServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
+    }
+
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
     }
 }

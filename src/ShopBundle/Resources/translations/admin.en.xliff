@@ -233,6 +233,23 @@
                 <target>Error: %error%</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_shop.orders.export_button_title">
+                <source>chameleon_system_shop.orders.export_button_title</source>
+                <target>Export to order management</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.orders.export_confirm">
+                <source>chameleon_system_shop.orders.export_confirm</source>
+                <target>Are you sure you want to export the order again?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.orders.export_success">
+                <source>chameleon_system_shop.orders.export_success</source>
+                <target>The order was successfully exported</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.orders.export_failure">
+                <source>chameleon_system_shop.orders.export_failure</source>
+                <target>There was an error while exporting the order</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_label">
                 <source>chameleon_system_shop.list_manager_article.filter_type_label</source>
                 <target>Product type</target>
