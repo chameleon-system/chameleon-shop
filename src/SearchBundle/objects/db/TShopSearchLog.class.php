@@ -12,8 +12,8 @@
 class TShopSearchLog extends TShopSearchLogAutoParent
 {
     /**
-     * @param string $id
-     * @param string $sLanguageId
+     * @param string|null $id
+     * @param string|null $sLanguageId
      */
     public function __construct($id = null, $sLanguageId = null)
     {

@@ -158,7 +158,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
      * by passing the parameter $sStepMethod (if null is passed, the method will try to fetch
      * the value from get/post from self::URL_PARAM_STEP_METHOD = xx.
      *
-     * @param string $sStepMethod - method to execute. defaults to ExecuteStep
+     * @param string|null $sStepMethod - method to execute. defaults to ExecuteStep
      *
      * @return false|null
      */
