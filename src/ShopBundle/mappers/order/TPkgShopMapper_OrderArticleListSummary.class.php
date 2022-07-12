@@ -131,7 +131,7 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
      *
      * @return array
      */
-    protected function getVoucherList(TdbShopOrder $oOrder, $bSponsored = false, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
+    protected function getVoucherList(TdbShopOrder $oOrder, $bSponsored, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
         $aVoucherList = array();
 
@@ -168,13 +168,13 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
 
     /**
      * @param TdbShopVoucherUse             $oVoucherUse
-     * @param TdbShopVoucher                $oVoucher
+     * @param TdbShopVoucher|null           $oVoucher
      * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
      * @param $bCachingEnabled
      *
      * @return array
      */
-    protected function getDataFromVoucher(TdbShopVoucherUse $oVoucherUse, TdbShopVoucher $oVoucher = null, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
+    protected function getDataFromVoucher(TdbShopVoucherUse $oVoucherUse, ?TdbShopVoucher $oVoucher, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
         $aVoucher = array(
             'sCode' => '',
