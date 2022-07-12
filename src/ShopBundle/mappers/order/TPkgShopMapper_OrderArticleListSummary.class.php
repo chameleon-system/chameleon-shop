@@ -131,7 +131,7 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
      *
      * @return array
      */
-    protected function getVoucherList(TdbShopOrder $oOrder, $bSponsored = false, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
+    protected function getVoucherList(TdbShopOrder $oOrder, $bSponsored, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
         $aVoucherList = array();
 
