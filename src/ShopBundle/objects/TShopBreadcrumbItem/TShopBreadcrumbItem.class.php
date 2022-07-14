@@ -11,21 +11,42 @@
 
 /**
  * item is used to simulate a breadcrumb node.
-/**/
+ *
+ * @template TItem of TCMSRecord
+ */
 class TShopBreadcrumbItem
 {
+    /**
+     * @var TItem
+     */
     public $oItem = null;
+
+    /**
+     * @var string
+     */
     public $id = null;
 
+    /**
+     * @return string
+     */
     public function GetName()
     {
         return $this->oItem->GetName();
     }
 
+    /**
+     * Subclasses *MUST* override this method
+     * @return string
+     * @abstract
+     * @psalm-suppress InvalidReturnType
+     */
     public function GetLink()
     {
     }
 
+    /**
+     * @return string
+     */
     public function GetTarget()
     {
         return '_self';

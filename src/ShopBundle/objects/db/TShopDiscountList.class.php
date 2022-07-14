@@ -50,12 +50,13 @@ class TShopDiscountList extends TShopDiscountListAutoParent
         return $aActiveDiscountList[$sKey];
     }
 
-    /*
+    /**
      * return all discounts matching the article
      * @param TdbShopArticle $oArticle
-     * @param boolean $bIncludeUserRestrictedDiscounts - set to true, if you want to include discounts restricted to the current user
-     * @return TIterator
-    */
+     * @param bool $bIncludeUserRestrictedDiscounts - set to true, if you want to include discounts restricted to the current user
+     *
+     * @return TIterator<TdbShopDiscount>
+     */
     public static function GetActiveDiscountListForArticle(&$oArticle, $bIncludeUserRestrictedDiscounts = false)
     {
         $oDiscountList = new TIterator();

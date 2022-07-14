@@ -29,7 +29,7 @@ class TShopPaymentHandlerIPaymentDebit extends TShopPaymentHandlerIPayment
     /**
      * return the default payment data for the handler.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function GetDefaultUserPaymentData()
     {
@@ -64,6 +64,8 @@ class TShopPaymentHandlerIPaymentDebit extends TShopPaymentHandlerIPayment
 
     /**
      * if request to IPayment was not successfully create a error message.
+     *
+     * @return void
      */
     protected function SetErrorCodesFromResponseToMessageManager()
     {

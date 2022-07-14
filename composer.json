@@ -33,7 +33,8 @@
         "chameleon-system/sanitycheck": "~7.1.0",
         "chameleon-system/sanitycheck-bundle": "~7.1.0",
         "phpspec/prophecy-phpunit": "^2.0.0",
-        "phpunit/phpunit": "^9.5.1"
+        "phpunit/phpunit": "^9.5.1",
+        "vimeo/psalm": "^4.22"
     },
     "conflict": {
         "sebastian/comparator": "<1.2.4"
@@ -131,5 +132,8 @@
         "chameleon-system/pkgshopratingservice": "*",
         "chameleon-system/pkgshopwishlist": "*",
         "chameleon-system/pkgtshoppaymenthandlersofortueberweisung": "*"
+    },
+    "scripts": {
+        "analyze": "psalm --no-cache"
     }
 }

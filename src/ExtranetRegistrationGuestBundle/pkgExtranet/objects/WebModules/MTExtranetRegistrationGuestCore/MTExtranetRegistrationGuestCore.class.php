@@ -15,7 +15,9 @@ use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 /**
  * Use this package module to register user after creating order with guest account.
  *
-/**/
+ * @psalm-suppress UndefinedInterfaceMethod
+ * @FIXME `HeaderURLRedirect` only exist on one implementation of `ChameleonControllerInterface`
+ */
 class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAutoParent
 {
     protected function DefineInterface()
@@ -35,6 +37,8 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
      *
      * @param null $sSuccessURL
      * @param null $sFailureURL
+     *
+     * @return void
      */
     protected function RegisterGuestUser($sSuccessURL = null, $sFailureURL = null)
     {
@@ -54,6 +58,8 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
                 $sFailureURL = null;
             }
         }
+
+        /** @var TShopStepOrderCompleted|null $oStep */
         $oStep = TdbShopOrderStep::GetStep('thankyou');
         if (null !== $oStep) {
             $oTmpUser = $oStep->GetLastUserBoughtFromSession();
@@ -97,6 +103,8 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
 
     /**
      * if user is not allowed to be register redirect to access denied page.
+     *
+     * @return void
      */
     protected function HandleRegisterAfterShopping()
     {
@@ -115,6 +123,7 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
      */
     protected function IsAllowedToShowRegisterAfterShoppingPage()
     {
+        /** @var TShopStepOrderCompleted $oStep */
         $oStep = TdbShopOrderStep::GetStep('thankyou');
         $bUserIsValid = false;
         if (!is_null($oStep)) {
@@ -140,6 +149,8 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
      * validate the extranet user data (in the current extranet object).
      *
      * @return bool
+     *
+     * @param TdbDataExtranetUser $oUser
      */
     protected function ValidateGivenUserData($oUser)
     {

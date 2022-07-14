@@ -24,22 +24,25 @@ interface ListResultInterface
     public function getPreviousPageUrl();
 
     /**
-     * @return ListItemInterface[]
+     * @return array<string, ListItemInterface>
      */
     public function getItemList();
 
     /**
-     * @param $url
+     * @param string $url
+     * @return void
      */
     public function setNextPageUrl($url);
 
     /**
-     * @param $url
+     * @param string $url
+     * @return void
      */
     public function setPreviousPageUrl($url);
 
     /**
-     * @param ListItemInterface[] $items (key = id)
+     * @param array<string, ListItemInterface> $items (key = id)
+     * @return void
      */
     public function setItemList(array $items);
 }

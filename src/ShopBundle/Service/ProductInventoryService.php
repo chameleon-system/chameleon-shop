@@ -26,6 +26,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
      */
     public function getAvailableStock($shopArticleId)
     {
+        /** @var int[]|false $stock */
         $stock = $this->databaseConnection->fetchArray(
             'SELECT `amount` FROM `shop_article_stock` WHERE `shop_article_id` = :id',
             array('id' => $shopArticleId)
@@ -33,6 +34,8 @@ class ProductInventoryService implements ProductInventoryServiceInterface
         if (is_array($stock) && isset($stock[0])) {
             return (int) $stock[0];
         }
+
+        /** @var false $stock */
 
         return $stock;
     }
@@ -107,6 +110,8 @@ class ProductInventoryService implements ProductInventoryServiceInterface
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {

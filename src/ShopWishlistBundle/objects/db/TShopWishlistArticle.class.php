@@ -17,6 +17,7 @@ class TShopWishlistArticle extends TShopWishlistArticleAutoParent
      * return the link that can be used to add the article to the users wishlist.
      *
      * @param bool $bIncludePortalLink
+     * @param bool $bRedirectToLoginPage
      *
      * @return string
      */

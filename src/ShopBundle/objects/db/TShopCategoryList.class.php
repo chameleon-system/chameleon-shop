@@ -81,7 +81,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
     /**
      * returns the max vat from the category list.
      *
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function &GetMaxVat()
     {
@@ -106,14 +106,16 @@ class TShopCategoryList extends TShopCategoryListAutoParent
     /**
      * returns the shops default article category.
      *
-     * @return TdbShopCategory
+     * @return TdbShopCategory|null
      */
     public static function &GetDefaultCategory()
     {
         static $oCategory;
+
         if (!$oCategory) {
             $oRootCategories = &TdbShopCategoryList::GetChildCategories();
             if ($oRootCategories->Length() > 0) {
+                /** @var TdbShopCategory $oCategory */
                 $oCategory = &$oRootCategories->Current();
             }
         }
@@ -126,7 +128,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      *
      * @param array $aPath - the category names
      *
-     * @return TdbShopCategory
+     * @return TdbShopCategory|null
      */
     public static function &GetCategoryForCategoryPath($aPath)
     {
@@ -135,7 +137,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
         if (!empty($sPath)) {
             $sPath = '/'.$sPath;
         }
-        /** @var $oCategory TdbShopCategory */
+
         $oCategory = TdbShopCategory::GetNewInstance();
         $activeLanguageId = self::getLanguageService()->getActiveLanguageId();
         $oCategory->SetLanguage($activeLanguageId);

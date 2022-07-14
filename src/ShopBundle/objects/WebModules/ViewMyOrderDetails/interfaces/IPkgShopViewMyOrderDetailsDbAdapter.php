@@ -12,8 +12,8 @@
 interface IPkgShopViewMyOrderDetailsDbAdapter
 {
     /**
-     * @param $userId
-     * @param $orderId
+     * @param string $userId
+     * @param string $orderId
      *
      * @return bool
      */

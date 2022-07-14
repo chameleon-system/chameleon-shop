@@ -10,7 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * varchar field with javascript to set the blog post url onblur.
@@ -19,6 +19,8 @@ class TCMSFieldText_ShowExportURL extends TCMSFieldVarchar
 {
     /**
      * sets methods that are allowed to be called via URL (ajax call).
+     *
+     * @return void
      */
     protected function DefineInterface()
     {

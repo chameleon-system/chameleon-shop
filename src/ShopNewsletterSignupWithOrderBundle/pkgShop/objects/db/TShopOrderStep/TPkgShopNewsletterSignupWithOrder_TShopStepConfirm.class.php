@@ -13,6 +13,8 @@ class TPkgShopNewsletterSignupWithOrder_TShopStepConfirm extends TPkgShopNewslet
 {
     /**
      * @param TShopBasket $oBasket
+     *
+     * @return void
      */
     protected function addDataToBasket(TShopBasket &$oBasket)
     {

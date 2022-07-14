@@ -24,11 +24,17 @@ class ShopProductExporter implements ShopProductExporterInterface
      * @var \ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultFactoryInterface
      */
     private $resultFactory;
+
     /**
      * @var ShopProductExportHandlerInterface[]
      */
     private $exportHandler = array();
+
+    /**
+     * @var string
+     */
     private $validShopExportKey;
+
     /**
      * @var StateFactoryInterface
      */
@@ -94,7 +100,7 @@ class ShopProductExporter implements ShopProductExporterInterface
     }
 
     /**
-     * @param $alias
+     * @param string $alias
      *
      * @return ShopProductExportHandlerInterface
      */

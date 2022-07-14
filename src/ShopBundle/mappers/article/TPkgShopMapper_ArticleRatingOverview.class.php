@@ -32,6 +32,7 @@ class TPkgShopMapper_ArticleRatingOverview extends AbstractPkgShopMapper_Article
      * @param TdbPkgShopArticleReviewModuleShopArticleReviewConfiguration $oReviewModuleConfiguration
      * @param TdbShopArticle                                              $oArticle
      * @param \IMapperCacheTriggerRestricted                              $oCacheTriggerManager
+     * @param bool $bCachingEnabled
      *
      * @return array
      */

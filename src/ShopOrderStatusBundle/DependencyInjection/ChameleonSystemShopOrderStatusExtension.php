@@ -19,6 +19,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class ChameleonSystemShopOrderStatusExtension extends Extension implements PrependExtensionInterface
 {
+    /**
+     * @return void
+     */
     public function load(array $config, ContainerBuilder $container)
     {
         $loader = new XMLFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
@@ -27,6 +30,8 @@ class ChameleonSystemShopOrderStatusExtension extends Extension implements Prepe
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function prepend(ContainerBuilder $container)
     {

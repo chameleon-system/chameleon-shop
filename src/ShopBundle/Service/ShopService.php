@@ -55,6 +55,8 @@ class ShopService implements ShopServiceInterface
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {
@@ -102,6 +104,8 @@ class ShopService implements ShopServiceInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param null|string $cmsPortalId
      */
     public function getShopForPortalId($cmsPortalId)
     {
@@ -171,9 +175,13 @@ class ShopService implements ShopServiceInterface
             return null;
         }
 
+        if (false === $request->hasSession()) {
+            return null;
+        }
+
         $session = $request->getSession();
 
-        if (null === $session || false === $session->isStarted()) {
+        if (false === $session->isStarted()) {
             return null;
         }
 

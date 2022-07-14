@@ -81,6 +81,9 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
             $oOrderList->GoToStart();
 
             if (0 < $oOrderList->Length()) {
+                /**
+                 * @psalm-suppress FalsableReturnStatement - We checked the length of the list here.
+                 */
                 return $oOrderList->Current();
             }
         }

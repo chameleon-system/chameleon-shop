@@ -32,6 +32,8 @@ class UpdateVariantParentStockListener
 
     /**
      * @param UpdateProductStockEvent $event
+     *
+     * @return void
      */
     public function onUpdateProductStock(UpdateProductStockEvent $event)
     {
@@ -49,6 +51,8 @@ class UpdateVariantParentStockListener
 
     /**
      * @param string $parentId
+     *
+     * @return void
      */
     private function updateVariantParentStock($parentId)
     {
@@ -57,6 +61,8 @@ class UpdateVariantParentStockListener
 
     /**
      * @param TdbShopArticle $product
+     *
+     * @return void
      */
     private function setVariantParentActive(TdbShopArticle $product)
     {

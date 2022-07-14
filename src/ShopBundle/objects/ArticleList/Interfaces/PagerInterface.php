@@ -13,11 +13,25 @@ namespace ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces;
 
 interface PagerInterface
 {
+    /**
+     * @param string $baseUrl
+     * @param StateInterface $state
+     */
     public function __construct($baseUrl, StateInterface $state);
 
+    /**
+     * @param int $pageNumber
+     * @return string
+     */
     public function getPageLink($pageNumber);
 
+    /**
+     * @return string
+     */
     public function getFirstPageLink();
 
+    /**
+     * @return string
+     */
     public function getLastPageLink();
 }

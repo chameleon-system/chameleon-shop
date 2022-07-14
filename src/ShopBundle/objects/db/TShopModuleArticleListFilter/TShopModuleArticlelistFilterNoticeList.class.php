@@ -88,6 +88,7 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
      */
     protected function CreateTempNotice($aNoticeList)
     {
+        /** @var string $sTmpTableName */
         $sTmpTableName = MySqlLegacySupport::getInstance()->real_escape_string('_tmp'.session_id().'noticelist');
         $query = "CREATE TEMPORARY  TABLE `{$sTmpTableName}` (
                               `date_added` datetime NOT NULL,

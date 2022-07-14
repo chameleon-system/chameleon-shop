@@ -14,10 +14,19 @@ namespace ChameleonSystem\ShopBundle\objects\ArticleList\State;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Exceptions\InvalidPageSizeException;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateElementInterface;
 
+/**
+ * @implements StateElementInterface<positive-int|0|-1|null|false>
+ */
 class StateElementPageSize implements StateElementInterface
 {
+    /**
+     * @var list<int|null>
+     */
     private $validOptions;
 
+    /**
+     * @return string
+     */
     public function getKey()
     {
         return 'ps';
@@ -56,6 +65,9 @@ class StateElementPageSize implements StateElementInterface
         return $pageSize;
     }
 
+    /**
+     * @return void
+     */
     public function setValidOptions(array $validOptions)
     {
         $this->validOptions = $validOptions;

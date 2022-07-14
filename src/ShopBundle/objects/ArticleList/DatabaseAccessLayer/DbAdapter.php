@@ -25,7 +25,7 @@ class DbAdapter implements DbAdapterInterface
     private $databaseConnection;
 
     /**
-     * @param $instanceID
+     * @param string $instanceID
      *
      * @return \ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\ConfigurationInterface
      */
@@ -38,7 +38,7 @@ class DbAdapter implements DbAdapterInterface
     }
 
     /**
-     * @param $filterId
+     * @param string $filterId
      *
      * @return \ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\FilterDefinitionInterface
      */
@@ -62,7 +62,7 @@ class DbAdapter implements DbAdapterInterface
     }
 
     /**
-     * @param $sortTypeId
+     * @param string $sortTypeId
      *
      * @return SortTypeInterface
      */
@@ -73,6 +73,8 @@ class DbAdapter implements DbAdapterInterface
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {
@@ -88,7 +90,7 @@ class DbAdapter implements DbAdapterInterface
     }
 
     /**
-     * @param $configurationId
+     * @param string $configurationId
      *
      * @return array
      */

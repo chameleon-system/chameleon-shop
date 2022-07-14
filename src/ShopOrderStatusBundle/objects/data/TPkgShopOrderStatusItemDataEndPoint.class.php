@@ -21,6 +21,10 @@ class TPkgShopOrderStatusItemDataEndPoint implements IPkgShopOrderStatusData
      */
     private $amount = null;
 
+    /**
+     * @param string $shopOrderItemId
+     * @param int $amount
+     */
     public function __construct($shopOrderItemId, $amount)
     {
         $this->setShopOrderItemId($shopOrderItemId)->setAmount($amount);

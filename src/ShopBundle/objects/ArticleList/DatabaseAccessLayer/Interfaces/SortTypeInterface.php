@@ -13,5 +13,8 @@ namespace ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Int
 
 interface SortTypeInterface
 {
+    /**
+     * @return string
+     */
     public function getSortString();
 }

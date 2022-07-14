@@ -26,6 +26,9 @@ class TShopUserNoticeList extends TAdbShopUserNoticeList
         return $this->getActivePageService()->getLinkToActivePageRelative($aParams);
     }
 
+    /**
+     * @return string
+     */
     public function GetRemoveFromNoticeListLinkAjax()
     {
         $oShop = TdbShop::GetInstance();
@@ -35,7 +38,7 @@ class TShopUserNoticeList extends TAdbShopUserNoticeList
     }
 
     /**
-     * @param $sViewName
+     * @param string $sViewName
      * @param string $sSubType
      * @param string $sType
      * @param array  $aCallTimeVars

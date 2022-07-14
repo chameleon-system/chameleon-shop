@@ -17,6 +17,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class ChameleonSystemShopArticleDetailPagingBundle extends Bundle
 {
+    /**
+     * @return void
+     */
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new ArticleListPass());

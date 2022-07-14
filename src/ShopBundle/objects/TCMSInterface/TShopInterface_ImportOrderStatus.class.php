@@ -15,10 +15,19 @@
 /**/
 class TShopInterface_ImportOrderStatus extends TCMSInterfaceManagerBase
 {
+    /** @var string */
     protected $sFileName = '';
+
+    /** @var string */
     protected $sPathName = '';
+
+    /** @var resource|false */
     protected $fp = null;
+
+    /** @var array|false */
     protected $aHeaderFields = array();
+
+    /** @var string */
     protected $sLineSplit = ';';
 
     protected function PrepareImport()
@@ -36,6 +45,9 @@ class TShopInterface_ImportOrderStatus extends TCMSInterfaceManagerBase
         return $bEverythingOk;
     }
 
+    /**
+     * @return void
+     */
     public function PerformImport()
     {
         $this->fp = fopen($this->sFileName, 'rb');
@@ -59,6 +71,8 @@ class TShopInterface_ImportOrderStatus extends TCMSInterfaceManagerBase
      * process one row from the file.
      *
      * @param array $aRow
+     *
+     * @return void
      */
     protected function ProcessRow($aRow)
     {
@@ -85,7 +99,7 @@ class TShopInterface_ImportOrderStatus extends TCMSInterfaceManagerBase
     /**
      * get a line from the file.
      *
-     * @return array
+     * @return array|false
      */
     protected function GetLine()
     {

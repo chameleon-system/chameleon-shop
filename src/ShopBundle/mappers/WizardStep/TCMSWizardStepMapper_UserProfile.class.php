@@ -62,10 +62,10 @@ class TCMSWizardStepMapper_UserProfile extends AbstractTCMSWizardStepMapper
     /**
      * Get user input value for given field name from given array.
      *
-     * @param $sFieldName
-     * @param $aUserData
-     *
-     * @return string
+     * @template T
+     * @param array<string, T> $aUserData
+     * @param string $sFieldName
+     * @return T|'' - empty string if field does not exist
      */
     protected function GetValueForField($sFieldName, $aUserData)
     {

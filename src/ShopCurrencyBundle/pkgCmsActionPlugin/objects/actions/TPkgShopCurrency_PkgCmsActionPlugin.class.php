@@ -13,6 +13,11 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 class TPkgShopCurrency_PkgCmsActionPlugin extends AbstractPkgActionPlugin
 {
+    /**
+     * @param array<string, mixed> $aData
+     * @param bool $bRedirect
+     * @return void
+     */
     public function ChangeCurrency($aData, $bRedirect = true)
     {
         $sId = (isset($aData['sPkgShopCurrencyId'])) ? ($aData['sPkgShopCurrencyId']) : ('');

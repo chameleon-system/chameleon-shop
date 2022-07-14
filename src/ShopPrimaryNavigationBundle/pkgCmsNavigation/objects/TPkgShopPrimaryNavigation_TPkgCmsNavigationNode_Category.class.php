@@ -11,6 +11,9 @@
 
 use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopCategoryDataAccessInterface;
 
+/**
+ * @extends AbstractPkgCmsNavigationNode<TdbShopCategory>
+ */
 class TPkgShopPrimaryNavigation_TPkgCmsNavigationNode_Category extends AbstractPkgCmsNavigationNode
 {
     /**
@@ -45,7 +48,7 @@ class TPkgShopPrimaryNavigation_TPkgCmsNavigationNode_Category extends AbstractP
     }
 
     /**
-     * @return array
+     * @return AbstractPkgCmsNavigationNode[]|null
      */
     public function getAChildren()
     {
@@ -73,7 +76,7 @@ class TPkgShopPrimaryNavigation_TPkgCmsNavigationNode_Category extends AbstractP
                         continue;
                     }
                     $sClass = get_class($this);
-                    /** @var $oNaviNode AbstractPkgCmsNavigationNode */
+                    /** @var AbstractPkgCmsNavigationNode $oNaviNode */
                     $oNaviNode = new $sClass();
                     $oNaviNode->iLevel = $this->iLevel + 1;
                     if (true === $oNaviNode->loadFromNode($oChild)) {
@@ -86,6 +89,9 @@ class TPkgShopPrimaryNavigation_TPkgCmsNavigationNode_Category extends AbstractP
         return $this->aChildren;
     }
 
+    /**
+     * @return void
+     */
     private function setFromShopCategory(TdbShopCategory $oNode)
     {
         $this->sLink = $oNode->GetLink();

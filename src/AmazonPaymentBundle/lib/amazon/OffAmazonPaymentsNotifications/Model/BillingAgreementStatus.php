@@ -84,7 +84,7 @@ class OffAmazonPaymentsNotifications_Model_BillingAgreementStatus extends OffAma
      * Sets the value of the State property.
      * 
      * @param string State
-     * @return this instance
+     * @return $this instance
      */
     public function setState ($value)
     {
@@ -128,7 +128,7 @@ class OffAmazonPaymentsNotifications_Model_BillingAgreementStatus extends OffAma
      * Sets the value of the LastUpdateTimestamp property.
      * 
      * @param string LastUpdateTimestamp
-     * @return this instance
+     * @return $this instance
      */
     public function setLastUpdateTimestamp ($value)
     {
@@ -172,7 +172,7 @@ class OffAmazonPaymentsNotifications_Model_BillingAgreementStatus extends OffAma
      * Sets the value of the ReasonCode property.
      * 
      * @param string ReasonCode
-     * @return this instance
+     * @return $this instance
      */
     public function setReasonCode ($value)
     {
@@ -216,7 +216,7 @@ class OffAmazonPaymentsNotifications_Model_BillingAgreementStatus extends OffAma
      * Sets the value of the ReasonDescription property.
      * 
      * @param string ReasonDescription
-     * @return this instance
+     * @return $this instance
      */
     public function setReasonDescription ($value)
     {

@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\ShopBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class UpdateProductStockEvent extends Event
 {

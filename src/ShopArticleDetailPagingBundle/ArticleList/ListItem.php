@@ -15,18 +15,28 @@ use ChameleonSystem\ShopArticleDetailPagingBundle\Interfaces\ListItemInterface;
 
 class ListItem implements ListItemInterface
 {
+    /** @var string|null */
     private $id = null;
+
+    /** @var string|null */
     private $name = null;
+
+    /** @var string|null */
     private $url = null;
 
     /**
-     * @param null $id
+     * @param string $id
+     *
+     * @return void
      */
     public function setId($id)
     {
         $this->id = $id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getId()
     {
         return $this->id;
@@ -34,25 +44,35 @@ class ListItem implements ListItemInterface
 
     /**
      * @param null $name
+     *
+     * @return void
      */
     public function setName($name)
     {
         $this->name = $name;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName()
     {
         return $this->name;
     }
 
     /**
-     * @param null $url
+     * @param string $url
+     *
+     * @return void
      */
     public function setUrl($url)
     {
         $this->url = $url;
     }
 
+    /**
+     * @return string|null
+     */
     public function getUrl()
     {
         return $this->url;

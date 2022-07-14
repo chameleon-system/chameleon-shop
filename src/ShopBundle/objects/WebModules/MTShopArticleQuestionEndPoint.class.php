@@ -13,6 +13,10 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMapper
 {
+    /**
+     * @var array<string, array{bRequired: bool, sFilter: string}>
+     * @psalm-var array<string, array{bRequired: bool, sFilter: TCMSUserInput::FILTER_*}>
+     */
     protected $aInputDefinition = array(
                 'name' => array('bRequired' => true, 'sFilter' => TCMSUserInput::FILTER_SAFE_TEXT),
                 'email' => array('bRequired' => true, 'sFilter' => TCMSUserInput::FILTER_DEFAULT),
@@ -108,6 +112,9 @@ class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMappe
         return $bCodeIsValid;
     }
 
+    /**
+     * @return void
+     */
     protected function askQuestion()
     {
         $aFilteredInput = array();
@@ -136,6 +143,11 @@ class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMappe
         }
     }
 
+    /**
+     * @param string[] $aFilteredInput
+     *
+     * @return bool
+     */
     protected function postFieldCheckHook($aFilteredInput)
     {
         return true;
@@ -145,6 +157,8 @@ class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMappe
      * sends the user question via mail profile: "product-info-request".
      *
      * @param array $aData
+     *
+     * @return never
      */
     protected function askQuestionExecute($aData)
     {

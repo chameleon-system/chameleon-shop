@@ -35,6 +35,7 @@ class TPkgShopPaymentHandlerMapper_PayPalExpressBasket extends AbstractPkgShopPa
                 return;
             }
 
+            /** @var string $sSpotName */
             $sSpotName = $oVisitor->GetSourceObject('sSpotName');
             $activePageService = $this->getActivePageService();
             $aURLData = array('module_fnc' => array($sSpotName => 'JumpSelectPaymentMethod'), 'sPaymentMethodNameInternal' => 'paypal-express');

@@ -16,6 +16,9 @@ use Doctrine\DBAL\Connection;
 
 class TShopShippingTypeList extends TShopShippingTypeListAutoParent
 {
+    /**
+     * @var float|null
+     */
     protected $dPrice = null;
 
     /**
@@ -113,6 +116,8 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
 
     /**
      * @deprecated since 6.1.4 - method was only called by GetAvailableTypes. this is no longer the case.
+     *
+     * @return void
      */
     public function RemoveInvalidItems()
     {
@@ -146,6 +151,8 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
 
     /**
      * remove list items that are restricted to some user or user group.
+     *
+     * @return void
      */
     public function RemoveRestrictedItems()
     {

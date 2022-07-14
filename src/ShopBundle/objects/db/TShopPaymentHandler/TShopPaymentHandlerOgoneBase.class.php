@@ -54,7 +54,7 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
     /**
      * Get the payment service URL to redirect or send post request.
      *
-     * @return string
+     * @return string|false
      */
     protected function GetPaymentURL()
     {
@@ -100,7 +100,7 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
      * HEADS UP! the OUT key in the shop config has to match the IN Key in the Ogone backend
      * and vice versa
      *
-     * @param string $aURLParameter
+     * @param array $aURLParameter
      *
      * @return bool
      */
@@ -174,6 +174,8 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
      * @param string       $sPaymentState state of the notified transaction
      * @param array        $aParameter
      * @param TdbShopOrder $oOrder
+     *
+     * @return void
      */
     protected function HandleNotifyMessageForPaymentState($sPaymentState, $aParameter, $oOrder)
     {
@@ -210,6 +212,8 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
      * @param bool         $bAllowExportWawi
      * @param bool         $bAllowSendNotificationEmail
      * @param bool         $bAllowSaveNewPaymentData
+     *
+     * @return void
      */
     protected function HandleNotifyOrderOnChange($oOrder, $bAllowExportWawi, $bAllowSendNotificationEmail, $bAllowSaveNewPaymentData)
     {

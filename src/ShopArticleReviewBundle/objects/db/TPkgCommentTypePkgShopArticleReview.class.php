@@ -11,6 +11,9 @@
 
 class TPkgCommentTypePkgShopArticleReview extends TPkgCommentType
 {
+    /**
+     * @return string
+     */
     public function GetActiveItemId()
     {
         return '';

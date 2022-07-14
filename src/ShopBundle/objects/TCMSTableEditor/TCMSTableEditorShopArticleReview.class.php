@@ -25,6 +25,9 @@ class TCMSTableEditorShopArticleReview extends TCMSTableEditor
 
     /**
      * updates the review stats for the article connected to the review item.
+     *
+     * @param string $iArticleId
+     * @return void
      */
     protected function UpdateArticleReviewStats($iArticleId)
     {

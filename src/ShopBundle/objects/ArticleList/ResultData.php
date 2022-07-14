@@ -24,7 +24,15 @@ class ResultData implements ResultDataInterface
      * @var int
      */
     private $page = 0;
+
+    /**
+     * @var int
+     */
     private $pageSize = -1;
+
+    /**
+     * @var int
+     */
     private $totalNumberOfResults = 0;
 
     /**
@@ -84,6 +92,7 @@ class ResultData implements ResultDataInterface
 
     /**
      * @return int
+     * @psalm-suppress InvalidReturnType, InvalidReturnStatement
      */
     public function getNumberOfPages()
     {
@@ -106,6 +115,9 @@ class ResultData implements ResultDataInterface
         return $this->pageSize;
     }
 
+    /**
+     * @return void
+     */
     public function setRawResult(ResultInterface $rawResult)
     {
         $this->rawResult = $rawResult;

@@ -11,6 +11,10 @@
 
 class TShopSearchLog extends TShopSearchLogAutoParent
 {
+    /**
+     * @param string $id
+     * @param string $sLanguageId
+     */
     public function __construct($id = null, $sLanguageId = null)
     {
         $this->SetChangeTriggerCacheChangeOnParentTable(false);

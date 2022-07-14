@@ -15,11 +15,17 @@
 class TCMSWizardStepShopTellAFriend extends TdbCmsWizardStep
 {
     const SESSION_CAPTCHA = 'tellafriendcaptchavalue';
+
+    /**
+     * @var array
+     */
     protected $aUserInput = array();
 
     /**
      * method is called from the init method of the calling module. here you can check
      * if the step may be viewed, and redirect to another step if the user does not have permission.
+     *
+     * @return void
      */
     public function Init()
     {
@@ -43,6 +49,9 @@ class TCMSWizardStepShopTellAFriend extends TdbCmsWizardStep
         $this->aUserInput = $this->FilterUserData($this->aUserInput);
     }
 
+    /**
+     * @return false|string
+     */
     protected function GetCaptchaValue()
     {
         $sCaptchaValue = false;
@@ -53,6 +62,9 @@ class TCMSWizardStepShopTellAFriend extends TdbCmsWizardStep
         return $sCaptchaValue;
     }
 
+    /**
+     * @return string
+     */
     protected function GenerateCaptcha()
     {
         $num1 = rand(1, 10);

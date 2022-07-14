@@ -33,6 +33,8 @@ interface ShopProductExporterInterface
     /**
      * @param string                            $alias
      * @param ShopProductExportHandlerInterface $exportHandler
+     *
+     * @return void
      */
     public function registerHandler($alias, ShopProductExportHandlerInterface $exportHandler);
 

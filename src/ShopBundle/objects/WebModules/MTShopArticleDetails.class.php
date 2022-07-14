@@ -16,7 +16,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MTShopArticleDetails extends MTPkgViewRendererAbstractModuleMapper
 {
+    /**
+     * @var string|null
+     */
     private $sActiveImageId = null;
+
+    /**
+     * @var array
+     */
     private $aVariantTypeValues = array();
 
     /**
@@ -53,6 +60,9 @@ class MTShopArticleDetails extends MTPkgViewRendererAbstractModuleMapper
         $this->OneTimeActiveArticleActions();
     }
 
+    /**
+     * @return void
+     */
     protected function OneTimeActiveArticleActions()
     {
         if (!defined('ARTICLE_DETAIL_ONE_TIME_ACTION') || (defined('ARTICLE_DETAIL_ONE_TIME_ACTION') && ARTICLE_DETAIL_ONE_TIME_ACTION === false)) {

@@ -136,7 +136,7 @@ class OffAmazonPaymentsNotifications_Model_AuthorizationDetails extends OffAmazo
      * 
      * @param string $value AmazonAuthorizationId value
      * 
-     * @return this instance
+     * @return $this instance
      */
     public function setAmazonAuthorizationId($value) 
     {
@@ -183,7 +183,7 @@ class OffAmazonPaymentsNotifications_Model_AuthorizationDetails extends OffAmazo
      * 
      * @param string $value AuthorizationReferenceId
      * 
-     * @return this instance
+     * @return $this instance
      */
     public function setAuthorizationReferenceId($value) 
     {
@@ -422,7 +422,7 @@ class OffAmazonPaymentsNotifications_Model_AuthorizationDetails extends OffAmazo
      * 
      * @param string $value CreationTimestamp
      * 
-     * @return this instance
+     * @return $this instance
      */
     public function setCreationTimestamp($value) 
     {
@@ -469,7 +469,7 @@ class OffAmazonPaymentsNotifications_Model_AuthorizationDetails extends OffAmazo
      * 
      * @param string $value ExpirationTimestamp
      * 
-     * @return this instance
+     * @return $this instance
      */
     public function setExpirationTimestamp($value) 
     {
@@ -612,7 +612,7 @@ class OffAmazonPaymentsNotifications_Model_AuthorizationDetails extends OffAmazo
      * 
      * @param bool $value CaptureNow
      * 
-     * @return this instance
+     * @return $this instance
      */
     public function setCaptureNow($value) 
     {
@@ -659,7 +659,7 @@ class OffAmazonPaymentsNotifications_Model_AuthorizationDetails extends OffAmazo
      * 
      * @param string $value SoftDescriptor
      * 
-     * @return this instance
+     * @return $this instance
      */
     public function setSoftDescriptor($value) 
     {

@@ -449,6 +449,8 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
 
     /**
      * @param ShopRouteArticleFactoryInterface $shopRouteArticleFactory
+     *
+     * @return void
      */
     public function setShopRouteArticleFactory(ShopRouteArticleFactoryInterface $shopRouteArticleFactory)
     {
@@ -457,6 +459,8 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
 
     /**
      * @param ChameleonControllerInterface $mainController
+     *
+     * @return void
      */
     public function setMainController(ChameleonControllerInterface $mainController)
     {
@@ -465,6 +469,8 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
 
     /**
      * @param CacheInterface $cache
+     *
+     * @return void
      */
     public function setCache($cache)
     {

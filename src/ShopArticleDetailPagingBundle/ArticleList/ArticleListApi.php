@@ -49,6 +49,11 @@ class ArticleListApi implements ArticleListApiInterface
         return $this->getListResponse($listRequestURL);
     }
 
+    /**
+     * @param string $listUrl
+     * @param string $spot
+     * @return string
+     */
     private function getFullURL($listUrl, $spot)
     {
         $methodAccessParameter = array(
@@ -88,6 +93,9 @@ class ArticleListApi implements ArticleListApiInterface
         return $this->cachedResults[$key];
     }
 
+    /**
+     * @return ListResult
+     */
     private function createResponseObject(array $responseData)
     {
         $responseObject = new ListResult();

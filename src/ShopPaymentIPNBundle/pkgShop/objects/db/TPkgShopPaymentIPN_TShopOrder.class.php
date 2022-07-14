@@ -14,7 +14,7 @@ class TPkgShopPaymentIPN_TShopOrder extends TPkgShopPaymentIPN_TShopOrderAutoPar
     /**
      * returns true if the status code has been sent as an IPN for the order.
      *
-     * @param $sStatusCode
+     * @param string $sStatusCode
      *
      * @return bool
      */

@@ -52,6 +52,9 @@ class MTShopManufacturerCore extends TShopUserCustomModelBase
         return $this->data;
     }
 
+    /**
+     * @return void
+     */
     protected function ViewManufacturerHook()
     {
         $oItem = TdbShopManufacturer::GetNewInstance();

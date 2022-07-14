@@ -14,7 +14,9 @@ use ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGeneratorInterfa
 
 /**
  * overwritten to handle variant management.
-/**/
+ *
+ * @property TdbShopArticle $oTable
+ */
 class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
 {
     /**
@@ -22,6 +24,8 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
      * then mark all fields as hidden that are NOT activated through the set.
      *
      * @param TIterator $oFields
+     *
+     * @return void
      */
     public function ProcessFieldsBeforeDisplay(&$oFields)
     {
@@ -129,6 +133,9 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
         }
     }
 
+    /**
+     * @return void
+     */
     private function activateParent()
     {
         /** @var TdbShopArticle $product */
@@ -141,7 +148,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
     /**
      * here you can modify, clean or filter data before saving.
      *
-     * @var array $postData
+     * @param array $postData
      *
      * @return array
      */
@@ -176,6 +183,9 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
     /**
      * we overwrite the insert method, so that when inserting variants, we realy perform
      * a copy of the parent.
+     *
+     * @psalm-suppress InvalidReturnType
+     * @FIXME This method should return TCMSstdClass with the object data similar to its parent, not `void`.
      */
     public function Insert()
     {
@@ -193,6 +203,9 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
         }
     }
 
+    /**
+     * @return void
+     */
     protected function OnBeforeCopy()
     {
         parent::OnBeforeCopy();
@@ -206,6 +219,8 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
      *
      * @param TCMSField $oField
      * @param int       $sourceRecordID
+     *
+     * @return void
      */
     public function CopyPropertyRecords($oField, $sourceRecordID)
     {
@@ -216,6 +231,8 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
 
     /**
      * changes price of parent article to lowest variant.
+     *
+     * @return void
      */
     public function UpdatePriceToLowestVariant()
     {

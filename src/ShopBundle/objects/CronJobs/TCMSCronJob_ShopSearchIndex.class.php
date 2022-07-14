@@ -17,6 +17,9 @@ use esono\pkgCmsCache\CacheInterface;
 /**/
 class TCMSCronJob_ShopSearchIndex extends TdbCmsCronjobs
 {
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         $this->getCache()->disable();

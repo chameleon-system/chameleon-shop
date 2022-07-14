@@ -11,8 +11,17 @@
 
 class TPkgShopPaymentIPNException_OrderHasNoPaymentGroup extends AbstractPkgShopPaymentIPNException
 {
+    /**
+     * @var string
+     */
     private $orderId = null;
 
+    /**
+     * @param string $sOrderId
+     * @param string $message
+     * @param int $code
+     * @param Exception|null $previous
+     */
     public function __construct(
         $sOrderId,
         $message = '',
@@ -31,6 +40,9 @@ class TPkgShopPaymentIPNException_OrderHasNoPaymentGroup extends AbstractPkgShop
         return $sString;
     }
 
+    /**
+     * @return string
+     */
     public function getOrderId()
     {
         return $this->orderId;

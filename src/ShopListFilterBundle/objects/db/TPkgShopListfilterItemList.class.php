@@ -15,7 +15,7 @@ class TPkgShopListfilterItemList extends TAdbPkgShopListfilterItemList
      * create a new instance.
      *
      * @param string $sQuery
-     * @param int    $iLanguage
+     * @param string|null $iLanguageId
      */
     public function __construct($sQuery = null, $iLanguageId = null)
     {
@@ -29,7 +29,8 @@ class TPkgShopListfilterItemList extends TAdbPkgShopListfilterItemList
      * @param TdbPkgShopListfilterItem $oExcludeItem
      * @param bool                     $bReturnAsArray - set to true if you want an array with the query parts instead of a string
      *
-     * @return string
+     * @return string|string[]
+     * @psalm-return ($bReturnAsArray is true ? string[] : string)
      */
     public function GetQueryRestriction($oExcludeItem = null, $bReturnAsArray = false)
     {
@@ -106,7 +107,7 @@ class TPkgShopListfilterItemList extends TAdbPkgShopListfilterItemList
      *
      * @param array $aData
      *
-     * @return TCMSRecord
+     * @return TdbPkgShopListfilterItem
      */
     protected function &_NewElement(&$aData)
     {
@@ -119,6 +120,9 @@ class TPkgShopListfilterItemList extends TAdbPkgShopListfilterItemList
             $sTableObject = $oListfilterItemType->fieldClass;
         }
 
+        /**
+         * @FIXME Empty if-statement?
+         */
         if (!class_exists($sTableObject, false)) {
         }
 

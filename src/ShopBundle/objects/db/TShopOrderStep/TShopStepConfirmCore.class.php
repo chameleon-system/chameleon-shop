@@ -116,6 +116,9 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         return $externalFunctions;
     }
 
+    /**
+     * @return never
+     */
     public function ConfirmRemotePayment()
     {
         $oGlobal = TGlobal::instance();
@@ -134,6 +137,9 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         $this->getRedirect()->redirect($sUrl);
     }
 
+    /**
+     * @return void
+     */
     protected function SaveInExportLog()
     {
         /** @var Request $request */
@@ -201,6 +207,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         }
 
         // check AGB
+        /** @var array|null $input */
         $input = $this->getInputFilterUtil()->getFilteredPostInput('aInput');
         if (false === is_array($input)) {
             $input = array();
@@ -235,6 +242,8 @@ class TShopStepConfirmCore extends TdbShopOrderStep
      * use this hook if you want to perform any actions after order creation
      * based on user into in the last order step (if you want to modify the order based on
      * basket data, use the hook within the order object instead).
+     *
+     * @return void
      */
     protected function PostProcessHookOnOrderCreateSuccess()
     {

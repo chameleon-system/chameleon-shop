@@ -21,6 +21,8 @@ use TShopOrderStep;
 
 class OrderStepPageService implements OrderStepPageServiceInterface
 {
+    public const SHOP_CHECKOUT_ROUTE_PREFIX = 'shop_checkout_';
+
     /**
      * @var PortalAndLanguageAwareRouterInterface
      */
@@ -80,10 +82,16 @@ class OrderStepPageService implements OrderStepPageServiceInterface
     /**
      * @param array          $parameters
      * @param TShopOrderStep $orderStep
+     *
+     * @return void
      */
     private function addBasketStepParameter(array &$parameters, TShopOrderStep $orderStep)
     {
-        $parameters['basketStep'] = '/'.$orderStep->fieldUrlName;
+        if ('1' === $orderStep->fieldPosition) {
+            $parameters['basketStep'] = '/';
+        } else {
+            $parameters['basketStep'] = '/'.$orderStep->fieldUrlName;
+        }
     }
 
     /**
@@ -93,7 +101,7 @@ class OrderStepPageService implements OrderStepPageServiceInterface
      */
     private function getBasketStepRouteName(TShopOrderStep $orderStep)
     {
-        return 'shop_checkout_'.$orderStep->fieldSystemname;
+        return self::SHOP_CHECKOUT_ROUTE_PREFIX.$orderStep->fieldSystemname;
     }
 
     /**
@@ -131,4 +139,5 @@ class OrderStepPageService implements OrderStepPageServiceInterface
 
         return $url;
     }
+
 }

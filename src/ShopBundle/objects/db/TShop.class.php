@@ -38,6 +38,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * set the affiliate partner code for the current session.
      *
      * @param string $sCode
+     *
+     * @return void
      */
     public function SetAffiliateCode($sCode)
     {
@@ -47,7 +49,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * return the affiliate partner code for the current session.
      *
-     * @return string
+     * @return string|false
      */
     public function GetAffilateCode()
     {
@@ -101,6 +103,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * store a copy of the active search object.
      *
      * @param TdbShopSearchCache $oActiveSearchCache
+     *
+     * @return void
      */
     public function SetActiveSearchCacheObject(TdbShopSearchCache $oActiveSearchCache)
     {
@@ -132,11 +136,13 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * return assoc array with the categories starting from the current root category
      * to the current active category (in that order). return null if there is no active category.
      *
-     * @return array
+     * @return array|null
      */
     public static function GetActiveCategoryPath()
     {
+        /** @var array<string, TdbShopCategory>|null $aCategoryList */
         static $aCategoryList;
+
         if (!isset($aCategoryList)) {
             $aCategoryList = null;
             $oCurrentCategory = self::getShopService()->getActiveCategory();
@@ -183,7 +189,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * returns the current active category.
      *
-     * @return TdbShopCategory
+     * @return TdbShopCategory|null
      *
      * @deprecated - use the service chameleon_system_shop.shop_service instead (method getActiveCategory)
      */
@@ -195,7 +201,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * return the active root category.
      *
-     * @return TdbShopCategory
+     * @return TdbShopCategory|null
      */
     public static function GetActiveRootCategory()
     {
@@ -243,6 +249,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * return an sql string for the current filter.
      *
      * @return string
+     *
+     * @param string $sExcludeKey
      */
     public static function GetActiveFilterString($sExcludeKey = '')
     {
@@ -257,6 +265,14 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
         return implode(' AND ', $aTmp);
     }
 
+    /**
+     * @param string $sFilterKey
+     * @param string $sFilterVal
+     *
+     * @psalm-param string|TdbShopCategory::FILTER_KEY_* $sFilterKey
+     *
+     * @return string
+     */
     public static function GetFilterSQLString($sFilterKey, $sFilterVal)
     {
         $sSQL = '';
@@ -297,7 +313,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * Get the current active item.
      *
-     * @return TdbShopArticle
+     * @return TdbShopArticle|null
      *
      * @deprecated - use the service chameleon_system_shop.shop_service instead (method getActiveProduct)
      */
@@ -334,12 +350,14 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
                 }
 
                 if (1 == $oVariants->Length()) {
+                    /** @var TdbShopArticle $oArticle */
                     $oArticle = $oVariants->Current();
                 }
             }
         } elseif (!$oArticle->IsVariant()) {
             $oVariants = &$oArticle->GetFieldShopArticleVariantsList();
             if (1 == $oVariants->Length()) {
+                /** @var TdbShopArticle $oArticle */
                 $oArticle = $oVariants->Current();
             }
         }
@@ -351,7 +369,9 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * returns the default country id. this is usually the id set in the shop table, but may also be fetched via
      * ip lookup.
      *
-     * @return int
+     * @return string
+     * @psalm-suppress InvalidReturnType
+     * @FIXME Method is not implemented
      */
     public function GetDefaultCountryId()
     {
@@ -372,7 +392,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * return the default vat group.
      *
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function GetVat()
     {
@@ -582,7 +602,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      *
      * @param string $sShopInfoName - internal name of the info record
      *
-     * @return TdbShopSystemInfo
+     * @return TdbShopSystemInfo|null
      */
     public function GetShopInfo($sShopInfoName)
     {
@@ -598,6 +618,10 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
 
     /**
      * render the shipping infos.
+     *
+     * @param string $sViewName
+     * @param string $sViewType
+     * @param array $aCallTimeVars
      *
      * @return string
      */
@@ -656,7 +680,10 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * overwrite the method to allow caching.
      *
-     * @return TdbShopPrimaryNaviList
+     * @return TdbPkgShopPrimaryNaviList
+     *
+     * @psalm-suppress UndefinedClass
+     * @FIXME References `TdbShopPrimaryNaviList` where `TdbPkgShopPrimaryNaviList` is probably meant
      */
     public function &GetFieldShopPrimaryNaviList()
     {
@@ -677,6 +704,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * @param string $sSpotName
      * @param string $sParentId
      * @param string $sShopVariantArticleId
+     *
+     * @return void
      */
     public static function RegisterActiveVariantForSpot($sSpotName, $sParentId, $sShopVariantArticleId)
     {
@@ -695,7 +724,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      *
      * @param string $sParentId
      *
-     * @return string
+     * @return string|false
      */
     public static function GetRegisteredActiveVariantForCurrentSpot($sParentId)
     {
@@ -716,6 +745,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
 
     /**
      * clear all registered varaints for alle spots.
+     *
+     * @return void
      */
     public static function ResetAllRegisteredActiveVariantsForAllSpots()
     {
@@ -755,6 +786,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * commit the current content to cache - need only be called if something relevant
      * changes in the object.
+     *
+     * @return void
      */
     public function CacheCommit()
     {

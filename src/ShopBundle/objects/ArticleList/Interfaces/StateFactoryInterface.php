@@ -17,11 +17,13 @@ interface StateFactoryInterface
 {
     /**
      * @param StateElementInterface $stateElement
+     *
+     * @return void
      */
     public function registerStateElement(StateElementInterface $stateElement);
 
     /**
-     * @param array $userData
+     * @param array|null $userData
      *
      * @return StateInterface
      */

@@ -78,6 +78,11 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
         return $sExternalHandlerURL;
     }
 
+    /**
+     * @param array<string, mixed> $parameter
+     *
+     * @return void
+     */
     protected function AddCustomParameter(&$parameter)
     {
     }
@@ -85,7 +90,7 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
     /**
      * Returns the PSPID for test or live modus.
      *
-     * @return string
+     * @return string|false
      */
     protected function GetPSPID()
     {

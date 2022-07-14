@@ -15,6 +15,8 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
      * create field index for the row. Note: we assume the index tables exists.
      *
      * @param array $aRowData
+     *
+     * @return void
      */
     public function CreateIndexTick($aRowData)
     {
@@ -33,13 +35,15 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
     /**
      * @static
      *
-     * @param $sTableName
+     * @param string $sTableName
      *
      * @return string
      */
     public static function GetTmpFileNameForTableImport($sTableName)
     {
+        /** @var array<string, string> $aFileNames */
         static $aFileNames = array();
+
         if (!isset($aFileNames[$sTableName])) {
             $aFileNames[$sTableName] = CMS_TMP_DIR.'/cms_pkg_search_index_'.$sTableName;
         }
@@ -47,14 +51,32 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
         return $aFileNames[$sTableName];
     }
 
+    /**
+     * @param string $sTableName
+     * @param null|string $sMode
+     *
+     * @psalm-param 'close'|null $sMode
+     *
+     * @return false|null|resource
+     */
     public static function &GetFilePointer($sTableName, $sMode = null)
     {
+        /**
+         * Uses the table name as a string and the opened resource as a value.
+         * @var array<string, resource|false> $aPointer
+         */
         static $aPointer = array();
+
         $pPointer = null;
         switch ($sMode) {
             case 'close':
                 reset($aPointer);
                 foreach (array_keys($aPointer) as $pointer) {
+
+                    /**
+                     * @psalm-suppress InvalidArgument
+                     * @FIXME This passes the table name to `fclose` - we probably want to iterate over `array_values` here.
+                     */
                     fclose($pointer);
                 }
                 break;
@@ -85,7 +107,9 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
      * @param string $sFieldValue
      * @param int    $iArticleId
      * @param string $sTableName
-     * @param int    $sSubstringLength
+     * @param int    $iSubstringLength
+     *
+     * @return void
      */
     protected function ProcessIndex($sFieldValue, $iArticleId, $sTableName, $iSubstringLength)
     {
@@ -158,6 +182,15 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
         }
     }
 
+    /**
+     * @param string $sTableName
+     * @param int $iArticleId
+     * @param string $sSubString
+     * @param int $iCount
+     * @param float $dWeight
+     *
+     * @return void
+     */
     protected function AddIndexToTable($sTableName, $iArticleId, $sSubString, $iCount, $dWeight)
     {
         $sSubString = trim($sSubString);
@@ -181,6 +214,13 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
         }
     }
 
+    /**
+     * @param bool $bCollect
+     * @param null|string $sTableName
+     * @param array<string, mixed>|null $aData
+     *
+     * @return void
+     */
     public static function AddQueryBlock($bCollect, $sTableName, $aData)
     {
         static $aQueries = array();
@@ -217,6 +257,10 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
      *
      * @param string $sOriginalWord
      * @param float  $dOriginalWeight
+     * @param int $iArticleId
+     * @param int $iCount
+     *
+     * @return void
      */
     protected function InsertSoundex($iArticleId, $sOriginalWord, $iCount, $dOriginalWeight)
     {
@@ -236,6 +280,8 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
      * return true if the complete word should be indexed.
      *
      * @param string $sCompleteWord
+     *
+     * @return bool
      */
     protected function AllowInsertOfThisCompleteWord($sCompleteWord)
     {

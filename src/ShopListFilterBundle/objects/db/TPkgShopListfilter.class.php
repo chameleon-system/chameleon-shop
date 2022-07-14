@@ -22,8 +22,19 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
     const VIEW_PATH = 'pkgShopListfilter/views/db/TPkgShopListfilter';
     const URL_PARAMETER_IS_NEW_REQUEST = 'bFilterNewRequest';
 
+    /**
+     * @var null|array
+     */
     private $staticFilter = null;
+
+    /**
+     * @var string
+     */
     private $articleListQuery;
+
+    /**
+     * @var array
+     */
     private $listState;
 
     /**
@@ -31,7 +42,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
      * Attention: If list filter has configured a static filter the static filter data was added to post data
      * within this function.
      *
-     * @return TdbPkgShopListfilter
+     * @return TdbPkgShopListfilter|null
      */
     public static function GetActiveInstance()
     {
@@ -68,15 +79,16 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
         return $oInstance;
     }
 
+    /**
+     * @param array $listState
+     * @return void
+     */
     public function setListState(array $listState)
     {
         $this->listState = $listState;
     }
 
     /**
-     * @param $activeCategory
-     * @param $oShop
-     *
      * @return TdbPkgShopListfilter|null
      */
     private static function getInstanceForCategory(TdbShopCategory $activeCategory, TdbShop $oShop)
@@ -114,7 +126,9 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
     }
 
     /**
-     * @param null $staticFilter
+     * @param string $staticFilter
+     *
+     * @return void
      */
     private function setStaticFilter($staticFilter)
     {
@@ -126,6 +140,9 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
         }
     }
 
+    /**
+     * @return bool
+     */
     public function isStaticFilter(TdbPkgShopListfilterItem $filter)
     {
         if (!is_array($this->staticFilter)) {
@@ -138,6 +155,9 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
         return false;
     }
 
+    /**
+     * @return array|null
+     */
     protected function getStaticFilter()
     {
         return $this->staticFilter;
@@ -176,6 +196,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
             // we are looking for a module that has a listfilter set. in the future we might change this to a more robust way of identifying the right module. (eg. via generic meta data)
             $filterConfig = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query));
             if ($filterConfig) {
+                /** @var self $instance */
                 $instance = TdbPkgShopListfilter::GetNewInstance($filterConfig['pkg_shop_listfilter_id']);
                 if ('' !== $filterConfig['filter_parameter']) {
                     $instance->setStaticFilter($filterConfig['filter_parameter']);
@@ -187,7 +208,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
 
         if (false === $instance) { // check if the category sets a filter
             $instance = null;
-            /** @var $shopService \ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface */
+            /** @var \ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface $shopService */
             $shopService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
             $activeCategory = $shopService->getActiveCategory();
             if (null !== $activeCategory) {
@@ -206,6 +227,10 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
         return $instance;
     }
 
+    /**
+     * @param string $articleListQuery
+     * @return void
+     */
     public function setArticleListQuery($articleListQuery)
     {
         $this->articleListQuery = $articleListQuery;
@@ -217,6 +242,8 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
      * @param string $sViewName     - name of the view
      * @param string $sViewType     - where to look for the view
      * @param array  $aCallTimeVars - optional parameters to pass to render method
+     *
+     * @return string
      */
     public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
     {
@@ -322,11 +349,13 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
      *
      * @param array $sFilterSystemName
      *
-     * @return array
+     * @return array|false
      */
     public function GetFilterValuesForFilterType($sFilterSystemName)
     {
+        /** @var array|null $aActiveFilter */
         $aActiveFilter = $this->GetFromInternalCache('aFilterDataAsArrayFor'.$sFilterSystemName);
+
         if (is_null($aActiveFilter)) {
             $aActiveFilter = false;
 
@@ -349,7 +378,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
     }
 
     /**
-     * @return array|null
+     * @return void
      */
     private function pushStaticFilterToRequest()
     {

@@ -59,8 +59,8 @@ class TShopPaymentHandlerEasyCash_Debit extends TShopPaymentHandlerEasyCash
 
     /**
      * @param TdbShopOrder $oOrder
-     * @param string       $aResponse        - te raw response inkl. header
-     * @param string       $aRequestData     - the original request data. we pass this in case some extension wants to log the request
+     * @param array{header: string, response: string} $aResponse        - the raw response incl. header
+     * @param array        $aRequestData     - the original request data. we pass this in case some extension wants to log the request
      * @param string       $sMessageConsumer
      *
      * @return bool
@@ -113,8 +113,8 @@ class TShopPaymentHandlerEasyCash_Debit extends TShopPaymentHandlerEasyCash
     /**
      * returns true if the transaction confirmation was successfully send to EasyCash.
      *
-     * @param $sPayId
-     * @param $sXID
+     * @param string $sPayId
+     * @param string $sXID
      *
      * @return bool
      */
@@ -159,7 +159,7 @@ class TShopPaymentHandlerEasyCash_Debit extends TShopPaymentHandlerEasyCash
     /**
      * return the default payment data for the handler.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function GetDefaultUserPaymentData()
     {

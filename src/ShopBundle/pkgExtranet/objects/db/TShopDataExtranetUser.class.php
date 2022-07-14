@@ -58,6 +58,9 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
         TdbDataExtranetGroup::UpdateAutoAssignToUser($this);
     }
 
+    /**
+     * @return void
+     */
     protected function PostSaveHook()
     {
         parent::PostSaveHook();
@@ -103,7 +106,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     /**
      * returns the users customer number, if set.
      *
-     * @return string
+     * @return int
      */
     public function GetCustomerNumber()
     {
@@ -132,6 +135,8 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     /**
      * takes the article view history from session and merges it with the data
      * in the database. this is done when the user logs in to make the history permanent.
+     *
+     * @return void
      */
     protected function PostLoginHookMergeTemporaryHistoryWithDatabaseHistory()
     {
@@ -160,6 +165,8 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     /**
      * takes the notice list from session and merges it with the data
      * in the database. this is done when the user logs in to make the notice list permanent.
+     *
+     * @return void
      */
     protected function PostLoginHookMergeTemporaryNoticeListWithDatabaseHistory()
     {
@@ -219,6 +226,8 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
      * add an article to the view history.
      *
      * @param int $iArticleId
+     *
+     * @return void
      */
     public function AddArticleIdToViewHistory($iArticleId)
     {
@@ -422,7 +431,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
      * @param int   $iArticleId
      * @param float $iAmount
      *
-     * @return float - new amount on list
+     * @return float|false - new amount on list
      */
     public function AddArticleIdToNoticeList($iArticleId, $iAmount = 1)
     {
@@ -474,6 +483,8 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
 
     /**
      * save user notice list to cookie.
+     *
+     * @return void
      */
     protected function CommitNoticeListToCookie()
     {
@@ -501,6 +512,8 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
      * remove an article form the notice list.
      *
      * @param string $sArticleId
+     *
+     * @return void
      */
     public function RemoveArticleFromNoticeList($sArticleId)
     {
@@ -645,7 +658,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     }
 
     /**
-     * @param $sAddressId
+     * @param string $sAddressId
      *
      * @return TdbDataExtranetUserAddress
      */
@@ -715,7 +728,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     }
 
     /**
-     * @param $sAddressId
+     * @param string $sAddressId
      *
      * @return TdbDataExtranetUserAddress
      */
@@ -764,6 +777,8 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
      *
      * @param TdbDataExtranetUserAddress $oOldAddress
      * @param TdbDataExtranetUserAddress $oNewAddress
+     *
+     * @return void
      */
     protected function hookChangedShippingAddress(
         TdbDataExtranetUserAddress $oOldAddress,
@@ -786,6 +801,8 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
      *
      * @param TdbDataExtranetUserAddress $oOldAddress
      * @param TdbDataExtranetUserAddress $oNewAddress
+     *
+     * @return void
      */
     protected function hookChangedBillingAddress(
         TdbDataExtranetUserAddress $oOldAddress,

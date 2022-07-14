@@ -48,6 +48,8 @@ class TPkgShopArticlePreorder extends TPkgShopArticlePreorderAutoParent
             }
 
             $oMail->AddData('sUserEmail', $sEmail);
+
+            /** @psalm-suppress InvalidPassByReference */
             $oMail->AddData('sArticleName', $oArticle->GetName());
             $oMail->AddData('sArticleDetailLink', $sArticleDetailLink);
             $oMail->AddData('sArticleBasketLink', $sArticleBasketLink);
@@ -75,6 +77,9 @@ class TPkgShopArticlePreorder extends TPkgShopArticlePreorderAutoParent
      * @param string $sArticleId
      *
      * @return bool
+     *
+     * @psalm-suppress UndefinedClass
+     * @FIXME References `TdbShopArticlePreorder` when it probably should be `TdbPkgShopArticlePreorder`
      */
     public function SaveNewPreorder($sArticleId = '')
     {

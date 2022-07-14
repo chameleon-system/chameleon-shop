@@ -22,6 +22,8 @@ class ArticleListPass implements CompilerPassInterface
      * @param ContainerBuilder $container
      *
      * @api
+     *
+     * @return void
      */
     public function process(ContainerBuilder $container)
     {
@@ -30,6 +32,9 @@ class ArticleListPass implements CompilerPassInterface
         $this->registerResultModifications($container);
     }
 
+    /**
+     * @return void
+     */
     private function registerStateExtractors(ContainerBuilder $container)
     {
         $extractorCollection = $container->getDefinition('chameleon_system_shop.state_request_extractor_collection');
@@ -39,6 +44,9 @@ class ArticleListPass implements CompilerPassInterface
         }
     }
 
+    /**
+     * @return void
+     */
     private function registerResultModifications(ContainerBuilder $container)
     {
         $modifierCollection = $container->getDefinition('chameleon_system_shop.result_modifier');
@@ -48,6 +56,9 @@ class ArticleListPass implements CompilerPassInterface
         }
     }
 
+    /**
+     * @return void
+     */
     private function registerStateElements(ContainerBuilder $container)
     {
         $stateFactory = $container->getDefinition('chameleon_system_shop.state_factory.state_factory');

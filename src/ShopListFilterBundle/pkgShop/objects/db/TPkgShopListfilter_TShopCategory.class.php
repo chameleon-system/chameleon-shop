@@ -13,9 +13,12 @@ class TPkgShopListfilter_TShopCategory extends TPkgShopListfilter_TShopCategoryA
 {
     /**
      * returns the ID of the Listfilter for that is set for this category or one of its ancestors.
+     *
+     * @return string
      */
     public function GetFieldPkgShopListfilterIdRecursive()
     {
+        /** @var string|null $sFilterId */
         $sFilterId = $this->GetFromInternalCache('sActingFilterForCategory');
         if (null !== $sFilterId) {
             return $sFilterId;
@@ -40,6 +43,9 @@ class TPkgShopListfilter_TShopCategory extends TPkgShopListfilter_TShopCategoryA
         return $sFilterId;
     }
 
+    /**
+     * @return string
+     */
     private function findFilterFromNestedSet()
     {
         $query = "select pkg_shop_listfilter_id
@@ -49,6 +55,11 @@ class TPkgShopListfilter_TShopCategory extends TPkgShopListfilter_TShopCategoryA
                     ORDER BY lft DESC
                        LIMIT 1
                         ";
+        /**
+         * @var non-empty-list<string>|false
+         * @psalm-suppress UndefinedThisPropertyFetch
+         * @FIXME Property `fieldLft` does not exist - maybe `fieldPkgShopListfilterId` is meant?
+         */
         $match = $this->getDatabaseConnection()->fetchArray($query, array('activeLeft' => $this->fieldLft));
         if (false === $match) {
             return '';

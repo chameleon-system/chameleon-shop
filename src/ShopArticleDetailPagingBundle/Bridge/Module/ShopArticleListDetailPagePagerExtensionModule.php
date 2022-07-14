@@ -37,11 +37,17 @@ class ShopArticleListDetailPagePagerExtensionModule extends \ChameleonSystemShop
         return $allowAccess || 'getAsJson' === $sMethodName;
     }
 
+    /**
+     * @return void
+     */
     public function setRequestToListUrlConverter(RequestToListUrlConverterInterface $requestToListUrlConverter)
     {
         $this->requestToListUrlConverter = $requestToListUrlConverter;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getAsJson()
     {
         $enrichedState = $this->enrichStateWithDefaultsFromConfiguration();

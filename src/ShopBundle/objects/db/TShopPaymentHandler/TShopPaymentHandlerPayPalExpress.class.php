@@ -112,6 +112,8 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
      *
      * @param array $aBilling
      * @param array $aShipping
+     *
+     * @return void
      */
     protected function GetUserDataFromPayPalData(&$aBilling, &$aShipping)
     {
@@ -168,6 +170,11 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
         return $modified;
     }
 
+    /**
+     * @param string $postalcode
+     * @param string $city
+     * @return bool
+     */
     protected function postalCodeAndCitySwitched($postalcode, $city)
     {
         $postalcode = trim($postalcode);

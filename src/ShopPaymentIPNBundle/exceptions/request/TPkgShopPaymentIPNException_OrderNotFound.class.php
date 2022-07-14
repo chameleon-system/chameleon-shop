@@ -11,9 +11,16 @@
 
 class TPkgShopPaymentIPNException_OrderNotFound extends TPkgShopPaymentIPNException_RequestError
 {
-    /** @var string */
+    /** @var string|null */
     private $orderCmsIdent = '';
 
+    /**
+     * @param string|null $iOrderCmsIdent
+     * @param TPkgShopPaymentIPNRequest $oRequest
+     * @param string $message
+     * @param int $code
+     * @param Exception|null $previous
+     */
     public function __construct(
         $iOrderCmsIdent,
         TPkgShopPaymentIPNRequest $oRequest,
@@ -44,7 +51,7 @@ class TPkgShopPaymentIPNException_OrderNotFound extends TPkgShopPaymentIPNExcept
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getOrderCmsIdent()
     {

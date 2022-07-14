@@ -105,6 +105,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
 
     /**
      * @param TdbPkgShopPaymentTransaction $transaction
+     *
+     * @return void
      */
     public function deleteTransaction($transaction)
     {
@@ -115,10 +117,10 @@ class TPkgShopPaymentTransactionManagerEndPoint
     /**
      * searches for a transaction with matching id number and confirms it. returns the transaction if found, null if not.
      *
-     * @param $transactionId
-     * @param $iConfirmedDate
+     * @param string $transactionId
+     * @param int $iConfirmedDate
      *
-     * @return TdbPkgShopPaymentTransaction
+     * @return TdbPkgShopPaymentTransaction|null
      */
     public function confirmTransactionById($transactionId, $iConfirmedDate)
     {
@@ -155,7 +157,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
      * confirm given transaction object.
      *
      * @param TdbPkgShopPaymentTransaction $transaction
-     * @param $iConfirmedDate
+     * @param int $iConfirmedDate
      *
      * @return TdbPkgShopPaymentTransaction
      */
@@ -176,7 +178,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
     }
 
     /**
-     * @param $sTransactionType
+     * @param string $sTransactionType
      *
      * @return TdbPkgShopPaymentTransactionType
      *
@@ -184,7 +186,9 @@ class TPkgShopPaymentTransactionManagerEndPoint
      */
     private function getTransactionTypeObject($sTransactionType)
     {
+        /** @var array<string, TdbPkgShopPaymentTransactionType>  $aTypeCache */
         static $aTypeCache = array();
+
         if (false === isset($aTypeCache[$sTransactionType])) {
             $oTransactionType = TdbPkgShopPaymentTransactionType::GetNewInstance();
             if (false === $oTransactionType->LoadFromField('system_name', $sTransactionType)) {
@@ -377,7 +381,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
     /**
      * returns true if there are transactions for the order (pending or not).
      *
-     * @param null $sTransactionType - must be one of self::TRANSACTION_TYPE_*
+     * @param null|string $sTransactionType - must be one of self::TRANSACTION_TYPE_*
+     * @psalm-param null|self::TRANSACTION_TYPE_* $sTransactionType
      *
      * @return bool
      */
@@ -408,9 +413,9 @@ class TPkgShopPaymentTransactionManagerEndPoint
     /**
      * returns an array with all products that have not been billed via a transaction.
      *
-     * @param $bIncludeUnconfirmedTransactions
+     * @param bool $bIncludeUnconfirmedTransactions
      *
-     * @return array [shop_order_item_id] = amount
+     * @return array<string, float>
      */
     public function getBillableProducts($bIncludeUnconfirmedTransactions = true)
     {
@@ -436,9 +441,9 @@ class TPkgShopPaymentTransactionManagerEndPoint
     /**
      * returns an array of all products that have been billed and not refunded.
      *
-     * @param $bIncludeUnconfirmedTransactions
+     * @param bool $bIncludeUnconfirmedTransactions
      *
-     * @return array [shop_order_item_id] = amount
+     * @return array<string, float>
      */
     public function getRefundableProducts($bIncludeUnconfirmedTransactions = true)
     {
@@ -476,6 +481,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
      *
      * a) no product has been refunded
      * b) ALL products have been paid
+     *
+     * @return bool
      */
     public function allProductsAreRefundable()
     {
@@ -493,9 +500,9 @@ class TPkgShopPaymentTransactionManagerEndPoint
     }
 
     /**
-     * @param $sOrderItemId
-     * @param string $sTransactionTypeSystemName      - should be one of self::TRANSACTION_TYPE_*
-     * @param bool   $bIncludeUnconfirmedTransactions
+     * @param string $sTransactionTypeSystemName
+     * @param bool $bIncludeUnconfirmedTransactions
+     * @param string $sOrderItemId
      *
      * @return int
      */
@@ -532,9 +539,13 @@ class TPkgShopPaymentTransactionManagerEndPoint
     /**
      * return the sum for the non-product entry in the positions with position type $sTransactionPositionType.
      *
-     * @param $sTransactionPositionType - must be one of TPkgShopPaymentTransactionItemData::TYPE_
-     * @param bool $bIncludeUnconfirmedTransactions
+     * @param true $bIncludeUnconfirmedTransactions
      * @param null $sShopOrderItemId
+     * @param string $sTransactionPositionType - must be one of TPkgShopPaymentTransactionItemData::TYPE_
+     *
+     * @psalm-param TPkgShopPaymentTransactionItemData::TYPE_* $sTransactionPositionType
+     *
+     * @return float
      */
     public function getTransactionPositionTotalForType(
         $sTransactionPositionType,
@@ -566,7 +577,10 @@ class TPkgShopPaymentTransactionManagerEndPoint
      * return the transaction details for a completed order.
      *
      * @param string $sTransactionType          - must be one of TPkgShopPaymentTransactionData::TYPE_*
-     * @param null   $aProductAmountRestriction
+     * @param null|array<string, int> $aProductAmountRestriction
+     * @param bool $bUseConfirmedTransactionsOnly
+     *
+     * @psalm-param TPkgShopPaymentTransactionData::TYPE_* $sTransactionType
      *
      * @return TPkgShopPaymentTransactionData
      */
@@ -712,6 +726,9 @@ class TPkgShopPaymentTransactionManagerEndPoint
         return $oTransactionData;
     }
 
+    /**
+     * @return float
+     */
     private function getOrderTotalOtherValue()
     {
         // return the "other" value of the original order

@@ -76,6 +76,8 @@ class ProductStatisticsServiceRuntimeCacheDecorator implements ProductStatistics
 
     /**
      * @param string $articleId
+     *
+     * @return void
      */
     private function resetStatsCache($articleId)
     {

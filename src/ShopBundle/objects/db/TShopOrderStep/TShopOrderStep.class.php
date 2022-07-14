@@ -34,6 +34,8 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Called from the init method of the calling module.
      * Visitor permissions for the requested step may be checked and the user redirected.
+     *
+     * @return void
      */
     public function Init()
     {
@@ -83,6 +85,8 @@ class TShopOrderStep extends TShopOrderStepAutoParent
 
     /**
      * Redirects back to the basket if basket is currently empty.
+     *
+     * @return void
      */
     protected function CheckBasketContents()
     {
@@ -100,7 +104,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @param string $sStepName
      *
-     * @return TdbShopOrderStep
+     * @return TdbShopOrderStep|null
      */
     public static function &GetStep($sStepName)
     {
@@ -110,6 +114,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
             // fetch the first step instead..
             $oSteps = TdbShopOrderStepList::GetList();
             if ($oSteps->Length() > 0) {
+                /** @var TdbShopOrderStep $oStep */
                 $oStep = $oSteps->Current();
             }
         } else {
@@ -126,6 +131,11 @@ class TShopOrderStep extends TShopOrderStepAutoParent
         return $oStep;
     }
 
+    /**
+     * @param string|array|null $sData - either the id of the object to load, or the row with which the instance should be initialized
+     * @param string|null $sLanguage - init with the language passed
+     * @return TdbShopOrderStep|null
+     */
     public static function GetNewInstance($sData = null, $sLanguage = null)
     {
         if (null === $sData) {
@@ -185,7 +195,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Returns the calling step name (set by JumpToStep).
      *
-     * @return string
+     * @return string|null
      */
     public static function GetCallingStepName()
     {
@@ -201,6 +211,8 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      * @param TdbShopOrderStep $oStep
      *                                Redirects to the specified step. The step calling this method will store its name in the session,
      *                                so that the new step knows where to return to.
+     *
+     * @return never
      */
     public function JumpToStep(TdbShopOrderStep &$oStep)
     {
@@ -211,6 +223,8 @@ class TShopOrderStep extends TShopOrderStepAutoParent
 
     /**
      * Reloads the current step.
+     *
+     * @return never
      */
     protected function ReloadCurrentStep()
     {
@@ -245,6 +259,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @param bool $bDisableAccessCheck
      * @param bool $bForcePortalLink
+     * @param array<string, mixed> $aAdditionalParameter
      *
      * @return string
      */
@@ -261,7 +276,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Returns the link to the previous step (or false if there is none).
      *
-     * @return string
+     * @return string|false
      */
     protected function GetReturnToLastStepURL()
     {
@@ -276,6 +291,8 @@ class TShopOrderStep extends TShopOrderStepAutoParent
 
     /**
      * Executes the current step. Redirects to the next step in line if no errors occur.
+     *
+     * @return void
      */
     public function ExecuteStep()
     {
@@ -290,6 +307,8 @@ class TShopOrderStep extends TShopOrderStepAutoParent
 
     /**
      * Called when method ProcessStep() was successful.
+     *
+     * @return void
      */
     protected function ProcessStepSuccessHook()
     {
@@ -331,7 +350,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Returns name of next step in line.
      *
-     * @return TdbShopOrderStep
+     * @return TdbShopOrderStep|null
      */
     public function &GetNextStep()
     {
@@ -346,7 +365,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Returns the previous step (null if this is the first step).
      *
-     * @return TdbShopOrderStep
+     * @return TdbShopOrderStep|null
      */
     protected function &GetPreviousStep()
     {
@@ -371,13 +390,16 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Defines any head includes the step needs.
      *
-     * @return array
+     * @return string[]
      */
     public function GetHtmlHeadIncludes()
     {
         return array();
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlFooterIncludes()
     {
         return array();
@@ -429,6 +451,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      * Renders the requested step.
      *
      * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param null|string $sSpotName
      *
      * @return string
      */
@@ -458,6 +481,9 @@ class TShopOrderStep extends TShopOrderStepAutoParent
         return $oView->RenderObjectPackageView($sViewName, $this->getStepViewPath(), $sViewType);
     }
 
+    /**
+     * @return string
+     */
     private function getStepViewPath()
     {
         $path = self::VIEW_PATH.'/';
@@ -488,6 +514,8 @@ class TShopOrderStep extends TShopOrderStepAutoParent
 
     /**
      * Called once the order is completed and saved before redirecting to the confirm step.
+     *
+     * @return void
      */
     public static function MarkOrderProcessAsCompleted()
     {
@@ -497,6 +525,8 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Resets the order process complete marker - allowing a new order process to start
      * (called by the thank you page render method).
+     *
+     * @return void
      */
     public static function ResetMarkOrderProcessAsCompleted()
     {
@@ -519,6 +549,8 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      * Adds custom data to the basket after getting instance from session.
      *
      * @param TShopBasket $oBasket
+     *
+     * @return void
      */
     protected function addDataToBasket(TShopBasket &$oBasket)
     {

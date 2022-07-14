@@ -21,8 +21,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('chameleon_system_shop_rating_service');
+        $treeBuilder = new TreeBuilder('chameleon_system_shop_rating_service');
+        $root = $treeBuilder->getRootNode();
         $root
             ->children()
                 ->arrayNode('ekomi')

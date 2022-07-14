@@ -164,6 +164,9 @@ class TShopVoucher extends TShopVoucherAutoParent
         ));
     }
 
+    /**
+     * @return void
+     */
     protected function PostWakeUpHook()
     {
         // the series holds info about the voucher - including for example min value. changes in this should affect the voucher right away. so clear the internal cache on wakeup
@@ -309,8 +312,10 @@ class TShopVoucher extends TShopVoucherAutoParent
      * @param bool  $bCalculateVoucher - set to true when we calculate the voucher value for the basket
      *                                 this should only be set to true when calling the method through the TShopBasketVoucherList::GetVoucherValue
      * @param float $dMaxValueAllowed  - if a value is passed, then the voucher will never exceed the value passed
+     * @param bool $bSponsoredVouchers
      *
-     * @return float
+     * @return float|null
+     * @psalm-return ($bCalculateVoucher is true ? float : float|null)
      */
     public function GetValue($bCalculateVoucher = false, $dMaxValueAllowed = null, $bSponsoredVouchers = false)
     {
@@ -357,7 +362,7 @@ class TShopVoucher extends TShopVoucherAutoParent
     /**
      * return the amount of the voucher used up in previous orders.
      *
-     * @return float
+     * @return int
      */
     public function GetValuePreviouslyUsed()
     {
@@ -384,6 +389,8 @@ class TShopVoucher extends TShopVoucherAutoParent
      * in the shop_voucher_use table.
      *
      * @param int $iShopOrderId - the order for which the voucher is being used
+     *
+     * @return void
      */
     public function CommitVoucherUseForCurrentUser($iShopOrderId)
     {
@@ -444,6 +451,8 @@ class TShopVoucher extends TShopVoucherAutoParent
      * method can be used to process the use data before the commit is called.
      *
      * @param array $aData
+     *
+     * @return void
      */
     protected function CommitVoucherUseForCurrentUserPreSaveHook(&$aData)
     {
@@ -451,6 +460,8 @@ class TShopVoucher extends TShopVoucherAutoParent
 
     /**
      * mark the voucher as Completely used.
+     *
+     * @return void
      */
     public function MarkVoucherAsCompletelyUsed()
     {
@@ -565,10 +576,10 @@ class TShopVoucher extends TShopVoucherAutoParent
         return substr(implode('', $aPasswordChars), 0, $iLength);
     }
 
-    /*
+    /**
      * return true if the voucher is sponsored - else return false
-     * @return boolean
-    */
+     * @return bool
+     */
     public function IsSponsored()
     {
         $bIsSponsored = $this->GetFromInternalCache('bVoucherIsSponsored');

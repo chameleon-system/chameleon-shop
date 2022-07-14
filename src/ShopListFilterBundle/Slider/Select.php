@@ -16,7 +16,9 @@ class Select
     /** @var bool */
     private $disabled = true;
 
+    /** @var int[] */
     private $options = array();
+
     /** @var int */
     private $selectedOption = null;
 
@@ -61,7 +63,7 @@ class Select
     }
 
     /**
-     * @param array $options
+     * @param int[] $options
      *
      * @return Select
      */
@@ -85,7 +87,7 @@ class Select
     }
 
     /**
-     * @return array
+     * @return int[]
      */
     public function getOptions()
     {

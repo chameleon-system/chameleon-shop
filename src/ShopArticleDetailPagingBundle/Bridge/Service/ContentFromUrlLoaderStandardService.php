@@ -42,11 +42,11 @@ class ContentFromUrlLoaderStandardService implements ContentFromUrlLoaderService
             throw new ContentLoadingException('Content loader needs current request; none found.');
         }
 
-        $session = $request->getSession();
-
-        if (null === $session) {
+        if (false === $request->hasSession()) {
             throw new ContentLoadingException('Content loader needs current session; none found.');
         }
+
+        $session = $request->getSession();
 
         if (0 !== strpos($url, 'http://') && 0 !== strpos($url, 'https://')) {
             $url = $request->getSchemeAndHttpHost().$url;

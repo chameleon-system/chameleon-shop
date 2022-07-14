@@ -233,6 +233,23 @@
                 <target>Fehler: %error%</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_shop.orders.export_button_title">
+                <source>chameleon_system_shop.orders.export_button_title</source>
+                <target>WaWi-Export</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.orders.export_confirm">
+                <source>chameleon_system_shop.orders.export_confirm</source>
+                <target>Sind Sie sicher, dass Sie die Bestellung erneut exportieren möchten?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.orders.export_success">
+                <source>chameleon_system_shop.orders.export_success</source>
+                <target>Die Bestellung wurde erfolgreich exportiert</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.orders.export_failure">
+                <source>chameleon_system_shop.orders.export_failure</source>
+                <target>Es ist ein Fehler beim Export aufgetreten</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_shop.list_manager_article.filter_type_label">
                 <source>chameleon_system_shop.list_manager_article.filter_type_label</source>
                 <target>Produkttyp</target>

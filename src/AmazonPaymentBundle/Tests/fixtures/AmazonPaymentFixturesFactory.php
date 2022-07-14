@@ -16,8 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 class AmazonPaymentFixturesFactory
 {
     /**
-     * @param $file
-     * @param $value
+     * @param string $file
+     * @param mixed $value
      *
      * @return \OffAmazonPaymentsService_Model_SetOrderReferenceDetailsResponse
      */
@@ -36,7 +36,7 @@ class AmazonPaymentFixturesFactory
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @return Request
      */
@@ -61,7 +61,7 @@ class AmazonPaymentFixturesFactory
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsNotifications_Model_OrderReferenceNotification|null
      */
@@ -92,7 +92,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsNotifications_Model_AuthorizationNotification|null
      */
@@ -123,7 +123,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsNotifications_Model_CaptureNotification|null
      */
@@ -154,7 +154,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsNotifications_Model_RefundNotification|null
      */
@@ -185,8 +185,8 @@ INPUT;
     }
 
     /**
-     * @param $file
-     * @param null $value
+     * @param string $file
+     * @param mixed $value
      *
      * @return \OffAmazonPaymentsService_Model_GetOrderReferenceDetailsResponse
      */
@@ -205,7 +205,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsService_Model_AuthorizeResponse
      */
@@ -215,7 +215,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsService_Model_CancelOrderReferenceResponse
      */
@@ -225,7 +225,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsService_Model_CaptureResponse
      */
@@ -235,7 +235,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsService_Model_CloseAuthorizationResponse
      */
@@ -245,7 +245,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsService_Model_CloseOrderReferenceResponse
      */
@@ -255,7 +255,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsService_Model_ConfirmOrderReferenceResponse
      */
@@ -265,7 +265,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsService_Model_GetAuthorizationDetailsResponse
      */
@@ -275,7 +275,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsService_Model_GetCaptureDetailsResponse
      */
@@ -285,7 +285,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsService_Model_GetRefundDetailsResponse
      */
@@ -295,7 +295,7 @@ INPUT;
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return \OffAmazonPaymentsService_Model_RefundResponse
      */
@@ -310,8 +310,7 @@ INPUT;
     }
 
     /**
-     * @param $type
-     * @param $file
+     * @param string $type
      *
      * @return string
      */

@@ -20,8 +20,17 @@ class Result implements ResultInterface
      * @var \TdbShopArticleList
      */
     private $content;
+
+    /** @var int */
     private $page = 0;
+
+    /** @var int */
     private $pageSize = -1;
+
+    /**
+     * @var array<string, string>
+     * @psalm-var array<string, 'ASC'|'DESC'>
+     */
     private $sort;
 
     public function __construct(\TdbShopArticleList $content)
@@ -46,6 +55,9 @@ class Result implements ResultInterface
         return $this->pageSize;
     }
 
+    /**
+     * @return void
+     */
     private function transferPagingToContentObject()
     {
         if (-1 === $this->pageSize) {
@@ -104,6 +116,7 @@ class Result implements ResultInterface
             return 1;
         }
 
+        /** @var int */
         return ceil($this->count() / $this->pageSize);
     }
 
@@ -118,6 +131,8 @@ class Result implements ResultInterface
      * limit result to this. pass null to remove limit.
      *
      * @param int $maxAllowedResults
+     *
+     * @return void
      */
     public function setMaxAllowedResults($maxAllowedResults)
     {

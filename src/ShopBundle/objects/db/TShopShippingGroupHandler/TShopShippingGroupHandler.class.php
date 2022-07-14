@@ -16,7 +16,7 @@ class TShopShippingGroupHandler extends TAdbShopShippingGroupHandler
      *
      * @param int $id
      *
-     * @return TdbShopShippingGroupHandler
+     * @return TdbShopShippingGroupHandler|null
      */
     public static function &GetInstance($id)
     {

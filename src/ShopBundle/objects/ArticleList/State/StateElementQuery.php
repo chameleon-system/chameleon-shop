@@ -13,8 +13,14 @@ namespace ChameleonSystem\ShopBundle\objects\ArticleList\State;
 
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateElementInterface;
 
+/**
+ * @implements StateElementInterface<mixed>
+ */
 class StateElementQuery implements StateElementInterface
 {
+    /**
+     * @return string
+     */
     public function getKey()
     {
         return 'q';

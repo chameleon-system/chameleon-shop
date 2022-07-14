@@ -277,7 +277,7 @@ abstract class OffAmazonPaymentsService_Model
     * Checks  whether passed variable is an associative array
     *
     * @param mixed $var
-    * @return TRUE if passed variable is an associative array
+    * @return bool - TRUE if passed variable is an associative array
     */
     private function _isAssociativeArray($var) {
         return is_array($var) && array_keys($var) !== range(0, sizeof($var) - 1);
@@ -287,7 +287,7 @@ abstract class OffAmazonPaymentsService_Model
     * Checks  whether passed variable is DOMElement
     *
     * @param mixed $var
-    * @return TRUE if passed variable is DOMElement
+    * @return bool - TRUE if passed variable is DOMElement
     */
     private function _isDOMElement($var) {
         return $var instanceof DOMElement;
@@ -297,7 +297,7 @@ abstract class OffAmazonPaymentsService_Model
     * Checks  whether passed variable is numeric array
     *
     * @param mixed $var
-    * @return TRUE if passed variable is an numeric array
+    * @return bool - TRUE if passed variable is an numeric array
     */
     protected function _isNumericArray($var) {
         return is_array($var) && array_keys($var) === range(0, sizeof($var) - 1);

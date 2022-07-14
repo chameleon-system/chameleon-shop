@@ -13,7 +13,9 @@
  * The TIterator based article list overwrites the standard add item method in such a way that if
  * the same article is added again, it simply increases the amout of that item. same goes for the
  * remove function.
-/**/
+ *
+ * @extends TIterator<TShopBasketArticle>
+ */
 class TShopBasketArticleCoreList extends TIterator
 {
     const VIEW_PATH = 'pkgShop/views/TShopBasket/TShopBasketArticleList';
@@ -58,6 +60,8 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @param string                    $sObserverName
      * @param IDataExtranetUserObserver $oObserver
+     *
+     * @return void
      */
     public function ObserverRegister($sObserverName, &$oObserver)
     {
@@ -70,6 +74,8 @@ class TShopBasketArticleCoreList extends TIterator
      * remove an observer from the list.
      *
      * @param string $sObserverName
+     *
+     * @return void
      */
     public function ObserverUnregister($sObserverName)
     {
@@ -80,6 +86,8 @@ class TShopBasketArticleCoreList extends TIterator
 
     /**
      * check list for dead articles.
+     *
+     * @return void
      */
     public function Refresh()
     {
@@ -176,6 +184,8 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @param TShopBasketArticle  $oItem
      * @param TdbShopShippingType $oShippingType
+     *
+     * @return void
      */
     protected function SetShippingTypeForArticle(TShopBasketArticle &$oItem, TdbShopShippingType &$oShippingType)
     {
@@ -237,7 +247,7 @@ class TShopBasketArticleCoreList extends TIterator
     /**
      * return true if the item is in the list (uses the IsSameAs method).
      *
-     * @param varObj $oItem
+     * @param TShopBasketArticle $oItem
      *
      * @return bool
      */
@@ -305,7 +315,7 @@ class TShopBasketArticleCoreList extends TIterator
     /**
      * overwrote the method so that the id could type hint properly.
      *
-     * @return TShopBasketArticle
+     * @return TShopBasketArticle|false
      */
     public function &next()
     {
@@ -314,6 +324,8 @@ class TShopBasketArticleCoreList extends TIterator
 
     /**
      * used to update class data wenn the class state changes.
+     *
+     * @return void
      */
     protected function UpdateListData()
     {
@@ -405,8 +417,10 @@ class TShopBasketArticleCoreList extends TIterator
      * All this means is: the voucher value will be distributed over all affected items in such a way that the total discount values of the items sums
      *  to the voucher value with a precision of 2 while most but not all discounted item prices will also be 2 digit precision
      *
-     * @param $oVoucher
-     * @param $dVoucherValue
+     * @param TdbShopVoucher $oVoucher
+     * @param float $dVoucherValue
+     *
+     * @return void
      */
     public function ReducePriceForItemsAffectedByNoneSponsoredVoucher(TdbShopVoucher &$oVoucher, $dVoucherValue)
     {
@@ -638,6 +652,8 @@ class TShopBasketArticleCoreList extends TIterator
      * apply a discount to the basket item list.
      *
      * @param TdbShopDiscount $oDiscount
+     *
+     * @return void
      */
     public function ApplyDiscount(TdbShopDiscount $oDiscount)
     {
@@ -688,6 +704,8 @@ class TShopBasketArticleCoreList extends TIterator
 
     /**
      * resets all discount info for alle articles.
+     *
+     * @return void
      */
     public function ResetAllDiscounts()
     {
@@ -703,6 +721,8 @@ class TShopBasketArticleCoreList extends TIterator
     /**
      * drop the acting shipping type marker from all articles in the basket. this is needed
      * when we want to recalculate shipping costs.
+     *
+     * @return void
      */
     public function ResetAllShippingMarkers()
     {
@@ -720,6 +740,11 @@ class TShopBasketArticleCoreList extends TIterator
     * @param string $sMessageManager - the manager to which error messages should be sent
     * @return boolean
     */
+    /**
+     * @return bool
+     *
+     * @param string $sMessageManager
+     */
     public function ValidateBasketContents($sMessageManager)
     {
         $bIsValid = true;
@@ -793,6 +818,8 @@ class TShopBasketArticleCoreList extends TIterator
      * called whenever an item in the basket item list is changed.
      *
      * @param TShopBasketArticle $oUpdatedItem
+     *
+     * @return void
      */
     protected function PostUpdateItemHook($oUpdatedItem)
     {
@@ -806,6 +833,8 @@ class TShopBasketArticleCoreList extends TIterator
      * called whenever an item is removed from the item list.
      *
      * @param TShopBasketArticle $oDeletedItem
+     *
+     * @return void
      */
     protected function PostDeleteItemHook($oDeletedItem)
     {

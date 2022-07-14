@@ -15,8 +15,14 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\SortStringInterfac
 
 class SortString implements SortStringInterface
 {
+    /**
+     * @var string
+     */
     private $sqlOrderByString;
 
+    /**
+     * @param string $sqlOrderByString
+     */
     public function __construct($sqlOrderByString)
     {
         $this->sqlOrderByString = $sqlOrderByString;
@@ -48,7 +54,9 @@ class SortString implements SortStringInterface
     }
 
     /**
+     * @param string $sortDirection
      * @return string
+     * @psalm-return 'ASC'|'DESC'
      */
     private function getSanitizedSortDirection($sortDirection)
     {

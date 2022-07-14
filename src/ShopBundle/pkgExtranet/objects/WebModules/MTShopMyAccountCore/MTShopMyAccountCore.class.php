@@ -34,6 +34,9 @@ class MTShopMyAccountCore extends MTExtranetMyAccountCore
         $this->methodCallAllowed[] = 'NewsletterUnsubscribe';
     }
 
+    /**
+     * @return void
+     */
     public function NewsletterSubscribe()
     {
         // subscribe shop user to newsletter
@@ -73,6 +76,9 @@ class MTShopMyAccountCore extends MTExtranetMyAccountCore
         $this->RedirectToCurrentPage();
     }
 
+    /**
+     * @return void
+     */
     public function NewsletterUnsubscribe()
     {
         $oNewsletter = &TdbPkgNewsletterUser::GetInstanceForActiveUser();
@@ -85,11 +91,17 @@ class MTShopMyAccountCore extends MTExtranetMyAccountCore
         $this->RedirectToCurrentPage();
     }
 
+    /**
+     * @return never
+     */
     protected function RedirectToCurrentPage()
     {
         $this->getRedirect()->redirectToActivePage();
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();

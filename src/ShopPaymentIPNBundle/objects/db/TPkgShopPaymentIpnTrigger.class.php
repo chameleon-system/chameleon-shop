@@ -15,6 +15,8 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
 {
     /**
      * @param TdbPkgShopPaymentIpnMessageTrigger $oMessageTrigger
+     *
+     * @return void
      */
     public function runTrigger(TdbPkgShopPaymentIpnMessageTrigger $oMessageTrigger)
     {
@@ -93,9 +95,10 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
 
         $sUserName = 'UNKNOWN USER';
         $request = $this->getCurrentRequest();
-        $session = $request->getSession();
 
-        if ($session && $session->isStarted()) {
+        $session = true === $request->hasSession() ? $request->getSession() : null;
+
+        if (null !== $session && true === $session->isStarted()) {
             if (class_exists('TdbDataExtranetUser', false)) {
                 $oUser = TdbDataExtranetUser::GetInstance();
                 if ($oUser && !empty($oUser->fieldName)) {
@@ -128,9 +131,11 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
     }
 
     /**
-     * @param $iAttemptNumber
+     * @param int $iAttemptNumber
+     * @return int|false
      *
-     * @return bool|int
+     * @psalm-param positive-int $iAttemptNumber
+     * @psalm-return positive-int|false
      */
     private function getNextAttemptTimestamp($iAttemptNumber)
     {

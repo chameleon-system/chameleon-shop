@@ -14,7 +14,10 @@ class TPkgRunFrontendAction_SendOrderStatusEMail implements IPkgRunFrontendActio
     /**
      * @param array $aParameter
      *
-     * @return TPkgRunFrontendActionStatus
+     * @return TPkgRunFrontendActionStatus|TdbShopOrderStatus
+     *
+     * @psalm-suppress UndefinedPropertyAssignment
+     * @FIXME Properties `sMessage` and `sMessageType` do not exist on `TdbShopOrderStatus`
      */
     public function runAction($aParameter)
     {

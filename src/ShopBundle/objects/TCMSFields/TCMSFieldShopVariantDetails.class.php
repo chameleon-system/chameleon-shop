@@ -18,6 +18,8 @@ use ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGeneratorInterfa
  * {@inheritdoc}
  *
  * manages the variant type and value details for an article
+ *
+ * @property TdbShopArticle $oTableRow
  */
 class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
 {
@@ -408,6 +410,8 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
 
     /**
      * sets methods that are allowed to be called via URL (ajax call).
+     *
+     * @return void
      */
     protected function DefineInterface()
     {

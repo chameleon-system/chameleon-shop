@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\ShopBundle\objects\TShopBasket;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class BasketItemEvent extends Event implements BasketItemEventInterface
 {

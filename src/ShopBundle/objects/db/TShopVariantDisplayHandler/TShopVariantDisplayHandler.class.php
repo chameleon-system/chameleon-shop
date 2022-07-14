@@ -19,6 +19,8 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      * @param string $sId
      *
      * @example TdbShopVariantDisplayHandler
+     *
+     * @return null|object
      */
     public static function GetInstance($sId)
     {
@@ -39,7 +41,7 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      *
      * @param bool $bOnlyCheckPost
      *
-     * @return array
+     * @return array<string, string>|false
      *
      * @deprecated since 6.2.13 - usages removed (replaced by ProductVariantServiceInterface::getProductBasedOnSelection())
      */
@@ -124,7 +126,7 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      * @param bool           $bOnlyIfAPartialSelectionExists - set to true if you also want to fetch the first variant if no
      *                                                       user selection (such as color) exists
      *
-     * @return TdbShopArticle
+     * @return TdbShopArticle|null
      *
      * @deprecated since 6.2.13 - replaced by ProductVariantServiceInterface::getProductBasedOnSelection()
      */
@@ -194,6 +196,8 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      * @param string         $sViewType      - location of the view (Core, Custom-Core, Customer)
      *
      * @deprecated since 6.2.0 - no longer used.
+     *
+     * @return void
      */
     protected function AddClearCacheTriggers(&$aClearTriggers, &$oArticle, $sViewName, $sViewType)
     {

@@ -61,7 +61,7 @@ abstract class OffAmazonPaymentsNotifications_Model_NotificationMetadataImpl
     /**
      * Returns true if a parent notification is defined
      * 
-     * @return true if parent notification is defined
+     * @return bool - true if parent notification is defined
      */
     public function hasParentNotificationMetadata()
     {
