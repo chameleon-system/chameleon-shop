@@ -104,7 +104,9 @@ class TPkgShopBasketMapper_TelephoneOrderForm extends AbstractViewMapper
      *
      * @param array                    $aFieldList (MappedFieldName(name used in template) => RealFieldName (user input field name) )
      * @param IMapperVisitorRestricted $oVisitor
-     * @param $aUserData
+     * @param array<string, mixed> $aUserData
+     *
+     * @return void
      */
     protected function SetInputFields($aFieldList, $oVisitor, $aUserData)
     {
@@ -123,7 +125,7 @@ class TPkgShopBasketMapper_TelephoneOrderForm extends AbstractViewMapper
      *
      * @param string $sFieldName
      * @param string $sCustomMSGConsumer
-     * @param $oVisitor
+     * @param IMapperVisitorRestricted $oVisitor
      *
      * @return string
      */

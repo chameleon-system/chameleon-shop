@@ -11,13 +11,24 @@
 
 class TPkgShopNewsletterSignupWithOrder_TShopBasket extends TPkgShopNewsletterSignupWithOrder_TShopBasketAutoParent
 {
+    /**
+     * @var bool
+     */
     private $userSelectedNewsletterOptionInOrderStep = false;
 
+    /**
+     * @return bool
+     */
     public function getUserSelectedNewsletterOptionInOrderStep()
     {
         return $this->userSelectedNewsletterOptionInOrderStep;
     }
 
+    /**
+     * @param bool $userSelectedNewsletterOptionInOrderStep
+     *
+     * @return void
+     */
     public function setUserSelectedNewsletterOptionInOrderStep($userSelectedNewsletterOptionInOrderStep)
     {
         $this->userSelectedNewsletterOptionInOrderStep = $userSelectedNewsletterOptionInOrderStep;

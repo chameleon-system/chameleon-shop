@@ -12,7 +12,7 @@
 class TShopVoucherSeries extends TShopVoucherSeriesAutoParent implements IPkgShopVatable
 {
     /**
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function GetVat()
     {

@@ -14,6 +14,7 @@
  */
 class ShopauskunftXmlStreamer extends XmlStreamer
 {
+    /** @var string|null */
     private $ratingServiceId = null;
 
     /**
@@ -52,7 +53,7 @@ class ShopauskunftXmlStreamer extends XmlStreamer
     /**
      * checks if an rating exists.
      *
-     * @param $ratingId
+     * @param string $ratingId
      *
      * @return bool
      */
@@ -96,6 +97,11 @@ class ShopauskunftXmlStreamer extends XmlStreamer
         return $sum / $divider;
     }
 
+    /**
+     * @param string $ratingServiceId
+     *
+     * @return void
+     */
     public function setRatingServiceId($ratingServiceId)
     {
         $this->ratingServiceId = $ratingServiceId;

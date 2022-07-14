@@ -11,7 +11,9 @@
 
 /**
  * item is used to simulate a breadcrumb node.
-/**/
+ *
+ * @extends TShopBreadcrumbItem<TdbShopArticle>
+ */
 class TShopBreadcrumbItemArticle extends TShopBreadcrumbItem
 {
     public function GetLink()
@@ -26,6 +28,9 @@ class TShopBreadcrumbItemArticle extends TShopBreadcrumbItem
         return $this->oItem->GetDetailLink(false, $iCategoryId);
     }
 
+    /**
+     * @return string
+     */
     public function GetName()
     {
         return $this->oItem->GetBreadcrumbName();

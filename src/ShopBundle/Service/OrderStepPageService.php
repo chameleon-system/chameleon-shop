@@ -82,6 +82,8 @@ class OrderStepPageService implements OrderStepPageServiceInterface
     /**
      * @param array          $parameters
      * @param TShopOrderStep $orderStep
+     *
+     * @return void
      */
     private function addBasketStepParameter(array &$parameters, TShopOrderStep $orderStep)
     {

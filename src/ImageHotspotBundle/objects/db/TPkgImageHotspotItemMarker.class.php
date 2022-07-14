@@ -19,6 +19,8 @@ class TPkgImageHotspotItemMarker extends TAdbPkgImageHotspotItemMarker
      * @param string $sViewName     - name of the view
      * @param string $sViewType     - where to look for the view
      * @param array  $aCallTimeVars - optional parameters to pass to render method
+     *
+     * @return string
      */
     public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
     {
@@ -70,10 +72,14 @@ class TPkgImageHotspotItemMarker extends TAdbPkgImageHotspotItemMarker
                 } elseif ($oSpotObject instanceof TdbPkgArticle) {
                     $sLink = $oSpotObject->GetLinkDetailPage();
                 } elseif ($oSpotObject instanceof TdbPkgArticleCategory) {
+                    /** @psalm-suppress UndefinedMethod */
                     $sLink = $oSpotObject->GetURL();
                 }
             } else { //nothing that we know matched - try to use  generic method
+
+                /** @psalm-suppress UndefinedMethod */
                 $sLink = $oSpotObject->GetURL();
+
                 // still no url? trigger a user error
                 if (empty($sLink)) {
                     trigger_error("couldn't get url from connected record object make sure you implement a method for fetching the url - maybe you have to extend ".__CLASS__.' and overwrite the method GetLinkFromConnectedRecord()', E_USER_ERROR);

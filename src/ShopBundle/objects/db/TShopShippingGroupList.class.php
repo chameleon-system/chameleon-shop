@@ -32,7 +32,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
      *
      * @param string $sPaymentInternalName
      *
-     * @return bool
+     * @return TdbShopShippingGroup|false
      */
     public static function &GetShippingGroupsThatAllowPaymentWith($sPaymentInternalName)
     {
@@ -50,6 +50,8 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
         if (!$bFound) {
             $oShippingGroup = false;
         }
+
+        /** @var TdbShopShippingGroup|false $oShippingGroup */
 
         return $oShippingGroup;
     }
@@ -70,6 +72,8 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
 
     /**
      * remove list items that are not permited for the current user or basket.
+     *
+     * @return void
      */
     public function RemoveInvalidItems()
     {
@@ -115,6 +119,8 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
 
     /**
      * remove list items that are restricted to some user or user group.
+     *
+     * @return void
      */
     public function RemoveRestrictedItems()
     {

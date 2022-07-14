@@ -17,16 +17,30 @@ class TShopVat extends TShopVatAutoParent
      * @var float
      */
     protected $dTotalValue = 0;
+
+    /** @var float */
     protected $dNetValue = 0;
+
+    /** @var float */
     protected $dGrossValue = 0;
+
+    /** @var float */
     protected $dVatValue = 0;
 
+    /**
+     * @param float|int $dValue
+     *
+     * @return void
+     */
     public function addValue($dValue)
     {
         $this->dTotalValue += $dValue;
         $this->recalculate();
     }
 
+    /**
+     * @return void
+     */
     protected function recalculate()
     {
         $this->dGrossValue = $this->dTotalValue;
@@ -34,6 +48,9 @@ class TShopVat extends TShopVatAutoParent
         $this->dVatValue = $this->dGrossValue - $this->dNetValue;
     }
 
+    /**
+     * @return void
+     */
     public function reset()
     {
         $this->dTotalValue = 0;
@@ -62,6 +79,9 @@ class TShopVat extends TShopVatAutoParent
         return round($this->dNetValue, 2);
     }
 
+    /**
+     * @return int
+     */
     public function getGrossValue()
     {
         return 0;

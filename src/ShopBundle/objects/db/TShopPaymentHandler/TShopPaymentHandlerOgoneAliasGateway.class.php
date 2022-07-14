@@ -24,7 +24,7 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
     /**
      * return the default payment data for the handler.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function GetDefaultUserPaymentData()
     {
@@ -143,7 +143,7 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
     }
 
     /**
-     * @return string
+     * @return string|false
      */
     protected function GetRequestURL()
     {
@@ -185,6 +185,8 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
     /**
      * the api only returns concatenated date instead of month and year in single fields
      * so we want to map them because we use the single fields for submitting.
+     *
+     * @return void
      */
     protected function MapExpireDateFromAPI()
     {
@@ -211,6 +213,8 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
 
     /**
      * handle error codes from the api.
+     *
+     * @return void
      */
     protected function HandleError()
     {

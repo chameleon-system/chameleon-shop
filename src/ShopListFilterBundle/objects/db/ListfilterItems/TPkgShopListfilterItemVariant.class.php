@@ -29,6 +29,9 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
      */
     protected $sItemFieldName = 'shop_variant_type_value_mlt';
 
+    /**
+     * @var string
+     */
     protected $sVariantTypeIdentifier = 'color';
 
     /**
@@ -36,12 +39,15 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
      *
      * @param array $aRow - the data of the current article
      *
-     * @return TdbShopVariantType
+     * @return TdbShopVariantType|false
      */
     protected function GetVariantType($aRow)
     {
         $sKey = 'oVariantType_'.$aRow['shop_variant_set_id'];
+
+        /** @var TdbShopVariantType|null $oVariantType */
         $oVariantType = &$this->GetFromInternalCache($sKey);
+
         if (null === $oVariantType) {
             $oVariantType = TdbShopVariantType::GetNewInstance();
             if (!empty($aRow['shop_variant_set_id'])) {
@@ -57,6 +63,11 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
         return $oVariantType;
     }
 
+    /**
+     * @param array<string, mixed> $aOptions
+     *
+     * @return void
+     */
     protected function OrderOptions(&$aOptions)
     {
         // get the variant type based on the first value
@@ -96,10 +107,11 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
      * @param string $sFieldValue
      * @param array  $aRow
      *
-     * @return string
+     * @return string[]
      */
     public function GetItemName($sFieldName, $sFieldValue, $aRow)
     {
+        /** @var array<string, string[]> $aLookupList */
         static $aLookupList = array();
 
         if (!array_key_exists($aRow['id'], $aLookupList)) {
@@ -109,6 +121,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
                 $oArticle = TdbShopArticle::GetNewInstance();
                 $oArticle->LoadFromRow($aRow);
 
+                /** @var string[] $aResult */
                 $aResult = array();
                 $oVariantValues = $oArticle->GetVariantValuesAvailableForType($oVariantType);
                 if ($oVariantValues) {
@@ -131,11 +144,13 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
      * return the query restriction for active filter. returns false if there
      * is no active restriction for this item.
      *
-     * @return string
+     * @return string|null
      */
     public function GetQueryRestrictionForActiveFilter()
     {
+        /** @var string|null $sQuery */
         $sQuery = $this->GetFromInternalCache('sQueryRestrictionForActiveFilter');
+
         if (is_null($sQuery)) {
             $aValues = $this->aActiveFilterData;
             if (!is_array($aValues)) {

@@ -146,6 +146,8 @@ class TShopBasketVoucherCoreList extends TIterator
      *
      * @param TdbShopVoucher $oInvalidVoucher
      * @param TShopBasket    $oBasket
+     *
+     * @return void
      */
     protected function RemoveInvalidVoucherHook($oInvalidVoucher, $oBasket)
     {

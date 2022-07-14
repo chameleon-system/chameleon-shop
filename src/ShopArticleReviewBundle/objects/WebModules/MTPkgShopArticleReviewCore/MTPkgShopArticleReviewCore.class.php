@@ -17,8 +17,10 @@ use ChameleonSystem\ShopArticleReviewBundle\AuthorDisplayConstants;
 /**/
 class MTPkgShopArticleReviewCore extends TUserCustomModelBase
 {
+    /** @var TdbPkgShopArticleReviewModuleShopArticleReviewConfiguration */
     protected $oModuleConfiguration = null;
 
+    /** @var string|false */
     protected $sPkgCommentTypeId = false;
 
     const MSG_CONSUMER_NAME = 'MTPkgShopArticleReview';
@@ -87,7 +89,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      * Returns virtual comment module config. Was needed to comment reviews
      * note: this function will be used only if package pkg comment was installed.
      *
-     * @return TdbPkgCommentModuleConfig
+     * @return TdbPkgCommentModuleConfig|null
      */
     protected function GetPkgCommentModuleConfiguration()
     {
@@ -100,9 +102,29 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
             $oPkgCommentModuleConfig->fieldNumberOfCommentsPerPage = 0;
             $oPkgCommentModuleConfig->fieldGuestCommentAllowed = !$oModuleConfiguration->fieldAllowWriteReviewLoggedinUsersOnly;
             $oPkgCommentModuleConfig->fieldPkgCommentTypeId = $this->GetCommentTypeId();
+
+            /**
+             * @psalm-suppress InvalidPropertyAssignmentValue
+             * @FIXME field is `bool` but assigned `int` - This could yield unwanted behaviour, especially with strict checks
+             */
             $oPkgCommentModuleConfig->fieldUseSimpleReporting = 1;
+
+            /**
+             * @psalm-suppress InvalidPropertyAssignmentValue
+             * @FIXME field is `bool` but assigned `int` - This could yield unwanted behaviour, especially with strict checks
+             */
             $oPkgCommentModuleConfig->fieldShowReportedComments = 0;
+
+            /**
+             * @psalm-suppress UndefinedPropertyAssignment
+             * @FIXME Does `fieldCountShowReviews` exist?
+             */
             $oPkgCommentModuleConfig->fieldCountShowReviews = $oModuleConfiguration->fieldCountShowReviews;
+
+            /**
+             * @psalm-suppress UndefinedPropertyAssignment
+             * @FIXME Does `fieldAllowReportComments` exist?
+             */
             $oPkgCommentModuleConfig->fieldAllowReportComments = $this->AllowReportReviews();
         }
 
@@ -130,7 +152,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * Get the comment type for article reviews.
      *
-     * @return TdbPkgCommentType
+     * @return string
      */
     protected function GetCommentTypeId()
     {
@@ -309,6 +331,8 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      * note: this function will be used only if package pkg comment was installed.
      *
      * @param TdbPkgComment $oNewComment
+     *
+     * @return void
      */
     protected function PostWriteComment($oNewComment)
     {
@@ -345,7 +369,11 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * Redirect to review item page and set anchor to start of the review module.
      *
+     * @param TCMSRecord $oReviewItem
      * @param array $aAddParameter
+     * @param bool $bGoToWriteReviewFrom
+     *
+     * @return never
      */
     protected function RedirectToItemPage($oReviewItem = null, $aAddParameter = array(), $bGoToWriteReviewFrom = false)
     {
@@ -368,7 +396,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      * Returns the reviews for active article.
      * If no active article exits then get the reviews from logged in user. (My Account page).
      *
-     * @return TdbShopArticleReviewList
+     * @return TdbShopArticleReviewList|null
      */
     protected function GetReviews()
     {
@@ -385,6 +413,8 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
 
     /**
      * get the reviews from logged in user.
+     *
+     * @return TdbShopArticleReviewList|null
      */
     protected function GetReviewsForUser()
     {
@@ -426,6 +456,8 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
 
     /**
      * Unlocks a locked review.
+     *
+     * @return void
      */
     protected function UnlockReview()
     {
@@ -460,6 +492,8 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * Changes the report notification state for one review.
      * this can only be called from the owning user.
+     *
+     * @return void
      */
     public function ChangeReviewReportNotificationState()
     {
@@ -490,6 +524,8 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * Deletes one review.
      * This function can only be called with valid action id or from owning user.
+     *
+     * @return void
      */
     public function DeleteReview()
     {
@@ -507,6 +543,8 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
 
     /**
      * Deletes one review with valid action id.
+     *
+     * @return void
      */
     protected function DeleteReviewFromActionId()
     {
@@ -529,6 +567,8 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
 
     /**
      * Deletes one review if owner is logged in.
+     *
+     * @return void
      */
     protected function DeleteReviewFromOwner()
     {
@@ -549,6 +589,8 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      * Deletes all comment for a given review.
      *
      * @param TdbShopArticleReview $oReviewItem
+     *
+     * @return void
      */
     protected function DeleteConnectedComments($oReviewItem)
     {
@@ -571,6 +613,8 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * Reports one review to shop owner and lock reported review.
      * Shop owner owner will get an email with delete and unlock link.
+     *
+     * @return void
      */
     public function ReportReview()
     {
@@ -605,6 +649,8 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
 
     /**
      * Rates one review positive or negative.
+     *
+     * @return void
      */
     public function RateReview()
     {
@@ -631,6 +677,8 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
 
     /**
      * Edit one review.
+     *
+     * @return void
      */
     public function EditReview()
     {
@@ -697,6 +745,8 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
 
     /**
      * Writes a review.
+     *
+     * @return void
      */
     public function WriteReview()
     {
@@ -720,7 +770,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     }
 
     /**
-     * @return TdbShopArticle
+     * @return TdbShopArticle|null
      */
     protected function GetArticleToReview()
     {
@@ -732,9 +782,14 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
         return $oArticle;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function GetReviewWriteData()
     {
         $oGlobal = TGlobal::instance();
+
+        /** @var array<string, mixed> $aUserData */
         $aUserData = $oGlobal->GetuserData(TdbShopArticleReview::INPUT_BASE_NAME);
         $aUserData['author_name'] = $this->GetAuthorName($aUserData['author_name']);
 
@@ -834,6 +889,9 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
         return $bDataValid;
     }
 
+    /**
+     * @return bool
+     */
     protected function InsertOfReviewLocked()
     {
         $bReviewLocked = false;
@@ -893,9 +951,9 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * Gets the author name from post data or form logged in user.
      *
-     * @param string $sUserPostName
+     * @param string|false $sUserPostName
      *
-     * @return bool|string
+     * @return false|string
      */
     protected function GetAuthorName($sUserPostName = false)
     {
@@ -951,7 +1009,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * Generates new captcha.
      *
-     * @return bool
+     * @return string|false
      */
     protected function GenerateCaptcha()
     {
@@ -979,6 +1037,9 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
         return false;
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();

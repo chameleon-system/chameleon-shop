@@ -14,6 +14,10 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @property TdbShopOrder $oTable
+ * @property TdbShopOrder $oTablePreChangeData
+ */
 class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
 {
     /**
@@ -85,6 +89,8 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
      * send the current order to the email.
      *
      * @param string $sMail - can also be passed via get/post
+     *
+     * @return TCMSstdClass
      */
     public function ShopOrderSendConfirmOrderMail($sMail = null)
     {
@@ -167,6 +173,8 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
 
     /**
      * set public methods here that may be called from outside.
+     *
+     * @return void
      */
     public function DefineInterface()
     {
@@ -213,6 +221,10 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
     /**
      * is called only from Delete method and calls all delete relevant methods
      * executes the final SQL Delete Query.
+     *
+     * @return void
+     * @psalm-suppress AssignmentToVoid, InvalidReturnStatement
+     * @FIXME Saving the result of `parent::DeleteExecute()` and returning does not make sense for a `void` return
      */
     protected function DeleteExecute()
     {

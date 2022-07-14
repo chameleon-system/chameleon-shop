@@ -53,7 +53,7 @@ class TShopManufacturer extends TShopManufacturerAutoParent
      * return an instance for the current filter (if the filter defines a manufacturer)
      * null if it does not.
      *
-     * @return TdbShopManufacturer
+     * @return TdbShopManufacturer|null
      */
     public static function &GetInstanceForCurrentFilter()
     {
@@ -153,10 +153,12 @@ class TShopManufacturer extends TShopManufacturerAutoParent
     /**
      * return the icon for the manufacturer. returns false if none found.
      *
-     * @return TCMSImage
+     * @param bool $bReturnDefaultImageIfNoneSet
+     * @return TCMSImage|false
      */
     public function GetIcon($bReturnDefaultImageIfNoneSet = false)
     {
+        /** @var TCMSImage|null $oIcon */
         $oIcon = $this->GetFromInternalCache('oIcon');
         if (is_null($oIcon)) {
             $oIcon = $this->GetImage(0, 'cms_media_id', $bReturnDefaultImageIfNoneSet);
@@ -173,10 +175,12 @@ class TShopManufacturer extends TShopManufacturerAutoParent
      * return the logo for the manufacturer. if none has been set, it will return the icon instead
      * if there is no icon either, it will return false.
      *
-     * @return TCMSImage
+     * @param bool $bReturnDefaultImageIfNoneSet
+     * @return TCMSImage|false
      */
     public function GetLogo($bReturnDefaultImageIfNoneSet = false)
     {
+        /** @var TCMSImage|null $oLogo */
         $oLogo = $this->GetFromInternalCache('oLogo');
         if (is_null($oLogo)) {
             $oLogo = $this->GetImage(1, 'cms_media_id', $bReturnDefaultImageIfNoneSet);
@@ -192,6 +196,9 @@ class TShopManufacturer extends TShopManufacturerAutoParent
         return $oLogo;
     }
 
+    /**
+     * @return false|void
+     */
     protected function PostLoadHook()
     {
         if (!TGlobal::IsCMSMode() && is_array($this->sqlData) && in_array('active', $this->sqlData)) {

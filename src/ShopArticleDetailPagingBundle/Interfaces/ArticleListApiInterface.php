@@ -16,8 +16,8 @@ use ChameleonSystem\ShopArticleDetailPagingBundle\Exception\ArticleListException
 interface ArticleListApiInterface
 {
     /**
-     * @param $listUrl
-     * @param $spot
+     * @param string $listUrl
+     * @param string $spot
      *
      * @return ListResultInterface
      *

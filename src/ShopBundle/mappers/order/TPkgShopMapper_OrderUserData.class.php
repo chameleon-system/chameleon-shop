@@ -46,6 +46,7 @@ class TPkgShopMapper_OrderUserData extends AbstractViewMapper
      *
      * @param TdbShopOrder $oOrder
      * @param int          $iAddressType use constants of the class to define the type to be fetched from
+     * @param bool $bCachingEnabled
      *
      * @return array
      */

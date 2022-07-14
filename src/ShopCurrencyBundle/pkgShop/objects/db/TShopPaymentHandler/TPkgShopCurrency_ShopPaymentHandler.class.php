@@ -17,7 +17,7 @@ class TPkgShopCurrency_ShopPaymentHandler extends TPkgShopCurrency_ShopPaymentHa
     /**
      * return the currency identifier for the currency we pay in.
      *
-     * @param $oPkgShopCurrency TdbPkgShopCurrency
+     * @param TdbPkgShopCurrency|null $oPkgShopCurrency
      *
      * @return string
      */

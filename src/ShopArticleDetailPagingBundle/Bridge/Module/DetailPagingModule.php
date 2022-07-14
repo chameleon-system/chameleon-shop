@@ -24,6 +24,7 @@ class DetailPagingModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     private $detailPagingService = null;
 
+    /** @var string|null */
     private $activeProductId = null;
 
     public function __construct(ShopServiceInterface $shop, DetailPagingServiceInterface $detailPagingService)

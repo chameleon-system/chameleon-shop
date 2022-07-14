@@ -21,10 +21,22 @@ class ShopPaymentConfigRawValue
     const SOURCE_ADDITIONAL = 2;
     const SOURCE_HANDLER = 3;
 
+    /** @var string */
     private $name;
+
+    /** @var string */
     private $value;
+
+    /** @var string */
     private $environment;
+
+    /** @var string */
     private $portalId;
+
+    /**
+     * @var int
+     * @psalm-var self::SOURCE_*
+     */
     private $source;
 
     /**
@@ -34,6 +46,7 @@ class ShopPaymentConfigRawValue
      * @param string $portalId    The portal for which this value is valid, or '' if valid for all portals
      * @param int    $source      Depicts from which configuration level the value is from (the payment handler group,
      *                            the configuration provider or the payment handler). One of SOURCE_GROUP, SOURCE_ADDITIONAL or SOURCE_HANDLER.
+     * @psalm-param self::SOURCE_* $source
      */
     public function __construct($name, $value, $environment, $portalId, $source)
     {
@@ -77,7 +90,8 @@ class ShopPaymentConfigRawValue
     }
 
     /**
-     * @return string
+     * @return int
+     * @psalm-return self::SOURCE_*
      */
     public function getSource()
     {

@@ -56,6 +56,8 @@ interface ResultFactoryInterface
 
     /**
      * @param ConfigurationInterface $moduleConfiguration
+     *
+     * @return void
      */
     public function moduleInitHook(ConfigurationInterface $moduleConfiguration);
 }

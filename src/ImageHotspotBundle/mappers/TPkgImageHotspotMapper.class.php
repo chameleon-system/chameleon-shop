@@ -223,8 +223,8 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
     /**
      * renders hotspot marker layover container content.
      *
-     * @param $oTargetObject
      * @param array $aRenderObjectConfig
+     * @param TCMSRecord|null $oTargetObject
      *
      * @return string
      */

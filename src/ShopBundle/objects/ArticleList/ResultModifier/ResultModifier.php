@@ -46,6 +46,12 @@ class ResultModifier implements ResultModifierInterface
         return $result;
     }
 
+    /**
+     * @param ResultInterface $result
+     * @param array $configuration
+     * @param StateInterface $state
+     * @return ResultInterface
+     */
     public function applyState(ResultInterface $result, array $configuration, StateInterface $state)
     {
         foreach ($this->modifications as $modification) {

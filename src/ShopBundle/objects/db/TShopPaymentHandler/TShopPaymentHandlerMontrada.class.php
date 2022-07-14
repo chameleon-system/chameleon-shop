@@ -13,7 +13,11 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
 {
+
+    /** @var string|null */
     protected $sMontradaTransactionId = null;
+
+    /** @var array<string, mixed>|null */
     protected $aCheckoutDetails = null;
 
     protected function GetViewPath()
@@ -107,7 +111,7 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
      *
      * @param string $sMessageConsumer - the name of the message handler that can display messages if an error occurs (assuming you return false)
      *
-     * @return string
+     * @return bool
      */
     protected function CallMontradaFormService($sMessageConsumer)
     {
@@ -189,6 +193,9 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
      * Send Call per POST to montrada. Response is a moved permanently header which we pass through.
      *
      * @param array $aData - the post data to be send to montrada
+     * @param string $sMessageConsumer
+     *
+     * @return bool
      */
     public function GetAnswerFromServer($aData, $sMessageConsumer)
     {
@@ -237,7 +244,7 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
      *
      * @param string $sParameterName - the system name of the handler
      *
-     * @return string
+     * @return string|false
      */
     public function GetConfigParameter($sParameterName)
     {
@@ -329,9 +336,9 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
      * Function to perform the API call to PayPal using API signature.
      *
      * @param string $methodName - is name of API  method
-     * @param array  $nvp        - nvpStr is the nvp (name value pair) string -  see paypal documentation for details
+     * @param array<string, mixed> $aRequestString - nvpStr is the nvp (name value pair) string -  see paypal documentation for details
      *
-     * @return array - returns an associtive array containing the response from the server
+     * @return array<string, mixed> - returns an associtive array containing the response from the server
      */
     public function ExecuteRequestCall($methodName, $aRequestString)
     {
@@ -383,11 +390,17 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
         return $aResponse;
     }
 
-    /** This function will take NVPString and convert it to an Associative Array and it will decode the response.
+    /**
+     * This function will take NVPString and convert it to an Associative Array and it will decode the response.
      * It is usefull to search for a particular key and displaying arrays.
      *
      * @nvpstr is NVPString.
+     *
      * @nvpArray is Associative Array.
+     *
+     * @param bool|string $nvpstr
+     *
+     * @return array<string, string>
      */
     public function ExtractResponse($nvpstr)
     {

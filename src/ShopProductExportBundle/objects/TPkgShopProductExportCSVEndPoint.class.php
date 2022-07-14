@@ -47,6 +47,8 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
 
     /**
      * get the fields and write it on top of the file (first line).
+     *
+     * @return void
      */
     protected function PreArticleListHandling()
     {
@@ -87,6 +89,8 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
 
     /**
      * loop through the article list and handle each article.
+     *
+     * @return void
      */
     protected function HandleArticleList()
     {
@@ -185,7 +189,7 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
     /**
      * Clean double blanks in content and replace delimiter to avoid errors.
      *
-     * @param $sValue
+     * @param string $sValue
      *
      * @return string
      */

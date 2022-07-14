@@ -82,7 +82,8 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
      */
     private $cache;
     /**
-     * @var array
+     * Mapping of viewname => twig template path
+     * @var array<string, string>
      */
     private $viewToListViewMapping;
     /**
@@ -107,7 +108,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     private $moduleListResult;
 
     /**
-     * @param array                                    $viewToListViewMapping
+     * @param array<string, string>                    $viewToListViewMapping - Mapping of template name to twig template path
      * @param RequestStack                             $requestStack
      * @param StateFactoryInterface                    $stateFactory
      * @param DbAdapterInterface                       $dbAdapter
@@ -155,6 +156,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @return Request
+     * @psalm-suppress NullableReturnStatement, InvalidNullableReturnType - We know that a request exists here
      */
     protected function getCurrentRequest()
     {
@@ -181,6 +183,9 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
         $this->initProductListResult();
     }
 
+    /**
+     * @return void
+     */
     private function initProductListResult()
     {
         if (null === $this->moduleListResult) {
@@ -189,6 +194,9 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
         }
     }
 
+    /**
+     * @return void
+     */
     private function initializeListState()
     {
         $stateData = $this->getStateDataFromRequest($this->getCurrentRequest());
@@ -198,6 +206,8 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @param array $stateData
+     *
+     * @return void
      */
     private function makePageSizeValid(array &$stateData)
     {
@@ -271,6 +281,9 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
         return $this->configuration;
     }
 
+    /**
+     * @return void
+     */
     private function loadConfiguration()
     {
         $this->configuration = $this->dbAdapter->getConfigurationFromInstanceId($this->instanceID);
@@ -318,7 +331,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @param $additionalData
+     * @param array $additionalData
      *
      * @return string
      */
@@ -396,6 +409,8 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
+     *
+     * @return void
      */
     protected function configureCacheTrigger(IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
@@ -431,6 +446,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @return TdbCmsLocals
+     * @psalm-suppress FalsableReturnStatement - `GetActive` only returns `false` during the bootstrapping phase, which is not the case here
      */
     private function getActiveLocal()
     {
@@ -438,7 +454,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @return TdbPkgShopCurrency
+     * @return TdbPkgShopCurrency|false
      */
     private function getActiveCurrency()
     {
@@ -447,6 +463,8 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * call this if you want to prevent the result from being written to cache.
+     *
+     * @return void
      */
     private function preventCachingOfResult()
     {
@@ -651,7 +669,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @param string $viewName
      *
-     * @return array
+     * @return string
      */
     private function getListTemplateFromConfigName($viewName)
     {

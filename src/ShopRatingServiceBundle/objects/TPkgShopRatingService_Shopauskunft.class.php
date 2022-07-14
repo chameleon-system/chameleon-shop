@@ -45,6 +45,8 @@ class TPkgShopRatingService_Shopauskunft extends TdbPkgShopRatingService
 
     /**
      * @param string $targetFile
+     *
+     * @return void
      */
     private function downloadXml($targetFile)
     {

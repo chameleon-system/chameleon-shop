@@ -26,26 +26,35 @@ class RequestToListUrlConverter implements RequestToListUrlConverterInterface
         $this->inputFilterUtil = $inputFilterUtil;
     }
 
+    /**
+     * @return null|string
+     */
     public function getListUrl()
     {
         return $this->getListUrlFromParameters();
     }
 
+    /**
+     * @return null|string
+     */
     public function getListSpotName()
     {
         return $this->inputFilterUtil->getFilteredInput(self::URL_PARAMETER_SPOT_NAME, null);
     }
 
+    /**
+     * @return null|string
+     */
     private function getListUrlFromParameters()
     {
         return $this->inputFilterUtil->getFilteredInput(self::URL_PARAMETER_LIST_URL, null);
     }
 
     /**
-     * @param $listSpotName
-     * @param $listPageUrl
+     * @param string $listSpotName
+     * @param string $listPageUrl
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getPagerParameter($listSpotName, $listPageUrl)
     {

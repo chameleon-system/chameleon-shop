@@ -25,6 +25,9 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      */
     public $bAllowCache = true;
 
+    /**
+     * @var array<string, mixed>
+     */
     private static $cache = [];
 
     /**
@@ -52,6 +55,9 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
             $oNewObject->LoadFromRow($oObject->sqlData);
 
             if ($canBeCached) {
+                /**
+                 * @psalm-suppress InvalidPropertyAssignmentValue - through `$canBeCached` we know that at this place, `$cacheKey` is not `null`
+                 */
                 self::$cache[$cacheKey] = $oNewObject;
             }
 
@@ -63,6 +69,8 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
 
     /**
      * is called when the module initializes.
+     *
+     * @return void
      */
     public function ModuleInitHook()
     {
@@ -131,9 +139,9 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
     /**
      * query restrictions added to the list.
      *
-     * @param  $oListConfig
+     * @param TdbShopModuleArticleList $oListConfig
      *
-     * @return array
+     * @return string[]
      */
     protected function GetGlobalQueryRestrictions($oListConfig)
     {

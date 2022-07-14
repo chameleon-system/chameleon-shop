@@ -131,11 +131,13 @@ class TPkgShopListfilterItemShopAttributeList extends TPkgShopListfilterItemMult
      * return the query restriction for active filter. returns false if there
      * is no active restriction for this item.
      *
-     * @return string
+     * @return string|null
      */
     public function GetQueryRestrictionForActiveFilter()
     {
+        /** @var string|null $sQuery */
         $sQuery = $this->GetFromInternalCache('sQueryRestrictionForActiveFilter');
+
         if (null === $sQuery) {
             $databaseConnection = $this->getDatabaseConnection();
             $aValues = $this->aActiveFilterData;

@@ -22,7 +22,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
     const VIEW_PATH = 'pkgShop/views/db/TShopShippingGroup';
 
     /**
-     * @param TShopBasketShippingList
+     * @var TdbShopShippingTypeList
      */
     protected $oActingShippingTypeList = null;
 
@@ -33,6 +33,9 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      */
     protected $oValidPaymentMethods = null;
 
+    /**
+     * @var float|null
+     */
     protected $dPrice = null;
 
     public function __sleep()
@@ -104,6 +107,9 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         return $bIsValid;
     }
 
+    /**
+     * @return bool
+     */
     protected function hasShippingTypeThatStopsTypeChain()
     {
         $item = $this->GetActingShippingTypes()->FindItemWithProperty('fieldEndShippingTypeChain', true);
@@ -336,6 +342,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      * @param bool $bRefresh - set to true to force a regeneration of the list
      *
      * @return TdbShopPaymentMethodList
+     * @psalm-suppress InvalidNullableReturnType, NullableReturnStatement - In this instance we know that the return type cannot be null
      */
     public function &GetValidPaymentMethods($bRefresh = false)
     {
@@ -415,11 +422,13 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
     /**
      * return the vat group for this shipping group.
      *
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function GetVat()
     {
+        /** @var TdbShopVat|null $oVat */
         $oVat = $this->GetFromInternalCache('ovat');
+
         if (is_null($oVat)) {
             $oVat = null;
             $oShopConf = TdbShop::GetInstance();
@@ -595,7 +604,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
     /**
      * @param TShopBasketArticleList $oBasketArticleList
-     * @param $sDataCountryId
+     * @param string $sDataCountryId
      *
      * @return TdbShopShippingGroupList
      */

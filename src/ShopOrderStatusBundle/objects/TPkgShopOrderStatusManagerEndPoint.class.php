@@ -28,6 +28,8 @@ class TPkgShopOrderStatusManagerEndPoint
      * @param IPkgCmsCoreLog $logger
      *
      * @deprecated since 6.3.0 - is not supported anymore; use only getShopLogger() or do your own logging
+     *
+     * @return void
      */
     public function setLogger(IPkgCmsCoreLog $logger)
     {
@@ -125,6 +127,8 @@ class TPkgShopOrderStatusManagerEndPoint
      * @param TPkgShopOrderStatusData $oData
      *
      * @throws TPkgCmsException_Log
+     *
+     * @return void
      */
     protected function validateStatusData(TPkgShopOrderStatusData $oData)
     {
@@ -150,6 +154,9 @@ class TPkgShopOrderStatusManagerEndPoint
         }
     }
 
+    /**
+     * @return TPkgCmsException[]
+     */
     private function orderStatusAddedHook(TdbShopOrderStatus $oStatus)
     {
         $aExceptionList = array();

@@ -17,7 +17,7 @@ class MTShopArticleCatalogListfilterCore extends MTShopArticleCatalogCore
     /**
      * load the article list and store it in $this->oList.
      *
-     * @return int - number of items found
+     * @return void
      */
     protected function LoadArticleList()
     {

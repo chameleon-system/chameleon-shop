@@ -26,6 +26,10 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
         $this->session = $session;
     }
 
+    /**
+     * @param array<string, mixed> $searchRequest
+     * @return void
+     */
     public function addSearch(array $searchRequest)
     {
         $searchKey = md5($this->getArrayAsString($searchRequest));
@@ -34,6 +38,10 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
         $this->session->set(ShopSearchSessionInterface::SESSION_KEY, $searches);
     }
 
+    /**
+     * @param array<string, mixed> $searchRequest
+     * @return bool
+     */
     public function hasSearchedFor(array $searchRequest)
     {
         $searchKey = md5($this->getArrayAsString($searchRequest));
@@ -43,6 +51,11 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
         return in_array($searchKey, $searches);
     }
 
+    /**
+     * @param array $data
+     *
+     * @return string
+     */
     private function getArrayAsString($data)
     {
         $parts = array();

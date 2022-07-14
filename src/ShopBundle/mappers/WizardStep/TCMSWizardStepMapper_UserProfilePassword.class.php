@@ -45,6 +45,8 @@ class TCMSWizardStepMapper_UserProfilePassword extends AbstractTCMSWizardStepMap
      * @param array                    $aFieldList   (MappedFieldName(name used in template) => RealFieldName (user input field name) )
      * @param IMapperVisitorRestricted $oVisitor
      * @param string                   $sMSGConsumer
+     *
+     * @return void
      */
     protected function SetInputFields($aFieldList, $oVisitor, $sMSGConsumer)
     {

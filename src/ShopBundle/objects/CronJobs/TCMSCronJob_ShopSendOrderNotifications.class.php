@@ -35,6 +35,9 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
         $this->languageService = $languageService;
     }
 
+    /**
+     * @return void
+     */
     protected function _ExecuteCron()
     {
         $sMinDate = date('Y-m-d H:i:s', time() - (self::MAX_AGE_DAYS * 24 * 3600));

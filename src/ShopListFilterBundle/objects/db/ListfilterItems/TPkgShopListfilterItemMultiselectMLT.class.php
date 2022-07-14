@@ -15,11 +15,13 @@ class TPkgShopListfilterItemMultiselectMLT extends TPkgShopListfilterItemMultise
      * return the query restriction for active filter. returns false if there
      * is no active restriction for this item.
      *
-     * @return string
+     * @return string|null
      */
     public function GetQueryRestrictionForActiveFilter()
     {
+        /** @var string|null $sQuery */
         $sQuery = $this->GetFromInternalCache('sQueryRestrictionForActiveFilter');
+
         if (is_null($sQuery)) {
             if (true === is_array($this->aActiveFilterData) && count($this->aActiveFilterData) > 0) {
                 $sItemListQuery = $this->GetSQLQueryForQueryRestrictionForActiveFilter();

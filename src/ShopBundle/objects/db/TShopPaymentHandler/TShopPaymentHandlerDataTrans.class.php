@@ -29,7 +29,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     /**
      * Transaction id for DataTrans authorisation. Needed for settlement authorised transactions.
      *
-     * @var bool/string
+     * @var bool|string
      */
     protected $sTransactionId = false;
 
@@ -39,7 +39,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      * Reference number was build with crc32 from basket identifier__payment type identifier__count
      * Count was needed because the first to parts are not unique.
      *
-     * @var bool/string
+     * @var false|int
      */
     protected $sRefNo = false;
 
@@ -139,7 +139,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      *
      * @param bool $bForAuthorisation
      *
-     * @return bool|string
+     * @return false|int
      */
     protected function GetRefNoParameter($bForAuthorisation = true)
     {
@@ -276,7 +276,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     /**
      * Get error message form DataTrans authorisation response.
      *
-     * @return string $SReturnMessage
+     * @return string|false
      */
     protected function GetErrorCodesFromResponse()
     {
@@ -328,6 +328,10 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
         return $sReturnMessage;
     }
 
+    /**
+     * @param string $sErrorCode
+     * @return string
+     */
     protected function TransformDataTransMessages($sErrorCode)
     {
         $sErrorMessage = 'ERROR_PAYMENT_DATA_TRANS_DEFAULT_ERROR';
@@ -399,7 +403,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      * to go directly to, for example, the payment provider. if you return an empty string, the default target (ie the payment
      * data entry step) will be used.
      *
-     * @return string
+     * @return string|false
      */
     public function GetUserInputTargetURL()
     {
@@ -427,9 +431,9 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     /**
      * Get payment handler parameter depending on live or test mode.
      *
-     * @param $sParameterName
+     * @param string $sParameterName
      *
-     * @return string
+     * @return string|false
      */
     protected function GetTestLiveModeParameter($sParameterName)
     {
@@ -538,7 +542,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      * Checks the response from settlement request.
      * No sign check on settlement response because DataTrans do not send sign in settlement response.
      *
-     * @param $sResponse
+     * @param string $sResponse
      *
      * @return bool
      */
@@ -624,7 +628,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     /**
      * Converts hex to string. Was needed for the sign check.
      *
-     * @param $hex
+     * @param string $hex
      *
      * @return string
      */
@@ -638,6 +642,12 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
         return $string;
     }
 
+    /**
+     * @param string $key
+     * @param string $data
+     *
+     * @return string
+     */
     protected function hmac($key, $data)
     {
         // RFC 2104 HMAC implementation for php.
@@ -656,6 +666,15 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
         return md5($k_opad.pack('H*', md5($k_ipad.$data)));
     }
 
+    /**
+     * @param string $key
+     * @param string $merchId
+     * @param float $amount
+     * @param string $ccy
+     * @param string $idno
+     *
+     * @return string
+     */
     protected function GetSecurityHash($key, $merchId, $amount, $ccy, $idno)
     {
         $str = $merchId.$amount.$ccy.$idno;

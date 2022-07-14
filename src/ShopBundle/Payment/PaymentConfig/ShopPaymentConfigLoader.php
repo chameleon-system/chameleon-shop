@@ -125,6 +125,8 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
     /**
      * @param string                             $alias
      * @param ShopPaymentConfigProviderInterface $shopPaymentConfigProvider
+     *
+     * @return void
      */
     public function addConfigProvider($alias, ShopPaymentConfigProviderInterface $shopPaymentConfigProvider)
     {

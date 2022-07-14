@@ -34,9 +34,13 @@ class TShopModuleArticlelistOrderbyList extends TShopModuleArticlelistOrderbyLis
     /**
      * used to display an article.
      *
+     * @param string $iActiveId
+     * @param string $sFormName
+     * @param string $sFieldName
      * @param string $sViewName     - the view to use
      * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
      * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param bool $bAllowCache
      *
      * @return string
      */

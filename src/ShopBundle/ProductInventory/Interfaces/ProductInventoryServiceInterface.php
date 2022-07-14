@@ -19,24 +19,30 @@ interface ProductInventoryServiceInterface
      *
      * @param string $shopArticleId
      *
-     * @return int|bool may return false if the query does not find a stock record
+     * @return int|false may return false if the query does not find a stock record
      */
     public function getAvailableStock($shopArticleId);
 
     /**
      * @param string $shopArticleId
      * @param int    $stock
+     *
+     * @return void
      */
     public function addStock($shopArticleId, $stock);
 
     /**
      * @param string $shopArticleId
      * @param int    $stock
+     *
+     * @return void
      */
     public function setStock($shopArticleId, $stock);
 
     /**
      * @param string $parentArticleId
+     *
+     * @return void
      */
     public function updateVariantParentStock($parentArticleId);
 }

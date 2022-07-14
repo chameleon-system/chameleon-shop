@@ -16,11 +16,13 @@ class TShopOrderItem extends TAdbShopOrderItem
     /**
      * loads the owning bundle order item IF this item belongs to a bundle. returns false if it is not.
      *
-     * @return TdbShopOrderItem
+     * @return TdbShopOrderItem|false
      */
     public function &GetOwningBundleOrderItem()
     {
+        /** @var TdbShopOrderItem|null $oOwningOrderItem */
         $oOwningOrderItem = $this->GetFromInternalCache('oOwningOrderItem');
+
         if (is_null($oOwningOrderItem)) {
             $oOwningOrderItem = false;
             if (!is_null($this->id)) {
@@ -44,11 +46,13 @@ class TShopOrderItem extends TAdbShopOrderItem
     /**
      * if this order item belongs to a bundle, then this method will return the connecting table.
      *
-     * @return TdbShopOrderBundleArticle
+     * @return TdbShopOrderBundleArticle|false
      */
     public function GetOwningBundleConnection()
     {
+        /** @var TdbShopOrderBundleArticle|null $oOwningBundleConnection */
         $oOwningBundleConnection = $this->GetFromInternalCache('oOwningBundleConnection');
+
         if (is_null($oOwningBundleConnection)) {
             $oOwningBundleConnection = false;
             if (!is_null($this->id)) {
@@ -79,6 +83,8 @@ class TShopOrderItem extends TAdbShopOrderItem
      * while the original is still in the database.
      *
      * @param bool $bIsInsert - set to true if this is an insert
+     *
+     * @return void
      */
     protected function PreSaveHook($bIsInsert)
     {
@@ -108,6 +114,8 @@ class TShopOrderItem extends TAdbShopOrderItem
 
     /**
      * use the method to up the sales count for the article.
+     *
+     * @return void
      */
     protected function PostInsertHook()
     {
@@ -122,6 +130,8 @@ class TShopOrderItem extends TAdbShopOrderItem
 
     /**
      * update the article counter.
+     *
+     * @return void
      */
     protected function PreDeleteHook()
     {
@@ -183,7 +193,7 @@ class TShopOrderItem extends TAdbShopOrderItem
         return array();
     }
 
-    /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD
+    /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD */
 
     /**
      * returns an array with all table names that are relevant for the render function.
@@ -191,7 +201,7 @@ class TShopOrderItem extends TAdbShopOrderItem
      * @param string $sViewName - the view name being requested (if know by the caller)
      * @param string $sViewType - the view type (core, custom-core, customer) being requested (if know by the caller)
      *
-     * @return array
+     * @return string[]
      */
     public static function GetCacheRelevantTables($sViewName = null, $sViewType = null)
     {

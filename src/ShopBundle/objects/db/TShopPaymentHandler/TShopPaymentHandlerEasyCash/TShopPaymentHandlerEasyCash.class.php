@@ -43,7 +43,7 @@ class TShopPaymentHandlerEasyCash extends TdbShopPaymentHandler
      * @param string $sTargetPath
      * @param array  $aData
      *
-     * @return array|string
+     * @return array{header: string, response: string}|string - Error message on error, otherwise array
      */
     protected function SendRequestToEasyCash($sTargetPath, $aData)
     {

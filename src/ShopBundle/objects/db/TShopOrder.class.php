@@ -24,6 +24,8 @@ class TShopOrder extends TShopOrderAutoParent
 
     /**
      * we use the post insert hook to set the ordernumber for the order.
+     *
+     * @return void
      */
     protected function PostInsertHook()
     {
@@ -43,6 +45,8 @@ class TShopOrder extends TShopOrderAutoParent
      * NOTE: this fills the base order only. None of the lists (article, vat, etc) will be added yet.
      *
      * @param TShopBasket $oBasket
+     *
+     * @return void
      */
     public function LoadFromBasket(TShopBasket &$oBasket)
     {
@@ -165,6 +169,8 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @param TShopBasket $oBasket
      * @param array       $aOrderData
+     *
+     * @return void
      */
     protected function LoadFromBasketPostProcessData($oBasket, &$aOrderData)
     {
@@ -175,6 +181,8 @@ class TShopOrder extends TShopOrderAutoParent
      * after all core data has been saved to the order (but before the order is marked as complete).
      *
      * @param TShopBasket $oBasket
+     *
+     * @return void
      */
     public function SaveCustomDataFromBasket(TShopBasket $oBasket)
     {
@@ -186,6 +194,8 @@ class TShopOrder extends TShopOrderAutoParent
      * Also Note: existing voucher uses will NOT be removed.
      *
      * @param TShopBasketVoucherList $oBasketVoucherList
+     *
+     * @return void
      */
     public function SaveVouchers(TShopBasketVoucherList $oBasketVoucherList)
     {
@@ -202,6 +212,8 @@ class TShopOrder extends TShopOrderAutoParent
      * this method to work.
      *
      * @param TShopBasketArticleList $oBasketArticleList
+     *
+     * @return void
      */
     public function SaveArticles(TShopBasketArticleList $oBasketArticleList)
     {
@@ -295,6 +307,8 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @param TShopBasketArticle $oBasketItem
      * @param array              $aOrderItemData
+     *
+     * @return void
      */
     protected function PrepareArticleDataForSave(&$oBasketItem, &$aOrderItemData)
     {
@@ -306,6 +320,8 @@ class TShopOrder extends TShopOrderAutoParent
      * @param TShopBasketArticle   $oBasketItem    - the original basket item
      * @param TdbShopOrderItem     $oOrderItem     - the generated order item (ie the bundle owner)
      * @param TdbShopBundleArticle $oBundleArticle - the bundle connection between the owning item and the owned item
+     *
+     * @return void
      */
     protected function SaveBundleArticle(&$oBasketItem, &$oOrderItem, &$oBundleArticle)
     {
@@ -331,6 +347,8 @@ class TShopOrder extends TShopOrderAutoParent
      * this method to work.
      *
      * @param TdbShopVatList $oVatList
+     *
+     * @return void
      */
     public function SaveVATList(TdbShopVatList $oVatList)
     {
@@ -352,6 +370,8 @@ class TShopOrder extends TShopOrderAutoParent
      * NOTE: the order object must have an id for this method to work.
      *
      * @param TdbShopShippingGroup $oShippingGroup
+     *
+     * @return void
      */
     public function SaveShippingUserData(TdbShopShippingGroup &$oShippingGroup)
     {
@@ -365,6 +385,8 @@ class TShopOrder extends TShopOrderAutoParent
      * NOTE: the order object must have an id for this method to work.
      *
      * @param TdbShopPaymentMethod $oPaymentMethod
+     *
+     * @return void
      */
     public function SavePaymentUserData(TdbShopPaymentMethod &$oPaymentMethod)
     {
@@ -426,6 +448,8 @@ class TShopOrder extends TShopOrderAutoParent
 
     /**
      * method is called after all data from the basket has been saved to the order tables.
+     *
+     * @return void
      */
     public function CreateOrderInDatabaseCompleteHook()
     {
@@ -466,6 +490,8 @@ class TShopOrder extends TShopOrderAutoParent
 
     /**
      * @param bool $bExported
+     *
+     * @return void
      */
     public function MarkOrderAsExportedToWaWi($bExported = true)
     {
@@ -485,6 +511,10 @@ class TShopOrder extends TShopOrderAutoParent
 
     /**
      * send an order notification for this order.
+     *
+     * @param string $sSendToMail
+     * @param string $sSendToName
+     * @return bool|string
      */
     public function SendOrderNotification($sSendToMail = null, $sSendToName = null)
     {
@@ -529,6 +559,8 @@ class TShopOrder extends TShopOrderAutoParent
      * @param bool               $bOrderSend
      * @param TdbDataMailProfile $oMail
      * @param string             $sSendToMail
+     *
+     * @return void
      */
     protected function SaveOrderNotificationDataToOrder($bOrderSend, $oMail, $sSendToMail)
     {
@@ -559,7 +591,8 @@ class TShopOrder extends TShopOrderAutoParent
      * Add additional data for the order if notification email was send correctly
      * to given array.
      *
-     * @return array
+     * @return array<string, mixed>
+     * @param array<string, mixed> $aData
      */
     protected function AddOrderNotificationDataForOrderSuccess($aData)
     {
@@ -600,7 +633,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @param string $sProfileName
      *
-     * @return TdbDataMailProfile
+     * @return TdbDataMailProfile|null
      */
     protected function GetOrderNotificationEmailProfile($sProfileName)
     {
@@ -748,6 +781,11 @@ class TShopOrder extends TShopOrderAutoParent
     /**
      * get info if ordered from registered user or guest user.
      * Was used for cms list.
+     *
+     * @param string $sDBValue
+     * @param array<string, mixed> $aOrderRow
+     *
+     * @return string
      */
     public static function getUserTypeOrdered($sDBValue, $aOrderRow)
     {
@@ -762,6 +800,11 @@ class TShopOrder extends TShopOrderAutoParent
     /**
      * Get country name for value.
      * Was used for cms list.
+     *
+     * @param string $sDBValue
+     * @param array<string, mixed> $aOrderRow
+     *
+     * @return string
      */
     public static function getCountryName($sDBValue, $aOrderRow)
     {
@@ -778,6 +821,11 @@ class TShopOrder extends TShopOrderAutoParent
      * Get shipping country from value.
      * If value was empty get billing country
      * Was used for cms list.
+     *
+     * @param string $sDBValue
+     * @param array<string, mixed> $aOrderRow
+     *
+     * @return string
      */
     public static function getShippingCountryName($sDBValue, $aOrderRow)
     {
@@ -841,8 +889,16 @@ class TShopOrder extends TShopOrderAutoParent
         $aTaxValueGroups = array();
         while ($oArticle = $oArticles->Next()) {
             if (!array_key_exists($oArticle->fieldVatPercent, $aTaxValueGroups)) {
+                /**
+                 * @psalm-suppress InvalidArrayOffset
+                 * @FIXME Float array keys are converted to integers - this could lead to unwanted behaviour
+                 */
                 $aTaxValueGroups[$oArticle->fieldVatPercent] = 0;
             }
+            /**
+             * @psalm-suppress InvalidArrayOffset
+             * @FIXME Float array keys are converted to integers - this could lead to unwanted behaviour
+             */
             $aTaxValueGroups[$oArticle->fieldVatPercent] += $oArticle->fieldOrderPriceAfterDiscounts;
         }
 
@@ -859,9 +915,12 @@ class TShopOrder extends TShopOrderAutoParent
         return $dProductNetValue;
     }
 
-    /*
-    * change paid state of order
-    */
+    /**
+     * change paid state of order
+     *
+     * @param bool $bIsPaid
+     * @return void
+     */
     public function SetStatusPaid($bIsPaid = true)
     {
         if ($this->fieldOrderIsPaid != $bIsPaid) {
@@ -884,9 +943,12 @@ class TShopOrder extends TShopOrderAutoParent
         }
     }
 
-    /*
-    * change canceled state
-    */
+    /**
+     * change canceled state
+     *
+     * @param bool $bIsCanceled
+     * @return void
+     */
     public function SetStatusCanceled($bIsCanceled = true)
     {
         if ($this->fieldCanceled != $bIsCanceled) {
@@ -921,6 +983,8 @@ class TShopOrder extends TShopOrderAutoParent
      * if $bIsCanceled is false so the order gets reactivated all negative used vouchers will be removed.
      *
      * @param bool $bIsCanceled
+     *
+     * @return void
      */
     public function UpdateUsedVouchers($bIsCanceled)
     {
@@ -983,6 +1047,8 @@ class TShopOrder extends TShopOrderAutoParent
 
     /**
      * @param TdbShopVoucher $voucher
+     *
+     * @return void
      */
     private function postActivateUsedUpVoucher(TdbShopVoucher $voucher)
     {
@@ -992,6 +1058,8 @@ class TShopOrder extends TShopOrderAutoParent
 
     /**
      * @param TdbShopVoucher $voucher
+     *
+     * @return void
      */
     private function logOnActivatingUsedUpVoucher(TdbShopVoucher $voucher)
     {
@@ -1009,6 +1077,8 @@ class TShopOrder extends TShopOrderAutoParent
 
     /**
      * @param TdbShopVoucher $voucher
+     *
+     * @return void
      */
     private function sendMailOnActivatingUsedUpVoucher(TdbShopVoucher $voucher)
     {
@@ -1020,6 +1090,9 @@ class TShopOrder extends TShopOrderAutoParent
         $mailProfile->SendUsingObjectView('emails', 'Customer');
     }
 
+    /**
+     * @return void
+     */
     protected function PreDeleteHook()
     {
         parent::PreDeleteHook();
@@ -1030,6 +1103,8 @@ class TShopOrder extends TShopOrderAutoParent
      * remove or add the stock of the order back into the product pool.
      *
      * @param bool $bRemoveFromStock
+     *
+     * @return void
      */
     public function UpdateStock($bRemoveFromStock)
     {
@@ -1048,7 +1123,7 @@ class TShopOrder extends TShopOrderAutoParent
         $oOrderItemList->GoToStart();
     }
 
-    /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD
+    /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD */
 
     /**
      * returns an array with all table names that are relevant for the render function.
@@ -1056,7 +1131,7 @@ class TShopOrder extends TShopOrderAutoParent
      * @param string $sViewName - the view name being requested (if know by the caller)
      * @param string $sViewType - the view type (core, custom-core, customer) being requested (if know by the caller)
      *
-     * @return array
+     * @return string[]
      */
     public static function GetCacheRelevantTables($sViewName = null, $sViewType = null)
     {
@@ -1128,6 +1203,11 @@ class TShopOrder extends TShopOrderAutoParent
         return true;
     }
 
+    /**
+     * @param array<string, mixed> $aConnectionData
+     *
+     * @return array<string, mixed>
+     */
     protected function saveDiscountsEnrichDiscountSaveData(TdbShopOrder $order, TdbShopDiscount $oShopBasketDiscount, $aConnectionData)
     {
         return $aConnectionData;

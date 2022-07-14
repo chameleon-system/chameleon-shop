@@ -148,6 +148,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
                 $selectedTypeValues[$typeValue->fieldShopVariantTypeId] = $typeValue->id;
             }
         } else {
+            /** @var array $selectedTypeValues */
             $selectedTypeValues = $this->getInputFilterUtil()->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
         }
 

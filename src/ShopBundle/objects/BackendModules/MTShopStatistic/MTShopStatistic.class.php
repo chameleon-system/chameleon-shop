@@ -14,12 +14,25 @@
 /**/
 class MTShopStatistic extends TCMSModelBase
 {
+    /** @var string */
     protected $sStartDate = null;
+
+    /** @var string */
     protected $sEndDate = null;
+
+    /** @var string */
     protected $sDateGroupType = 'day';
+
+    /** @var bool|'0'|'1' */
     protected $bShowChange = false;
+
+    /** @var string */
     protected $sViewName = 'html.table';
+
+    /** @var string[] */
     protected $portalList = array();
+
+    /** @var string */
     protected $selectedPortalId = '';
 
     const SEPARATOR = ';';
@@ -30,7 +43,12 @@ class MTShopStatistic extends TCMSModelBase
         $this->sStartDate = $this->GetUserInput('sStartDate', date('1.m.Y'));
         $this->sEndDate = $this->GetUserInput('sEndDate', date('d.m.Y'));
         $this->sDateGroupType = $this->GetUserInput('sDateGroupType', 'day');
+        /**
+         * @FIXME `bShowChange` is probably meant to be a bool field. However, `GetUserInput` writes strings (probably '1' & '0')
+         * @psalm-suppress InvalidPropertyAssignmentValue
+         */
         $this->bShowChange = $this->GetUserInput('bShowChange', '0');
+
         $this->sViewName = $this->GetUserInput('sViewName', 'html.table');
         $this->selectedPortalId = $this->GetUserInput('portalId', '');
         $this->portalList = $this->getPortalList();
@@ -60,6 +78,9 @@ class MTShopStatistic extends TCMSModelBase
         $this->methodCallAllowed[] = 'DownloadTopsellers';
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function getPortalList()
     {
         $portalIdList = array();
@@ -71,6 +92,9 @@ class MTShopStatistic extends TCMSModelBase
         return $portalIdList;
     }
 
+    /**
+     * @return void
+     */
     protected function GetProductStats()
     {
         $oLocal = &TCMSLocal::GetActive();
@@ -105,6 +129,9 @@ class MTShopStatistic extends TCMSModelBase
         }
     }
 
+    /**
+     * @return void
+     */
     protected function DownloadTopsellers()
     {
         $oLocal = &TCMSLocal::GetActive();
@@ -131,6 +158,9 @@ class MTShopStatistic extends TCMSModelBase
     * return the top seller
     * @return TdbShopOrderItemList
     */
+    /**
+     * @return TdbShopOrderItemList
+     */
     protected function GetTopsellers()
     {
         $oLocal = &TCMSLocal::GetActive();
@@ -165,6 +195,9 @@ class MTShopStatistic extends TCMSModelBase
         return $oOrderItems;
     }
 
+    /**
+     * @return void
+     */
     protected function GetAsCSV()
     {
         $oStats = $this->GetStats();
@@ -172,6 +205,12 @@ class MTShopStatistic extends TCMSModelBase
         $this->OutputAsDownload($oStats->Render('csv.table'), $sName);
     }
 
+    /**
+     * @param string $sContent
+     * @param string $sTargetFileName
+     *
+     * @return never
+     */
     protected function OutputAsDownload($sContent, $sTargetFileName)
     {
         $sContent = utf8_decode($sContent);
@@ -187,6 +226,9 @@ class MTShopStatistic extends TCMSModelBase
         exit(0);
     }
 
+    /**
+     * @return TCMSGroupedStatistics
+     */
     protected function GetStats()
     {
         $oStats = new TCMSGroupedStatistics();
@@ -259,7 +301,7 @@ class MTShopStatistic extends TCMSModelBase
      * the controller (the controller will replace the tag "<!--#CMSHEADERCODE#-->" with
      * the results).
      *
-     * @return array()
+     * @return string[]
      */
     public function GetHtmlHeadIncludes()
     {
@@ -273,11 +315,28 @@ class MTShopStatistic extends TCMSModelBase
 
 class MTShopStatistic_Statblock
 {
+    /** @var string */
     public $sGroupName = '';
+
+    /** @var array<string, mixed> */
     public $aColumns = array();
+
+    /** @var self[] */
     protected $aSubGroups = array();
+
+    /** @var bool */
     public $bShowGrandTotal = true;
 
+    /**
+     * Returns
+     * - (mixed) The value of the column if it exists
+     * - (int) A sum of the values of subgroups, if it does not but subgroups exist and `bShowGrandTotal=true` is set
+     * - (string) An empty string, if the column does not exist but subgroups exist and `bShowGrandTotal=false` is set
+     * - (int) 0 If the column does not exist and has no subGroups - irresponsible of the value of `bShowGrandTotal`
+     *
+     * @param string $sColName
+     * @return int|mixed|''
+     */
     public function GetColumn($sColName)
     {
         // the column is the sume of the sub columns - if there are any
@@ -300,11 +359,21 @@ class MTShopStatistic_Statblock
         return $dValue;
     }
 
+    /**
+     * @param string $sFieldName
+     * @return void
+     */
     public function AddSubgroupingForField($sFieldName)
     {
         // split the result by field name
     }
 
+    /**
+     * @param string $sName
+     * @param string $sQuery
+     * @param array $aSubGrupping
+     * @return void
+     */
     public function AddGroupValue($sName, $sQuery, $aSubGrupping = array())
     {
         // subdivide by $aSubGrupping -> nested grupping..
@@ -323,6 +392,11 @@ class MTShopStatistic_Statblock
         }
     }
 
+    /**
+     * @param string $sViewName
+     * @param array $aOtherParamter
+     * @return string
+     */
     public function Render($sViewName, $aOtherParamter = array())
     {
         $oView = new TViewParser();
@@ -334,6 +408,9 @@ class MTShopStatistic_Statblock
         return $oView->RenderBackendModuleView($sViewName, 'MTShopStatistic', 'Customer');
     }
 
+    /**
+     * @return string[]
+     */
     public function GetColumnNames()
     {
         $aColumnNames = array_keys($this->aColumns);
@@ -353,6 +430,10 @@ class MTShopStatistic_Statblock
         return $aColumnNames;
     }
 
+    /**
+     * @return int
+     * @psalm-return positive-int
+     */
     public function GetColumnGroupDepth()
     {
         $iDepth = 1;

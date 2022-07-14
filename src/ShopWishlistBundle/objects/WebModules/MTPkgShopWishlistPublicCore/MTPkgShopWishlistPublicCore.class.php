@@ -23,7 +23,15 @@ class MTPkgShopWishlistPublicCore extends TUserCustomModelBase
      * @var TdbPkgShopWishlist
      */
     protected $oActiveWishlist = null;
+
+    /**
+     * @var array<string, mixed>
+     */
     protected $aUserInput = array();
+
+    /**
+     * @var bool
+     */
     protected $bAllowHTMLDivWrapping = true;
 
     public function Init()

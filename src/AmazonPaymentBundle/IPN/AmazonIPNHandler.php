@@ -316,6 +316,7 @@ class AmazonIPNHandler implements \IPkgShopPaymentIPNHandler
     ) {
         $mailProfile = $this->getMailProfile(AmazonPayment::MAIL_PROFILE_IPN_ERROR);
 
+        /** @psalm-suppress InvalidPassByReference */
         $mailProfile->AddDataArray($oRequest->getOrder()->GetSQLWithTablePrefix());
 
         $status = array(

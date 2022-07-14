@@ -20,6 +20,10 @@ abstract class AbstractPkgShopPaymentIPNException extends Exception
         return $sString;
     }
 
+    /**
+     * @return string
+     * @psalm-return class-string<self>
+     */
     public function getErrorType()
     {
         return get_class($this);

@@ -154,11 +154,13 @@ class TPkgShopListfilterItemMultiselect extends TdbPkgShopListfilterItem
      * return the query restriction for active filter. returns false if there
      * is no active restriction for this item.
      *
-     * @return string
+     * @return string|null
      */
     public function GetQueryRestrictionForActiveFilter()
     {
+        /** @var string|null $sQuery */
         $sQuery = $this->GetFromInternalCache('sQueryRestrictionForActiveFilter');
+
         if (is_null($sQuery)) {
             $aValues = $this->aActiveFilterData;
             if (is_array($aValues) && count($aValues) > 0) {

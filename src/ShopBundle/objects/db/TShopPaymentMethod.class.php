@@ -23,7 +23,11 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
 {
     const VIEW_PATH = 'pkgShop/views/db/TShopPaymentMethod';
 
+    /**
+     * @var float|null
+     */
     protected $dPrice = null;
+
     /**
      * payment handler.
      *
@@ -57,7 +61,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
      * @param TdbShop             $oShop
      * @param TShopBasket         $oBasket
      * @param TdbDataExtranetUser $oUser
-     * @param $sMessageConsumer
+     * @param string $sMessageConsumer
      *
      * @return bool
      */
@@ -69,7 +73,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
     /**
      * Paymenthandler.
      *
-     * @return TdbShopPaymentHandler
+     * @return TdbShopPaymentHandler|null
      */
     public function &GetFieldShopPaymentHandler()
     {
@@ -429,17 +433,20 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
      * attention:
      * vat-logic for payment-methods is currently not implemented in basket!
      *
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function GetVat()
     {
+        /** @var TdbShopVat|null $oVat */
         $oVat = $this->GetFromInternalCache('ovat');
+
         if (is_null($oVat)) {
             $oVat = $this->GetFieldShopVat();
             if (is_null($oVat)) {
                 $oShopConf = TdbShop::GetInstance();
                 $oVat = $oShopConf->GetVat();
             }
+
             $this->SetInternalCache('ovat', $oVat);
         }
 
@@ -488,6 +495,8 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
     /**
      * the method should be called when returning from an external payment handler such as paypal
      * Note: you should not need to change this method - instead, work with the same method in the payment handler.
+     *
+     * @return bool
      */
     public function PostProcessExternalPaymentHandlerHook()
     {
@@ -509,6 +518,9 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
             return '';
         }
 
+        /**
+         * @psalm-suppress UndefinedMethod - At this point we know that the payment handler implements `IPkgShopPaymentHandlerCustomConfirmOrderBlockInterface`
+         */
         return $this->GetFieldShopPaymentHandler()->renderConfirmOrderBlock($this, $user);
     }
 
@@ -525,6 +537,9 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
             return true;
         }
 
+        /**
+         * @psalm-suppress UndefinedMethod - At this point we know that the payment handler implements `IPkgShopPaymentHandlerCustomConfirmOrderBlockInterface`
+         */
         return $this->GetFieldShopPaymentHandler()->processConfirmOrderUserResponse($this, $user, $userData);
     }
 

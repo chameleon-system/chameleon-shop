@@ -16,6 +16,8 @@ class TPkgShopAffiliate_TradeDoubler extends TdbPkgShopAffiliate
      *
      * @param TdbShopOrder $oOrder
      * @param array        $aParameter
+     *
+     * @return void
      */
     protected function GetAdditionalViewVariables(&$oOrder, &$aParameter)
     {
@@ -72,6 +74,12 @@ class TPkgShopAffiliate_TradeDoubler extends TdbPkgShopAffiliate
         }*/
     }
 
+    /**
+     * @template T
+     * @param array<string, T> $aData
+     * @param string $sKey
+     * @return T|''
+     */
     protected function GetValueFromArray($aData, $sKey)
     {
         if (array_key_exists($sKey, $aData)) {

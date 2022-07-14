@@ -38,6 +38,7 @@ class ShopSearchSuggest implements ShopSearchSuggestInterface
             return array();
         }
         // simple filter to avoid XSS attacks - only works with German/English
+        /** @var string $searchTerm */
         $searchTerm = preg_replace("/[^a-zA-ZäÄöÖüÜß0-9-\s]/", '', $searchTerm);
 
         $searchTerm1 = $this->databaseConnection->quote('%'.$searchTerm.'%');
@@ -45,6 +46,7 @@ class ShopSearchSuggest implements ShopSearchSuggestInterface
         $aQueries[] = "SELECT `name` AS name FROM `shop_article` WHERE `name` LIKE $searchTerm1 ";
         $aQueries[] = "SELECT `articlenumber` AS name FROM `shop_article` WHERE `articlenumber` LIKE $searchTerm2";
 
+        /** @var string[] $aSuggestions */
         $aSuggestions = array();
         $finalQuery = '';
         $isFirst = true;
@@ -55,12 +57,15 @@ class ShopSearchSuggest implements ShopSearchSuggestInterface
             $finalQuery .= '('.$sQuery.')';
             $isFirst = false;
         }
+
+        /** @var array{name:string}[] $results */
         $results = $this->databaseConnection->fetchAll($finalQuery);
         foreach ($results as $result) {
             $aSuggestions[] = $result['name'];
         }
         $aSuggestions = array_unique($aSuggestions);
 
+        /** @var string[] $suggestions */
         $suggestions = array();
         $suggestions[] = $searchTerm;
         $suggestions = array_merge($suggestions, $aSuggestions);

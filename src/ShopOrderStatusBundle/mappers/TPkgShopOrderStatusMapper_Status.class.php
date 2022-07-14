@@ -78,6 +78,11 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
         }
     }
 
+    /**
+     * @param bool $bCachingEnabled
+     *
+     * @return array<string, mixed>
+     */
     protected function getDataFromStatus(
         TdbShopOrderStatus $oStatus,
         TdbCmsLocals $local,
@@ -112,7 +117,7 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
      *
      * @param TdbShopOrderStatusItem        $oPosition
      * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     * @param $bCachingEnabled
+     * @param bool $bCachingEnabled
      *
      * @return array
      */
@@ -152,6 +157,7 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
      *
      * @param TdbShopOrderItem $oOrderItem
      * @param string           $sImageSizeName
+     * @param bool $bCachingEnabled
      *
      * @return string empty string or image id
      */
@@ -188,9 +194,10 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
      * Get variant data if article is variant.
      *
      * @param TdbShopArticle $oArticle
-     * @param $aData
+     * @param array<string, mixed> $aData
+     * @param bool $bCachingEnabled
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function GetVariantInfo($oArticle, $aData, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {

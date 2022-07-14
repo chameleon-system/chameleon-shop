@@ -26,6 +26,11 @@ class TCMSTableEditorShopUser extends TableEditorExtranetUser
         parent::PostSaveHook($oFields, $oPostTable);
     }
 
+    /**
+     * @param TCMSRecord $oPostTable
+     *
+     * @return void
+     */
     protected function UpdateNewsletterInfo(&$oPostTable)
     {
         $query = "SELECT * FROM `pkg_newsletter_user` WHERE `data_extranet_user_id` = '".\MySqlLegacySupport::getInstance()->real_escape_string($oPostTable->id)."'";
@@ -50,6 +55,11 @@ class TCMSTableEditorShopUser extends TableEditorExtranetUser
         }
     }
 
+    /**
+     * @param string $iUserId
+     *
+     * @return void
+     */
     protected function DeleteNewsletterInfo($iUserId)
     {
         $query = "SELECT * FROM `pkg_newsletter_user` WHERE `data_extranet_user_id` = '".\MySqlLegacySupport::getInstance()->real_escape_string($iUserId)."'";

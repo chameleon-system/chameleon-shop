@@ -11,6 +11,15 @@
 
 class TShopManufacturerList extends TShopManufacturerListAutoParent
 {
+    /**
+     * @param string $sQuery
+     * @param array  $queryParameters     - PDO style parameters
+     * @param array  $queryParameterTypes - PDO style parameter types
+     *
+     * @return void
+     * @psalm-suppress AssignmentToVoid, InvalidReturnStatement
+     * @FIXME Saving the result of `parent::DeleteExecute()` and returning does not make sense for a `void` return
+     */
     public function Load($sQuery, array $queryParameters = array(), array $queryParameterTypes = array())
     {
         $returnValue = parent::Load($sQuery, $queryParameters, $queryParameterTypes);

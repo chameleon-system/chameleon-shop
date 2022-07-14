@@ -14,7 +14,7 @@ class TShopArticleGroup extends TAdbShopArticleGroup implements IPkgShopVatable
     /**
      * return the vat group of the article group.
      *
-     * @return TdbShopVat
+     * @return TdbShopVat|null
      */
     public function GetVat()
     {

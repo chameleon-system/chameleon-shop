@@ -168,8 +168,8 @@ class ArticleListLegacyMapper extends AbstractViewMapper
 
     /**
      * @param ResultDataInterface $results
-     * @param $currentPage
-     * @param $pageSize
+     * @param int $currentPage
+     * @param int $pageSize
      * @param string $listPagerUrl
      * @param string $moduleSpotName
      *

@@ -30,6 +30,9 @@ class MTPkgShopCurrencyChangeCurrencyCore extends TUserCustomModelBase
         $this->methodCallAllowed[] = 'ChangeCurrency';
     }
 
+    /**
+     * @return void
+     */
     protected function ChangeCurrency()
     {
         $oAction = new TPkgShopCurrency_PkgCmsActionPlugin();

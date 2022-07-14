@@ -55,6 +55,8 @@ class ShopService implements ShopServiceInterface
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
     public function setDatabaseConnection(Connection $connection)
     {
@@ -102,6 +104,8 @@ class ShopService implements ShopServiceInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param null|string $cmsPortalId
      */
     public function getShopForPortalId($cmsPortalId)
     {

@@ -31,7 +31,7 @@ class TPkgShopViewMyOrderDetailsSessionAdapter implements IPkgShopViewMyOrderDet
     }
 
     /**
-     * @param $orderId
+     * @param string $orderId
      *
      * @return bool
      */

@@ -27,6 +27,8 @@ class TShopPaymentHandlerInvoice extends TdbShopPaymentHandler
      * store user payment data in order.
      *
      * @param int $iOrderId
+     *
+     * @return void
      */
     public function SaveUserPaymentDataToOrder($iOrderId)
     {

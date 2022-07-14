@@ -31,7 +31,7 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
     /**
      * return the default payment data for the handler.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function GetDefaultUserPaymentData()
     {
@@ -135,11 +135,19 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
         return $aFilteredData;
     }
 
+    /**
+     * @param string $iban
+     * @return bool
+     */
     private function isGermanIBAN($iban)
     {
         return ('' !== $iban) && ('DE' === substr($iban, 0, 2));
     }
 
+    /**
+     * @param string $iban
+     * @return bool
+     */
     private function validateIBAN($iban)
     {
         $oMsgManager = TCMSMessageManager::GetInstance();
@@ -154,6 +162,10 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
         return true;
     }
 
+    /**
+     * @param string $bic
+     * @return bool
+     */
     private function validateBIC($bic)
     {
         if ('' === $bic) {

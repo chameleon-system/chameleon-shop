@@ -15,21 +15,31 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Exceptions\InvalidPageNumberE
 
 interface ResultInterface
 {
+    /**
+     * @return int
+     */
     public function count();
 
     /**
-     * @param $pageSize
+     * @param int $pageSize
      *
      * @throws \ChameleonSystem\ShopBundle\objects\ArticleList\Exceptions\InvalidPageNumberException
+     *
+     * @return void
      */
     public function setPageSize($pageSize);
 
+    /**
+     * @return int
+     */
     public function getPageSize();
 
     /**
      * @param int $page
      *
      * @throws InvalidPageNumberException
+     *
+     * @return void
      */
     public function setPage($page);
 
@@ -38,6 +48,10 @@ interface ResultInterface
      */
     public function getPage();
 
+    /**
+     * @psalm-param array<string, 'ASC'|'DESC'> $sort
+     * @return void
+     */
     public function setSort(array $sort);
 
     /**
@@ -45,14 +59,22 @@ interface ResultInterface
      */
     public function asArray();
 
+    /**
+     * @return int
+     */
     public function getNumberOfPages();
 
+    /**
+     * @param string|null $filterQueryString
+     * @return void
+     */
     public function addFilterQueryString($filterQueryString);
 
     /**
      * limit result to this. pass null to remove limit.
      *
      * @param int $maxAllowedResults
+     * @return void
      */
     public function setMaxAllowedResults($maxAllowedResults);
 }

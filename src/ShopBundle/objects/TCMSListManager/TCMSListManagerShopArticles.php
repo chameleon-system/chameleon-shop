@@ -20,6 +20,8 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
 {
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     protected function PostCreateTableObjectHook()
     {
@@ -145,6 +147,8 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
     }
 
     /**
+     * @param string $id
+     * @param array<string, string> $data
      * @return \Symfony\Component\Translation\IdentityTranslator
      */
     protected function getTranslation($id, $data = array())

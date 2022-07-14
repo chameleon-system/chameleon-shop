@@ -15,6 +15,8 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
 {
     /**
      * @param TdbPkgShopPaymentIpnMessageTrigger $oMessageTrigger
+     *
+     * @return void
      */
     public function runTrigger(TdbPkgShopPaymentIpnMessageTrigger $oMessageTrigger)
     {
@@ -129,9 +131,11 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
     }
 
     /**
-     * @param $iAttemptNumber
+     * @param int $iAttemptNumber
+     * @return int|false
      *
-     * @return bool|int
+     * @psalm-param positive-int $iAttemptNumber
+     * @psalm-return positive-int|false
      */
     private function getNextAttemptTimestamp($iAttemptNumber)
     {

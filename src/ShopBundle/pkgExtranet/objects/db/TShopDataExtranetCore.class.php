@@ -15,7 +15,7 @@ class TShopDataExtranetCore extends TShopDataExtranetCoreAutoParent
      * returns link to current page with logout method as parameter for given spotname of extranet module if not on "thank you" page of order process
      * otherwise it would return link to home page with logout method as parameter for given spotname.
      *
-     * @param $sSpotName
+     * @param string $sSpotName
      *
      * @return string
      */

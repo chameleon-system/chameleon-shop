@@ -17,7 +17,15 @@ class MTShopCentralHandlerCoreEndPoint extends TUserModelBase
 {
     const URL_DATA = 'aShopCentralHandlerData';
     const URL_CALLING_SPOT_NAME = 'sCallingSpotName';
+
+    /**
+     * @var string|null
+     */
     protected $sCallingSpotName = null;
+
+    /**
+     * @var array
+     */
     protected $aUserData = array();
 
     public function Init()
@@ -71,6 +79,9 @@ class MTShopCentralHandlerCoreEndPoint extends TUserModelBase
         return true;
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();

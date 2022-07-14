@@ -16,7 +16,7 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
     /**
      * set to the owning article id, if list is generated via GetPublishedReviews.
      *
-     * @var int
+     * @var string
      */
     protected $iArticleId = null;
 
@@ -86,6 +86,8 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
      * use the method to set the owning article id when generating a list for only one article.
      *
      * @param string $iArticleId
+     *
+     * @return void
      */
     public function SetOwningArticleId($iArticleId)
     {
@@ -98,6 +100,7 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
      * @param string $sViewName     - the view to use
      * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
      * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param bool $bAllowCache
      *
      * @return string
      */

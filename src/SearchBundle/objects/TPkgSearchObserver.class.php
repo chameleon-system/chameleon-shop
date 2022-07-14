@@ -38,6 +38,10 @@ class TPkgSearchObserver implements IPkgCmsEventObserver
         return $oInstance;
     }
 
+    /**
+     * @param string $sSearchTypeIdentifier
+     * @return mixed|null
+     */
     public function GetSearch($sSearchTypeIdentifier)
     {
         if (isset($this->aSearches[$sSearchTypeIdentifier])) {
@@ -47,6 +51,12 @@ class TPkgSearchObserver implements IPkgCmsEventObserver
         }
     }
 
+    /**
+     * @param string $sSearchTypeIdentifier
+     * @param int $iNumberOfResults
+     *
+     * @return void
+     */
     public function AddSearch($sSearchTypeIdentifier, $iNumberOfResults)
     {
         $this->aSearches[$sSearchTypeIdentifier] = new stdClass();

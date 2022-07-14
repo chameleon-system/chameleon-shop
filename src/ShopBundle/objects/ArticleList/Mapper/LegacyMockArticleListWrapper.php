@@ -27,12 +27,14 @@ class LegacyMockArticleListWrapper extends \TdbShopArticleList
      * @var int
      */
     private $pageSize;
+
     /**
-     * @var
+     * @var string
      */
     private $listPagerUrl;
+
     /**
-     * @var
+     * @var string
      */
     private $sModuleSpotName;
 

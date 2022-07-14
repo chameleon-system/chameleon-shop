@@ -9,12 +9,15 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @extends TCMSInterfaceManagerBaseExportCSV<TdbShopOrder>
+ */
 class TShopInterfaceExportOrders extends TCMSInterfaceManagerBaseExportCSV
 {
     /**
      * OVERWRITE THIS TO FETCH THE DATA. MUST RETURN A TCMSRecordList.
      *
-     * @return TCMSRecordList
+     * @return TdbShopOrderList
      */
     protected function GetDataList()
     {
@@ -24,7 +27,7 @@ class TShopInterfaceExportOrders extends TCMSInterfaceManagerBaseExportCSV
     /**
      * OVERWRITE THIS IF YOU NEED TO ADD ANY OTHER DATA TO THE ROW OBJECT.
      *
-     * @param TCMSRecord $oDataObjct
+     * @param TdbShopOrder $oDataObjct
      *
      * @return array
      */

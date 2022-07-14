@@ -50,11 +50,13 @@ class TShopVariantSet extends TAdbShopVariantSet
     /**
      * Anzeigemanager für die Variantenauswahl im Shop.
      *
-     * @return TdbShopVariantDisplayHandler
+     * @return TdbShopVariantDisplayHandler|null
      */
     public function &GetFieldShopVariantDisplayHandler()
     {
+        /** @var TdbShopVariantDisplayHandler|null $oItem */
         $oItem = $this->GetFromInternalCache('oLookupshop_variant_display_handler_id');
+
         if (is_null($oItem)) {
             $oItem = TdbShopVariantDisplayHandler::GetInstance($this->fieldShopVariantDisplayHandlerId);
             $this->SetInternalCache('oLookupshop_variant_display_handler_id', $oItem);
@@ -68,14 +70,15 @@ class TShopVariantSet extends TAdbShopVariantSet
      *
      * @param string $sVariantTypeIdentifier
      *
-     * @return TdbShopVariantType
+     * @return TdbShopVariantType|null
      */
     public function GetVariantTypeForIdentifier($sVariantTypeIdentifier)
     {
+        /** @var TdbShopVariantType|null $oType */
         $oType = &$this->GetFromInternalCache('VariantTypeForIdentifier'.$sVariantTypeIdentifier);
+
         if (is_null($oType)) {
             $oType = TdbShopVariantType::GetNewInstance();
-            /** @var $oType TdbShopVariantType */
             if (!$oType->Loadfromfields(array('shop_variant_set_id' => $this->id, 'identifier' => $sVariantTypeIdentifier))) {
                 $oType = null;
             }

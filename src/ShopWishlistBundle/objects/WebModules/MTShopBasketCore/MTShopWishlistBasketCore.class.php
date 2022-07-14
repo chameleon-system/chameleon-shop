@@ -28,6 +28,8 @@ class MTShopWishlistBasketCore extends MTShopBasketCore
      * @param float  $dAmount
      * @param string $sMessageHandler
      * @param bool   $bIsInternalCall
+     *
+     * @return void
      */
     protected function AddToWishlist($sArticleId = null, $dAmount = null, $sMessageHandler = null, $bIsInternalCall = false)
     {
@@ -106,6 +108,8 @@ class MTShopWishlistBasketCore extends MTShopBasketCore
      * @param string $sPkgShopWishlistArticleId - the pkg_shop_wishlist_article_id to remove from the list
      * @param string $sMessageHandler
      * @param bool   $bIsInternalCall
+     *
+     * @return void
      */
     protected function RemoveFromWishlist($sPkgShopWishlistArticleId = null, $sMessageHandler = null, $bIsInternalCall = false)
     {
@@ -155,6 +159,9 @@ class MTShopWishlistBasketCore extends MTShopBasketCore
         }
     }
 
+    /**
+     * @return string[]
+     */
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();

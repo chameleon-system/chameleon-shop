@@ -15,6 +15,11 @@ class TShop_DataExtranetGroupList extends TShop_DataExtranetGroupListAutoParent
      * return a list of ids for the given order value
      * @return TdbDataExtranetGroupList
     */
+    /**
+     * @return TdbDataExtranetGroupList
+     *
+     * @param float $dOrderValue
+     */
     public static function GetAutoGroupsForValue($dOrderValue)
     {
         $dEscaped = MySqlLegacySupport::getInstance()->real_escape_string($dOrderValue);

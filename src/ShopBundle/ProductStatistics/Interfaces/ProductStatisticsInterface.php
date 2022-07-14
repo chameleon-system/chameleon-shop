@@ -13,11 +13,23 @@ namespace ChameleonSystem\ShopBundle\ProductStatistics\Interfaces;
 
 interface ProductStatisticsInterface
 {
+    /**
+     * @return int
+     */
     public function getSales();
 
+    /**
+     * @return int
+     */
     public function getDetailViews();
 
+    /**
+     * @return int
+     */
     public function getReviews();
 
+    /**
+     * @return int
+     */
     public function getReviewAverage();
 }

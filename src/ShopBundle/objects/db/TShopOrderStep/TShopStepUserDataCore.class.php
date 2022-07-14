@@ -16,11 +16,15 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 /**/
 class TShopStepUserDataCore extends TdbShopOrderStep
 {
-    protected $bShowShippingAddressInput = false;
-    protected $oNewsletterSignup = null;
     const SESSION_STATE_NAME = 'TShopStepUserData-sessionstate';
     const INPUT_DATA_NAME = 'aUser';
     const URL_NAME_NEWSLETTER_SIGNUP = 'bSignupNewsletter';
+
+    /** @var bool  */
+    protected $bShowShippingAddressInput = false;
+
+    /** @var TdbPkgNewsletterUser|null */
+    protected $oNewsletterSignup = null;
 
     /**
      * returns true if the user may view the step.
@@ -79,6 +83,11 @@ class TShopStepUserDataCore extends TdbShopOrderStep
         }
     }
 
+    /**
+     * @param bool $bState
+     *
+     * @return void
+     */
     protected function SetShowShippingAddressInputState($bState)
     {
         $this->bShowShippingAddressInput = $bState;
@@ -165,45 +174,71 @@ class TShopStepUserDataCore extends TdbShopOrderStep
         return $externalFunctions;
     }
 
+    /**
+     * @return void
+     */
     public function UpdateUser()
     {
         $this->CallExtranetModuleMethod('UpdateUser');
     }
 
+    /**
+     * @return void
+     */
     public function Register()
     {
         $this->CallExtranetModuleMethod('Register');
     }
 
+    /**
+     * @return void
+     */
     public function UpdateUserAddress()
     {
         $this->CallExtranetModuleMethod('UpdateUserAddress');
     }
 
+    /**
+     * @return void
+     */
     public function Login()
     {
         $this->CallExtranetModuleMethod('Login');
     }
 
+    /**
+     * @return void
+     */
     public function SelectBillingAddress()
     {
         $this->CallExtranetModuleMethod('SelectBillingAddress');
     }
 
+    /**
+     * @return void
+     */
     public function SelectShippingAddress()
     {
         $this->CallExtranetModuleMethod('SelectShippingAddress');
     }
 
+    /**
+     * @return void
+     */
     public function DeleteShippingAddress()
     {
         $this->CallExtranetModuleMethod('DeleteShippingAddress');
     }
 
+    /**
+     * @param string $sMethodName
+     * @param mixed[] $aParameter
+     * @return mixed
+     */
     protected function CallExtranetModuleMethod($sMethodName, $aParameter = array())
     {
         $oExtranetConfig = &TdbDataExtranet::GetInstance();
-        /** @var $oExtranet MTExtranet */
+        /** @var MTExtranet $oExtranet */
         $oExtranet = TTools::GetModuleObject('MTExtranet', 'standard', array(), $oExtranetConfig->fieldExtranetSpotName);
         $oExtranet->SetPreventRedirects(true);
 
@@ -213,6 +248,8 @@ class TShopStepUserDataCore extends TdbShopOrderStep
     /**
      * set state variable to show shipping address input. method returns false, so that
      * the same step is returned.
+     *
+     * @return void
      */
     public function ShowShippingAddressInput()
     {
@@ -223,6 +260,8 @@ class TShopStepUserDataCore extends TdbShopOrderStep
     /**
      * set state variable to show shipping address input. method returns false, so that
      * the same step is returned.
+     *
+     * @return void
      */
     public function HideShippingAddressInput()
     {
@@ -386,6 +425,11 @@ class TShopStepUserDataCore extends TdbShopOrderStep
         return $this->oNewsletterSignup;
     }
 
+    /**
+     * @param array<string, mixed> $aData
+     *
+     * @return array<string, mixed>
+     */
     protected function CreateNewsletterArry($aData)
     {
         $aNewData = array();
