@@ -527,7 +527,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return string
      */
-    protected function generateLinkForToBasketParameters($aParameters = array(), $bIncludePortalLink)
+    protected function generateLinkForToBasketParameters($aParameters, $bIncludePortalLink)
     {
         $activePage = $this->getActivePageService()->getActivePage();
         if (!is_object($activePage)) {
