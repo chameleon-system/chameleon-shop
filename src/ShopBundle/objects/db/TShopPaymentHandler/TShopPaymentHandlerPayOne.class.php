@@ -667,7 +667,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
      * @param TdbShopOrder $oOrder
      * @return array
      */
-    protected function PayOnePreauthorization($aParams = array(), &$oOrder)
+    protected function PayOnePreauthorization($aParams, &$oOrder)
     {
         $aResponse = array();
         $aResponse['success'] = false;

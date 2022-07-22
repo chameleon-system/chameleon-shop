@@ -231,7 +231,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      *
      * @return array $aParameter
      */
-    protected function GetPayFieldParameter($aParameter = array(), $oOrder)
+    protected function GetPayFieldParameter($aParameter, $oOrder)
     {
         if (!is_array($aParameter)) {
             $aParameter = array();
