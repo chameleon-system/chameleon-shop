@@ -26,9 +26,9 @@ class AddParametersToUrlService
     }
 
     /**
-     * @return string
+     * @param string|null $url
      *
-     * @param null|string $url
+     * @return string
      */
     public function addParameterToUrl($url, array $parameter)
     {

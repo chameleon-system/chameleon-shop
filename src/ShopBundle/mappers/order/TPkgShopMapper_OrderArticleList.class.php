@@ -43,7 +43,7 @@ class TPkgShopMapper_OrderArticleList extends AbstractViewMapper
      * get the value map for the whole article list (order items) of the order.
      *
      * @param TdbShopOrder $oOrder
-     * @param bool|false $bCachingEnabled
+     * @param bool $bCachingEnabled
      *
      * @return array
      */

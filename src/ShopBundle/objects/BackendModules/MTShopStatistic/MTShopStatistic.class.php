@@ -332,7 +332,7 @@ class MTShopStatistic_Statblock
      * - (mixed) The value of the column if it exists
      * - (int) A sum of the values of subgroups, if it does not but subgroups exist and `bShowGrandTotal=true` is set
      * - (string) An empty string, if the column does not exist but subgroups exist and `bShowGrandTotal=false` is set
-     * - (int) 0 If the column does not exist and has no subGroups - irresponsible of the value of `bShowGrandTotal`
+     * - (int) 0 If the column does not exist and has no subGroups - irrespective of the value of `bShowGrandTotal`
      *
      * @param string $sColName
      * @return int|mixed|''

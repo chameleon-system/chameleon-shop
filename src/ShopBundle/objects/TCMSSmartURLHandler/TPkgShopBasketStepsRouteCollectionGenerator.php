@@ -113,7 +113,7 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
      * @param false|null|string $checkoutBaseUrl
      * @param string $defaultCheckoutPageId
      * @param string $defaultCheckoutNodeId
-     * @param bool $stepNameOptional
+     * @param bool $isFirstStep
      *
      * @return \Symfony\Component\Routing\Route
      */
