@@ -16,7 +16,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
 {
     const COOKIE_NAME_HISTORY = 'shopuserarticleviewhistory';
     const COOKIE_NAME_NOTICELIST = 'shopuserarticlenoticelist';
-    private const MAX_NOTICE_LIST_COOKIE_LENGTH = 25; // this should stay under the critical 4kb string size
+    private const MAX_NOTICE_LIST_COOKIE_LENGTH = 17; // this should stay under the critical 4kb string size
 
     /**
      * the article ids last viewed by the user (ie. on the detail page) will be stored here
@@ -448,6 +448,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
             $aData = [
                 'shop_article_id' => $iArticleId,
                 'date_added' => date('Y-m-d H:i:s'),
+                'data_extranet_user_id' => $this->id,
                 'amount' => $iAmount,
             ];
             $oNoticeListItem->LoadFromRow($aData);
@@ -495,6 +496,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
             $aNoticeList[] = [
                 'shop_article_id' => $this->aNoticeList[$iItemId]['shop_article_id'],
                 'date_added' => $this->aNoticeList[$iItemId]['date_added'],
+                'data_extranet_user_id' => $this->aNoticeList[$iItemId]['data_extranet_user_id'],
                 'amount' => $this->aNoticeList[$iItemId]['amount'],
             ];
         }
