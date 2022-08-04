@@ -278,15 +278,17 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             throw new NotFoundHttpException('route matches shop article route pattern, but the article id passed was not found or is disabled.');
         }
 
-        $request->attributes->set('pagedef', $aResponse['pagedef']);
-        $request->query->set('pagedef', $aResponse['pagedef']);
+        if (null !== $request) {
+            $request->attributes->set('pagedef', $aResponse['pagedef']);
+            $request->query->set('pagedef', $aResponse['pagedef']);
 
-        if (null !== $aResponse['activeShopArticle']) {
-            $request->attributes->set('activeShopArticle', $aResponse['activeShopArticle']);
-        }
+            if (null !== $aResponse['activeShopArticle']) {
+                $request->attributes->set('activeShopArticle', $aResponse['activeShopArticle']);
+            }
 
-        if (null !== $aResponse['activeShopCategory']) {
-            $request->attributes->set('activeShopCategory', $aResponse['activeShopCategory']);
+            if (null !== $aResponse['activeShopCategory']) {
+                $request->attributes->set('activeShopCategory', $aResponse['activeShopCategory']);
+            }
         }
 
         if (null === $this->mainController) {
