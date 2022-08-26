@@ -20,6 +20,7 @@ use ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGeneratorInterfa
  * manages the variant type and value details for an article
  *
  * @property TdbShopArticle $oTableRow
+ * @property TdbCmsFieldConf $oDefinition
  */
 class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
 {
