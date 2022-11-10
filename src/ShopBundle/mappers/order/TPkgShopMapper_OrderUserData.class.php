@@ -61,6 +61,10 @@ class TPkgShopMapper_OrderUserData extends AbstractViewMapper
             }
             $aAddress['sSalutation'] = (null !== $oSalutation) ? ($oSalutation->GetName()) : ('');
 
+            $aAddress['sCompany'] = '';
+            if (property_exists($oOrder,'fieldAdrBillingCompany')) {
+                $aAddress['sCompany'] = $oOrder->fieldAdrBillingCompany;
+            }
             $aAddress['sFirstName'] = $oOrder->fieldAdrBillingFirstname;
             $aAddress['sLastName'] = $oOrder->fieldAdrBillingLastname;
             $aAddress['sAdditionalInfo'] = $oOrder->fieldAdrBillingAdditionalInfo;
@@ -85,6 +89,10 @@ class TPkgShopMapper_OrderUserData extends AbstractViewMapper
             }
             $aAddress['sSalutation'] = (null !== $oSalutation) ? ($oSalutation->GetName()) : ('');
 
+            $aAddress['sCompany'] = '';
+            if (property_exists($oOrder,'fieldAdrShippingCompany')) {
+                $aAddress['sCompany'] = $oOrder->fieldAdrShippingCompany;
+            }
             $aAddress['sFirstName'] = $oOrder->fieldAdrShippingFirstname;
             $aAddress['sLastName'] = $oOrder->fieldAdrShippingLastname;
             $aAddress['sAdditionalInfo'] = $oOrder->fieldAdrShippingAdditionalInfo;
