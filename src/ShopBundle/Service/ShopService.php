@@ -144,7 +144,12 @@ class ShopService implements ShopServiceInterface
      */
     public function getActiveProduct()
     {
-        return $this->requestStack->getCurrentRequest()->attributes->get('activeShopArticle', null);
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return null;
+        }
+
+        return $request->attributes->get('activeShopArticle');
     }
 
     /**
@@ -152,13 +157,12 @@ class ShopService implements ShopServiceInterface
      */
     public function getActiveCategory()
     {
-        $activeCategory = null;
         $request = $this->requestStack->getCurrentRequest();
-        if (null !== $request) {
-            $activeCategory = $request->attributes->get('activeShopCategory');
+        if (null === $request) {
+            return null;
         }
 
-        return $activeCategory;
+        return $request->attributes->get('activeShopCategory');
     }
 
     /**
