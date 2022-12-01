@@ -22,7 +22,7 @@ class TShopModuleArticlelistFilterAccessories extends TdbShopModuleArticleListFi
      *
      * @return string
      */
-    protected function GetListQueryBase(&$oListConfig)
+    protected function GetListQueryBase($oListConfig)
     {
         $sQuery = 'SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
                    FROM `shop_article`

@@ -41,7 +41,7 @@ class TShopStepUserDataCore extends TdbShopOrderStep
         if ($oBasket->iTotalNumberOfUniqueArticles <= 0) {
             $bAllowAccess = false;
             if ($bRedirectToPreviousPermittedStep) {
-                $oBasketStep = &TdbShopOrderStep::GetStep('basket');
+                $oBasketStep = TdbShopOrderStep::GetStep('basket');
                 $this->JumpToStep($oBasketStep);
             }
         }
@@ -112,21 +112,21 @@ class TShopStepUserDataCore extends TdbShopOrderStep
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = &parent::GetAdditionalViewVariables($sViewName, $sViewType);
+        $aViewVariables = parent::GetAdditionalViewVariables($sViewName, $sViewType);
         $oUser = TdbDataExtranetUser::GetInstance();
-        $aViewVariables['oUser'] = &$oUser;
+        $aViewVariables['oUser'] = $oUser;
         $oAdrBilling = $oUser->GetBillingAddress();
-        $aViewVariables['oAdrBilling'] = &$oAdrBilling;
+        $aViewVariables['oAdrBilling'] = $oAdrBilling;
 
         $oAdrShipping = $oUser->GetShippingAddress();
-        $aViewVariables['oAdrShipping'] = &$oAdrShipping;
-        $aViewVariables['oExtranetConfig'] = &TdbDataExtranet::GetInstance();
+        $aViewVariables['oAdrShipping'] = $oAdrShipping;
+        $aViewVariables['oExtranetConfig'] = TdbDataExtranet::GetInstance();
 
         $aAddress = array();
-        $oAddressList = &$oUser->GetUserAddresses();
-        $aViewVariables['oAddressList'] = &$oAddressList;
+        $oAddressList = $oUser->GetUserAddresses();
+        $aViewVariables['oAddressList'] = $oAddressList;
 
         $oGlobal = TGlobal::instance();
 
@@ -237,7 +237,7 @@ class TShopStepUserDataCore extends TdbShopOrderStep
      */
     protected function CallExtranetModuleMethod($sMethodName, $aParameter = array())
     {
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         /** @var MTExtranet $oExtranet */
         $oExtranet = TTools::GetModuleObject('MTExtranet', 'standard', array(), $oExtranetConfig->fieldExtranetSpotName);
         $oExtranet->SetPreventRedirects(true);
@@ -397,11 +397,11 @@ class TShopStepUserDataCore extends TdbShopOrderStep
      *
      * @return TdbPkgNewsletterUser
      */
-    protected function &LoadNewsletterSignup()
+    protected function LoadNewsletterSignup()
     {
         if (is_null($this->oNewsletterSignup)) {
             $this->oNewsletterSignup = TdbPkgNewsletterUser::GetNewInstance();
-            $oNewslettter = &TdbPkgNewsletterUser::GetInstanceForActiveUser();
+            $oNewslettter = TdbPkgNewsletterUser::GetInstanceForActiveUser();
             if (!is_null($oNewslettter)) {
                 $this->oNewsletterSignup = $oNewslettter;
             }

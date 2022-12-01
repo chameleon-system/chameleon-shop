@@ -91,7 +91,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return TdbShopContributorList
      */
-    public function &GetContributorList($aContributorTypes)
+    public function GetContributorList($aContributorTypes)
     {
         if (!is_array($aContributorTypes)) {
             $aContributorTypes = array($aContributorTypes);
@@ -144,11 +144,11 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return TdbShopArticleReviewList
      */
-    public function &GetReviewsPublished()
+    public function GetReviewsPublished()
     {
         $oReviews = $this->GetFromInternalCache('oPublishedReviews');
         if (is_null($oReviews)) {
-            $oReviews = &TdbShopArticleReviewList::GetPublishedReviews($this->id, $this->iLanguageId);
+            $oReviews = TdbShopArticleReviewList::GetPublishedReviews($this->id, $this->iLanguageId);
             $this->SetInternalCache('oPublishedReviews', $oReviews);
         }
 
@@ -362,12 +362,12 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             $oActiveCategory = $oShopConfig->GetActiveCategory();
             if (!is_null($oActiveCategory)) {
                 if ($this->IsInCategory(array($oActiveCategory->id))) {
-                    $oCategory = &$oActiveCategory;
+                    $oCategory = $oActiveCategory;
                 }
             }
         }
         if (is_null($oCategory)) {
-            $oCategory = &$this->GetPrimaryCategory();
+            $oCategory = $this->GetPrimaryCategory();
         }
         $sCategoryURLPath = '';
         if (!is_null($oCategory)) {
@@ -380,7 +380,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $sArticlePath .= $this->getUrlNormalizationUtil()->normalizeUrl($this->fieldName).'/id/'.urlencode($this->id);
 
         $sPageLink = $oShopConfig->GetLinkToSystemPage('product', null, $bIncludePortalLink);
-        $oConf = &TdbCmsConfig::GetInstance();
+        $oConf = TdbCmsConfig::GetInstance();
 
         if ('.html' == substr($sPageLink, -5)) {
             $sPageLink = substr($sPageLink, 0, -5).'/';
@@ -430,13 +430,13 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             $oActiveCategory = $this->getShopService()->getActiveCategory();
             if (!is_null($oActiveCategory)) {
                 if ($this->IsInCategory(array($oActiveCategory->id))) {
-                    $oCategory = &$oActiveCategory;
+                    $oCategory = $oActiveCategory;
                 }
             }
         }
         // if no category is given, fetch the first category of the article
         if (is_null($oCategory)) {
-            $oCategory = &$this->GetPrimaryCategory();
+            $oCategory = $this->GetPrimaryCategory();
         }
         if (is_null($oCategory)) {
             $aParts[] = '-';
@@ -652,28 +652,28 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return TdbShopCategory|null
      */
-    public function &GetPrimaryCategory()
+    public function GetPrimaryCategory()
     {
         $oCategory = null;
         // if this is a variant, then we want to take the parent object instead - at least if no data is set for the child
         if (!empty($this->fieldShopCategoryId)) {
-            $oCategory = &$this->GetFieldShopCategory();
+            $oCategory = $this->GetFieldShopCategory();
             if (!is_null($oCategory) && false == $oCategory->AllowDisplayInShop()) {
                 $oCategory = null;
             }
         }
 
         if (is_null($oCategory)) {
-            $oCategories = &$this->GetFieldShopCategoryList();
+            $oCategories = $this->GetFieldShopCategoryList();
             $oCategories->GoToStart();
             if ($oCategories->Length() > 0) {
                 /** @var TdbShopCategory $oCategory */
-                $oCategory = &$oCategories->Current();
+                $oCategory = $oCategories->Current();
             }
         }
         if (is_null($oCategory) && $this->IsVariant()) {
-            $oParent = &$this->GetFieldVariantParent();
-            $oCategory = &$oParent->GetPrimaryCategory();
+            $oParent = $this->GetFieldVariantParent();
+            $oCategory = $oParent->GetPrimaryCategory();
         }
 
         return $oCategory;
@@ -686,11 +686,11 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return TdbShopCategoryList
      */
-    public function &GetFieldShopCategoryList($sOrderBy = '')
+    public function GetFieldShopCategoryList($sOrderBy = '')
     {
-        $oCategories = &$this->GetFromInternalCache('oCategories');
+        $oCategories = $this->GetFromInternalCache('oCategories');
         if (is_null($oCategories)) {
-            $oCategories = &TdbShopCategoryList::GetArticleCategories($this->id, $this->iLanguageId);
+            $oCategories = TdbShopCategoryList::GetArticleCategories($this->id, $this->iLanguageId);
             $this->SetInternalCache('oCategories', $oCategories);
         }
 
@@ -702,11 +702,11 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return TdbShopArticleGroupList
      */
-    public function &GetArticleGroups()
+    public function GetArticleGroups()
     {
-        $oArticleGroups = &$this->GetFromInternalCache('oArticleGroups');
+        $oArticleGroups = $this->GetFromInternalCache('oArticleGroups');
         if (is_null($oArticleGroups)) {
-            $oArticleGroups = &TdbShopArticleGroupList::GetArticleGroups($this->id);
+            $oArticleGroups = TdbShopArticleGroupList::GetArticleGroups($this->id);
             $this->SetInternalCache('oArticleGroups', $oArticleGroups);
         }
 
@@ -783,7 +783,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return void
      */
-    protected function AddCacheParameters(&$aCacheParameters)
+    protected function AddCacheParameters($aCacheParameters)
     {
     }
 
@@ -819,7 +819,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     public function RenderPreviewThumbnail($sImageSizeName, $sViewName = 'simple', $sViewType = 'Core', $aEffects = array())
     {
         $sHTML = '';
-        $oPreviewImage = &$this->GetImagePreviewObject($sImageSizeName);
+        $oPreviewImage = $this->GetImagePreviewObject($sImageSizeName);
         if (!is_null($oPreviewImage)) {
             $sHTML = $oPreviewImage->Render($sViewName, $sViewType, $aEffects);
         } else {
@@ -842,7 +842,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     public function GetPrimaryImage()
     {
         /** @var TdbShopArticleImage|null $oPrimaryImage */
-        $oPrimaryImage = &$this->GetFromInternalCache('oPrimaryImage');
+        $oPrimaryImage = $this->GetFromInternalCache('oPrimaryImage');
 
         if (is_null($oPrimaryImage)) {
             if (!empty($this->fieldCmsMediaDefaultPreviewImageId) && (!is_numeric($this->fieldCmsMediaDefaultPreviewImageId) || intval($this->fieldCmsMediaDefaultPreviewImageId) > 1000)) {
@@ -851,7 +851,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
                 $oPrimaryImage = TdbShopArticleImage::GetNewInstance();
                 $oPrimaryImage->LoadFromRow($aData);
             } else {
-                $oImages = &$this->GetFieldShopArticleImageList();
+                $oImages = $this->GetFieldShopArticleImageList();
                 $activePage = $this->getActivePageService()->getActivePage();
                 if (0 == $oImages->Length() && (!is_null($activePage))) {
                     $oShop = TdbShop::GetInstance();
@@ -860,7 +860,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
                     $oPrimaryImage->LoadFromRow($aData);
                 } else {
                     $oImages->GoToStart();
-                    $oPrimaryImage = &$oImages->Current();
+                    $oPrimaryImage = $oImages->Current();
                 }
             }
 
@@ -886,7 +886,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return TdbShopArticlePreviewImage|null
      */
-    public function &GetImagePreviewObject($sImageSizeName)
+    public function GetImagePreviewObject($sImageSizeName)
     {
         // check if the type has been defined...
         $oPreviewObject = TdbShopArticlePreviewImage::GetNewInstance();
@@ -894,7 +894,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if (!$oPreviewObject->LoadByName($this, $sImageSizeName)) {
             // if the article is a varaint, try the parent
             if ($this->IsVariant()) {
-                $oParent = &$this->GetFieldVariantParent();
+                $oParent = $this->GetFieldVariantParent();
                 $oPreviewObject = null;
                 if (null != $oParent) {
                     $oPreviewObject = $oParent->GetImagePreviewObject($sImageSizeName);
@@ -955,7 +955,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $aIntersec = array_intersect($aArticleGroups, $aGroupList);
 
         if (0 == count($aIntersec) && 0 == count($aArticleGroups) && $this->IsVariant()) {
-            $oParent = &$this->GetFieldVariantParent();
+            $oParent = $this->GetFieldVariantParent();
             if ($oParent) {
                 $bIsInGroups = $oParent->IsInArticleGroups($aGroupList);
             }
@@ -988,17 +988,17 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         // Images
         if (TGlobal::IsCMSMode()) {
-            $oPortals = &TdbCmsPortalList::GetList();
+            $oPortals = TdbCmsPortalList::GetList();
             $oPortal = $oPortals->Current();
-            $oShop = &TdbShop::GetInstance($oPortal->id);
+            $oShop = TdbShop::GetInstance($oPortal->id);
         } else {
             $oShop = TdbShop::GetInstance();
         }
-        $oImageSizeList = &TdbShopArticleImageSizeList::GetListForShopId($oShop->id);
+        $oImageSizeList = TdbShopArticleImageSizeList::GetListForShopId($oShop->id);
         $oExportObject->aImages = array();
-        $oImagePropertyList = &$this->GetFieldShopArticleImageList();
+        $oImagePropertyList = $this->GetFieldShopArticleImageList();
         $aImageData = array('original' => array(), 'thumb' => array());
-        while ($oImageProperty = &$oImagePropertyList->Next()) {
+        while ($oImageProperty = $oImagePropertyList->Next()) {
             $oImage = $oImageProperty->GetImage(0, 'cms_media_id');
             if (null !== $oImage) {
                 $aImageData['original'][] = $oImage->GetFullURL();
@@ -1006,8 +1006,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             }
         }
         $oImageSizeList->GoToStart();
-        while ($oImageSize = &$oImageSizeList->Next()) {
-            $oPreviewImageDescription = &$this->GetImagePreviewObject($oImageSize->fieldNameInternal);
+        while ($oImageSize = $oImageSizeList->Next()) {
+            $oPreviewImageDescription = $this->GetImagePreviewObject($oImageSize->fieldNameInternal);
             if (null !== $oPreviewImageDescription) {
                 $oImage = $oPreviewImageDescription->GetImageThumbnailObject();
                 $aImageData['thumb'][$oImageSize->fieldNameInternal] = $oImage->GetFullURL();
@@ -1050,7 +1050,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             $aArticleCategories = $this->GetMLTIdList('shop_category_mlt');
             $aIntersec = array_intersect($aArticleCategories, $aCategoryList);
             if (0 == count($aIntersec) && 0 == count($aArticleCategories) && $this->IsVariant()) {
-                $oParent = &$this->GetFieldVariantParent();
+                $oParent = $this->GetFieldVariantParent();
                 if ($oParent) {
                     $bIsInCategory = $oParent->IsInCategory($aCategoryList);
                 }
@@ -1132,7 +1132,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return TdbShopArticle|false
      */
-    public function &GetOwningBundleItem()
+    public function GetOwningBundleItem()
     {
         /** @var TdbShopArticle|null $oOwningBundleItem */
         $oOwningBundleItem = $this->GetFromInternalCache('oOwningBundleItem');
@@ -1217,7 +1217,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if ($bCheckForActiveVariantsOnly) {
             $sInternalCacheKey .= 'OnlyActive';
         }
-        $bHasVariants = &$this->GetFromInternalCache($sInternalCacheKey);
+        $bHasVariants = $this->GetFromInternalCache($sInternalCacheKey);
         if (is_null($bHasVariants)) {
             $bHasVariants = false;
             if (!empty($this->fieldShopVariantSetId)) {
@@ -1238,7 +1238,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return TdbShopArticleList
      */
-    public function &GetFieldShopArticleVariantsList($aSelectedTypeValues = array(), $bLoadOnlyActive = true)
+    public function GetFieldShopArticleVariantsList($aSelectedTypeValues = array(), $bLoadOnlyActive = true)
     {
         $sKey = 'oFieldShopArticleVariantsList'.serialize($aSelectedTypeValues);
         if ($bLoadOnlyActive) {
@@ -1246,7 +1246,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         } else {
             $sKey .= 'inactive';
         }
-        $oVariantList = &$this->GetFromInternalCache($sKey);
+        $oVariantList = $this->GetFromInternalCache($sKey);
         if (null === $oVariantList) {
             $connection = $this->getDatabaseConnection();
             $query = '';
@@ -1322,9 +1322,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     /**
      * {@inheritdoc}
      */
-    public function &GetFieldShopVariantTypeValueList($sOrderBy = '')
+    public function GetFieldShopVariantTypeValueList($sOrderBy = '')
     {
-        $oVariantValueList = &$this->GetFromInternalCache('oFieldShopVariantTypeValueList');
+        $oVariantValueList = $this->GetFromInternalCache('oFieldShopVariantTypeValueList');
         if (is_null($oVariantValueList)) {
             $query = "SELECT `shop_variant_type_value`.*
                     FROM `shop_variant_type_value`
@@ -1354,7 +1354,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $aArticleIdList = array();
         $oVariantList = null;
         if ($this->IsVariant()) {
-            $oParent = &$this->GetFieldVariantParent();
+            $oParent = $this->GetFieldVariantParent();
             $oVariantList = $oParent->GetFieldShopArticleVariantsList($aSelectedTypeValues, $bLoadActiveOnly);
         } else {
             $oVariantList = $this->GetFieldShopArticleVariantsList($aSelectedTypeValues, $bLoadActiveOnly);
@@ -1438,11 +1438,11 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     public function GetVariantsForVariantTypeName($sVariantTypeIdentifier)
     {
         /** @var TdbShopArticleList|null $oArticleList */
-        $oArticleList = &$this->GetFromInternalCache('VariantsForVariantTypeName'.$sVariantTypeIdentifier);
+        $oArticleList = $this->GetFromInternalCache('VariantsForVariantTypeName'.$sVariantTypeIdentifier);
 
         if (is_null($oArticleList)) {
             $oArticleList = null;
-            $oVariantSet = &$this->GetFieldShopVariantSet();
+            $oVariantSet = $this->GetFieldShopVariantSet();
             if (!is_null($oVariantSet)) {
                 $oVariantType = $oVariantSet->GetVariantTypeForIdentifier($sVariantTypeIdentifier);
                 if (!is_null($oVariantType)) {
@@ -1502,7 +1502,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
          * Use variant type name as key
          * @var array<string, TdbShopVariantTypeValue>|null $aVariantValues
          */
-        $aVariantValues = &$this->GetFromInternalCache('aActiveVariantValues');
+        $aVariantValues = $this->GetFromInternalCache('aActiveVariantValues');
 
         if (is_null($aVariantValues)) {
             $query = "SELECT `shop_variant_type_value`.*, `shop_variant_type`.`identifier` AS variantTypeName
@@ -1542,7 +1542,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $aVariantValueIds = $this->GetFromInternalCache('aActiveVariantValueIds');
 
         if (is_null($aVariantValueIds)) {
-            $oValueList = &$this->GetFieldShopVariantTypeValueList();
+            $oValueList = $this->GetFieldShopVariantTypeValueList();
             while ($oValue = $oValueList->Next()) {
                 $aVariantValueIds[$oValue->fieldShopVariantTypeId] = $oValue->id;
             }
@@ -1569,11 +1569,11 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $sHTML = '';
         $oVariantSet = null;
         if ($this->IsVariant()) {
-            $oParent = &$this->GetFieldVariantParent();
+            $oParent = $this->GetFieldVariantParent();
 
-            $oVariantSet = &$oParent->GetFieldShopVariantSet();
+            $oVariantSet = $oParent->GetFieldShopVariantSet();
         } else {
-            $oVariantSet = &$this->GetFieldShopVariantSet();
+            $oVariantSet = $this->GetFieldShopVariantSet();
         }
         if (!is_null($oVariantSet)) {
             $oHandler = $oVariantSet->GetFieldShopVariantDisplayHandler();
@@ -1629,17 +1629,17 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return TdbShopArticleImageList
      */
-    public function &GetFieldShopArticleImageList()
+    public function GetFieldShopArticleImageList()
     {
-        $oImages = &$this->GetFromInternalCache('FieldShopArticleImageList');
+        $oImages = $this->GetFromInternalCache('FieldShopArticleImageList');
         if (is_null($oImages)) {
             $query = TdbShopArticleImageList::GetDefaultQuery($this->iLanguageId, "`shop_article_image`.`shop_article_id`= '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."' AND `shop_article_image`.`cms_media_id` NOT IN ('','0','1','2','3','4','5','6','7','8','9','11','12','13','14')"); // exclude broken records and template images
             $oImages = TdbShopArticleImageList::GetList($query);
             $oImages->bAllowItemCache = true;
             if (0 == $oImages->Length() && $this->IsVariant()) {
-                $oParent = &$this->GetFieldVariantParent();
+                $oParent = $this->GetFieldVariantParent();
                 if ($oParent) {
-                    $oImages = &$oParent->GetFieldShopArticleImageList();
+                    $oImages = $oParent->GetFieldShopArticleImageList();
                 } else {
                     trigger_error('Variants [ID = '.TGlobal::OutHTML($this->id).'] parent is missing', E_USER_WARNING);
                 }
@@ -1675,7 +1675,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return TdbShopBundleArticleList
      */
-    public function &GetFieldShopBundleArticleList()
+    public function GetFieldShopBundleArticleList()
     {
         $oBundleList = parent::GetFieldShopBundleArticleList();
         if (0 == $oBundleList->Length() && $this->IsVariant()) {
@@ -1769,7 +1769,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return array SEO pattern replace values
      */
-    public function GetSeoPattern(&$sPaternIn)
+    public function GetSeoPattern($sPaternIn)
     {
         //$sPaternIn = "[{PORTAL_NAME}] - [{CATEGORY_NAME}] - [{ARTICLE_NAME}]"; //default
         $aPatRepl = null;
@@ -1804,16 +1804,16 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return TdbShopVariantSet|null
      */
-    public function &GetFieldShopVariantSet()
+    public function GetFieldShopVariantSet()
     {
         /** @var TdbShopVariantSet|null $oItem */
-        $oItem = &$this->GetFromInternalCache('oFieldShopVariantSet');
+        $oItem = $this->GetFromInternalCache('oFieldShopVariantSet');
 
         if (null === $oItem) {
-            $oItem = &parent::GetFieldShopVariantSet();
+            $oItem = parent::GetFieldShopVariantSet();
             if (null === $oItem && $this->IsVariant()) {
-                $oParent = &$this->GetFieldVariantParent();
-                $oItem = &$oParent->GetFieldShopVariantSet();
+                $oParent = $this->GetFieldVariantParent();
+                $oItem = $oParent->GetFieldShopVariantSet();
             }
             $this->SetInternalCache('oFieldShopVariantSet', $oItem);
         }
@@ -1828,7 +1828,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function IsBuyable()
     {
-        $bIsBuyable = &$this->GetFromInternalCache('bIsBuyable');
+        $bIsBuyable = $this->GetFromInternalCache('bIsBuyable');
         if (is_null($bIsBuyable)) {
             $bIsBuyable = $this->isActive();
             if ($bIsBuyable) {
@@ -2044,7 +2044,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if ($this->fieldActive) {
             $isActive = 1;
         }
-        $oStockMessage = &$this->GetFieldShopStockMessage();
+        $oStockMessage = $this->GetFieldShopStockMessage();
         if ($oStockMessage) {
             if ($oStockMessage->fieldAutoActivateOnStock && $dNewStockValue > 0) {
                 $isActive = 1;
@@ -2070,7 +2070,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return TdbShopStockMessage|null
      */
-    public function &GetFieldShopStockMessage()
+    public function GetFieldShopStockMessage()
     {
         $oItem = $this->GetFromInternalCache('oLookupshop_stock_message_id');
         if (null === $oItem) {
@@ -2208,7 +2208,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             if ($dDiscountValue < $this->fieldPrice) {
                 $this->aPriceBeforeDiscount['fieldPrice'] = $this->fieldPrice;
                 $this->aPriceBeforeDiscount['fieldPriceReference'] = $this->fieldPriceReference;
-                $oLocal = &TCMSLocal::GetActive();
+                $oLocal = TCMSLocal::GetActive();
                 $this->fieldPriceReference = $this->fieldPrice;
                 $this->fieldPriceReferenceFormated = $this->fieldPriceFormated;
                 $this->fieldPrice = $dDiscountValue;

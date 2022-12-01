@@ -25,7 +25,7 @@ class TShopModuleArticlelistFilterArticleOfActiveManufacturer extends TdbShopMod
      *
      * @return string
      */
-    protected function GetListQueryBase(&$oListConfig)
+    protected function GetListQueryBase($oListConfig)
     {
         $oActiveManufacturer = TdbShop::GetActiveManufacturer();
         if (!is_null($oActiveManufacturer)) {

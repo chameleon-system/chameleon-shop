@@ -224,7 +224,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      *
      * @return bool
      */
-    public function ExecutePayment(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $bPaymentOk = parent::ExecutePayment($oOrder);
 
@@ -246,7 +246,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      *
      * @return bool
      */
-    public function PostExecutePaymentHook(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function PostExecutePaymentHook(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $aDirectLinkPaymentUserDataFields = self::GetDirectLinkResponsePaymentUserDataFields();
 

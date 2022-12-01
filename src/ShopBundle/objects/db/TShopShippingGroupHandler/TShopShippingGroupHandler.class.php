@@ -18,7 +18,7 @@ class TShopShippingGroupHandler extends TAdbShopShippingGroupHandler
      *
      * @return TdbShopShippingGroupHandler|null
      */
-    public static function &GetInstance($id)
+    public static function GetInstance($id)
     {
         $oInstance = null;
         $query = "SELECT * FROM `shop_shipping_group_handler` WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";

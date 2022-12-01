@@ -85,7 +85,7 @@ class OrderStepPageService implements OrderStepPageServiceInterface
      *
      * @return void
      */
-    private function addBasketStepParameter(array &$parameters, TShopOrderStep $orderStep)
+    private function addBasketStepParameter(array $parameters, TShopOrderStep $orderStep)
     {
         if ('1' === $orderStep->fieldPosition) {
             $parameters['basketStep'] = '/';

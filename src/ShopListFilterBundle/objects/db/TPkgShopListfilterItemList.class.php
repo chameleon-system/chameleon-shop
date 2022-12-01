@@ -109,7 +109,7 @@ class TPkgShopListfilterItemList extends TAdbPkgShopListfilterItemList
      *
      * @return TdbPkgShopListfilterItem
      */
-    protected function &_NewElement(&$aData)
+    protected function _NewElement($aData)
     {
         $oElement = false;
         // try to fetch the element from _items first

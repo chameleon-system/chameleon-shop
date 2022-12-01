@@ -23,7 +23,7 @@ class MTShopSearchFormCore extends TShopUserCustomModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 

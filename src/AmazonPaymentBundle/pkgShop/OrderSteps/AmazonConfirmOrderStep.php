@@ -46,7 +46,7 @@ class AmazonConfirmOrderStep extends \TShopStepConfirm
         return $includes;
     }
 
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
         $data = parent::GetAdditionalViewVariables($sViewName, $sViewType);
 

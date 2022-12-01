@@ -16,7 +16,7 @@ class TCMSWizardStepMapper_UserAddressForm extends AbstractTCMSWizardStepMapper
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        $oExtranetConfig = &TdbDataExtranet::GetInstance();
+        $oExtranetConfig = TdbDataExtranet::GetInstance();
         if ($oExtranetConfig && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oExtranetConfig->table, $oExtranetConfig->id);
         }

@@ -208,7 +208,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      *
      * @return string|false
      */
-    protected function GetDeliveryCosts(&$oArticle, $aAdditionalData = array())
+    protected function GetDeliveryCosts($oArticle, $aAdditionalData = array())
     {
         $sDeliveryCosts = 0.00;
         $oShop = TdbShop::GetInstance();
@@ -259,7 +259,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
 
         if (null === $aAttributesForSystemNames && null === $aAttributesForIds) {
             $oAttributesList = TdbShopAttributeList::GetList();
-            while ($oAttribute = &$oAttributesList->Next()) {
+            while ($oAttribute = $oAttributesList->Next()) {
                 $sName = $oAttribute->GetName();
                 $aAttributesForSystemNames[$oAttribute->fieldSystemName] = $sName;
                 $aAttributesForIds[$oAttribute->id] = $sName;
@@ -284,7 +284,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * @return array|null
      */
     public function GetArticleAttributeValueListForAttributeNames(
-        &$oArticle,
+        $oArticle,
         $aAttributeNames,
         $sFieldName = 'system_name'
     ) {
@@ -314,7 +314,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * @return string|array|null
      */
     protected function GetArticleAttributeValueForAttributeName(
-        &$oArticle,
+        $oArticle,
         $sAttributeName,
         $sFieldName = 'system_name',
         $bReturnFirstOccurrence = true
@@ -338,7 +338,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
             $aArticleAttributes = array_flip(array_values($this->aAttributes));
             array_walk(
                 $aArticleAttributes,
-                function (&$val, $key) {
+                function ($val, $key) {
                     $val = array();
                 }
             );
@@ -405,7 +405,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      *
      * @return string
      */
-    protected function getArticleImageLink(&$oArticle, $iWidth = null)
+    protected function getArticleImageLink($oArticle, $iWidth = null)
     {
         $sLink = '';
         $oArticleImage = $oArticle->GetPrimaryImage();
@@ -582,7 +582,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
             $aAttributes = array();
             $oAttributeList = TdbShopAttributeList::GetList();
             $oAttributeList->GoToStart();
-            while ($oAttribute = &$oAttributeList->Next()) {
+            while ($oAttribute = $oAttributeList->Next()) {
                 $aAttributes[] = $oAttribute->fieldSystemName;
             }
         }

@@ -16,7 +16,7 @@ class TPkgShopNewsletterSignupWithOrder_TShopStepConfirm extends TPkgShopNewslet
      *
      * @return void
      */
-    protected function addDataToBasket(TShopBasket &$oBasket)
+    protected function addDataToBasket(TShopBasket $oBasket)
     {
         parent::addDataToBasket($oBasket);
         if (false === method_exists($oBasket, 'getUserSelectedNewsletterOptionInOrderStep')) {
@@ -41,9 +41,9 @@ class TPkgShopNewsletterSignupWithOrder_TShopStepConfirm extends TPkgShopNewslet
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = &parent::GetAdditionalViewVariables($sViewName, $sViewType);
+        $aViewVariables = parent::GetAdditionalViewVariables($sViewName, $sViewType);
 
         $aViewVariables['bShowNewsletterSignup'] = true;
         $aViewVariables['newsletter'] = false;

@@ -29,14 +29,14 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      *
      * @return TdbShopOrderStep|null
      */
-    public static function &GetNextStep(&$oStep)
+    public static function GetNextStep($oStep)
     {
         $oNextStep = null;
         $query = "SELECT * FROM `shop_order_step` WHERE `position` > '".MySqlLegacySupport::getInstance()->real_escape_string($oStep->fieldPosition)."' ORDER BY `position`";
-        $oSteps = &TdbShopOrderStepList::GetList($query);
+        $oSteps = TdbShopOrderStepList::GetList($query);
         if ($oSteps->Length() > 0) {
             /** @var TdbShopOrderStep $oNextStep */
-            $oNextStep = &$oSteps->Current();
+            $oNextStep = $oSteps->Current();
             if ($oNextStep && !$oNextStep->IsActive()) {
                 $oNextStep = TdbShopOrderStepList::GetNextStep($oNextStep);
             }
@@ -52,14 +52,14 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      *
      * @return TdbShopOrderStep|null
      */
-    public static function &GetPreviousStep(&$oStep)
+    public static function GetPreviousStep($oStep)
     {
         $oPreviousStep = null;
         $query = "SELECT * FROM `shop_order_step` WHERE `position` < '".MySqlLegacySupport::getInstance()->real_escape_string($oStep->fieldPosition)."' ORDER BY `position` DESC";
-        $oSteps = &TdbShopOrderStepList::GetList($query);
+        $oSteps = TdbShopOrderStepList::GetList($query);
         if ($oSteps->Length() > 0) {
             /** @var TdbShopOrderStep $oPreviousStep */
-            $oPreviousStep = &$oSteps->Current();
+            $oPreviousStep = $oSteps->Current();
         }
 
         return $oPreviousStep;
@@ -79,10 +79,10 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
                 WHERE `show_in_navigation` = '1'
              ORDER BY `position` ASC
               ";
-        $oSteps = &TdbShopOrderStepList::GetList($query);
+        $oSteps = TdbShopOrderStepList::GetList($query);
         $oSteps->bAllowItemCache = true;
         $stepIdList = array();
-        while ($oStep = &$oSteps->Next()) {
+        while ($oStep = $oSteps->Next()) {
             if (false === $oStep->IsActive()) {
                 continue;
             }
@@ -99,9 +99,9 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
                 WHERE `show_in_navigation` = '1' AND `id` IN ('".implode("','", $stepIdList)."')
              ORDER BY `position` ASC
               ";
-        $oSteps = &TdbShopOrderStepList::GetList($query);
+        $oSteps = TdbShopOrderStepList::GetList($query);
         $oSteps->bAllowItemCache = true;
-        while ($oStep = &$oSteps->Next()) {
+        while ($oStep = $oSteps->Next()) {
             $stepIdList[] = $oStep->id;
             if ($oActiveStep->id == $oStep->id) {
                 $oStep->bIsTheActiveStep = true;
@@ -158,7 +158,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
         $oView->AddVar('sSpotName', $sSpotName);
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);
 
-        $aOtherParameters = &$this->GetAdditionalViewVariables($sViewName, $sViewType);
+        $aOtherParameters = $this->GetAdditionalViewVariables($sViewName, $sViewType);
         $oView->AddVarArray($aOtherParameters);
 
         return $oView->RenderObjectPackageView($sViewName, self::VIEW_PATH, $sViewType);
@@ -173,7 +173,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
         $aViewVariables = array();
 

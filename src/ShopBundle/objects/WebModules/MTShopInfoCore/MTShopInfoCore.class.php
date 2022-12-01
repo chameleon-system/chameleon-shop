@@ -23,11 +23,11 @@ class MTShopInfoCore extends TShopUserCustomModelBase
 
     protected $bAllowHTMLDivWrapping = true;
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
-        $this->data['oConf'] = &$this->GetModuleConfig();
+        $this->data['oConf'] = $this->GetModuleConfig();
         $this->data['oInfos'] = $this->data['oConf']->GetFieldShopSystemInfoList('name');
 
         return $this->data;
@@ -38,7 +38,7 @@ class MTShopInfoCore extends TShopUserCustomModelBase
      *
      * @return TdbShopSystemInfoModuleConfig|null
      */
-    protected function &GetModuleConfig()
+    protected function GetModuleConfig()
     {
         if (is_null($this->oModuleConfig)) {
             $this->oModuleConfig = TdbShopSystemInfoModuleConfig::GetNewInstance();
@@ -87,7 +87,7 @@ class MTShopInfoCore extends TShopUserCustomModelBase
     public function _GetCacheTableInfos()
     {
         $aClearCacheInfo = parent::_GetCacheTableInfos();
-        $oConf = &$this->GetModuleConfig();
+        $oConf = $this->GetModuleConfig();
         if (!is_null($oConf)) {
             $aClearCacheInfo[] = array('table' => $oConf->table, 'id' => $oConf->id);
             $aIDList = $oConf->GetMLTIdList('shop_system_info');

@@ -20,7 +20,7 @@ class TShopBasketVoucherCoreList extends TIterator
      *
      * @return void
      */
-    public function AddItem(&$oVoucher)
+    public function AddItem($oVoucher)
     {
         $oVoucher->sBasketVoucherKey = $this->GetUniqueItemKey();
         parent::AddItem($oVoucher);
@@ -53,7 +53,7 @@ class TShopBasketVoucherCoreList extends TIterator
      *
      * @return TdbShopVoucher|false
      */
-    public function &next()
+    public function next()
     {
         return parent::Next();
     }
@@ -164,8 +164,8 @@ class TShopBasketVoucherCoreList extends TIterator
         $tmpCurrentPointer = $this->getItemPointer();
         $this->GoToStart();
 
-        while (!$bHasFreeShipping && ($oItem = &$this->Next())) {
-            $oVoucherSeries = &$oItem->GetFieldShopVoucherSeries();
+        while (!$bHasFreeShipping && ($oItem = $this->Next())) {
+            $oVoucherSeries = $oItem->GetFieldShopVoucherSeries();
             if ($oVoucherSeries->fieldFreeShipping) {
                 $bHasFreeShipping = true;
             }

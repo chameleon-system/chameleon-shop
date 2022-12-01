@@ -57,7 +57,7 @@ class TShopDiscountList extends TShopDiscountListAutoParent
      *
      * @return TIterator<TdbShopDiscount>
      */
-    public static function GetActiveDiscountListForArticle(&$oArticle, $bIncludeUserRestrictedDiscounts = false)
+    public static function GetActiveDiscountListForArticle($oArticle, $bIncludeUserRestrictedDiscounts = false)
     {
         $oDiscountList = new TIterator();
         if (false == $oArticle->fieldExcludeFromDiscounts) {

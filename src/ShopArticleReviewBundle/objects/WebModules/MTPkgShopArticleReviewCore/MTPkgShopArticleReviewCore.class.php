@@ -64,7 +64,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
         return $aDefaultFieldDataList;
     }
 
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
         $this->data['oActiveArticle'] = null;
@@ -299,7 +299,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * {@inheritdoc}
      */
-    public function &_CallMethod($sMethodName, $aMethodParameter = array())
+    public function _CallMethod($sMethodName, $aMethodParameter = array())
     {
         $functionResult = null;
         if (true === \method_exists($this, $sMethodName)) {

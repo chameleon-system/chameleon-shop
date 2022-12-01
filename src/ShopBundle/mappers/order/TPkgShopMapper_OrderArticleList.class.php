@@ -50,8 +50,8 @@ class TPkgShopMapper_OrderArticleList extends AbstractViewMapper
     protected function getArticleList(TdbShopOrder $oOrder, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
         $aArticleList = array();
-        $oOrderItemList = &$oOrder->GetFieldShopOrderItemList();
-        while ($oOrderItem = &$oOrderItemList->Next()) {
+        $oOrderItemList = $oOrder->GetFieldShopOrderItemList();
+        while ($oOrderItem = $oOrderItemList->Next()) {
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oOrderItem->table, $oOrderItem->id);
             }
@@ -72,7 +72,7 @@ class TPkgShopMapper_OrderArticleList extends AbstractViewMapper
     protected function getArticle(TdbShopOrderItem $oOrderItem, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
         $aArticle = array();
-        $oArticle = &$oOrderItem->GetFieldShopArticle();
+        $oArticle = $oOrderItem->GetFieldShopArticle();
 
         $aArticle['iAmount'] = $oOrderItem->fieldOrderAmountFormated;
         $aArticle['sManufacturer'] = $oOrderItem->fieldShopManufacturerName;

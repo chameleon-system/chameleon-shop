@@ -23,7 +23,7 @@ class TPkgShopPrimaryNavigation_TShop extends TPkgShopPrimaryNavigation_TShopAut
      *
      * @return \TdbPkgShopPrimaryNaviList
      */
-    public function &GetFieldShopPrimaryNaviList()
+    public function GetFieldShopPrimaryNaviList()
     {
         $activePortal = self::getPortalDomainService()->getActivePortal();
         if (null === $activePortal) {

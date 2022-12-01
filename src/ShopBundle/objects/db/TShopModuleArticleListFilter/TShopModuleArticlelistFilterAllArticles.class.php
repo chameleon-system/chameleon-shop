@@ -22,7 +22,7 @@ class TShopModuleArticlelistFilterAllArticles extends TdbShopModuleArticleListFi
      *
      * @return string
      */
-    protected function GetListQueryBase(&$oListConfig)
+    protected function GetListQueryBase($oListConfig)
     {
         $sQuery = '';
 

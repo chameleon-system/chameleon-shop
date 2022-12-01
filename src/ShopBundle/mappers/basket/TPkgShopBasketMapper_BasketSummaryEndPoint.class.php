@@ -144,7 +144,7 @@ class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
      *
      * @return void
      */
-    protected function addFormattedValues(&$aData)
+    protected function addFormattedValues($aData)
     {
         foreach (array_keys($aData) as $sField) {
             if (is_array($aData[$sField])) {

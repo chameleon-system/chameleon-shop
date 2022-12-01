@@ -32,18 +32,18 @@ class MTShopManufacturerCore extends TShopUserCustomModelBase
         }
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
-        $this->data['oManufacturerList'] = &TdbShopManufacturerList::GetList();
+        $this->data['oManufacturerList'] = TdbShopManufacturerList::GetList();
 
         $oConfig = TdbShopManufacturerModuleConf::GetNewInstance();
         /** @var $oConfig TdbShopManufacturerModuleConf */
         if (!$oConfig->LoadFromField('cms_tpl_module_instance_id', $this->instanceID)) {
             $oConfig = null;
         }
-        $this->data['oConfig'] = &$oConfig;
+        $this->data['oConfig'] = $oConfig;
 
         if (!is_null($this->iActiveItemId) && (!isset($this->aModuleConfig['bDisableDetailViewCheck']) || true !== $this->aModuleConfig['bDisableDetailViewCheck'])) {
             $this->ViewManufacturerHook();
@@ -62,7 +62,7 @@ class MTShopManufacturerCore extends TShopUserCustomModelBase
         if (!$oItem->Load($this->iActiveItemId)) {
             $oItem = null;
         }
-        $this->data['oManufacturer'] = &$oItem;
+        $this->data['oManufacturer'] = $oItem;
         $this->SetTemplate('MTShopManufacturer', 'system/manufacturer');
     }
 

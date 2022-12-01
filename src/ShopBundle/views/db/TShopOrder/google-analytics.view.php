@@ -1,7 +1,7 @@
 <?php
 /** @var $oOrder TdbShopOrder */
 /** @var $aCallTimeVars array */
-$oLocal = &TCMSLocal::GetActive();
+$oLocal = TCMSLocal::GetActive();
 $portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
 $activePortal = $portalDomainService->getActivePortal();
 

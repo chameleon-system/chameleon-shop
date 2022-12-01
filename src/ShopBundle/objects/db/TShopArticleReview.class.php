@@ -55,7 +55,7 @@ class TShopArticleReview extends TAdbShopArticleReview
         }
 
         $aAgeParts = array();
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         if ($iAgeYear > 0) {
             $sName = 'Jahr';
             if ($iAgeYear > 1) {
@@ -192,7 +192,7 @@ class TShopArticleReview extends TAdbShopArticleReview
     {
         $oMail = TDataMailProfile::GetProfile('shop-new-review');
         $aData = $this->sqlData;
-        $oArticle = &$this->GetFieldShopArticle();
+        $oArticle = $this->GetFieldShopArticle();
         $aData['ArtikelName'] = $oArticle->GetName();
         $oMail->AddDataArray($aData);
         $oMail->SendUsingObjectView('emails', 'Customer');

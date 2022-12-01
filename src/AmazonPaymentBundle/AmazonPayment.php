@@ -134,7 +134,7 @@ class AmazonPayment implements PaymentTransactionHandlerInterface
      *
      * {@inheritdoc}
      */
-    public function captureOrder(\TPkgShopPaymentTransactionManager $transactionManager, \TdbShopOrder &$order)
+    public function captureOrder(\TPkgShopPaymentTransactionManager $transactionManager, \TdbShopOrder $order)
     {
         $transaction = null;
 
@@ -295,7 +295,7 @@ class AmazonPayment implements PaymentTransactionHandlerInterface
      */
     public function captureShipment(
         \TPkgShopPaymentTransactionManager $transactionManager,
-        \TdbShopOrder &$order,
+        \TdbShopOrder $order,
         $value,
         $invoiceNumber = null,
         array $orderItemList = null
@@ -364,7 +364,7 @@ class AmazonPayment implements PaymentTransactionHandlerInterface
     private function captureShipmentViaNewAuthCaptureNow(
         \TPkgShopPaymentTransactionManager $transactionManager,
         \TPkgShopPaymentTransactionData $transactionData,
-        \TdbShopOrder &$order,
+        \TdbShopOrder $order,
         $value,
         AmazonOrderReferenceObject $amazonOrderRefObject,
         AmazonReferenceIdManager $idManager,
@@ -397,7 +397,7 @@ class AmazonPayment implements PaymentTransactionHandlerInterface
     private function captureShipmentUsingExistingAuth(
         \TPkgShopPaymentTransactionManager $transactionManager,
         \TPkgShopPaymentTransactionData $transactionData,
-        \TdbShopOrder &$order,
+        \TdbShopOrder $order,
         $value,
         AmazonOrderReferenceObject $amazonOrderRefObject,
         AmazonReferenceIdManager $idManager,
@@ -441,7 +441,7 @@ class AmazonPayment implements PaymentTransactionHandlerInterface
      */
     public function refund(
         \TPkgShopPaymentTransactionManager $transactionManager,
-        \TdbShopOrder &$order,
+        \TdbShopOrder $order,
         $value,
         $invoiceNumber = null,
         $sellerRefundNote = null,
@@ -543,7 +543,7 @@ class AmazonPayment implements PaymentTransactionHandlerInterface
      */
     public function cancelOrder(
         \TPkgShopPaymentTransactionManager $transactionManager,
-        \TdbShopOrder &$order,
+        \TdbShopOrder $order,
         $cancellationReason = null
     ) {
         $amazonOrderReference = $this->config->amazonOrderReferenceObjectFactory($order->getAmazonOrderReferenceId());
@@ -585,7 +585,7 @@ class AmazonPayment implements PaymentTransactionHandlerInterface
      */
     private function updateOrderWithAmazonDataBeforeAuthorize(
         \OffAmazonPaymentsService_Model_OrderReferenceDetails $orderReferenceDetails,
-        \TdbShopOrder &$order
+        \TdbShopOrder $order
     ) {
         $converter = new AmazonDataConverter();
 
@@ -618,7 +618,7 @@ class AmazonPayment implements PaymentTransactionHandlerInterface
         $order->AllowEditByAll($allowSave);
     }
 
-    private function updateOrderWithAmazonDataAfterAuthorize(\TdbShopOrder &$order, $address)
+    private function updateOrderWithAmazonDataAfterAuthorize(\TdbShopOrder $order, $address)
     {
         $addressData = $this->converter->convertAddressFromAmazonObjectToLocal($address, AmazonDataConverter::ORDER_ADDRESS_TYPE_BILLING);
         $orderAddress = $this->converter->convertLocalToOrderAddress(AmazonDataConverter::ORDER_ADDRESS_TYPE_BILLING, $addressData);

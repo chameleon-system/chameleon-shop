@@ -21,7 +21,7 @@ class TCMSSmartURLHandler_BuyProductDirectLink extends TCMSSmartURLHandler
     public function GetPageDef()
     {
         $iPageId = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
 
         $aParts = explode('/', $oURLData->sRelativeFullURL);
 
@@ -32,7 +32,7 @@ class TCMSSmartURLHandler_BuyProductDirectLink extends TCMSSmartURLHandler
             /** @var $oArticle TdbShopArticle */
             if ($oArticle->Load($aParts[2])) {
                 // we need to perform a real redirect...
-                $oShopConfig = &TdbShop::GetInstance($oURLData->iPortalId);
+                $oShopConfig = TdbShop::GetInstance($oURLData->iPortalId);
                 $iNode = $oShopConfig->GetSystemPageNodeId('checkout');
                 $oNode = new TCMSTreeNode();
                 /** @var $oNode TCMSTreeNode */

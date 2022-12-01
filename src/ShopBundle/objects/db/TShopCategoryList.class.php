@@ -26,7 +26,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      *
      * @return TdbShopCategoryList
      */
-    public static function &GetArticleCategories($iArticleId, $sLanguageID = null)
+    public static function GetArticleCategories($iArticleId, $sLanguageID = null)
     {
         $oList = null;
         $sCategoryRestriction = TdbShopCategoryList::GetActiveCategoryQueryRestriction();
@@ -63,7 +63,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      *
      * @return TdbShopCategoryList
      */
-    public static function &GetRootCategoryList($sLanguageID = null)
+    public static function GetRootCategoryList($sLanguageID = null)
     {
         if (null === $sLanguageID) {
             $sLanguageID = self::getMyLanguageService()->getActiveLanguageId();
@@ -83,12 +83,12 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      *
      * @return TdbShopVat|null
      */
-    public function &GetMaxVat()
+    public function GetMaxVat()
     {
         $iPointer = $this->getItemPointer();
         $oMaxVatItem = null;
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $oCurrentVat = $oItem->GetVat();
             if (!is_null($oCurrentVat)) {
                 if (is_null($oMaxVatItem)) {
@@ -108,15 +108,15 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      *
      * @return TdbShopCategory|null
      */
-    public static function &GetDefaultCategory()
+    public static function GetDefaultCategory()
     {
         static $oCategory;
 
         if (!$oCategory) {
-            $oRootCategories = &TdbShopCategoryList::GetChildCategories();
+            $oRootCategories = TdbShopCategoryList::GetChildCategories();
             if ($oRootCategories->Length() > 0) {
                 /** @var TdbShopCategory $oCategory */
-                $oCategory = &$oRootCategories->Current();
+                $oCategory = $oRootCategories->Current();
             }
         }
 
@@ -130,7 +130,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      *
      * @return TdbShopCategory|null
      */
-    public static function &GetCategoryForCategoryPath($aPath)
+    public static function GetCategoryForCategoryPath($aPath)
     {
         $oCategory = null;
         $sPath = implode('/', $aPath);
@@ -166,7 +166,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      *
      * @return TdbShopCategoryList
      */
-    public static function &GetChildCategories($iParentId = null, $aFilter = null, $sLanguageID = null)
+    public static function GetChildCategories($iParentId = null, $aFilter = null, $sLanguageID = null)
     {
         $sActiveSnippetRestriction = TdbShopCategoryList::GetActiveCategoryQueryRestriction();
         if (is_null($iParentId)) {
@@ -232,7 +232,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      *
      * @return TIterator
      */
-    public static function &GetCategoryPath($iEndNodeId, $iStartNodeId = null, $sLanguageID = null)
+    public static function GetCategoryPath($iEndNodeId, $iStartNodeId = null, $sLanguageID = null)
     {
         if (null === $sLanguageID) {
             $sLanguageID = self::getLanguageService()->getActiveLanguageId();

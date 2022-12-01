@@ -127,7 +127,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['oBasket'] = $this->getShopService()->getActiveBasket();

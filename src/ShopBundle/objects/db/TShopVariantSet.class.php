@@ -52,7 +52,7 @@ class TShopVariantSet extends TAdbShopVariantSet
      *
      * @return TdbShopVariantDisplayHandler|null
      */
-    public function &GetFieldShopVariantDisplayHandler()
+    public function GetFieldShopVariantDisplayHandler()
     {
         /** @var TdbShopVariantDisplayHandler|null $oItem */
         $oItem = $this->GetFromInternalCache('oLookupshop_variant_display_handler_id');
@@ -75,7 +75,7 @@ class TShopVariantSet extends TAdbShopVariantSet
     public function GetVariantTypeForIdentifier($sVariantTypeIdentifier)
     {
         /** @var TdbShopVariantType|null $oType */
-        $oType = &$this->GetFromInternalCache('VariantTypeForIdentifier'.$sVariantTypeIdentifier);
+        $oType = $this->GetFromInternalCache('VariantTypeForIdentifier'.$sVariantTypeIdentifier);
 
         if (is_null($oType)) {
             $oType = TdbShopVariantType::GetNewInstance();

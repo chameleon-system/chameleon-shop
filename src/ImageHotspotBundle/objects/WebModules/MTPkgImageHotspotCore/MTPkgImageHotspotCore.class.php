@@ -119,7 +119,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
         }
         if (is_null($this->sActiveItemId) || empty($this->sActiveItemId)) {
             // get the first entry from the list
-            $oItemList = &$this->GetHotspotConfig()->GetFieldPkgImageHotspotItemList();
+            $oItemList = $this->GetHotspotConfig()->GetFieldPkgImageHotspotItemList();
             $oItemList->bAllowItemCache = true;
             $this->oActiveItem = $oItemList->Next();
             if (false == $this->oActiveItem) {
@@ -141,11 +141,11 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
      *
      * @return TdbPkgImageHotspotItem|null|false
      */
-    protected function &GetNextItem()
+    protected function GetNextItem()
     {
         if (is_null($this->oNextItem)) {
-            $oActiveItem = &$this->GetActiveItem();
-            $oItemList = &$this->GetHotspotConfig()->GetFieldPkgImageHotspotItemList();
+            $oActiveItem = $this->GetActiveItem();
+            $oItemList = $this->GetHotspotConfig()->GetFieldPkgImageHotspotItemList();
             if ($oItemList->Length() < 2) {
                 $retValue = null; // write to variable to satisfy strict mode
                 return $retValue;
@@ -173,7 +173,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
      *
      * @return TdbPkgImageHotspot|null
      */
-    protected function &GetHotspotConfig()
+    protected function GetHotspotConfig()
     {
         if (is_null($this->oHotspotConfig)) {
             $this->oHotspotConfig = TdbPkgImageHotspot::GetNewInstance();
@@ -190,7 +190,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
      *
      * @return TdbPkgImageHotspotItem|null
      */
-    protected function &GetActiveItem()
+    protected function GetActiveItem()
     {
         if (is_null($this->oActiveItem) && !is_null($this->sActiveItemId)) {
             $this->oActiveItem = TdbPkgImageHotspotItem::GetNewInstance();
@@ -203,14 +203,14 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['oHotspotConfig'] = $this->GetHotspotConfig();
         $this->data['oActiveItem'] = $this->GetActiveItem();
         $this->data['oNextItem'] = $this->GetNextItem();
         $this->data['sLinkNextItem'] = '';
-        $this->data['oAllItems'] = &$this->GetHotspotConfig()->GetFieldPkgImageHotspotItemList();
+        $this->data['oAllItems'] = $this->GetHotspotConfig()->GetFieldPkgImageHotspotItemList();
 
         return $this->data;
     }
@@ -251,14 +251,14 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
         if (!is_array($aTriggers)) {
             $aTriggers = array();
         }
-        $oHotspotConfig = &$this->GetHotspotConfig();
+        $oHotspotConfig = $this->GetHotspotConfig();
         if (!is_null($oHotspotConfig)) {
             $aTriggers[] = array('table' => 'pkg_image_hotspot', 'id' => $oHotspotConfig->id);
         }
         $aTriggers[] = array('table' => 'pkg_image_hotspot_item', 'id' => $this->sActiveItemId);
         $aTriggers[] = array('table' => 'pkg_image_hotspot_item_spot', 'id' => '');
 
-        $oActiveItem = &$this->GetActiveItem();
+        $oActiveItem = $this->GetActiveItem();
         if (!empty($oActiveItem)) {
             $aTriggers[] = array('table' => 'cms_media', 'id' => $oActiveItem->fieldCmsMediaId);
         }

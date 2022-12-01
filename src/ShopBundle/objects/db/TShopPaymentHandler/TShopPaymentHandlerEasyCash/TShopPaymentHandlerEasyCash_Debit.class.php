@@ -21,7 +21,7 @@ class TShopPaymentHandlerEasyCash_Debit extends TShopPaymentHandlerEasyCash
      *
      * @return bool
      */
-    public function ExecutePayment(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $bPaymentOk = parent::ExecutePayment($oOrder, $sMessageConsumer);
         if ($bPaymentOk) {

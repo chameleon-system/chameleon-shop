@@ -23,7 +23,7 @@ class TCMSTableEditor_PkgShopListfilterItem extends TCMSTableEditor
      *
      * @return void
      */
-    protected function PrepareFieldsForSave(&$oFields)
+    protected function PrepareFieldsForSave($oFields)
     {
         parent::PrepareFieldsForSave($oFields);
         $this->RemoveDisabledFields($oFields);
@@ -37,7 +37,7 @@ class TCMSTableEditor_PkgShopListfilterItem extends TCMSTableEditor
      *
      * @return void
      */
-    public function ProcessFieldsBeforeDisplay(&$oFields)
+    public function ProcessFieldsBeforeDisplay($oFields)
     {
         parent::ProcessFieldsBeforeDisplay($oFields);
         $this->RemoveDisabledFields($oFields);
@@ -48,7 +48,7 @@ class TCMSTableEditor_PkgShopListfilterItem extends TCMSTableEditor
      *
      * @return void
      */
-    protected function RemoveDisabledFields(&$oFields)
+    protected function RemoveDisabledFields($oFields)
     {
         // hide fields for type
         $oType = null;
@@ -63,7 +63,7 @@ class TCMSTableEditor_PkgShopListfilterItem extends TCMSTableEditor
             if ($oType && is_array($oType->sqlData) && count($oType->sqlData) > 0) {
                 $oHiddenFields = $oType->GetFieldCmsFieldConfList();
                 $aFieldNames = $oHiddenFields->GetItemUniqueValueListForField('name');
-                while ($oField = &$oFields->Next()) {
+                while ($oField = $oFields->Next()) {
                     if (!array_key_exists($oField->name, $aFieldNames)) {
                         $oField->oDefinition->sqlData['modifier'] = 'hidden';
                     }

@@ -25,7 +25,7 @@ class TCMSSmartURLHandler_ShopPaymentSofortueberweisungAPI extends TCMSSmartURLH
     public function GetPageDef()
     {
         $iPageId = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
 
         $iMessagePos = strpos($oURLData->sRelativeURL, TShopPaymentHandlerSofortueberweisung::URL_IDENTIFIER);
         $sPaymentPayload = '';

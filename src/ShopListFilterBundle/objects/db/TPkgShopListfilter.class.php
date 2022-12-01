@@ -59,10 +59,10 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
             $listState = $filterApi->getArticleListFilterRelevantState();
             $oInstance->setListState($listState);
 
-            $oFilterList = &$oInstance->GetFieldPkgShopListfilterItemList();
+            $oFilterList = $oInstance->GetFieldPkgShopListfilterItemList();
             $oFilterList->GoToStart();
             $aCloneList = array();
-            while ($oFilterItem = &$oFilterList->Next()) {
+            while ($oFilterItem = $oFilterList->Next()) {
                 $filterQueryRestriction = $oFilterList->GetQueryRestriction($oFilterItem);
                 $sBaseQueryHash = 'h'.md5($filterQueryRestriction);
                 if (false === isset($aCloneList[$sBaseQueryHash])) {
@@ -120,7 +120,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
      */
     public function getActiveFilterAsQueryString()
     {
-        $oFilterList = &$this->GetFieldPkgShopListfilterItemList();
+        $oFilterList = $this->GetFieldPkgShopListfilterItemList();
 
         return $oFilterList->GetQueryRestriction();
     }
@@ -278,9 +278,9 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
      *
      * @return TdbPkgShopListfilterItemList
      */
-    public function &GetFieldPkgShopListfilterItemList()
+    public function GetFieldPkgShopListfilterItemList()
     {
-        $oList = &$this->GetFromInternalCache('FieldPkgShopListfilterItemList');
+        $oList = $this->GetFromInternalCache('FieldPkgShopListfilterItemList');
         if (is_null($oList)) {
             $aTrigger = array('class' => __CLASS__, 'method' => 'GetFieldPkgShopListfilterItemList', 'id' => $this->id);
             $aTrigger['activeFilter'] = TGlobal::instance()->GetUserData(TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA);
@@ -322,7 +322,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
      */
     public function GetCurrentFilterAsHiddenInputFields()
     {
-        $oList = &$this->GetFieldPkgShopListfilterItemList();
+        $oList = $this->GetFieldPkgShopListfilterItemList();
 
         return $oList->GetListSettingAsInputFields();
     }
@@ -336,7 +336,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
     {
         $aFilterAsArray = $this->GetFromInternalCache('aFilterAsArray');
         if (is_null($aFilterAsArray)) {
-            $oList = &$this->GetFieldPkgShopListfilterItemList();
+            $oList = $this->GetFieldPkgShopListfilterItemList();
             $aFilterAsArray = $oList->GetListSettingAsArray();
             $this->SetInternalCache('aFilterAsArray', $aFilterAsArray);
         }

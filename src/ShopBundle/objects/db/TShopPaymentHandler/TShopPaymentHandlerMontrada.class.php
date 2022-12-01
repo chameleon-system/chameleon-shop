@@ -137,7 +137,7 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
         $aParameter['psphash'] = $this->GetMontradaRequstHash($aParameter); // psphash=SHA-256 Hashwert zur Sicherung der Übergabeparameter.
 
         // add basket design
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         $aParameter['h.1'] = TGlobal::Translate('chameleon_system_shop.payment_montrada.payment_form_h1');
         $aParameter['h.2'] = TGlobal::Translate('chameleon_system_shop.payment_montrada.payment_form_h2');
         $oBasketArticles = $oBasket->GetBasketContents();
@@ -159,7 +159,7 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
             $aParameter['w.'.$iIndex.'.2'] = $oLocal->FormatNumber($oBasket->dCostShipping, 2).' EUR';
             ++$iIndex;
         }
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         if ($oBasket->dCostPaymentMethodSurcharge > 0) {
             $aParameter['w.'.$iIndex.'.1'] = TGlobal::Translate('chameleon_system_shop.payment_montrada.payment_form_payment_surcharge');
             $aParameter['w.'.$iIndex.'.2'] = $oLocal->FormatNumber($oBasket->dCostPaymentMethodSurcharge, 2).' EUR';
@@ -294,7 +294,7 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
      *
      * @return bool
      */
-    public function ExecutePayment(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $bPaymentOk = parent::ExecutePayment($oOrder);
 

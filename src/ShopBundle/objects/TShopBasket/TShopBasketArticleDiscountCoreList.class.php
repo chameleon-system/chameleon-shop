@@ -19,7 +19,7 @@ class TShopBasketArticleDiscountCoreList extends TIterator
      *
      * @return TdbShopDiscount|false
      */
-    public function &next()
+    public function next()
     {
         return parent::Next();
     }
@@ -29,7 +29,7 @@ class TShopBasketArticleDiscountCoreList extends TIterator
      *
      * @return TdbShopDiscount|false
      */
-    public function &Previous()
+    public function Previous()
     {
         return parent::Previous();
     }
@@ -39,7 +39,7 @@ class TShopBasketArticleDiscountCoreList extends TIterator
      *
      * @return TdbShopDiscount
      */
-    public function &current()
+    public function current()
     {
         return parent::Current();
     }

@@ -70,7 +70,7 @@ class TShopPaymentHandlerPayPalExpressTest extends TestCase
         foreach ($testCases as $testCase) {
             $adrBilling = $testCase['adr'];
             $adrShipping = $testCase['adr'];
-            $reflectionMethod->invokeArgs($object, array(&$adrBilling, &$adrShipping));
+            $reflectionMethod->invokeArgs($object, array($adrBilling, $adrShipping));
             $this->assertEquals($testCase['expectedAdr'], $adrBilling, 'billing does not match');
             $this->assertEquals($testCase['expectedAdr'], $adrShipping, 'shipping does not match');
         }
@@ -131,7 +131,7 @@ class TShopPaymentHandlerPayPalExpressTest extends TestCase
         foreach ($testCases as $testCase) {
             $adrBilling = $testCase['adr'];
             $adrShipping = $testCase['adr'];
-            $reflectionMethod->invokeArgs($object, array(&$adrBilling, &$adrShipping));
+            $reflectionMethod->invokeArgs($object, array($adrBilling, $adrShipping));
             $this->assertEquals($testCase['expectedAdr'], $adrBilling, 'billing does not match');
             $this->assertEquals($testCase['expectedAdr'], $adrShipping, 'shipping does not match');
         }
@@ -162,7 +162,7 @@ class TShopPaymentHandlerPayPalExpressTest extends TestCase
         foreach ($testCases as $testCase) {
             $adrBilling = $testCase['adr'];
             $adrShipping = $testCase['adr'];
-            $reflectionMethod->invokeArgs($object, array(&$adrBilling, &$adrShipping));
+            $reflectionMethod->invokeArgs($object, array($adrBilling, $adrShipping));
             $this->assertEquals($testCase['expectedAdr'], $adrBilling, 'billing does not match');
             $this->assertEquals($testCase['expectedAdr'], $adrShipping, 'shipping does not match');
         }

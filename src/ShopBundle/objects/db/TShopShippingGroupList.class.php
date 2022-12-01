@@ -16,9 +16,9 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
      *
      * @return TdbShopShippingGroupList
      */
-    public static function &GetAvailableShippingGroups()
+    public static function GetAvailableShippingGroups()
     {
-        $oList = &TdbShopShippingGroupList::GetList();
+        $oList = TdbShopShippingGroupList::GetList();
         $oList->bAllowItemCache = true;
         $oList->RemoveInvalidItems();
         $oList->GoToStart();
@@ -34,13 +34,13 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
      *
      * @return TdbShopShippingGroup|false
      */
-    public static function &GetShippingGroupsThatAllowPaymentWith($sPaymentInternalName)
+    public static function GetShippingGroupsThatAllowPaymentWith($sPaymentInternalName)
     {
-        $oList = &TdbShopShippingGroupList::GetAvailableShippingGroups();
+        $oList = TdbShopShippingGroupList::GetAvailableShippingGroups();
         $bFound = false;
         $oShippingGroup = null;
-        while (!$bFound && ($oShippingGroup = &$oList->Next())) {
-            $oPaymentMethods = &$oShippingGroup->GetValidPaymentMethods();
+        while (!$bFound && ($oShippingGroup = $oList->Next())) {
+            $oPaymentMethods = $oShippingGroup->GetValidPaymentMethods();
             $oPayPal = $oPaymentMethods->FindItemWithProperty('fieldNameInternal', $sPaymentInternalName);
             if ($oPayPal) {
                 $bFound = true;
@@ -61,9 +61,9 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
      *
      * @return TdbShopShippingGroupList
      */
-    public static function &GetPublicShippingGroups()
+    public static function GetPublicShippingGroups()
     {
-        $oList = &TdbShopShippingGroupList::GetList();
+        $oList = TdbShopShippingGroupList::GetList();
         $oList->bAllowItemCache = true;
         $oList->RemoveRestrictedItems();
 
@@ -85,7 +85,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
         $aValidIds = array();
         $this->GoToStart();
         $aValidShippingGroupItems = array();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $oBasket->ResetAllShippingMarkers(); // we need to reset the shipping marker on every group call - since we want
             // to consider every single item in the basket
 
@@ -130,7 +130,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
         // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
         $aValidIds = array();
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             if ($oItem->IsPublic()) {
                 $aValidIds[] = MySqlLegacySupport::getInstance()->real_escape_string($oItem->id);
             }

@@ -1,6 +1,6 @@
 <?php
 /*@var $oListItem TdbPkgShopListfilterItem */
-$oLocal = &TCMSLocal::GetActive();
+$oLocal = TCMSLocal::GetActive();
 ?>
 <div class="TPkgShopListfilterItem <?=get_class($oListItem); ?> <?=$aCallTimeVars['CountClass']; ?>">
     <div class="tree">

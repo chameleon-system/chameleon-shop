@@ -105,7 +105,7 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
                     $sUserName = $oUser->fieldName;
                 }
             }
-            $oSmartUrl = &TCMSSmartURLData::GetActive();
+            $oSmartUrl = TCMSSmartURLData::GetActive();
             if ($oSmartUrl) {
                 $sOriginalURL = $oSmartUrl->sOriginalURL;
             } else {

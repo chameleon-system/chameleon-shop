@@ -46,7 +46,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
         $sKey = 'oVariantType_'.$aRow['shop_variant_set_id'];
 
         /** @var TdbShopVariantType|null $oVariantType */
-        $oVariantType = &$this->GetFromInternalCache($sKey);
+        $oVariantType = $this->GetFromInternalCache($sKey);
 
         if (null === $oVariantType) {
             $oVariantType = TdbShopVariantType::GetNewInstance();
@@ -68,7 +68,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
      *
      * @return void
      */
-    protected function OrderOptions(&$aOptions)
+    protected function OrderOptions($aOptions)
     {
         // get the variant type based on the first value
         if (count($aOptions) > 0) {

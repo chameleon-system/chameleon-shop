@@ -23,7 +23,7 @@ class TCMSSmartURLHandler_ShopPayPalAPI extends TCMSSmartURLHandler_ShopBasketSt
     public function GetPageDef()
     {
         $iPageId = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
 
         $iPayPalApiPos = strpos($oURLData->sRelativeURL, TShopPaymentHandlerPayPal::URL_IDENTIFIER);
         if (false !== $iPayPalApiPos) {

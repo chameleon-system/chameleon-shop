@@ -58,7 +58,7 @@ class MTShopManufacturerArticleCatalogCore extends MTShopArticleCatalogCore
         }
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->LoadManufacturer();

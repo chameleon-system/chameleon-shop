@@ -16,7 +16,7 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
 {
     protected $bAllowHTMLDivWrapping = true;
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
@@ -44,7 +44,7 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
                 $oItem = new TShopBreadcrumbItemArticle();
                 /** @var $oItem TShopBreadcrumbItemArticle */
                 $oItem->oItem = $oActiveItem;
-                $aList[] = &$oItem;
+                $aList[] = $oItem;
             }
 
             foreach (array_keys($aList) as $index) {

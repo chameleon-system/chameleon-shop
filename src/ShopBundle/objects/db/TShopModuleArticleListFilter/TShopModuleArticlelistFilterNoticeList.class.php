@@ -24,7 +24,7 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
      *
      * @return string
      */
-    protected function GetListQueryBase(&$oListConfig)
+    protected function GetListQueryBase($oListConfig)
     {
         $sQuery = '';
         $oExtranetUser = $this->getExtranetUserProvider()->getActiveUser();
@@ -66,7 +66,7 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
      *
      * @return string
      */
-    protected function GetListQueryOrderBy(&$oListConfig)
+    protected function GetListQueryOrderBy($oListConfig)
     {
         $sQuery = '';
         if ($this->bUsedBaseQuery) {
@@ -119,7 +119,7 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
      *
      * @return string
      */
-    protected function GetListQueryGroupBy(&$oListConfig)
+    protected function GetListQueryGroupBy($oListConfig)
     {
         return '';
     }

@@ -33,7 +33,7 @@ class CMSShopArticleIndex extends TCMSModelBase
     {
         $this->bIndexIsRunning = true;
         // see if some indexer exists
-        $oIndexers = &TdbShopSearchIndexerList::GetList();
+        $oIndexers = TdbShopSearchIndexerList::GetList();
         //      $bRegenerateCompleteIndex = false;
         $oIndex = null;
         if ($oIndexers->Length() < 1) {
@@ -42,7 +42,7 @@ class CMSShopArticleIndex extends TCMSModelBase
             //        $oIndex->bRegenerateCompleteIndex = $bRegenerateCompleteIndex;
             $oIndex->InitializeIndexer();
         } else {
-            $oIndex = &$oIndexers->Current();
+            $oIndex = $oIndexers->Current();
             //        $oIndex->bRegenerateCompleteIndex = $bRegenerateCompleteIndex;
         }
 
@@ -79,7 +79,7 @@ class CMSShopArticleIndex extends TCMSModelBase
         \MySqlLegacySupport::getInstance()->query($sQuery);
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['bIndexIsRunning'] = $this->bIndexIsRunning;

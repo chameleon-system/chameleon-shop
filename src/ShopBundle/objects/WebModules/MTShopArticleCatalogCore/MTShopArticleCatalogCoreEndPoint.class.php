@@ -278,7 +278,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         return TdbShop::GetActiveCategory();
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         // Initialize objects
@@ -452,7 +452,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         if (is_array($aReviewData)) {
             $oReviewItem->LoadFromRowProtected($aReviewData);
         }
-        $this->data['oReviewEntryItem'] = &$oReviewItem;
+        $this->data['oReviewEntryItem'] = $oReviewItem;
     }
 
     /**
@@ -518,7 +518,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
      *
      * @return TdbShopModuleArticlelistOrderbyList
      */
-    protected function &GetOrderByFilterList()
+    protected function GetOrderByFilterList()
     {
         $aFilterIds = $this->oModuleConf->GetMLTIdList('shop_module_articlelist_orderby');
         $oList = TdbShopModuleArticlelistOrderbyList::GetListForIds($aFilterIds);
@@ -585,7 +585,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
             }
             if (is_null($oOrderBy)) {
                 $oShop = TdbShop::GetInstance();
-                $oOrderBy = &$oShop->GetFieldShopModuleArticlelistOrderby();
+                $oOrderBy = $oShop->GetFieldShopModuleArticlelistOrderby();
             }
             if (!is_null($oOrderBy)) {
                 $sOrder = $oOrderBy->GetOrderByString();

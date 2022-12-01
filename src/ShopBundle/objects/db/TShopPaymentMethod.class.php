@@ -47,7 +47,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
         if (!TGlobal::IsCMSMode()) {
             $dCosts = $this->GetPrice();
             if (0 != $dCosts) {
-                $oLocal = &TCMSLocal::GetActive();
+                $oLocal = TCMSLocal::GetActive();
                 $sName .= ' ('.$oLocal->FormatNumber($dCosts, 2).' EUR)';
             }
         }
@@ -75,7 +75,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
      *
      * @return TdbShopPaymentHandler|null
      */
-    public function &GetFieldShopPaymentHandler()
+    public function GetFieldShopPaymentHandler()
     {
         if (is_null($this->oPaymentHandler)) {
             if (empty($this->fieldShopPaymentHandlerId)) {

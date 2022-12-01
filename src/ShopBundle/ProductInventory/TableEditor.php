@@ -45,7 +45,7 @@ class TableEditor extends \TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
         /**

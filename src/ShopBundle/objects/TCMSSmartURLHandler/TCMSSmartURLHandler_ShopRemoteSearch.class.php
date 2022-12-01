@@ -17,9 +17,9 @@ class TCMSSmartURLHandler_ShopRemoteSearch extends TCMSSmartURLHandler
     public function GetPageDef()
     {
         $iPageId = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
 
-        $oShop = &TdbShop::GetInstance($oURLData->iPortalId);
+        $oShop = TdbShop::GetInstance($oURLData->iPortalId);
 
         $sProductPath = $oShop->GetLinkToSystemPage('remotesearch');
         if ('.html' == substr($sProductPath, -5)) {

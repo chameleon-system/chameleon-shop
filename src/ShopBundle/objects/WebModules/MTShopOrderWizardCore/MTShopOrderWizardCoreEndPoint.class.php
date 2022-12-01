@@ -48,7 +48,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
             $oStep->JumpToStep($oStep);
         }
 
-        $this->oActiveOrderStep = &TdbShopOrderStep::GetStep($sStepName);
+        $this->oActiveOrderStep = TdbShopOrderStep::GetStep($sStepName);
 
         // if the order has been created, and we are not on the final step, then we jump to that step
         if (is_null($this->oActiveOrderStep)) {
@@ -56,7 +56,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
             $oMsgManager = TCMSMessageManager::GetInstance();
             $oMsgManager->AddMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'SYSTEM-ERROR-SHOP-ORDER-STEP-NOT-DEFINED', array('target' => $sStepName, 'calling' => TdbShopOrderStep::GetCallingStepName()));
             $sStepName = TdbShopOrderStep::GetCallingStepName();
-            $this->oActiveOrderStep = &TdbShopOrderStep::GetStep($sStepName);
+            $this->oActiveOrderStep = TdbShopOrderStep::GetStep($sStepName);
         }
         if (!is_null($this->oActiveOrderStep)) {
             $this->oActiveOrderStep->bIsTheActiveStep = true;
@@ -74,9 +74,9 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
             $oOrder = TShopBasket::GetLastCreatedOrder();
             $oBasket = TShopBasket::GetInstance();
             //$oPaymentHandler
-            $oActivePaymentMethod = &$oBasket->GetActivePaymentMethod();
+            $oActivePaymentMethod = $oBasket->GetActivePaymentMethod();
             if ($oActivePaymentMethod) {
-                $oPaymentHandler = &$oActivePaymentMethod->GetFieldShopPaymentHandler();
+                $oPaymentHandler = $oActivePaymentMethod->GetFieldShopPaymentHandler();
                 if ($oPaymentHandler) {
                     try {
                         if ($oPaymentHandler->postExecutePaymentInterruptedHook($oOrder, TCMSMessageManager::GLOBAL_CONSUMER_NAME) && $oBasket->OnPaymentSuccessHook($oOrder, $oPaymentHandler, TCMSMessageManager::GLOBAL_CONSUMER_NAME)) {
@@ -111,10 +111,10 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
         }
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
-        $this->data['oActiveOrderStep'] = &$this->oActiveOrderStep;
+        $this->data['oActiveOrderStep'] = $this->oActiveOrderStep;
 
         $this->data['oSteps'] = TdbShopOrderStepList::GetNavigationStepList($this->oActiveOrderStep);
         $this->data['sBasketRequestURL'] = self::GetCallingURL();

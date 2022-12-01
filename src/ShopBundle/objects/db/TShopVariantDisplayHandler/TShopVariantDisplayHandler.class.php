@@ -58,7 +58,7 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
             if (!is_array($aSelectedTypeValues) && !$bOnlyCheckPost) {
                 $aSelectedTypeValues = array();
                 if (!is_null($oActiveArticle) && $oActiveArticle->IsVariant()) {
-                    $oVariantSet = &$oActiveArticle->GetFieldShopVariantSet();
+                    $oVariantSet = $oActiveArticle->GetFieldShopVariantSet();
                     $oVariantTypes = $oVariantSet->GetFieldShopVariantTypeList();
                     $aSelectedTypeValues = array();
                     while ($oVariantType = $oVariantTypes->Next()) {
@@ -130,7 +130,7 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      *
      * @deprecated since 6.2.13 - replaced by ProductVariantServiceInterface::getProductBasedOnSelection()
      */
-    public static function GetArticleMatchingCurrentSelection(TdbShopArticle &$oParentArticle, $bOnlyIfAPartialSelectionExists = true)
+    public static function GetArticleMatchingCurrentSelection(TdbShopArticle $oParentArticle, $bOnlyIfAPartialSelectionExists = true)
     {
         $aActiveSelection = TdbShopVariantDisplayHandler::GetActiveVariantTypeSelection(true);
         if (!$bOnlyIfAPartialSelectionExists || (is_array($aActiveSelection) && count($aActiveSelection))) {
@@ -150,7 +150,7 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      *
      * @return string
      */
-    public function Render(&$oArticle, $sViewName = 'vStandard', $sViewType = 'Customer', $aCallTimeVars = array())
+    public function Render($oArticle, $sViewName = 'vStandard', $sViewType = 'Customer', $aCallTimeVars = array())
     {
         $oView = new TViewParser();
 
@@ -159,7 +159,7 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
             $aSelectedTypeValues = array();
         }
 
-        $oVariantSet = &$oArticle->GetFieldShopVariantSet();
+        $oVariantSet = $oArticle->GetFieldShopVariantSet();
 
         $oView->AddVar('oDisplayHandler', $this);
         $oView->AddVar('aSelectedTypeValues', $aSelectedTypeValues);
@@ -182,7 +182,7 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      *
      * @return array
      */
-    protected function GetAdditionalViewVariables(&$oArticle, $sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($oArticle, $sViewName, $sViewType)
     {
         return array();
     }
@@ -199,7 +199,7 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
      *
      * @return void
      */
-    protected function AddClearCacheTriggers(&$aClearTriggers, &$oArticle, $sViewName, $sViewType)
+    protected function AddClearCacheTriggers($aClearTriggers, $oArticle, $sViewName, $sViewType)
     {
         $aClearTriggers[] = array('table' => $this->table, 'id' => $this->id);
         $aClearTriggers[] = array('table' => $oArticle->table, 'id' => $oArticle->id);

@@ -22,7 +22,7 @@ class TShopModuleArticlelistFilterAllArticlesOfActiveNonLeafCategory extends Tdb
      *
      * @return string
      */
-    protected function GetListQueryBase(&$oListConfig)
+    protected function GetListQueryBase($oListConfig)
     {
         $sQuery = 'select shop_article.* from shop_article
                 LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`

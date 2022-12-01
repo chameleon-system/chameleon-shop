@@ -64,7 +64,7 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
         $this->SetTemplate(get_class($this), 'system/vSendForm');
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         if (!empty($this->sActiveMode)) {
@@ -120,7 +120,7 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
         // validate input
         $oUser = TdbDataExtranetUser::GetInstance();
         if ($this->SendWishlistDataValid() && $oUser->IsLoggedIn()) {
-            $oWishList = &$oUser->GetWishlist();
+            $oWishList = $oUser->GetWishlist();
             if (!is_null($oWishList)) {
                 if ($oWishList->SendPerMail($this->aUserInput['to_mail'], $this->aUserInput['to_name'], $this->aUserInput['comment'])) {
                     $oMsgManager->AddMessage(self::MSG_CONSUMER_NAME, 'WISHLIST-SEND-MAIL', $this->aUserInput);
@@ -185,7 +185,7 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
 
         $oUser = TdbDataExtranetUser::GetInstance();
         if ($oUser->IsLoggedIn()) {
-            $oWishlist = &$oUser->GetWishlist(true);
+            $oWishlist = $oUser->GetWishlist(true);
             $aTmp = $oWishlist->sqlData;
             $aTmp['description'] = $sWishListDescription;
             if (array_key_exists('is_public', $aInput)) {

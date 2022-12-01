@@ -1,6 +1,6 @@
 <?php
 /** @var $oListItem TdbPkgShopListfilterItem */
-$oLocal = &TCMSLocal::GetActive();
+$oLocal = TCMSLocal::GetActive();
 $sSelectedActive = '';
 $sSelectedInactive = '';
 $sSelectedNotSelected = '';

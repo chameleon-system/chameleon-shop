@@ -19,7 +19,7 @@ class TCMSTableEditorShopCategory extends TCMSTableEditor
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         $this->UpdatePageNaviBreadCrumb();
         $this->UpdateInheritablePropertiesManager($this->oTable, $this->oTable);
@@ -92,7 +92,7 @@ class TCMSTableEditorShopCategory extends TCMSTableEditor
         if (!$oCategory->Load($this->sId)) {
             $oCategory = null;
         } else {
-            $oChildren = &$oCategory->GetChildren();
+            $oChildren = $oCategory->GetChildren();
             while ($oChild = $oChildren->Next()) {
                 $oEditor = new TCMSTableEditorManager();
                 /** @var $oEditor TCMSTableEditorManager */
@@ -123,7 +123,7 @@ class TCMSTableEditorShopCategory extends TCMSTableEditor
             $oCategory = null;
         }
         if (!is_null($oCategory)) {
-            $oCategoryBreadcrumb = &$oCategory->GetBreadcrumb();
+            $oCategoryBreadcrumb = $oCategory->GetBreadcrumb();
             $oCategoryBreadcrumb->GoToStart();
             while ($oCategoryItem = $oCategoryBreadcrumb->Next()) {
                 $sBreadCrumb .= '/'.self::getUrlNormalizationUtil()->normalizeUrl($oCategoryItem->GetName());

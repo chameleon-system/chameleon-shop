@@ -54,7 +54,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      *
      * @return TdbShopArticleList
      */
-    public static function &LoadCategoryArticleList($iCategoryId, $sOrderString = null, $iLimit = -1, $aFilter = array())
+    public static function LoadCategoryArticleList($iCategoryId, $sOrderString = null, $iLimit = -1, $aFilter = array())
     {
         return TdbShopArticleList::LoadCategoryArticleListForCategoryList(array($iCategoryId), $sOrderString, $iLimit, $aFilter);
     }
@@ -70,7 +70,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      *
      * @return TdbShopArticleList
      */
-    public static function &LoadCategoryArticleListForCategoryList($aCategoryIdList, $sOrderString = null, $iLimit = -1, $aFilter = array(), $sCustomBaseQuery = null)
+    public static function LoadCategoryArticleListForCategoryList($aCategoryIdList, $sOrderString = null, $iLimit = -1, $aFilter = array(), $sCustomBaseQuery = null)
     {
         if (is_null($sOrderString)) {
             $sOrderString = '`shop_article`.`list_rank` DESC, `shop_article`.`name` ASC';
@@ -149,7 +149,7 @@ class TShopArticleList extends TShopArticleListAutoParent
        WHERE `shop_article`.`id` IN (
         {$query}
        ) {$sRestrictions}";*/
-        $oList = &TdbShopArticleList::GetList($sFullQuery, null, false);
+        $oList = TdbShopArticleList::GetList($sFullQuery, null, false);
 
         return $oList;
     }
@@ -192,7 +192,7 @@ class TShopArticleList extends TShopArticleListAutoParent
             $query .= ' LIMIT 0,'.$iLimit;
         }
 
-        $oList = &TdbShopArticleList::GetList($query);
+        $oList = TdbShopArticleList::GetList($query);
 
         return $oList;
     }
@@ -229,7 +229,7 @@ class TShopArticleList extends TShopArticleListAutoParent
     {
         if (null === $this->sListIdentKey) {
             $oGlobal = TGlobal::instance();
-            $oExecutingModule = &$oGlobal->GetExecutingModulePointer();
+            $oExecutingModule = $oGlobal->GetExecutingModulePointer();
             $this->sListIdentKey = $oExecutingModule->sModuleSpotName;
         }
 
@@ -250,7 +250,7 @@ class TShopArticleList extends TShopArticleListAutoParent
     {
         $oGlobal = TGlobal::instance();
         $sItemKey = $this->GetListIdentKey();
-        $oExecutingModule = &$oGlobal->GetExecutingModulePointer();
+        $oExecutingModule = $oGlobal->GetExecutingModulePointer();
 
         if (!array_key_exists(TdbShopArticleList::SESSIN_DUMP_NAME, $_SESSION)) {
             $_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME] = array();
@@ -308,7 +308,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      *
      * @return TdbShopArticleList|null
      */
-    public static function &GetInstanceFromSession($sListSessionKey)
+    public static function GetInstanceFromSession($sListSessionKey)
     {
         $oList = null;
         $aListData = TdbShopArticleList::GetInstanceDataFromSession($sListSessionKey);
@@ -407,7 +407,7 @@ class TShopArticleList extends TShopArticleListAutoParent
         $sLink = false;
         if ($this->HasNextPage()) {
             $oGlobal = TGlobal::instance();
-            $oExecutingModule = &$oGlobal->GetExecutingModulePointer();
+            $oExecutingModule = $oGlobal->GetExecutingModulePointer();
             $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ChangePage', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'NextPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => $this->GetCurrentPageNumber());
             $sLink = $this->getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, TdbShopArticleList::GetParametersToIgnoreInPageLinks());
         }
@@ -427,7 +427,7 @@ class TShopArticleList extends TShopArticleListAutoParent
         $sLink = false;
         if ($this->HasNextPage()) {
             $oGlobal = TGlobal::instance();
-            $oExecutingModule = &$oGlobal->GetExecutingModulePointer();
+            $oExecutingModule = $oGlobal->GetExecutingModulePointer();
             $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ExecuteAjaxCall', '_fnc' => 'ChangePageAjax', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'NextPage',
             );
             $sLink = $this->getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, TdbShopArticleList::GetParametersToIgnoreInPageLinks());
@@ -451,7 +451,7 @@ class TShopArticleList extends TShopArticleListAutoParent
         $sLink = false;
         if ($this->HasPreviousPage()) {
             $oGlobal = TGlobal::instance();
-            $oExecutingModule = &$oGlobal->GetExecutingModulePointer();
+            $oExecutingModule = $oGlobal->GetExecutingModulePointer();
             $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ExecuteAjaxCall', '_fnc' => 'ChangePageAjax', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'PreviousPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => $this->GetCurrentPageNumber() - 2,
             );
             $sLink = $this->getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, TdbShopArticleList::GetParametersToIgnoreInPageLinks());
@@ -473,7 +473,7 @@ class TShopArticleList extends TShopArticleListAutoParent
         $sLink = false;
         if ($this->HasPreviousPage()) {
             $oGlobal = TGlobal::instance();
-            $oExecutingModule = &$oGlobal->GetExecutingModulePointer();
+            $oExecutingModule = $oGlobal->GetExecutingModulePointer();
             $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ChangePage', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'PreviousPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => ($this->GetCurrentPageNumber() - 2));
             $sLink = $this->getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, TdbShopArticleList::GetParametersToIgnoreInPageLinks());
         }
@@ -494,7 +494,7 @@ class TShopArticleList extends TShopArticleListAutoParent
         $sLink = false;
         if ($iPageNumber < $this->GetTotalPageCount()) {
             $oGlobal = TGlobal::instance();
-            $oExecutingModule = &$oGlobal->GetExecutingModulePointer();
+            $oExecutingModule = $oGlobal->GetExecutingModulePointer();
             $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ExecuteAjaxCall', '_fnc' => 'ChangePageAjax', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'GoToPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => $iPageNumber,
             );
             $sLink = $this->getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, TdbShopArticleList::GetParametersToIgnoreInPageLinks());
@@ -518,7 +518,7 @@ class TShopArticleList extends TShopArticleListAutoParent
         $sLink = false;
         if ($iPageNumber < $this->GetTotalPageCount()) {
             $oGlobal = TGlobal::instance();
-            $oExecutingModule = &$oGlobal->GetExecutingModulePointer();
+            $oExecutingModule = $oGlobal->GetExecutingModulePointer();
             $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ChangePage', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'GoToPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => $iPageNumber);
             $sLink = $this->getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, TdbShopArticleList::GetParametersToIgnoreInPageLinks());
         }

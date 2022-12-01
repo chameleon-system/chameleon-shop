@@ -15,7 +15,7 @@ class TPkgShopPaymentIPN_TCMSSmartURLHandler extends TCMSSmartURLHandler
 {
     public function GetPageDef()
     {
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
 
         $oGlobal = TGlobal::instance();
         $aRawData = $oGlobal->GetRawUserData();

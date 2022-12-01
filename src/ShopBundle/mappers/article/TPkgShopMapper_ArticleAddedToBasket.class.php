@@ -23,7 +23,7 @@ class TPkgShopMapper_ArticleAddedToBasket extends AbstractPkgShopMapper_Article
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
 
         /** @var $oArticle TdbShopArticle */
         $oArticle = $oVisitor->GetSourceObject('oObject');

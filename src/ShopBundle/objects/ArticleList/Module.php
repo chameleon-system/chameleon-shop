@@ -209,7 +209,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
      *
      * @return void
      */
-    private function makePageSizeValid(array &$stateData)
+    private function makePageSizeValid(array $stateData)
     {
         $pageSizeKey = $this->stateElementPageSize->getKey();
         if (!isset($stateData[$pageSizeKey])) {

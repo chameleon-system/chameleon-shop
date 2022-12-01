@@ -59,7 +59,7 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
      *
      * @return false|null|resource
      */
-    public static function &GetFilePointer($sTableName, $sMode = null)
+    public static function GetFilePointer($sTableName, $sMode = null)
     {
         /**
          * Uses the table name as a string and the opened resource as a value.
@@ -94,7 +94,7 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
                         $aPointer[$sTableName] = fopen($sBasePath, 'ab');
                     }
                 }
-                $pPointer = &$aPointer[$sTableName];
+                $pPointer = $aPointer[$sTableName];
                 break;
         }
 
@@ -113,7 +113,7 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
      */
     protected function ProcessIndex($sFieldValue, $iArticleId, $sTableName, $iSubstringLength)
     {
-        $oShop = &$this->GetFieldShop();
+        $oShop = $this->GetFieldShop();
         $aInserts = array();
         $aInsertsCompleteWords = array();
 
@@ -268,7 +268,7 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
 
         $sSoundEx = TdbShopSearchIndexer::PrepareSearchWord($sSoundEx); // clean and cut the word
         if (!empty($sSoundEx) && '0000' != $sSoundEx) {
-            $oShop = &$this->GetFieldShop();
+            $oShop = $this->GetFieldShop();
             // now add to index
             $sIndexTable = TdbShopSearchIndexer::GetIndexTableNameForIndexLength(mb_strlen($sSoundEx));
             $dWeight = $dOriginalWeight * $oShop->fieldShopSearchSoundexPenalty;

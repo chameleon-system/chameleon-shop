@@ -129,7 +129,7 @@ class MTRatingListCore extends TUserCustomModelBase
         $_SESSION['cmsMTRatingListCore'][$sName] = $sValue;
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 

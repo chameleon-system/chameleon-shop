@@ -27,14 +27,14 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
      *
      * @return void
      */
-    public function ProcessFieldsBeforeDisplay(&$oFields)
+    public function ProcessFieldsBeforeDisplay($oFields)
     {
         /** @var TdbShopArticle $product */
         $product = $this->oTable;
         if ($product->IsVariant()) {
-            $oParent = &$product->GetFieldVariantParent();
+            $oParent = $product->GetFieldVariantParent();
             if (null != $oParent) {
-                $oVariantSet = &$oParent->GetFieldShopVariantSet();
+                $oVariantSet = $oParent->GetFieldShopVariantSet();
                 if (!is_null($oVariantSet)) {
                     $aPermittedFields = $oVariantSet->GetMLTIdList('cms_field_conf', 'cms_field_conf_mlt');
                     $oPermittedFields = new TIterator();
@@ -58,7 +58,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
         /** @var TdbShopArticle $product */
@@ -83,7 +83,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
             }
             $aRawData['variant_parent_is_active'] = $this->oTable->sqlData['active'];
 
-            $oVariants = &$product->GetFieldShopArticleVariantsList(array(), false);
+            $oVariants = $product->GetFieldShopArticleVariantsList(array(), false);
             $oVariants->GoToStart();
             while ($oVariant = $oVariants->Next()) {
                 $aTmpRawData = $aRawData;

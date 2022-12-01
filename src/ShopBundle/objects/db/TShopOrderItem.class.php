@@ -18,7 +18,7 @@ class TShopOrderItem extends TAdbShopOrderItem
      *
      * @return TdbShopOrderItem|false
      */
-    public function &GetOwningBundleOrderItem()
+    public function GetOwningBundleOrderItem()
     {
         /** @var TdbShopOrderItem|null $oOwningOrderItem */
         $oOwningOrderItem = $this->GetFromInternalCache('oOwningOrderItem');
@@ -120,7 +120,7 @@ class TShopOrderItem extends TAdbShopOrderItem
     protected function PostInsertHook()
     {
         parent::PostInsertHook();
-        $oArticle = &$this->GetFieldShopArticle();
+        $oArticle = $this->GetFieldShopArticle();
         if (!is_null($oArticle)) {
             $bNewAmountIsDelta = true;
             $bUpdateSaleCounter = true;
@@ -136,7 +136,7 @@ class TShopOrderItem extends TAdbShopOrderItem
     protected function PreDeleteHook()
     {
         parent::PreDeleteHook();
-        $oArticle = &$this->GetFieldShopArticle();
+        $oArticle = $this->GetFieldShopArticle();
         if (!is_null($oArticle)) {
             $bNewAmountIsDelta = true;
             $bUpdateSaleCounter = true;

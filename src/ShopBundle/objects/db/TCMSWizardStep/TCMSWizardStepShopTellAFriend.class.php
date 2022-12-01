@@ -86,7 +86,7 @@ class TCMSWizardStepShopTellAFriend extends TdbCmsWizardStep
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
         $aViewVariables = array();
 
@@ -99,7 +99,7 @@ class TCMSWizardStepShopTellAFriend extends TdbCmsWizardStep
         if (!$oArticle->Load($this->aUserInput[MTShopArticleCatalogCore::URL_ITEM_ID])) {
             $oArticle = null;
         }
-        $aViewVariables['oArticle'] = &$oArticle;
+        $aViewVariables['oArticle'] = $oArticle;
 
         $oMsgManager = TCMSMessageManager::GetInstance();
 
@@ -113,14 +113,14 @@ class TCMSWizardStepShopTellAFriend extends TdbCmsWizardStep
             $sConsumerName = 'tell-a-friend-field-'.$sField;
             if ($oMsgManager->ConsumerHasMessages($sConsumerName)) {
                 $oMsgs = $oMsgManager->ConsumeMessages($sConsumerName);
-                while ($oMsg = &$oMsgs->Next()) {
+                while ($oMsg = $oMsgs->Next()) {
                     $aFieldMessages[$sField] .= $oMsg->Render();
                 }
             }
         }
         $this->aUserInput['captcha'] = '';
-        $aViewVariables['aFieldMessages'] = &$aFieldMessages;
-        $aViewVariables['aUserInput'] = &$this->aUserInput;
+        $aViewVariables['aFieldMessages'] = $aFieldMessages;
+        $aViewVariables['aUserInput'] = $this->aUserInput;
 
         return $aViewVariables;
     }

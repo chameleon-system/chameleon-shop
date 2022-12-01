@@ -13,7 +13,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 class MTShopMyAccountCore extends MTExtranetMyAccountCore
 {
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
@@ -42,7 +42,7 @@ class MTShopMyAccountCore extends MTExtranetMyAccountCore
         // subscribe shop user to newsletter
         $oUser = TdbDataExtranetUser::GetInstance();
 
-        $oNewsletter = &TdbPkgNewsletterUser::GetInstanceForActiveUser();
+        $oNewsletter = TdbPkgNewsletterUser::GetInstanceForActiveUser();
         if (is_null($oNewsletter)) {
             $oNewsletter = TdbPkgNewsletterUser::GetNewInstance();
             $aData = array();
@@ -81,7 +81,7 @@ class MTShopMyAccountCore extends MTExtranetMyAccountCore
      */
     public function NewsletterUnsubscribe()
     {
-        $oNewsletter = &TdbPkgNewsletterUser::GetInstanceForActiveUser();
+        $oNewsletter = TdbPkgNewsletterUser::GetInstanceForActiveUser();
         if (!is_null($oNewsletter)) {
             $oNewsletter->SignOut();
             TdbPkgNewsletterUser::GetInstanceForActiveUser(true);

@@ -80,7 +80,7 @@ class TShopPaymentHandlerDebitNoSEPA extends TdbShopPaymentHandler
      *
      * @return bool
      */
-    public function ExecutePayment(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $bPaymentOk = true;
         // run order....

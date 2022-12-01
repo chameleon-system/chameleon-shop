@@ -29,7 +29,7 @@ class TPkgShopCurrency_ShopVoucher extends TPkgShopCurrency_ShopVoucherAutoParen
      *
      * @return void
      */
-    protected function CommitVoucherUseForCurrentUserPreSaveHook(&$aData)
+    protected function CommitVoucherUseForCurrentUserPreSaveHook($aData)
     {
         // value used is converted to the base currency - euro
         $oCurrency = TdbPkgShopCurrency::GetBaseCurrency();
@@ -51,7 +51,7 @@ class TPkgShopCurrency_ShopVoucher extends TPkgShopCurrency_ShopVoucherAutoParen
      */
     protected function GetVoucherSeriesOriginalValue()
     {
-        $oVoucherSeries = &$this->GetFieldShopVoucherSeries();
+        $oVoucherSeries = $this->GetFieldShopVoucherSeries();
         $dValue = $oVoucherSeries->fieldValue;
         if ('absolut' == $oVoucherSeries->fieldValueType) {
             $oCurrency = TdbPkgShopCurrency::GetBaseCurrency();

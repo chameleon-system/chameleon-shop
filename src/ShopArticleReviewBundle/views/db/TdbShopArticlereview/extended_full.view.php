@@ -4,7 +4,7 @@
 /*@var $oPkgCommentModuleConfig TdbPkgCommentModuleConfig */
 $oGlobal = TGlobal::instance();
 $oLocal = TCMSLocal::GetActive();
-$oModulePointer = &$oGlobal->GetExecutingModulePointer();
+$oModulePointer = $oGlobal->GetExecutingModulePointer();
 $sSpotName = $oModulePointer->sModuleSpotName;
 $bAllowRateReviews = false;
 $bAllowReportReviews = false;

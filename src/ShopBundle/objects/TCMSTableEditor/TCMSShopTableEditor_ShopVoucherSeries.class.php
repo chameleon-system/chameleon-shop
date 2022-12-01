@@ -39,7 +39,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
             $oMenuItem->sIcon = 'fas fa-file-invoice-dollar';
 
             $oGlobal = TGlobal::instance();
-            $oExecutingModulePointer = &$oGlobal->GetExecutingModulePointer();
+            $oExecutingModulePointer = $oGlobal->GetExecutingModulePointer();
 
             $aURLData = array('module_fnc' => array($oExecutingModulePointer->sModuleSpotName => 'ExecuteAjaxCall'), '_fnc' => 'CreateVoucherCodes', '_noModuleFunction' => 'true', 'pagedef' => $oGlobal->GetUserData('pagedef'), 'id' => $this->sId, 'tableid' => $this->oTableConf->id);
             $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aURLData);
@@ -56,7 +56,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
             $oMenuItem->sIcon = 'fas fa-file-download';
 
             $oGlobal = TGlobal::instance();
-            $oExecutingModulePointer = &$oGlobal->GetExecutingModulePointer();
+            $oExecutingModulePointer = $oGlobal->GetExecutingModulePointer();
 
             $aURLData = array('module_fnc' => array($oExecutingModulePointer->sModuleSpotName => 'ExportVoucherCodes'), '_noModuleFunction' => 'true', 'pagedef' => $oGlobal->GetUserData('pagedef'), 'id' => $this->sId, 'tableid' => $this->oTableConf->id);
             $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aURLData);
@@ -105,7 +105,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
             if (!$oReturn->bError) {
                 $oVoucher = TdbShopVoucher::GetNewInstance();
                 /** @var $oVoucher TdbShopVoucher */
-                $oVoucherCodeTableConf = &$oVoucher->GetTableConf();
+                $oVoucherCodeTableConf = $oVoucher->GetTableConf();
                 $oVoucherCodeEditor = new TCMSTableEditorManager();
                 /** @var $oEditor TCMSTableEditorManager */
                 $oVoucherCodeEditor->Init($oVoucherCodeTableConf->id, null);

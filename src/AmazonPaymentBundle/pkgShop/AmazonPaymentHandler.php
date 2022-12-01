@@ -47,7 +47,7 @@ class AmazonPaymentHandler extends \TdbShopPaymentHandler implements \IPkgShopPa
         return true;
     }
 
-    public function ExecutePayment(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         if (false === parent::ExecutePayment($oOrder, $sMessageConsumer)) {
             return false;

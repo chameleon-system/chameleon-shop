@@ -64,7 +64,7 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
      *
      * @return void
      */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
+    protected function AddClearCacheTriggers($aClearTriggers, $sViewName, $sViewType)
     {
         $aClearTriggers[] = array('table' => $this->table, 'id' => $this->id);
         $aClearTriggers[] = array('table' => 'shop_article', 'id' => ''); // for now we keep it simple and react to any article changes. this should later be changed to react only to relevant items
@@ -83,7 +83,7 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
     public function GetNextItem()
     {
         /** @var TdbPkgImageHotspotItem|null $oNextItem */
-        $oNextItem = &$this->GetFromInternalCache('oNextItem');
+        $oNextItem = $this->GetFromInternalCache('oNextItem');
         if (is_null($oNextItem)) {
             $oItemList = TdbPkgImageHotspotItemList::GetListForPkgImageHotspotId($this->fieldPkgImageHotspotId);
             $oItemList->bAllowItemCache = true;
@@ -120,7 +120,7 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
     public function GetPreviousItem()
     {
         /** @var TdbPkgImageHotspotItem|null $oPreviousItem */
-        $oPreviousItem = &$this->GetFromInternalCache('oPreviousItem');
+        $oPreviousItem = $this->GetFromInternalCache('oPreviousItem');
         if (is_null($oPreviousItem)) {
             $oItemList = TdbPkgImageHotspotItemList::GetListForPkgImageHotspotId($this->fieldPkgImageHotspotId);
             $oItemList->bAllowItemCache = true;
@@ -154,7 +154,7 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
     public static function GetURLParameterBaseForActiveSpot()
     {
         $oGlobal = TGlobal::instance();
-        $oRunningModule = &$oGlobal->GetExecutingModulePointer();
+        $oRunningModule = $oGlobal->GetExecutingModulePointer();
         $sModuleSpotName = $oRunningModule->sModuleSpotName;
 
         return TdbPkgImageHotspotItem::URL_NAME_ITEM_ID.$sModuleSpotName;
@@ -184,7 +184,7 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
     public function GetAjaxLink($sViewName = 'standard', $sType = 'Core', $aParameter = array())
     {
         $oGlobal = TGlobal::instance();
-        $oRunningModule = &$oGlobal->GetExecutingModulePointer();
+        $oRunningModule = $oGlobal->GetExecutingModulePointer();
         $aParameter['id'] = $this->id;
         $aParameter['sViewName'] = $sViewName;
         $aParameter['sType'] = $sType;

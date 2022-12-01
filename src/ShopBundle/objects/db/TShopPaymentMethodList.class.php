@@ -26,10 +26,10 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
      *
      * @return TdbShopPaymentMethodList
      */
-    public static function &GetAvailableMethods($iGroupId)
+    public static function GetAvailableMethods($iGroupId)
     {
         $query = self::getAvailableMethodsQuery($iGroupId);
-        $oList = &TdbShopPaymentMethodList::GetList($query);
+        $oList = TdbShopPaymentMethodList::GetList($query);
         $oList->bAllowItemCache = true;
         $oList->RemoveInvalidItems();
 
@@ -94,11 +94,11 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
      *
      * @return TdbShopPaymentMethodList
      */
-    public static function &GetPublicPaymentMethods($iGroupId)
+    public static function GetPublicPaymentMethods($iGroupId)
     {
         $query = self::getAvailableMethodsQuery($iGroupId);
 
-        $oList = &TdbShopPaymentMethodList::GetList($query);
+        $oList = TdbShopPaymentMethodList::GetList($query);
         $oList->bAllowItemCache = true;
         $oList->RemoveRestrictedItems();
 
@@ -113,7 +113,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
         // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
         $aValidIds = array();
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             if ($oItem->IsAvailable()) {
                 $aValidIds[] = MySqlLegacySupport::getInstance()->real_escape_string($oItem->id);
             }
@@ -141,7 +141,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
         // since this is a tcmsrecord list, we need to collect all valid ids, and then reload the list with them
         $aValidIds = array();
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             if ($oItem->IsPublic()) {
                 $aValidIds[] = MySqlLegacySupport::getInstance()->real_escape_string($oItem->id);
             }
@@ -170,7 +170,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
             $this->dPrice = 0;
             $iPointer = $this->getItemPointer();
             $this->GoToStart();
-            while ($oItem = &$this->Next()) {
+            while ($oItem = $this->Next()) {
                 $this->dPrice += $oItem->GetPrice();
             }
             $this->setItemPointer($iPointer);

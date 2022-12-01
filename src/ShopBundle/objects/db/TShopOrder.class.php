@@ -48,7 +48,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return void
      */
-    public function LoadFromBasket(TShopBasket &$oBasket)
+    public function LoadFromBasket(TShopBasket $oBasket)
     {
         $oShop = TdbShop::GetInstance();
         $oPortal = $this->getPortalDomainService()->getActivePortal();
@@ -172,7 +172,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return void
      */
-    protected function LoadFromBasketPostProcessData($oBasket, &$aOrderData)
+    protected function LoadFromBasketPostProcessData($oBasket, $aOrderData)
     {
     }
 
@@ -232,7 +232,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return TdbShopOrderItem
      */
-    protected function &SaveArticle(TShopBasketArticle $oBasketItem)
+    protected function SaveArticle(TShopBasketArticle $oBasketItem)
     {
         $oVat = $oBasketItem->GetVat();
         $oOrderItem = TdbShopOrderItem::GetNewInstance();
@@ -310,7 +310,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return void
      */
-    protected function PrepareArticleDataForSave(&$oBasketItem, &$aOrderItemData)
+    protected function PrepareArticleDataForSave($oBasketItem, $aOrderItemData)
     {
     }
 
@@ -323,7 +323,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return void
      */
-    protected function SaveBundleArticle(&$oBasketItem, &$oOrderItem, &$oBundleArticle)
+    protected function SaveBundleArticle($oBasketItem, $oOrderItem, $oBundleArticle)
     {
         $oVirtualBasketArticleForBundle = new TShopBasketArticle();
         /** @var $oVirtualBasketArticleForBundle TShopBasketArticle */
@@ -373,7 +373,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return void
      */
-    public function SaveShippingUserData(TdbShopShippingGroup &$oShippingGroup)
+    public function SaveShippingUserData(TdbShopShippingGroup $oShippingGroup)
     {
         // TODO
         if (!is_null($this->id)) {
@@ -388,7 +388,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return void
      */
-    public function SavePaymentUserData(TdbShopPaymentMethod &$oPaymentMethod)
+    public function SavePaymentUserData(TdbShopPaymentMethod $oPaymentMethod)
     {
         if (!is_null($this->id)) {
             $oHandler = $oPaymentMethod->GetFieldShopPaymentHandler();
@@ -404,7 +404,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return TdbShopPaymentHandler|null
      */
-    public function &GetPaymentHandler()
+    public function GetPaymentHandler()
     {
         $oPaymentHandler = $this->GetFromInternalCache('oOrderPaymentHandler');
         if (is_null($oPaymentHandler)) {
@@ -483,7 +483,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return bool
      */
-    public function ExportOrderForWaWiHook(&$oPaymentHandler)
+    public function ExportOrderForWaWiHook($oPaymentHandler)
     {
         return true;
     }
@@ -745,7 +745,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return bool
      */
-    public function ExecutePayment(&$oPaymentHandler, $sMessageConsumer = '')
+    public function ExecutePayment($oPaymentHandler, $sMessageConsumer = '')
     {
         $bPaymentOk = false;
         $bAllowEdit = $this->bAllowEditByAll;
@@ -773,7 +773,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return bool
      */
-    protected function ExecutePaymentHook(&$oPaymentHandler, $sMessageConsumer = '')
+    protected function ExecutePaymentHook($oPaymentHandler, $sMessageConsumer = '')
     {
         return $oPaymentHandler->ExecutePayment($this, $sMessageConsumer);
     }

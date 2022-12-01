@@ -48,9 +48,9 @@ class TPkgShopMapper_OrderPayment extends AbstractViewMapper
     {
         $aPaymentInformation = array();
 
-        $oPaymentMethodParameterList = &$oOrder->GetFieldShopOrderPaymentMethodParameterList();
+        $oPaymentMethodParameterList = $oOrder->GetFieldShopOrderPaymentMethodParameterList();
         $oPaymentMethodParameterList->GoToStart();
-        while ($oPaymentParameter = &$oPaymentMethodParameterList->Next()) {
+        while ($oPaymentParameter = $oPaymentMethodParameterList->Next()) {
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oPaymentParameter->table, $oPaymentParameter->id);
             }

@@ -209,7 +209,7 @@ class TShopShippingType extends TShopShippingTypeAutoParent
     public function IsValidForBasket()
     {
         $bValidForBasket = false;
-        $oArticles = &$this->GetAffectedBasketArticles();
+        $oArticles = $this->GetAffectedBasketArticles();
         $bValidForBasket = ($oArticles->Length() > 0);
 
         return $bValidForBasket;
@@ -221,12 +221,12 @@ class TShopShippingType extends TShopShippingTypeAutoParent
      *
      * @return TShopBasketArticleList
      */
-    public function &GetAffectedBasketArticles()
+    public function GetAffectedBasketArticles()
     {
         if (is_null($this->oAffectedBasketArticles)) {
             $this->oAffectedBasketArticles = null;
             $oBasket = TShopBasket::GetInstance();
-            $this->oAffectedBasketArticles = &$oBasket->GetArticlesAffectedByShippingType($this);
+            $this->oAffectedBasketArticles = $oBasket->GetArticlesAffectedByShippingType($this);
         }
 
         return $this->oAffectedBasketArticles;
@@ -248,11 +248,11 @@ class TShopShippingType extends TShopShippingTypeAutoParent
      *
      * @return bool
      */
-    public function ArticleAffected(TShopBasketArticle &$oArticle)
+    public function ArticleAffected(TShopBasketArticle $oArticle)
     {
         $shopShippingTypeDataAccess = $this->getShopShippingTypeDataAccess();
         $bAffected = false;
-        $oArticleShippingType = &$oArticle->GetActingShippingType();
+        $oArticleShippingType = $oArticle->GetActingShippingType();
         // if the article is already marked with this shipping type, then we keep it
         if (!is_null($oArticleShippingType) && $oArticleShippingType->id == $this->id) {
             $bAffected = true;
@@ -305,7 +305,7 @@ class TShopShippingType extends TShopShippingTypeAutoParent
      *
      * @return bool
      */
-    public function ArticleListValidForShippingType(TShopBasketArticleList &$oArticleList)
+    public function ArticleListValidForShippingType(TShopBasketArticleList $oArticleList)
     {
         $bIsValid = true;
         $dArticleValue = $oArticleList->dProductPrice;
@@ -354,7 +354,7 @@ class TShopShippingType extends TShopShippingTypeAutoParent
                 $iTotalDiscountedPriceOfArticlesInBasketThatAreExcludedFromShippingCostCalculation = 0;
                 $oItemList = $oBasket->GetBasketContents();
                 $oItemList->GoToStart();
-                while ($oItem = &$oItemList->Next()) {
+                while ($oItem = $oItemList->Next()) {
                     if ($oItem->fieldExcludeFromShippingCostCalculation) {
                         $iTotalNumberOfArticlesInBasketThatAreExcludedFromShippingCostCalculation += $oItem->dAmount;
                         $iTotalDiscountedPriceOfArticlesInBasketThatAreExcludedFromShippingCostCalculation += $oItem->dPriceTotalAfterDiscount;
@@ -377,12 +377,12 @@ class TShopShippingType extends TShopShippingTypeAutoParent
             } else {
                 // price based on current list
                 /** @var $oArticleList TShopBasketArticleList */
-                $oArticleList = &$this->GetAffectedBasketArticles();
+                $oArticleList = $this->GetAffectedBasketArticles();
                 if (!is_null($oArticleList)) {
                     $iTotalNumberOfArticlesInListThatAreExcludedFromShippingCostCalculation = 0;
                     $iTotalDiscountedPriceOfArticlesInListThatAreExcludedFromShippingCostCalculation = 0;
                     $oArticleList->GoToStart();
-                    while ($oArticle = &$oArticleList->Next()) {
+                    while ($oArticle = $oArticleList->Next()) {
                         if ($oArticle->fieldExcludeFromShippingCostCalculation) {
                             $iTotalNumberOfArticlesInListThatAreExcludedFromShippingCostCalculation += $oArticle->dAmount;
                             $iTotalDiscountedPriceOfArticlesInListThatAreExcludedFromShippingCostCalculation += $oArticle->dPriceTotalAfterDiscount;

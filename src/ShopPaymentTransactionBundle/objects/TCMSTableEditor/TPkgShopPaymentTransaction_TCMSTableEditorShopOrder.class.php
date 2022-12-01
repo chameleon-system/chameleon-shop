@@ -252,7 +252,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     /**
      * @return TCMSTableEditorMenuItem
      */
-    private function &getCustomMenuItem_CollectAll()
+    private function getCustomMenuItem_CollectAll()
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'collectall';
@@ -279,7 +279,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     /**
      * @return TCMSTableEditorMenuItem
      */
-    private function &getCustomMenuItem_RefundAll()
+    private function getCustomMenuItem_RefundAll()
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'refundall';
@@ -306,7 +306,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     /**
      * @return TCMSTableEditorMenuItem
      */
-    private function &getCustomMenuItem_CollectPartial()
+    private function getCustomMenuItem_CollectPartial()
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'collectpartial';
@@ -333,7 +333,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     /**
      * @return TCMSTableEditorMenuItem
      */
-    private function &getCustomMenuItem_RefundPartial()
+    private function getCustomMenuItem_RefundPartial()
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'refundpartial';

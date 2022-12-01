@@ -168,7 +168,7 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
         //if no new payment data was submitted try to get the data from the active payment method
         if (!$oGlobal->UserDataExists(TdbShopPaymentHandler::URL_PAYMENT_USER_INPUT) && !isset($this->aPaymentUserData['NCERROR'])) {
             $oBasket = TShopBasket::GetInstance();
-            $oPaymentMethod = &$oBasket->GetActivePaymentMethod();
+            $oPaymentMethod = $oBasket->GetActivePaymentMethod();
             if (null !== $oPaymentMethod) {
                 $oPaymentHandler = $oPaymentMethod->GetFieldShopPaymentHandler();
                 if ($oPaymentHandler instanceof self) {

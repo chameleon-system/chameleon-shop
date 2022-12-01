@@ -41,7 +41,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
     {
         // get current search... then add filter
         $oShop = $this->getShopService()->getActiveShop();
-        $oSearchCache = &$oShop->GetActiveSearchObject();
+        $oSearchCache = $oShop->GetActiveSearchObject();
         //$oSearchCache->aFilter[TdbShopCategory::FILTER_KEY_NAME] = $this->id;
         return $oSearchCache->GetSearchLink(array(TdbShopCategory::FILTER_KEY_NAME => $this->id));
     }
@@ -134,8 +134,8 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
             return $aChildIdList;
         }
         $aChildIdList = array();
-        $oChildren = &$this->GetChildren();
-        while ($oChild = &$oChildren->Next()) {
+        $oChildren = $this->GetChildren();
+        while ($oChild = $oChildren->Next()) {
             $aChildIdList[] = $oChild->id;
             $aChildChildIdList = $oChild->GetAllChildrenIds();
             $aChildIdList = array_merge($aChildIdList, $aChildChildIdList);
@@ -150,7 +150,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      *
      * @return TdbShopCategoryList
      */
-    public function &GetChildren()
+    public function GetChildren()
     {
         return TdbShopCategoryList::GetChildCategories($this->id, null, $this->GetLanguage());
     }
@@ -183,11 +183,11 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      *
      * @return TdbShopArticleList
      */
-    public function &GetArticleList($sOrderBy = null, $aFilter = array())
+    public function GetArticleList($sOrderBy = null, $aFilter = array())
     {
         $oCategoryArticles = $this->GetFromInternalCache('oArticleList');
         if (is_null($oCategoryArticles)) {
-            $oCategoryArticles = &TdbShopArticleList::LoadCategoryArticleList($this->id, $sOrderBy, -1, $aFilter);
+            $oCategoryArticles = TdbShopArticleList::LoadCategoryArticleList($this->id, $sOrderBy, -1, $aFilter);
             $this->SetInternalCache('oArticleList', $oCategoryArticles);
         }
 
@@ -210,7 +210,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
         if (is_null($oCategoryArticles)) {
             $aCategoryIds = $this->GetAllChildrenIds();
             $aCategoryIds[] = $this->id;
-            $oCategoryArticles = &TdbShopArticleList::LoadCategoryArticleListForCategoryList($aCategoryIds, $sOrderBy, -1, $aFilter);
+            $oCategoryArticles = TdbShopArticleList::LoadCategoryArticleListForCategoryList($aCategoryIds, $sOrderBy, -1, $aFilter);
             $this->SetInternalCache($sCacheKey, $oCategoryArticles);
         }
 
@@ -233,7 +233,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      *
      * @return TdbShopCategory|null
      */
-    public function &GetParent()
+    public function GetParent()
     {
         $oParent = null;
         if (!empty($this->fieldShopCategoryId)) {
@@ -300,7 +300,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
         $sPath = $this->GetFromInternalCache($sKey);
         if (is_null($sPath)) {
             $sPath = '';
-            $oParent = &$this->GetParent();
+            $oParent = $this->GetParent();
             if ($oParent) {
                 $sPath = $oParent->GetCategoryPathAsString($sSeparator);
             }
@@ -319,16 +319,16 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      *
      * @return TdbShopCategory
      */
-    public function &GetRootCategory()
+    public function GetRootCategory()
     {
         /** @var TdbShopCategory|null $oRootCategory */
-        $oRootCategory = &$this->GetFromInternalCache('oRootCategory');
+        $oRootCategory = $this->GetFromInternalCache('oRootCategory');
 
         if (is_null($oRootCategory)) {
             $oRootCategory = clone $this;
             while (!empty($oRootCategory->fieldShopCategoryId)) {
                 /** @var TdbShopCategory $oRootCategory */
-                $oRootCategory = &$oRootCategory->GetParent();
+                $oRootCategory = $oRootCategory->GetParent();
             }
             $this->SetInternalCache('oRootCategory', $oRootCategory);
         }
@@ -341,11 +341,11 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      *
      * @return TIterator
      */
-    public function &GetBreadcrumb()
+    public function GetBreadcrumb()
     {
-        $oBreadCrumb = &$this->GetFromInternalCache('oCategoryBreadcrumb');
+        $oBreadCrumb = $this->GetFromInternalCache('oCategoryBreadcrumb');
         if (is_null($oBreadCrumb)) {
-            $oBreadCrumb = &TdbShopCategoryList::GetCategoryPath($this->id, null, $this->GetLanguage());
+            $oBreadCrumb = TdbShopCategoryList::GetCategoryPath($this->id, null, $this->GetLanguage());
             $this->SetInternalCache('oCategoryBreadcrumb', $oBreadCrumb);
         } else {
             $oBreadCrumb->GoToStart();
@@ -431,7 +431,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
     {
         $sDesc = trim($this->fieldMetaDescription);
         if (empty($sDesc)) {
-            $oParent = &$this->GetParent();
+            $oParent = $this->GetParent();
             if (!is_null($oParent)) {
                 $sDesc .= $oParent->GetMetaDescription().' ';
             }
@@ -487,7 +487,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      *
      * @return array
      */
-    public function GetSeoPattern(&$sPaternIn)
+    public function GetSeoPattern($sPaternIn)
     {
         //$sPaternIn = "[{PORTAL_NAME}] - [{CATEGORY_NAME}]"; //default
         $aPatRepl = null;

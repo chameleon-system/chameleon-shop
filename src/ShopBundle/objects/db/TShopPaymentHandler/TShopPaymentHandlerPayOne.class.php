@@ -460,7 +460,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
      *
      * @return bool
      */
-    public function ExecutePayment(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $bPaymentOk = parent::ExecutePayment($oOrder, $sMessageConsumer);
 
@@ -537,7 +537,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
     {
         $bPaymentTransmitOk = parent::PostProcessExternalPaymentHandlerHook();
         if ($bPaymentTransmitOk) {
-            $oURLData = &TCMSSmartURLData::GetActive();
+            $oURLData = TCMSSmartURLData::GetActive();
             // If 3D-Secure Authentification fails, the ECI value is empty
             if (!empty($oURLData->aParameters['eci']) && !empty($oURLData->aParameters['xid'])) {
                 $_SESSION['3ds_payment']['eci'] = $oURLData->aParameters['eci'];
@@ -667,7 +667,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
      * @param TdbShopOrder $oOrder
      * @return array
      */
-    protected function PayOnePreauthorization($aParams, &$oOrder)
+    protected function PayOnePreauthorization($aParams, $oOrder)
     {
         $aResponse = array();
         $aResponse['success'] = false;

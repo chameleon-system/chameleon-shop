@@ -192,7 +192,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     {
         $aParameter = array();
         $sCurrency = $this->GetCurrencyIdentifier();
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         $oShopBasket = TShopBasket::GetInstance();
         $aParameter['merchantId'] = $this->GetTestLiveModeParameter('merchantId');
         $aParameter['refno'] = $this->GetRefNoParameter();
@@ -456,7 +456,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      *
      * @return bool
      */
-    public function ExecutePayment(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $bPaymentOk = parent::ExecutePayment($oOrder);
         if ($bPaymentOk) {
@@ -479,7 +479,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      *
      * @return bool
      */
-    protected function ExecuteDataTransPaymentCall(TdbShopOrder &$oOrder)
+    protected function ExecuteDataTransPaymentCall(TdbShopOrder $oOrder)
     {
         $sXMLSettlement = $this->GetXMLSettlement();
         $ch = curl_init();
@@ -520,7 +520,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      *
      * @return bool
      */
-    protected function SendFailureSettlementMail(TdbShopOrder &$oOrder)
+    protected function SendFailureSettlementMail(TdbShopOrder $oOrder)
     {
         $bSendMail = false;
         $oMail = TdbDataMailProfile::GetProfile('payment_datatrans_error_settlement');
@@ -587,7 +587,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
         $sMerchantId = $this->GetTestLiveModeParameter('merchantId');
         $sRefNo = $this->GetRefNoParameter(false);
         $sCurrency = $this->GetCurrencyIdentifier();
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         $sAmount = str_replace(',', '.', $oLocal->FormatNumber($oShopBasket->dCostTotal)) * 100;
         $sXML = '<?xml version="1.0" encoding="UTF-8" ?>
        <paymentService version="1">

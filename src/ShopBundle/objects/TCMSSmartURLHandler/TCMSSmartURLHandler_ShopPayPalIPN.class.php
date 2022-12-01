@@ -21,7 +21,7 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
         $logger = $this->getLogger();
 
         $iPageId = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
         if (false !== strpos($oURLData->sRelativeURL, TShopPaymentHandlerPayPal_PayViaLink::URL_IDENTIFIER_IPN)) {
             $oGlobal = TGlobal::instance();
             $sOrderId = null;

@@ -25,10 +25,10 @@ class TCMSShopTableEditor_ShopOrderItem extends TCMSTableEditor
          */
         $item = $this->oTable;
         if ($item->fieldIsBundle) {
-            $oOrderItemTableConf = &$item->GetTableConf();
-            $oBundleArticles = &$item->GetFieldShopOrderBundleArticleList();
+            $oOrderItemTableConf = $item->GetTableConf();
+            $oBundleArticles = $item->GetFieldShopOrderBundleArticleList();
 
-            while ($oBundleArticle = &$oBundleArticles->Next()) {
+            while ($oBundleArticle = $oBundleArticles->Next()) {
                 // now delete connected order item
                 $oOrderItemEditor = new TCMSTableEditorManager();
                 /** @var $oOrderItemEditor TCMSTableEditorManager */

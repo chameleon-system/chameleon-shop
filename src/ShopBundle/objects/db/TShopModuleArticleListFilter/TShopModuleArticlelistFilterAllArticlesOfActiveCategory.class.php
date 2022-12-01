@@ -22,7 +22,7 @@ class TShopModuleArticlelistFilterAllArticlesOfActiveCategory extends TdbShopMod
      *
      * @return string
      */
-    protected function GetListQueryBase(&$oListConfig)
+    protected function GetListQueryBase($oListConfig)
     {
         $sQuery = '';
         $oShop = TdbShop::GetInstance();

@@ -129,7 +129,7 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
         $oOrderItem = $oPosition->GetFieldShopOrderItem();
         $aArticle = array();
         /** @var $oArticle TdbShopArticle */
-        $oArticle = &$oOrderItem->GetFieldShopArticle();
+        $oArticle = $oOrderItem->GetFieldShopArticle();
 
         $aArticle['iAmount'] = number_format((float) $oOrderItem->fieldOrderAmount, 0, ',', '');
         $aArticle['iUsedAmount'] = number_format($oPosition->fieldAmount, 0, ',', '');

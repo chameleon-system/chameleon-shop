@@ -57,7 +57,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         if (!TGlobal::IsCMSMode()) {
             $dCosts = $this->GetShippingCostsForBasket();
             if (0 != $dCosts) {
-                $oLocal = &TCMSLocal::GetActive();
+                $oLocal = TCMSLocal::GetActive();
                 $sCurrencySymbol = $this->GetCurrencySymbol();
                 $sName .= ' ('.$oLocal->FormatNumber($dCosts, 2).' '.$sCurrencySymbol.')';
             }
@@ -198,7 +198,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         if ($bIsPublic) {
             // check if we have public shipping types
-            $oPublicTypes = &$this->GetPublicShippingTypes();
+            $oPublicTypes = $this->GetPublicShippingTypes();
             if ($oPublicTypes->Length() < 1) {
                 $bIsPublic = false;
             }
@@ -206,7 +206,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         if ($bIsPublic) {
             // check if we have public payment types
-            $oPublicPaymentTypes = &$this->GetPublicPaymentMethods();
+            $oPublicPaymentTypes = $this->GetPublicPaymentMethods();
             if ($oPublicPaymentTypes->Length() < 1) {
                 $bIsPublic = false;
             }
@@ -315,7 +315,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
     public function HasAvailablePaymentMethods()
     {
         $bValidMethods = false;
-        $oMethods = &$this->GetValidPaymentMethods();
+        $oMethods = $this->GetValidPaymentMethods();
         $bValidMethods = ($oMethods->Length() > 0);
 
         return $bValidMethods;
@@ -331,7 +331,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      */
     public function HasPaymentMethod($sPaymentMethodId)
     {
-        $oPaymentMethods = &$this->GetValidPaymentMethods();
+        $oPaymentMethods = $this->GetValidPaymentMethods();
 
         return $oPaymentMethods->IsInList($sPaymentMethodId);
     }
@@ -344,10 +344,10 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      * @return TdbShopPaymentMethodList
      * @psalm-suppress InvalidNullableReturnType, NullableReturnStatement - In this instance we know that the return type cannot be null
      */
-    public function &GetValidPaymentMethods($bRefresh = false)
+    public function GetValidPaymentMethods($bRefresh = false)
     {
         if (is_null($this->oValidPaymentMethods) || $bRefresh) {
-            $this->oValidPaymentMethods = &TdbShopPaymentMethodList::GetAvailableMethods($this->id);
+            $this->oValidPaymentMethods = TdbShopPaymentMethodList::GetAvailableMethods($this->id);
             $this->oValidPaymentMethods->bAllowItemCache = true;
         }
         if (!is_null($this->oValidPaymentMethods)) {
@@ -363,10 +363,10 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      * @return TdbShopShippingTypeList
      *                                 returns a list of all shipping types that can act on the current basket/user
      */
-    public function &GetActingShippingTypes($bRefresh = false)
+    public function GetActingShippingTypes($bRefresh = false)
     {
         if (is_null($this->oActingShippingTypeList) || $bRefresh) {
-            $this->oActingShippingTypeList = &TdbShopShippingTypeList::GetAvailableTypes($this->id);
+            $this->oActingShippingTypeList = TdbShopShippingTypeList::GetAvailableTypes($this->id);
             $this->oActingShippingTypeList->bAllowItemCache = true;
         }
 
@@ -378,7 +378,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      *
      * @return TdbShopShippingTypeList
      */
-    public function &GetPublicShippingTypes()
+    public function GetPublicShippingTypes()
     {
         return TdbShopShippingTypeList::GetPublicShippingTypes($this->id);
     }
@@ -388,7 +388,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      *
      * @return TdbShopPaymentMethodList
      */
-    public function &GetPublicPaymentMethods()
+    public function GetPublicPaymentMethods()
     {
         return TdbShopPaymentMethodList::GetPublicPaymentMethods($this->id);
     }
@@ -410,7 +410,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
     {
         if (is_null($this->dPrice)) {
             $this->dPrice = 0;
-            $oActingShippingTypes = &$this->GetActingShippingTypes();
+            $oActingShippingTypes = $this->GetActingShippingTypes();
             if (!is_null($oActingShippingTypes)) {
                 $this->dPrice = $oActingShippingTypes->GetTotalPrice();
             }

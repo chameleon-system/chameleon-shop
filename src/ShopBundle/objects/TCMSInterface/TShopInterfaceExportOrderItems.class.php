@@ -31,18 +31,18 @@ class TShopInterfaceExportOrderItems extends TCMSInterfaceManagerBaseExportCSV
      *
      * @return array
      */
-    protected function GetExportRowFromDataObject(&$oDataObjct)
+    protected function GetExportRowFromDataObject($oDataObjct)
     {
         $aRow = parent::GetExportRowFromDataObject($oDataObjct);
 
-        $oOrder = &$oDataObjct->GetFieldShopOrder();
+        $oOrder = $oDataObjct->GetFieldShopOrder();
 
         $aRow['ordernumber'] = $oOrder->fieldOrdernumber;
         $aRow['customer_number'] = $oOrder->fieldCustomerNumber;
         $aRow['orderdate'] = $oOrder->fieldDatecreated;
         $aRow['affiliate_code'] = $oOrder->fieldAffiliateCode;
 
-        $oLocale = &TCMSLocal::GetActive();
+        $oLocale = TCMSLocal::GetActive();
         $aRow['price'] = $oLocale->FormatNumber($aRow['price'], 2);
         $aRow['price_reference'] = $oLocale->FormatNumber($aRow['price_reference'], 2);
         $aRow['vat_percent'] = $oLocale->FormatNumber($aRow['vat_percent'], 2);

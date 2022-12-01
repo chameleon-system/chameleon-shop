@@ -19,11 +19,11 @@ class MTShopSearchTagsCore extends TShopUserCustomModelBase
 {
     protected $bAllowHTMLDivWrapping = true;
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
-        $this->data['oCloud'] = &$this->GetSearchKeywordCloud();
+        $this->data['oCloud'] = $this->GetSearchKeywordCloud();
 
         return $this->data;
     }
@@ -33,12 +33,12 @@ class MTShopSearchTagsCore extends TShopUserCustomModelBase
      *
      * @return TCMSTagCloud
      */
-    protected function &GetSearchKeywordCloud()
+    protected function GetSearchKeywordCloud()
     {
         $iSize = 13;
         $aCustomWords = array();
-        $oCustomList = &TdbShopSearchCloudWordList::GetList();
-        while ($oWord = &$oCustomList->Next()) {
+        $oCustomList = TdbShopSearchCloudWordList::GetList();
+        while ($oWord = $oCustomList->Next()) {
             $aCustomWords[$oWord->fieldName] = $oWord->fieldWeight;
         }
         $iSize = $iSize - count($aCustomWords);

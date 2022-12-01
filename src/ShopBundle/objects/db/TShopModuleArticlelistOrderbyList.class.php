@@ -23,7 +23,7 @@ class TShopModuleArticlelistOrderbyList extends TShopModuleArticlelistOrderbyLis
      *
      * @return TdbShopModuleArticlelistOrderbyList
      */
-    public static function &GetListForIds($aIdList, $iLanguageId = null)
+    public static function GetListForIds($aIdList, $iLanguageId = null)
     {
         $aIdList = TTools::MysqlRealEscapeArray($aIdList);
         $sQuery = self::GetDefaultQuery($iLanguageId, "`id` IN ('".implode("', '", $aIdList)."') ");

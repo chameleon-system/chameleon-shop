@@ -76,10 +76,10 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
     {
         $aDiscountList = array();
 
-        $oDiscountList = &$oOrder->GetFieldShopOrderDiscountList();
+        $oDiscountList = $oOrder->GetFieldShopOrderDiscountList();
         $oDiscountList->GoToStart();
         if (0 < $oDiscountList->Length()) {
-            while ($oDiscount = &$oDiscountList->Next()) {
+            while ($oDiscount = $oDiscountList->Next()) {
                 if ($bCachingEnabled) {
                     $oCacheTriggerManager->addTrigger($oDiscount->table, $oDiscount->id);
                 }
@@ -103,10 +103,10 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
     {
         $aVat = array();
 
-        $oVatList = &$oOrder->GetFieldShopOrderVatList();
+        $oVatList = $oOrder->GetFieldShopOrderVatList();
         $oVatList->GoToStart();
         if (0 < $oVatList->Length()) {
-            while ($oVat = &$oVatList->Next()) {
+            while ($oVat = $oVatList->Next()) {
                 $dVatValue = $oVat->fieldValue;
                 if (0 == $dVatValue) {
                     continue;
@@ -136,10 +136,10 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
         $aVoucherList = array();
 
         // get vouchers
-        $oVoucherUseList = &$oOrder->GetFieldShopVoucherUseList();
+        $oVoucherUseList = $oOrder->GetFieldShopVoucherUseList();
         $oVoucherUseList->GoToStart();
         if (0 < $oVoucherUseList->Length()) {
-            while ($oVoucherUse = &$oVoucherUseList->Next()) {
+            while ($oVoucherUse = $oVoucherUseList->Next()) {
                 if ($bCachingEnabled) {
                     $oCacheTriggerManager->addTrigger($oVoucherUse->table, $oVoucherUse->id);
                 }
@@ -191,7 +191,7 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
 
         if (null !== $oVoucher) {
             $aVoucher['sCode'] = $oVoucher->fieldCode;
-            $oVoucherSeries = &$oVoucher->GetFieldShopVoucherSeries();
+            $oVoucherSeries = $oVoucher->GetFieldShopVoucherSeries();
             if (null !== $oVoucherSeries) {
                 if ($bCachingEnabled) {
                     $oCacheTriggerManager->addTrigger($oVoucherSeries->table, $oVoucherSeries->id);

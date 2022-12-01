@@ -242,7 +242,7 @@ class TShopBasketArticleCore extends TdbShopArticle
      *                                  returns true if the passed item is the same as this instance. Relevant for this comparision is the article id and
      *                                  some other parameters
      */
-    public function IsSameAs(&$oItem)
+    public function IsSameAs($oItem)
     {
         $bIsSame = false;
         if ($this->sBasketItemKey == $oItem->sBasketItemKey) {
@@ -313,9 +313,9 @@ class TShopBasketArticleCore extends TdbShopArticle
      *
      * @return void
      */
-    public function SetActingShippingType(TdbShopShippingType &$oShippingType)
+    public function SetActingShippingType(TdbShopShippingType $oShippingType)
     {
-        $this->oActingShopBasketShippingType = &$oShippingType;
+        $this->oActingShopBasketShippingType = $oShippingType;
     }
 
     /**
@@ -323,7 +323,7 @@ class TShopBasketArticleCore extends TdbShopArticle
      *
      * @return TdbShopShippingType
      */
-    public function &GetActingShippingType()
+    public function GetActingShippingType()
     {
         return $this->oActingShopBasketShippingType;
     }

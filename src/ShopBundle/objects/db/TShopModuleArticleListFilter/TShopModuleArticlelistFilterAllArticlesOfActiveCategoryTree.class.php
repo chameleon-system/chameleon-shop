@@ -25,7 +25,7 @@ class TShopModuleArticlelistFilterAllArticlesOfActiveCategoryTree extends TdbSho
      *
      * @return string
      */
-    protected function GetListQueryBase(&$oListConfig)
+    protected function GetListQueryBase($oListConfig)
     {
         $oShop = TdbShop::GetInstance();
         $oActiveCategory = $oShop->GetActiveCategory();

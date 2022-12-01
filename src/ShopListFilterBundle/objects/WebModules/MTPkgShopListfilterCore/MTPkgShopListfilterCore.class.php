@@ -33,7 +33,7 @@ class MTPkgShopListfilterCore extends TUserCustomModelBase
         TdbPkgShopListfilter::GetActiveInstance();
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['oFilter'] = TdbPkgShopListfilter::GetActiveInstance();

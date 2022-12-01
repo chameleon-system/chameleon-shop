@@ -18,9 +18,9 @@ class TPkgImageHotspotItemSpot extends TAdbPkgImageHotspotItemSpot
      *
      * @return TCMSRecord|null
      */
-    public function &GetSpotObject()
+    public function GetSpotObject()
     {
-        $oObject = &$this->GetFromInternalCache('oObjectAssignedToSpot');
+        $oObject = $this->GetFromInternalCache('oObjectAssignedToSpot');
         if (is_null($oObject)) {
             $oObject = $this->GetFieldLinkedRecord();
             $this->SetInternalCache('oObjectAssignedToSpot', $oObject);
@@ -36,11 +36,11 @@ class TPkgImageHotspotItemSpot extends TAdbPkgImageHotspotItemSpot
      */
     public function GetURLForConnectedRecord()
     {
-        $oSpotObject = &$this->GetSpotObject();
+        $oSpotObject = $this->GetSpotObject();
         if (null === $oSpotObject) {
             return '';
         }
-        $oCmsConfig = &TdbCmsConfig::GetInstance();
+        $oCmsConfig = TdbCmsConfig::GetInstance();
         $sLink = '';
 
         if ($oSpotObject instanceof TdbCmsTplPage) {

@@ -32,7 +32,7 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
             $iPt = $this->getItemPointer();
             $this->GoToStart();
             $dScore = 0;
-            while ($oitem = &$this->Next()) {
+            while ($oitem = $this->Next()) {
                 $dScore += $oitem->fieldRating;
             }
             $this->setItemPointer($iPt);
@@ -51,13 +51,13 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
      *
      * @return TdbShopArticleReviewList
      */
-    public static function &GetPublishedReviews($iArticle, $iLanguage = null)
+    public static function GetPublishedReviews($iArticle, $iLanguage = null)
     {
         $sFilter = "`shop_article_review`.`shop_article_id`='".MySqlLegacySupport::getInstance()->real_escape_string($iArticle)."' ";
         $sFilter .= "AND `shop_article_review`.`publish`='1' ";
 
         $sQuery = self::GetDefaultQuery($iLanguage, $sFilter);
-        $oList = &TdbShopArticleReviewList::GetList($sQuery, $iLanguage);
+        $oList = TdbShopArticleReviewList::GetList($sQuery, $iLanguage);
         $oList->SetOwningArticleId($iArticle);
 
         return $oList;
@@ -77,7 +77,7 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
         $sFilter .= "AND `shop_article_review`.`publish`='1' ";
 
         $sQuery = self::GetDefaultQuery($iLanguage, $sFilter);
-        $oList = &TdbShopArticleReviewList::GetList($sQuery, $iLanguage);
+        $oList = TdbShopArticleReviewList::GetList($sQuery, $iLanguage);
 
         return $oList;
     }

@@ -143,7 +143,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
         $oMail = TDataMailProfile::GetProfile('report-review');
         $aData = array();
         $oShop = TdbShop::GetInstance();
-        $oArticle = &$this->GetFieldShopArticle();
+        $oArticle = $this->GetFieldShopArticle();
         $aData['sArticleName'] = $oArticle->GetName();
         $aData['sReviewId'] = $this->id;
         $aData['sReviewTitle'] = $this->fieldTitle;
@@ -171,7 +171,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
             if (TTools::IsValidEMail($sAuthorEmail)) {
                 $oMail = TDataMailProfile::GetProfile('review-comment');
                 $aData = array();
-                $oArticle = &$this->GetFieldShopArticle();
+                $oArticle = $this->GetFieldShopArticle();
                 $aData['sArticleName'] = $oArticle->GetName();
                 $aData['sReviewTitle'] = $this->fieldTitle;
                 $aData['sReviewText'] = $this->fieldComment;

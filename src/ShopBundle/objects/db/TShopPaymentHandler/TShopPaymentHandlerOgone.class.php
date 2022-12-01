@@ -26,7 +26,7 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
      *
      * @return bool
      */
-    public function ExecutePayment(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         TTools::WriteLogEntry('In ExecutePayment Ogone for order id '.$oOrder->id." (nr: {$oOrder->fieldOrdernumber}", 4, __FILE__, __LINE__);
         $bPaymentOk = parent::ExecutePayment($oOrder);
@@ -83,7 +83,7 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
      *
      * @return void
      */
-    protected function AddCustomParameter(&$parameter)
+    protected function AddCustomParameter($parameter)
     {
     }
 
@@ -143,7 +143,7 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
      *
      * @return bool
      */
-    public function PostExecutePaymentHook(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function PostExecutePaymentHook(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $bPaymentOk = parent::PostExecutePaymentHook($oOrder, $sMessageConsumer);
         if ($bPaymentOk) {
@@ -169,12 +169,12 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
                 $oOrder->SetStatusCanceled(true);
                 $bPaymentOk = false;
             } elseif ('1' === $sPaymentStatus || (!$sPassTroughNotKnowState && ('92' === $sPaymentStatus)) || (!$sPassTroughNotKnowState && ('52' === $sPaymentStatus))) { // user clicked abort link. cancel order
-                $oURLData = &TCMSSmartURLData::GetActive();
+                $oURLData = TCMSSmartURLData::GetActive();
                 $oOrder->SetStatusCanceled(true);
                 TTools::WriteLogEntry("Ogone Payment: user canceled payment or transaction in not known state [{$oOrder->id}]: ".print_r($oURLData, true), 1, __FILE__, __LINE__);
                 $bPaymentOk = false;
             } else { // error - find out what and return false
-                $oURLData = &TCMSSmartURLData::GetActive();
+                $oURLData = TCMSSmartURLData::GetActive();
                 TTools::WriteLogEntry("Ogone Payment: unknown response for order [{$oOrder->id}]: maybe user used browser back button".print_r($oURLData, true), 1, __FILE__, __LINE__);
                 $bPaymentOk = false;
             }
@@ -193,7 +193,7 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
      *
      * @return bool
      */
-    protected function ValidateResponseData($aResponseData, TdbShopOrder &$oOrder, $sMessageConsumer)
+    protected function ValidateResponseData($aResponseData, TdbShopOrder $oOrder, $sMessageConsumer)
     {
         $bIsValid = $this->CheckIncomingHash($aResponseData);
 

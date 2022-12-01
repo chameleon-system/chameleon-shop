@@ -18,7 +18,7 @@ class TShopVariantType extends TAdbShopVariantType
      *
      * @return TdbShopVariantTypeValueList
      */
-    public function &GetFieldShopVariantTypeValueList()
+    public function GetFieldShopVariantTypeValueList()
     {
         $oValueList = TdbShopVariantTypeValueList::GetListForShopVariantTypeId($this->id, $this->iLanguageId);
         $oValueList->ChangeOrderBy(array($this->fieldShopVariantTypeValueCmsfieldname => 'ASC'));

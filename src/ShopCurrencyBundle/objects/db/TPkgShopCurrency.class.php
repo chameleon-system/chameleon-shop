@@ -30,7 +30,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
      */
     public function GetFormattedCurrency($dValue)
     {
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         $sValue = $oLocal->FormatNumber($dValue, 2).' '.$this->GetCurrencyDisplaySymbol();
 
         return $sValue;

@@ -106,7 +106,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return TdbShopOrderStep|null
      */
-    public static function &GetStep($sStepName)
+    public static function GetStep($sStepName)
     {
         $oStep = null;
         $oStepData = null;
@@ -214,7 +214,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return never
      */
-    public function JumpToStep(TdbShopOrderStep &$oStep)
+    public function JumpToStep(TdbShopOrderStep $oStep)
     {
         $_SESSION[self::SESSION_KEY_NAME] = $this->fieldSystemname;
         $statusCode = 'POST' === $this->getRequest()->getMethod() ? Response::HTTP_SEE_OTHER : Response::HTTP_FOUND;
@@ -352,7 +352,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return TdbShopOrderStep|null
      */
-    public function &GetNextStep()
+    public function GetNextStep()
     {
         static $oNextStep;
         if (!$oNextStep) {
@@ -367,7 +367,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return TdbShopOrderStep|null
      */
-    protected function &GetPreviousStep()
+    protected function GetPreviousStep()
     {
         static $oPreviousStep;
         if (!$oPreviousStep) {
@@ -475,7 +475,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
 
         $sViewName = $this->GetRenderViewName();
         $sViewType = $this->GetRenderViewType();
-        $aOtherParameters = &$this->GetAdditionalViewVariables($sViewName, $sViewType);
+        $aOtherParameters = $this->GetAdditionalViewVariables($sViewName, $sViewType);
         $oView->AddVarArray($aOtherParameters);
 
         return $oView->RenderObjectPackageView($sViewName, $this->getStepViewPath(), $sViewType);
@@ -505,7 +505,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
         $aViewVariables = $this->GetDescriptionVariables();
 
@@ -552,7 +552,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return void
      */
-    protected function addDataToBasket(TShopBasket &$oBasket)
+    protected function addDataToBasket(TShopBasket $oBasket)
     {
     }
 

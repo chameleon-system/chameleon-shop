@@ -24,7 +24,7 @@ class SearchResultTriggerCmsObserverListener
             return;
         }
 
-        $oSearchObserver = &\TPkgSearchObserver::GetInstance();
+        $oSearchObserver = \TPkgSearchObserver::GetInstance();
         $oSearchObserver->AddSearch('pkgShop', $this->getNumberOfResults($event));
     }
 

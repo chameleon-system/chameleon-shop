@@ -72,7 +72,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
         if ($oBasket->iTotalNumberOfUniqueArticles <= 0) {
             $bAllowAccess = false;
             if ($bRedirectToPreviousPermittedStep) {
-                $oBasketStep = &TdbShopOrderStep::GetStep('basket');
+                $oBasketStep = TdbShopOrderStep::GetStep('basket');
                 $this->JumpToStep($oBasketStep);
             }
         }
@@ -110,14 +110,14 @@ class TShopStepShippingCore extends TdbShopOrderStep
             if (!$bUserDataCompleted) {
                 $bAllowAccess = false;
                 if ($bRedirectToPreviousPermittedStep) {
-                    $oUserStep = &TdbShopOrderStep::GetStep('user');
+                    $oUserStep = TdbShopOrderStep::GetStep('user');
                     $this->JumpToStep($oUserStep);
                 }
             }
         } else {
             $bAllowAccess = false;
             if ($bRedirectToPreviousPermittedStep) {
-                $oUserStep = &TdbShopOrderStep::GetStep('user');
+                $oUserStep = TdbShopOrderStep::GetStep('user');
                 $this->JumpToStep($oUserStep);
             }
         }
@@ -149,7 +149,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
         $oPaymentHandler = null;
         if ($bContinue) {
             // check payment method data
-            $oPaymentHandler = &$this->oActivePaymentMethod->GetFieldShopPaymentHandler();
+            $oPaymentHandler = $this->oActivePaymentMethod->GetFieldShopPaymentHandler();
             $bContinue = $oPaymentHandler->ValidateUserInput();
         }
 
@@ -192,17 +192,17 @@ class TShopStepShippingCore extends TdbShopOrderStep
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = &parent::GetAdditionalViewVariables($sViewName, $sViewType);
+        $aViewVariables = parent::GetAdditionalViewVariables($sViewName, $sViewType);
         $aViewVariables['oUser'] = TdbDataExtranetUser::GetInstance();
 
-        $aViewVariables['oExtranetConfig'] = &TdbDataExtranet::GetInstance();
+        $aViewVariables['oExtranetConfig'] = TdbDataExtranet::GetInstance();
 
-        $oShippingGroupList = &$this->GetAvailableShippingGroups();
-        $aViewVariables['oShippingGroupList'] = &$oShippingGroupList;
-        $aViewVariables['oActiveShippingGroup'] = &$this->oActiveShippingGroup;
-        $aViewVariables['oActivePaymentMethod'] = &$this->oActivePaymentMethod;
+        $oShippingGroupList = $this->GetAvailableShippingGroups();
+        $aViewVariables['oShippingGroupList'] = $oShippingGroupList;
+        $aViewVariables['oActiveShippingGroup'] = $this->oActiveShippingGroup;
+        $aViewVariables['oActivePaymentMethod'] = $this->oActivePaymentMethod;
 
         $aViewVariables['oPaymentMethods'] = TShopBasket::GetInstance()->GetValidPaymentMethodsSelectableByTheUser();
 
@@ -215,7 +215,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
      *
      * @return TdbShopShippingGroupList
      */
-    protected function &GetAvailableShippingGroups()
+    protected function GetAvailableShippingGroups()
     {
         return TdbShopShippingGroupList::GetAvailableShippingGroups();
     }
@@ -261,7 +261,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
     protected function LoadActivePaymentMethod()
     {
         $oBasket = TShopBasket::GetInstance();
-        $this->oActivePaymentMethod = &$oBasket->GetActivePaymentMethod();
+        $this->oActivePaymentMethod = $oBasket->GetActivePaymentMethod();
         if (!is_null($this->oActiveShippingGroup)) {
             $iPaymentId = null;
             $bSelectionValid = true;
@@ -296,7 +296,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
                 if (is_null($this->oActivePaymentMethod)) {
                     $oList->GoToStart();
                     if ($oList->Length() > 0) {
-                        $this->oActivePaymentMethod = &$oList->Current();
+                        $this->oActivePaymentMethod = $oList->Current();
                     }
                 }
             }

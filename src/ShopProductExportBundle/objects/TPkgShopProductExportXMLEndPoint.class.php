@@ -22,7 +22,7 @@ class TPkgShopProductExportXMLEndPoint extends TPkgShopProductExportBase
         $iCount = 0;
         if (!is_null($oArticleList)) {
             /** @var $oArticle TdbShopArticle */
-            while ($oArticle = &$oArticleList->Next() && !$this->BreakUp($iCount)) {
+            while ($oArticle = $oArticleList->Next() && !$this->BreakUp($iCount)) {
                 $oArticle = $this->PreProcessArticle($oArticle);
                 $this->HandleArticle($oArticle);
                 ++$iCount;
@@ -39,7 +39,7 @@ class TPkgShopProductExportXMLEndPoint extends TPkgShopProductExportBase
      *
      * @return void
      */
-    protected function HandleArticle(&$oArticle)
+    protected function HandleArticle($oArticle)
     {
     }
 

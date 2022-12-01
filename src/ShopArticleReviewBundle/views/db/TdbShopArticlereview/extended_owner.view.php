@@ -4,9 +4,9 @@
 $oGlobal = TGlobal::instance();
 $oMsgManager = TCMSMessageManager::GetInstance();
 $oLocal = TCMSLocal::GetActive();
-$oModulePointer = &$oGlobal->GetExecutingModulePointer();
+$oModulePointer = $oGlobal->GetExecutingModulePointer();
 $sSpotName = $oModulePointer->sModuleSpotName;
-$oArticle = &$oReview->GetFieldShopArticle();
+$oArticle = $oReview->GetFieldShopArticle();
 $bAllowRateReviews = false;
 $bAllowReportReviews = false;
 $oPkgCommentModuleConfig = null;

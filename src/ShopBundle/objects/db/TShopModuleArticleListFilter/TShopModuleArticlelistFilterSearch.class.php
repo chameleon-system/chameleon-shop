@@ -53,7 +53,7 @@ class TShopModuleArticlelistFilterSearch extends TdbShopModuleArticleListFilter
      *
      * @return string
      */
-    protected function GetListQueryBase(&$oListConfig)
+    protected function GetListQueryBase($oListConfig)
     {
         $sQueryString = '';
         $aQueryStrings = '';
@@ -83,7 +83,7 @@ class TShopModuleArticlelistFilterSearch extends TdbShopModuleArticleListFilter
      *
      * @return void
      */
-    protected function GetQuerySearchPostParameters(&$sQueryString, &$aQueryStrings, &$aFilter)
+    protected function GetQuerySearchPostParameters($sQueryString, $aQueryStrings, $aFilter)
     {
         $oGlobal = TGlobal::instance();
         $sQueryString = '';
@@ -109,7 +109,7 @@ class TShopModuleArticlelistFilterSearch extends TdbShopModuleArticleListFilter
      *
      * @return string
      */
-    protected function GetListQueryOrderBy(&$oListConfig)
+    protected function GetListQueryOrderBy($oListConfig)
     {
         $sQuery = parent::GetListQueryOrderBy($oListConfig);
         //      if (empty($sQuery)) $sQuery = "`shop_article`.`list_rank` DESC, `shop_article`.`name`";
@@ -123,7 +123,7 @@ class TShopModuleArticlelistFilterSearch extends TdbShopModuleArticleListFilter
      *
      * @return string
      */
-    protected function GetListQueryGroupBy(&$oListConfig)
+    protected function GetListQueryGroupBy($oListConfig)
     {
         return ''; // 'GROUP BY `shop_article`.`id`';
     }
