@@ -54,7 +54,7 @@ class OrderStepPageService implements OrderStepPageServiceInterface
     public function getLinkToOrderStepPageRelative(TShopOrderStep $orderStep, array $parameters = array(), TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
     {
         $orderStep = $this->getOrderStepInCorrectLanguage($orderStep, $language);
-        $this->addBasketStepParameter($parameters, $orderStep);
+        $parameters = $this->addBasketStepParameter($parameters, $orderStep);
 
         return $this->router->generateWithPrefixes($this->getBasketStepRouteName($orderStep), $parameters, $portal, $language, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
@@ -85,13 +85,14 @@ class OrderStepPageService implements OrderStepPageServiceInterface
      *
      * @return void
      */
-    private function addBasketStepParameter(array $parameters, TShopOrderStep $orderStep)
+    private function addBasketStepParameter(array $parameters, TShopOrderStep $orderStep): array
     {
         if ('1' === $orderStep->fieldPosition) {
             $parameters['basketStep'] = '/';
         } else {
             $parameters['basketStep'] = '/'.$orderStep->fieldUrlName;
         }
+        return $parameters;
     }
 
     /**
@@ -110,7 +111,7 @@ class OrderStepPageService implements OrderStepPageServiceInterface
     public function getLinkToOrderStepPageAbsolute(TShopOrderStep $orderStep, array $parameters = array(), TdbCmsPortal $portal = null, TdbCmsLanguage $language = null, $forceSecure = false)
     {
         $orderStep = $this->getOrderStepInCorrectLanguage($orderStep, $language);
-        $this->addBasketStepParameter($parameters, $orderStep);
+        $parameters = $this->addBasketStepParameter($parameters, $orderStep);
 
         $url = $this->router->generateWithPrefixes($this->getBasketStepRouteName($orderStep), $parameters, $portal, $language, UrlGeneratorInterface::ABSOLUTE_URL);
 
