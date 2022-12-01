@@ -317,7 +317,7 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return TShopBasketArticle|false
      */
-    public function next()
+    public function next(): TShopBasketArticle|false
     {
         return parent::Next();
     }
