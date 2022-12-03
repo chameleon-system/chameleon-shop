@@ -162,7 +162,7 @@ class ShopShippingTypeDataAccess implements ShopShippingTypeDataAccessInterface
               ORDER BY `shop_shipping_type`.`position`
                ";
 
-        return $this->connection->fetchAll($query, $parameters);
+        return $this->connection->fetchAllAssociative($query, $parameters);
     }
 
     /**
@@ -177,7 +177,7 @@ class ShopShippingTypeDataAccess implements ShopShippingTypeDataAccessInterface
                     FROM %1$s
                    WHERE %1$s.`source_id` = :shippingTypeId
                     ', $this->connection->quoteIdentifier($mltName));
-        $idRows = $this->connection->fetchAll($query, array('shippingTypeId' => $shippingTypeId));
+        $idRows = $this->connection->fetchAllAssociative($query, array('shippingTypeId' => $shippingTypeId));
 
         return array_map(
             function (array $row) {

@@ -1904,7 +1904,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
                WHERE shop_bundle_article.bundle_article_id = :articleId
                  AND (shop_bundle_article.amount * shop_article_stock.amount) > :newStock
                ';
-        $aBundleChangeList = $this->getDatabaseConnection()->fetchAll($query, array('articleId' => $this->id, 'newStock' => $newStock), array('articleId' => \PDO::PARAM_STR, 'newStock' => \PDO::PARAM_INT));
+        $aBundleChangeList = $this->getDatabaseConnection()->fetchAllAssociative($query, array('articleId' => $this->id, 'newStock' => $newStock), array('articleId' => \PDO::PARAM_STR, 'newStock' => \PDO::PARAM_INT));
         foreach ($aBundleChangeList as $aBundleChange) {
             $iAllowedStock = floor($newStock / $aBundleChange['ItemsPerBundle']);
             $oBundleArticle = TdbShopArticle::GetNewInstance();

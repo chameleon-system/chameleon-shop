@@ -169,7 +169,7 @@ class AmazonReferenceIdManager
      */
     public static function createFromShopOrderId(Connection $dbal, $shop_order_id)
     {
-        $data = $dbal->fetchAll(
+        $data = $dbal->fetchAllAssociative(
             'select * from '.self::PERSIST_TABLE.' WHERE `shop_order_id` = ? ORDER BY `cmsident`',
             array($shop_order_id)
         );
@@ -194,7 +194,7 @@ class AmazonReferenceIdManager
      */
     public static function createFromLocalId(Connection $dbal, $localId)
     {
-        $data = $dbal->fetchAll(
+        $data = $dbal->fetchAllAssociative(
             'SELECT T.*
                                                FROM '.self::PERSIST_TABLE.' AS T
                              INNER JOIN '.self::PERSIST_TABLE.' AS S ON T.shop_order_id = S.shop_order_id
@@ -224,7 +224,7 @@ class AmazonReferenceIdManager
      */
     public static function createFromOrderReferenceId(Connection $dbal, $amazon_order_reference_id)
     {
-        $data = $dbal->fetchAll(
+        $data = $dbal->fetchAllAssociative(
             'select * from '.self::PERSIST_TABLE.' WHERE `amazon_order_reference_id` = ? ORDER BY `cmsident`',
             array($amazon_order_reference_id)
         );

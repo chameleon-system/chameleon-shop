@@ -8,7 +8,7 @@ TCMSLogChange::requireBundleUpdates('ChameleonSystemImageCropBundle', 1534864767
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
 
-$fieldConfigImageField = $databaseConnection->fetchAssoc(
+$fieldConfigImageField = $databaseConnection->fetchAssociative(
     'SELECT * FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = ? AND `name` = ?',
     [TCMSLogChange::GetTableId('pkg_image_hotspot_item'), 'cms_media_id']
 );

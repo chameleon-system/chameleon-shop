@@ -124,7 +124,7 @@ class PaymentMethodDataAccess implements PaymentMethodDataAccessInterface
                     ',
             $this->connection->quoteIdentifier($mltName)
         );
-        $idRows = $this->connection->fetchAll($query, array('paymentMethodId' => $paymentMethodId));
+        $idRows = $this->connection->fetchAllAssociative($query, array('paymentMethodId' => $paymentMethodId));
 
         return array_map(
             function (array $row) {

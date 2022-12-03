@@ -97,9 +97,9 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
     {
         $query = 'SELECT * FROM `shop_order_step` ORDER BY `position`';
         $statement = $this->databaseConnection->prepare($query);
-        $statement->execute();
+        $result = $statement->executeQuery();
         $steps = array();
-        while ($row = $statement->fetch()) {
+        foreach($result as $row) {
             $step = new TdbShopOrderStep();
             $step->SetLanguage($languageId);
             $step->LoadFromRow($row);

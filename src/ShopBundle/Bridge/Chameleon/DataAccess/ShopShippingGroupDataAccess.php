@@ -65,7 +65,7 @@ class ShopShippingGroupDataAccess implements ShopShippingGroupDataAccessInterfac
                     FROM %1$s
                    WHERE %1$s.`source_id` = :shippingGroupId
                     ', $this->connection->quoteIdentifier($mltName));
-        $idRows = $this->connection->fetchAll($query, array('shippingGroupId' => $shippingGroupId));
+        $idRows = $this->connection->fetchAllAssociative($query, array('shippingGroupId' => $shippingGroupId));
 
         return array_map(
             function (array $row) {

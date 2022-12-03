@@ -117,7 +117,7 @@ class ShopPaymentConfigLoaderDatabaseAccess implements ShopPaymentConfigLoaderDa
                     FROM `shop_payment_handler_group_config`
                    WHERE `shop_payment_handler_group_config`.`shop_payment_handler_group_id` = :shopPaymentHandlerGroupId';
         try {
-            $configDataRaw = $this->databaseConnection->fetchAll(
+            $configDataRaw = $this->databaseConnection->fetchAllAssociative(
                 $query,
                 array('shopPaymentHandlerGroupId' => $shopPaymentHandlerGroupId)
             );
@@ -151,7 +151,7 @@ class ShopPaymentConfigLoaderDatabaseAccess implements ShopPaymentConfigLoaderDa
                     FROM `shop_payment_handler_parameter`
                    WHERE `shop_payment_handler_parameter`.`shop_payment_handler_id` = :shopPaymentHandlerId';
         try {
-            $configDataRaw = $this->databaseConnection->fetchAll(
+            $configDataRaw = $this->databaseConnection->fetchAllAssociative(
                 $query,
                 array('shopPaymentHandlerId' => $shopPaymentHandlerId)
             );

@@ -118,7 +118,7 @@ class ShopService implements ShopServiceInterface
             INNER JOIN `shop_cms_portal_mlt` ON `shop`.`id` = `shop_cms_portal_mlt`.`source_id`
                  WHERE `shop_cms_portal_mlt`.`target_id` = :portalId';
 
-        $shopData = $this->databaseConnection->fetchAssoc($query, array('portalId' => $cmsPortalId));
+        $shopData = $this->databaseConnection->fetchAssociative($query, array('portalId' => $cmsPortalId));
         if (false === $shopData) {
             throw new ErrorException("no shop configured for portal {$cmsPortalId}", 0, E_USER_ERROR, __FILE__, __LINE__);
         }

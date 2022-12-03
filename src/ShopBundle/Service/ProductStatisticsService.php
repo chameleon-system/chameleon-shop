@@ -31,7 +31,7 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
     public function getStats($articleId)
     {
         $query = 'SELECT * FROM `shop_article_stats` WHERE `shop_article_id` = :articleId';
-        $data = $this->databaseConnection->fetchAssoc($query, array('articleId' => $articleId));
+        $data = $this->databaseConnection->fetchAssociative($query, array('articleId' => $articleId));
         if (is_array($data)) {
             $stats = $this->createStatsObject($data);
         } else {
@@ -118,7 +118,7 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
               INNER JOIN `shop_article` ON `shop_article_stats`.`shop_article_id` = `shop_article`.`id`
                    WHERE `shop_article`.`variant_parent_id` = :articleId
         ';
-        $result = $this->databaseConnection->fetchAssoc($query, array('articleId' => $parentArticleId));
+        $result = $this->databaseConnection->fetchAssociative($query, array('articleId' => $parentArticleId));
         if (is_array($result)) {
             $stats = $this->createStatsObject($result);
         } else {
