@@ -11,6 +11,7 @@
 
 class TCMSCronJob_CleanWishlist extends TdbCmsCronjobs
 {
+
     public function __construct()
     {
         parent::__construct();

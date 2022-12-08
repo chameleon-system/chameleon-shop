@@ -54,12 +54,9 @@ class TShopAuskunftAPI
      * @psalm-suppress UndefinedFunction
      *
      * @FIXME callbacks should be specified as `[$this, 'function']`
-     *
-     * @return void
      */
     public function __construct()
     {
-        //-------------------------------------------------------------------------
         if (!($this->parser = xml_parser_create())) {
             die('Cannot create parser');
         }
@@ -72,6 +69,7 @@ class TShopAuskunftAPI
     /**
      * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
      * @see self::__construct
+     * @return void
      */
     public function TShopAuskunftAPI()
     {

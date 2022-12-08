@@ -79,6 +79,9 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
     {
         // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
         $oBasket = TShopBasket::GetInstance();
+        if (null === $oBasket) {
+            return;
+        }
         $aValidIds = array();
         $this->GoToStart();
         $aValidShippingGroupItems = array();

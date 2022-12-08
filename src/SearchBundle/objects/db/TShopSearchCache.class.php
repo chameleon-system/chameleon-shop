@@ -47,8 +47,8 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
     public $aFilter = null;
 
     /**
-     * @param string $id
-     * @param string $sLanguageId
+     * @param string|null $id
+     * @param string|null $sLanguageId
      */
     public function __construct($id = null, $sLanguageId = null)
     {
