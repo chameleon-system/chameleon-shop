@@ -18,7 +18,7 @@ class TPkgShopAffiliateList extends TPkgShopAffiliateListAutoParent
      *
      * @return TdbPkgShopAffiliate
      */
-    protected function _NewElement($aData)
+    protected function _NewElement($aData): TdbPkgShopAffiliate
     {
         if (!empty($aData['class'])) {
             $sClassName = $aData['class'];

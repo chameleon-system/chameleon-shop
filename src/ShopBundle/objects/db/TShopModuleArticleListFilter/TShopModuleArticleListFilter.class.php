@@ -37,7 +37,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      * @param string       $sLanguage - init with the language passed
      *
      * @return TdbShopModuleArticleListFilter     */
-    public static function GetNewInstance($sData = null, $sLanguage = null)
+    public static function GetNewInstance($sData = null, $sLanguage = null): TdbShopModuleArticleListFilter
     {
         $canBeCached = false;
         $cacheKey = null;

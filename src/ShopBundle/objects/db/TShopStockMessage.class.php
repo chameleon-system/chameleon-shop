@@ -27,7 +27,7 @@ class TShopStockMessage extends TAdbShopStockMessage
      *
      * @return TdbShopStockMessage
      */
-    public static function GetNewInstance($sData = null, $sLanguage = null)
+    public static function GetNewInstance($sData = null, $sLanguage = null): TdbShopStockMessage
     {
         $oInstance = parent::GetNewInstance($sData, $sLanguage);
         if ($oInstance && is_array($oInstance->sqlData)) {

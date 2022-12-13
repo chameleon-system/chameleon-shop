@@ -18,7 +18,7 @@ class TShopVariantDisplayHandlerList extends TAdbShopVariantDisplayHandlerList
      *
      * @return TdbShopVariantDisplayHandler
      */
-    protected function _NewElement($aData)
+    protected function _NewElement($aData): TdbShopVariantDisplayHandler
     {
         $oElement = false;
         $sTableObject = $this->sTableObject;

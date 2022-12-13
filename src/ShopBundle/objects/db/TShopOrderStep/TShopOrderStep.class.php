@@ -134,9 +134,9 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * @param string|array|null $sData - either the id of the object to load, or the row with which the instance should be initialized
      * @param string|null $sLanguage - init with the language passed
-     * @return TdbShopOrderStep|null
+     * @return TdbShopOrderStep
      */
-    public static function GetNewInstance($sData = null, $sLanguage = null)
+    public static function GetNewInstance($sData = null, $sLanguage = null): TdbShopOrderStep
     {
         if (null === $sData) {
             return new TdbShopOrderStep(null, $sLanguage);
@@ -150,7 +150,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
             $class = $sData['class'];
         }
         $shopBasket = TShopBasket::GetInstance();
-        $object = null;
+        $object = new TdbShopOrderStep(null, $sLanguage);
         if (null !== $shopBasket) {
             $object = self::createClass($shopBasket, $class);
             $object->LoadFromRow($sData);

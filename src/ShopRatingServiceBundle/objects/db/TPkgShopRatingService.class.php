@@ -42,7 +42,7 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
      * @param string       $sLanguage - init with the language passed
      *
      * @return TdbPkgShopRatingService     */
-    public static function GetNewInstance($sData = null, $sLanguage = null)
+    public static function GetNewInstance($sData = null, $sLanguage = null): TdbPkgShopRatingService
     {
         $oObject = parent::GetNewInstance($sData, $sLanguage);
 
