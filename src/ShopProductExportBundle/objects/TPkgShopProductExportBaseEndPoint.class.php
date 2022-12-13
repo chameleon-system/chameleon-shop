@@ -163,7 +163,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     }
 
     /**
-     * generally you want to loop through the article list by while ($oArticle =& $oArticleList->Next())
+     * generally you want to loop through the article list by while ($oArticle = $oArticleList->Next())
      * and do work with your articles.
      *
      * @see the csv export base class how you could do this

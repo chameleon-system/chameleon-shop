@@ -172,7 +172,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return void
      */
-    protected function LoadFromBasketPostProcessData($oBasket, $aOrderData)
+    protected function LoadFromBasketPostProcessData($oBasket, &$aOrderData)
     {
     }
 
@@ -310,7 +310,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @return void
      */
-    protected function PrepareArticleDataForSave($oBasketItem, $aOrderItemData)
+    protected function PrepareArticleDataForSave($oBasketItem, &$aOrderItemData)
     {
     }
 

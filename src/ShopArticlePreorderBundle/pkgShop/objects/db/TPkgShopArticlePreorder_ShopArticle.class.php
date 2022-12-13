@@ -50,7 +50,7 @@ class TPkgShopArticlePreorder_ShopArticle extends TPkgShopArticlePreorder_ShopAr
             }
         }
         /*
-        $oStockMessage =& $this->GetFieldShopStockMessage();
+        $oStockMessage = $this->GetFieldShopStockMessage();
         $bPreorder = false;
         if ($oStockMessage) $bPreorder = $this->fieldShowPreorderOnZeroStock;
         $bOnlyPreOrder = ($bPreorder && $this->fieldStock > 0) || !$bPreorder;

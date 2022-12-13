@@ -21,7 +21,7 @@ class TPkgShopNewsletterSignupWithOrder_TShopOrder extends TPkgShopNewsletterSig
      *
      * @return void
      */
-    protected function LoadFromBasketPostProcessData($oBasket, $aOrderData)
+    protected function LoadFromBasketPostProcessData($oBasket, &$aOrderData)
     {
         // ------------------------------------------------------------------------
         parent::LoadFromBasketPostProcessData($oBasket, $aOrderData);

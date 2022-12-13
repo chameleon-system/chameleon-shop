@@ -36,7 +36,7 @@ if(!TGlobal::IsCMSMode()) {
 }else{
 
     if ($oLocal === null && class_exists('TCMSLocal',false)) {
-        $oLocal =& TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
     }
 
     if (isset($this->sqlData['<?= $sFieldDatabaseName; ?>'])) {

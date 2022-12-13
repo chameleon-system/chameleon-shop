@@ -19,7 +19,7 @@ class TPkgShopCurrency_ShopOrder extends TPkgShopCurrency_ShopOrderAutoParent
      *
      * @return void
      */
-    protected function LoadFromBasketPostProcessData($oBasket, $aOrderData)
+    protected function LoadFromBasketPostProcessData($oBasket, &$aOrderData)
     {
         parent::LoadFromBasketPostProcessData($oBasket, $aOrderData);
         $aOrderData['pkg_shop_currency_id'] = TdbPkgShopCurrency::GetActiveCurrencyId();

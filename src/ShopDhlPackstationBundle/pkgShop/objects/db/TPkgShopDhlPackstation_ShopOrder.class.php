@@ -19,7 +19,7 @@ class TPkgShopDhlPackstation_ShopOrder extends TPkgShopDhlPackstation_ShopOrderA
      *
      * @return void
      */
-    protected function LoadFromBasketPostProcessData($oBasket, $aOrderData)
+    protected function LoadFromBasketPostProcessData($oBasket, &$aOrderData)
     {
         parent::LoadFromBasketPostProcessData($oBasket, $aOrderData);
         $oUser = TdbDataExtranetUser::GetInstance();
