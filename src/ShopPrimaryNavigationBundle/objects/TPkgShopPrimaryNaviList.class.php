@@ -20,7 +20,7 @@ class TPkgShopPrimaryNaviList extends TPkgShopPrimaryNaviListAutoParent
      *
      * @return string
      */
-    public static function GetDefaultQuery($iLanguageId, $sFilterString = false)
+    public static function GetDefaultQuery($iLanguageId, $sFilterString = false): string
     {
         $sDefaultQuery = 'SELECT `pkg_shop_primary_navi`.*
                           FROM `pkg_shop_primary_navi`
