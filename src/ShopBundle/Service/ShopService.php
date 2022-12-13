@@ -209,7 +209,9 @@ class ShopService implements ShopServiceInterface
         $this->extranetUserProvider->getActiveUser()->ObserverUnregister('oUserBasket');
 
         $request = $this->requestStack->getCurrentRequest();
-
+        if (null === $request || false == $request->hasSession()) {
+            return ;
+        }
         $session = $request->getSession();
 
         if (true === $session->has(TShopBasket::SESSION_KEY_NAME)) {

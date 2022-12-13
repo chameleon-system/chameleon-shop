@@ -326,6 +326,9 @@ class TShopOrderStep extends TShopOrderStepAutoParent
         }
         $bContinue = true;
         $request = $this->getRequest();
+        if (null === $request || false === $request->hasSession()) {
+            return false;
+        }
         /** @var TPKgCmsSession $session */
         $session = $request->getSession();
         if (false === $session->restartSessionWithWriteLock()) {

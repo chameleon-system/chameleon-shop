@@ -497,7 +497,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $this->UnlockBasket();
         /** @var Request $request */
         $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
-        $request->getSession()->remove(self::SESSION_KEY_NAME);
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->remove(self::SESSION_KEY_NAME);
+        }
 
         $event = new BasketItemEvent(
             TdbDataExtranetUser::GetInstance(),
@@ -535,6 +537,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     {
         /** @var Request $request */
         $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        if (null === $request || false === $request->hasSession()) {
+            return false;
+        }
 
         return $request->getSession()->has(self::SESSION_KEY_NAME);
     }
@@ -591,8 +596,10 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                 /** @var Request $request */
                 $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
                 /** @var TPKgCmsSession $session */
-                $session = $request->getSession();
-                $session->set(self::SESSION_KEY_NAME, $this);
+                if (null !== $request && true === $request->hasSession()) {
+                    $session = $request->getSession();
+                    $session->set(self::SESSION_KEY_NAME, $this);
+                }
             }
         }
     }
@@ -1755,7 +1762,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $time = time();
         $user = $this->getExtranetUserProvider()->getActiveUser();
         $request = $this->getRequest();
-        if (null === $request) {
+        if (null === $request || false === $request->hasSession()) {
             $sessionCopy = array();
             $sessionId = '';
         } else {

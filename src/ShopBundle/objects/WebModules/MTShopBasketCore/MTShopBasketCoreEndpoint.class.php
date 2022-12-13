@@ -862,6 +862,9 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     public function UpdateBasketItem($aRequestData = null, $bAddAmountToExistingAmount = false, $bIsInternalCall = false, $bWriteMessageOnInternalCall = false)
     {
         $request = $this->getCurrentRequest();
+        if (null !== $request && true === $request->hasSession()) {
+            return false;
+        }
         /** @var TPKgCmsSession $session */
         $session = $request->getSession();
         if (false === $session->RestartSessionWithWriteLock()) {

@@ -565,7 +565,9 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         $oOldUser = clone TdbDataExtranetUser::GetInstance();
 
         $oTmpBasket = new TShopBasket();
-        $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oTmpBasket);
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oTmpBasket);
+        }
 
         $oTmpUser = TdbDataExtranetUser::GetNewInstance();
 
@@ -583,7 +585,9 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         $oTmpUser->sqlData['lastname'] = 'Dummy';
         $oTmpUser->sqlData['city'] = 'Dummy';
 
-        $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oTmpUser);
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oTmpUser);
+        }
 
         while ($oBasketArticle = $oBasketArticleList->Next()) {
             $oTmpBasket->AddItem($oBasketArticle);
@@ -596,8 +600,11 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         $dShippingCosts = $oTmpBasket->dCostShipping;
 
-        $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oOldBasket);
-        $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oOldUser);
+
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oOldBasket);
+            $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oOldUser);
+        }
 
         return $dShippingCosts;
     }
@@ -618,7 +625,9 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         $oTmpBasket = new TShopBasket();
         /** @var Request $request */
         $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
-        $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oTmpBasket);
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oTmpBasket);
+        }
 
         $oTmpUser = TdbDataExtranetUser::GetNewInstance();
         $oTmpUser->sqlData['data_country_id'] = $sDataCountryId;
@@ -629,7 +638,9 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         $oTmpShippingAddress->sqlData['data_country_id'] = $sDataCountryId;
         $oTmpUser->setFakedShippingAddressForUser($oTmpShippingAddress);
 
-        $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oTmpUser);
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oTmpUser);
+        }
 
         while ($oBasketArticle = $oBasketArticleList->Next()) {
             $oNewBasketArticle = new TShopBasketArticle();
@@ -643,8 +654,10 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         $oList = $oTmpBasket->GetAvailableShippingGroups();
 
-        $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oOldBasket);
-        $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oOldUser);
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oOldBasket);
+            $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oOldUser);
+        }
 
         return $oList;
     }
