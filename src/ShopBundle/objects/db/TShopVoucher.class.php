@@ -454,7 +454,7 @@ class TShopVoucher extends TShopVoucherAutoParent
      *
      * @return void
      */
-    protected function CommitVoucherUseForCurrentUserPreSaveHook($aData)
+    protected function CommitVoucherUseForCurrentUserPreSaveHook(&$aData)
     {
     }
 
