@@ -75,7 +75,7 @@ class AmazonReferenceIdList implements IAmazonReferenceIdList, \IteratorAggregat
      *                        <b>Traversable</b>
      * @return \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new \ArrayIterator($this->mappingList);
     }
@@ -91,7 +91,7 @@ class AmazonReferenceIdList implements IAmazonReferenceIdList, \IteratorAggregat
      *             <p>
      *             The return value is cast to an integer
      */
-    public function count()
+    public function count(): int
     {
         return count($this->mappingList);
     }

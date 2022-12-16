@@ -32,7 +32,7 @@ class TPkgShopPaymentIPNException_OrderNotFound extends TPkgShopPaymentIPNExcept
         parent::__construct($oRequest, $message, $code, $previous);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
         $sString = $sString."\nOrderCmsIdent: ".$this->getOrderCmsIdent();

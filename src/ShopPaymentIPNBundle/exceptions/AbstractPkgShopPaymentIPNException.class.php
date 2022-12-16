@@ -11,7 +11,7 @@
 
 abstract class AbstractPkgShopPaymentIPNException extends Exception
 {
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
 

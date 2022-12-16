@@ -32,7 +32,7 @@ class TPkgShopPaymentIPNException_OrderHasNoPaymentGroup extends AbstractPkgShop
         parent::__construct($message, $code, $previous);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
         $sString = $sString."\nOrder-ID: ".$this->getOrderId();
