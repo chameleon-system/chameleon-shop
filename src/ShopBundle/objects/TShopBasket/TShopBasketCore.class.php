@@ -1913,17 +1913,19 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             $sMessageManager = MTShopBasketCore::MSG_CONSUMER_NAME;
         }
         $this->GetBasketArticles()->Refresh();
-        $bIsValid = $this->GetBasketArticles()->ValidateBasketContents($sMessageManager);
+
+        $isValid = $this->GetBasketArticles()->ValidateBasketContents($sMessageManager);
         /**
-         * validate the vouchers as they were stored in the session and
-         * maybe could be used by an other order (when vouchers with the same code exist).
+         * Validate the vouchers as they were stored in the session and
+         * maybe could be used by another order (when vouchers with the same code exist).
          */
-        $bBasketVouchersValidated = $this->CheckBasketVoucherAvailable($sMessageManager);
-        if (!$bIsValid) {
+        $this->CheckBasketVoucherAvailable($sMessageManager);
+
+        if (false === $isValid) {
             $this->RecalculateBasket();
         }
 
-        return $bIsValid;
+        return $isValid;
     }
 
     /**
