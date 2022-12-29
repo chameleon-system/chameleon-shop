@@ -40,7 +40,7 @@ interface PaymentTransactionHandlerInterface
      * @param \TdbShopOrder                      $order
      * @param float                              $value              - the value to capture (should be >0)
      * @param array                              $orderItemList      - assoc array [shop_order_item_id] = [quantity]
-     * @param string                             $invoiceNumber      - 16 char id shown on the payment statement of the buy (usually the order number or the bill number). will be passed to AmazonPaymentGroupConfig::getSellerAuthorizationNote
+     * @param string                             $invoiceNumber      - 16 char id shown on the payment statement of the buy (usually the order number or the bill number). will be passed to AmazonPayGroupConfig::getSellerAuthorizationNote
      *
      * @return \TdbPkgShopPaymentTransaction
      *
@@ -60,7 +60,7 @@ interface PaymentTransactionHandlerInterface
      * @param \TPkgShopPaymentTransactionManager $transactionManager
      * @param \TdbShopOrder                      $order
      * @param float                              $value              - the value to refund (should be >0)
-     * @param string                             $invoiceNumber      - 16 char id shown on the payment statement of the buy (usually the order number or the bill number). will be passed to AmazonPaymentGroupConfig::getSellerAuthorizationNote
+     * @param string                             $invoiceNumber      - 16 char id shown on the payment statement of the buy (usually the order number or the bill number). will be passed to AmazonPayGroupConfig::getSellerAuthorizationNote
      * @param string                             $sellerRefundNote   - a reason for the refund
      * @param array                              $orderItemList      - assoc array [shop_order_item_id] = [quantity]
      *

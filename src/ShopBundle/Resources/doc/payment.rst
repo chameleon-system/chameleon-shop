@@ -89,9 +89,9 @@ Example:
 
 .. code-block:: xml
 
-    <service id="chameleon_system_amazon_payment.config_provider" class="ChameleonSystem\AmazonPaymentBundle\Configuration\ConfigProvider">
+    <service id="chameleon_system_amazon_pay.config_provider" class="ChameleonSystem\AmazonPayBundle\Configuration\ConfigProvider">
         <argument />
-        <tag name="chameleon_system_shop.payment_config_provider" system_name="amazon" />
+        <tag name="chameleon_system_shop.pay_config_provider" system_name="amazon" />
     </service>
 
 Please note:
