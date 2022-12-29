@@ -30,7 +30,6 @@
 
             <!-- Third party code or portions of the code that touch a lot of third party code -->
             <directory name="src/**/lib/" />
-            <directory name="src/AmazonPaymentBundle/" />
             <file name="src/ShopRatingServiceBundle/objects/AbstractXmlStreamer.php" />
         </ignoreFiles>
     </projectFiles>
