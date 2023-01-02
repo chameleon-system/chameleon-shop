@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use esono\pkgCmsCache\CacheInterface;
 
 class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
@@ -145,9 +147,11 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
         $oTargetTableConf = TdbCmsTblConf::GetNewInstance();
         /** @var $oTargetTableConf TdbCmsTblConf */
         if ($oTargetTableConf->Loadfromfield('name', 'shop_voucher')) {
-            $oGlobal = TGlobal::instance();
-            $bUserIsInCodeTableGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($oTargetTableConf->fieldCmsUsergroupId);
-            $bHasNewPermissionOnTargetTable = ($oGlobal->oUser->oAccessManager->HasNewPermission('shop_voucher'));
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+            $bUserIsInCodeTableGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $oTargetTableConf->fieldName);
+            $bHasNewPermissionOnTargetTable = ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, 'shop_voucher'));
             $bAllowCreatingCodes = ($bUserIsInCodeTableGroup && $bHasNewPermissionOnTargetTable);
         }
 
