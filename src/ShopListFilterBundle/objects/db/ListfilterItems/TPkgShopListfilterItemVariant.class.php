@@ -68,7 +68,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
      *
      * @return void
      */
-    protected function OrderOptions($aOptions)
+    protected function OrderOptions(array &$aOptions): void
     {
         // get the variant type based on the first value
         if (count($aOptions) > 0) {

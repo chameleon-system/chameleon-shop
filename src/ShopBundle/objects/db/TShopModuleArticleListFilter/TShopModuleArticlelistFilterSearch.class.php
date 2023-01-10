@@ -83,7 +83,7 @@ class TShopModuleArticlelistFilterSearch extends TdbShopModuleArticleListFilter
      *
      * @return void
      */
-    protected function GetQuerySearchPostParameters($sQueryString, $aQueryStrings, $aFilter)
+    protected function GetQuerySearchPostParameters(string &$sQueryString, string &$aQueryStrings, array &$aFilter): void
     {
         $oGlobal = TGlobal::instance();
         $sQueryString = '';
