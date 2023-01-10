@@ -73,7 +73,7 @@ $oIPaymentHandler = $data['oPaymentHandler'];
             <th valign="middle">Land: *</th>
             <td>
                 <?php
-                $oCountries = &TdbDataCountryList::GetList();
+                $oCountries = TdbDataCountryList::GetList();
                 $oShop = TdbShop::GetInstance();
                 $oUser = TdbDataExtranetUser::GetInstance();
                 $iCountryId = $oUser->fieldDataCountryId;

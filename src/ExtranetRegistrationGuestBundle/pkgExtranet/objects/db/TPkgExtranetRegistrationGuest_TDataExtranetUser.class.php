@@ -37,8 +37,8 @@ class TPkgExtranetRegistrationGuest_TDataExtranetUser extends TPkgExtranetRegist
      */
     public function GetLinkForRegistrationGuest()
     {
-        $oURLData = &TCMSSmartURLData::GetActive();
-        $oShop = &TdbShop::GetInstance($oURLData->iPortalId);
+        $oURLData = TCMSSmartURLData::GetActive();
+        $oShop = TdbShop::GetInstance($oURLData->iPortalId);
         $sRegisterPath = $oShop->GetLinkToSystemPage(self::NAME_SYSTEM_PAGE);
 
         return $sRegisterPath;

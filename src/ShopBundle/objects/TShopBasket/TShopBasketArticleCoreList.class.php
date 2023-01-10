@@ -63,10 +63,10 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return void
      */
-    public function ObserverRegister($sObserverName, &$oObserver)
+    public function ObserverRegister($sObserverName, $oObserver)
     {
         if (!array_key_exists($sObserverName, $this->aObservers)) {
-            $this->aObservers[$sObserverName] = &$oObserver;
+            $this->aObservers[$sObserverName] = $oObserver;
         }
     }
 
@@ -115,13 +115,13 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return TShopBasketArticleList
      */
-    public function &GetArticlesAffectedByShippingType(TdbShopShippingType &$oShippingType)
+    public function GetArticlesAffectedByShippingType(TdbShopShippingType $oShippingType)
     {
         $oArticles = new TShopBasketArticleList();
         /** @var $oArticles TShopBasketArticleList */
         $iPointer = $this->getItemPointer();
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             if ($oShippingType->ArticleAffected($oItem)) {
                 $oArticles->AddItem($oItem);
             }
@@ -131,7 +131,7 @@ class TShopBasketArticleCoreList extends TIterator
             $this->GoToStart();
             $oArticles = new TShopBasketArticleList();
             /** @var $oArticles TShopBasketArticleList */
-            while ($oItem = &$this->Next()) {
+            while ($oItem = $this->Next()) {
                 $oArticles->AddItem($oItem);
             }
         }
@@ -139,7 +139,7 @@ class TShopBasketArticleCoreList extends TIterator
         if ($oShippingType->ArticleListValidForShippingType($oArticles)) {
             // we keep the list. we now need to mark all items in the list with that shipping type
             $oArticles->GoToStart();
-            while ($oItem = &$oArticles->Next()) {
+            while ($oItem = $oArticles->Next()) {
                 $this->SetShippingTypeForArticle($oItem, $oShippingType);
             }
             $oArticles->GoToStart();
@@ -161,13 +161,13 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return TShopBasketArticleList
      */
-    public function &GetListMatchingVat(TdbShopVat &$oVat)
+    public function GetListMatchingVat(TdbShopVat $oVat)
     {
         $oArticles = new TShopBasketArticleList();
         /** @var $oArticles TShopBasketArticleList */
         $iPointer = $this->getItemPointer();
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $oItemVat = $oItem->GetVat();
             if (!is_null($oItemVat) && $oItemVat->id == $oVat->id) {
                 $oArticles->AddItem($oItem);
@@ -187,12 +187,12 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return void
      */
-    protected function SetShippingTypeForArticle(TShopBasketArticle &$oItem, TdbShopShippingType &$oShippingType)
+    protected function SetShippingTypeForArticle(TShopBasketArticle $oItem, TdbShopShippingType $oShippingType)
     {
         $iCurrentPos = $this->getItemPointer();
         $this->GoToStart();
         $bFound = false;
-        while (!$bFound && ($oExistingItem = &$this->Next())) {
+        while (!$bFound && ($oExistingItem = $this->Next())) {
             /** @var $oExistingItem TShopBasketArticle */
             if ($oExistingItem->IsSameAs($oItem)) {
                 $bFound = true;
@@ -213,13 +213,13 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return bool
      */
-    public function AddItem(&$oItem)
+    public function AddItem($oItem)
     {
         $bWasAdded = true;
         $iCurrentPos = $this->getItemPointer();
         $this->GoToStart();
         $bFound = false;
-        while (!$bFound && ($oExistingItem = &$this->Next())) {
+        while (!$bFound && ($oExistingItem = $this->Next())) {
             /** @var $oExistingItem TShopBasketArticle */
             if ($oExistingItem->IsSameAs($oItem)) {
                 $bFound = true;
@@ -256,7 +256,7 @@ class TShopBasketArticleCoreList extends TIterator
         $bIsInList = false;
         $iCurPos = $this->getItemPointer();
         $this->GoToStart();
-        while (!$bIsInList && ($oTmpItem = &$this->Next())) {
+        while (!$bIsInList && ($oTmpItem = $this->Next())) {
             if ($oTmpItem->id == $oItem->id) {
                 $bIsInList = true;
             }
@@ -275,7 +275,7 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return bool
      */
-    public function UpdateItemAmount(TShopBasketArticle &$oItem)
+    public function UpdateItemAmount(TShopBasketArticle $oItem)
     {
         $bWasUpdated = false;
         if ($oItem->dAmount <= 0) {
@@ -286,7 +286,7 @@ class TShopBasketArticleCoreList extends TIterator
             $this->GoToStart();
             $bFound = false;
             $oExistingItem = null;
-            while (!$bFound && ($oExistingItem = &$this->Next())) {
+            while (!$bFound && ($oExistingItem = $this->Next())) {
                 /** @var $oExistingItem TShopBasketArticle */
                 if ($oExistingItem->IsSameAs($oItem)) {
                     $bFound = true;
@@ -317,7 +317,7 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return TShopBasketArticle|false
      */
-    public function &next()
+    public function next(): TShopBasketArticle|false
     {
         return parent::Next();
     }
@@ -336,7 +336,7 @@ class TShopBasketArticleCoreList extends TIterator
         $this->dTotalVolume = 0;
         $tmpPointer = $this->getItemPointer();
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             if ($oItem->dAmount <= 0) {
                 $this->RemoveArticle($oItem);
             } else {
@@ -358,7 +358,7 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return TShopBasketArticle|null
      */
-    public function RemoveArticle(TShopBasketArticle &$oItem)
+    public function RemoveArticle(TShopBasketArticle $oItem)
     {
         // find the item, then drop it
         $oItemToRemove = $this->FindItemWithProperty('sBasketItemKey', $oItem->sBasketItemKey);
@@ -380,14 +380,14 @@ class TShopBasketArticleCoreList extends TIterator
      *                                 returns the total basket value for alle articles that may be used for the voucher passed. the method takes
      *                                 active discounts into account
      */
-    public function GetBasketSumForVoucher(TdbShopVoucher &$oVoucher)
+    public function GetBasketSumForVoucher(TdbShopVoucher $oVoucher)
     {
         // get the sum of all products (if the voucher is not sponsored, we exclude products with "ExcludeFromVouchers")
         $iCurrentPosition = $this->getItemPointer();
         $this->GoToStart();
-        $oVoucherDef = &$oVoucher->GetFieldShopVoucherSeries();
+        $oVoucherDef = $oVoucher->GetFieldShopVoucherSeries();
         $dProductValue = 0;
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $bIncludeProduct = $oVoucher->AllowVoucherForArticle($oItem);
             if ($bIncludeProduct) {
                 $dProductValue = $dProductValue + $oItem->dPriceTotalAfterDiscountWithoutVouchers;
@@ -422,7 +422,7 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return void
      */
-    public function ReducePriceForItemsAffectedByNoneSponsoredVoucher(TdbShopVoucher &$oVoucher, $dVoucherValue)
+    public function ReducePriceForItemsAffectedByNoneSponsoredVoucher(TdbShopVoucher $oVoucher, $dVoucherValue)
     {
         $currentPosition = $this->getItemPointer();
         $this->GoToStart();
@@ -544,12 +544,12 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return float
      */
-    public function GetBasketQuantityForVoucher(TdbShopVoucher &$oVoucher)
+    public function GetBasketQuantityForVoucher(TdbShopVoucher $oVoucher)
     {
         $iCurrentPosition = $this->getItemPointer();
         $this->GoToStart();
         $iAmount = 0;
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $bIncludeProduct = $oVoucher->AllowVoucherForArticle($oItem);
             if ($bIncludeProduct) {
                 $iAmount = $iAmount + $oItem->dAmount;
@@ -568,13 +568,13 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return float
      */
-    public function GetBasketSumForDiscount(TdbShopDiscount &$oDiscount)
+    public function GetBasketSumForDiscount(TdbShopDiscount $oDiscount)
     {
         // get the sum of all products (we exclude products with "fieldExcludeFromDiscounts")
         $iCurrentPosition = $this->getItemPointer();
         $this->GoToStart();
         $dProductValue = 0;
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $bIncludeProduct = $oDiscount->AllowDiscountForArticle($oItem);
             if ($bIncludeProduct) {
                 $dProductValue = $dProductValue + $oItem->dPriceTotal;
@@ -592,13 +592,13 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @return float
      */
-    public function GetBasketQuantityForDiscount(TdbShopDiscount &$oDiscount)
+    public function GetBasketQuantityForDiscount(TdbShopDiscount $oDiscount)
     {
         // get the sum of all products (we exclude products with "fieldExcludeFromDiscounts")
         $iCurrentPosition = $this->getItemPointer();
         $this->GoToStart();
         $iAmount = 0;
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $bIncludeProduct = $oDiscount->AllowDiscountForArticle($oItem);
             if ($bIncludeProduct) {
                 $iAmount = $iAmount + $oItem->dAmount;
@@ -667,7 +667,7 @@ class TShopBasketArticleCoreList extends TIterator
         }
 
         $totalDiscountValueItemCalculated = 0;
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             if ((!$bIsAbsoluteDiscount || $dTotalDiscountValue > 0) && $oDiscount->AllowDiscountForArticle($oItem)) {
                 $oDiscountToPass = clone $oDiscount;
                 $oItem->ApplyDiscount($oDiscountToPass, $dTotalDiscountValue);
@@ -694,7 +694,7 @@ class TShopBasketArticleCoreList extends TIterator
 
         $dTotalDiscountValue = 0;
 
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $dTotalDiscountValue += ($oItem->dPriceTotal - $oItem->dPriceTotalAfterDiscount);
         }
         $this->setItemPointer($iCurrentPosition);
@@ -712,7 +712,7 @@ class TShopBasketArticleCoreList extends TIterator
         $iCurrentPosition = $this->getItemPointer();
         $this->GoToStart();
 
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $oItem->ResetDiscounts();
         }
         $this->setItemPointer($iCurrentPosition);
@@ -729,7 +729,7 @@ class TShopBasketArticleCoreList extends TIterator
         $iCurrentPosition = $this->getItemPointer();
         $this->GoToStart();
 
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $oItem->ResetShippingMarker();
         }
         $this->setItemPointer($iCurrentPosition);

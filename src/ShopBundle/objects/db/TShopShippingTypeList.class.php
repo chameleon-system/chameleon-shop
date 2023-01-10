@@ -53,7 +53,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
      *
      * @return TdbShopShippingTypeList
      */
-    public static function &GetAvailableTypes($iGroupId)
+    public static function GetAvailableTypes($iGroupId)
     {
         $shippingTypeDataAccess = self::getShippingTypeDataAccess();
         $shopService = self::getShopService();
@@ -100,7 +100,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
      *
      * @return TdbShopShippingTypeList
      */
-    public static function &GetPublicShippingTypes($iGroupId)
+    public static function GetPublicShippingTypes($iGroupId)
     {
         $query = "SELECT `shop_shipping_type`.*
                   FROM `shop_shipping_type`
@@ -108,7 +108,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
                  WHERE `shop_shipping_group_shop_shipping_type_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iGroupId)."'
                ";
 
-        $oList = &TdbShopShippingTypeList::GetList($query);
+        $oList = TdbShopShippingTypeList::GetList($query);
         $oList->RemoveRestrictedItems();
 
         return $oList;
@@ -125,7 +125,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
         $allIds = array();
         $aValidIds = array();
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $allIds[] = $oItem->id;
             if ($oItem->IsAvailable()) {
                 $aValidIds[] = MySqlLegacySupport::getInstance()->real_escape_string($oItem->id);
@@ -159,7 +159,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
         // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
         $aValidIds = array();
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             if ($oItem->IsPublic()) {
                 $aValidIds[] = MySqlLegacySupport::getInstance()->real_escape_string($oItem->id);
             }
@@ -196,7 +196,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
             } else {
                 $iPointer = $this->getItemPointer();
                 $this->GoToStart();
-                while ($oItem = &$this->Next()) {
+                while ($oItem = $this->Next()) {
                     $this->dPrice += $oItem->GetPrice();
                     if (true === $oItem->endShippingTypeChain()) {
                         break;

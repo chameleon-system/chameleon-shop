@@ -31,7 +31,7 @@ interface PaymentTransactionHandlerInterface
      *
      * @throws \TPkgCmsException_LogAndMessage
      */
-    public function captureOrder(\TPkgShopPaymentTransactionManager $transactionManager, \TdbShopOrder &$order);
+    public function captureOrder(\TPkgShopPaymentTransactionManager $transactionManager, \TdbShopOrder $order);
 
     /**
      * on success a transaction is created and returned by the method.
@@ -48,7 +48,7 @@ interface PaymentTransactionHandlerInterface
      */
     public function captureShipment(
         \TPkgShopPaymentTransactionManager $transactionManager,
-        \TdbShopOrder &$order,
+        \TdbShopOrder $order,
         $value,
         $invoiceNumber = null,
         array $orderItemList = null
@@ -70,7 +70,7 @@ interface PaymentTransactionHandlerInterface
      */
     public function refund(
         \TPkgShopPaymentTransactionManager $transactionManager,
-        \TdbShopOrder &$order,
+        \TdbShopOrder $order,
         $value,
         $invoiceNumber = null,
         $sellerRefundNote = null,
@@ -90,7 +90,7 @@ interface PaymentTransactionHandlerInterface
      */
     public function cancelOrder(
         \TPkgShopPaymentTransactionManager $transactionManager,
-        \TdbShopOrder &$order,
+        \TdbShopOrder $order,
         $cancellationReason = null
     );
 }

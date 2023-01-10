@@ -18,7 +18,7 @@ class TShopOrderItem extends TAdbShopOrderItem
      *
      * @return TdbShopOrderItem|false
      */
-    public function &GetOwningBundleOrderItem()
+    public function GetOwningBundleOrderItem()
     {
         /** @var TdbShopOrderItem|null $oOwningOrderItem */
         $oOwningOrderItem = $this->GetFromInternalCache('oOwningOrderItem');
@@ -120,7 +120,7 @@ class TShopOrderItem extends TAdbShopOrderItem
     protected function PostInsertHook()
     {
         parent::PostInsertHook();
-        $oArticle = &$this->GetFieldShopArticle();
+        $oArticle = $this->GetFieldShopArticle();
         if (!is_null($oArticle)) {
             $bNewAmountIsDelta = true;
             $bUpdateSaleCounter = true;
@@ -136,7 +136,7 @@ class TShopOrderItem extends TAdbShopOrderItem
     protected function PreDeleteHook()
     {
         parent::PreDeleteHook();
-        $oArticle = &$this->GetFieldShopArticle();
+        $oArticle = $this->GetFieldShopArticle();
         if (!is_null($oArticle)) {
             $bNewAmountIsDelta = true;
             $bUpdateSaleCounter = true;
@@ -174,7 +174,7 @@ class TShopOrderItem extends TAdbShopOrderItem
         $db = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
         $query = 'select COUNT(*) AS matches FROM `shop_order_item_download_cms_document_mlt`
                    WHERE `source_id` = :shopOrderItemId';
-        $result = $db->fetchAssoc($query, array('shopOrderItemId' => $this->id));
+        $result = $db->fetchAssociative($query, array('shopOrderItemId' => $this->id));
 
         return intval($result['matches']) > 0;
     }

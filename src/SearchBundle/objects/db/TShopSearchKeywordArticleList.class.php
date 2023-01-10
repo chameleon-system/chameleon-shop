@@ -20,7 +20,7 @@ class TShopSearchKeywordArticleList extends TAdbShopSearchKeywordArticleList
      *
      * @return TdbShopSearchKeywordArticleList
      */
-    public static function &GetListForShopKeywords($iShopId, $aKeywordList, $iLanguageId = null)
+    public static function GetListForShopKeywords($iShopId, $aKeywordList, $iLanguageId = null)
     {
         if (null === $iLanguageId) {
             $iLanguageId = self::getMyLanguageService()->getActiveLanguageId();

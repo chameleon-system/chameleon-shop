@@ -1,6 +1,6 @@
 <?php
 /** @var $oListItem TdbPkgShopListfilterItem */
-$oLocal = &TCMSLocal::GetActive();
+$oLocal = TCMSLocal::GetActive();
 $bNoActive = false;
 if ('1' == $oListItem->GetActiveValue()) {
     $sSelectedActive = 'checked="checked"';

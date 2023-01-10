@@ -20,7 +20,7 @@ class MTRatingServiceWidgetCore extends TUserCustomModelBase
      */
     protected $oModuleConfig = null;
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['oModuleConfig'] = $this->GetModuleConfig();

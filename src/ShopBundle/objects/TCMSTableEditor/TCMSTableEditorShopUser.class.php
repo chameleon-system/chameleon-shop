@@ -20,7 +20,7 @@ class TCMSTableEditorShopUser extends TableEditorExtranetUser
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         $this->UpdateNewsletterInfo($oPostTable);
         parent::PostSaveHook($oFields, $oPostTable);
@@ -31,7 +31,7 @@ class TCMSTableEditorShopUser extends TableEditorExtranetUser
      *
      * @return void
      */
-    protected function UpdateNewsletterInfo(&$oPostTable)
+    protected function UpdateNewsletterInfo($oPostTable)
     {
         $query = "SELECT * FROM `pkg_newsletter_user` WHERE `data_extranet_user_id` = '".\MySqlLegacySupport::getInstance()->real_escape_string($oPostTable->id)."'";
         if ($aRow = \MySqlLegacySupport::getInstance()->fetch_assoc(\MySqlLegacySupport::getInstance()->query($query))) {

@@ -27,7 +27,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
     public function getAvailableStock($shopArticleId)
     {
         /** @var int[]|false $stock */
-        $stock = $this->databaseConnection->fetchArray(
+        $stock = $this->databaseConnection->fetchNumeric(
             'SELECT `amount` FROM `shop_article_stock` WHERE `shop_article_id` = :id',
             array('id' => $shopArticleId)
         );
@@ -87,7 +87,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
               INNER JOIN `shop_article` ON `shop_article_stock`.`shop_article_id` = `shop_article`.`id`
                    WHERE `shop_article`.`variant_parent_id` = :articleId
         ';
-        $result = $this->databaseConnection->fetchArray($query, array('articleId' => $parentArticleId));
+        $result = $this->databaseConnection->fetchNumeric($query, array('articleId' => $parentArticleId));
         $amount = (is_array($result) && isset($result[0])) ? (int) $result[0] : 0;
 
         $updateData = array(

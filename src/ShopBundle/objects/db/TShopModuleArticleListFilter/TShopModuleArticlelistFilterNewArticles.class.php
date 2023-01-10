@@ -22,7 +22,7 @@ class TShopModuleArticlelistFilterNewArticles extends TdbShopModuleArticleListFi
      *
      * @return string
      */
-    protected function GetListQueryBase(&$oListConfig)
+    protected function GetListQueryBase($oListConfig)
     {
         $sQuery = '';
 
@@ -43,7 +43,7 @@ class TShopModuleArticlelistFilterNewArticles extends TdbShopModuleArticleListFi
      *
      * @return string
      */
-    protected function GetListQueryGroupBy(&$oListConfig)
+    protected function GetListQueryGroupBy($oListConfig)
     {
         return '';
     }

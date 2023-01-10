@@ -26,7 +26,7 @@ class TPkgShopArticlePreorder_ShopArticle extends TPkgShopArticlePreorder_ShopAr
     {
         $bReturn = parent::StockWasUpdatedHook($dOldValue, $dNewValue);
         if ($dOldValue < 1 && $dNewValue > 0) {
-            $oShopArticlePreorderList = &TdbPkgShopArticlePreorderList::GetListForShopArticleId($this->id);
+            $oShopArticlePreorderList = TdbPkgShopArticlePreorderList::GetListForShopArticleId($this->id);
             while ($oShopArticlePreorder = $oShopArticlePreorderList->Next()) {
                 $oShopArticlePreorder->SendMail();
             }
@@ -50,7 +50,7 @@ class TPkgShopArticlePreorder_ShopArticle extends TPkgShopArticlePreorder_ShopAr
             }
         }
         /*
-        $oStockMessage =& $this->GetFieldShopStockMessage();
+        $oStockMessage = $this->GetFieldShopStockMessage();
         $bPreorder = false;
         if ($oStockMessage) $bPreorder = $this->fieldShowPreorderOnZeroStock;
         $bOnlyPreOrder = ($bPreorder && $this->fieldStock > 0) || !$bPreorder;

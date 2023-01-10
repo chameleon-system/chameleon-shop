@@ -54,7 +54,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         if ($oBasket->iTotalNumberOfUniqueArticles <= 0) {
             $bAllowAccess = false;
             if ($bRedirectToPreviousPermittedStep) {
-                $oBasketStep = &TdbShopOrderStep::GetStep('basket');
+                $oBasketStep = TdbShopOrderStep::GetStep('basket');
                 $this->JumpToStep($oBasketStep);
             }
         }
@@ -79,7 +79,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
             if (!$bUserDataCompleted) {
                 $bAllowAccess = false;
                 if ($bRedirectToPreviousPermittedStep) {
-                    $oUserStep = &TdbShopOrderStep::GetStep('user');
+                    $oUserStep = TdbShopOrderStep::GetStep('user');
                     $this->JumpToStep($oUserStep);
                 }
             }
@@ -92,7 +92,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
                 if (false == $oMsgManager->consumerHasMessages(TCMSMessageManager::GLOBAL_CONSUMER_NAME)) {
                     $oMsgManager->addMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => TGlobal::Translate('chameleon_system_shop.error.generic_payment_shipping_error')));
                 }
-                $oUserStep = &TdbShopOrderStep::GetStep('shipping');
+                $oUserStep = TdbShopOrderStep::GetStep('shipping');
                 $this->JumpToStep($oUserStep);
             }
         }
@@ -164,11 +164,11 @@ class TShopStepConfirmCore extends TdbShopOrderStep
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = &parent::GetAdditionalViewVariables($sViewName, $sViewType);
+        $aViewVariables = parent::GetAdditionalViewVariables($sViewName, $sViewType);
         $aViewVariables['oUser'] = $this->getExtranetUserProvider()->getActiveUser();
-        $aViewVariables['oExtranetConfig'] = &TdbDataExtranet::GetInstance();
+        $aViewVariables['oExtranetConfig'] = TdbDataExtranet::GetInstance();
         $aViewVariables['oBasket'] = $this->getShopService()->getActiveBasket();
 
         $oUserStep = TdbShopOrderStep::GetStep('user');

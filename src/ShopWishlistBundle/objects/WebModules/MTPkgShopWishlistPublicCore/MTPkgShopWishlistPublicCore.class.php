@@ -53,7 +53,7 @@ class MTPkgShopWishlistPublicCore extends TUserCustomModelBase
         }
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['oActiveWishlist'] = $this->oActiveWishlist;

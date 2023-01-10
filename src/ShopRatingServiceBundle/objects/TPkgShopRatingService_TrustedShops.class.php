@@ -178,7 +178,7 @@ class TPkgShopRatingService_TrustedShops extends TdbPkgShopRatingService
             // We'll make sure that the right content type and character encoding gets set automatically.
             // This function will grab the proper character encoding, as well as set the content type to text/html.
             $feed->handle_content_type();
-            $this->data = &$feed;
+            $this->data = $feed;
 
             return $this->bFeedLoadSuccess;
         }

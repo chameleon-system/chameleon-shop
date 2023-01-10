@@ -66,7 +66,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
         parent::PostSaveHook();
 
         // change newsletter email address if user is registered for a newsletter
-        $oNewsletter = &TdbPkgNewsletterUser::GetInstanceForActiveUser();
+        $oNewsletter = TdbPkgNewsletterUser::GetInstanceForActiveUser();
         if (!is_null($oNewsletter)) {
             $aNewsletterData = $oNewsletter->sqlData;
             $aNewsletterData['data_extranet_user_id'] = $this->id;
@@ -349,7 +349,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
             if ($this->IsLoggedIn()) {
                 // fetch from user
                 $iNumRecsAdded = 0;
-                $oHistoryList = &$this->GetFieldDataExtranetUserShopArticleHistoryList();
+                $oHistoryList = $this->GetFieldDataExtranetUserShopArticleHistoryList();
                 while (($oHistoryItem = $oHistoryList->Next()) && $iNumRecsAdded <= $iMaxQueueLength) {
                     $this->aArticleViewHistory[] = $oHistoryItem->sqlData;
                 }
@@ -393,7 +393,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
             if ($this->IsLoggedIn()) {
                 // fetch from user
                 $iNumRecsAdded = 0;
-                $oNoticeList = &$this->GetFieldShopUserNoticeListList();
+                $oNoticeList = $this->GetFieldShopUserNoticeListList();
                 while (($oNoticeListItem = $oNoticeList->Next()) && $iNumRecsAdded <= $iMaxQueueLength) {
                     if (!empty($oNoticeListItem->fieldShopArticleId)) {
                         $this->aNoticeList[$oNoticeListItem->fieldShopArticleId] = $oNoticeListItem->sqlData;

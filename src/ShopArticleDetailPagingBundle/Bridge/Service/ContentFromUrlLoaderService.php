@@ -40,7 +40,7 @@ class ContentFromUrlLoaderService implements ContentFromUrlLoaderServiceInterfac
      */
     public function load($url)
     {
-        $masterRequest = $this->requestStack->getMasterRequest();
+        $masterRequest = $this->requestStack->getMainRequest();
         $request = Request::create($url, 'GET', array(), $masterRequest->cookies->all(), array(), $masterRequest->server->all());
         if (true === $masterRequest->hasSession()) {
             $request->setSession($masterRequest->getSession());

@@ -18,7 +18,7 @@ class TShopArticleGroupList extends TAdbShopArticleGroupList
      *
      * @return TdbShopArticleGroupList
      */
-    public static function &GetArticleGroups($iArticleId)
+    public static function GetArticleGroups($iArticleId)
     {
         $oList = null;
 
@@ -28,7 +28,7 @@ class TShopArticleGroupList extends TAdbShopArticleGroupList
                  WHERE `shop_article_article_group_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iArticleId)."'
               ORDER BY `shop_article_group`.`name`
                ";
-        $oList = &TdbShopArticleGroupList::GetList($query);
+        $oList = TdbShopArticleGroupList::GetList($query);
 
         return $oList;
     }
@@ -38,12 +38,12 @@ class TShopArticleGroupList extends TAdbShopArticleGroupList
      *
      * @return TdbShopVat|null
      */
-    public function &GetMaxVat()
+    public function GetMaxVat()
     {
         $iPointer = $this->getItemPointer();
         $oMaxVatItem = null;
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $oCurrentVat = $oItem->GetVat();
             if (!is_null($oCurrentVat)) {
                 if (is_null($oMaxVatItem)) {

@@ -357,7 +357,7 @@ class TShopCategoryTree
         } else {
             if (!is_null($this->oChildCategoryTreeList)) {
                 $this->oChildCategoryTreeList->GoToStart();
-                while (!$this->bIsActive && ($oCatTree = &$this->oChildCategoryTreeList->Next())) {
+                while (!$this->bIsActive && ($oCatTree = $this->oChildCategoryTreeList->Next())) {
                     $this->bIsActive = $this->bIsActive || $oCatTree->MarkActiveCategories($aActiveCategories);
                 }
                 $this->oChildCategoryTreeList->GoToStart();

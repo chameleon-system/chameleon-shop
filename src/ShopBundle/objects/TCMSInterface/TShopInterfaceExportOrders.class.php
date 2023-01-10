@@ -31,7 +31,7 @@ class TShopInterfaceExportOrders extends TCMSInterfaceManagerBaseExportCSV
      *
      * @return array
      */
-    protected function GetExportRowFromDataObject(&$oDataObjct)
+    protected function GetExportRowFromDataObject($oDataObjct)
     {
         $aRow = parent::GetExportRowFromDataObject($oDataObjct);
         $aRow['adr_billing_country_name'] = '';
@@ -56,7 +56,7 @@ class TShopInterfaceExportOrders extends TCMSInterfaceManagerBaseExportCSV
             $aRow['adr_shipping_salutation_name'] = $oSal->fieldName;
         }
 
-        $oLocale = &TCMSLocal::GetActive();
+        $oLocale = TCMSLocal::GetActive();
         $aRow['value_vat_total'] = $oLocale->FormatNumber($aRow['value_vat_total'], 2);
         $aRow['count_unique_articles'] = $oLocale->FormatNumber($aRow['count_unique_articles'], 2);
 

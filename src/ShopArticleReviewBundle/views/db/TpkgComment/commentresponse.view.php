@@ -97,7 +97,7 @@ $oModulePointer = $oGlobal->GetExecutingModulePointer();
             <div class=" respondcommentlist respondcommentlistc<?=$oComment->id; ?>">&nbsp;<div>
             <div
                 class="antwortCount"><?=$oChildCommentList->Length().'&nbsp;'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.action.respond_to_comment')); ?></div>
-                    <?php   while ($oChildComment = &$oChildCommentList->Next()) {
+                    <?php   while ($oChildComment = $oChildCommentList->Next()) {
                                 echo $oChildComment->Render('commentresponse', array('iCommentNr' => $aCallTimeVars['iCommentNr'], 'oActiveItem' => $aCallTimeVars['oActiveItem'], 'iAktPage' => $aCallTimeVars['iAktPage']));
                             } ?>
                     <?php

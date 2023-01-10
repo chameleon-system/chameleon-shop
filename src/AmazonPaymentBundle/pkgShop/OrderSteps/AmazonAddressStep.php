@@ -47,7 +47,7 @@ class AmazonAddressStep extends \TdbShopOrderStep
         return $portalDomainService->getActivePortal()->id;
     }
 
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
         $data = parent::GetAdditionalViewVariables($sViewName, $sViewType);
         $data['amazonConfig'] = null;

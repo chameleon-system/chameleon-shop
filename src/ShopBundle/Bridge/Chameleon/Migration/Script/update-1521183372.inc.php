@@ -23,7 +23,7 @@ if (1 === (int) $indexEntryExists) {
 }
 
 $query = "show index from shop_order where Key_name = 'order_ident'";
-$row = TCMSLogChange::getDatabaseConnection()->fetchAssoc($query);
+$row = TCMSLogChange::getDatabaseConnection()->fetchAssociative($query);
 if (false !== $row) {
     $query = 'ALTER TABLE `shop_order` DROP INDEX  `order_ident`';
     TCMSLogChange::RunQuery(__LINE__, $query);
@@ -66,7 +66,7 @@ $orderIndicies = [
 ];
 foreach ($orderIndicies as $orderIndex) {
     $query = 'show index from shop_order where Key_name = :keyName';
-    $row = TCMSLogChange::getDatabaseConnection()->fetchAssoc($query, ['keyName' => $orderIndex]);
+    $row = TCMSLogChange::getDatabaseConnection()->fetchAssociative($query, ['keyName' => $orderIndex]);
     if (false !== $row) {
         $query = sprintf(
             'ALTER TABLE `shop_order` DROP INDEX  %s',

@@ -72,7 +72,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      *
      * @return string|null
      */
-    protected function &GetOwningPaymentMethodId()
+    protected function GetOwningPaymentMethodId()
     {
         return $this->sOwningPaymentMethodId;
     }
@@ -86,7 +86,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      *
      * @return TdbShopPaymentHandler|null
      */
-    public static function &GetInstance($id)
+    public static function GetInstance($id)
     {
         $oInstance = null;
         $query = "SELECT * FROM `shop_payment_handler` WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";
@@ -196,7 +196,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
     /**
      * @return TdbShopPaymentHandlerParameterList
      */
-    public function &GetFieldShopPaymentHandlerParameterList()
+    public function GetFieldShopPaymentHandlerParameterList()
     {
         $oList = TdbShopPaymentHandlerParameterList::GetListForShopPaymentHandlerId($this->id, $this->iLanguageId);
         $oList->ChangeOrderBy(array('cms_portal_id' => 'ASC')); //make sure parameters without portal come first
@@ -215,7 +215,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      *
      * @return bool true if the payment was executed successfully, else false
      */
-    public function ExecutePayment(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         return true;
     }
@@ -265,7 +265,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      *
      * @return bool
      */
-    public function PostExecutePaymentHook(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function PostExecutePaymentHook(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $bPaymentOk = true;
         $aData = $oOrder->sqlData;
@@ -497,7 +497,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      *
      * @return bool
      */
-    public function AllowUse(TdbShopPaymentMethod &$oPaymentMethod)
+    public function AllowUse(TdbShopPaymentMethod $oPaymentMethod)
     {
         return true;
     }

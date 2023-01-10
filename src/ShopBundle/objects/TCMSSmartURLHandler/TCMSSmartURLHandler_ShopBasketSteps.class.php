@@ -17,9 +17,9 @@ class TCMSSmartURLHandler_ShopBasketSteps extends TCMSSmartURLHandler
     public function GetPageDef()
     {
         $iPageId = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
 
-        $oShop = &TdbShop::GetInstance($oURLData->iPortalId);
+        $oShop = TdbShop::GetInstance($oURLData->iPortalId);
         $oStep = $this->GetActiveStep($oURLData);
         if (!is_null($oStep)) {
             $this->aCustomURLParameters[MTShopOrderWizardCore::URL_PARAM_STEP_SYSTEM_NAME] = $oStep->fieldSystemname;
@@ -41,7 +41,7 @@ class TCMSSmartURLHandler_ShopBasketSteps extends TCMSSmartURLHandler
     protected function GetActiveStep($oURLData)
     {
         $oStep = null;
-        $oShop = &TdbShop::GetInstance($oURLData->iPortalId);
+        $oShop = TdbShop::GetInstance($oURLData->iPortalId);
         $sCheckoutPath = $oShop->GetLinkToSystemPage('checkout');
         if ('.html' == substr($sCheckoutPath, -5)) {
             $sCheckoutPath = substr($sCheckoutPath, 0, -5);

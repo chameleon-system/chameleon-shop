@@ -23,7 +23,7 @@ class TCMSCronJob_ShopSearchIndex extends TdbCmsCronjobs
     protected function _ExecuteCron()
     {
         $this->getCache()->disable();
-        $oIndexers = &TdbShopSearchIndexerList::GetList();
+        $oIndexers = TdbShopSearchIndexerList::GetList();
         $oIndex = null;
         if ($oIndexers->Length() < 1) {
             $oIndex = TdbShopSearchIndexer::GetNewInstance();

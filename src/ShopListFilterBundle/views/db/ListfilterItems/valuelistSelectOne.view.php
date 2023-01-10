@@ -1,6 +1,6 @@
 <?php
 /** @var $oListItem TdbPkgShopListfilterItem */
-$oLocal = &TCMSLocal::GetActive();
+$oLocal = TCMSLocal::GetActive();
 $aValues = $oListItem->GetOptions();
 if (count($aValues) > 0) {
     $sLongCSS = '';

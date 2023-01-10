@@ -56,24 +56,6 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
     }
 
     /**
-     * Add view based clear cache triggers for the Render method here.
-     *
-     * @param array  $aClearTriggers - clear trigger array (with current contents)
-     * @param string $sViewName      - view being requested
-     * @param string $sViewType      - location of the view (Core, Custom-Core, Customer)
-     *
-     * @return void
-     */
-    protected function AddClearCacheTriggers(&$aClearTriggers, $sViewName, $sViewType)
-    {
-        $aClearTriggers[] = array('table' => $this->table, 'id' => $this->id);
-        $aClearTriggers[] = array('table' => 'shop_article', 'id' => ''); // for now we keep it simple and react to any article changes. this should later be changed to react only to relevant items
-        $aClearTriggers[] = array('table' => 'cms_tree', 'id' => ''); // for the connected markers that may hold tree links
-        $aClearTriggers[] = array('table' => 'cms_media', 'id' => ''); // for the connected markers that may hold tree links
-        $aClearTriggers[] = array('table' => 'pkg_image_hotspot_item_spot', 'id' => ''); // for the connected markers that may hold tree links
-    }
-
-    /**
      * returns the item next in line relative to this item
      * if the current item is the last in line, the method will return the first item. returns false if
      * no next item exists.
@@ -83,7 +65,7 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
     public function GetNextItem()
     {
         /** @var TdbPkgImageHotspotItem|null $oNextItem */
-        $oNextItem = &$this->GetFromInternalCache('oNextItem');
+        $oNextItem = $this->GetFromInternalCache('oNextItem');
         if (is_null($oNextItem)) {
             $oItemList = TdbPkgImageHotspotItemList::GetListForPkgImageHotspotId($this->fieldPkgImageHotspotId);
             $oItemList->bAllowItemCache = true;
@@ -120,7 +102,7 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
     public function GetPreviousItem()
     {
         /** @var TdbPkgImageHotspotItem|null $oPreviousItem */
-        $oPreviousItem = &$this->GetFromInternalCache('oPreviousItem');
+        $oPreviousItem = $this->GetFromInternalCache('oPreviousItem');
         if (is_null($oPreviousItem)) {
             $oItemList = TdbPkgImageHotspotItemList::GetListForPkgImageHotspotId($this->fieldPkgImageHotspotId);
             $oItemList->bAllowItemCache = true;
@@ -154,7 +136,7 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
     public static function GetURLParameterBaseForActiveSpot()
     {
         $oGlobal = TGlobal::instance();
-        $oRunningModule = &$oGlobal->GetExecutingModulePointer();
+        $oRunningModule = $oGlobal->GetExecutingModulePointer();
         $sModuleSpotName = $oRunningModule->sModuleSpotName;
 
         return TdbPkgImageHotspotItem::URL_NAME_ITEM_ID.$sModuleSpotName;
@@ -184,7 +166,7 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
     public function GetAjaxLink($sViewName = 'standard', $sType = 'Core', $aParameter = array())
     {
         $oGlobal = TGlobal::instance();
-        $oRunningModule = &$oGlobal->GetExecutingModulePointer();
+        $oRunningModule = $oGlobal->GetExecutingModulePointer();
         $aParameter['id'] = $this->id;
         $aParameter['sViewName'] = $sViewName;
         $aParameter['sType'] = $sType;

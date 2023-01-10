@@ -139,7 +139,7 @@ class TShopPaymentHandlerDataTrans_SwissPostFinance extends TShopPaymentHandlerD
      *
      * @return bool
      */
-    public function AllowUse(TdbShopPaymentMethod &$oPaymentMethod)
+    public function AllowUse(TdbShopPaymentMethod $oPaymentMethod)
     {
         $bAllowUse = parent::AllowUse($oPaymentMethod);
         if ($bAllowUse) {

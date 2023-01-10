@@ -99,7 +99,7 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
         $iCount = 0;
         if (!is_null($oArticleList)) {
             /** @var $oArticle TdbShopArticle */
-            while ($oArticle = &$oArticleList->Next() && !$this->BreakUp($iCount)) {
+            while ($oArticle = $oArticleList->Next() && !$this->BreakUp($iCount)) {
                 $oArticle = $this->PreProcessArticle($oArticle);
                 $this->HandleArticle($oArticle, $aFields);
                 ++$iCount;
@@ -118,7 +118,7 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
      *
      * @return string
      */
-    protected function HandleArticle(&$oArticle, &$aFields)
+    protected function HandleArticle($oArticle, $aFields)
     {
         /**
          * @var $logger LoggerInterface
@@ -181,7 +181,7 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
      *
      * @return mixed
      */
-    protected function GetFieldValue($sFieldName, &$oArticle)
+    protected function GetFieldValue($sFieldName, $oArticle)
     {
         return '';
     }

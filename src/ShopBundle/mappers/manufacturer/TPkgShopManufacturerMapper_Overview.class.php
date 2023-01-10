@@ -87,7 +87,7 @@ class TPkgShopManufacturerMapper_Overview extends AbstractViewMapper
     {
         $aManufacturerList = array();
 
-        while ($oManufacturer = &$oManufacturerList->Next()) {
+        while ($oManufacturer = $oManufacturerList->Next()) {
             $aItem = array();
             $aItem['sTitle'] = $oManufacturer->GetName();
             $sText = $oManufacturer->GetTextField('description_short');

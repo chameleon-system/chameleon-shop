@@ -124,7 +124,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
     public function CreateIndexTick($iNumberOfRowsToProcess)
     {
         $iRealNumberProcessed = 0;
-        $oFields = &TdbShopSearchFieldWeightList::GetListForShopSearchQueryId($this->id);
+        $oFields = TdbShopSearchFieldWeightList::GetListForShopSearchQueryId($this->id);
         if (CMS_SHOP_INDEX_LOAD_DELAY_MILLISECONDS > 0) {
             usleep(CMS_SHOP_INDEX_LOAD_DELAY_MILLISECONDS * 1000);
         }
@@ -142,7 +142,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
         } else {
             while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($tres)) {
                 $oFields->GoToStart();
-                while ($oField = &$oFields->Next()) {
+                while ($oField = $oFields->Next()) {
                     $oField->CreateIndexTick($aRow);
                 }
                 $query = 'DELETE FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->GetIndexRawTableName())."` WHERE `sysid` = '".MySqlLegacySupport::getInstance()->real_escape_string($aRow['sysid'])."'";

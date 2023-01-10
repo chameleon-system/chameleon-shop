@@ -27,7 +27,7 @@ class TShopStockMessage extends TAdbShopStockMessage
      *
      * @return TdbShopStockMessage
      */
-    public static function GetNewInstance($sData = null, $sLanguage = null)
+    public static function GetNewInstance($sData = null, $sLanguage = null): TdbShopStockMessage
     {
         $oInstance = parent::GetNewInstance($sData, $sLanguage);
         if ($oInstance && is_array($oInstance->sqlData)) {
@@ -153,7 +153,7 @@ class TShopStockMessage extends TAdbShopStockMessage
     {
         $this->sArticleKey = $oArticle->id;
         TCacheManagerRuntimeCache::SetContent($this->sArticleKey, $oArticle, 'TShopArticle', 3);
-        $oShopStockMessageTrigger = &$this->GetFieldShopStockMessageTrigger();
+        $oShopStockMessageTrigger = $this->GetFieldShopStockMessageTrigger();
         if (!is_null($oShopStockMessageTrigger)) {
             $this->fieldName = $oShopStockMessageTrigger->fieldMessage;
             $this->fieldClass = $oShopStockMessageTrigger->fieldCssClass;
@@ -189,7 +189,7 @@ class TShopStockMessage extends TAdbShopStockMessage
      *
      * @return TdbShopStockMessageTrigger|null
      */
-    public function &GetFieldShopStockMessageTrigger()
+    public function GetFieldShopStockMessageTrigger()
     {
         /** @var TdbShopStockMessageTrigger|null $oShopStockMessageTrigger */
         $oShopStockMessageTrigger = $this->GetFromInternalCache('oActive_shop_stock_message_trigger_id');
@@ -280,7 +280,7 @@ class TShopStockMessage extends TAdbShopStockMessage
         return $aStock;
     }
 
-    public function &GetFieldShopStockMessageTriggerList()
+    public function GetFieldShopStockMessageTriggerList()
     {
         return $this->GetFieldShopStockMessageTriggerListOrdered();
     }
@@ -290,7 +290,7 @@ class TShopStockMessage extends TAdbShopStockMessage
      * @psalm-param array<string, 'ASC'|'DESC'>|null $aOrderBy
      * @return TdbShopStockMessageTriggerList
      */
-    public function &GetFieldShopStockMessageTriggerListOrdered(array $aOrderBy = null)
+    public function GetFieldShopStockMessageTriggerListOrdered(array $aOrderBy = null)
     {
         $oTriggerList = $this->GetFromInternalCache('oShopStockMessageTriggerList');
         if (is_null($oTriggerList)) {

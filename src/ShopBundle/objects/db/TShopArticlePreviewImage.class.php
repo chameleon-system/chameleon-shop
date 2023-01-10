@@ -41,10 +41,10 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
      *
      * @return bool
      */
-    public function LoadByName(&$oArticle, $sInternalName)
+    public function LoadByName($oArticle, $sInternalName)
     {
         $bLoaded = false;
-        $this->oArticle = &$oArticle;
+        $this->oArticle = $oArticle;
         $this->oImageSize = TdbShopArticleImageSize::GetNewInstance();
         /** @var $oImageSize TdbShopArticleImageSize */
         if ($this->oImageSize->LoadFromField('name_internal', $sInternalName)) {
@@ -78,9 +78,9 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
     {
         $oView = new TViewParser();
 
-        $oArticle = &$this->GetArticleObject();
-        $oArticleSize = &$this->GetImageSizeObject();
-        $oImage = &$this->GetImageObject();
+        $oArticle = $this->GetArticleObject();
+        $oArticleSize = $this->GetImageSizeObject();
+        $oImage = $this->GetImageObject();
 
         $oView->AddVar('oArticle', $oArticle);
         $oView->AddVar('oImageSize', $oArticleSize);
@@ -100,7 +100,7 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
      *
      * @return TdbShopArticle|null
      */
-    public function &GetArticleObject()
+    public function GetArticleObject()
     {
         if (is_null($this->oArticle)) {
             $this->oArticle = TdbShopArticle::GetNewInstance();
@@ -119,7 +119,7 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
      *
      * @return TCMSImage|null
      */
-    public function &GetImageObject()
+    public function GetImageObject()
     {
         if (is_null($this->oImage)) {
             $this->oImage = $this->GetImage(0, 'cms_media_id', true);
@@ -136,8 +136,8 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
      */
     public function GetImageThumbnailObject($aEffects = array())
     {
-        $oImageSize = &$this->GetImageSizeObject();
-        $oImage = &$this->GetImageObject();
+        $oImageSize = $this->GetImageSizeObject();
+        $oImage = $this->GetImageObject();
         $oThumb = null;
         TdbCmsConfigImagemagick::SetEnableEffects(true);
         $bEnableEffects = TdbCmsConfigImagemagick::GetEnableEffects();
@@ -159,7 +159,7 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
      *
      * @return TdbShopArticleImageSize|null
      */
-    public function &GetImageSizeObject()
+    public function GetImageSizeObject()
     {
         if (is_null($this->oImageSize)) {
             $this->oImageSize = TdbShopArticleImageSize::GetNewInstance();

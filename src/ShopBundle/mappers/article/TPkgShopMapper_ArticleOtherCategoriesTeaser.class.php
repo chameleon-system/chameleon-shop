@@ -27,7 +27,7 @@ class TPkgShopMapper_ArticleOtherCategoriesTeaser extends AbstractPkgShopMapper_
 
         $aLinks = array();
         $oCategoryList = $this->getCategoryList($oArticle);
-        while ($oCategory = &$oCategoryList->Next()) {
+        while ($oCategory = $oCategoryList->Next()) {
             if ($oCategory->id !== $oActiveCategory->id) {
                 $aLinks[] = $this->getLink($oCategory, $oCacheTriggerManager, $bCachingEnabled);
             }
@@ -44,14 +44,14 @@ class TPkgShopMapper_ArticleOtherCategoriesTeaser extends AbstractPkgShopMapper_
      *
      * @return TdbShopCategoryList
      */
-    protected function &getCategoryList(TdbShopArticle $oArticle)
+    protected function getCategoryList(TdbShopArticle $oArticle)
     {
         /** @var $oCategoryList TdbShopCategoryList */
-        $oCategoryList = &$oArticle->GetFieldShopCategoryList();
+        $oCategoryList = $oArticle->GetFieldShopCategoryList();
         $oCategoryList->GoToStart();
         if (0 === $oCategoryList->Length() && $oArticle->IsVariant()) {
-            $oParent = &$oArticle->GetFieldVariantParent();
-            $oCategoryList = &$oParent->GetFieldShopCategoryList();
+            $oParent = $oArticle->GetFieldVariantParent();
+            $oCategoryList = $oParent->GetFieldShopCategoryList();
             $oCategoryList->GoToStart();
         }
 

@@ -263,8 +263,8 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
               INNER JOIN shop_search_field_weight ON shop_search_query.id = shop_search_field_weight.shop_search_query_id
                 GROUP BY shop_search_query.id
                  ';
-            $oIndexQueries = &TdbShopSearchQueryList::GetList($query);
-            while ($oIndexQuery = &$oIndexQueries->Next()) {
+            $oIndexQueries = TdbShopSearchQueryList::GetList($query);
+            while ($oIndexQuery = $oIndexQueries->Next()) {
                 $oIndexQuery->StartIndex($this->bRegenerateCompleteIndex);
                 $iNumberOfItems = $oIndexQuery->NumberOfRecordsLeftToIndex();
                 if ($iNumberOfItems > 0) {
@@ -292,12 +292,12 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      *
      * @return TdbShop|false
      */
-    protected static function &GetShopConfigForIndexer()
+    protected static function GetShopConfigForIndexer()
     {
         static $oShop;
         if (!isset($oShop)) {
             // get first shop we find
-            $oShops = &TdbShopList::GetList();
+            $oShops = TdbShopList::GetList();
             $oShop = $oShops->Current();
         }
 
@@ -482,7 +482,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         static $aNames;
         if (!isset($aNames)) {
             $aNames = array();
-            $oShop = &TdbShopSearchIndexer::GetShopConfigForIndexer();
+            $oShop = TdbShopSearchIndexer::GetShopConfigForIndexer();
             for ($i = $oShop->fieldShopSearchMinIndexLength; $i <= $oShop->fieldShopSearchMaxIndexLength; ++$i) {
                 $aNames[TdbShopSearchIndexer::GetIndexTableNameForIndexLength($i)] = $i;
             }
@@ -522,7 +522,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         $sQuery = self::GenerateSearchQuery($sSearchTerm, $sLanguageId, $aSearchTerms);
 
         // now create search cache.. unless a cache entry exists
-        $oSearchCache = &TdbShopSearchCache::CreateSearchCache($sCacheKey, $sQuery, $sSearchTerm, $aSearchTerms, $aFilter);
+        $oSearchCache = TdbShopSearchCache::CreateSearchCache($sCacheKey, $sQuery, $sSearchTerm, $aSearchTerms, $aFilter);
 
         $sQuery = "SELECT DISTINCT
                         `shop_search_cache_item`.`weight` AS cms_search_weight,
@@ -576,7 +576,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
                 // fetch manually selected articles for search words
                 $oShop = TdbShop::GetInstance();
-                $oManuelArticleSelections = &TdbShopSearchKeywordArticleList::GetListForShopKeywords($oShop->id, $aTerms, $sLanguageId);
+                $oManuelArticleSelections = TdbShopSearchKeywordArticleList::GetListForShopKeywords($oShop->id, $aTerms, $sLanguageId);
                 while ($oManuelArticleSelection = $oManuelArticleSelections->Next()) {
                     $aTmpArticleList = $oManuelArticleSelection->GetMLTIdList('shop_article');
                     $manualArticleSelection = array_merge($manualArticleSelection, $aTmpArticleList);
@@ -770,7 +770,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         $aRemove = array('°' => '', '´' => '', '*' => '', '`' => '', '.' => '', ',' => '', ':' => '', ';' => '', '"' => '', "'" => '', '-' => '', '?' => '', '!' => '', '(' => '', ')' => '', '#' => '', 'ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', 'Ä' => 'Ae', 'Ö' => 'Oe', 'Ü' => 'Ue');
         $sCleanWord = str_replace(array_keys($aRemove), array_values($aRemove), $sCleanWord);
 
-        $oShop = &TdbShopSearchIndexer::GetShopConfigForIndexer();
+        $oShop = TdbShopSearchIndexer::GetShopConfigForIndexer();
         $iMinWordLength = $oShop->fieldShopSearchMinIndexLength;
         $iMaxWordLength = $oShop->fieldShopSearchMaxIndexLength;
 
@@ -806,7 +806,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         // first try to cache all... if we have to many (more than 500) then work an a word base system instead
         if (!isset($aIgnoreWordCache)) {
             $aIgnoreWordCache = array();
-            $oShop = &TdbShopSearchIndexer::GetShopConfigForIndexer();
+            $oShop = TdbShopSearchIndexer::GetShopConfigForIndexer();
             $query = "SELECT DISTINCT `name` FROM `shop_search_ignore_word` WHERE `shop_id`='".MySqlLegacySupport::getInstance()->real_escape_string($oShop->id)."'";
             $tres = MySqlLegacySupport::getInstance()->query($query);
             if (MySqlLegacySupport::getInstance()->num_rows($tres) <= 500) {
@@ -827,7 +827,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             $bIgnore = true;
         } elseif (!$bCompleteLoad) {
             // check if we find it in the db
-            $oShop = &TdbShopSearchIndexer::GetShopConfigForIndexer();
+            $oShop = TdbShopSearchIndexer::GetShopConfigForIndexer();
             $query = "SELECT DISTINCT `name` FROM `shop_search_ignore_word` WHERE `shop_id`='".MySqlLegacySupport::getInstance()->real_escape_string($oShop->id)."' AND `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sWord)."'";
             $tres = MySqlLegacySupport::getInstance()->query($query);
             if (MySqlLegacySupport::getInstance()->num_rows($tres) > 0) {

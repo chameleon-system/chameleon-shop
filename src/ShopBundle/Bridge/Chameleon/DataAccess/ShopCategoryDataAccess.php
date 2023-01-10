@@ -41,7 +41,7 @@ class ShopCategoryDataAccess implements ShopCategoryDataAccessInterface
             $query = $query.' WHERE '.$activeRestriction;
         }
         $query = $query.' ORDER BY `position`';
-        $categories = $this->connection->fetchAll($query);
+        $categories = $this->connection->fetchAllAssociative($query);
 
         $idList = \array_column($categories, 'id');
 
@@ -60,7 +60,7 @@ class ShopCategoryDataAccess implements ShopCategoryDataAccessInterface
         }
         $query = sprintf($query, $activeRestriction);
 
-        return $this->connection->fetchAll($query, array('parentId' => $categoryId));
+        return $this->connection->fetchAllAssociative($query, array('parentId' => $categoryId));
     }
 
     /**
@@ -69,7 +69,7 @@ class ShopCategoryDataAccess implements ShopCategoryDataAccessInterface
     public function getCategory($categoryId)
     {
         $query = 'SELECT * FROM `shop_category` WHERE `shop_category_id` = :categoryId';
-        $row = $this->connection->fetchAll($query, array('categoryId' => $categoryId));
+        $row = $this->connection->fetchAllAssociative($query, array('categoryId' => $categoryId));
         if (false === $row) {
             return null;
         }

@@ -57,7 +57,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         if (!TGlobal::IsCMSMode()) {
             $dCosts = $this->GetShippingCostsForBasket();
             if (0 != $dCosts) {
-                $oLocal = &TCMSLocal::GetActive();
+                $oLocal = TCMSLocal::GetActive();
                 $sCurrencySymbol = $this->GetCurrencySymbol();
                 $sName .= ' ('.$oLocal->FormatNumber($dCosts, 2).' '.$sCurrencySymbol.')';
             }
@@ -198,7 +198,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         if ($bIsPublic) {
             // check if we have public shipping types
-            $oPublicTypes = &$this->GetPublicShippingTypes();
+            $oPublicTypes = $this->GetPublicShippingTypes();
             if ($oPublicTypes->Length() < 1) {
                 $bIsPublic = false;
             }
@@ -206,7 +206,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         if ($bIsPublic) {
             // check if we have public payment types
-            $oPublicPaymentTypes = &$this->GetPublicPaymentMethods();
+            $oPublicPaymentTypes = $this->GetPublicPaymentMethods();
             if ($oPublicPaymentTypes->Length() < 1) {
                 $bIsPublic = false;
             }
@@ -315,7 +315,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
     public function HasAvailablePaymentMethods()
     {
         $bValidMethods = false;
-        $oMethods = &$this->GetValidPaymentMethods();
+        $oMethods = $this->GetValidPaymentMethods();
         $bValidMethods = ($oMethods->Length() > 0);
 
         return $bValidMethods;
@@ -331,7 +331,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      */
     public function HasPaymentMethod($sPaymentMethodId)
     {
-        $oPaymentMethods = &$this->GetValidPaymentMethods();
+        $oPaymentMethods = $this->GetValidPaymentMethods();
 
         return $oPaymentMethods->IsInList($sPaymentMethodId);
     }
@@ -344,10 +344,10 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      * @return TdbShopPaymentMethodList
      * @psalm-suppress InvalidNullableReturnType, NullableReturnStatement - In this instance we know that the return type cannot be null
      */
-    public function &GetValidPaymentMethods($bRefresh = false)
+    public function GetValidPaymentMethods($bRefresh = false)
     {
         if (is_null($this->oValidPaymentMethods) || $bRefresh) {
-            $this->oValidPaymentMethods = &TdbShopPaymentMethodList::GetAvailableMethods($this->id);
+            $this->oValidPaymentMethods = TdbShopPaymentMethodList::GetAvailableMethods($this->id);
             $this->oValidPaymentMethods->bAllowItemCache = true;
         }
         if (!is_null($this->oValidPaymentMethods)) {
@@ -363,10 +363,10 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      * @return TdbShopShippingTypeList
      *                                 returns a list of all shipping types that can act on the current basket/user
      */
-    public function &GetActingShippingTypes($bRefresh = false)
+    public function GetActingShippingTypes($bRefresh = false)
     {
         if (is_null($this->oActingShippingTypeList) || $bRefresh) {
-            $this->oActingShippingTypeList = &TdbShopShippingTypeList::GetAvailableTypes($this->id);
+            $this->oActingShippingTypeList = TdbShopShippingTypeList::GetAvailableTypes($this->id);
             $this->oActingShippingTypeList->bAllowItemCache = true;
         }
 
@@ -378,7 +378,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      *
      * @return TdbShopShippingTypeList
      */
-    public function &GetPublicShippingTypes()
+    public function GetPublicShippingTypes()
     {
         return TdbShopShippingTypeList::GetPublicShippingTypes($this->id);
     }
@@ -388,7 +388,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      *
      * @return TdbShopPaymentMethodList
      */
-    public function &GetPublicPaymentMethods()
+    public function GetPublicPaymentMethods()
     {
         return TdbShopPaymentMethodList::GetPublicPaymentMethods($this->id);
     }
@@ -410,7 +410,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
     {
         if (is_null($this->dPrice)) {
             $this->dPrice = 0;
-            $oActingShippingTypes = &$this->GetActingShippingTypes();
+            $oActingShippingTypes = $this->GetActingShippingTypes();
             if (!is_null($oActingShippingTypes)) {
                 $this->dPrice = $oActingShippingTypes->GetTotalPrice();
             }
@@ -565,7 +565,9 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         $oOldUser = clone TdbDataExtranetUser::GetInstance();
 
         $oTmpBasket = new TShopBasket();
-        $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oTmpBasket);
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oTmpBasket);
+        }
 
         $oTmpUser = TdbDataExtranetUser::GetNewInstance();
 
@@ -583,7 +585,9 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         $oTmpUser->sqlData['lastname'] = 'Dummy';
         $oTmpUser->sqlData['city'] = 'Dummy';
 
-        $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oTmpUser);
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oTmpUser);
+        }
 
         while ($oBasketArticle = $oBasketArticleList->Next()) {
             $oTmpBasket->AddItem($oBasketArticle);
@@ -596,8 +600,11 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         $dShippingCosts = $oTmpBasket->dCostShipping;
 
-        $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oOldBasket);
-        $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oOldUser);
+
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oOldBasket);
+            $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oOldUser);
+        }
 
         return $dShippingCosts;
     }
@@ -618,7 +625,9 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         $oTmpBasket = new TShopBasket();
         /** @var Request $request */
         $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
-        $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oTmpBasket);
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oTmpBasket);
+        }
 
         $oTmpUser = TdbDataExtranetUser::GetNewInstance();
         $oTmpUser->sqlData['data_country_id'] = $sDataCountryId;
@@ -629,7 +638,9 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         $oTmpShippingAddress->sqlData['data_country_id'] = $sDataCountryId;
         $oTmpUser->setFakedShippingAddressForUser($oTmpShippingAddress);
 
-        $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oTmpUser);
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oTmpUser);
+        }
 
         while ($oBasketArticle = $oBasketArticleList->Next()) {
             $oNewBasketArticle = new TShopBasketArticle();
@@ -643,8 +654,10 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         $oList = $oTmpBasket->GetAvailableShippingGroups();
 
-        $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oOldBasket);
-        $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oOldUser);
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oOldBasket);
+            $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oOldUser);
+        }
 
         return $oList;
     }

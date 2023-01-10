@@ -58,7 +58,7 @@ class AmazonReferenceIdManagerPersistenceTest extends \PHPUnit_Extensions_Databa
         $new->delete($dbal);
 
         // should only contain one record
-        $remaining = $dbal->fetchAll('SELECT id, local_id, shop_order_id,amazon_order_reference_id, amazon_id, value, type, capture_now, request_mode, pkg_shop_payment_transaction_id  FROM '.self::AMAZON_ID_MANAGER_TABLE);
+        $remaining = $dbal->fetchAllAssociative('SELECT id, local_id, shop_order_id,amazon_order_reference_id, amazon_id, value, type, capture_now, request_mode, pkg_shop_payment_transaction_id  FROM '.self::AMAZON_ID_MANAGER_TABLE);
         $expected = array(
             array(
                 'id' => '1234567890',

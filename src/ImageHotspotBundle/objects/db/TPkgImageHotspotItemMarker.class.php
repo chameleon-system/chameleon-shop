@@ -54,8 +54,8 @@ class TPkgImageHotspotItemMarker extends TAdbPkgImageHotspotItemMarker
      */
     public function GetURLForConnectedRecord()
     {
-        $oSpotObject = &$this->GetFieldLinkedRecord();
-        $oCmsConfig = &TdbCmsConfig::GetInstance();
+        $oSpotObject = $this->GetFieldLinkedRecord();
+        $oCmsConfig = TdbCmsConfig::GetInstance();
         $sLink = $this->fieldUrl;
         if (is_object($oSpotObject)) {
             if ($oSpotObject instanceof TdbCmsTplPage) {

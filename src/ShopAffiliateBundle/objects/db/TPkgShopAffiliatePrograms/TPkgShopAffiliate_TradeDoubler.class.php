@@ -19,7 +19,7 @@ class TPkgShopAffiliate_TradeDoubler extends TdbPkgShopAffiliate
      *
      * @return void
      */
-    protected function GetAdditionalViewVariables(&$oOrder, &$aParameter)
+    protected function GetAdditionalViewVariables($oOrder, $aParameter)
     {
         parent::GetAdditionalViewVariables($oOrder, $aParameter);
 

@@ -182,7 +182,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
      *
      * @return bool
      */
-    public function ExecutePayment(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $bPaymentOk = parent::ExecutePayment($oOrder);
 

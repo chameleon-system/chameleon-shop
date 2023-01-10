@@ -3,7 +3,7 @@
 // show header first
 $aColumNames = $oGroup->GetColumnNames();
 $iDepth = $oGroup->GetColumnGroupDepth();
-$oLocal = &TCMSLocal::GetActive();
+$oLocal = TCMSLocal::GetActive();
 ?>
 <tr class="headerRow">
     <?php

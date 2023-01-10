@@ -43,7 +43,7 @@ class TShopUnitOfMeasurement extends TShopUnitOfMeasurementAutoParent
     /**
      * @return TdbShopUnitOfMeasurement|null
      */
-    public function &GetFieldShopUnitOfMeasurement()
+    public function GetFieldShopUnitOfMeasurement()
     {
         if (empty($this->fieldShopUnitOfMeasurementId)) {
             return $this;

@@ -204,7 +204,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      *
      * @return TdbShopSearchCache
      */
-    public static function &CreateSearchCache($sKey, $sQuery, $sSearchTerm, $aSearchTerms = null, $aFilter = array())
+    public static function CreateSearchCache($sKey, $sQuery, $sSearchTerm, $aSearchTerms = null, $aFilter = array())
     {
         $sShopId = null;
         $oShop = TdbShop::GetInstance();
@@ -244,7 +244,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
         $oItem->sSearchTerm = $sSearchTerm;
         if (true === CMS_SHOP_SEARCH_ENABLE_SPELLCHECKER) {
-            $oSpellCheck = &TCMSSpellcheck::GetInstance();
+            $oSpellCheck = TCMSSpellcheck::GetInstance();
             $oSearchCacheObject = TdbShopSearchCache::GetNewInstance();
             $aCorrections = false;
             if (!empty($sSearchTerm)) {
@@ -344,12 +344,12 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
                   GROUP BY `shop_category`.`id`
                    ";
             }
-            $oCatList = &TdbShopCategoryList::GetList($query);
+            $oCatList = TdbShopCategoryList::GetList($query);
 
             // now organize list into a tree... we trace back each node untill we reach a root node... in the end we
             // will have a collection of rows. then we merge these
 
-            while ($oCat = &$oCatList->Next()) {
+            while ($oCat = $oCatList->Next()) {
                 if (!array_key_exists($oCat->id, $aHits)) {
                     $aHits[$oCat->id] = 0;
                 }

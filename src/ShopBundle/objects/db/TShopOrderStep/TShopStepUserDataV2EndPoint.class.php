@@ -305,7 +305,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
         $aViewVariables = parent::GetAdditionalViewVariables($sViewName, $sViewType);
 

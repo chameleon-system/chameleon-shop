@@ -24,7 +24,7 @@ class TPkgShopArticleReviewShopArticleReviewList extends TPkgShopArticleReviewSh
                        WHERE `shop_article_review`.`shop_article_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iShopArticleId)."'
                          AND `shop_article_review`.`publish` = '1'
                     ORDER BY `shop_article_review`.`helpful_count` DESC , `shop_article_review`.`datecreated` DESC";
-        $oList = &TdbShopArticleReviewList::GetList($sQuery);
+        $oList = TdbShopArticleReviewList::GetList($sQuery);
 
         return $oList;
     }

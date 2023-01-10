@@ -30,7 +30,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
      */
     public function GetFormattedCurrency($dValue)
     {
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         $sValue = $oLocal->FormatNumber($dValue, 2).' '.$this->GetCurrencyDisplaySymbol();
 
         return $sValue;
@@ -176,7 +176,9 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
 
         /** @var Request $request */
         $request = ServiceLocator::get('request_stack')->getCurrentRequest();
-        $request->getSession()->set(TdbPkgShopCurrency::SESSION_NAME, $sCurrencyId);
+        if (null !== $request && true === $request->hasSession()) {
+            $request->getSession()->set(TdbPkgShopCurrency::SESSION_NAME, $sCurrencyId);
+        }
 
         $sDomain = $request->getHost();
         if ('www.' == substr($sDomain, 0, 4)) {

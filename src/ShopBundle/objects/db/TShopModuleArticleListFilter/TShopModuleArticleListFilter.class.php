@@ -37,7 +37,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      * @param string       $sLanguage - init with the language passed
      *
      * @return TdbShopModuleArticleListFilter     */
-    public static function GetNewInstance($sData = null, $sLanguage = null)
+    public static function GetNewInstance($sData = null, $sLanguage = null): TdbShopModuleArticleListFilter
     {
         $canBeCached = false;
         $cacheKey = null;
@@ -119,7 +119,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      *
      * @return string
      */
-    public function GetListQuery(&$oListConfig)
+    public function GetListQuery($oListConfig)
     {
         $sQuery = $this->GetListQueryBase($oListConfig);
         $aRestrictions = $this->GetGlobalQueryRestrictions($oListConfig);
@@ -174,7 +174,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      *
      * @return string
      */
-    protected function GetListQueryBase(&$oListConfig)
+    protected function GetListQueryBase($oListConfig)
     {
         $this->bUsedBaseQuery = true;
         $sQuery = $this->GetListBaseQueryRestrictedToCategories($oListConfig);
@@ -190,7 +190,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      *
      * @return string
      */
-    protected function GetListBaseQueryRestrictedToCategories(&$oListConfig, $aCategoryList = null)
+    protected function GetListBaseQueryRestrictedToCategories($oListConfig, $aCategoryList = null)
     {
         $aCustRestriction = array();
 
@@ -212,7 +212,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
             $aCustRestriction[] = "`shop_article_shop_category_mlt`.`target_id` IN ($quotedCategories)";
         }
 
-        $manuallySelectedArticles = &$oListConfig->GetFieldShopModuleArticleListArticleList();
+        $manuallySelectedArticles = $oListConfig->GetFieldShopModuleArticleListArticleList();
         if ($manuallySelectedArticles->Length() > 0) {
             $aCustRestriction[] = "`shop_module_article_list_article`.`shop_module_article_list_id` = $quotedListConfigId";
         }
@@ -245,7 +245,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      *
      * @return string
      */
-    protected function GetListQueryGroupBy(&$oListConfig)
+    protected function GetListQueryGroupBy($oListConfig)
     {
         return ''; // 'GROUP BY `shop_article`.`id`';
     }
@@ -257,10 +257,10 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      *
      * @return string
      */
-    protected function GetListQueryOrderBy(&$oListConfig)
+    protected function GetListQueryOrderBy($oListConfig)
     {
         $sQuery = '';
-        $oOrder = &$oListConfig->GetFieldShopModuleArticlelistOrderby();
+        $oOrder = $oListConfig->GetFieldShopModuleArticlelistOrderby();
         if (!is_null($oOrder)) {
             $sQuery = $oOrder->GetOrderByString();
         } else {
@@ -284,7 +284,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      *
      * @return string
      */
-    protected function GetListQueryLimit(&$oListConfig)
+    protected function GetListQueryLimit($oListConfig)
     {
         if ($oListConfig->fieldNumberOfArticles > 0) {
             return 'LIMIT 0,'.MySqlLegacySupport::getInstance()->real_escape_string($oListConfig->fieldNumberOfArticles);

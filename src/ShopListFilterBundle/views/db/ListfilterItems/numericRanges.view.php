@@ -2,7 +2,7 @@
 /** @var $oListItem TdbPkgShopListfilterItem */
 $oListFilter = TdbPkgShopListfilter::GetActiveInstance();
 $aData = $oListFilter->GetCurrentFilterAsArray();
-$oLocal = &TCMSLocal::GetActive();
+$oLocal = TCMSLocal::GetActive();
 $aValues = $oListItem->GetOptions();
 if (is_array($aValues) && count($aValues) > 0) {
     $aTmpArray = array_flip($aValues);

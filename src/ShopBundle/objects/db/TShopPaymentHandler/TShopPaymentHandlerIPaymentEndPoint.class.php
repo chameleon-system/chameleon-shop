@@ -468,7 +468,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      *
      * @return bool
      */
-    public function ExecutePayment(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $bPaymentOk = parent::ExecutePayment($oOrder);
         if ($bPaymentOk) {
@@ -493,7 +493,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      *
      * @return bool
      */
-    public function PostExecutePaymentHook(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function PostExecutePaymentHook(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $bPaymentOk = false;
         $oGlobal = TGlobal::instance();

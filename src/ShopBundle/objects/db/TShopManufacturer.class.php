@@ -44,7 +44,7 @@ class TShopManufacturer extends TShopManufacturerAutoParent
     {
         // get current search... then add filter
         $oShop = TdbShop::GetInstance();
-        $oSearchCache = &$oShop->GetActiveSearchObject();
+        $oSearchCache = $oShop->GetActiveSearchObject();
         //$oSearchCache->aFilter[TdbShopManufacturer::FILTER_KEY_NAME] = $this->id;
         return $oSearchCache->GetSearchLink(array(TdbShopManufacturer::FILTER_KEY_NAME => $this->id));
     }
@@ -55,7 +55,7 @@ class TShopManufacturer extends TShopManufacturerAutoParent
      *
      * @return TdbShopManufacturer|null
      */
-    public static function &GetInstanceForCurrentFilter()
+    public static function GetInstanceForCurrentFilter()
     {
         static $oInstance = false;
         if (false === $oInstance) {

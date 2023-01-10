@@ -48,14 +48,14 @@ class MTShopPageMetaCore extends MTPageMetaCore
                     /** @var $oItem TShopBreadcrumbItemCategory */
                     $oItem->oItem = $oActiveCategory;
                     $aList[] = $oItem;
-                    $oCurrentCategory = &$oActiveCategory;
+                    $oCurrentCategory = $oActiveCategory;
 
-                    while ($oParent = &$oCurrentCategory->GetParent()) {
+                    while ($oParent = $oCurrentCategory->GetParent()) {
                         $oItem = new TShopBreadcrumbItemCategory();
                         /** @var $oItem TShopBreadcrumbItemCategory */
                         $oItem->oItem = $oParent;
                         $aList[] = $oItem;
-                        $oCurrentCategory = &$oParent;
+                        $oCurrentCategory = $oParent;
                     }
                 }
                 $aList = array_reverse($aList);

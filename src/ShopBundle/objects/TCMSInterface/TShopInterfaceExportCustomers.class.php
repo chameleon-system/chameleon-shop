@@ -76,7 +76,7 @@ class TShopInterfaceExportCustomers extends TCMSInterfaceManagerBaseExportCSV
      *
      * @return array
      */
-    protected function GetExportRowFromDataObject(&$oDataObjct)
+    protected function GetExportRowFromDataObject($oDataObjct)
     {
         $aRow = parent::GetExportRowFromDataObject($oDataObjct);
 

@@ -32,7 +32,7 @@ class TCMSSmartURLHandler_ShopPaymentOgone extends TCMSSmartURLHandler_ShopBaske
     {
         $oGlobal = TGlobal::instance();
         $iPageId = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
         $iMessagePos = strpos($oURLData->sRelativeURL, TShopPaymentHandlerOgone::URL_IDENTIFIER_NOTIFY);
         $bNotifyIsValid = false;
         if (false !== $iMessagePos) {

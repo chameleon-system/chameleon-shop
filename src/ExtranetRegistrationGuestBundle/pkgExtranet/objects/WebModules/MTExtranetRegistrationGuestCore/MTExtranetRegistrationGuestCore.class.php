@@ -77,7 +77,7 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
                 $bDataValid = $this->ValidateUserLoginData();
                 $bDataValid = $this->ValidateUserData() && $bDataValid;
                 if ($bDataValid) {
-                    $oUserOrder = &TShopBasket::GetLastCreatedOrder();
+                    $oUserOrder = TShopBasket::GetLastCreatedOrder();
                     $sNewUserId = $oUser->Register();
                     $this->UpdateUserAddress(null, null, true);
                     $oUserOrder->AllowEditByAll(true);
@@ -86,7 +86,7 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
                     if (!is_null($sSuccessURL)) {
                         $this->controller->HeaderURLRedirect($sSuccessURL, true);
                     } else {
-                        $oExtranetConf = &TdbDataExtranet::GetInstance();
+                        $oExtranetConf = TdbDataExtranet::GetInstance();
                         $this->controller->HeaderURLRedirect($oExtranetConf->GetLinkRegisterSuccessPage(), true);
                     }
                     $oStep->RemoveLastUserBoughtFromSession();
@@ -131,7 +131,7 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
             if (!is_null($oUser)) {
                 $bUserIsValid = $this->ValidateGivenUserData($oUser);
                 if ($bUserIsValid) {
-                    $oUserOrder = &TShopBasket::GetLastCreatedOrder();
+                    $oUserOrder = TShopBasket::GetLastCreatedOrder();
                     if ($oUser->LoginExists()) {
                         $bUserIsValid = false;
                     }

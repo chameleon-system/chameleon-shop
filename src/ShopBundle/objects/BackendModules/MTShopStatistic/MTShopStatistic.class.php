@@ -54,7 +54,7 @@ class MTShopStatistic extends TCMSModelBase
         $this->portalList = $this->getPortalList();
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
@@ -97,7 +97,7 @@ class MTShopStatistic extends TCMSModelBase
      */
     protected function GetProductStats()
     {
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         $query = 'SELECT SUM(`shop_order_item`.`order_amount`) AS totalordered,
                        SUM(`shop_order_item`.`order_price_after_discounts`) AS totalorderedvalue,
                        shop_payment_method_name,
@@ -134,7 +134,7 @@ class MTShopStatistic extends TCMSModelBase
      */
     protected function DownloadTopsellers()
     {
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         $oOrderItems = $this->GetTopsellers();
         $oOrderItems->GoToStart();
         $aFields = array('articlenumber' => TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.field_article_number'), 'name' => TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.field_article_name'), 'totalordered' => TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.field_order_count'), 'totalorderedvalue' => TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.field_value'), 'categorypath' => TGlobal::Translate('chameleon_system_shop.cms_module_shop_statistic.field_category'));
@@ -163,7 +163,7 @@ class MTShopStatistic extends TCMSModelBase
      */
     protected function GetTopsellers()
     {
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         $query = 'SELECT SUM(`shop_order_item`.`order_amount`) AS totalordered,
                        SUM(`shop_order_item`.`order_price_after_discounts`) AS totalorderedvalue,
                        `shop_category`.`url_path` AS categorypath, `shop_order_item`.*
@@ -254,7 +254,7 @@ class MTShopStatistic extends TCMSModelBase
                 $sDateBlock = 'DATE(datecreated)';
                 break;
         }
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
 
         $oGroups = TdbPkgShopStatisticGroupList::GetList();
         while ($oGroup = $oGroups->Next()) {

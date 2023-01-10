@@ -25,7 +25,7 @@ class TPkgShopListfilter_TShopModuleArticleListFilter extends TPkgShopListfilter
      *
      * @return string
      */
-    public function GetListQuery(&$oListConfig)
+    public function GetListQuery($oListConfig)
     {
         $this->bCanBeFiltered = $oListConfig->fieldCanBeFiltered;
 

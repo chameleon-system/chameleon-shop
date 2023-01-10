@@ -41,7 +41,7 @@ class TShopPaymentHandlerSofortueberweisung extends TdbShopPaymentHandler
      *
      * @return bool
      */
-    public function ExecutePayment(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         TTools::WriteLogEntry('In ExecutePayment Sofortueberweisung for order id '.$oOrder->id." (nr: {$oOrder->fieldOrdernumber}", 4, __FILE__, __LINE__);
         $bPaymentOk = parent::ExecutePayment($oOrder);
@@ -180,7 +180,7 @@ class TShopPaymentHandlerSofortueberweisung extends TdbShopPaymentHandler
      *
      * @return bool
      */
-    public function PostExecutePaymentHook(TdbShopOrder &$oOrder, $sMessageConsumer = '')
+    public function PostExecutePaymentHook(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
         $bPaymentOk = parent::PostExecutePaymentHook($oOrder, $sMessageConsumer);
 
@@ -234,7 +234,7 @@ class TShopPaymentHandlerSofortueberweisung extends TdbShopPaymentHandler
                 }
                 if (!$bOrderWasProcessed) {
                     // error - find out what and return false
-                    $oURLData = &TCMSSmartURLData::GetActive();
+                    $oURLData = TCMSSmartURLData::GetActive();
                     TTools::WriteLogEntry("sofortueberweisung: unknown response for order [{$oOrder->id}]: ".print_r($oURLData, true), 1, __FILE__, __LINE__);
                     $bPaymentOk = false;
                 }
@@ -253,7 +253,7 @@ class TShopPaymentHandlerSofortueberweisung extends TdbShopPaymentHandler
      *
      * @return bool
      */
-    protected function ValidateResponseData($aResponseData, TdbShopOrder &$oOrder, $sMessageConsumer)
+    protected function ValidateResponseData($aResponseData, TdbShopOrder $oOrder, $sMessageConsumer)
     {
         $bIsValid = true;
         $oGlobal = TGlobal::instance();

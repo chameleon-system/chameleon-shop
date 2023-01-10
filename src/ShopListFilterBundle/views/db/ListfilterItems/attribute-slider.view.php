@@ -2,7 +2,7 @@
 /*@var $oListItem TdbPkgShopListfilterItem */
 $oListFilter = TdbPkgShopListfilter::GetActiveInstance();
 $aData = $oListFilter->GetCurrentFilterAsArray();
-$oLocal = &TCMSLocal::GetActive();
+$oLocal = TCMSLocal::GetActive();
 
 $sStyle = '';
 

@@ -2,7 +2,7 @@
 //@todo we need to fix the positioning of the tooltip
 /** @var $oSpot TdbPkgImageHotspotItemSpot */
 /** @var $oItem TdbShopArticle */
-$oItem = &$oSpot->GetSpotObject();
+$oItem = $oSpot->GetSpotObject();
 $iMarkerWidth = 21;
 $iMarkerHeight = 21;
 ?>

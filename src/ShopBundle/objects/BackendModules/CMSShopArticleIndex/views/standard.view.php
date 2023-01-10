@@ -26,7 +26,7 @@ $translator = ServiceLocator::get('translator');
 } ?>
         </form>
         <?php
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         ?>
         <div class="mt-4"><?= TGlobal::OutHTML($translator->trans('chameleon_system_shop.product_search_index.completed')); ?>: <?=$oLocal->FormatNumber($data['bPercentDone'], 2); ?>%</div>
 

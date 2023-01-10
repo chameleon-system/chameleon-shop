@@ -127,7 +127,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->data['oBasket'] = $this->getShopService()->getActiveBasket();
@@ -862,6 +862,9 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     public function UpdateBasketItem($aRequestData = null, $bAddAmountToExistingAmount = false, $bIsInternalCall = false, $bWriteMessageOnInternalCall = false)
     {
         $request = $this->getCurrentRequest();
+        if (null !== $request && false === $request->hasSession()) {
+            return false;
+        }
         /** @var TPKgCmsSession $session */
         $session = $request->getSession();
         if (false === $session->RestartSessionWithWriteLock()) {

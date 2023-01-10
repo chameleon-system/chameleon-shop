@@ -21,7 +21,7 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
         if (null === $oUser->id) {
             return;
         }
-        $oOrderList = &TdbShopOrderList::GetListForDataExtranetUserId($oUser->id);
+        $oOrderList = TdbShopOrderList::GetListForDataExtranetUserId($oUser->id);
         // show only orders that were not canceled and have been completed
         $oOrderList->AddFilterString(
             "`shop_order`.`canceled` = '0' AND `shop_order`.`system_order_save_completed` = '1'"
@@ -46,7 +46,7 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
     protected function getOrderList(TdbShopOrderList $oOrderList, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
         $aOrderList = array();
-        while ($oOrder = &$oOrderList->Next()) {
+        while ($oOrder = $oOrderList->Next()) {
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oOrder->table, $oOrder->id);
             }

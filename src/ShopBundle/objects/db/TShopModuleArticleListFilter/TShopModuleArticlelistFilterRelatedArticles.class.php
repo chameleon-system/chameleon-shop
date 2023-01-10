@@ -22,7 +22,7 @@ class TShopModuleArticlelistFilterRelatedArticles extends TdbShopModuleArticleLi
      *
      * @return string
      */
-    protected function GetListQueryBase(&$oListConfig)
+    protected function GetListQueryBase($oListConfig)
     {
         $sQuery = 'SELECT 0 AS cms_search_weight, `shop_article`.*
                    FROM `shop_article`

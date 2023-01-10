@@ -21,7 +21,7 @@ class TShopVatList extends TShopVatListAutoParent
         $dVal = 0;
         $iPointer = $this->getItemPointer();
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $dVal += $oItem->GetVatValue();
         }
         $this->setItemPointer($iPointer);
@@ -39,7 +39,7 @@ class TShopVatList extends TShopVatListAutoParent
         $dVal = 0;
         $iPointer = $this->getItemPointer();
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $dVal += $oItem->getNetValue();
         }
         $this->setItemPointer($iPointer);
@@ -57,7 +57,7 @@ class TShopVatList extends TShopVatListAutoParent
         $dVal = 0;
         $iPointer = $this->getItemPointer();
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             $dVal += $oItem->getTotalValue();
         }
         $this->setItemPointer($iPointer);
@@ -76,7 +76,7 @@ class TShopVatList extends TShopVatListAutoParent
         $oMaxItem = null;
         $iPt = $this->getItemPointer();
         $this->GoToStart();
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             if ($oItem->getTotalValue() > 0 && (is_null($oMaxItem) || $oItem->getTotalValue() > $oMaxItem->getTotalValue())) {
                 $oMaxItem = $oItem;
             }

@@ -36,7 +36,7 @@ class TShopStepOrderCompletedCore extends TShopStepUserData
         if (!array_key_exists(self::SESSION_KEY_NAME_ORDER_SUCCESS, $_SESSION) || true != $_SESSION[self::SESSION_KEY_NAME_ORDER_SUCCESS]) {
             $bAllowAccess = false;
             if ($bRedirectToPreviousPermittedStep) {
-                $oUserStep = &TdbShopOrderStep::GetStep('confirm');
+                $oUserStep = TdbShopOrderStep::GetStep('confirm');
                 $this->JumpToStep($oUserStep);
             }
         }
@@ -54,7 +54,7 @@ class TShopStepOrderCompletedCore extends TShopStepUserData
         $aParameter = parent::GetDescriptionVariables();
 
         // add some data about the order so that we can display the details on the closing page
-        $oUserOrder = &TShopBasket::GetLastCreatedOrder();
+        $oUserOrder = TShopBasket::GetLastCreatedOrder();
         if (!is_null($oUserOrder)) {
             foreach ($oUserOrder as $sProperty => $sPropertyValue) {
                 if ('field' == substr($sProperty, 0, 5)) {

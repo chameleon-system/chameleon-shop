@@ -22,7 +22,7 @@ class TCMSShopTableEditor_DataExtranetGroup extends TCMSTableEditor
      *
      * @return void
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
         if ($this->oTable->fieldAutoAssignActive) {

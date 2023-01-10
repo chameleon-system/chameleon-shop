@@ -206,9 +206,9 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
      * @param string|array $sData - either the id of the object to load, or the row with which the instance should be initialized
      * @param string $sLanguage - init with the language passed
      *
-     * @return TdbShopPaymentHandlerGroup|void
+     * @return TdbShopPaymentHandlerGroup
      */
-    public static function GetNewInstance($sData = null, $sLanguage = null)
+    public static function GetNewInstance($sData = null, $sLanguage = null): TdbShopPaymentHandlerGroup
     {
         $oInstance = parent::GetNewInstance($sData, $sLanguage);
         if (false !== $oInstance->sqlData) {

@@ -47,7 +47,7 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
      *
      * @return TdbPkgShopAffiliate|null
      */
-    public static function &GetActiveInstance()
+    public static function GetActiveInstance()
     {
         /** @var TdbPkgShopAffiliate|null $oInstance */
         static $oInstance = null;
@@ -188,7 +188,7 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
      *
      * @return string
      */
-    public function RenderHTMLCode(&$oOrder)
+    public function RenderHTMLCode($oOrder)
     {
         $aParameter = $oOrder->GetSQLWithTablePrefix($oOrder->table);
 
@@ -215,7 +215,7 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
     public static function RenderOrderSuccessHTMLCode()
     {
         $sHTML = '';
-        $oUserOrder = &TShopBasket::GetLastCreatedOrder();
+        $oUserOrder = TShopBasket::GetLastCreatedOrder();
         $oProgram = TdbPkgShopAffiliate::GetActiveInstance();
         if ($oUserOrder && $oProgram) {
             $sHTML = $oProgram->RenderHTMLCode($oUserOrder);
@@ -232,7 +232,7 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
      *
      * @return void
      */
-    protected function GetAdditionalViewVariables(&$oOrder, &$aParameter)
+    protected function GetAdditionalViewVariables($oOrder, $aParameter)
     {
     }
 

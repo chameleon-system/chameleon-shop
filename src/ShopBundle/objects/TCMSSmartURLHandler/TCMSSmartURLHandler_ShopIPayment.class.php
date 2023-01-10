@@ -22,7 +22,7 @@ class TCMSSmartURLHandler_ShopIPayment extends TCMSSmartURLHandler_ShopBasketSte
     public function GetPageDef()
     {
         $iPageId = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
 
         $iIPaymentPos = strpos($oURLData->sRelativeURL, TShopPaymentHandlerIPayment::URL_PARAMETER_NAME);
         if (false !== $iIPaymentPos) {

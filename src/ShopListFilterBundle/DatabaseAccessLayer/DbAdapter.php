@@ -36,7 +36,7 @@ class DbAdapter
                  ";
 
         /** @psalm-var false|non-empty-list<string> $instanceData */
-        $instanceData = $this->getDatabaseConnection()->fetchArray($query, array('pageId' => $pageId));
+        $instanceData = $this->getDatabaseConnection()->fetchNumeric($query, array('pageId' => $pageId));
         if (false === $instanceData) {
             return null;
         }
@@ -81,7 +81,7 @@ class DbAdapter
                    WHERE `shop_module_article_list`.`can_be_filtered` = '1'
                      AND `cms_tpl_page_cms_master_pagedef_spot`.`cms_tpl_page_id` = :pageId
                  ";
-        $instanceData = $this->getDatabaseConnection()->fetchArray($query, array('pageId' => $pageId));
+        $instanceData = $this->getDatabaseConnection()->fetchNumeric($query, array('pageId' => $pageId));
         if (false === $instanceData) {
             return null;
         }

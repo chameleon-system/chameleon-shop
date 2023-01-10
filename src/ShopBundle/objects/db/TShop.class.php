@@ -86,7 +86,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      *
      * @deprecated use service chameleon_system_shop.shop_service instead
      */
-    public static function &GetInstance($iPortalId = null)
+    public static function GetInstance($iPortalId = null)
     {
         $shop = null;
         $activeShopService = self::getShopService();
@@ -108,7 +108,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      */
     public function SetActiveSearchCacheObject(TdbShopSearchCache $oActiveSearchCache)
     {
-        $this->oActiveSearchCache = &$oActiveSearchCache;
+        $this->oActiveSearchCache = $oActiveSearchCache;
         if (!is_null($oActiveSearchCache)) {
             $_SESSION[self::SESSION_ACTIVE_SEARCH_CACHE_ID] = base64_encode(serialize($oActiveSearchCache));
         } else {
@@ -121,7 +121,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      *
      * @return TdbShopSearchCache
      */
-    public function &GetActiveSearchObject()
+    public function GetActiveSearchObject()
     {
         if (is_null($this->oActiveSearchCache) && array_key_exists(self::SESSION_ACTIVE_SEARCH_CACHE_ID, $_SESSION)) {
             $this->oActiveSearchCache = unserialize(base64_decode($_SESSION[self::SESSION_ACTIVE_SEARCH_CACHE_ID]));
@@ -150,7 +150,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
                 $aCategoryList = array();
                 do {
                     $aCategoryList[$oCurrentCategory->id] = $oCurrentCategory;
-                } while ($oCurrentCategory = &$oCurrentCategory->GetParent());
+                } while ($oCurrentCategory = $oCurrentCategory->GetParent());
                 $aCategoryList = array_reverse($aCategoryList, true);
             }
         }
@@ -336,17 +336,17 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     {
         $aVariantTypeSelection = TdbShopVariantDisplayHandler::GetActiveVariantTypeSelection(true);
         if (is_array($aVariantTypeSelection)) {
-            $oSet = &$oArticle->GetFieldShopVariantSet();
+            $oSet = $oArticle->GetFieldShopVariantSet();
             if (null === $oSet) {
                 return $oArticle;
             }
-            $oTypes = &$oSet->GetFieldShopVariantTypeList();
+            $oTypes = $oSet->GetFieldShopVariantTypeList();
             if (count($aVariantTypeSelection) == $oTypes->Length()) {
                 if (!$oArticle->IsVariant()) {
-                    $oVariants = &$oArticle->GetFieldShopArticleVariantsList($aVariantTypeSelection);
+                    $oVariants = $oArticle->GetFieldShopArticleVariantsList($aVariantTypeSelection);
                 } else {
                     $oParentArticle = $oArticle->GetFieldVariantParent();
-                    $oVariants = &$oParentArticle->GetFieldShopArticleVariantsList($aVariantTypeSelection);
+                    $oVariants = $oParentArticle->GetFieldShopArticleVariantsList($aVariantTypeSelection);
                 }
 
                 if (1 == $oVariants->Length()) {
@@ -355,7 +355,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
                 }
             }
         } elseif (!$oArticle->IsVariant()) {
-            $oVariants = &$oArticle->GetFieldShopArticleVariantsList();
+            $oVariants = $oArticle->GetFieldShopArticleVariantsList();
             if (1 == $oVariants->Length()) {
                 /** @var TdbShopArticle $oArticle */
                 $oArticle = $oVariants->Current();
@@ -635,7 +635,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
         $oView->AddVar('oShippingEndText', $oShippingEndText);
 
         // get the shipping list for users not sigend in
-        $oPublicShippingGroups = &TdbShopShippingGroupList::GetPublicShippingGroups();
+        $oPublicShippingGroups = TdbShopShippingGroupList::GetPublicShippingGroups();
         $oView->AddVar('oPublicShippingGroups', $oPublicShippingGroups);
 
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);
@@ -685,9 +685,9 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * @psalm-suppress UndefinedClass
      * @FIXME References `TdbShopPrimaryNaviList` where `TdbPkgShopPrimaryNaviList` is probably meant
      */
-    public function &GetFieldShopPrimaryNaviList()
+    public function GetFieldShopPrimaryNaviList()
     {
-        $oNaviList = &$this->GetFromInternalCache('oFieldShopPrimaryNaviList');
+        $oNaviList = $this->GetFromInternalCache('oFieldShopPrimaryNaviList');
         if (is_null($oNaviList)) {
             $oNaviList = TdbShopPrimaryNaviList::GetListForShopId($this->id, $this->iLanguageId);
             $oNaviList->bAllowItemCache = true;
@@ -764,7 +764,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     public static function GetURLPageStateParameters()
     {
         // ------------------------------------------------------------------------
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
         $aSeoParam = $oURLData->getSeoURLParameters();
         $aSeoParam[] = MTShopBasketCoreEndpoint::URL_REQUEST_PARAMETER;
         $aSeoParam[] = 'module_fnc';

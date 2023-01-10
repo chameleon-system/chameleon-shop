@@ -32,7 +32,7 @@ class TPkgShopPaymentIPNException_InvalidIP extends TPkgShopPaymentIPNException_
         parent::__construct($oRequest, $message, $code, $previous);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
         $sString = $sString."\nRequest IP: ".$this->getRequestIP();

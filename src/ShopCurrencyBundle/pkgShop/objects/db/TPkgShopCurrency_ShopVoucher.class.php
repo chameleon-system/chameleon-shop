@@ -51,7 +51,7 @@ class TPkgShopCurrency_ShopVoucher extends TPkgShopCurrency_ShopVoucherAutoParen
      */
     protected function GetVoucherSeriesOriginalValue()
     {
-        $oVoucherSeries = &$this->GetFieldShopVoucherSeries();
+        $oVoucherSeries = $this->GetFieldShopVoucherSeries();
         $dValue = $oVoucherSeries->fieldValue;
         if ('absolut' == $oVoucherSeries->fieldValueType) {
             $oCurrency = TdbPkgShopCurrency::GetBaseCurrency();

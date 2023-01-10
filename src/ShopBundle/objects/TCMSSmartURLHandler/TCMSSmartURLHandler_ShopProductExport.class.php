@@ -17,8 +17,8 @@ class TCMSSmartURLHandler_ShopProductExport extends TCMSSmartURLHandler
     public function GetPageDef()
     {
         $iPageId = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
-        $oShop = &TdbShop::GetInstance($oURLData->iPortalId);
+        $oURLData = TCMSSmartURLData::GetActive();
+        $oShop = TdbShop::GetInstance($oURLData->iPortalId);
 
         $sProductPath = $oShop->GetLinkToSystemPage('productexport');
         if ('.html' == substr($sProductPath, -5)) {
@@ -44,9 +44,9 @@ class TCMSSmartURLHandler_ShopProductExport extends TCMSSmartURLHandler
 
                 if (7 == count($aParts)) {
                     $bFound = false;
-                    $oChildNodes = &$oNode->GetChildren();
+                    $oChildNodes = $oNode->GetChildren();
                     /** @var $oChildNode TdbCmsTree */
-                    while ($oChildNode = &$oChildNodes->Next() && false === $bFound) {
+                    while ($oChildNode = $oChildNodes->Next() && false === $bFound) {
                         if ($oChildNode->fieldUrlname == $aParts[0]) {
                             $bFound = true;
                             $iPageId = $oChildNode->GetLinkedPage();

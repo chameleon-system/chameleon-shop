@@ -35,8 +35,6 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
 
         if ($bResponse) {
             $oUser = TdbDataExtranetUser::GetInstance();
-
-            $oUser = TdbDataExtranetUser::GetInstance();
             if (is_null($oUser->id)) {
                 $aBilling = array();
                 $aShipping = array();
@@ -86,7 +84,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
             $oBasket = TShopBasket::GetInstance();
             // paypal expres success... redirect to confirm page. we need to force correct redirection here.
             $logger->info('PostProcessExternalPaymentHandlerHook: return from express ok - redirect to checkout');
-            $oNextStep = &TdbShopOrderStep::GetStep('confirm');
+            $oNextStep = TdbShopOrderStep::GetStep('confirm');
             $oStepList = TdbShopOrderStepList::GetNavigationStepList($oNextStep);
             $oStepList->GoToStart();
             $bStop = false;
@@ -115,7 +113,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
      *
      * @return void
      */
-    protected function GetUserDataFromPayPalData(&$aBilling, &$aShipping)
+    protected function GetUserDataFromPayPalData(array &$aBilling, array &$aShipping): void
     {
         $sCountryIsoCode = 'de';
         if (array_key_exists('SHIPTOCOUNTRYCODE', $this->aCheckoutDetails)) {
@@ -151,7 +149,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
      *
      * @return bool
      */
-    protected function postProcessBillingAndShippingAddress(array &$billingAddress, array &$shippingAddress)
+    protected function postProcessBillingAndShippingAddress(array &$billingAddress, array &$shippingAddress): bool
     {
         $modified = false;
         if ($this->postalCodeAndCitySwitched($billingAddress['postalcode'], $billingAddress['city'])) {

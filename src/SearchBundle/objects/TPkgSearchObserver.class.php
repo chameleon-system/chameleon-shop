@@ -27,7 +27,7 @@ class TPkgSearchObserver implements IPkgCmsEventObserver
      *
      * @return TPkgSearchObserver
      */
-    public static function &GetInstance()
+    public static function GetInstance()
     {
         static $oInstance = null;
         if (is_null($oInstance)) {

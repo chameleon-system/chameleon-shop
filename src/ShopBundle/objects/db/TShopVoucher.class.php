@@ -182,7 +182,7 @@ class TShopVoucher extends TShopVoucherAutoParent
      *
      * @return bool
      */
-    public function IsSameAs(&$oItem)
+    public function IsSameAs($oItem)
     {
         if (!is_null($this->sBasketVoucherKey) || !is_null($oItem->sBasketVoucherKey)) {
             return 0 == strcmp($this->sBasketVoucherKey, $oItem->sBasketVoucherKey);
@@ -210,7 +210,7 @@ class TShopVoucher extends TShopVoucherAutoParent
             }
         }
 
-        $oSeries = &$this->GetFieldShopVoucherSeries();
+        $oSeries = $this->GetFieldShopVoucherSeries();
         $oUser = TdbDataExtranetUser::GetInstance();
 
         if (TdbShopVoucher::ALLOW_USE == $bAllowUse) {
@@ -328,7 +328,7 @@ class TShopVoucher extends TShopVoucherAutoParent
     public function GetValue($bCalculateVoucher = false, $dMaxValueAllowed = null, $bSponsoredVouchers = false)
     {
         if ($bCalculateVoucher) {
-            $oSeries = &$this->GetFieldShopVoucherSeries();
+            $oSeries = $this->GetFieldShopVoucherSeries();
             $dValue = $oSeries->fieldValue;
             $oBasket = TShopBasket::GetInstance();
             $dBasketValueApplicableForVoucher = $oBasket->GetBasketSumForVoucher($this);
@@ -428,7 +428,7 @@ class TShopVoucher extends TShopVoucherAutoParent
     public function checkMarkVoucherAsCompletelyUsed()
     {
         $bMarkVoucherAsCompletelyUsed = false;
-        $oVoucherSeries = &$this->GetFieldShopVoucherSeries();
+        $oVoucherSeries = $this->GetFieldShopVoucherSeries();
         if ('absolut' == $oVoucherSeries->fieldValueType && !is_null($oVoucherSeries->GetFieldShopVoucherSeriesSponsor())) {
             $dValueUsed = $this->GetValuePreviouslyUsed();
             if ($dValueUsed >= $this->GetVoucherSeriesOriginalValue()) {
@@ -450,7 +450,7 @@ class TShopVoucher extends TShopVoucherAutoParent
      */
     protected function GetVoucherSeriesOriginalValue()
     {
-        $oVoucherSeries = &$this->GetFieldShopVoucherSeries();
+        $oVoucherSeries = $this->GetFieldShopVoucherSeries();
 
         return $oVoucherSeries->fieldValue;
     }
@@ -494,7 +494,7 @@ class TShopVoucher extends TShopVoucherAutoParent
     {
         $bMayBeUsed = true;
 
-        $oVoucherDef = &$this->GetFieldShopVoucherSeries();
+        $oVoucherDef = $this->GetFieldShopVoucherSeries();
 
         if ($oArticle->fieldExcludeFromVouchers && empty($oVoucherDef->fieldShopVoucherSeriesSponsorId)) {
             $bMayBeUsed = false;

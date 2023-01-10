@@ -96,7 +96,7 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
         $sUserName = 'UNKNOWN USER';
         $request = $this->getCurrentRequest();
 
-        $session = true === $request->hasSession() ? $request->getSession() : null;
+        $session = (null !== $request && true === $request->hasSession()) ? $request->getSession() : null;
 
         if (null !== $session && true === $session->isStarted()) {
             if (class_exists('TdbDataExtranetUser', false)) {
@@ -105,7 +105,7 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
                     $sUserName = $oUser->fieldName;
                 }
             }
-            $oSmartUrl = &TCMSSmartURLData::GetActive();
+            $oSmartUrl = TCMSSmartURLData::GetActive();
             if ($oSmartUrl) {
                 $sOriginalURL = $oSmartUrl->sOriginalURL;
             } else {

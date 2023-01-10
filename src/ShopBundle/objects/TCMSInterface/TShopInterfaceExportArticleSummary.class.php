@@ -39,10 +39,10 @@ class TShopInterfaceExportArticleSummary extends TCMSInterfaceManagerBaseExportC
      *
      * @return array
      */
-    protected function GetExportRowFromDataObject(&$oDataObjct)
+    protected function GetExportRowFromDataObject($oDataObjct)
     {
         $aRow = parent::GetExportRowFromDataObject($oDataObjct);
-        $oLocale = &TCMSLocal::GetActive();
+        $oLocale = TCMSLocal::GetActive();
         $aRow['stats_review_average'] = $oLocale->FormatNumber($aRow['stats_review_average'], 2);
 
         return $aRow;

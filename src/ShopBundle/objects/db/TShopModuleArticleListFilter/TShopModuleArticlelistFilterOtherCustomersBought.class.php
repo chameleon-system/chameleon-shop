@@ -24,7 +24,7 @@ class TShopModuleArticlelistFilterOtherCustomersBought extends TdbShopModuleArti
      *
      * @return string
      */
-    protected function GetListQueryBase(&$oListConfig)
+    protected function GetListQueryBase($oListConfig)
     {
         $sQuery = 'SELECT 0 AS cms_search_weight, `shop_article`.*
                    FROM `shop_article`
@@ -82,7 +82,7 @@ class TShopModuleArticlelistFilterOtherCustomersBought extends TdbShopModuleArti
      *
      * @return string
      */
-    protected function GetListQueryGroupBy(&$oListConfig)
+    protected function GetListQueryGroupBy($oListConfig)
     {
         $sGroupBy = 'GROUP BY `shop_article`.`id`';
 

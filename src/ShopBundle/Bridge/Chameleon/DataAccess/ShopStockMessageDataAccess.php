@@ -49,7 +49,7 @@ class ShopStockMessageDataAccess implements ShopStockMessageDataAccessInterface
      */
     public function getAll()
     {
-        $rows = $this->databaseConnection->fetchAll('SELECT * FROM `shop_stock_message`');
+        $rows = $this->databaseConnection->fetchAllAssociative('SELECT * FROM `shop_stock_message`');
 
         return array_reduce(
             $rows,

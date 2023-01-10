@@ -106,7 +106,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return TdbShopOrderStep|null
      */
-    public static function &GetStep($sStepName)
+    public static function GetStep($sStepName)
     {
         $oStep = null;
         $oStepData = null;
@@ -134,9 +134,9 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * @param string|array|null $sData - either the id of the object to load, or the row with which the instance should be initialized
      * @param string|null $sLanguage - init with the language passed
-     * @return TdbShopOrderStep|null
+     * @return TdbShopOrderStep
      */
-    public static function GetNewInstance($sData = null, $sLanguage = null)
+    public static function GetNewInstance($sData = null, $sLanguage = null): TdbShopOrderStep
     {
         if (null === $sData) {
             return new TdbShopOrderStep(null, $sLanguage);
@@ -150,7 +150,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
             $class = $sData['class'];
         }
         $shopBasket = TShopBasket::GetInstance();
-        $object = null;
+        $object = new TdbShopOrderStep(null, $sLanguage);
         if (null !== $shopBasket) {
             $object = self::createClass($shopBasket, $class);
             $object->LoadFromRow($sData);
@@ -214,7 +214,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return never
      */
-    public function JumpToStep(TdbShopOrderStep &$oStep)
+    public function JumpToStep(TdbShopOrderStep $oStep)
     {
         $_SESSION[self::SESSION_KEY_NAME] = $this->fieldSystemname;
         $statusCode = 'POST' === $this->getRequest()->getMethod() ? Response::HTTP_SEE_OTHER : Response::HTTP_FOUND;
@@ -326,6 +326,9 @@ class TShopOrderStep extends TShopOrderStepAutoParent
         }
         $bContinue = true;
         $request = $this->getRequest();
+        if (null === $request || false === $request->hasSession()) {
+            return false;
+        }
         /** @var TPKgCmsSession $session */
         $session = $request->getSession();
         if (false === $session->restartSessionWithWriteLock()) {
@@ -352,7 +355,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return TdbShopOrderStep|null
      */
-    public function &GetNextStep()
+    public function GetNextStep()
     {
         static $oNextStep;
         if (!$oNextStep) {
@@ -367,7 +370,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return TdbShopOrderStep|null
      */
-    protected function &GetPreviousStep()
+    protected function GetPreviousStep()
     {
         static $oPreviousStep;
         if (!$oPreviousStep) {
@@ -475,7 +478,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
 
         $sViewName = $this->GetRenderViewName();
         $sViewType = $this->GetRenderViewType();
-        $aOtherParameters = &$this->GetAdditionalViewVariables($sViewName, $sViewType);
+        $aOtherParameters = $this->GetAdditionalViewVariables($sViewName, $sViewType);
         $oView->AddVarArray($aOtherParameters);
 
         return $oView->RenderObjectPackageView($sViewName, $this->getStepViewPath(), $sViewType);
@@ -505,7 +508,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
         $aViewVariables = $this->GetDescriptionVariables();
 
@@ -552,7 +555,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return void
      */
-    protected function addDataToBasket(TShopBasket &$oBasket)
+    protected function addDataToBasket(TShopBasket $oBasket)
     {
     }
 

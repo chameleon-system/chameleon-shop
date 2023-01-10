@@ -22,7 +22,7 @@ class TShopWishlistDataExtranetUser extends TShopWishlistDataExtranetUserAutoPar
     public function AddArticleIdToWishlist($sArticleId, $dAmount = 1)
     {
         $dNewAmountOnList = 0;
-        $oWishlist = &$this->GetWishlist(true);
+        $oWishlist = $this->GetWishlist(true);
         $dNewAmountOnList = $oWishlist->AddArticle($sArticleId, $dAmount);
 
         return $dNewAmountOnList;
@@ -37,7 +37,7 @@ class TShopWishlistDataExtranetUser extends TShopWishlistDataExtranetUserAutoPar
      */
     public function RemoveArticleFromWishlist($sPkgShopWishlistArticleId)
     {
-        $oWishlist = &$this->GetWishlist(true);
+        $oWishlist = $this->GetWishlist(true);
         $oWishlistItem = TdbPkgShopWishlistArticle::GetNewInstance();
         /** @var $oWishlistItem TdbPkgShopWishlistArticle */
         if ($oWishlistItem->LoadFromFields(array('pkg_shop_wishlist_id' => $oWishlist->id, 'id' => $sPkgShopWishlistArticleId))) {
@@ -55,10 +55,10 @@ class TShopWishlistDataExtranetUser extends TShopWishlistDataExtranetUserAutoPar
      *
      * @return TdbPkgShopWishlist|null
      */
-    public function &GetWishlist($bCreateIfNotExists = false)
+    public function GetWishlist($bCreateIfNotExists = false)
     {
         /** @var TdbPkgShopWishlist|null $oWishlist */
-        $oWishlist = &$this->GetFromInternalCache('oUserWishlist');
+        $oWishlist = $this->GetFromInternalCache('oUserWishlist');
 
         if (is_null($oWishlist)) {
             $oWishlists = $this->GetFieldPkgShopWishlistList();

@@ -32,7 +32,7 @@ class TPkgShopPaymentIPNException_RequestError extends AbstractPkgShopPaymentIPN
         parent::__construct($message, $code, $previous);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
 

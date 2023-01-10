@@ -126,7 +126,7 @@ class TPkgShopWishlist extends TAdbPkgShopWishlist
      */
     public function GetNumberOfItemsInList()
     {
-        $oWishlistItems = &$this->GetFieldPkgShopWishlistArticleList();
+        $oWishlistItems = $this->GetFieldPkgShopWishlistArticleList();
 
         return $oWishlistItems->Length();
     }
@@ -136,7 +136,7 @@ class TPkgShopWishlist extends TAdbPkgShopWishlist
      *
      * @return TdbPkgShopWishlistArticleList
      */
-    public function &GetFieldPkgShopWishlistArticleList()
+    public function GetFieldPkgShopWishlistArticleList()
     {
         $oWishlistItems = $this->GetFromInternalCache('oPkgShopWishlistArticleList');
         if (is_null($oWishlistItems)) {
@@ -154,7 +154,7 @@ class TPkgShopWishlist extends TAdbPkgShopWishlist
      *
      * @return TdbPkgShopWishlistMailHistoryList
      */
-    public function &GetFieldPkgShopWishlistMailHistoryList()
+    public function GetFieldPkgShopWishlistMailHistoryList()
     {
         $oWishlistHistoryItems = $this->GetFromInternalCache('oPkgShopWishlistMailHistoryList');
         if (is_null($oWishlistHistoryItems)) {

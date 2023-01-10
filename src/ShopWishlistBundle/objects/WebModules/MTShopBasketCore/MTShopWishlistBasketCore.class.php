@@ -66,7 +66,7 @@ class MTShopWishlistBasketCore extends MTShopBasketCore
             /** @var $oItem TdbShopArticle */
             if ($oItem->Load($sArticleId)) {
                 $oShop = TdbShop::GetInstance();
-                $oExtranet = &TdbDataExtranet::GetInstance();
+                $oExtranet = TdbDataExtranet::GetInstance();
                 $aInfoData = array('sLinkLoginStart' => '<a href="'.$oExtranet->GetLinkLoginPage().'">', 'sLinkLoginEnd' => '</a>', 'sLinkWishlistStart' => '<a href="'.$oShop->GetLinkToSystemPage('wishlist').'">', 'sLinkWishlistEnd' => '</a>', 'sLinkArticleStart' => '<a href="'.$oItem->GetDetailLink().'">', 'sLinkArticleEnd' => '</a>', 'sArticleName' => TGlobal::OutHTML($oItem->GetName()), 'dAddedAmount' => $dAmount);
                 $oUser = TdbDataExtranetUser::GetInstance();
                 if (!$oUser->IsLoggedIn()) {

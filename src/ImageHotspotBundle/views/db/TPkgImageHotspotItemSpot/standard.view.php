@@ -1,7 +1,7 @@
 <?php
 /** @var $oSpot TdbPkgImageHotspotItemSpot */
 /** @var $oItem Tdb* */
-$oItem = &$oSpot->GetSpotObject();
+$oItem = $oSpot->GetSpotObject();
 $sLink = $oSpot->GetURLForConnectedRecord();
 $iMarkerWidth = 21;
 $iMarkerHeight = 21;

@@ -45,9 +45,9 @@ class TShopStepBasketCore extends TdbShopOrderStep
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = &parent::GetAdditionalViewVariables($sViewName, $sViewType);
+        $aViewVariables = parent::GetAdditionalViewVariables($sViewName, $sViewType);
 
         $aViewVariables['oBasket'] = TShopBasket::GetInstance();
 
@@ -85,7 +85,7 @@ class TShopStepBasketCore extends TdbShopOrderStep
      *
      * @return TdbShopOrderStep|null
      */
-    public function &GetNextStep()
+    public function GetNextStep()
     {
         static $oNextStep;
         if (!$oNextStep) {
@@ -110,7 +110,7 @@ class TShopStepBasketCore extends TdbShopOrderStep
                     }
                 }
             } else {
-                $oNextStep = &TdbShopOrderStepList::GetNextStep($this);
+                $oNextStep = TdbShopOrderStepList::GetNextStep($this);
             }
         }
 
