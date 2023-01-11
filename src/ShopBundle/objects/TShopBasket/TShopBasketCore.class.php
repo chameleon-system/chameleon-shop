@@ -742,7 +742,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      *
      * @param string $sBasketItemKey
      *
-     * @return TShopBasketArticle|bool
+     * @return TShopBasketArticle|false
      */
     public function RemoveItem($sBasketItemKey)
     {

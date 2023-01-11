@@ -51,7 +51,7 @@ class TShopBasketVoucherCoreList extends TIterator
     /**
      * return voucher.
      *
-     * @return TdbShopVoucher|bool
+     * @return TdbShopVoucher|false
      */
     public function next(): TdbShopVoucher|bool
     {

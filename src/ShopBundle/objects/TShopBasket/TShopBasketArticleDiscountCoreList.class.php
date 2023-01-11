@@ -17,7 +17,7 @@ class TShopBasketArticleDiscountCoreList extends TIterator
     /**
      * return next itme.
      *
-     * @return TdbShopDiscount|bool
+     * @return TdbShopDiscount|false
      */
     public function next(): TdbShopDiscount|bool
     {
