@@ -860,6 +860,7 @@ class TShopBasketArticleCoreList extends TIterator
                 $mergedItems = true;
                 continue;
             }
+            /** @var TShopBasketArticle $item */
             $items[$key] = $item;
         }
         $this->setItemPointer(0);
