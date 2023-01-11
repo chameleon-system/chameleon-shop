@@ -61,7 +61,7 @@ class TPkgShopOrderStatusException_PostOrderStatusAddedExceptions extends TPkgCm
         return $this->exceptionList;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
         $sString = $sString."\n: Status Entry ".$this->getOrderStatus()->sqlData;
