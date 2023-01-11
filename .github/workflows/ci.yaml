@@ -67,7 +67,7 @@ jobs:
         with:
           cmd: |
             # Exclamation point in parameters cannot be parsed by yq.
-            cat chameleon-system/app/config/parameters.yml.dist | sed -e 's/!ThisTokenIsNotSoSecretChangeIt!/""/g' > chameleon-system/app/config/parameters.yml
+            cp chameleon-system/app/config/parameters.yml.dist chameleon-system/app/config/parameters.yml
             yq -i '
               .parameters.secret = "__CI_SECRET__" |
               .parameters.database_host = "127.0.0.1" |
