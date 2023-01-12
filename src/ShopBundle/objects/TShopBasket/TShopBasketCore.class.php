@@ -1881,12 +1881,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         return strtoupper(substr(implode('', $aPasswordChars), 0, $iLength));
     }
 
-    /*
-    * validate the contents of the basket (such as allowable stock)
-    * @param string $sMessageManager - the manager to which error messages should be sent
-    * @return boolean
-    */
     /**
+     * validate the contents of the basket (such as allowable stock)
+     *
      * @param null|string $sMessageManager
      *
      * @return bool
@@ -1899,24 +1896,36 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
          * which is of course not intended since the stock has been reserved via the creation process of the order
          *
          */
-        if (TdbShopPaymentHandler::ExecutePaymentInterrupted()) {
+        if (true === TdbShopPaymentHandler::ExecutePaymentInterrupted()) {
             return true;
         }
+
+        /**
+         * Prevent basket validation if the basket was loaded during an ongoing payment process.
+         * If an order exists already and the basket has not been reset yet, it would otherwise check again for the
+         * stock value and create an error if the stock fell to zero with the created order.
+         */
+        if (true === TShopOrderStep::OrderProcessHasBeenMarkedAsCompleted()) {
+            return true;
+        }
+
         if (is_null($sMessageManager)) {
             $sMessageManager = MTShopBasketCore::MSG_CONSUMER_NAME;
         }
         $this->GetBasketArticles()->Refresh();
-        $bIsValid = $this->GetBasketArticles()->ValidateBasketContents($sMessageManager);
+
+        $isValid = $this->GetBasketArticles()->ValidateBasketContents($sMessageManager);
         /**
-         * validate the vouchers as they were stored in the session and
-         * maybe could be used by an other order (when vouchers with the same code exist).
+         * Validate the vouchers as they were stored in the session and
+         * maybe could be used by another order (when vouchers with the same code exist).
          */
-        $bBasketVouchersValidated = $this->CheckBasketVoucherAvailable($sMessageManager);
-        if (!$bIsValid) {
+        $this->CheckBasketVoucherAvailable($sMessageManager);
+
+        if (false === $isValid) {
             $this->RecalculateBasket();
         }
 
-        return $bIsValid;
+        return $isValid;
     }
 
     /**
