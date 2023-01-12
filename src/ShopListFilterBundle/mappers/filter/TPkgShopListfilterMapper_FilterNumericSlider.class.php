@@ -79,8 +79,8 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
              *        step:
              *            - $highestArticlePrice (rounded up) - $lowestArticlePrice (rounded down).
              */
-            $highestArticlePrice = $userDataValueHigh ? (int) $userDataValueHigh : $this->roundValueUp($highestArticlePrice);
-            $lowestArticlePrice = $userDataValueLow ? (int) $userDataValueLow : $this->roundValueDown($lowestArticlePrice);
+            $highestArticlePrice = $userDataValueHigh ? ((int) $userDataValueHigh) : $this->roundValueUp($highestArticlePrice);
+            $lowestArticlePrice = $userDataValueLow ? ((int) $userDataValueLow) : $this->roundValueDown($lowestArticlePrice);
             $slider->setDisabled(false)
                 ->setValueLow($lowestArticlePrice)
                 ->setValueHigh($highestArticlePrice)
