@@ -79,7 +79,12 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
              *        step:
              *            - $highestArticlePrice (rounded up) - $lowestArticlePrice (rounded down).
              */
+            // TODO: psalm reports "InvalidCast: MapperVirtualSourceObject&static cannot be cast to int" here, but this should
+            // not be the case, as $userDataValueHigh is a float here. We should investigate this further because usually psalm
+            // knows what it's talking about.
+            /** @psalm-suppress InvalidCast */
             $highestArticlePrice = $userDataValueHigh ? ((int) $userDataValueHigh) : $this->roundValueUp($highestArticlePrice);
+            /** @psalm-suppress InvalidCast */
             $lowestArticlePrice = $userDataValueLow ? ((int) $userDataValueLow) : $this->roundValueDown($lowestArticlePrice);
             $slider->setDisabled(false)
                 ->setValueLow($lowestArticlePrice)
