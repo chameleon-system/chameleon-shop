@@ -94,6 +94,7 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
                 ->setStep(0);
 
             if (false != $userDataValueLow) {
+                /** @psalm-suppress InvalidCast */
                 $selectFromPrice
                     ->addOption((int) $userDataValueLow)
                     ->setSelectedOption($userDataValueLow);
@@ -105,6 +106,7 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
             }
 
             if (false != $userDataValueHigh) {
+                /** @psalm-suppress InvalidCast */
                 $selectToPrice
                     ->addOption((int) $userDataValueHigh)
                     ->setSelectedOption($userDataValueHigh);
@@ -136,6 +138,7 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
                 if (false != $userDataValueLow && $userDataValueLow < $priceOption) {
                     $selectFromPrice->addOption((int) $userDataValueLow);
                 }
+                /** @psalm-suppress InvalidCast */
                 if (false != $userDataValueHigh &&
                     ($userDataValueHigh < $priceOption || $i == $stepCount)
                 ) {
