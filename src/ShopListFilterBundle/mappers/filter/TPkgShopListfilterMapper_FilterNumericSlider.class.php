@@ -136,6 +136,7 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
             for ($i = 0; $i <= $stepCount; ++$i) {
                 $priceOption = round($lowestArticlePrice + $i * $stepSize);
                 if (false != $userDataValueLow && $userDataValueLow < $priceOption) {
+                    /** @psalm-suppress InvalidCast */
                     $selectFromPrice->addOption((int) $userDataValueLow);
                 }
                 /** @psalm-suppress InvalidCast */
