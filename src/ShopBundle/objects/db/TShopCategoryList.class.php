@@ -9,8 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
 
 class TShopCategoryList extends TShopCategoryListAutoParent
@@ -321,7 +323,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
         $requestInfoService = self::getRequestInfoService();
         $languageService = self::getLanguageService();
         if ($requestInfoService->isBackendMode()) {
-            $languageId = $languageService->getActiveEditLanguage()->id;
+            $languageId = self::getBackendSession()->getCurrentEditLanguageId();
         } else {
             $languageId = $languageService->getActiveLanguageId();
         }
@@ -372,5 +374,10 @@ class TShopCategoryList extends TShopCategoryListAutoParent
     private static function getLanguageService()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    static private function getBackendSession(): BackendSessionInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
     }
 }
