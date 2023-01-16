@@ -79,8 +79,13 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
              *        step:
              *            - $highestArticlePrice (rounded up) - $lowestArticlePrice (rounded down).
              */
-            $highestArticlePrice = $userDataValueHigh ? (int) $userDataValueHigh : $this->roundValueUp($highestArticlePrice);
-            $lowestArticlePrice = $userDataValueLow ? (int) $userDataValueLow : $this->roundValueDown($lowestArticlePrice);
+            // TODO: psalm reports "InvalidCast: MapperVirtualSourceObject&static cannot be cast to int" here, but this should
+            // not be the case, as $userDataValueHigh is a float here. We should investigate this further because usually psalm
+            // knows what it's talking about.
+            /** @psalm-suppress InvalidCast */
+            $highestArticlePrice = $userDataValueHigh ? ((int) $userDataValueHigh) : $this->roundValueUp($highestArticlePrice);
+            /** @psalm-suppress InvalidCast */
+            $lowestArticlePrice = $userDataValueLow ? ((int) $userDataValueLow) : $this->roundValueDown($lowestArticlePrice);
             $slider->setDisabled(false)
                 ->setValueLow($lowestArticlePrice)
                 ->setValueHigh($highestArticlePrice)
@@ -89,6 +94,7 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
                 ->setStep(0);
 
             if (false != $userDataValueLow) {
+                /** @psalm-suppress InvalidCast */
                 $selectFromPrice
                     ->addOption((int) $userDataValueLow)
                     ->setSelectedOption($userDataValueLow);
@@ -100,6 +106,7 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
             }
 
             if (false != $userDataValueHigh) {
+                /** @psalm-suppress InvalidCast */
                 $selectToPrice
                     ->addOption((int) $userDataValueHigh)
                     ->setSelectedOption($userDataValueHigh);
@@ -129,8 +136,10 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
             for ($i = 0; $i <= $stepCount; ++$i) {
                 $priceOption = round($lowestArticlePrice + $i * $stepSize);
                 if (false != $userDataValueLow && $userDataValueLow < $priceOption) {
+                    /** @psalm-suppress InvalidCast */
                     $selectFromPrice->addOption((int) $userDataValueLow);
                 }
+                /** @psalm-suppress InvalidCast */
                 if (false != $userDataValueHigh &&
                     ($userDataValueHigh < $priceOption || $i == $stepCount)
                 ) {

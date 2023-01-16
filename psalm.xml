@@ -36,7 +36,7 @@
     </projectFiles>
 
     <extraFiles>
-        <directory name="../../../app/cache/autoclasses" />
+        <directory name="../../../var/autoclasses" />
         <file name="../../../app/config/config.inc.php" />
         <file name="../chameleon-base/src/CoreBundle/Resources/config/defaults.inc.php" />
     </extraFiles>
@@ -48,7 +48,7 @@
 
     <plugins>
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
-            <containerXml>../../../var/cache/dev/appAppKernelDevDebugContainer.xml</containerXml>
+            <containerXml>../../../var/cache/dev/AppKernelDevDebugContainer.xml</containerXml>
         </pluginClass>
     </plugins>
 

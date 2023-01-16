@@ -55,7 +55,6 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
         return array();
     }
 
-
     /**
      * returns the item next in line relative to this item
      * if the current item is the last in line, the method will return the first item. returns false if

@@ -46,7 +46,7 @@ class TCMSSmartURLHandler_ShopProductExport extends TCMSSmartURLHandler
                     $bFound = false;
                     $oChildNodes = $oNode->GetChildren();
                     /** @var $oChildNode TdbCmsTree */
-                    while ($oChildNode = $oChildNodes->Next() && false === $bFound) {
+                    while (($oChildNode = $oChildNodes->Next()) && false === $bFound) {
                         if ($oChildNode->fieldUrlname == $aParts[0]) {
                             $bFound = true;
                             $iPageId = $oChildNode->GetLinkedPage();

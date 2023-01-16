@@ -64,7 +64,7 @@ class TPkgShopOrderStatusException_OrderStatusCodeNotFound extends TPkgCmsExcept
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
         $sString = $sString."\n: Status Code ".$this->getStatusCode();

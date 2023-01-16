@@ -272,6 +272,14 @@ class TShopVoucher extends TShopVoucherAutoParent
                     $bAllowUse = TdbShopVoucher::USE_ERROR_CUSTOMER_USED_VOUCHER_SERIES_BEFORE;
                 }
             }
+
+            $matchingVoucherFromSameSeries = $oExistingVouchers->FindItemWithProperty(
+                'fieldShopVoucherSeriesId',
+                $this->fieldShopVoucherSeriesId
+            );
+            if (false !== $matchingVoucherFromSameSeries) {
+                $bAllowUse = TdbShopVoucher::USE_ERROR_CUSTOMER_USED_VOUCHER_SERIES_BEFORE;
+            }
         }
 
         // if the voucher may only be used with the first order, check if the user has ordered before
