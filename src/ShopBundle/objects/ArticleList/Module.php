@@ -200,7 +200,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     private function initializeListState()
     {
         $stateData = $this->getStateDataFromRequest($this->getCurrentRequest());
-        $this->makePageSizeValid($stateData);
+        $stateData = $this->makePageSizeValid($stateData);
         $this->state = $this->stateFactory->createState($stateData);
     }
 
@@ -209,15 +209,17 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
      *
      * @return void
      */
-    private function makePageSizeValid(array $stateData)
+    private function makePageSizeValid(array $stateData): array
     {
         $pageSizeKey = $this->stateElementPageSize->getKey();
         if (!isset($stateData[$pageSizeKey])) {
-            return;
+            return $stateData;
         }
         if (!$this->pageSizeIsValid($stateData[$pageSizeKey])) {
             $stateData[$pageSizeKey] = $this->configuration->getDefaultPageSize();
         }
+
+        return $stateData;
     }
 
     /**

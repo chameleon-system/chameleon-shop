@@ -53,7 +53,7 @@ class TShopBasketVoucherCoreList extends TIterator
      *
      * @return TdbShopVoucher|false
      */
-    public function next(): TdbShopVoucher|false
+    public function next(): TdbShopVoucher|bool
     {
         return parent::Next();
     }
