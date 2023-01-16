@@ -320,7 +320,7 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
      *
      * @return void
      */
-    protected function OrderOptions($aOptions)
+    protected function OrderOptions(&$aOptions)
     {
         $SortOrder = SORT_NUMERIC;
         reset($aOptions);
