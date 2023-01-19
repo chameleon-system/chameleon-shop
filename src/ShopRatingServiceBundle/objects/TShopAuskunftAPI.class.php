@@ -18,7 +18,7 @@ class TShopAuskunftAPI
     use \ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
 
     // XML-Parsing vars
-    /** @var resource */
+    /** @var XMLParser */
     protected $parser;
 
     /** @var bool  */
