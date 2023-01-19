@@ -186,31 +186,4 @@ class TShopVariantDisplayHandler extends TAdbShopVariantDisplayHandler
     {
         return array();
     }
-
-    /**
-     * Add view based clear cache triggers for the Render method here.
-     *
-     * @param array          $aClearTriggers - clear trigger array (with current contents)
-     * @param TdbShopArticle $oArticle       - the article object for which we want to render the view
-     * @param string         $sViewName      - view being requested
-     * @param string         $sViewType      - location of the view (Core, Custom-Core, Customer)
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     *
-     * @return void
-     */
-    protected function AddClearCacheTriggers($aClearTriggers, $oArticle, $sViewName, $sViewType)
-    {
-        $aClearTriggers[] = array('table' => $this->table, 'id' => $this->id);
-        $aClearTriggers[] = array('table' => $oArticle->table, 'id' => $oArticle->id);
-
-        // also react to ANY changes in the variant def tables... and any related articles
-        $aClearTriggers[] = array('table' => 'shop_variant_type', 'id' => '');
-        $aClearTriggers[] = array('table' => 'shop_variant_type_value', 'id' => '');
-
-        $aCacheInfos = TdbShopArticle::GetCacheRelevantTables();
-        foreach ($aCacheInfos as $sTableName) {
-            $aClearTriggers[] = array('table' => $sTableName, 'id' => '');
-        }
-    }
 }

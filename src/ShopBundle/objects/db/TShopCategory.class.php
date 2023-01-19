@@ -487,7 +487,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      *
      * @return array
      */
-    public function GetSeoPattern($sPaternIn)
+    public function GetSeoPattern(&$sPaternIn)
     {
         //$sPaternIn = "[{PORTAL_NAME}] - [{CATEGORY_NAME}]"; //default
         $aPatRepl = null;

@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+
 class TPkgShopPaymentTransactionManagerEndPoint
 {
     const LOG = '/logs/pkgShopPaymentTransaction.log';
@@ -55,11 +58,18 @@ class TPkgShopPaymentTransactionManagerEndPoint
         if (self::TRANSACTION_TYPE_CREDIT == $sTransactionType || self::TRANSACTION_TYPE_PAYMENT_REVERSAL === $sTransactionType) {
             $amount = -1 * $amount;
         }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $userId = $securityHelper->getUser()?->getId();
+        if (null === $userId) {
+            $userId = '';
+        }
+
         $aData = array(
             'shop_order_id' => $this->order->id,
             'data_extranet_user_id' => (null !== $oContext->getExtranetUser()) ? ($oContext->getExtranetUser(
             )->id) : (''),
-            'cms_user_id' => (null !== $oContext->getCmsUser()) ? ($oContext->getCmsUser()->id) : (''),
+            'cms_user_id' => $userId,
             'datecreated' => date('Y-m-d H:i:s'),
             'ip' => $oContext->getIp(),
             'amount' => $amount,

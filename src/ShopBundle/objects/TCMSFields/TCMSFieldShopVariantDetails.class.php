@@ -12,6 +12,8 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGeneratorInterface;
 
 /**
@@ -131,8 +133,10 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
             $oTableConf->LoadFromField('name', $sTableName);
             $aTableEditorConfs[$sTableName] = $oTableConf->id;
         }
-        $oGlobal = TGlobal::instance();
-        if (false === $oGlobal->oUser->oAccessManager->HasEditPermission($sTableName)) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $sTableName)) {
             return '';
         }
 

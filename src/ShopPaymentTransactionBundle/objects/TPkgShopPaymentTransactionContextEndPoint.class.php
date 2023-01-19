@@ -28,10 +28,6 @@ class TPkgShopPaymentTransactionContextEndPoint
      */
     private $ip = null;
 
-    /**
-     * @var TdbCmsUser|null
-     */
-    private $cmsUser = null;
 
     /**
      * @param string $sContext
@@ -42,15 +38,6 @@ class TPkgShopPaymentTransactionContextEndPoint
         $this->extranetUser = TdbDataExtranetUser::GetInstance();
         $request = $this->getCurrentRequest();
         $this->ip = null === $request ? '' : $request->getClientIp();
-        $this->cmsUser = TCMSUser::GetActiveUser();
-    }
-
-    /**
-     * @return TdbCmsUser|null
-     */
-    public function getCmsUser()
-    {
-        return $this->cmsUser;
     }
 
     /**

@@ -1769,7 +1769,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      *
      * @return array SEO pattern replace values
      */
-    public function GetSeoPattern($sPaternIn)
+    public function GetSeoPattern(&$sPaternIn)
     {
         //$sPaternIn = "[{PORTAL_NAME}] - [{CATEGORY_NAME}] - [{ARTICLE_NAME}]"; //default
         $aPatRepl = null;
