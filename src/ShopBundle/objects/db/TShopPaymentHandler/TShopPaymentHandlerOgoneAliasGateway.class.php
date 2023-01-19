@@ -101,7 +101,7 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
      *
      * @param string $sStepName
      *
-     * @return string
+     * @return string|false
      */
     protected function GetErrorURL($sStepName = '')
     {

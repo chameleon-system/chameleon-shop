@@ -266,7 +266,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      *
      * @param string $stepName
      *
-     * @return string $sURL
+     * @return string|false $sURL
      */
     protected function GetExecutePaymentErrorURL($stepName = '')
     {
