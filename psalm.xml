@@ -13,7 +13,7 @@
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
     cacheDirectory="/tmp"
     autoloader="../../autoload.php"
-    phpVersion="7.4"
+    phpVersion="8.1"
 >
 
     <projectFiles>
