@@ -207,7 +207,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @param array $stateData
      *
-     * @return void
+     * @return array
      */
     private function makePageSizeValid(array $stateData): array
     {
