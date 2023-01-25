@@ -12,16 +12,26 @@
 namespace ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer;
 
 use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\SortTypeInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Service\PortalDomainService;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use Symfony\Component\Config\Resource\SelfCheckingResourceChecker;
 
 class SortType extends \ChameleonSystemShopBundleobjectsArticleListDatabaseAccessLayerSortTypeAutoParent implements SortTypeInterface
 {
+    private const NAME_SORT_STRING = '`shop_article`.`name`';
+
     public function getSortString()
     {
         $sortString = trim($this->fieldSqlOrderBy);
         if ('' !== $sortString) {
             $sortString .= ' '.trim($this->fieldOrderDirection);
         }
+
+        $sortString = $this->getMultilingualSortString($sortString);
+
         $secondarySortString = trim($this->fieldSqlSecondaryOrderByString);
+
         $parts = array();
         if ('' !== $sortString) {
             $parts[] = $sortString;
@@ -31,5 +41,33 @@ class SortType extends \ChameleonSystemShopBundleobjectsArticleListDatabaseAcces
         }
 
         return implode(', ', $parts);
+    }
+
+    private function getMultilingualSortString(string $sortString): string
+    {
+        $portalDomainService = $this->getPortalDomainService();
+        $activePortal = $portalDomainService->getActivePortal();
+        $activeLanguages = $activePortal->GetActiveLanguages();
+
+        if (1 < $activeLanguages->Length()) {
+            $languageServic = self::getLanguageService();
+            $activeLanguage = $languageServic->getActiveLanguage();
+            $baseLanguage = $languageServic->getCmsBaseLanguage();
+            if($baseLanguage->id !== $activeLanguage->id && str_contains($sortString, self::NAME_SORT_STRING)) {
+                return str_replace('name', 'name__'.$activeLanguage->fieldIso6391, $sortString);
+            }
+        }
+
+        return $sortString;
+    }
+
+    private function getPortalDomainService(): PortalDomainService
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
+    }
+
+    protected static function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 }
