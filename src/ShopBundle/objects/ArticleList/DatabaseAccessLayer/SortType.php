@@ -15,7 +15,7 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interface
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Service\PortalDomainService;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
-use Symfony\Component\Config\Resource\SelfCheckingResourceChecker;
+use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 
 class SortType extends \ChameleonSystemShopBundleobjectsArticleListDatabaseAccessLayerSortTypeAutoParent implements SortTypeInterface
 {
@@ -45,17 +45,8 @@ class SortType extends \ChameleonSystemShopBundleobjectsArticleListDatabaseAcces
 
     private function getMultilingualSortString(string $sortString): string
     {
-        $portalDomainService = $this->getPortalDomainService();
-        $activePortal = $portalDomainService->getActivePortal();
-        $activeLanguages = $activePortal->GetActiveLanguages();
-
-        if (1 < $activeLanguages->Length()) {
-            $languageServic = self::getLanguageService();
-            $activeLanguage = $languageServic->getActiveLanguage();
-            $baseLanguage = $languageServic->getCmsBaseLanguage();
-            if($baseLanguage->id !== $activeLanguage->id && str_contains($sortString, self::NAME_SORT_STRING)) {
-                return str_replace('name', 'name__'.$activeLanguage->fieldIso6391, $sortString);
-            }
+        if(str_contains($sortString, self::NAME_SORT_STRING)) {
+            return self::getFieldTranslationUtil()->getTranslatedFieldName('shop_article', 'name');
         }
 
         return $sortString;
@@ -69,5 +60,10 @@ class SortType extends \ChameleonSystemShopBundleobjectsArticleListDatabaseAcces
     protected static function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    protected static function getFieldTranslationUtil(): FieldTranslationUtil
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 }
