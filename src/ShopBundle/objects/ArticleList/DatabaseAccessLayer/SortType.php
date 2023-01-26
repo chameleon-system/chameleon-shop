@@ -13,8 +13,6 @@ namespace ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer;
 
 use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\SortTypeInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\CoreBundle\Service\PortalDomainService;
-use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 
 class SortType extends \ChameleonSystemShopBundleobjectsArticleListDatabaseAccessLayerSortTypeAutoParent implements SortTypeInterface
@@ -50,16 +48,6 @@ class SortType extends \ChameleonSystemShopBundleobjectsArticleListDatabaseAcces
         }
 
         return $sortString;
-    }
-
-    private function getPortalDomainService(): PortalDomainService
-    {
-        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
-    }
-
-    protected static function getLanguageService(): LanguageServiceInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     protected static function getFieldTranslationUtil(): FieldTranslationUtil
