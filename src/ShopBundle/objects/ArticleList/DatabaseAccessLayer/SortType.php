@@ -11,9 +11,9 @@
 
 namespace ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer;
 
-use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\SortTypeInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
+use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\SortTypeInterface;
 
 class SortType extends \ChameleonSystemShopBundleobjectsArticleListDatabaseAccessLayerSortTypeAutoParent implements SortTypeInterface
 {
@@ -30,7 +30,7 @@ class SortType extends \ChameleonSystemShopBundleobjectsArticleListDatabaseAcces
 
         $secondarySortString = trim($this->fieldSqlSecondaryOrderByString);
 
-        $parts = array();
+        $parts = [];
         if ('' !== $sortString) {
             $parts[] = $sortString;
         }
@@ -43,15 +43,15 @@ class SortType extends \ChameleonSystemShopBundleobjectsArticleListDatabaseAcces
 
     private function getMultilingualSortString(string $sortString): string
     {
-        if(str_contains($sortString, self::NAME_SORT_STRING)) {
-            return self::getFieldTranslationUtil()->getTranslatedFieldName('shop_article', 'name');
+        if (str_contains($sortString, self::NAME_SORT_STRING)) {
+            return $this->getFieldTranslationUtil()->getTranslatedFieldName('shop_article', 'name');
         }
 
         return $sortString;
     }
 
-    protected static function getFieldTranslationUtil(): FieldTranslationUtil
+    protected function getFieldTranslationUtil(): FieldTranslationUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 }
