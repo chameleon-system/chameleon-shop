@@ -165,6 +165,9 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
             $cacheTriggerManager->addTrigger($salutation->table, $salutation->id);
         }
         $address = '';
+        if (property_exists($oOrder,'fieldAdrBillingCompany')) {
+            $address .= $this->getValueOrDefault($order->fieldAdrBillingCompany, ', ');
+        }
         $address .= (null !== $salutation) ? $salutation->GetName().' ' : '';
         $address .= $this->getValueOrDefault($order->fieldAdrBillingFirstname, ' ');
         $address .= $this->getValueOrDefault($order->fieldAdrBillingLastname, ', ');
@@ -194,6 +197,9 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
             $cacheTriggerManager->addTrigger($salutation->table, $salutation->id);
         }
         $address = '';
+        if (property_exists($oOrder,'fieldAdrShippingCompany')) {
+            $address .= $this->getValueOrDefault($order->fieldAdrShippingCompany, ' ');
+        }
         $address .= (null !== $salutation) ? $salutation->GetName().' ' : '';
         $address .= $this->getValueOrDefault($order->fieldAdrShippingFirstname, ' ');
         $address .= $this->getValueOrDefault($order->fieldAdrShippingLastname, ', ');
