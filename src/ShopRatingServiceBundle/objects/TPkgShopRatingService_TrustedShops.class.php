@@ -157,17 +157,17 @@ class TPkgShopRatingService_TrustedShops extends TdbPkgShopRatingService
         // Create a new instance of the SimplePie object
         $feedURL = $this->fieldRatingUrl;
 
-        if (!empty($feedURL) && stristr($feedURL, 'http://') || stristr($feedURL, 'https://')) {
-            $feed = new SimplePie();
+        if (!empty($feedURL) && (stristr($feedURL, 'http://') || stristr($feedURL, 'https://'))) {
+            $feed = new \SimplePie\SimplePie();
             $feed->set_feed_url($feedURL);
 
             $cachePath = $this->getCacheUtil()->getCacheDirectory();
             if (null === $cachePath) {
-                $feed->cache = false;
+                $feed->enable_cache(false);
                 trigger_error('RSS cache directory '.$cachePath.' is not writable or does not exist.', E_USER_NOTICE);
             } else {
-                $feed->cache = true;
-                $feed->cache_location = $cachePath;
+                $feed->enable_cache(true);
+                $feed->set_cache_location($cachePath);
             }
 
             // Initialize the whole SimplePie object.  Read the feed, process it, parse it, cache it, and
