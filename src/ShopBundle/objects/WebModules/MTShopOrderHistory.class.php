@@ -165,7 +165,7 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
             $cacheTriggerManager->addTrigger($salutation->table, $salutation->id);
         }
         $address = '';
-        if (property_exists($oOrder,'fieldAdrBillingCompany')) {
+        if (property_exists($order,'fieldAdrBillingCompany')) {
             $address .= $this->getValueOrDefault($order->fieldAdrBillingCompany, ', ');
         }
         $address .= (null !== $salutation) ? $salutation->GetName().' ' : '';
@@ -197,7 +197,7 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
             $cacheTriggerManager->addTrigger($salutation->table, $salutation->id);
         }
         $address = '';
-        if (property_exists($oOrder,'fieldAdrShippingCompany')) {
+        if (property_exists($order,'fieldAdrShippingCompany')) {
             $address .= $this->getValueOrDefault($order->fieldAdrShippingCompany, ' ');
         }
         $address .= (null !== $salutation) ? $salutation->GetName().' ' : '';
