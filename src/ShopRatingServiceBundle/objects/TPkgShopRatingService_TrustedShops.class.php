@@ -198,7 +198,7 @@ class TPkgShopRatingService_TrustedShops extends TdbPkgShopRatingService
         if (file_exists($filename_cache)) {
             $timestamp = filemtime($filename_cache);
             // Seconds
-            if (mktime() - $timestamp < $timeout) {
+            if (time() - $timestamp < $timeout) {
                 $bRet = true;
             } else {
                 $bRet = false;
