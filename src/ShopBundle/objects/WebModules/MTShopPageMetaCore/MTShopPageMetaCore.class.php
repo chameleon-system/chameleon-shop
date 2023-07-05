@@ -261,7 +261,7 @@ class MTShopPageMetaCore extends MTPageMetaCore
             if ($category) {
                 $currentPage = $this->getInputFilterUtil()->getFilteredInput(TdbShopArticleList::URL_LIST_CURRENT_PAGE, 0);
                 $additionalParam = array();
-                if (0 !== $currentPage) {
+                if ('0' !== $currentPage && 0 !== $currentPage) {
                     $additionalParam = array(TdbShopArticleList::URL_LIST_CURRENT_PAGE => $currentPage);
                 }
                 $activePage = $this->getActivePageService()->getActivePage();
