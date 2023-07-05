@@ -1,20 +1,10 @@
 | Q             | A
 | ------------- | ---
-| Branch        | master for features / 6.2.x for bug fixes <!-- see below -->
+| Branch        | master for features / 7.1.x for bug fixes
 | Bug fix?      | yes/no
-| New feature?  | yes/no <!-- don't forget to update CHANGELOG.md files -->
+| New feature?  | yes/no
 | BC breaks?    | no     <!-- does the change break backwards compatibility? Only allowed for major versions -->
-| Deprecations? | yes/no <!-- don't forget to update UPGRADE-*.md and CHANGELOG.md files -->
-| Tests pass?   | yes    <!-- please add some, will be required by reviewers -->
-| Fixed issues  | chameleon-system/chameleon-system#...   <!-- #-prefixed issue number(s), if any -->
+| Deprecations? | yes/no <!-- don't forget to update the UPGRADE-*.md file -->
+| Fixed issues  | chameleon-system/chameleon-system#<!-- issue nr. -->
 | License       | MIT
-
-<!--
-Write a short README entry for your feature/bugfix here (replace this comment block.)
-This will help people understand your PR and can be used as a start of the Doc PR.
-Additionally:
- - Bug fixes must be submitted against the lowest branch where they apply
-   (lowest branches are regularly merged to upper ones so they get the fixes, too).
- - Features and deprecations must be submitted against the master branch.
--->
 
