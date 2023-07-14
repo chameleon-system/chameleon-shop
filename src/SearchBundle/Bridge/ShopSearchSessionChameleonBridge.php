@@ -12,18 +12,16 @@
 namespace ChameleonSystem\SearchBundle\Bridge;
 
 use ChameleonSystem\SearchBundle\Interfaces\ShopSearchSessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
 {
-    /**
-     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
-     */
-    private $session;
+    private RequestStack $requestStack;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->session = $session;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -32,10 +30,16 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
      */
     public function addSearch(array $searchRequest)
     {
+        $session = $this->getSession();
+
+        if (null === $session) {
+            return;
+        }
+                
         $searchKey = md5($this->getArrayAsString($searchRequest));
-        $searches = $this->session->get(ShopSearchSessionInterface::SESSION_KEY, array());
+        $searches = $session->get(ShopSearchSessionInterface::SESSION_KEY, array());
         $searches[] = $searchKey;
-        $this->session->set(ShopSearchSessionInterface::SESSION_KEY, $searches);
+        $session->set(ShopSearchSessionInterface::SESSION_KEY, $searches);
     }
 
     /**
@@ -44,19 +48,23 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
      */
     public function hasSearchedFor(array $searchRequest)
     {
+        $session = $this->getSession();
+        
+        if(null === $session) {
+            return false;
+        }
+        
         $searchKey = md5($this->getArrayAsString($searchRequest));
 
-        $searches = $this->session->get(ShopSearchSessionInterface::SESSION_KEY, array());
+        $searches = $session->get(ShopSearchSessionInterface::SESSION_KEY, array());
 
         return in_array($searchKey, $searches);
     }
 
     /**
      * @param array $data
-     *
-     * @return string
      */
-    private function getArrayAsString($data)
+    private function getArrayAsString($data): string
     {
         $parts = array();
         ksort($data);
@@ -68,5 +76,16 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
         }
 
         return implode(',', $parts);
+    }
+
+    private function getSession(): ?SessionInterface
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        
+        if (null === $request) {
+            return null;
+        }
+                
+        return $request->getSession();
     }
 }
