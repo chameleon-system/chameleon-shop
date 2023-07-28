@@ -37,7 +37,9 @@ class TPkgShopPaymentIPNManager
         }
         $url = $this->getPageService()->getLinkToPortalHomePageAbsolute(array(), $portal, $language, true);
 
-        $url .= '/'.self::URL_IPN_IDENTIFIER.$identifier.'__'.$order->sqlData['cmsident'];
+        if (array_key_exists('cmsident', $order->sqlData)) {
+            $url .= '/'.self::URL_IPN_IDENTIFIER.$identifier.'__'.$order->sqlData['cmsident'];
+        }
 
         return $url;
     }
