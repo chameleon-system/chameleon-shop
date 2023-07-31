@@ -631,7 +631,9 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
                 }
             }
             if (count($manualArticleSelection) > 0) {
-                $query = "SELECT `shop_article`.`id` AS shop_article_id,
+                $query = "SELECT
+                            0 as id,
+                            `shop_article`.`id` AS shop_article_id,
                            'xxx' substring,
                            '".$sLanguageId."' cms_language_id,
                            1 AS occurrences,
