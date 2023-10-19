@@ -50,7 +50,7 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
     {
         $session = $this->getSession();
         
-        if(null === $session) {
+        if (null === $session) {
             return false;
         }
         
