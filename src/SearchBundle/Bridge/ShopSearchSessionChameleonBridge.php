@@ -64,7 +64,7 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
     /**
      * @param array $data
      */
-    private function getArrayAsString($data): string
+    private function getArrayAsString(array $data): string
     {
         $parts = array();
         ksort($data);
