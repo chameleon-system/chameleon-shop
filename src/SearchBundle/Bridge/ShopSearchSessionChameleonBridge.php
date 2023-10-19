@@ -56,7 +56,7 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
         
         $searchKey = md5($this->getArrayAsString($searchRequest));
 
-        $searches = $session->get(ShopSearchSessionInterface::SESSION_KEY, array());
+        $searches = $session->get(ShopSearchSessionInterface::SESSION_KEY, []);
 
         return in_array($searchKey, $searches);
     }
