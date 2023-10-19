@@ -81,11 +81,14 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
     private function getSession(): ?SessionInterface
     {
         $request = $this->requestStack->getCurrentRequest();
-        
         if (null === $request) {
             return null;
         }
-                
+        
+        if (false === $request->hasSession()) {
+            return null;
+        }
+
         return $request->getSession();
     }
 }
