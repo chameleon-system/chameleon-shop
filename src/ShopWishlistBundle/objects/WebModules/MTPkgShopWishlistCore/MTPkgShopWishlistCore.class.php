@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class MTPkgShopWishlistCore extends TUserCustomModelBase
 {
     /**
@@ -126,11 +128,7 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
                     $oMsgManager->AddMessage(self::MSG_CONSUMER_NAME, 'WISHLIST-SEND-MAIL', $this->aUserInput);
                     $oShop = TdbShop::GetInstance();
                     $sURL = $oShop->GetLinkToSystemPage('wishlist');
-                    /**
-                     * @psalm-suppress UndefinedInterfaceMethod
-                     * @FIXME `HeaderURLRedirect` only exists on one of the implementations of the interface
-                     */
-                    $this->controller->HeaderURLRedirect($sURL);
+                    $this->getRedirectService()->redirect($sURL);
                     $oMsgManager->AddMessage(self::MSG_CONSUMER_NAME, 'WISHLIST-UNABLE-TO-SEND-MAIL', $this->aUserInput);
                 }
             }
@@ -218,5 +216,10 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
 
             $oMsgManager->AddMessage($oWishlist->GetMsgConsumerName(), 'WISHLIST-UPDATED-INFOS');
         }
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

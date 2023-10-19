@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 if (!defined('PKG_SHOP_ALLOWED_PAGE_SIZES')) {
     define('PKG_SHOP_ALLOWED_PAGE_SIZES', '40,60,100,120');
@@ -388,11 +389,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
                 $iActiveCategoryId = $oActiveCategory->id;
             }
             $sURL = $oActiveItm->GetDetailLink(true, $iActiveCategoryId);
-            /**
-             * @psalm-suppress UndefinedInterfaceMethod
-             * @FIXME `HeaderURLRedirect` only exists on a single interface implementation.
-             */
-            $this->controller->HeaderURLRedirect($sURL);
+            $this->getRedirectService()->redirect($sURL);
         }
     }
 
@@ -672,6 +669,11 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

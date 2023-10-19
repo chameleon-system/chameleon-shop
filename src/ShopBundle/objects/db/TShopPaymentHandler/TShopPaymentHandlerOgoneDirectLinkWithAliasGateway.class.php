@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 
 class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHandlerOgoneAliasGateway
@@ -102,11 +103,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
                 $this->Set3DSecureFormToSession($this->aXMLResponseData['HTML_ANSWER']);
                 $oShop = TdbShop::GetInstance();
                 $sTargetURL = $oShop->GetLinkToSystemPage($s3DSecurePage, null, true);
-                /**
-                 * @psalm-suppress UndefinedInterfaceMethod
-                 * @FIXME `HeaderURLRedirect` only exists in a single implementatino of the interface
-                 */
-                TGlobal::GetController()->HeaderURLRedirect($sTargetURL);
+                $this->getRedirectService()->redirect($sTargetURL);
             }
         }
 
@@ -396,7 +393,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
             $sOrderId = $oBasket->sBasketIdentifier;
         }
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ServiceLocator::get('request_stack')->getCurrentRequest();
         $sUserIpAddress = $request->getClientIp();
         $aParameter = array('PSPID' => $this->GetConfigParameter('user_id'), //required
             'ORDERID' => $sOrderId, //required
@@ -493,6 +490,11 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }
