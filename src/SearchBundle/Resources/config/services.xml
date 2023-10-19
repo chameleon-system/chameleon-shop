@@ -1,17 +1,14 @@
 <?xml version="1.0" ?>
-
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
-
     <services>
         <service id="chameleon_system_search.state_extractor" class="ChameleonSystem\SearchBundle\ArticleList\StateRequestExtractor\StateRequestExtractor" public="false">
             <tag name="chameleon_system_shop.article_list_module.state_extractor" />
         </service>
 
         <service id="chameleon_system_search.session" class="ChameleonSystem\SearchBundle\Bridge\ShopSearchSessionChameleonBridge">
-            <argument type="service" id="session" />
+            <argument type="service" id="request_stack" />
         </service>
 
         <service id="chameleon_system_search.logger" class="ChameleonSystem\SearchBundle\Bridge\ShopSearchLoggerBridge">
@@ -29,8 +26,5 @@
         <service id="chameleon_system_search.listener.search_result_cms_event" class="ChameleonSystem\SearchBundle\EventListener\SearchResultTriggerCmsObserverListener">
             <tag name="kernel.event_listener" event="chameleon_system_shop.article_list.result_generated" method="onArticleListResultGenerated" />
         </service>
-
-
     </services>
-
 </container>
