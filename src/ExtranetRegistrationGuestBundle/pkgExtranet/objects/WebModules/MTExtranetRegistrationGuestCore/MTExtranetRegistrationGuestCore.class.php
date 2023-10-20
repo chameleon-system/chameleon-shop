@@ -205,7 +205,6 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
         return ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 
-
     private function getRedirectService(): ICmsCoreRedirect
     {
         return ServiceLocator::get('chameleon_system_core.redirect');
