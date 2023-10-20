@@ -129,7 +129,7 @@ class TShopStepBasketCore extends TdbShopOrderStep
         // we use the existing basket module to do all the work...
         $oShop = TdbShop::GetInstance();
         $oController = TGlobal::GetController();
-        $oBasketModule = $oController->moduleLoader->GetPointerToModule($oShop->fieldBasketSpotName);
+        $oBasketModule = $oController->getModuleLoader()->GetPointerToModule($oShop->fieldBasketSpotName);
         $bSuccess = $oBasketModule->UpdateBasketItems(null, false, true);
 
         // redirect to current page
