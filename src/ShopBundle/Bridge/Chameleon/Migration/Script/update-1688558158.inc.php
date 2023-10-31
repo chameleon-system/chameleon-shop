@@ -17,7 +17,13 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
 ;
 TCMSLogChange::update(__LINE__, $data);
 
+$query ="ALTER TABLE `shop_order_step` DROP INDEX `class`";
+TCMSLogChange::RunQuery(__LINE__, $query);
+
 $query ="ALTER TABLE `shop_order_step`
                      CHANGE `class`
-                            `class` LONGTEXT NOT NULL";
+                            `class` TEXT NOT NULL";
+TCMSLogChange::RunQuery(__LINE__, $query);
+
+$query ="ALTER TABLE `shop_order_step` ADD INDEX (`class`(512))";
 TCMSLogChange::RunQuery(__LINE__, $query);
