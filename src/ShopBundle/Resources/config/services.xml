@@ -289,6 +289,13 @@
             <tag name="kernel.event_listener" event="chameleon_system_core.filter_content" method="filterResponse" priority="0"/>
         </service>
 
+        <service id="chameleon_system_shop.factory.variant_type_data_model_factory" class="ChameleonSystem\ShopBundle\Bridge\Chameleon\Factory\VariantTypeDataModelFactory" public="true" />
+
+        <service id="chameleon_system_shop.factory.variant_type_value_data_model_factory" class="ChameleonSystem\ShopBundle\Bridge\Chameleon\Factory\VariantTypeValueDataModelFactory" public="true">
+            <argument type="service" id="chameleon_system_core.util.url" />
+        </service>
+
+
     </services>
 
 </container>

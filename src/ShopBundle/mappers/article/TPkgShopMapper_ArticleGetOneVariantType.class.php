@@ -11,132 +11,132 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
+use ChameleonSystem\ShopBundle\Interfaces\VariantTypeDataModelFactoryInterface;
+use ChameleonSystem\ShopBundle\Interfaces\VariantTypeValueDataModelFactoryInterface;
 
 class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Article
 {
     /**
      * {@inheritdoc}
+     * @throws ErrorException
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        $aReturnData = array();
-        /** @var $oArticle TdbShopArticle */
-        $oArticle = $oVisitor->GetSourceObject('oObject');
-        if ($oArticle && $bCachingEnabled) {
-            $oCacheTriggerManager->addTrigger($oArticle->table, $oArticle->id);
+        $aReturnData = [];
+        $variantTypeDataModel = null;
+        /** @var \TdbShopArticle $productRecord */
+        $productRecord = $oVisitor->GetSourceObject('oObject');
+        if ($productRecord && $bCachingEnabled) {
+            $oCacheTriggerManager->addTrigger($productRecord->table, $productRecord->id);
         }
 
-        $aPageParameters = array();
-
-        $oVariantSet = $oArticle->GetFieldShopVariantSet();
-        if ($oVariantSet) {
+        $variantSetRecord = $productRecord->GetFieldShopVariantSet();
+        if ($variantSetRecord) {
+            $variantTypeDataModelFactory = $this->getVariantTypeDataModelFactory();
+            $variantTypeValueDataModelFactory = $this->getVariantTypeValueDataModelFactory();
+            
             if ($bCachingEnabled) {
-                $oCacheTriggerManager->addTrigger($oVariantSet->table, $oVariantSet->id);
+                $oCacheTriggerManager->addTrigger($variantSetRecord->table, $variantSetRecord->id);
             }
 
-            $aSelectedTypeValues = $this->getSelectedTypeValues($oArticle);
+            $selectedTypeValues = $this->getSelectedTypeValues($productRecord);
 
-            $bLoadInactiveItems = false;
-            $oShop = TShop::GetInstance();
-            if (property_exists($oShop, 'fieldLoadInactiveVariants') && $oShop->fieldLoadInactiveVariants) {
-                $bLoadInactiveItems = true;
+            $loadInactiveItems = false;
+            $shopService = $this->getShopService();
+            $shopRecord = $shopService->getActiveShop();
+            
+            if (property_exists($shopRecord, 'fieldLoadInactiveVariants') && $shopRecord->fieldLoadInactiveVariants) {
+                $loadInactiveItems = true;
             }
 
-            $oVariantTypes = $oVariantSet->GetFieldShopVariantTypeList();
-            if ($oVariantTypes) {
-                $aTmpSelectValue = array();
-                $sPreviousTypeId = '';
-                while ($oVariantType = $oVariantTypes->Next()) {
+            $variantTypeRecordList = $variantSetRecord->GetFieldShopVariantTypeList();
+            if ($variantTypeRecordList) {
+                $currentSelectedValues = [];
+                $previousVariantTypeId = '';
+                while ($variantTypeRecord = $variantTypeRecordList->Next()) {
                     if ($bCachingEnabled) {
-                        $oCacheTriggerManager->addTrigger($oVariantType->table, $oVariantType->id);
+                        $oCacheTriggerManager->addTrigger($variantTypeRecord->table, $variantTypeRecord->id);
                     }
 
-                    if ($bLoadInactiveItems) {
-                        $oAvailableValues = $oArticle->GetVariantValuesAvailableForTypeIncludingInActive($oVariantType, $aTmpSelectValue);
+                    if ($loadInactiveItems) {
+                        $availableVariantValuesRecordList = $productRecord->GetVariantValuesAvailableForTypeIncludingInActive($variantTypeRecord, $currentSelectedValues);
                     } else {
-                        $oAvailableValues = $oArticle->GetVariantValuesAvailableForType($oVariantType, $aTmpSelectValue);
+                        $availableVariantValuesRecordList = $productRecord->GetVariantValuesAvailableForType($variantTypeRecord, $currentSelectedValues);
                     }
 
-                    if (!$oAvailableValues) {
+                    if (null === $availableVariantValuesRecordList) {
                         continue;
                     }
 
                     $sActiveValueForVariantType = '';
-                    if (is_array($aSelectedTypeValues) && isset($aSelectedTypeValues[$oVariantType->id])) {
-                        $sActiveValueForVariantType = $aSelectedTypeValues[$oVariantType->id];
+                    if (isset($selectedTypeValues[$variantTypeRecord->id])) {
+                        $sActiveValueForVariantType = $selectedTypeValues[$variantTypeRecord->id];
                     }
-                    if ('' != $oVariantType->fieldCmsMediaId && $bCachingEnabled) {
-                        $oCacheTriggerManager->addTrigger('cms_media', $oVariantType->fieldCmsMediaId);
+                    if ('' !== $variantTypeRecord->fieldCmsMediaId && $bCachingEnabled) {
+                        $oCacheTriggerManager->addTrigger('cms_media', $variantTypeRecord->fieldCmsMediaId);
                     }
-                    $aType = array(
-                        'sTitle' => $oVariantType->fieldName,
-                        'sSystemName' => $oVariantType->fieldIdentifier,
-                        'cms_media_id' => $oVariantType->fieldCmsMediaId,
-                        'bAllowSelection' => (empty($sPreviousTypeId) || isset($aTmpSelectValue[$sPreviousTypeId])),
-                        'aItems' => array(),
-                    );
-                    $aItems = array();
-                    $sFirstVariantId = '';
-                    while ($oValue = $oAvailableValues->Next()) {
-                        if ($bCachingEnabled) {
-                            $oCacheTriggerManager->addTrigger($oValue->table, $oValue->id);
-                        }
-                        $aSelectionRestriction = $aTmpSelectValue;
-                        $aSelectionRestriction[$oVariantType->id] = $oValue->id;
+                    
+                    $variantTypeDataModel = $variantTypeDataModelFactory->createFromVariantTypeRecord($variantTypeRecord, (empty($previousVariantTypeId) || isset($currentSelectedValues[$previousVariantTypeId])));
 
-                        $sCmsMediaId = $oValue->fieldCmsMediaId;
+                    $variantTypes = $variantTypeDataModel->getAllPropertiesAsArray();
+                        
+                    $variantValues = [];
+                    $variantTypeValueDataModels = [];
+                    $firstVariantId = '';
+                    while ($variantValueRecord = $availableVariantValuesRecordList->Next()) {
+                        if ($bCachingEnabled) {
+                            $oCacheTriggerManager->addTrigger($variantValueRecord->table, $variantValueRecord->id);
+                        }
+
+                        $sCmsMediaId = $variantValueRecord->fieldCmsMediaId;
                         if (is_numeric($sCmsMediaId) && $sCmsMediaId < 1000) { // dummy image
                             $sCmsMediaId = '';
                         }
 
-                        if ('' != $sCmsMediaId && $bCachingEnabled) {
+                        if ('' !== $sCmsMediaId && $bCachingEnabled) {
                             $oCacheTriggerManager->addTrigger('cms_media', $sCmsMediaId);
                         }
-                        $aItem = array(
-                            'sTitle' => $oValue->fieldName,
-                            'sColor' => $oValue->fieldColorCode,
-                            'cms_media_id' => $sCmsMediaId,
-                            'bIsActive' => ($sActiveValueForVariantType == $oValue->id),
-                            'sSelectLink' => '',
-                            'bArticleIsActive' => '1',
+
+                        $variantTypeValueDataModel = $variantTypeValueDataModelFactory->createFromVariantTypeValueRecord(
+                            $variantTypeRecord,
+                            $variantValueRecord,
+                            $loadInactiveItems,
+                            $currentSelectedValues,
+                            $sActiveValueForVariantType === $variantValueRecord->id
                         );
+                        
+                        $variantTypeValueDataModels[] = $variantTypeValueDataModel;
+                        
+                        $aItem = $variantTypeValueDataModel->getAllPropertiesAsArray();
 
-                        if ($bLoadInactiveItems) {
-                            if (isset($oValue->sqlData['articleactive']) && $oValue->sqlData['articleactive'] > 0) {
-                                $aItem['bArticleIsActive'] = '1';
-                            } else {
-                                $aItem['bArticleIsActive'] = '0';
-                            }
-                        }
-
-                        $aSelectionLinkData = $aTmpSelectValue;
-                        $aSelectionLinkData[$oVariantType->id] = $oValue->id;
-                        $aPageParameters[TdbShopVariantType::URL_PARAMETER] = $aSelectionLinkData;
-
-                        $aItem['sSelectLink'] = TTools::GetArrayAsURL($aPageParameters, '?');
-                        $aItems[] = $aItem;
-                        if (empty($sFirstVariantId)) {
-                            $sFirstVariantId = $oValue->id;
+                        $variantValues[] = $aItem;
+                        if (empty($firstVariantId)) {
+                            $firstVariantId = $variantValueRecord->id;
                         }
                     }
-                    $aType['aItems'] = $aItems;
+                    $variantTypes['aItems'] = $variantValues;
+                    $variantTypeDataModel->setVariantTypeValues($variantTypeValueDataModels);
 
-                    if (is_array($aSelectedTypeValues) && isset($aSelectedTypeValues[$oVariantType->id])) {
-                        $aTmpSelectValue[$oVariantType->id] = $aSelectedTypeValues[$oVariantType->id];
+                    if (isset($selectedTypeValues[$variantTypeRecord->id])) {
+                        $currentSelectedValues[$variantTypeRecord->id] = $selectedTypeValues[$variantTypeRecord->id];
                     }
-                    $aReturnData[$oVariantType->id] = $aType;
-                    $sPreviousTypeId = $oVariantType->id;
+                    $aReturnData[$variantTypeRecord->id] = $variantTypes;
+                    $previousVariantTypeId = $variantTypeRecord->id;
                 }
             }
         }
+
+        /**
+         * @node aVariantTypes is deprecated since 7.1.16
+         * Use the variantTypeDataModel instead.
+         */
         $oVisitor->SetMappedValue('aVariantTypes', $aReturnData);
+        $oVisitor->SetMappedValue('variantTypeDataModel', $variantTypeDataModel);
     }
 
     /**
      * Can be either from the current article (variant) or the user's selection (URL).
-     *
-     * @param TdbShopArticle $article
-     * @return array
      */
     private function getSelectedTypeValues(\TdbShopArticle $article): array
     {
@@ -158,5 +158,20 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getVariantTypeDataModelFactory(): VariantTypeDataModelFactoryInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.factory.variant_type_data_model_factory');
+    }
+    
+    private function getVariantTypeValueDataModelFactory(): VariantTypeValueDataModelFactoryInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.factory.variant_type_value_data_model_factory');
+    }
+
+    private function getShopService(): ShopServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }
