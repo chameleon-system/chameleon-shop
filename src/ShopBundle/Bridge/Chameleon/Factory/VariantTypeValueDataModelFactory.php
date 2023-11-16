@@ -42,8 +42,15 @@ class VariantTypeValueDataModelFactory implements VariantTypeValueDataModelFacto
         );
     }
 
+    /**
+     * @inheritDoc
+     */
     public function setDataModelClass(string $dataModelClass): void
     {
+        if (!is_a($dataModelClass, VariantTypeValueDataModelInterface::class, true)) {
+            throw new \InvalidArgumentException('dataModelClass must implement ' . VariantTypeValueDataModelInterface::class);
+        }        
+        
         $this->dataModelClass = $dataModelClass;
     }
     
