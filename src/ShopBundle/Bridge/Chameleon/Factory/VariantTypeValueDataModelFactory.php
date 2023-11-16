@@ -17,6 +17,8 @@ use ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeValueDataModelInter
 
 class VariantTypeValueDataModelFactory implements VariantTypeValueDataModelFactoryInterface
 {
+    private const MAX_TEMPLATE_IMAGE_ID = 1000; // older systems use IDs 1-1000 for template image IDs, so the image field may not be empty
+
     private string $dataModelClass = 'ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeValueDataModel';
     private UrlUtil $urlUtil;
 
@@ -57,7 +59,7 @@ class VariantTypeValueDataModelFactory implements VariantTypeValueDataModelFacto
     private function getImageId(\TdbShopVariantTypeValue $shopVariantTypeValue): string
     {
         $imageId = $shopVariantTypeValue->fieldCmsMediaId;
-        if (is_numeric($imageId) && $imageId < 1000) { // dummy image
+        if (is_numeric($imageId) && $imageId < self::MAX_TEMPLATE_IMAGE_ID) { // dummy image
             $imageId = '';
         }
         
