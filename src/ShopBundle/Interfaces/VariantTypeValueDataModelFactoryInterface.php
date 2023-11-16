@@ -20,7 +20,8 @@ interface VariantTypeValueDataModelFactoryInterface
         \TdbShopVariantTypeValue $shopVariantTypeValue,
         bool $loadInactiveItems,
         array $currentSelectedParameters,
-        bool $variantIsActive,
-        ?string $dataModelClassName = null
+        bool $variantIsActive        
     ): VariantTypeValueDataModelInterface;
+
+    public function setDataModelClass(string $dataModelClass): void;
 }

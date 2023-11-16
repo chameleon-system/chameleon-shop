@@ -16,22 +16,22 @@ use ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeDataModelInterface;
 
 class VariantTypeDataModelFactory implements VariantTypeDataModelFactoryInterface
 {
-    private string $dataModelClassName = 'ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeDataModel';
+    private string $dataModelClass = 'ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeDataModel';
  
     public function createFromVariantTypeRecord(
         \TdbShopVariantType $shopVariantType, 
-        bool $isSelectionAllowed,
-        ?string $dataModelClassName = null): VariantTypeDataModelInterface
+        bool $isSelectionAllowed): VariantTypeDataModelInterface
     {
-        if (null === $dataModelClassName) {
-            $dataModelClassName = $this->dataModelClassName;
-        }
-        
-        return new $dataModelClassName(
+        return new $this->dataModelClass(
             $shopVariantType->fieldName,
             $shopVariantType->fieldIdentifier,
             $shopVariantType->fieldCmsMediaId,
             $isSelectionAllowed
         );
+    }
+    
+    public function setDataModelClass(string $dataModelClass): void
+    {
+        $this->dataModelClass = $dataModelClass;
     }
 }

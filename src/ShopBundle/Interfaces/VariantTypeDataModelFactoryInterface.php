@@ -19,4 +19,6 @@ interface VariantTypeDataModelFactoryInterface
         \TdbShopVariantType $shopVariantType,
         bool $isSelectionAllowed
     ): VariantTypeDataModelInterface;
+
+    public function setDataModelClass(string $dataModelClass): void;
 }

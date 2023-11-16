@@ -17,7 +17,7 @@ use ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeValueDataModelInter
 
 class VariantTypeValueDataModelFactory implements VariantTypeValueDataModelFactoryInterface
 {
-    private string $dataModelClassName = 'ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeValueDataModel';
+    private string $dataModelClass = 'ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeValueDataModel';
     private UrlUtil $urlUtil;
 
     public function __construct(UrlUtil $urlUtil) 
@@ -30,14 +30,9 @@ class VariantTypeValueDataModelFactory implements VariantTypeValueDataModelFacto
         \TdbShopVariantTypeValue $shopVariantTypeValue,
         bool $loadInactiveItems, 
         array $currentSelectedParameters,
-        bool $variantIsActive,
-        ?string $dataModelClassName = null): VariantTypeValueDataModelInterface
+        bool $variantIsActive): VariantTypeValueDataModelInterface
     {
-        if (null === $dataModelClassName) {
-            $dataModelClassName = $this->dataModelClassName;
-        }
-        
-        return new $dataModelClassName(
+        return new $this->dataModelClass(
             $shopVariantTypeValue->fieldName,
             $shopVariantTypeValue->fieldColorCode,
             $this->getImageId($shopVariantTypeValue),
@@ -45,6 +40,11 @@ class VariantTypeValueDataModelFactory implements VariantTypeValueDataModelFacto
             $this->getVariantSelectionUrlParameters($currentSelectedParameters, $variantTypeRecord, $shopVariantTypeValue),
             $this->isProductVariantSelectable($shopVariantTypeValue, $loadInactiveItems)
         );
+    }
+
+    public function setDataModelClass(string $dataModelClass): void
+    {
+        $this->dataModelClass = $dataModelClass;
     }
     
     private function getImageId(\TdbShopVariantTypeValue $shopVariantTypeValue): string
