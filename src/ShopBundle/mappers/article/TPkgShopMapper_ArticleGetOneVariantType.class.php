@@ -24,7 +24,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
         $aReturnData = [];
-        $variantTypeDataModel = null;
+        $variantTypeDataModels = [];
         /** @var \TdbShopArticle $productRecord */
         $productRecord = $oVisitor->GetSourceObject('oObject');
         if ($productRecord && $bCachingEnabled) {
@@ -54,6 +54,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
             if ($variantTypeRecordList) {
                 $currentSelectedValues = [];
                 $previousVariantTypeId = '';
+                $variantTypeDataModel = null;
                 while ($variantTypeRecord = $variantTypeRecordList->Next()) {
                     if ($bCachingEnabled) {
                         $oCacheTriggerManager->addTrigger($variantTypeRecord->table, $variantTypeRecord->id);
@@ -122,6 +123,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
                         $currentSelectedValues[$variantTypeRecord->id] = $selectedTypeValues[$variantTypeRecord->id];
                     }
                     $aReturnData[$variantTypeRecord->id] = $variantTypes;
+                    $variantTypeDataModels[$variantTypeRecord->id] = $variantTypeDataModel;
                     $previousVariantTypeId = $variantTypeRecord->id;
                 }
             }
@@ -132,7 +134,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
          * Use the variantTypeDataModel instead.
          */
         $oVisitor->SetMappedValue('aVariantTypes', $aReturnData);
-        $oVisitor->SetMappedValue('variantTypeDataModel', $variantTypeDataModel);
+        $oVisitor->SetMappedValue('variantTypeDataModels', $variantTypeDataModels);
     }
 
     /**
