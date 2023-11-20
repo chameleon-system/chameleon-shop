@@ -14,9 +14,19 @@ namespace ChameleonSystem\ShopBundle\Bridge\Chameleon\Factory;
 use ChameleonSystem\ShopBundle\Interfaces\VariantTypeDataModelFactoryInterface;
 use ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeDataModelInterface;
 
+/**
+ * You may overwrite this class with your own and set a custom dataModelClass via config parameters.
+ * @example chameleon_system_shop.shop_variant_type.data_model: "Esono\\CustomerBundle\\DataModel\\VariantTypeDataModel"
+ */
 class VariantTypeDataModelFactory implements VariantTypeDataModelFactoryInterface
 {
-    private string $dataModelClass = 'ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeDataModel';
+    private string $dataModelClass;
+    
+    public function __construct(string $dataModelClass)
+    {
+        $this->dataModelClass = $dataModelClass;
+        $this->validateDataModelClass($dataModelClass);
+    }
  
     public function createFromVariantTypeRecord(
         \TdbShopVariantType $shopVariantType, 
@@ -30,15 +40,10 @@ class VariantTypeDataModelFactory implements VariantTypeDataModelFactoryInterfac
         );
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function setDataModelClass(string $dataModelClass): void
+    private function validateDataModelClass(string $dataModelClass): void
     {
         if (!is_a($dataModelClass, VariantTypeDataModelInterface::class, true)) {
             throw new \InvalidArgumentException('dataModelClass must implement ' . VariantTypeDataModelInterface::class);
         }
-        
-        $this->dataModelClass = $dataModelClass;
     }
 }

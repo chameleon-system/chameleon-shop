@@ -19,14 +19,4 @@ interface VariantTypeDataModelFactoryInterface
         \TdbShopVariantType $shopVariantType,
         bool $isSelectionAllowed
     ): VariantTypeDataModelInterface;
-
-    /**
-     * Set the data model class for the function.
-     *
-     * @param string $dataModelClass The class name of the data model including the namespace.
-     * @throws \InvalidArgumentException If the dataModelClass does not implement VariantTypeDataModelInterface.
-     * 
-     * @return void
-     */
-    public function setDataModelClass(string $dataModelClass): void;
 }

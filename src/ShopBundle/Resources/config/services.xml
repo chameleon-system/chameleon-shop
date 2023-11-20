@@ -40,6 +40,8 @@
         <parameter key="chameleon_system_shop.product_controller.class">TPkgShopRouteControllerArticle</parameter>
 
         <parameter key="chameleon_system_shop.shop_route_article_factory.class">ShopRouteArticleFactory</parameter>
+        <parameter key="chameleon_system_shop.shop_variant_type.data_model">ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeDataModel</parameter>
+        <parameter key="chameleon_system_shop.shop_variant_type_value.data_model">ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeValueDataModel</parameter>
     </parameters>
 
     <services>
@@ -289,12 +291,14 @@
             <tag name="kernel.event_listener" event="chameleon_system_core.filter_content" method="filterResponse" priority="0"/>
         </service>
 
-        <service id="chameleon_system_shop.factory.variant_type_data_model_factory" class="ChameleonSystem\ShopBundle\Bridge\Chameleon\Factory\VariantTypeDataModelFactory" public="true" />
+        <service id="chameleon_system_shop.factory.variant_type_data_model_factory" class="ChameleonSystem\ShopBundle\Bridge\Chameleon\Factory\VariantTypeDataModelFactory" public="true">
+            <argument type="string">%chameleon_system_shop.shop_variant_type.data_model%</argument>
+        </service>
 
         <service id="chameleon_system_shop.factory.variant_type_value_data_model_factory" class="ChameleonSystem\ShopBundle\Bridge\Chameleon\Factory\VariantTypeValueDataModelFactory" public="true">
             <argument type="service" id="chameleon_system_core.util.url" />
+            <argument type="string">%chameleon_system_shop.shop_variant_type_value.data_model%</argument>
         </service>
-
 
     </services>
 

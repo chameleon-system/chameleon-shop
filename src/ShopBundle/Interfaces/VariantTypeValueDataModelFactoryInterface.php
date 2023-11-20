@@ -22,10 +22,4 @@ interface VariantTypeValueDataModelFactoryInterface
         array $currentSelectedParameters,
         bool $variantIsActive        
     ): VariantTypeValueDataModelInterface;
-
-    /**
-     * @param string $dataModelClass The class name of the data model including the namespace.
-     * @throws \InvalidArgumentException If the dataModelClass does not implement VariantTypeValueDataModelInterface.
-     */
-    public function setDataModelClass(string $dataModelClass): void;
 }

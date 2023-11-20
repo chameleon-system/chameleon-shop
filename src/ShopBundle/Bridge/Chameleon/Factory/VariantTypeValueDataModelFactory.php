@@ -15,16 +15,25 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ShopBundle\Interfaces\VariantTypeValueDataModelFactoryInterface;
 use ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeValueDataModelInterface;
 
+/**
+ * You may overwrite this class with your own and set a custom dataModelClass via config parameters.
+ * @example chameleon_system_shop.shop_variant_type_value.data_model: "Esono\\CustomerBundle\\DataModel\\VariantTypeValueDataModel"
+ */
 class VariantTypeValueDataModelFactory implements VariantTypeValueDataModelFactoryInterface
 {
     private const MAX_TEMPLATE_IMAGE_ID = 1000; // older systems use IDs 1-1000 for template image IDs, so the image field may not be empty
 
-    private string $dataModelClass = 'ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeValueDataModel';
+    private string $dataModelClass;
     private UrlUtil $urlUtil;
 
-    public function __construct(UrlUtil $urlUtil) 
+    public function __construct(
+        UrlUtil $urlUtil,
+        string $dataModelClass) 
     {
+        $this->dataModelClass = $dataModelClass;
         $this->urlUtil = $urlUtil;
+
+        $this->validateDataModelClass($dataModelClass);
     }    
     
     public function createFromVariantTypeValueRecord(
@@ -44,16 +53,11 @@ class VariantTypeValueDataModelFactory implements VariantTypeValueDataModelFacto
         );
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function setDataModelClass(string $dataModelClass): void
+    private function validateDataModelClass(string $dataModelClass): void
     {
         if (!is_a($dataModelClass, VariantTypeValueDataModelInterface::class, true)) {
             throw new \InvalidArgumentException('dataModelClass must implement ' . VariantTypeValueDataModelInterface::class);
         }        
-        
-        $this->dataModelClass = $dataModelClass;
     }
     
     private function getImageId(\TdbShopVariantTypeValue $shopVariantTypeValue): string
