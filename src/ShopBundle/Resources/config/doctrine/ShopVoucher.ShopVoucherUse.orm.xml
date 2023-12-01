@@ -1,0 +1,60 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopVoucher\ShopVoucherUse" table="shop_voucher_use">
+
+
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="shopVoucher" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopVoucher\ShopVoucher"
+                     inversed-by="shopVoucherUseCollection">
+            <options>
+                <option name="comment">Belongs to voucher</option>
+            </options>
+            <join-column name="shop_voucher_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="dateUsed" type="datetime" column="date_used" nullable="false">
+            <options>
+                <option name="comment">Used on</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="valueUsed" type="decimal" column="value_used" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Value used up</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="shopOrder" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrder"
+                     inversed-by="shopVoucherUseCollection">
+            <options>
+                <option name="comment">Used in this order</option>
+            </options>
+            <join-column name="shop_order_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="valueUsedInOrderCurrency" type="decimal" column="value_used_in_order_currency" length=""
+               nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Value consumed in the order currency</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="pkgShopCurrency"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\PkgShopCurrency">
+            <join-column name="pkg_shop_currency_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Currency in which the order was made</option>
+            </options>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

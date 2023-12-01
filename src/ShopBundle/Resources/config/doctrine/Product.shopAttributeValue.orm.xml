@@ -1,0 +1,34 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\Product\shopAttributeValue" table="shop_attribute_value">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <many-to-one field="ShopAttribute" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\shopAttribute" inversed-by="ShopAttributeValueCollection" >
+    <options>
+        <option name="comment">Belongs to the attribute</option>
+    </options>
+        <join-column name="shop_attribute_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="Name" type="string" column="name" length="255" nullable="false" >
+    <options>
+        <option name="comment">Value</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Position" type="integer" column="position" nullable="false" >
+    <options>
+        <option name="comment">Sorting</option>
+        <option name="default"></option>    </options>
+</field>
+                <lifecycle-callbacks>
+                                                                                                        </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

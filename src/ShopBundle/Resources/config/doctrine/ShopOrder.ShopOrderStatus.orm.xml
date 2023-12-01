@@ -1,0 +1,59 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrderStatus" table="shop_order_status">
+
+
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="shopOrder" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrder"
+                     inversed-by="shopOrderStatusCollection">
+            <options>
+                <option name="comment">Belongs to order</option>
+            </options>
+            <join-column name="shop_order_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="statusDate" type="datetime" column="status_date" nullable="false">
+            <options>
+                <option name="comment">Date</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="shopOrderStatusCode"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrderStatusCode">
+            <join-column name="shop_order_status_code_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Status code</option>
+            </options>
+        </many-to-one>
+        <field name="data" type="object" column="data" nullable="false">
+            <options>
+                <option name="comment">Data</option>
+            </options>
+        </field>
+        <field name="info" type="text" column="info" nullable="false">
+            <options>
+                <option name="comment">Additional info</option>
+            </options>
+        </field>
+        <one-to-many field="shopOrderStatusItemCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrderStatusItem"
+                     mapped-by="shopOrderStatus" orphan-removal="true">
+            <options>
+                <option name="comment">Order status items</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

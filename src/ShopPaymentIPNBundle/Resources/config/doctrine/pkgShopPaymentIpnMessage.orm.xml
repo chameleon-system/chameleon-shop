@@ -1,0 +1,89 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopPaymentIPNBundle\Entity\pkgShopPaymentIpnMessage" table="pkg_shop_payment_ipn_message">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <one-to-many field="PkgShopPaymentIpnMessageTriggerCollection" target-entity="\ChameleonSystem\ShopPaymentIPNBundle\Entity\pkgShopPaymentIpnMessageTrigger" mapped-by="PkgShopPaymentIpnMessage" orphan-removal="true">
+    <options>
+        <option name="comment">Forwarding logs</option>
+    </options>
+    <cascade-persist/>
+</one-to-many>
+
+            <many-to-one field="CmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\cmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">Activated via this portal</option>
+    </options>
+</many-to-one>
+            <many-to-one field="ShopOrder" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopOrder\shopOrder" inversed-by="PkgShopPaymentIpnMessageCollection" >
+    <options>
+        <option name="comment">Belongs to order (ID)</option>
+    </options>
+        <join-column name="shop_order_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="ShopPaymentHandlerGroup" target-entity="\ChameleonSystem\ShopBundle\Entity\Payment\shopPaymentHandlerGroup" inversed-by="PkgShopPaymentIpnMessageCollection" >
+    <options>
+        <option name="comment">Payment provider</option>
+    </options>
+        <join-column name="shop_payment_handler_group_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="Datecreated" type="datetime" column="datecreated" nullable="false" >
+    <options>
+        <option name="comment">Date</option>
+        <option name="default">CURRENT_TIMESTAMP</option>    </options>
+</field>
+            <many-to-one field="PkgShopPaymentIpnStatus" target-entity="\ChameleonSystem\ShopPaymentIPNBundle\Entity\pkgShopPaymentIpnStatus">
+    <join-column name="pkg_shop_payment_ipn_status_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">Status</option>
+    </options>
+</many-to-one>
+            <field name="Success" type="boolean" column="success" nullable="false">
+    <options>
+        <option name="comment">Processed successfully</option>
+        <option name="default">0</option>    </options>
+</field>
+            <field name="Completed" type="boolean" column="completed" nullable="false">
+    <options>
+        <option name="comment">Processed message</option>
+        <option name="default">0</option>    </options>
+</field>
+            <field name="ErrorType" type="string" column="error_type" length="255" nullable="false" >
+    <options>
+        <option name="comment">Type of error</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Ip" type="string" column="ip" length="255" nullable="false" >
+    <options>
+        <option name="comment">IP</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="RequestUrl" type="string" column="request_url" length="255" nullable="false" >
+    <options>
+        <option name="comment">Request URL</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Payload" type="object" column="payload" nullable="false" >
+    <options>
+        <option name="comment">Payload</option>
+            </options>
+</field>
+            <field name="Errors" type="text" column="errors" nullable="false" >
+    <options>
+        <option name="comment">Error details</option>
+            </options>
+</field>
+                <lifecycle-callbacks>
+                                                                                                                                                                                                                                                                                                                                                                                                </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

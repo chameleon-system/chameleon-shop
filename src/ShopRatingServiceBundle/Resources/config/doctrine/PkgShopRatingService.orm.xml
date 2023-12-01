@@ -1,0 +1,153 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopRatingServiceBundle\Entity\PkgShopRatingService" table="pkg_shop_rating_service">
+
+
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="active" type="boolean" column="active" nullable="false">
+            <options>
+                <option name="comment">Active</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="systemName" type="string" column="system_name" length="255" nullable="false">
+            <options>
+                <option name="comment">System name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="ratingsContainHtml" type="boolean" column="ratings_contain_html" nullable="false">
+            <options>
+                <option name="comment">Ratings contain HTML</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-one field="iconCmsMedia" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="icon_cms_media_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Icon</option>
+            </options>
+        </many-to-one>
+        <field name="shopUrl" type="string" column="shop_url" length="255" nullable="false">
+            <options>
+                <option name="comment">Shop URL</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="ratingUrl" type="string" column="rating_url" length="255" nullable="false">
+            <options>
+                <option name="comment">Rating URL</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="ratingApiId" type="string" column="rating_api_id" length="255" nullable="false">
+            <options>
+                <option name="comment">Rating API ID</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="affiliateValue" type="string" column="affiliate_value" length="255" nullable="false">
+            <options>
+                <option name="comment">Affiliate value</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="emailText" type="text" column="email_text" nullable="false">
+            <options>
+                <option name="comment">Email text</option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Position</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="weight" type="decimal" column="weight" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Weighting</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="numberOfTimesUsed" type="integer" column="number_of_times_used" nullable="false">
+            <options>
+                <option name="comment">Frequency of use</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="lastUsedYearWeek" type="integer" column="last_used_year_week" nullable="false">
+            <options>
+                <option name="comment">Last used (calender week)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="allowImport" type="boolean" column="allow_import" nullable="false">
+            <options>
+                <option name="comment">Allow import</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="allowSendingEmails" type="boolean" column="allow_sending_emails" nullable="false">
+            <options>
+                <option name="comment">Allow sending of emails</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="currentRating" type="decimal" column="current_rating" length="" nullable="false" precision="1"
+               scale="0">
+            <options>
+                <option name="comment">Current rating</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="serviceEmail" type="string" column="service_email" length="255" nullable="false">
+            <options>
+                <option name="comment">Email provider</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="currentRatingDate" type="datetime" column="current_rating_date" nullable="false">
+            <options>
+                <option name="comment">Current date of rating</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="class" type="string" column="class" length="255" nullable="false">
+            <options>
+                <option name="comment">Class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classSubtype" type="string" column="class_subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">Subtype</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classType" type="string" column="class_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Class type</option>
+                <option name="default">Customer</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

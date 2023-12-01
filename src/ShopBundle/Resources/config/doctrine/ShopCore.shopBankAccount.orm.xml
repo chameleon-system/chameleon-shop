@@ -1,0 +1,64 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopCore\shopBankAccount" table="shop_bank_account">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <many-to-one field="Shop" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\shop" inversed-by="ShopBankAccountCollection" >
+    <options>
+        <option name="comment">Belongs to shop</option>
+    </options>
+        <join-column name="shop_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="Name" type="string" column="name" length="255" nullable="false" >
+    <options>
+        <option name="comment">Name</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="AccountOwner" type="string" column="account_owner" length="255" nullable="false" >
+    <options>
+        <option name="comment">Account owner</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Bankname" type="string" column="bankname" length="255" nullable="false" >
+    <options>
+        <option name="comment">Bank name</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Bankcode" type="string" column="bankcode" length="255" nullable="false" >
+    <options>
+        <option name="comment">Bank code</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="AccountNumber" type="string" column="account_number" length="255" nullable="false" >
+    <options>
+        <option name="comment">Account number</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="BicCode" type="string" column="bic_code" length="255" nullable="false" >
+    <options>
+        <option name="comment">BIC code</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Ibannumber" type="string" column="ibannumber" length="255" nullable="false" >
+    <options>
+        <option name="comment">IBAN number</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Position" type="integer" column="position" nullable="false" >
+    <options>
+        <option name="comment">Position</option>
+        <option name="default"></option>    </options>
+</field>
+                <lifecycle-callbacks>
+                                                                                                                                                                                                                                                                                </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,267 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrderItem" table="shop_order_item">
+
+
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="nameVariantInfo" type="string" column="name_variant_info" length="255" nullable="false">
+            <options>
+                <option name="comment">Variant</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="shopOrder" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrder"
+                     inversed-by="shopOrderItemCollection">
+            <options>
+                <option name="comment">Belongs to order</option>
+            </options>
+            <join-column name="shop_order_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="basketItemKey" type="string" column="basket_item_key" length="32" nullable="false">
+            <options>
+                <option name="comment">sBasketItemKey is the key for the position in the consumer basket</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="shopArticle" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticle">
+            <join-column name="shop_article_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Original article from shop</option>
+            </options>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="articlenumber" type="string" column="articlenumber" length="255" nullable="false">
+            <options>
+                <option name="comment">Article number</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="descriptionShort" type="text" column="description_short" nullable="false">
+            <options>
+                <option name="comment">Short description</option>
+            </options>
+        </field>
+        <field name="description" type="text" column="description" nullable="false">
+            <options>
+                <option name="comment">Description</option>
+            </options>
+        </field>
+        <many-to-one field="shopManufacturer"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopManufacturer">
+            <join-column name="shop_manufacturer_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Manufacturer/ brand</option>
+            </options>
+        </many-to-one>
+        <field name="shopManufacturerName" type="string" column="shop_manufacturer_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Manufacturer / brand name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="price" type="decimal" column="price" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Price</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="priceReference" type="decimal" column="price_reference" length="" nullable="false" precision="1"
+               scale="0">
+            <options>
+                <option name="comment">Reference price</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="priceDiscounted" type="decimal" column="price_discounted" length="" nullable="false" precision="1"
+               scale="8">
+            <options>
+                <option name="comment">Discounted price</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="vatPercent" type="decimal" column="vat_percent" length="" nullable="false" precision="5" scale=",">
+            <options>
+                <option name="comment">VAT percentage</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sizeWeight" type="decimal" column="size_weight" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Weight (grams)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sizeWidth" type="decimal" column="size_width" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Width (meters)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sizeHeight" type="decimal" column="size_height" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Height (meters)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sizeLength" type="decimal" column="size_length" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Length (meters)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="stock" type="integer" column="stock" nullable="false">
+            <options>
+                <option name="comment">Stock at time of order</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="quantityInUnits" type="decimal" column="quantity_in_units" length="" nullable="false" precision="1"
+               scale="0">
+            <options>
+                <option name="comment">Units per packing</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="shopUnitOfMeasurement"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopUnitOfMeasurement">
+            <join-column name="shop_unit_of_measurement_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Unit of measurement of content</option>
+            </options>
+        </many-to-one>
+        <field name="virtualArticle" type="boolean" column="virtual_article" nullable="false">
+            <options>
+                <option name="comment">Virtual article</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="excludeFromVouchers" type="boolean" column="exclude_from_vouchers" nullable="false">
+            <options>
+                <option name="comment">Do not allow vouchers</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="excludeFromDiscounts" type="boolean" column="exclude_from_discounts" nullable="false">
+            <options>
+                <option name="comment">Do not allow discounts for this article</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="subtitle" type="string" column="subtitle" length="255" nullable="false">
+            <options>
+                <option name="comment">Subtitle</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="isNew" type="boolean" column="is_new" nullable="false">
+            <options>
+                <option name="comment">Mark as new</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="pages" type="integer" column="pages" nullable="false">
+            <options>
+                <option name="comment">Amount of pages</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="usp" type="string" column="usp" length="255" nullable="false">
+            <options>
+                <option name="comment">USP</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="customData" type="object" column="custom_data" nullable="false">
+            <options>
+                <option name="comment">Custom data</option>
+            </options>
+        </field>
+        <field name="orderAmount" type="decimal" column="order_amount" length="" nullable="false" precision="1"
+               scale="0">
+            <options>
+                <option name="comment">Amount</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="orderPriceTotal" type="decimal" column="order_price_total" length="" nullable="false" precision="1"
+               scale="0">
+            <options>
+                <option name="comment">Total price</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="orderPriceAfterDiscounts" type="decimal" column="order_price_after_discounts" length=""
+               nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Order price after calculation of discounts</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="orderTotalWeight" type="decimal" column="order_total_weight" length="" nullable="false"
+               precision="1" scale="0">
+            <options>
+                <option name="comment">Total weight (grams)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="orderTotalVolume" type="decimal" column="order_total_volume" length="" nullable="false"
+               precision="1" scale="0">
+            <options>
+                <option name="comment">Total volume (cubic meters)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="orderPrice" type="decimal" column="order_price" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Unit price at time of order</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="isBundle" type="boolean" column="is_bundle" nullable="false">
+            <options>
+                <option name="comment">Is a bundle</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <one-to-many field="shopOrderBundleArticleCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrderBundleArticle"
+                     mapped-by="shopOrderItem" orphan-removal="true">
+            <options>
+                <option name="comment">Articles in order that belong to this bundle</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-many field="downCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsDocument">
+            <join-table name="shop_order_item_download_cms_document_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Download file</option>
+            </options>
+        </many-to-many>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

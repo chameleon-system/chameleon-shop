@@ -1,0 +1,40 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopCore\pkgShopFooterCategory" table="pkg_shop_footer_category">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <field name="Name" type="string" column="name" length="255" nullable="false" >
+    <options>
+        <option name="comment">Main category / heading</option>
+        <option name="default"></option>    </options>
+</field>
+            <many-to-one field="ShopCategory" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\shopCategory">
+    <join-column name="shop_category_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">Product category</option>
+    </options>
+</many-to-one>
+            <field name="SortOrder" type="integer" column="sort_order" nullable="false" >
+    <options>
+        <option name="comment">Sorting</option>
+        <option name="default"></option>    </options>
+</field>
+            <many-to-one field="Shop" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\shop" inversed-by="PkgShopFooterCategoryCollection" >
+    <options>
+        <option name="comment">Belongs to shop</option>
+    </options>
+        <join-column name="shop_id" referenced-column-name="id" />
+</many-to-one>
+                <lifecycle-callbacks>
+                                                                                                                                    </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

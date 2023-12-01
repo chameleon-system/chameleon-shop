@@ -1,0 +1,56 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopOrder\shopOrderStatusCode" table="shop_order_status_code">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <field name="Name" type="string" column="name" length="255" nullable="false" >
+    <options>
+        <option name="comment">Name</option>
+        <option name="default"></option>    </options>
+</field>
+            <many-to-one field="Shop" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\shop" inversed-by="ShopOrderStatusCodeCollection" >
+    <options>
+        <option name="comment">Belongs to shop</option>
+    </options>
+        <join-column name="shop_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="SendMailNotification" type="boolean" column="send_mail_notification" nullable="false">
+    <options>
+        <option name="comment">Send status notification via email</option>
+        <option name="default">1</option>    </options>
+</field>
+            <field name="SystemName" type="string" column="system_name" length="255" nullable="false" >
+    <options>
+        <option name="comment">System name / merchandise management code</option>
+        <option name="default"></option>    </options>
+</field>
+            <many-to-one field="PkgShopPaymentTransactionType" target-entity="\ChameleonSystem\ShopPaymentTransactionBundle\Entity\pkgShopPaymentTransactionType">
+    <join-column name="pkg_shop_payment_transaction_type_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">Run following transaction, if status is executed</option>
+    </options>
+</many-to-one>
+            <many-to-one field="DataMailProfile" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\dataMailProfile">
+    <join-column name="data_mail_profile_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">Email profile</option>
+    </options>
+</many-to-one>
+            <field name="InfoText" type="text" column="info_text" nullable="false" >
+    <options>
+        <option name="comment">Status text</option>
+            </options>
+</field>
+                <lifecycle-callbacks>
+                                                                                                                                                                                                                        </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

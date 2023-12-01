@@ -1,0 +1,69 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopOrder\shopOrderBasket" table="shop_order_basket">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <field name="OrderIdent" type="string" column="order_ident" length="20" nullable="false" >
+    <options>
+        <option name="comment">Basket cart ID (will also be included in the order)</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="SessionId" type="string" column="session_id" length="255" nullable="false" >
+    <options>
+        <option name="comment">Session ID</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Datecreated" type="integer" column="datecreated" nullable="false" >
+    <options>
+        <option name="comment">Created on</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Lastmodified" type="integer" column="lastmodified" nullable="false" >
+    <options>
+        <option name="comment">Last changed</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="RawdataBasket" type="text" column="rawdata_basket" nullable="false" >
+    <options>
+        <option name="comment">Basket</option>
+            </options>
+</field>
+            <field name="RawdataUser" type="text" column="rawdata_user" nullable="false" >
+    <options>
+        <option name="comment">User data</option>
+            </options>
+</field>
+            <field name="RawdataSession" type="text" column="rawdata_session" nullable="false" >
+    <options>
+        <option name="comment">Session</option>
+            </options>
+</field>
+            <many-to-one field="ShopOrder" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopOrder\shopOrder">
+    <join-column name="shop_order_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">Order</option>
+    </options>
+</many-to-one>
+            <field name="UpdateStepname" type="string" column="update_stepname" length="255" nullable="false" >
+    <options>
+        <option name="comment">Last update in step</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Processed" type="boolean" column="processed" nullable="false">
+    <options>
+        <option name="comment">Processed</option>
+        <option name="default">0</option>    </options>
+</field>
+                <lifecycle-callbacks>
+                                                                                                                                                                                                                                                                                                            </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,77 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ImageHotspotBundle\Entity\PkgImageHotspotItem" table="pkg_image_hotspot_item">
+
+
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="pkgImageHotspot" target-entity="\ChameleonSystem\ImageHotspotBundle\Entity\PkgImageHotspot"
+                     inversed-by="pkgImageHotspotItemCollection">
+            <options>
+                <option name="comment">Belongs to image hotspot</option>
+            </options>
+            <join-column name="pkg_image_hotspot_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Alternative text for image</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="active" type="boolean" column="active" nullable="false">
+            <options>
+                <option name="comment">Active</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Position</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsMedia" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="cms_media_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Image</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="cmsMediaIdImageCrop"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="cms_media_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Image</option>
+            </options>
+        </many-to-one>
+
+        <one-to-many field="pkgImageHotspotItemSpotCollection"
+                     target-entity="\ChameleonSystem\ImageHotspotBundle\Entity\PkgImageHotspotItemSpot"
+                     mapped-by="pkgImageHotspotItem" orphan-removal="true">
+            <options>
+                <option name="comment">Hotspots and linked areas</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="pkgImageHotspotItemMarkerCollection"
+                     target-entity="\ChameleonSystem\ImageHotspotBundle\Entity\PkgImageHotspotItemMarker"
+                     mapped-by="pkgImageHotspotItem" orphan-removal="true">
+            <options>
+                <option name="comment">Hotspots with image</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

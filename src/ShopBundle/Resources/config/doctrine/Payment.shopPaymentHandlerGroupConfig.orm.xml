@@ -1,0 +1,51 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\Payment\shopPaymentHandlerGroupConfig" table="shop_payment_handler_group_config">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <many-to-one field="ShopPaymentHandlerGroup" target-entity="\ChameleonSystem\ShopBundle\Entity\Payment\shopPaymentHandlerGroup" inversed-by="ShopPaymentHandlerGroupConfigCollection" >
+    <options>
+        <option name="comment">Belongs to</option>
+    </options>
+        <join-column name="shop_payment_handler_group_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="Name" type="string" column="name" length="255" nullable="false" >
+    <options>
+        <option name="comment">Name</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Type" type="string" column="type" length="10" nullable="false" >
+    <options>
+        <option name="fixed">true</option>
+        <option name="comment">Type</option>
+        <option name="default">common</option>    </options>
+</field>
+            <many-to-one field="CmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\cmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">Portal</option>
+    </options>
+</many-to-one>
+            <field name="Value" type="text" column="value" nullable="false" >
+    <options>
+        <option name="comment">Value</option>
+            </options>
+</field>
+            <field name="Description" type="text" column="description" nullable="false" >
+    <options>
+        <option name="comment">Description</option>
+            </options>
+</field>
+                <lifecycle-callbacks>
+                                                                                                                                                                                            </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

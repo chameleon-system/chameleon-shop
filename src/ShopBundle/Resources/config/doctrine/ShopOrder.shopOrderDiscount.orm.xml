@@ -1,0 +1,64 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopOrder\shopOrderDiscount" table="shop_order_discount">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <many-to-one field="ShopOrder" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopOrder\shopOrder" inversed-by="ShopOrderDiscountCollection" >
+    <options>
+        <option name="comment">Order ID</option>
+    </options>
+        <join-column name="shop_order_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="ShopDiscountId" type="string" column="shop_discount_id" length="255" nullable="false" >
+    <options>
+        <option name="comment">Discount ID</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Name" type="string" column="name" length="255" nullable="false" >
+    <options>
+        <option name="comment">Name</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Value" type="string" column="value" length="255" nullable="false" >
+    <options>
+        <option name="comment">Value</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Valuetype" type="string" column="valuetype" length="255" nullable="false" >
+    <options>
+        <option name="comment">Value type</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="FreearticleName" type="string" column="freearticle_name" length="255" nullable="false" >
+    <options>
+        <option name="comment">Gratis article (name)</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="FreearticleArticlenumber" type="string" column="freearticle_articlenumber" length="255" nullable="false" >
+    <options>
+        <option name="comment">Gratis article (article number)</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="FreearticleId" type="string" column="freearticle_id" length="255" nullable="false" >
+    <options>
+        <option name="comment">Gratis article (ID)</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Total" type="decimal" column="total" length="" nullable="false" precision="1" scale="0" >
+    <options>
+        <option name="comment">Total</option>
+        <option name="default"></option>    </options>
+</field>
+                <lifecycle-callbacks>
+                                                                                                                                                                                                                                                                                </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

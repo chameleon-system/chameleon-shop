@@ -1,0 +1,52 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\Product\ShopStockMessageTrigger" table="shop_stock_message_trigger">
+
+
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="shopStockMessage"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopStockMessage"
+                     inversed-by="shopStockMessageTriggerCollection">
+            <options>
+                <option name="comment">Stock message</option>
+            </options>
+            <join-column name="shop_stock_message_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="amount" type="integer" column="amount" nullable="false">
+            <options>
+                <option name="comment">Amount</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="message" type="string" column="message" length="255" nullable="false">
+            <options>
+                <option name="comment">Message</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="systemName" type="string" column="system_name" length="255" nullable="false">
+            <options>
+                <option name="comment">System name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="cssClass" type="string" column="css_class" length="255" nullable="false">
+            <options>
+                <option name="comment">CSS class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

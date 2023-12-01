@@ -1,0 +1,102 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopCore\pkgShopListfilterItem" table="pkg_shop_listfilter_item">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <many-to-one field="PkgShopListfilter" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\pkgShopListfilter" inversed-by="PkgShopListfilterItemCollection" >
+    <options>
+        <option name="comment">Belongs to list filter configuration</option>
+    </options>
+        <join-column name="pkg_shop_listfilter_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="PkgShopListfilterItemT" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\pkgShopListfilterItemType">
+    <join-column name="pkg_shop_listfilter_item_type" referenced-column-name="id" />
+    <options>
+        <option name="comment">Filter type</option>
+    </options>
+</many-to-one>
+            <field name="Name" type="string" column="name" length="255" nullable="false" >
+    <options>
+        <option name="comment">Name</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Systemname" type="string" column="systemname" length="255" nullable="false" >
+    <options>
+        <option name="comment">System name</option>
+        <option name="default"></option>    </options>
+</field>
+            <many-to-one field="ShopAttrib" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\shopAttribute">
+    <join-column name="shop_attribute" referenced-column-name="id" />
+    <options>
+        <option name="comment">Belonging product attribute</option>
+    </options>
+</many-to-one>
+            <field name="AllowMultiSelection" type="boolean" column="allow_multi_selection" nullable="false">
+    <options>
+        <option name="comment">Multiple selections</option>
+        <option name="default">0</option>    </options>
+</field>
+            <field name="ShowAllOnPageLoad" type="boolean" column="show_all_on_page_load" nullable="false">
+    <options>
+        <option name="comment">Show all when opening the page?</option>
+        <option name="default">1</option>    </options>
+</field>
+            <field name="PreviewSize" type="integer" column="preview_size" nullable="false" >
+    <options>
+        <option name="comment">Window size</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="ShowScrollbars" type="boolean" column="show_scrollbars" nullable="false">
+    <options>
+        <option name="comment">Show scrollbars instead of &quot;show all&quot; button?</option>
+        <option name="default">0</option>    </options>
+</field>
+            <field name="MinValue" type="integer" column="min_value" nullable="false" >
+    <options>
+        <option name="comment">Lowest value</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="MaxValue" type="integer" column="max_value" nullable="false" >
+    <options>
+        <option name="comment">Highest value</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="MysqlFieldName" type="string" column="mysql_field_name" length="255" nullable="false" >
+    <options>
+        <option name="comment">MySQL field name</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="View" type="string" column="view" length="255" nullable="false" >
+    <options>
+        <option name="comment">View</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="ViewClassType" type="string" column="view_class_type" length="11" nullable="false" >
+    <options>
+        <option name="fixed">true</option>
+        <option name="comment">View class type</option>
+        <option name="default">Customer</option>    </options>
+</field>
+            <field name="Position" type="integer" column="position" nullable="false" >
+    <options>
+        <option name="comment">Sorting</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="VariantIdentifier" type="string" column="variant_identifier" length="255" nullable="false" >
+    <options>
+        <option name="comment">System name of the variant type</option>
+        <option name="default"></option>    </options>
+</field>
+                <lifecycle-callbacks>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

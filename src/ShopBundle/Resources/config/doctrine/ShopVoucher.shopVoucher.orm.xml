@@ -1,0 +1,51 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopVoucher\shopVoucher" table="shop_voucher">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <many-to-one field="ShopVoucherSeries" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopVoucher\shopVoucherSeries" inversed-by="ShopVoucherCollection" >
+    <options>
+        <option name="comment">Belongs to voucher series</option>
+    </options>
+        <join-column name="shop_voucher_series_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="Code" type="string" column="code" length="255" nullable="false" >
+    <options>
+        <option name="comment">Code</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Datecreated" type="datetime" column="datecreated" nullable="false" >
+    <options>
+        <option name="comment">Created on</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="DateUsedUp" type="datetime" column="date_used_up" nullable="false" >
+    <options>
+        <option name="comment">Used up on</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="IsUsedUp" type="boolean" column="is_used_up" nullable="false">
+    <options>
+        <option name="comment">Is used up</option>
+        <option name="default">0</option>    </options>
+</field>
+            <one-to-many field="ShopVoucherUseCollection" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopVoucher\shopVoucherUse" mapped-by="ShopVoucher" orphan-removal="true">
+    <options>
+        <option name="comment">Voucher usages</option>
+    </options>
+    <cascade-persist/>
+</one-to-many>
+
+                <lifecycle-callbacks>
+                                                                                                                                                                                            </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

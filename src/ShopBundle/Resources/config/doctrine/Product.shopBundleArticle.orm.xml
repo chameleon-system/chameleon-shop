@@ -1,0 +1,40 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\Product\shopBundleArticle" table="shop_bundle_article">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <many-to-one field="ShopArticle" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\shopArticle" inversed-by="ShopBundleArticleCollection" >
+    <options>
+        <option name="comment">Belongs to bundle article</option>
+    </options>
+        <join-column name="shop_article_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="BundleArticle" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\shopArticle">
+    <join-column name="bundle_article_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">Article</option>
+    </options>
+</many-to-one>
+            <field name="Amount" type="integer" column="amount" nullable="false" >
+    <options>
+        <option name="comment">Units</option>
+        <option name="default">1</option>    </options>
+</field>
+            <field name="Position" type="integer" column="position" nullable="false" >
+    <options>
+        <option name="comment">Position</option>
+        <option name="default"></option>    </options>
+</field>
+                <lifecycle-callbacks>
+                                                                                                                                    </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

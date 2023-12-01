@@ -1,0 +1,118 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ProductList\shopModuleArticleList" table="shop_module_article_list">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <many-to-one field="CmsTplModuleInstance" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\cmsTplModuleInstance">
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">Belongs to module instance</option>
+    </options>
+</many-to-one>
+            <field name="CanBeFiltered" type="boolean" column="can_be_filtered" nullable="false">
+    <options>
+        <option name="comment">Release for the Post-Search-Filter</option>
+        <option name="default">0</option>    </options>
+</field>
+            <field name="Name" type="string" column="name" length="255" nullable="false" >
+    <options>
+        <option name="comment">Headline</option>
+        <option name="default"></option>    </options>
+</field>
+            <many-to-one field="I" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\cmsMedia">
+    <join-column name="icon" referenced-column-name="id" />
+    <options>
+        <option name="comment">Icon</option>
+    </options>
+</many-to-one>
+            <many-to-one field="ShopModuleArticleListFilter" target-entity="\ChameleonSystem\ShopBundle\Entity\ProductList\shopModuleArticleListFilter">
+    <join-column name="shop_module_article_list_filter_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">Filter / content</option>
+    </options>
+</many-to-one>
+            <many-to-one field="ShopModuleArticlelistOrderby" target-entity="\ChameleonSystem\ShopBundle\Entity\ProductList\shopModuleArticlelistOrderby">
+    <join-column name="shop_module_articlelist_orderby_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">Sorting</option>
+    </options>
+</many-to-one>
+            <many-to-many field="ShopModuleArticlelistOrderbyCollection" target-entity="\ChameleonSystem\ShopBundle\Entity\ProductList\shopModuleArticlelistOrderby">
+    <join-table name="shop_module_article_list_shop_module_articlelist_orderby_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+    <options>
+        <option name="comment">Available sortings</option>
+    </options>
+</many-to-many>
+            <field name="NumberOfArticles" type="integer" column="number_of_articles" nullable="false" >
+    <options>
+        <option name="comment">Number of articles shown</option>
+        <option name="default">-1</option>    </options>
+</field>
+            <field name="NumberOfArticlesPerPage" type="integer" column="number_of_articles_per_page" nullable="false" >
+    <options>
+        <option name="comment">Number of articles per page</option>
+        <option name="default">10</option>    </options>
+</field>
+            <field name="DescriptionStart" type="text" column="description_start" nullable="false" >
+    <options>
+        <option name="comment">Introduction text</option>
+            </options>
+</field>
+            <field name="DescriptionEnd" type="text" column="description_end" nullable="false" >
+    <options>
+        <option name="comment">Closing text</option>
+            </options>
+</field>
+            <many-to-many field="ShopArticleGroupCollection" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\shopArticleGroup">
+    <join-table name="shop_module_article_list_shop_article_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+    <options>
+        <option name="comment">Show articles from these article groups</option>
+    </options>
+</many-to-many>
+            <many-to-many field="ShopCategoryCollection" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\shopCategory">
+    <join-table name="shop_module_article_list_shop_category_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+    <options>
+        <option name="comment">Show articles from these product categories</option>
+    </options>
+</many-to-many>
+            <one-to-many field="ShopModuleArticleListArticleCollection" target-entity="\ChameleonSystem\ShopBundle\Entity\ProductList\shopModuleArticleListArticle" mapped-by="ShopModuleArticleList" orphan-removal="true">
+    <options>
+        <option name="comment">Show these articles</option>
+    </options>
+    <cascade-persist/>
+</one-to-many>
+
+                <lifecycle-callbacks>
+                                                                                                                                                                                                                                                                                                                                                                                                                            </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

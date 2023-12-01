@@ -1,0 +1,39 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopPaymentIPNBundle\Entity\pkgShopPaymentIpnStatus" table="pkg_shop_payment_ipn_status">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <many-to-one field="ShopPaymentHandlerGroup" target-entity="\ChameleonSystem\ShopBundle\Entity\Payment\shopPaymentHandlerGroup" inversed-by="PkgShopPaymentIpnStatusCollection" >
+    <options>
+        <option name="comment">Belongs to the configuration of</option>
+    </options>
+        <join-column name="shop_payment_handler_group_id" referenced-column-name="id" />
+</many-to-one>
+            <field name="Name" type="string" column="name" length="255" nullable="false" >
+    <options>
+        <option name="comment">Name</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Code" type="string" column="code" length="255" nullable="false" >
+    <options>
+        <option name="comment">Code (of the provider)</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Description" type="text" column="description" nullable="false" >
+    <options>
+        <option name="comment">Description</option>
+            </options>
+</field>
+                <lifecycle-callbacks>
+                                                                                                                                    </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

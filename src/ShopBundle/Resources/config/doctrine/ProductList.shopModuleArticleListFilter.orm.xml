@@ -1,0 +1,39 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ProductList\shopModuleArticleListFilter" table="shop_module_article_list_filter">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <field name="Name" type="string" column="name" length="255" nullable="false" >
+    <options>
+        <option name="comment">Name</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="Class" type="string" column="class" length="255" nullable="false" >
+    <options>
+        <option name="comment">Class name</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="ClassType" type="string" column="class_type" length="11" nullable="false" >
+    <options>
+        <option name="fixed">true</option>
+        <option name="comment">Class type</option>
+        <option name="default">Core</option>    </options>
+</field>
+            <field name="ClassSubtype" type="string" column="class_subtype" length="255" nullable="false" >
+    <options>
+        <option name="comment">Class subtype</option>
+        <option name="default"></option>    </options>
+</field>
+                <lifecycle-callbacks>
+                                                                                                                                    </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

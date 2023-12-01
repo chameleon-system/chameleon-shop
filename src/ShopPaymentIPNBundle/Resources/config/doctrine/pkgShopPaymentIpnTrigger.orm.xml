@@ -1,0 +1,59 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopPaymentIPNBundle\Entity\pkgShopPaymentIpnTrigger" table="pkg_shop_payment_ipn_trigger">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <many-to-one field="ShopPaymentHandlerGroup" target-entity="\ChameleonSystem\ShopBundle\Entity\Payment\shopPaymentHandlerGroup" inversed-by="PkgShopPaymentIpnTriggerCollection" >
+    <options>
+        <option name="comment">Belongs to payment provider</option>
+    </options>
+        <join-column name="shop_payment_handler_group_id" referenced-column-name="id" />
+</many-to-one>
+            <one-to-many field="PkgShopPaymentIpnMessageTriggerCollection" target-entity="\ChameleonSystem\ShopPaymentIPNBundle\Entity\pkgShopPaymentIpnMessageTrigger" mapped-by="PkgShopPaymentIpnTrigger" orphan-removal="true">
+    <options>
+        <option name="comment"></option>
+    </options>
+    <cascade-persist/>
+</one-to-many>
+
+            <field name="Active" type="boolean" column="active" nullable="false">
+    <options>
+        <option name="comment">Active</option>
+        <option name="default">0</option>    </options>
+</field>
+            <field name="TargetUrl" type="string" column="target_url" length="255" nullable="false" >
+    <options>
+        <option name="comment">Target URL</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="TimeoutSeconds" type="integer" column="timeout_seconds" nullable="false" >
+    <options>
+        <option name="comment">Timeout</option>
+        <option name="default">30</option>    </options>
+</field>
+            <many-to-many field="PkgShopPaymentIpnStatusCollection" target-entity="\ChameleonSystem\ShopPaymentIPNBundle\Entity\pkgShopPaymentIpnStatus">
+    <join-table name="pkg_shop_payment_ipn_trigger_pkg_shop_payment_ipn_status_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+    <options>
+        <option name="comment">Status codes to be forwarded</option>
+    </options>
+</many-to-many>
+                <lifecycle-callbacks>
+                                                                                                                                                                                            </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

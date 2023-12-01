@@ -1,0 +1,176 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopVoucher\shopVoucherSeries" table="shop_voucher_series">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+            <field name="Name" type="string" column="name" length="255" nullable="false" >
+    <options>
+        <option name="comment">Name</option>
+        <option name="default"></option>    </options>
+</field>
+            <many-to-one field="ShopVoucherSeriesSponsor" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopVoucher\shopVoucherSeriesSponsor">
+    <join-column name="shop_voucher_series_sponsor_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">Voucher sponsor</option>
+    </options>
+</many-to-one>
+            <field name="Value" type="decimal" column="value" length="" nullable="false" precision="1" scale="0" >
+    <options>
+        <option name="comment">Value</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="ValueType" type="string" column="value_type" length="7" nullable="false" >
+    <options>
+        <option name="fixed">true</option>
+        <option name="comment">Value type</option>
+        <option name="default">absolut</option>    </options>
+</field>
+            <many-to-one field="ShopVat" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\shopVat">
+    <join-column name="shop_vat_id" referenced-column-name="id" />
+    <options>
+        <option name="comment">VAT group</option>
+    </options>
+</many-to-one>
+            <field name="FreeShipping" type="boolean" column="free_shipping" nullable="false">
+    <options>
+        <option name="comment">Free shipping</option>
+        <option name="default">0</option>    </options>
+</field>
+            <field name="Active" type="boolean" column="active" nullable="false">
+    <options>
+        <option name="comment">Active</option>
+        <option name="default">0</option>    </options>
+</field>
+            <field name="ActiveFrom" type="datetime" column="active_from" nullable="false" >
+    <options>
+        <option name="comment">Active from</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="ActiveTo" type="datetime" column="active_to" nullable="false" >
+    <options>
+        <option name="comment">Active until</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="RestrictToValue" type="decimal" column="restrict_to_value" length="" nullable="false" precision="1" scale="0" >
+    <options>
+        <option name="comment">Minimum order value</option>
+        <option name="default"></option>    </options>
+</field>
+            <field name="RestrictToOtherSeries" type="boolean" column="restrict_to_other_series" nullable="false">
+    <options>
+        <option name="comment">Allow with other series only</option>
+        <option name="default">1</option>    </options>
+</field>
+            <field name="AllowNoOtherVouchers" type="boolean" column="allow_no_other_vouchers" nullable="false">
+    <options>
+        <option name="comment">Do not allow in combination with other vouchers</option>
+        <option name="default">1</option>    </options>
+</field>
+            <field name="RestrictToOnePerUser" type="boolean" column="restrict_to_one_per_user" nullable="false">
+    <options>
+        <option name="comment">Allow one voucher per customer only</option>
+        <option name="default">0</option>    </options>
+</field>
+            <field name="RestrictToFirstOrder" type="boolean" column="restrict_to_first_order" nullable="false">
+    <options>
+        <option name="comment">Only allow at first order of a customer</option>
+        <option name="default">0</option>    </options>
+</field>
+            <many-to-many field="DataExtranetUserCollection" target-entity="\ChameleonSystem\ExtranetBundle\Entity\dataExtranetUser">
+    <join-table name="shop_voucher_series_data_extranet_user_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+    <options>
+        <option name="comment">Restrict to following customers</option>
+    </options>
+</many-to-many>
+            <many-to-many field="DataExtranetGroupCollection" target-entity="\ChameleonSystem\ExtranetBundle\Entity\dataExtranetGroup">
+    <join-table name="shop_voucher_series_data_extranet_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+    <options>
+        <option name="comment">Restrict to following customer groups</option>
+    </options>
+</many-to-many>
+            <many-to-many field="ShopManufacturerCollection" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\shopManufacturer">
+    <join-table name="shop_voucher_series_shop_manufacturer_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+    <options>
+        <option name="comment">Restrict to products from this manufacturer</option>
+    </options>
+</many-to-many>
+            <many-to-many field="ShopArticleGroupCollection" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\shopArticleGroup">
+    <join-table name="shop_voucher_series_shop_article_group_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+    <options>
+        <option name="comment">Restrict to products from these product groups</option>
+    </options>
+</many-to-many>
+            <many-to-many field="ShopCategoryCollection" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\shopCategory">
+    <join-table name="shop_voucher_series_shop_category_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+    <options>
+        <option name="comment">Restrict to products from these product categories</option>
+    </options>
+</many-to-many>
+            <many-to-many field="ShopArticleCollection" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\shopArticle">
+    <join-table name="shop_voucher_series_shop_article_mlt">
+        <join-columns>
+            <join-column name="source_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+            <join-column name="target_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+    </join-table>
+    <options>
+        <option name="comment">Restrict to these products</option>
+    </options>
+</many-to-many>
+            <one-to-many field="ShopVoucherCollection" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopVoucher\shopVoucher" mapped-by="ShopVoucherSeries" orphan-removal="true">
+    <options>
+        <option name="comment">Vouchers belonging to the series</option>
+    </options>
+    <cascade-persist/>
+</one-to-many>
+
+                <lifecycle-callbacks>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </lifecycle-callbacks>
+        
+    </entity>
+
+</doctrine-mapping>

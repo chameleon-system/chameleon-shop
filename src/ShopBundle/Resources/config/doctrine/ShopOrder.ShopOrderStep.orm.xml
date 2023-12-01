@@ -1,0 +1,106 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrderStep" table="shop_order_step">
+
+
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="systemname" type="string" column="systemname" length="255" nullable="false">
+            <options>
+                <option name="comment">Internal name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="urlName" type="string" column="url_name" length="255" nullable="false">
+            <options>
+                <option name="comment">URL name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Headline</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="showInNavigation" type="boolean" column="show_in_navigation" nullable="false">
+            <options>
+                <option name="comment">Show in navigation list</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="description" type="text" column="description" nullable="false">
+            <options>
+                <option name="comment">Description</option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Position</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="class" type="string" column="class" length="255" nullable="false">
+            <options>
+                <option name="comment">Class name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classType" type="string" column="class_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Class type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <field name="classSubtype" type="string" column="class_subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">Class subtype</option>
+                <option name="default">pkgShop/objects/db/TShopOrderStep</option>
+            </options>
+        </field>
+        <field name="renderViewName" type="string" column="render_view_name" length="255" nullable="false">
+            <options>
+                <option name="comment">View to use for the step</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="renderViewType" type="string" column="render_view_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">View type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <field name="cssIconClassInactive" type="string" column="css_icon_class_inactive" length="255" nullable="false">
+            <options>
+                <option name="comment">CSS icon class inactive</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="cssIconClassActive" type="string" column="css_icon_class_active" length="255" nullable="false">
+            <options>
+                <option name="comment">CSS icon class active</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="templateNodeCmsTree"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="template_node_cms_tree_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Use template</option>
+            </options>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>
