@@ -11,6 +11,9 @@
 
 use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
@@ -29,13 +32,25 @@ class MTShopSearchFormCore extends TShopUserCustomModelBase
 
         try {
             $this->data['sSearchURL'] = $this->getSystemPageService()->getLinkToSystemPageRelative('search');
-            $this->data['q'] = $this->global->GetUserData('q');
+            $this->data['q'] = $this->getSearchQuery();
             $this->data['quicksearchUrl'] = $this->getRouter()->generateWithPrefixes('chameleon_system_shop.search_suggest');
         } catch (RouteNotFoundException $e) {
             // nothing to do
         }
 
         return $this->data;
+    }
+    
+    protected function getSearchQuery(): string
+    {
+        $inputFilterService = $this->getInputFilterService();
+        $queryString = $inputFilterService->getFilteredInput('q', '');
+        
+        if (false === \is_string($queryString)) {
+            return '';
+        }
+
+        return \trim($queryString);
     }
 
     /**
@@ -45,7 +60,10 @@ class MTShopSearchFormCore extends TShopUserCustomModelBase
      */
     public function _AllowCache()
     {
-        return false === $this->global->UserDataExists('q');
+        $inputFilterService = $this->getInputFilterService();
+        $queryString = $inputFilterService->getFilteredInput('q');
+        
+        return null === $queryString;
     }
 
     /**
@@ -59,19 +77,18 @@ class MTShopSearchFormCore extends TShopUserCustomModelBase
         return $aIncludes;
     }
 
-    /**
-     * @return PortalAndLanguageAwareRouterInterface
-     */
-    private function getRouter()
+    private function getRouter(): PortalAndLanguageAwareRouterInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.router.chameleon_frontend');
+        return ServiceLocator::get('chameleon_system_core.router.chameleon_frontend');
     }
 
-    /**
-     * @return SystemPageServiceInterface
-     */
-    private function getSystemPageService()
+    private function getSystemPageService(): SystemPageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ServiceLocator::get('chameleon_system_core.system_page_service');
+    }
+    
+    private function getInputFilterService(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }
