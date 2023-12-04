@@ -118,7 +118,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
     protected function GetUserDataFromPayPalData(&$aBilling, &$aShipping)
     {
         $countryIsoCode = $this->aCheckoutDetails['SHIPTOCOUNTRYCODE'] ?? 'de';
-        $shippingCountry = TdbDataCountry::GetInstanceForIsoCode($sCountryIsoCode);
+        $shippingCountry = TdbDataCountry::GetInstanceForIsoCode($countryIsoCode);
 
         $mail = $this->aCheckoutDetails['EMAIL'] ?? '';
         $company = $this->aCheckoutDetails['BUSINESS'] ?? '';
