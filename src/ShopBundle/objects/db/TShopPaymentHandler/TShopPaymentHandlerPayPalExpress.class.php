@@ -117,53 +117,53 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
      */
     protected function GetUserDataFromPayPalData(&$aBilling, &$aShipping)
     {
-        $sCountryIsoCode = $this->aCheckoutDetails['SHIPTOCOUNTRYCODE'] ?? 'de';
-        $oShippingCountry = TdbDataCountry::GetInstanceForIsoCode($sCountryIsoCode);
+        $countryIsoCode = $this->aCheckoutDetails['SHIPTOCOUNTRYCODE'] ?? 'de';
+        $shippingCountry = TdbDataCountry::GetInstanceForIsoCode($sCountryIsoCode);
 
-        $sMail = $this->aCheckoutDetails['EMAIL'] ?? '';
-        $sCompany = $this->aCheckoutDetails['BUSINESS'] ?? '';
-        $sFirstname = $this->aCheckoutDetails['FIRSTNAME'] ?? '';
-        $sLastname = $this->aCheckoutDetails['LASTNAME'] ?? '';
-        $sStreet = $this->aCheckoutDetails['SHIPTOSTREET'] ?? '';
-        $sCity = $this->aCheckoutDetails['SHIPTOCITY'] ?? '';
-        $sPostalCode = $this->aCheckoutDetails['SHIPTOZIP'] ?? '';
-        $sTelefon = $this->aCheckoutDetails['PHONENUM'] ?? '';
+        $mail = $this->aCheckoutDetails['EMAIL'] ?? '';
+        $company = $this->aCheckoutDetails['BUSINESS'] ?? '';
+        $firstname = $this->aCheckoutDetails['FIRSTNAME'] ?? '';
+        $lastname = $this->aCheckoutDetails['LASTNAME'] ?? '';
+        $street = $this->aCheckoutDetails['SHIPTOSTREET'] ?? '';
+        $city = $this->aCheckoutDetails['SHIPTOCITY'] ?? '';
+        $postalCode = $this->aCheckoutDetails['SHIPTOZIP'] ?? '';
+        $phone = $this->aCheckoutDetails['PHONENUM'] ?? '';
         $addressAdditionalInfo = $this->aCheckoutDetails['SHIPTOSTREET2'] ?? '';
 
         $aBilling = [
-            'name' => $sMail,
-            'email' => $sMail,
-            'company' => $sCompany,
+            'name' => $mail,
+            'email' => $mail,
+            'company' => $company,
             'data_extranet_salutation_id' => '',
-            'firstname' => $sFirstname,
-            'lastname' => $sLastname,
-            'street' => $sStreet,
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'street' => $street,
             'streenr' => '',
-            'city' => $sCity,
-            'postalcode' => $sPostalCode,
-            'telefon' => $sTelefon,
+            'city' => $city,
+            'postalcode' => $postalCode,
+            'telefon' => $phone,
             'fax' => '',
-            'data_country_id' => $oShippingCountry->id ?? '',
+            'data_country_id' => $shippingCountry->id ?? '',
             'address_additional_info' => $addressAdditionalInfo,
         ];
 
         $shippingFirstAnLastName = $this->getPayPalResponseShippingFirstAnLastName(
-            $sFirstname,
-            $sLastname,
+            $firstname,
+            $lastname,
             $this->aCheckoutDetails['SHIPTONAME'] ?? null
         );
         $aShipping = [
-            'company' => $sCompany,
+            'company' => $company,
             'data_extranet_salutation_id' => '',
-            'firstname' => $shippingFirstAnLastName['firstName'],
-            'lastname' => $shippingFirstAnLastName['lastName'],
-            'street' => $sStreet,
+            'firstname' => $shippingFirstAnLastName['firstname'],
+            'lastname' => $shippingFirstAnLastName['lastname'],
+            'street' => $street,
             'streenr' => '',
-            'city' => $sCity,
-            'postalcode' => $sPostalCode,
-            'telefon' => $sTelefon,
+            'city' => $city,
+            'postalcode' => $postalCode,
+            'telefon' => $phone,
             'fax' => '',
-            'data_country_id' => $oShippingCountry->id ?? '',
+            'data_country_id' => $shippingCountry->id ?? '',
             'address_additional_info' => $addressAdditionalInfo,
         ];
 
@@ -175,26 +175,27 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
      * or if "shipToName" is just a simple creation out of both.
      */
     private function getPayPalResponseShippingFirstAnLastName(
-        string $userFirstName,
-        string $userLastName,
+        string $userFirstname,
+        string $userLastname,
         ?string $shipToName
     ): array {
         $result = [
-            'firstName' => $userFirstName,
-            'lastName' => $userLastName
+            'firstname' => $userFirstname,
+            'lastname' => $userLastname,
         ];
 
         if (null === $shipToName) {
             return $result;
         }
 
-        if (sprintf('%s %s', mb_strtolower($userFirstName), mb_strtolower($userLastName)) === mb_strtolower($shipToName)) {
+        $fullNameLowerCase = sprintf('%s %s', mb_strtolower($userFirstname), mb_strtolower($userLastname));
+        if ($fullNameLowerCase === mb_strtolower($shipToName)) {
             return $result;
         }
 
         return [
-            'firstName' => '',
-            'lastName' => $shipToName
+            'firstname' => '',
+            'lastname' => $shipToName,
         ];
     }
 
