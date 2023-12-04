@@ -117,30 +117,52 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
      */
     protected function GetUserDataFromPayPalData(&$aBilling, &$aShipping)
     {
-        $sCountryIsoCode = 'de';
-        if (array_key_exists('SHIPTOCOUNTRYCODE', $this->aCheckoutDetails)) {
-            $sCountryIsoCode = $this->aCheckoutDetails['SHIPTOCOUNTRYCODE'];
-        }
-
+        $sCountryIsoCode = $this->aCheckoutDetails['SHIPTOCOUNTRYCODE'] ?? 'de';
         $oShippingCountry = TdbDataCountry::GetInstanceForIsoCode($sCountryIsoCode);
 
-        $sMail = (array_key_exists('EMAIL', $this->aCheckoutDetails)) ? $this->aCheckoutDetails['EMAIL'] : '';
-        $sCompany = (array_key_exists('BUSINESS', $this->aCheckoutDetails)) ? $this->aCheckoutDetails['BUSINESS'] : '';
-        //$sDataExtranetSalutationId = (array_key_exists('',$this->aCheckoutDetails)) ? $this->aCheckoutDetails[''] : '';
-        $sFirstname = (array_key_exists('FIRSTNAME', $this->aCheckoutDetails)) ? $this->aCheckoutDetails['FIRSTNAME'] : '';
-        $sLastname = (array_key_exists('LASTNAME', $this->aCheckoutDetails)) ? $this->aCheckoutDetails['LASTNAME'] : '';
+        $sMail = $this->aCheckoutDetails['EMAIL'] ?? '';
+        $sCompany = $this->aCheckoutDetails['BUSINESS'] ?? '';
+        $sFirstname = $this->aCheckoutDetails['FIRSTNAME'] ?? '';
+        $sLastname = $this->aCheckoutDetails['LASTNAME'] ?? '';
+        $sStreet = $this->aCheckoutDetails['SHIPTOSTREET'] ?? '';
+        $sCity = $this->aCheckoutDetails['SHIPTOCITY'] ?? '';
+        $sPostalCode = $this->aCheckoutDetails['SHIPTOZIP'] ?? '';
+        $sTelefon = $this->aCheckoutDetails['PHONENUM'] ?? '';
+        $addressAdditionalInfo = $this->aCheckoutDetails['SHIPTOSTREET2'] ?? '';
 
-        $sStreet = (array_key_exists('SHIPTOSTREET', $this->aCheckoutDetails)) ? $this->aCheckoutDetails['SHIPTOSTREET'] : '';
-        $sCity = (array_key_exists('SHIPTOCITY', $this->aCheckoutDetails)) ? $this->aCheckoutDetails['SHIPTOCITY'] : '';
-        $sPostalcode = (array_key_exists('SHIPTOZIP', $this->aCheckoutDetails)) ? $this->aCheckoutDetails['SHIPTOZIP'] : '';
-        $sTelefon = (array_key_exists('PHONENUM', $this->aCheckoutDetails)) ? $this->aCheckoutDetails['PHONENUM'] : '';
-        $addressAdditionalInfo = (array_key_exists('SHIPTOSTREET2', $this->aCheckoutDetails)) ? $this->aCheckoutDetails['SHIPTOSTREET2'] : '';
+        $aBilling = [
+            'name' => $sMail,
+            'email' => $sMail,
+            'company' => $sCompany,
+            'data_extranet_salutation_id' => '',
+            'firstname' => $sFirstname,
+            'lastname' => $sLastname,
+            'street' => $sStreet,
+            'streenr' => '',
+            'city' => $sCity,
+            'postalcode' => $sPostalCode,
+            'telefon' => $sTelefon,
+            'fax' => '',
+            'data_country_id' => $oShippingCountry->id ?? '',
+            'address_additional_info' => $addressAdditionalInfo,
+        ];
 
-        $aBilling = array('name' => $sMail, 'email' => $sMail, 'company' => $sCompany, 'data_extranet_salutation_id' => '', 'firstname' => $sFirstname, 'lastname' => $sLastname, 'street' => $sStreet, 'streenr' => '', 'city' => $sCity, 'postalcode' => $sPostalcode, 'telefon' => $sTelefon, 'fax' => '', 'data_country_id' => $oShippingCountry->id, 'address_additional_info' => $addressAdditionalInfo);
-
-        $sShippingLastName = (array_key_exists('SHIPTONAME', $this->aCheckoutDetails) && '' != $this->aCheckoutDetails['SHIPTONAME']) ? $this->aCheckoutDetails['SHIPTONAME'] : $sFirstname.' '.$sLastname;
-
-        $aShipping = array('company' => $sCompany, 'data_extranet_salutation_id' => '', 'firstname' => '', 'lastname' => $sShippingLastName, 'street' => $sStreet, 'streenr' => '', 'city' => $sCity, 'postalcode' => $sPostalcode, 'telefon' => $sTelefon, 'fax' => '', 'data_country_id' => $oShippingCountry->id, 'address_additional_info' => $addressAdditionalInfo);
+        // only use buyer's first and lastname, if no "shipToName" is provided, which is placed within the lastname field
+        $sShippingLastNameOnly =  $this->aCheckoutDetails['SHIPTONAME'] ?? null;
+        $aShipping = [
+            'company' => $sCompany,
+            'data_extranet_salutation_id' => '',
+            'firstname' => null === $sShippingLastNameOnly ? $sFirstname : '',
+            'lastname' => $sShippingLastNameOnly ?? $sLastname,
+            'street' => $sStreet,
+            'streenr' => '',
+            'city' => $sCity,
+            'postalcode' => $sPostalCode,
+            'telefon' => $sTelefon,
+            'fax' => '',
+            'data_country_id' => $oShippingCountry->id ?? '',
+            'address_additional_info' => $addressAdditionalInfo,
+        ];
 
         $this->postProcessBillingAndShippingAddress($aBilling, $aShipping);
     }
