@@ -147,13 +147,16 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
             'address_additional_info' => $addressAdditionalInfo,
         ];
 
-        // only use buyer's first and lastname, if no "shipToName" is provided, which is placed within the lastname field
-        $sShippingLastNameOnly =  $this->aCheckoutDetails['SHIPTONAME'] ?? null;
+        $shippingFirstAnLastName = $this->getPayPalResponseShippingFirstAnLastName(
+            $sFirstname,
+            $sLastname,
+            $this->aCheckoutDetails['SHIPTONAME'] ?? null
+        );
         $aShipping = [
             'company' => $sCompany,
             'data_extranet_salutation_id' => '',
-            'firstname' => null === $sShippingLastNameOnly ? $sFirstname : '',
-            'lastname' => $sShippingLastNameOnly ?? $sLastname,
+            'firstname' => $shippingFirstAnLastName['firstName'],
+            'lastname' => $shippingFirstAnLastName['lastName'],
             'street' => $sStreet,
             'streenr' => '',
             'city' => $sCity,
@@ -165,6 +168,34 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
         ];
 
         $this->postProcessBillingAndShippingAddress($aBilling, $aShipping);
+    }
+
+    /**
+     * use buyer's first and lastname, if no "shipToName" is provided,
+     * or if "shipToName" is just a simple creation out of both.
+     */
+    private function getPayPalResponseShippingFirstAnLastName(
+        string $userFirstName,
+        string $userLastName,
+        ?string $shipToName
+    ): array {
+        $result = [
+            'firstName' => $userFirstName,
+            'lastName' => $userLastName
+        ];
+
+        if (null === $shipToName) {
+            return $result;
+        }
+
+        if (sprintf('%s %s', mb_strtolower($userFirstName), mb_strtolower($userLastName)) === mb_strtolower($shipToName)) {
+            return $result;
+        }
+
+        return [
+            'firstName' => '',
+            'lastName' => $shipToName
+        ];
     }
 
     /**
