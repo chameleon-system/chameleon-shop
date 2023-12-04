@@ -110,12 +110,12 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
      * updates teh aBilling and aShipping arrays with the user billing and shipping
      * info returned from paypal.
      *
-     * @param array $aBilling
-     * @param array $aShipping
+     * @param array $billingAddressData
+     * @param array $shippingAddressData
      *
      * @return void
      */
-    protected function GetUserDataFromPayPalData(&$aBilling, &$aShipping)
+    protected function GetUserDataFromPayPalData(&$billingAddressData, &$shippingAddressData)
     {
         $countryIsoCode = $this->aCheckoutDetails['SHIPTOCOUNTRYCODE'] ?? 'de';
         $shippingCountry = TdbDataCountry::GetInstanceForIsoCode($countryIsoCode);
@@ -130,7 +130,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
         $phone = $this->aCheckoutDetails['PHONENUM'] ?? '';
         $addressAdditionalInfo = $this->aCheckoutDetails['SHIPTOSTREET2'] ?? '';
 
-        $aBilling = [
+        $billingAddressData = [
             'name' => $mail,
             'email' => $mail,
             'company' => $company,
@@ -147,16 +147,16 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
             'address_additional_info' => $addressAdditionalInfo,
         ];
 
-        $shippingFirstAnLastName = $this->getPayPalResponseShippingFirstAnLastName(
+        $shippingFirstAndLastName = $this->buildShippingFirstAnLastNameFromResponseData(
             $firstname,
             $lastname,
             $this->aCheckoutDetails['SHIPTONAME'] ?? null
         );
-        $aShipping = [
+        $shippingAddressData = [
             'company' => $company,
             'data_extranet_salutation_id' => '',
-            'firstname' => $shippingFirstAnLastName['firstname'],
-            'lastname' => $shippingFirstAnLastName['lastname'],
+            'firstname' => $shippingFirstAndLastName['firstname'],
+            'lastname' => $shippingFirstAndLastName['lastname'],
             'street' => $street,
             'streenr' => '',
             'city' => $city,
@@ -167,14 +167,14 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
             'address_additional_info' => $addressAdditionalInfo,
         ];
 
-        $this->postProcessBillingAndShippingAddress($aBilling, $aShipping);
+        $this->postProcessBillingAndShippingAddress($billingAddressData, $shippingAddressData);
     }
 
     /**
      * use buyer's first and lastname, if no "shipToName" is provided,
      * or if "shipToName" is just a simple creation out of both.
      */
-    private function getPayPalResponseShippingFirstAnLastName(
+    private function buildShippingFirstAnLastNameFromResponseData(
         string $userFirstname,
         string $userLastname,
         ?string $shipToName
