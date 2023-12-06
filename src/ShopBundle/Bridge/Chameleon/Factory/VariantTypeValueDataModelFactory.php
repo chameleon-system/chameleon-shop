@@ -41,7 +41,8 @@ class VariantTypeValueDataModelFactory implements VariantTypeValueDataModelFacto
         \TdbShopVariantTypeValue $shopVariantTypeValue,
         bool $loadInactiveItems, 
         array $currentSelectedParameters,
-        bool $variantIsActive): VariantTypeValueDataModelInterface
+        bool $variantIsActive,
+        \TdbShopArticle $shopArticle): VariantTypeValueDataModelInterface
     {
         return new $this->dataModelClass(
             $shopVariantTypeValue->fieldName,

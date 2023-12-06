@@ -20,6 +20,7 @@ interface VariantTypeValueDataModelFactoryInterface
         \TdbShopVariantTypeValue $shopVariantTypeValue,
         bool $loadInactiveItems,
         array $currentSelectedParameters,
-        bool $variantIsActive        
+        bool $variantIsActive,
+        \TdbShopArticle $shopArticle
     ): VariantTypeValueDataModelInterface;
 }

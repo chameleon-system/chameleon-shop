@@ -104,7 +104,8 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
                             $variantValueRecord,
                             $loadInactiveItems,
                             $currentSelectedValues,
-                            $sActiveValueForVariantType === $variantValueRecord->id
+                            $sActiveValueForVariantType === $variantValueRecord->id,
+                            $productRecord
                         );
                         
                         $variantTypeValueDataModels[] = $variantTypeValueDataModel;
