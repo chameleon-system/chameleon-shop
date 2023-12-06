@@ -147,7 +147,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
             'address_additional_info' => $addressAdditionalInfo,
         ];
 
-        $shippingFirstAndLastName = $this->buildShippingFirstAnLastNameFromResponseData(
+        $shippingFirstAndLastName = $this->buildShippingFirstAnLastName(
             $firstname,
             $lastname,
             $this->aCheckoutDetails['SHIPTONAME'] ?? null
@@ -172,30 +172,35 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
 
     /**
      * use buyer's first and lastname, if no "shipToName" is provided,
-     * or if "shipToName" is just a simple creation out of both.
+     * or if "shipToName" is just a simple creation out of both, otherwise
+     * return no firstname and "shipToName" as lastname.
      */
-    private function buildShippingFirstAnLastNameFromResponseData(
+    private function buildShippingFirstAnLastName(
         string $userFirstname,
         string $userLastname,
         ?string $shipToName
     ): array {
         $result = [
             'firstname' => $userFirstname,
-            'lastname' => $userLastname,
+            'lastname'  => $userLastname,
         ];
 
         if (null === $shipToName) {
             return $result;
         }
 
-        $fullNameLowerCase = sprintf('%s %s', mb_strtolower($userFirstname), mb_strtolower($userLastname));
+        $fullNameLowerCase = sprintf(
+            '%s %s',
+            mb_strtolower($userFirstname),
+            mb_strtolower($userLastname)
+        );
         if ($fullNameLowerCase === mb_strtolower($shipToName)) {
             return $result;
         }
 
         return [
             'firstname' => '',
-            'lastname' => $shipToName,
+            'lastname'  => $shipToName,
         ];
     }
 
