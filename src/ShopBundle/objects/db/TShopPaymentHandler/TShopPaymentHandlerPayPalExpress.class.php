@@ -35,8 +35,6 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
 
         if ($bResponse) {
             $oUser = TdbDataExtranetUser::GetInstance();
-
-            $oUser = TdbDataExtranetUser::GetInstance();
             if (is_null($oUser->id)) {
                 $aBilling = array();
                 $aShipping = array();
@@ -84,7 +82,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
 
         if ($bResponse) {
             $oBasket = TShopBasket::GetInstance();
-            // paypal expres success... redirect to confirm page. we need to force correct redirection here.
+            // paypal express success... redirect to confirm page. we need to force correct redirection here.
             $logger->info('PostProcessExternalPaymentHandlerHook: return from express ok - redirect to checkout');
             $oNextStep = &TdbShopOrderStep::GetStep('confirm');
             $oStepList = TdbShopOrderStepList::GetNavigationStepList($oNextStep);
@@ -179,7 +177,8 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
         string $userFirstname,
         string $userLastname,
         ?string $shipToName
-    ): array {
+    ): array
+    {
         $result = [
             'firstname' => $userFirstname,
             'lastname'  => $userLastname,
