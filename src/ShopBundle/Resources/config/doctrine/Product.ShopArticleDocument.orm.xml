@@ -1,0 +1,44 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\Product\ShopArticleDocument" table="shop_article_document">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="shopArticle" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticle"
+                     inversed-by="shopArticleDocumentCollection">
+            <options>
+                <option name="comment">Belongs to article</option>
+            </options>
+            <join-column name="shop_article_id" referenced-column-name="id"/>
+        </many-to-one>
+        <many-to-one field="shopArticleDocumentType"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleDocumentType">
+            <join-column name="shop_article_document_type_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Article document type</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="cmsDocument" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsDocument">
+            <join-column name="cms_document_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Document</option>
+            </options>
+        </many-to-one>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Position</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

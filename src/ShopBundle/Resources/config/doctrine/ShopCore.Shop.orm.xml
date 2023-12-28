@@ -1,0 +1,460 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopCore\Shop" table="shop">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <one-to-many field="shopOrderStatusCodeCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrderStatusCode" mapped-by="shop"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Available shipping status codes</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-one field="defaultPkgShopCurrency"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\PkgShopCurrency">
+            <join-column name="default_pkg_shop_currency_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Default currency</option>
+            </options>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Shop name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-many field="cmsPortalCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-table name="shop_cms_portal_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Belongs to these portals</option>
+            </options>
+        </many-to-many>
+        <many-to-one field="shopCategory" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopCategory">
+            <join-column name="shop_category_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Shop main category</option>
+            </options>
+        </many-to-one>
+        <field name="adrCompany" type="string" column="adr_company" length="255" nullable="false">
+            <options>
+                <option name="comment">Company name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="adrStreet" type="string" column="adr_street" length="255" nullable="false">
+            <options>
+                <option name="comment">Company street</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="adrZip" type="string" column="adr_zip" length="255" nullable="false">
+            <options>
+                <option name="comment">Company zip code</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="adrCity" type="string" column="adr_city" length="255" nullable="false">
+            <options>
+                <option name="comment">Company city</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="tCountry" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\TCountry">
+            <join-column name="t_country_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Company country</option>
+            </options>
+        </many-to-one>
+        <field name="customerServiceTelephone" type="string" column="customer_service_telephone" length="255"
+               nullable="false">
+            <options>
+                <option name="comment">Telephone (customer service)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="customerServiceEmail" type="string" column="customer_service_email" length="255" nullable="false">
+            <options>
+                <option name="comment">Email (customer service)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="shopvatnumber" type="string" column="shopvatnumber" length="255" nullable="false">
+            <options>
+                <option name="comment">VAT registration number</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="shopBankAccountCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopBankAccount" mapped-by="shop"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Bank accounts</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="dataExtranetUserCollection"
+                     target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser" mapped-by="shop"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Customers</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="dataExtranetUserShopArticleHistoryMaxArticleCount" type="integer"
+               column="data_extranet_user_shop_article_history_max_article_count" nullable="false">
+            <options>
+                <option name="comment">Length of product history of an user</option>
+                <option name="default">20</option>
+            </options>
+        </field>
+        <many-to-one field="shopModuleArticlelistOrderby"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ProductList\ShopModuleArticlelistOrderby">
+            <join-column name="shop_module_articlelist_orderby_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Default sorting of items in the category view</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="shopVat" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopVat">
+            <join-column name="shop_vat_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Default VAT group</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="shopShippingGroup"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopShippingGroup">
+            <join-column name="shop_shipping_group_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Default shipping group</option>
+            </options>
+        </many-to-one>
+        <field name="shippingVatDependsOnBasketContents" type="boolean" column="shipping_vat_depends_on_basket_contents"
+               nullable="false">
+            <options>
+                <option name="comment">Make VAT of shipping costs dependent on basket contents</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <many-to-one field="dataExtranetSalutation"
+                     target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetSalutation">
+            <join-column name="data_extranet_salutation_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Default salutation</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="dataCountry" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\DataCountry">
+            <join-column name="data_country_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Default country</option>
+            </options>
+        </many-to-one>
+        <field name="affiliateParameterName" type="string" column="affiliate_parameter_name" length="255"
+               nullable="false">
+            <options>
+                <option name="comment">Affiliate URL parameter</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="pkgShopAffiliateCollection"
+                     target-entity="\ChameleonSystem\ShopAffiliateBundle\Entity\PkgShopAffiliate" mapped-by="shop"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Affiliate programs</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="shopArticleImageSizeCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleImageSize" mapped-by="shop"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Size of product images</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="shopSystemInfoCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopSystemInfo" mapped-by="shop"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Shop specific information / text blocks (e.g. Terms and Conditions)</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-one field="notFoundImage" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="not_found_image" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Replacement image</option>
+            </options>
+        </many-to-one>
+        <field name="shopSearchWordBonus" type="decimal" column="shop_search_word_bonus" length="" nullable="false"
+               precision="5" scale=",">
+            <options>
+                <option name="comment">Weight bonus for whole words in search</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="shopSearchWordLengthFactor" type="decimal" column="shop_search_word_length_factor" length=""
+               nullable="false" precision="5" scale=",">
+            <options>
+                <option name="comment">Weight of search word length</option>
+                <option name="default">0.8</option>
+            </options>
+        </field>
+        <field name="shopSearchSoundexPenalty" type="decimal" column="shop_search_soundex_penalty" length=""
+               nullable="false" precision="5" scale=",">
+            <options>
+                <option name="comment">Deduction for words that only sound similar</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="shopSearchMinIndexLength" type="integer" column="shop_search_min_index_length" nullable="false">
+            <options>
+                <option name="comment">Shortest searchable partial word</option>
+                <option name="default">3</option>
+            </options>
+        </field>
+        <field name="shopSearchMaxIndexLength" type="integer" column="shop_search_max_index_length" nullable="false">
+            <options>
+                <option name="comment">Longest searchable partial word</option>
+                <option name="default">10</option>
+            </options>
+        </field>
+        <field name="shopSearchUseBooleanAnd" type="boolean" column="shop_search_use_boolean_and" nullable="false">
+            <options>
+                <option name="comment">Connect search items with AND</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="maxSearchCacheAgeInHours" type="integer" column="max_search_cache_age_in_hours" nullable="false">
+            <options>
+                <option name="comment">Maximum age of search cache</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="shopSearchLogCollection" target-entity="\ChameleonSystem\SearchBundle\Entity\ShopSearchLog"
+                     mapped-by="shop" orphan-removal="true">
+            <options>
+                <option name="comment">Search log</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="shopSearchFieldWeightCollection"
+                     target-entity="\ChameleonSystem\SearchBundle\Entity\ShopSearchFieldWeight" mapped-by="shop"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Fields weight</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="shopSearchIgnoreWordCollection"
+                     target-entity="\ChameleonSystem\SearchBundle\Entity\ShopSearchIgnoreWord" mapped-by="shop"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Words to be ignored in searches</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="shopSearchKeywordArticleCollection"
+                     target-entity="\ChameleonSystem\SearchBundle\Entity\ShopSearchKeywordArticle" mapped-by="shop"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Manually selected search results</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="shopSearchCacheCollection"
+                     target-entity="\ChameleonSystem\SearchBundle\Entity\ShopSearchCache" mapped-by="shop"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Search cache</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="basketSpotName" type="string" column="basket_spot_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name of the spot in the layouts containing the basket module</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="shopCentralHandlerSpotName" type="string" column="shop_central_handler_spot_name" length="255"
+               nullable="false">
+            <options>
+                <option name="comment">Name of the spot containing the central shop handler</option>
+                <option name="default">oShopCentralHandler</option>
+            </options>
+        </field>
+        <field name="showEmptyCategories" type="boolean" column="show_empty_categories" nullable="false">
+            <options>
+                <option name="comment">Show empty categories in shop</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="allowPurchaseOfVariantParents" type="boolean" column="allow_purchase_of_variant_parents"
+               nullable="false">
+            <options>
+                <option name="comment">Variant parents can be purchased</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="loadInactiveVariants" type="boolean" column="load_inactive_variants" nullable="false">
+            <options>
+                <option name="comment">Load inactive variants</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="syncProfileDataWithBillingData" type="boolean" column="sync_profile_data_with_billing_data"
+               nullable="false">
+            <options>
+                <option name="comment">Synchronize profile address with billing address</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="allowMultipleBillingAddresses" type="boolean" column="allow_multiple_billing_addresses"
+               nullable="false">
+            <options>
+                <option name="comment">Is the user allowed to have more than one billing address?</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="allowMultipleShippingAddresses" type="boolean" column="allow_multiple_shipping_addresses"
+               nullable="false">
+            <options>
+                <option name="comment">Is the user allowed to have more than one shipping address?</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="allowGuestPurchase" type="boolean" column="allow_guest_purchase" nullable="false">
+            <options>
+                <option name="comment">Allow guest orders?</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="logArticleSuggestions" type="boolean" column="log_article_suggestions" nullable="false">
+            <options>
+                <option name="comment">Archive customers product recommendations</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <one-to-many field="shopStockMessageCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopStockMessage" mapped-by="shop"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Stock messages</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="exportKey" type="string" column="export_key" length="255" nullable="false">
+            <options>
+                <option name="comment">Export key</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="cartInfoText" type="text" column="cart_info_text" nullable="false">
+            <options>
+                <option name="comment">Basket info text</option>
+            </options>
+        </field>
+        <many-to-one field="pkgShopListfilterPostsearch"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\PkgShopListfilter">
+            <join-column name="pkg_shop_listfilter_postsearch_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Results list filter</option>
+            </options>
+        </many-to-one>
+        <field name="redirectToNotFoundPageProductSearchOnNoResults" type="boolean"
+               column="redirect_to_not_found_page_product_search_on_no_results" nullable="false">
+            <options>
+                <option name="comment">If there are no results, refer to page &quot;no results for product
+                    search&quot;
+                </option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="useShopSearchLog" type="boolean" column="use_shop_search_log" nullable="false">
+            <options>
+                <option name="comment">Turn on search log</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <many-to-one field="pkgShopListfilterCategoryFilter"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\PkgShopListfilter">
+            <join-column name="pkg_shop_listfilter_category_filter_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Category list filter for categories without subcategories</option>
+            </options>
+        </many-to-one>
+        <field name="dataExtranetUserShopArticleHistoryMaxCookieSize" type="integer"
+               column="data_extranet_user_shop_article_history_max_cookie_size" nullable="false">
+            <options>
+                <option name="comment">Maximum size of cookie for item history (in KB)</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="productUrlMode" type="string" column="product_url_mode" length="2" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Use SEO-URLs for products</option>
+                <option name="default">V1</option>
+            </options>
+        </field>
+        <field name="shopreviewmailMailDelay" type="integer" column="shopreviewmail_mail_delay" nullable="false">
+            <options>
+                <option name="comment">Shipping delay (days)</option>
+                <option name="default">4</option>
+            </options>
+        </field>
+        <field name="shopreviewmailPercentOfCustomers" type="decimal" column="shopreviewmail_percent_of_customers"
+               length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Recipients (percent)</option>
+                <option name="default">90</option>
+            </options>
+        </field>
+        <field name="shopreviewmailSendForEachOrder" type="boolean" column="shopreviewmail_send_for_each_order"
+               nullable="false">
+            <options>
+                <option name="comment">For each order</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <one-to-many field="pkgShopFooterCategoryCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\PkgShopFooterCategory" mapped-by="shop"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Footer categories</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

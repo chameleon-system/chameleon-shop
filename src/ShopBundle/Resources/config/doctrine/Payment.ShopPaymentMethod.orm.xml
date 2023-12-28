@@ -1,0 +1,282 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\Payment\ShopPaymentMethod" table="shop_payment_method">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="shopPaymentHandlerGroup"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Payment\ShopPaymentHandlerGroup"
+                     inversed-by="shopPaymentMethodCollection">
+            <options>
+                <option name="comment">Belongs to payment provider</option>
+            </options>
+            <join-column name="shop_payment_handler_group_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="nameInternal" type="string" column="name_internal" length="255" nullable="false">
+            <options>
+                <option name="comment">Internal system name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="shopPaymentHandler"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Payment\ShopPaymentHandler">
+            <join-column name="shop_payment_handler_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Payment handler</option>
+            </options>
+        </many-to-one>
+        <field name="active" type="boolean" column="active" nullable="false">
+            <options>
+                <option name="comment">Active</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="pkgDhlPackstationAllowForPackstation" type="boolean"
+               column="pkg_dhl_packstation_allow_for_packstation" nullable="false">
+            <options>
+                <option name="comment">Allow for Packstation delivery addresses</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Sorting</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-many field="cmsPortalCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-table name="shop_payment_method_cms_portal_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to the following portals</option>
+            </options>
+        </many-to-many>
+        <field name="restrictToValueFrom" type="decimal" column="restrict_to_value_from" length="" nullable="false"
+               precision="1" scale="0">
+            <options>
+                <option name="comment">Available from merchandise value</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="restrictToValueTo" type="decimal" column="restrict_to_value_to" length="" nullable="false"
+               precision="1" scale="0">
+            <options>
+                <option name="comment">Available until merchandise value</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="restrictToBasketValueFrom" type="decimal" column="restrict_to_basket_value_from" length=""
+               nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Available from basket value</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="restrictToBasketValueTo" type="decimal" column="restrict_to_basket_value_to" length=""
+               nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Available to basket value</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="value" type="decimal" column="value" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Additional costs</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="valueType" type="string" column="value_type" length="7" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Additional costs type</option>
+                <option name="default">absolut</option>
+            </options>
+        </field>
+        <many-to-one field="shopVat" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopVat">
+            <join-column name="shop_vat_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">VAT group</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="cmsMedia" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="cms_media_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Icon</option>
+            </options>
+        </many-to-one>
+        <field name="description" type="text" column="description" nullable="false">
+            <options>
+                <option name="comment">Description</option>
+            </options>
+        </field>
+        <many-to-many field="dataExtranetUserCollection"
+                      target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser">
+            <join-table name="shop_payment_method_data_extranet_user_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following customers</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="dataExtranetGroupCollection"
+                      target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetGroup">
+            <join-table name="shop_payment_method_data_extranet_group_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following customer groups</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="dataCountryCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\DataCountry">
+            <join-table name="shop_payment_method_data_country_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following shipping countries</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="dataCountryBillingCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\DataCountry">
+            <join-table name="shop_payment_method_data_country_billing_data_country_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following billing countries</option>
+            </options>
+        </many-to-many>
+        <field name="positivListLooseMatch" type="boolean" column="positiv_list_loose_match" nullable="false">
+            <options>
+                <option name="comment">Use not fixed positive list match</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-many field="shopArticleGroupCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleGroup">
+            <join-table name="shop_payment_method_shop_article_group_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following product groups</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="shopCategoryCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopCategory">
+            <join-table name="shop_payment_method_shop_category_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following product categories</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="shopArticleCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticle">
+            <join-table name="shop_payment_method_shop_article_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following items</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="shopArticleGroup1Collection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleGroup">
+            <join-table name="shop_payment_method_shop_article_group1_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Do not allow for following product groups</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="shopCategory1Collection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopCategory">
+            <join-table name="shop_payment_method_shop_category1_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Do not allow for following product categories</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="shopArticle1Collection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticle">
+            <join-table name="shop_payment_method_shop_article1_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Do not allow for following products</option>
+            </options>
+        </many-to-many>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

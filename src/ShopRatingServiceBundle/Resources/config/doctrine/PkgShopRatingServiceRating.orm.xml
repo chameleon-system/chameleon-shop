@@ -1,0 +1,60 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopRatingServiceBundle\Entity\PkgShopRatingServiceRating"
+            table="pkg_shop_rating_service_rating">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="pkgShopRatingService"
+                     target-entity="\ChameleonSystem\ShopRatingServiceBundle\Entity\PkgShopRatingService">
+            <join-column name="pkg_shop_rating_service_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Rating service</option>
+            </options>
+        </many-to-one>
+        <field name="remoteKey" type="string" column="remote_key" length="59" nullable="false">
+            <options>
+                <option name="comment">Remote key</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="score" type="decimal" column="score" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Rating</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="rawdata" type="text" column="rawdata" nullable="false">
+            <options>
+                <option name="comment">Raw data</option>
+            </options>
+        </field>
+        <field name="ratingUser" type="string" column="rating_user" length="255" nullable="false">
+            <options>
+                <option name="comment">User who rates</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="ratingText" type="text" column="rating_text" nullable="false">
+            <options>
+                <option name="comment">Rating text</option>
+            </options>
+        </field>
+        <field name="ratingDate" type="datetime" column="rating_date" nullable="false">
+            <options>
+                <option name="comment">Date of rating</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

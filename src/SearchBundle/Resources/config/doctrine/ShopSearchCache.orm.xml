@@ -1,0 +1,57 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\SearchBundle\Entity\ShopSearchCache" table="shop_search_cache">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="shop" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\Shop"
+                     inversed-by="shopSearchCacheCollection">
+            <options>
+                <option name="comment">Belongs to shop</option>
+            </options>
+            <join-column name="shop_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="searchkey" type="string" column="searchkey" length="32" nullable="false">
+            <options>
+                <option name="comment">Search key</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="lastUsedDate" type="datetime" column="last_used_date" nullable="false">
+            <options>
+                <option name="comment">Last used</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="shopSearchCacheItemCollection"
+                     target-entity="\ChameleonSystem\SearchBundle\Entity\ShopSearchCacheItem"
+                     mapped-by="shopSearchCache" orphan-removal="true">
+            <options>
+                <option name="comment">Results</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="categoryHits" type="text" column="category_hits" nullable="false">
+            <options>
+                <option name="comment">Category hits</option>
+            </options>
+        </field>
+        <field name="numberOfRecordsFound" type="integer" column="number_of_records_found" nullable="false">
+            <options>
+                <option name="comment">Number of records found</option>
+                <option name="default">-1</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

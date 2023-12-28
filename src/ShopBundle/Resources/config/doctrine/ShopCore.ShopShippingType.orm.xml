@@ -1,0 +1,260 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\ShopCore\ShopShippingType" table="shop_shipping_type">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="value" type="decimal" column="value" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Additional costs</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="valueType" type="string" column="value_type" length="7" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Addtional costs type</option>
+                <option name="default">absolut</option>
+            </options>
+        </field>
+        <field name="valueBasedOnEntireBasket" type="boolean" column="value_based_on_entire_basket" nullable="false">
+            <options>
+                <option name="comment">Value relates to the whole basket</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="valueAdditional" type="decimal" column="value_additional" length="" nullable="false" precision="1"
+               scale="0">
+            <options>
+                <option name="comment">Additional charges</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="valueMax" type="decimal" column="value_max" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Maximum additional charges</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="valueMin" type="decimal" column="value_min" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Minimum additional charges</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="addValueForEachArticle" type="boolean" column="add_value_for_each_article" nullable="false">
+            <options>
+                <option name="comment">Calculate shipping costs for each item separately</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="restrictToSignedInUsers" type="boolean" column="restrict_to_signed_in_users" nullable="false">
+            <options>
+                <option name="comment">Use for logged in users only</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="applyToAllProducts" type="boolean" column="apply_to_all_products" nullable="false">
+            <options>
+                <option name="comment">Apply to all products with at least one match</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="endShippingTypeChain" type="boolean" column="end_shipping_type_chain" nullable="false">
+            <options>
+                <option name="comment">When applied, ignore all other shipping costs types</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Position</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="active" type="boolean" column="active" nullable="false">
+            <options>
+                <option name="comment">Active</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="activeFrom" type="datetime" column="active_from" nullable="false">
+            <options>
+                <option name="comment">Active as of</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="activeTo" type="datetime" column="active_to" nullable="false">
+            <options>
+                <option name="comment">Active until</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="restrictToValueFrom" type="decimal" column="restrict_to_value_from" length="" nullable="false"
+               precision="1" scale="0">
+            <options>
+                <option name="comment">Minimum value of affected items (Euro)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="restrictToValueTo" type="decimal" column="restrict_to_value_to" length="" nullable="false"
+               precision="1" scale="0">
+            <options>
+                <option name="comment">Maximum value of affected items (Euro)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="restrictToArticlesFrom" type="integer" column="restrict_to_articles_from" nullable="false">
+            <options>
+                <option name="comment">Minimum amount of items affected</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="restrictToArticlesTo" type="integer" column="restrict_to_articles_to" nullable="false">
+            <options>
+                <option name="comment">Maximum amount of items affected</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="restrictToWeightFrom" type="integer" column="restrict_to_weight_from" nullable="false">
+            <options>
+                <option name="comment">Minimum weight of affected items (grams)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="restrictToWeightTo" type="integer" column="restrict_to_weight_to" nullable="false">
+            <options>
+                <option name="comment">Maximum weight of affected items (grams)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="restrictToVolumeFrom" type="decimal" column="restrict_to_volume_from" length="" nullable="false"
+               precision="1" scale="0">
+            <options>
+                <option name="comment">Minimum volume of affected items (cubic meters)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="restrictToVolumeTo" type="decimal" column="restrict_to_volume_to" length="" nullable="false"
+               precision="1" scale="0">
+            <options>
+                <option name="comment">Maximum volume of affected items (cubic meters)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-many field="shopArticleGroupCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleGroup">
+            <join-table name="shop_shipping_type_shop_article_group_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following product groups</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="shopCategoryCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopCategory">
+            <join-table name="shop_shipping_type_shop_category_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following product categories</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="shopArticleCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticle">
+            <join-table name="shop_shipping_type_shop_article_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following items</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="dataCountryCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\DataCountry">
+            <join-table name="shop_shipping_type_data_country_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following shipping countries</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="dataExtranetUserCollection"
+                      target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser">
+            <join-table name="shop_shipping_type_data_extranet_user_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following users</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="dataExtranetGroupCollection"
+                      target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetGroup">
+            <join-table name="shop_shipping_type_data_extranet_group_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following customer groups</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="cmsPortalCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-table name="shop_shipping_type_cms_portal_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to following portals</option>
+            </options>
+        </many-to-many>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

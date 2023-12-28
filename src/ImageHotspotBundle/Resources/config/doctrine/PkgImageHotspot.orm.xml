@@ -1,0 +1,46 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ImageHotspotBundle\Entity\PkgImageHotspot" table="pkg_image_hotspot">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsTplModuleInstance"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplModuleInstance">
+            <join-column name="cms_tpl_module_instance_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to module instance</option>
+            </options>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Headline</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="autoSlideTime" type="integer" column="auto_slide_time" nullable="false">
+            <options>
+                <option name="comment">How long should an image be displayed (in seconds)?</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="pkgImageHotspotItemCollection"
+                     target-entity="\ChameleonSystem\ImageHotspotBundle\Entity\PkgImageHotspotItem"
+                     mapped-by="pkgImageHotspot" orphan-removal="true">
+            <options>
+                <option name="comment">Images</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>
