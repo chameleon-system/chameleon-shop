@@ -87,7 +87,7 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
                     if (!is_null($sSuccessURL)) {
                         $this->getRedirectService()->redirect($sSuccessURL, true);
                     } else {
-                        $oExtranetConf = &TdbDataExtranet::GetInstance();
+                        $oExtranetConf = TdbDataExtranet::GetInstance();
                         $this->getRedirectService()->redirect($oExtranetConf->GetLinkRegisterSuccessPage(), true);
                     }
                     $oStep->RemoveLastUserBoughtFromSession();
