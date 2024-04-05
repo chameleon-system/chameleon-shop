@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 
 class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
 {
@@ -49,7 +51,7 @@ class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
     private function getActivePageId()
     {
         /** @var ActivePageServiceInterface $activePageService */
-        $activePageService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        $activePageService = ServiceLocator::get('chameleon_system_core.active_page_service');
         $activePage = $activePageService->getActivePage();
 
         return $activePage->id;
@@ -60,20 +62,12 @@ class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getActiveUserGroups()
     {
-        $user = $this->getActiveExtranetUser();
+        $user = $this->getExtranetUserProvider()->getActiveUser();
         if (null === $user) {
             return array();
         }
 
         return $user->GetUserGroupIds();
-    }
-
-    /**
-     * @return TdbDataExtranetUser
-     */
-    private function getActiveExtranetUser()
-    {
-        return TdbDataExtranetUser::GetInstance();
     }
 
     /**
@@ -94,7 +88,7 @@ class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getActiveCategory()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+        return ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
     }
 
     /**
@@ -102,6 +96,11 @@ class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
+    }
+
+    public function getExtranetUserProvider(): ExtranetUserProviderInterface
+    {
+        return ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 }
