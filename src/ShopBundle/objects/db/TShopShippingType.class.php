@@ -298,8 +298,8 @@ class TShopShippingType extends TShopShippingTypeAutoParent
     }
 
     /**
-     * returns true if the list of articles is valid for the current shipping type (ie the number
-     * of articles, weight, volumn, etc).
+     * returns true if the list of articles is valid for the current shipping type (i.e. the number
+     * of articles, weight, volume, etc).
      *
      * @param TShopBasketArticleList $oArticleList
      *
@@ -307,16 +307,20 @@ class TShopShippingType extends TShopShippingTypeAutoParent
      */
     public function ArticleListValidForShippingType(TShopBasketArticleList &$oArticleList)
     {
-        $bIsValid = true;
-        $dArticleValue = $oArticleList->dProductPrice;
         $dNumberOfArticles = $oArticleList->dNumberOfItems;
         $dArticleWeight = $oArticleList->dTotalWeight;
         $dArticleVolume = $oArticleList->dTotalVolume;
 
-        if ($this->fieldValueBasedOnEntireBasket) {
+        if (true === $this->fieldValueBasedOnEntireBasket) {
             $oBasket = TShopBasket::GetInstance();
             $dArticleValue = $oBasket->dCostArticlesTotalAfterDiscounts;
+        } else {
+            $dArticleValue = 0;
+            while($tmpItem = $oArticleList->next()) {
+                $dArticleValue += $tmpItem->dPriceTotalAfterDiscount;
+            }
         }
+
         if ($this->fieldApplyToAllProducts) {
             $oBasket = TShopBasket::GetInstance();
             $dNumberOfArticles = $oBasket->dTotalNumberOfArticles;
