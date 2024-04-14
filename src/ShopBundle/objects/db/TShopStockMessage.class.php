@@ -10,9 +10,9 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\ShopMultiWarehouseBundle\Availability\ProductAvailabilityMessageConfigurationFactoryInterface;
-use ChameleonSystem\ShopMultiWarehouseBundle\Stock\ProductStockQuantityStringifyInterface;
-use ChameleonSystem\ShopMultiWarehouseBundle\Stock\StockServiceInterface;
+use ChameleonSystem\ShopMultiWarehouseBundle\ProductAvailability\ProductAvailabilityStringifyInterface;
+use ChameleonSystem\ShopMultiWarehouseBundle\StockAccess\StockServiceInterface;
+use ChameleonSystem\ShopMultiWarehouseBundle\StockAccessConfiguration\StockAccessConfigurationFactoryInterface;
 use ChameleonSystem\ShopMultiWarehouseBundle\TargetAddress\TargetAddressProviderInterface;
 
 class TShopStockMessage extends TAdbShopStockMessage
@@ -60,10 +60,10 @@ class TShopStockMessage extends TAdbShopStockMessage
         $stockService = ServiceLocator::get(StockServiceInterface::class);
         /** @var TargetAddressProviderInterface $targetAddressProvider */
         $targetAddressProvider = ServiceLocator::get(TargetAddressProviderInterface::class);
-        /** @var ProductAvailabilityMessageConfigurationFactoryInterface $stockMessageFactory */
-        $stockMessageFactory = ServiceLocator::get(ProductAvailabilityMessageConfigurationFactoryInterface::class);
-        /** @var ProductStockQuantityStringifyInterface $stringifyService */
-        $stringifyService = ServiceLocator::get(ProductStockQuantityStringifyInterface::class);;;
+        /** @var StockAccessConfigurationFactoryInterface $stockMessageFactory */
+        $stockMessageFactory = ServiceLocator::get(StockAccessConfigurationFactoryInterface::class);
+        /** @var ProductAvailabilityStringifyInterface $stringifyService */
+        $stringifyService = ServiceLocator::get(ProductAvailabilityStringifyInterface::class);;;
 
         $quantity = 1;
         $product = $this->GetArticle();
