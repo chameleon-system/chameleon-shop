@@ -55,37 +55,6 @@ class TShopStockMessage extends TAdbShopStockMessage
      */
     public function GetShopStockMessage()
     {
-        // todo: we have a lot of dependencies here - it may be possible to streamline this into a glue service
-        /** @var StockServiceInterface $stockService */
-        $stockService = ServiceLocator::get(StockServiceInterface::class);
-        /** @var TargetAddressProviderInterface $targetAddressProvider */
-        $targetAddressProvider = ServiceLocator::get(TargetAddressProviderInterface::class);
-        /** @var StockAccessConfigurationFactoryInterface $stockMessageFactory */
-        $stockMessageFactory = ServiceLocator::get(StockAccessConfigurationFactoryInterface::class);
-        /** @var ProductAvailabilityStringifyInterface $stringifyService */
-        $stringifyService = ServiceLocator::get(ProductAvailabilityStringifyInterface::class);;;
-
-        $quantity = 1;
-        $product = $this->GetArticle();
-        $productId = $product?->id;
-        if (is_object($this->GetArticle()) && property_exists($this->GetArticle(), 'dAmount') && is_null($this->aMessagesForQuantity)) {
-            $quantity = $this->GetArticle()->dAmount;
-        }
-
-        $stockMessageConfiguration = $stockMessageFactory->createFromStockMessageId($this->id);
-        if (null === $productId) {
-            // todo - if there is no product, we need to return some standard message.
-            return '';
-        }
-        $stockQuantity = $stockService->checkQuantity(
-            $productId,
-            $quantity,
-            $stockMessageConfiguration,
-            $targetAddressProvider->getTargetAddress()
-        );
-        return $stringifyService->toString($stockQuantity);
-
-        // todo - handle this
         $oShopStockMessageTrigger = null;
         $sMessage = $this->RenderStockMessage();
         if (is_object($this->GetArticle()) && property_exists($this->GetArticle(), 'dAmount') && is_null($this->aMessagesForQuantity)) {
