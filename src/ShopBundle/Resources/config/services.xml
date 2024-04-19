@@ -224,6 +224,12 @@
             <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="onUpdateProductStock" />
         </service>
 
+        <service id="ChameleonSystem\ShopBundle\EventListener\UpdateProductStockListener">
+            <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="enableDisableProductBasedOnStock" />
+            <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="updateBundleOwnerStock" />
+            <argument type="service" id="database_connection" />
+        </service>
+
         <service id="chameleon_system_shop.basket.basket_product_amount_validator" class="ChameleonSystem\ShopBundle\Basket\BasketProductAmountValidator" public="true">
         </service>
 

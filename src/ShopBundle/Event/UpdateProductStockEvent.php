@@ -27,17 +27,24 @@ class UpdateProductStockEvent extends Event
      * @var int
      */
     private $oldStock;
+    private \TdbShopArticle $product;
 
     /**
      * @param string $productId
      * @param int    $newStock
      * @param int    $oldStock
      */
-    public function __construct($productId, $newStock, $oldStock)
+    public function __construct(string $productId, int $newStock, int $oldStock, \TdbShopArticle $product)
     {
         $this->productId = $productId;
         $this->newStock = $newStock;
         $this->oldStock = $oldStock;
+        $this->product = $product;
+    }
+
+    public function getProduct(): \TdbShopArticle
+    {
+        return $this->product;
     }
 
     /**

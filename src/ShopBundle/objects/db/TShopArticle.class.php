@@ -1891,30 +1891,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         $newStock = $this->getAvailableStock();
 
-        $bActive = $this->CheckActivateOrDeactivate($newStock);
-        $this->setIsActive(1 === $bActive);
-
-        // check if the article is part of a bundle... if it is, make sure the bundle article does not exceed the total number of single items
-        $query = 'SELECT shop_article.*,
-                     shop_bundle_article.amount AS ItemsPerBundle,
-                     (shop_bundle_article.amount * shop_article_stock.amount) AS required_stock
-                FROM shop_article
-          INNER JOIN shop_bundle_article ON shop_article.id = shop_bundle_article.shop_article_id
-           LEFT JOIN shop_article_stock ON shop_article.id = shop_article_stock.shop_article_id
-               WHERE shop_bundle_article.bundle_article_id = :articleId
-                 AND (shop_bundle_article.amount * shop_article_stock.amount) > :newStock
-               ';
-        $aBundleChangeList = $this->getDatabaseConnection()->fetchAll($query, array('articleId' => $this->id, 'newStock' => $newStock), array('articleId' => \PDO::PARAM_STR, 'newStock' => \PDO::PARAM_INT));
-        foreach ($aBundleChangeList as $aBundleChange) {
-            $iAllowedStock = floor($newStock / $aBundleChange['ItemsPerBundle']);
-            $oBundleArticle = TdbShopArticle::GetNewInstance();
-            $oBundleArticle->LoadFromRow($aBundleChange);
-            $oBundleArticle->UpdateStock($iAllowedStock, false, false);
-        }
-
         if ($oldStock !== $newStock || true === $bForceUpdate) {
             $this->StockWasUpdatedHook($oldStock, $newStock);
-            $this->getEventDispatcher()->dispatch(new UpdateProductStockEvent($this->id, $newStock, $oldStock), ShopEvents::UPDATE_PRODUCT_STOCK);
+            $this->getEventDispatcher()->dispatch(new UpdateProductStockEvent($this->id, $newStock, $oldStock, $this), ShopEvents::UPDATE_PRODUCT_STOCK);
         }
 
         return $oldStock !== $newStock;

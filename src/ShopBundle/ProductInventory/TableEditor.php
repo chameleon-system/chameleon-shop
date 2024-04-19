@@ -32,7 +32,12 @@ class TableEditor extends \TCMSTableEditor
          */
         $preChangeData = $this->oTablePreChangeData;
         $this->getEventDispatcher()->dispatch(
-            new UpdateProductStockEvent($shopArticleStock->fieldShopArticleId, $shopArticleStock->fieldAmount, $preChangeData->fieldAmount),
+            new UpdateProductStockEvent(
+                $shopArticleStock->fieldShopArticleId,
+                $shopArticleStock->fieldAmount,
+                $preChangeData->fieldAmount,
+                $shopArticleStock->GetFieldShopArticle()
+            ),
             ShopEvents::UPDATE_PRODUCT_STOCK
         );
     }
