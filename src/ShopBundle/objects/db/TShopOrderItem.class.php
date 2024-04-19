@@ -105,15 +105,15 @@ class TShopOrderItem extends TAdbShopOrderItem
                 if ($bSameArticle) {
                     $dAmountDelta = $oOldData->fieldOrderAmount - $this->sqlData['order_amount'];
                     $productInventoryService->addStock($this->fieldShopArticleId, $dAmountDelta);
-                    $productStatisticService->add($this->fieldShopArticleId, ProductStatisticsServiceInterface::TYPE_SALES, $dAmountDelta);
+                    $productStatisticService->add($this->fieldShopArticleId, ProductStatisticsServiceInterface::TYPE_SALES, -1 * $dAmountDelta);
 
                 } else {
                     $productInventoryService->addStock($oOldData->fieldShopArticleId, $oOldData->fieldOrderAmount);
-                    $productStatisticService->add($oOldData->fieldShopArticleId, ProductStatisticsServiceInterface::TYPE_SALES, $oOldData->fieldOrderAmount);
+                    $productStatisticService->add($oOldData->fieldShopArticleId, ProductStatisticsServiceInterface::TYPE_SALES, -1 * $oOldData->fieldOrderAmount);
 
                     if (!empty($this->sqlData['shop_article_id'])) {
                         $productInventoryService->addStock($this->sqlData['shop_article_id'], -1 * $this->sqlData['order_amount']);
-                        $productStatisticService->add($this->sqlData['shop_article_id'], ProductStatisticsServiceInterface::TYPE_SALES, -1 * $this->sqlData['order_amount']);
+                        $productStatisticService->add($this->sqlData['shop_article_id'], ProductStatisticsServiceInterface::TYPE_SALES, $this->sqlData['order_amount']);
                     }
                 }
             }

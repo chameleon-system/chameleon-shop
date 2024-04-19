@@ -1125,7 +1125,7 @@ class TShopOrder extends TShopOrderAutoParent
                     $dAmount = -1 * $dAmount;
                 }
                 $productInventoryService->addStock($oOrderItem->fieldShopArticleId, $dAmount);
-                $productStatisticService->add($oOrderItem->fieldShopArticleId, ProductStatisticsServiceInterface::TYPE_SALES, $dAmount);
+                $productStatisticService->add($oOrderItem->fieldShopArticleId, ProductStatisticsServiceInterface::TYPE_SALES, -1 * $dAmount);
             }
         }
         $oOrderItemList->GoToStart();
