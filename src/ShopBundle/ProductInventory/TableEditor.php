@@ -11,37 +11,12 @@
 
 namespace ChameleonSystem\ShopBundle\ProductInventory;
 
-use TdbShopArticle;
+use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
+use ChameleonSystem\ShopBundle\ShopEvents;
 use TdbShopArticleStock;
 
 class TableEditor extends \TCMSTableEditor
 {
-    /**
-     * @var string
-     */
-    private $newStockValue;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function PrepareDataForSave($postData)
-    {
-        $postData = parent::PrepareDataForSave($postData);
-        /**
-         * In UpdateStock() it is assumed that the value was not changed before while the table editor would save it
-         * before calling the PostSaveHook() method - to achieve compatibility between the two approaches, we simply
-         * restore the old amount value before saving.
-         */
-        $this->newStockValue = $postData['amount'];
-        /**
-         * @var TdbShopArticleStock $preChangeData
-         */
-        $preChangeData = $this->oTablePreChangeData;
-        $postData['amount'] = $preChangeData->fieldAmount;
-
-        return $postData;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -52,7 +27,13 @@ class TableEditor extends \TCMSTableEditor
          * @var TdbShopArticleStock $shopArticleStock
          */
         $shopArticleStock = $this->oTable;
-        $article = TdbShopArticle::GetNewInstance($shopArticleStock->fieldShopArticleId);
-        $article->UpdateStock(doubleval($this->newStockValue), false, false, true);
+        /**
+         * @var TdbShopArticleStock $preChangeData
+         */
+        $preChangeData = $this->oTablePreChangeData;
+        $this->getEventDispatcher()->dispatch(
+            new UpdateProductStockEvent($shopArticleStock->fieldShopArticleId, $shopArticleStock->fieldAmount, $preChangeData->fieldAmount),
+            ShopEvents::UPDATE_PRODUCT_STOCK
+        );
     }
 }
