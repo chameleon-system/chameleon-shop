@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
+use ChameleonSystem\ShopBundle\ProductStatistics\Interfaces\ProductStatisticsServiceInterface;
+
 class TShopOrderItem extends TAdbShopOrderItem
 {
     const VIEW_PATH = 'pkgShop/views/db/TShopOrderItem';
@@ -90,22 +94,26 @@ class TShopOrderItem extends TAdbShopOrderItem
     {
         parent::PreSaveHook($bIsInsert);
         if (!$bIsInsert) {
+            /** @var ProductInventoryServiceInterface $productInventoryService */
+            $productInventoryService = ServiceLocator::get('chameleon_system_shop.product_inventory_service');
+            /** @var ProductStatisticsServiceInterface $productStatisticService */
+            $productStatisticService = ServiceLocator::get('chameleon_system_shop.product_stats_service');
+
             $oOldData = TdbShopOrderItem::GetNewInstance();
             if ($oOldData->Load($this->id)) {
-                $bNewAmountIsDelta = true;
-                $bUpdateSaleCounter = true;
                 $bSameArticle = ($oOldData->fieldShopArticleId == $this->sqlData['shop_article_id']);
                 if ($bSameArticle) {
                     $dAmountDelta = $oOldData->fieldOrderAmount - $this->sqlData['order_amount'];
-                    $oArticle = $this->GetFieldShopArticle();
-                    $oArticle->UpdateStock($dAmountDelta, $bNewAmountIsDelta, $bUpdateSaleCounter);
-                } else {
-                    $oOldArticle = $oOldData->GetFieldShopArticle();
-                    $oOldArticle->UpdateStock($oOldData->fieldOrderAmount, $bNewAmountIsDelta, $bUpdateSaleCounter);
+                    $productInventoryService->addStock($this->fieldShopArticleId, $dAmountDelta);
+                    $productStatisticService->add($this->fieldShopArticleId, ProductStatisticsServiceInterface::TYPE_SALES, $dAmountDelta);
 
-                    $oNewArticle = TdbShopArticle::GetNewInstance();
-                    if ($oNewArticle->Load($this->sqlData['shop_article_id'])) {
-                        $oNewArticle->UpdateStock(-1 * $this->sqlData['order_amount'], $bNewAmountIsDelta, $bUpdateSaleCounter);
+                } else {
+                    $productInventoryService->addStock($oOldData->fieldShopArticleId, $oOldData->fieldOrderAmount);
+                    $productStatisticService->add($oOldData->fieldShopArticleId, ProductStatisticsServiceInterface::TYPE_SALES, $oOldData->fieldOrderAmount);
+
+                    if (!empty($this->sqlData['shop_article_id'])) {
+                        $productInventoryService->addStock($this->sqlData['shop_article_id'], -1 * $this->sqlData['order_amount']);
+                        $productStatisticService->add($this->sqlData['shop_article_id'], ProductStatisticsServiceInterface::TYPE_SALES, -1 * $this->sqlData['order_amount']);
                     }
                 }
             }

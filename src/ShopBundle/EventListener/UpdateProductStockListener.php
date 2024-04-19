@@ -3,12 +3,15 @@
 namespace ChameleonSystem\ShopBundle\EventListener;
 
 use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
+use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
 use Doctrine\DBAL\Connection;
 
 class UpdateProductStockListener
 {
-    public function __construct(private readonly Connection $databaseConnection)
-    {
+    public function __construct(
+        private readonly Connection $databaseConnection,
+        private readonly ProductInventoryServiceInterface $productInventoryService
+    ) {
 
     }
 
@@ -23,7 +26,7 @@ class UpdateProductStockListener
     {
 //        $product = $event->getProductId()
         // check if the article is part of a bundle... if it is, make sure the bundle article does not exceed the total number of single items
-        $query = 'SELECT shop_article.*,
+        $query = 'SELECT `shop_article`.`id`,
                      shop_bundle_article.amount AS ItemsPerBundle,
                      (shop_bundle_article.amount * shop_article_stock.amount) AS required_stock
                 FROM shop_article
@@ -39,9 +42,7 @@ class UpdateProductStockListener
         );
         foreach ($aBundleChangeList as $aBundleChange) {
             $iAllowedStock = floor($event->getNewStock() / $aBundleChange['ItemsPerBundle']);
-            $oBundleArticle = \TdbShopArticle::GetNewInstance();
-            $oBundleArticle->LoadFromRow($aBundleChange);
-            $oBundleArticle->UpdateStock($iAllowedStock, false, false);
+            $this->productInventoryService->setStock($aBundleChange['id'], $iAllowedStock);
         }
     }
 }

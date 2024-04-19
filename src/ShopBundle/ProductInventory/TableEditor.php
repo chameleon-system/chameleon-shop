@@ -35,8 +35,7 @@ class TableEditor extends \TCMSTableEditor
             new UpdateProductStockEvent(
                 $shopArticleStock->fieldShopArticleId,
                 $shopArticleStock->fieldAmount,
-                $preChangeData->fieldAmount,
-                $shopArticleStock->GetFieldShopArticle()
+                $preChangeData->fieldAmount
             ),
             ShopEvents::UPDATE_PRODUCT_STOCK
         );

@@ -1865,6 +1865,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param bool  $bForceUpdate       - set to true, if you want to trigger update action, even if nothing changed (needed for example, if an article is changed via the table editor)
      *
      * @return bool - return true if some data was changed
+     *
+     * @deprecated - you should use `\ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface` to update stock
+     *               and `\ChameleonSystem\ShopBundle\ProductStatistics\Interfaces\ProductStatisticsServiceInterface` to update product stats
      */
     public function UpdateStock($dNewStockValue, $bNewAmountIsDelta = false, $bUpdateSaleCounter = false, $bForceUpdate = false)
     {
@@ -1893,7 +1896,6 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         if ($oldStock !== $newStock || true === $bForceUpdate) {
             $this->StockWasUpdatedHook($oldStock, $newStock);
-            $this->getEventDispatcher()->dispatch(new UpdateProductStockEvent($this->id, $newStock, $oldStock, $this), ShopEvents::UPDATE_PRODUCT_STOCK);
         }
 
         return $oldStock !== $newStock;
@@ -2001,6 +2003,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param float $dNewValue
      *
      * @return void
+     * @deprecated use the `\ChameleonSystem\ShopBundle\ShopEvents::UPDATE_PRODUCT_STOCK` event instead
      */
     protected function StockWasUpdatedHook($dOldValue, $dNewValue)
     {
