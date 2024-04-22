@@ -17,14 +17,13 @@ class UpdateProductStockListener
 
     public function enableDisableProductBasedOnStock(UpdateProductStockEvent $event): void
     {
-        $product = $event->getProduct();
+        $product = \TdbShopArticle::GetNewInstance($event->getProductId());
         $bActive = $product->CheckActivateOrDeactivate($event->getNewStock());
         $product->setIsActive(1 === $bActive);
     }
 
     public function updateBundleOwnerStock(UpdateProductStockEvent $event): void
     {
-//        $product = $event->getProductId()
         // check if the article is part of a bundle... if it is, make sure the bundle article does not exceed the total number of single items
         $query = 'SELECT `shop_article`.`id`,
                      shop_bundle_article.amount AS ItemsPerBundle,

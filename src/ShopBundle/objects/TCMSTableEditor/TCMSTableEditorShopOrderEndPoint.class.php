@@ -207,7 +207,7 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
             }
             if ($bStornoChanged) {
                 $this->oTable->UpdateUsedVouchers($this->oTable->sqlData['canceled']);
-                $this->oTable->UpdateStock('1' === $this->oTable->sqlData['canceled']);
+                $this->oTable->UpdateStock('1' !== $this->oTable->sqlData['canceled']);
             }
         }
         if ($bUserChanged && !empty($this->oTablePreChangeData->sqlData['data_extranet_user_id'])) {
