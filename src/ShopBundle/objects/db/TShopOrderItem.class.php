@@ -121,38 +121,6 @@ class TShopOrderItem extends TAdbShopOrderItem
     }
 
     /**
-     * use the method to up the sales count for the article.
-     *
-     * @return void
-     */
-    protected function PostInsertHook()
-    {
-        parent::PostInsertHook();
-        $oArticle = &$this->GetFieldShopArticle();
-        if (!is_null($oArticle)) {
-            $bNewAmountIsDelta = true;
-            $bUpdateSaleCounter = true;
-            $oArticle->UpdateStock(-1 * $this->fieldOrderAmount, $bNewAmountIsDelta, $bUpdateSaleCounter);
-        }
-    }
-
-    /**
-     * update the article counter.
-     *
-     * @return void
-     */
-    protected function PreDeleteHook()
-    {
-        parent::PreDeleteHook();
-        $oArticle = &$this->GetFieldShopArticle();
-        if (!is_null($oArticle)) {
-            $bNewAmountIsDelta = true;
-            $bUpdateSaleCounter = true;
-            $oArticle->UpdateStock($this->fieldOrderAmount, $bNewAmountIsDelta, $bUpdateSaleCounter);
-        }
-    }
-
-    /**
      * used to display an order item.
      *
      * @param string $sViewName     - the view to use
