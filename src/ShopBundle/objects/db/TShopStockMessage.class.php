@@ -236,8 +236,6 @@ class TShopStockMessage extends TAdbShopStockMessage
      */
     protected function GetMessagesFromTriggerForQuantity($dQuantityRequested)
     {
-        // todo - get messages from service
-
         // need to find range for every stock type first
         $aStock = array();
         $iTotalStock = $this->GetArticle()->getAvailableStock();
