@@ -9,12 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\ShopMultiWarehouseBundle\ProductAvailability\ProductAvailabilityStringifyInterface;
-use ChameleonSystem\ShopMultiWarehouseBundle\StockAccess\StockServiceInterface;
-use ChameleonSystem\ShopMultiWarehouseBundle\StockAccessConfiguration\StockAccessConfigurationFactoryInterface;
-use ChameleonSystem\ShopMultiWarehouseBundle\TargetAddress\TargetAddressProviderInterface;
-
 class TShopStockMessage extends TAdbShopStockMessage
 {
     /**
