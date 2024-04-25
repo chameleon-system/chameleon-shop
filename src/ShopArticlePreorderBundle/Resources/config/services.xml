@@ -6,7 +6,7 @@
 
     <services>
         <service id="ChameleonSystem\ShopArticlePreorderBundle\EventListener\UpdateProductStockListener">
-            <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="sentPreOrderMail" />
+            <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="sendPreOrderMail" />
         </service>
     </services>
 </container>
