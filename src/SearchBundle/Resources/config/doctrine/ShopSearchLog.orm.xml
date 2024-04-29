@@ -1,0 +1,56 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\SearchBundle\Entity\ShopSearchLog" table="shop_search_log">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="shop" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\Shop"
+                     inversed-by="shopSearchLogCollection">
+            <options>
+                <option name="comment">Belongs to shop</option>
+            </options>
+            <join-column name="shop_id" referenced-column-name="id"/>
+        </many-to-one>
+        <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage">
+            <join-column name="cms_language_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Language</option>
+            </options>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Search term</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="numberOfResults" type="integer" column="number_of_results" nullable="false">
+            <options>
+                <option name="comment">Number of results</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="searchDate" type="datetime" column="search_date" nullable="false">
+            <options>
+                <option name="comment">Search date</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser"
+                     inversed-by="shopSearchLogCollection">
+            <options>
+                <option name="comment">Executed by</option>
+            </options>
+            <join-column name="data_extranet_user_id" referenced-column-name="id"/>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

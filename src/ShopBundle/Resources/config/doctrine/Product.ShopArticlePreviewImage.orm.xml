@@ -1,0 +1,38 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\Product\ShopArticlePreviewImage" table="shop_article_preview_image">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="shopArticle" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticle"
+                     inversed-by="shopArticlePreviewImageCollection">
+            <options>
+                <option name="comment">Belongs to article</option>
+            </options>
+            <join-column name="shop_article_id" referenced-column-name="id"/>
+        </many-to-one>
+        <many-to-one field="shopArticleImageSize"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleImageSize">
+            <join-column name="shop_article_image_size_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Preview image size / type</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="cmsMedia" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="cms_media_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Preview image</option>
+            </options>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

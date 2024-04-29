@@ -1,0 +1,73 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\SearchBundle\Entity\ShopSearchFieldWeight" table="shop_search_field_weight">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="shop" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\Shop"
+                     inversed-by="shopSearchFieldWeightCollection">
+            <options>
+                <option name="comment">Belongs to shop</option>
+            </options>
+            <join-column name="shop_id" referenced-column-name="id"/>
+        </many-to-one>
+        <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage">
+            <join-column name="cms_language_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Language</option>
+            </options>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Descriptive name of the field / table combination</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="tablename" type="string" column="tablename" length="255" nullable="false">
+            <options>
+                <option name="comment">Table</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="fieldname" type="string" column="fieldname" length="255" nullable="false">
+            <options>
+                <option name="comment">Field</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="weight" type="decimal" column="weight" length="" nullable="false" precision="5" scale=",">
+            <options>
+                <option name="comment">Weight</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="shopSearchQuery" target-entity="\ChameleonSystem\SearchBundle\Entity\ShopSearchQuery">
+            <join-column name="shop_search_query_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Selection to be used</option>
+            </options>
+        </many-to-one>
+        <field name="fieldNameInQuery" type="string" column="field_name_in_query" length="255" nullable="false">
+            <options>
+                <option name="comment">Field name in query</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="indexPartialWords" type="boolean" column="index_partial_words" nullable="false">
+            <options>
+                <option name="comment">Indexing partial words</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

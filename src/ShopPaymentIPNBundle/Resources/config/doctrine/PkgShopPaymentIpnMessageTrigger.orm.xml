@@ -1,0 +1,76 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopPaymentIPNBundle\Entity\PkgShopPaymentIpnMessageTrigger"
+            table="pkg_shop_payment_ipn_message_trigger">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="pkgShopPaymentIpnTrigger"
+                     target-entity="\ChameleonSystem\ShopPaymentIPNBundle\Entity\PkgShopPaymentIpnTrigger"
+                     inversed-by="pkgShopPaymentIpnMessageTriggerCollection">
+            <options>
+                <option name="comment">Trigger</option>
+            </options>
+            <join-column name="pkg_shop_payment_ipn_trigger_id" referenced-column-name="id"/>
+        </many-to-one>
+        <many-to-one field="pkgShopPaymentIpnMessage"
+                     target-entity="\ChameleonSystem\ShopPaymentIPNBundle\Entity\PkgShopPaymentIpnMessage"
+                     inversed-by="pkgShopPaymentIpnMessageTriggerCollection">
+            <options>
+                <option name="comment">IPN Message</option>
+            </options>
+            <join-column name="pkg_shop_payment_ipn_message_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="datecreated" type="datetime" column="datecreated" nullable="false">
+            <options>
+                <option name="comment">Created on</option>
+                <option name="default">CURRENT_TIMESTAMP</option>
+            </options>
+        </field>
+        <field name="done" type="boolean" column="done" nullable="false">
+            <options>
+                <option name="comment">Processed</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="doneDate" type="datetime" column="done_date" nullable="false">
+            <options>
+                <option name="comment">Processed on</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="success" type="boolean" column="success" nullable="false">
+            <options>
+                <option name="comment">Successful</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="attemptCount" type="integer" column="attempt_count" nullable="false">
+            <options>
+                <option name="comment">Number of attempts</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="nextAttempt" type="datetime" column="next_attempt" nullable="false">
+            <options>
+                <option name="comment">Next attempt on</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="log" type="text" column="log" nullable="false">
+            <options>
+                <option name="comment">Log</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

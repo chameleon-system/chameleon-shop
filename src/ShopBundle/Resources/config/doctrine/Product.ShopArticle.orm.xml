@@ -1,0 +1,502 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ShopBundle\Entity\Product\ShopArticle" table="shop_article">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsUser" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUser">
+            <join-column name="cms_user" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Name</option>
+            </options>
+        </many-to-one>
+        <field name="articlenumber" type="string" column="articlenumber" length="255" nullable="false">
+            <options>
+                <option name="comment">Product number</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="shopArticleImageCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleImage" mapped-by="shopArticle"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Detailed product pictures</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-one field="cmsMediaDefaultPreviewImage"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="cms_media_default_preview_image_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Default preview image of the product</option>
+            </options>
+        </many-to-one>
+        <one-to-many field="shopArticlePreviewImageCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticlePreviewImage"
+                     mapped-by="shopArticle" orphan-removal="true">
+            <options>
+                <option name="comment">Product preview images</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="shopArticleDocumentCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleDocument"
+                     mapped-by="shopArticle" orphan-removal="true">
+            <options>
+                <option name="comment">Product documents</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="datecreated" type="datetime" column="datecreated" nullable="false">
+            <options>
+                <option name="comment">Created on</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="active" type="boolean" column="active" nullable="false">
+            <options>
+                <option name="comment">Active</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="subtitle" type="string" column="subtitle" length="255" nullable="false">
+            <options>
+                <option name="comment">Subtitle</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="usp" type="string" column="usp" length="255" nullable="false">
+            <options>
+                <option name="comment">USP</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-many field="cmsTagsCollection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsTags">
+            <join-table name="shop_article_cms_tags_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Tag / Catchword</option>
+            </options>
+        </many-to-many>
+        <field name="test" type="decimal" column="test" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment"></option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="testfeld" type="text" column="testfeld" nullable="false">
+            <options>
+                <option name="comment">Test</option>
+            </options>
+        </field>
+        <field name="descriptionShort" type="text" column="description_short" nullable="false">
+            <options>
+                <option name="comment">Short description</option>
+            </options>
+        </field>
+        <field name="description" type="text" column="description" nullable="false">
+            <options>
+                <option name="comment">Description</option>
+            </options>
+        </field>
+        <many-to-one field="shopManufacturer"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopManufacturer">
+            <join-column name="shop_manufacturer_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Manufacturer / Brand</option>
+            </options>
+        </many-to-one>
+        <many-to-many field="shopArticleGroupCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleGroup">
+            <join-table name="shop_article_shop_article_group_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Product groups</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="shopArticleTypeCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleType">
+            <join-table name="shop_article_shop_article_type_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Product type</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="shopCategoryCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopCategory">
+            <join-table name="shop_article_shop_category_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Product categories</option>
+            </options>
+        </many-to-many>
+        <many-to-one field="shopCategory" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopCategory">
+            <join-column name="shop_category_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Main category of the product</option>
+            </options>
+        </many-to-one>
+        <many-to-many field="shopArticleMarkerCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleMarker">
+            <join-table name="shop_article_shop_article_marker_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Product characteristics</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="shopAttributeValueCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopAttributeValue">
+            <join-table name="shop_article_shop_attribute_value_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Product attributes</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="shopCollection" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\Shop">
+            <join-table name="shop_article_shop_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to the following shops</option>
+            </options>
+        </many-to-many>
+        <one-to-many field="shopArticleContributorCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleContributor"
+                     mapped-by="shopArticle" orphan-removal="true">
+            <options>
+                <option name="comment">Contributing persons</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-many field="downloadCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsDocument">
+            <join-table name="shop_article_download_cms_document_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Download file</option>
+            </options>
+        </many-to-many>
+        <field name="price" type="decimal" column="price" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Price</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="priceReference" type="decimal" column="price_reference" length="" nullable="false" precision="1"
+               scale="0">
+            <options>
+                <option name="comment">Reference price</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="shopVat" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopVat">
+            <join-column name="shop_vat_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">VAT group</option>
+            </options>
+        </many-to-one>
+        <field name="excludeFromShippingCostCalculation" type="boolean" column="exclude_from_shipping_cost_calculation"
+               nullable="false">
+            <options>
+                <option name="comment">Product is free of shipping costs</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="excludeFromVouchers" type="boolean" column="exclude_from_vouchers" nullable="false">
+            <options>
+                <option name="comment">Do not allow vouchers</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="excludeFromDiscounts" type="boolean" column="exclude_from_discounts" nullable="false">
+            <options>
+                <option name="comment">Do not allow discounts</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="sizeWeight" type="decimal" column="size_weight" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Weight (grams)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sizeWidth" type="decimal" column="size_width" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Width (meters)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sizeHeight" type="decimal" column="size_height" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Height (meters)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sizeLength" type="decimal" column="size_length" length="" nullable="false" precision="1" scale="0">
+            <options>
+                <option name="comment">Length (meters)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="quantityInUnits" type="decimal" column="quantity_in_units" length="" nullable="false" precision="1"
+               scale="0">
+            <options>
+                <option name="comment">Content</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="shopUnitOfMeasurement"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopUnitOfMeasurement">
+            <join-column name="shop_unit_of_measurement_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Measurement unit of content</option>
+            </options>
+        </many-to-one>
+        <field name="nameVariantInfo" type="string" column="name_variant_info" length="255" nullable="false">
+            <options>
+                <option name="comment">Variant name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="shopVariantSet" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopVariantSet">
+            <join-column name="shop_variant_set_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Variant set</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="variantParent" target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticle"
+                     inversed-by="shopArticleVariantsCollection">
+            <options>
+                <option name="comment">Is a variant of</option>
+            </options>
+            <join-column name="variant_parent_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="variantParentIsActive" type="boolean" column="variant_parent_is_active" nullable="false">
+            <options>
+                <option name="comment">Is the parent of the variant active?</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <one-to-many field="shopArticleVariantsCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticle" mapped-by="variantParent"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Product variants</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-many field="shopVariantTypeValueCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopVariantTypeValue">
+            <join-table name="shop_article_shop_variant_type_value_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Variant values</option>
+            </options>
+        </many-to-many>
+        <one-to-one field="shopArticleStockCollection"
+                    target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleStock" mapped-by="shopArticle">
+            <options>
+                <option name="comment">Stock</option>
+            </options>
+            <cascade>
+                <cascade-remove/>
+            </cascade>
+        </one-to-one>
+        <field name="showPreorderOnZeroStock" type="boolean" column="show_preorder_on_zero_stock" nullable="false">
+            <options>
+                <option name="comment">Offer preorder at 0 stock</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-one field="shopStockMessage"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopStockMessage">
+            <join-column name="shop_stock_message_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Delivery status</option>
+            </options>
+        </many-to-one>
+        <many-to-many field="shopArticle2Collection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticle">
+            <join-table name="shop_article_shop_article2_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Accessories</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="shopArticleCollection"
+                      target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticle">
+            <join-table name="shop_article_shop_article_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Similar products</option>
+            </options>
+        </many-to-many>
+        <field name="seoPattern" type="string" column="seo_pattern" length="255" nullable="false">
+            <options>
+                <option name="comment">SEO pattern</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="metaKeywords" type="string" column="meta_keywords" length="255" nullable="false">
+            <options>
+                <option name="comment">Meta keywords</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="metaDescription" type="string" column="meta_description" length="255" nullable="false">
+            <options>
+                <option name="comment">Meta description</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="listRank" type="integer" column="list_rank" nullable="false">
+            <options>
+                <option name="comment">Quantifier / Product ranking</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="virtualArticle" type="boolean" column="virtual_article" nullable="false">
+            <options>
+                <option name="comment">Virtual product</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="isSearchable" type="boolean" column="is_searchable" nullable="false">
+            <options>
+                <option name="comment">Is searchable</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="isNew" type="boolean" column="is_new" nullable="false">
+            <options>
+                <option name="comment">Mark as new</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="stars" type="string" column="stars" length="255" nullable="false">
+            <options>
+                <option name="comment">Number of stars</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="shopArticleReviewCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleReview"
+                     mapped-by="shopArticle" orphan-removal="true">
+            <options>
+                <option name="comment">Customer reviews</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="isBundle" type="boolean" column="is_bundle" nullable="false">
+            <options>
+                <option name="comment">Is a bundle</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <one-to-many field="shopBundleArticleCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopBundleArticle"
+                     mapped-by="shopArticle" orphan-removal="true">
+            <options>
+                <option name="comment">Items belonging to this bundle</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-one field="shopArticleStatsCollection"
+                    target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleStats" mapped-by="shopArticle">
+            <options>
+                <option name="comment">Statistics</option>
+            </options>
+            <cascade>
+                <cascade-remove/>
+            </cascade>
+        </one-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>
