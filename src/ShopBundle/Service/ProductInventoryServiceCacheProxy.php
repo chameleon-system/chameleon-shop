@@ -46,7 +46,7 @@ class ProductInventoryServiceCacheProxy implements ProductInventoryServiceInterf
      * @psalm-suppress InvalidReturnStatement
      * @FIXME Returning a void return
      */
-    public function addStock($shopArticleId, $stock)
+    public function addStock($shopArticleId, $stock): bool
     {
         $this->triggerCacheChange($shopArticleId);
 
@@ -58,7 +58,7 @@ class ProductInventoryServiceCacheProxy implements ProductInventoryServiceInterf
      * @psalm-suppress InvalidReturnStatement
      * @FIXME Returning a void return
      */
-    public function setStock($shopArticleId, $stock)
+    public function setStock($shopArticleId, $stock): bool
     {
         $this->triggerCacheChange($shopArticleId);
 
@@ -70,7 +70,7 @@ class ProductInventoryServiceCacheProxy implements ProductInventoryServiceInterf
      * @psalm-suppress InvalidReturnStatement
      * @FIXME Returning a void return
      */
-    public function updateVariantParentStock($parentArticleId)
+    public function updateVariantParentStock($parentArticleId): bool
     {
         $this->triggerCacheChange($parentArticleId);
 

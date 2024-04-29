@@ -1865,6 +1865,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param bool  $bForceUpdate       - set to true, if you want to trigger update action, even if nothing changed (needed for example, if an article is changed via the table editor)
      *
      * @return bool - return true if some data was changed
+     *
+     * @deprecated - you should use `\ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface` to update stock
+     *               and `\ChameleonSystem\ShopBundle\ProductStatistics\Interfaces\ProductStatisticsServiceInterface` to update product stats
      */
     public function UpdateStock($dNewStockValue, $bNewAmountIsDelta = false, $bUpdateSaleCounter = false, $bForceUpdate = false)
     {
@@ -1872,16 +1875,11 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             return false;
         }
         $oldStock = $this->getAvailableStock();
-        // NOTE the below comparison always has true as result (compares int to double); see https://github.com/chameleon-system/chameleon-system/issues/120
-        $stockIsChanging = ($bNewAmountIsDelta || $oldStock !== $dNewStockValue);
-        if (false === $stockIsChanging && false === $bUpdateSaleCounter && false === $bForceUpdate) {
-            return false;
-        }
 
         if ($bNewAmountIsDelta) {
-            $this->getInventoryService()->addStock($this->id, $dNewStockValue);
+            $stockChanged = $this->getInventoryService()->addStock($this->id, $dNewStockValue);
         } else {
-            $this->getInventoryService()->setStock($this->id, $dNewStockValue);
+            $stockChanged = $this->getInventoryService()->setStock($this->id, $dNewStockValue);
         }
 
         if ($bUpdateSaleCounter && $bNewAmountIsDelta) {
@@ -1891,33 +1889,11 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         $newStock = $this->getAvailableStock();
 
-        $bActive = $this->CheckActivateOrDeactivate($newStock);
-        $this->setIsActive(1 === $bActive);
-
-        // check if the article is part of a bundle... if it is, make sure the bundle article does not exceed the total number of single items
-        $query = 'SELECT shop_article.*,
-                     shop_bundle_article.amount AS ItemsPerBundle,
-                     (shop_bundle_article.amount * shop_article_stock.amount) AS required_stock
-                FROM shop_article
-          INNER JOIN shop_bundle_article ON shop_article.id = shop_bundle_article.shop_article_id
-           LEFT JOIN shop_article_stock ON shop_article.id = shop_article_stock.shop_article_id
-               WHERE shop_bundle_article.bundle_article_id = :articleId
-                 AND (shop_bundle_article.amount * shop_article_stock.amount) > :newStock
-               ';
-        $aBundleChangeList = $this->getDatabaseConnection()->fetchAll($query, array('articleId' => $this->id, 'newStock' => $newStock), array('articleId' => \PDO::PARAM_STR, 'newStock' => \PDO::PARAM_INT));
-        foreach ($aBundleChangeList as $aBundleChange) {
-            $iAllowedStock = floor($newStock / $aBundleChange['ItemsPerBundle']);
-            $oBundleArticle = TdbShopArticle::GetNewInstance();
-            $oBundleArticle->LoadFromRow($aBundleChange);
-            $oBundleArticle->UpdateStock($iAllowedStock, false, false);
-        }
-
-        if ($oldStock !== $newStock || true === $bForceUpdate) {
+        if (true === $stockChanged || true === $bForceUpdate) {
             $this->StockWasUpdatedHook($oldStock, $newStock);
-            $this->getEventDispatcher()->dispatch(new UpdateProductStockEvent($this->id, $newStock, $oldStock), ShopEvents::UPDATE_PRODUCT_STOCK);
         }
 
-        return $oldStock !== $newStock;
+        return $stockChanged;
     }
 
     /**
@@ -2022,6 +1998,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      * @param float $dNewValue
      *
      * @return void
+     * @deprecated use the `\ChameleonSystem\ShopBundle\ShopEvents::UPDATE_PRODUCT_STOCK` event instead
      */
     protected function StockWasUpdatedHook($dOldValue, $dNewValue)
     {

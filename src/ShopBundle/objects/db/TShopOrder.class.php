@@ -13,6 +13,8 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopBundle\Exception\ConfigurationException;
 use ChameleonSystem\ShopBundle\Payment\PaymentHandler\Interfaces\ShopPaymentHandlerFactoryInterface;
+use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
+use ChameleonSystem\ShopBundle\ProductStatistics\Interfaces\ProductStatisticsServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -1108,6 +1110,11 @@ class TShopOrder extends TShopOrderAutoParent
      */
     public function UpdateStock($bRemoveFromStock)
     {
+        /** @var ProductInventoryServiceInterface $productInventoryService */
+        $productInventoryService = ServiceLocator::get('chameleon_system_shop.product_inventory_service');
+        /** @var ProductStatisticsServiceInterface $productStatisticService */
+        $productStatisticService = ServiceLocator::get('chameleon_system_shop.product_stats_service');
+
         $oOrderItemList = $this->GetFieldShopOrderItemList();
         $oOrderItemList->GoToStart();
         while ($oOrderItem = $oOrderItemList->Next()) {
@@ -1117,7 +1124,8 @@ class TShopOrder extends TShopOrderAutoParent
                 if ($bRemoveFromStock) {
                     $dAmount = -1 * $dAmount;
                 }
-                $oItem->UpdateStock($dAmount, true, true);
+                $productInventoryService->addStock($oOrderItem->fieldShopArticleId, $dAmount);
+                $productStatisticService->add($oOrderItem->fieldShopArticleId, ProductStatisticsServiceInterface::TYPE_SALES, -1 * $dAmount);
             }
         }
         $oOrderItemList->GoToStart();

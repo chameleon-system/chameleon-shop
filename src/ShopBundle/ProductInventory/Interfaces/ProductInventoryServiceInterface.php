@@ -29,20 +29,20 @@ interface ProductInventoryServiceInterface
      *
      * @return void
      */
-    public function addStock($shopArticleId, $stock);
+    public function addStock($shopArticleId, $stock): bool;
 
     /**
      * @param string $shopArticleId
      * @param int    $stock
      *
-     * @return void
+     * @return bool
      */
-    public function setStock($shopArticleId, $stock);
+    public function setStock($shopArticleId, $stock): bool;
 
     /**
      * @param string $parentArticleId
      *
-     * @return void
+     * @return bool
      */
-    public function updateVariantParentStock($parentArticleId);
+    public function updateVariantParentStock($parentArticleId): bool;
 }

@@ -125,9 +125,8 @@
         </service>
 
         <service id="chameleon_system_shop.product_inventory_service_provider" class="ChameleonSystem\ShopBundle\Service\ProductInventoryService">
-            <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection" />
-            </call>
+            <argument key="$databaseConnection" type="service" id="database_connection" />
+            <argument key="$eventDispatcher" type="service" id="event_dispatcher" />
         </service>
         <service id="chameleon_system_shop.product_inventory_service" class="ChameleonSystem\ShopBundle\Service\ProductInventoryServiceCacheProxy" public="true">
             <argument type="service" id="chameleon_system_shop.product_inventory_service_provider" />
@@ -222,6 +221,13 @@
         <service id="chameleon_system_shop.event_listener.update_product_statistics" class="ChameleonSystem\ShopBundle\EventListener\UpdateProductStatisticsListener">
             <argument type="service" id="chameleon_system_shop.product_stats_service" />
             <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="onUpdateProductStock" />
+        </service>
+
+        <service id="ChameleonSystem\ShopBundle\EventListener\UpdateProductStockListener">
+            <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="enableDisableProductBasedOnStock" />
+            <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="updateBundleOwnerStock" />
+            <argument key="$databaseConnection" type="service" id="database_connection" />
+            <argument key="$productInventoryService" type="service" id="chameleon_system_shop.product_inventory_service" />
         </service>
 
         <service id="chameleon_system_shop.basket.basket_product_amount_validator" class="ChameleonSystem\ShopBundle\Basket\BasketProductAmountValidator" public="true">
