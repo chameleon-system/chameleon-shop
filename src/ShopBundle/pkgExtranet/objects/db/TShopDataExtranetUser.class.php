@@ -16,7 +16,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
 {
     const COOKIE_NAME_HISTORY = 'shopuserarticleviewhistory';
     const COOKIE_NAME_NOTICELIST = 'shopuserarticlenoticelist';
-    private const MAX_NOTICE_LIST_COOKIE_LENGTH = 17; // this should stay under the critical 4kb string size
+    public const MAX_NOTICE_LIST_COOKIE_LENGTH = 17; // this should stay under the critical 4kb string size
 
     /**
      * the article ids last viewed by the user (ie. on the detail page) will be stored here
