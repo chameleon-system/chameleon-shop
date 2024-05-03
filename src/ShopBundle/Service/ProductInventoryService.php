@@ -11,15 +11,19 @@
 
 namespace ChameleonSystem\ShopBundle\Service;
 
+use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
 use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
+use ChameleonSystem\ShopBundle\ShopEvents;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ProductInventoryService implements ProductInventoryServiceInterface
 {
-    /**
-     * @var Connection
-     */
-    private $databaseConnection;
+    public function __construct(
+        private readonly Connection $databaseConnection,
+        private readonly EventDispatcherInterface $eventDispatcher
+    ) {
+    }
 
     /**
      * {@inheritdoc}
@@ -27,59 +31,79 @@ class ProductInventoryService implements ProductInventoryServiceInterface
     public function getAvailableStock($shopArticleId)
     {
         /** @var int[]|false $stock */
-        $stock = $this->databaseConnection->fetchNumeric(
-            'SELECT `amount` FROM `shop_article_stock` WHERE `shop_article_id` = :id',
+        $stock = $this->databaseConnection->fetchOne(
+            'SELECT SUM(`amount`) AS total_amount FROM `shop_article_stock` WHERE `shop_article_id` = :id GROUP BY `shop_article_id`',
             array('id' => $shopArticleId)
         );
-        if (is_array($stock) && isset($stock[0])) {
-            return (int) $stock[0];
+        if (false === $stock) {
+            return 0;
         }
 
-        /** @var false $stock */
-
-        return $stock;
+        return (int) $stock;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addStock($shopArticleId, $stock)
+    public function addStock($shopArticleId, $stock): bool
     {
+        $preChangeStock = $this->getAvailableStock($shopArticleId);
         $query = 'INSERT INTO `shop_article_stock`
                           SET `id` = :id,
                               `amount` = :amount,
                               `shop_article_id` = :articleId
       ON DUPLICATE KEY UPDATE `amount` = `amount` + :amount
                               ';
-        $this->databaseConnection->executeQuery(
+        $affectedRows = $this->databaseConnection->executeStatement(
             $query,
             array('id' => \TTools::GetUUID(), 'amount' => $stock, 'articleId' => $shopArticleId),
             array('amount' => \PDO::PARAM_INT)
         );
+        if (0 === $affectedRows) {
+            return false;
+        }
+
+        $this->eventDispatcher->dispatch(
+            new UpdateProductStockEvent($shopArticleId, $stock, $preChangeStock),
+            ShopEvents::UPDATE_PRODUCT_STOCK
+        );
+
+        return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setStock($shopArticleId, $stock)
+    public function setStock($shopArticleId, $stock): bool
     {
+        $preChangeStock = $this->getAvailableStock($shopArticleId);
         $query = 'INSERT INTO `shop_article_stock`
                           SET `id` = :id,
                               `amount` = :amount,
                               `shop_article_id` = :articleId
       ON DUPLICATE KEY UPDATE `amount` = :amount
                               ';
-        $this->databaseConnection->executeQuery(
+        $affectedRows = $this->databaseConnection->executeStatement(
             $query,
             array('id' => \TTools::GetUUID(), 'amount' => $stock, 'articleId' => $shopArticleId),
             array('amount' => \PDO::PARAM_INT)
         );
+        if (0 === $affectedRows) {
+            return false;
+        }
+
+        $this->eventDispatcher->dispatch(
+            new UpdateProductStockEvent($shopArticleId, $stock, $preChangeStock),
+            ShopEvents::UPDATE_PRODUCT_STOCK
+        );
+
+        return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function updateVariantParentStock($parentArticleId)
+    public function updateVariantParentStock($parentArticleId): bool
     {
         $query = 'SELECT
                          SUM(`shop_article_stock`.amount) AS amount
@@ -90,31 +114,6 @@ class ProductInventoryService implements ProductInventoryServiceInterface
         $result = $this->databaseConnection->fetchNumeric($query, array('articleId' => $parentArticleId));
         $amount = (is_array($result) && isset($result[0])) ? (int) $result[0] : 0;
 
-        $updateData = array(
-            'amount' => $amount,
-            'articleId' => $parentArticleId,
-        );
-        $query = 'INSERT INTO `shop_article_stock`
-                          SET `amount` = :amount,
-                              `shop_article_id` = :articleId,
-                              `id` = :id
-      ON DUPLICATE KEY UPDATE `amount` = :amount
-                              ';
-        $updateData['id'] = \TTools::GetUUID();
-        $this->databaseConnection->executeQuery(
-            $query,
-            $updateData,
-            array('amount' => \PDO::PARAM_INT)
-        );
-    }
-
-    /**
-     * @param Connection $connection
-     *
-     * @return void
-     */
-    public function setDatabaseConnection(Connection $connection)
-    {
-        $this->databaseConnection = $connection;
+        return $this->setStock($parentArticleId, $amount);
     }
 }

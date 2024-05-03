@@ -31,15 +31,13 @@ class UpdateProductStockEvent extends Event
     /**
      * @param string $productId
      * @param int    $newStock
-     * @param int    $oldStock
      */
-    public function __construct($productId, $newStock, $oldStock)
+    public function __construct(string $productId, int $newStock, int $oldStock)
     {
         $this->productId = $productId;
         $this->newStock = $newStock;
         $this->oldStock = $oldStock;
     }
-
     /**
      * @return string
      */

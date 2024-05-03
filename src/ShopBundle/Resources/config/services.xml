@@ -40,6 +40,8 @@
         <parameter key="chameleon_system_shop.product_controller.class">TPkgShopRouteControllerArticle</parameter>
 
         <parameter key="chameleon_system_shop.shop_route_article_factory.class">ShopRouteArticleFactory</parameter>
+        <parameter key="chameleon_system_shop.shop_variant_type.data_model">ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeDataModel</parameter>
+        <parameter key="chameleon_system_shop.shop_variant_type_value.data_model">ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeValueDataModel</parameter>
     </parameters>
 
     <services>
@@ -123,9 +125,8 @@
         </service>
 
         <service id="chameleon_system_shop.product_inventory_service_provider" class="ChameleonSystem\ShopBundle\Service\ProductInventoryService">
-            <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection" />
-            </call>
+            <argument key="$databaseConnection" type="service" id="database_connection" />
+            <argument key="$eventDispatcher" type="service" id="event_dispatcher" />
         </service>
         <service id="chameleon_system_shop.product_inventory_service" class="ChameleonSystem\ShopBundle\Service\ProductInventoryServiceCacheProxy" public="true">
             <argument type="service" id="chameleon_system_shop.product_inventory_service_provider" />
@@ -222,6 +223,13 @@
             <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="onUpdateProductStock" />
         </service>
 
+        <service id="ChameleonSystem\ShopBundle\EventListener\UpdateProductStockListener">
+            <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="enableDisableProductBasedOnStock" />
+            <tag name="kernel.event_listener" event="chameleon_system_shop.update_product_stock" method="updateBundleOwnerStock" />
+            <argument key="$databaseConnection" type="service" id="database_connection" />
+            <argument key="$productInventoryService" type="service" id="chameleon_system_shop.product_inventory_service" />
+        </service>
+
         <service id="chameleon_system_shop.basket.basket_product_amount_validator" class="ChameleonSystem\ShopBundle\Basket\BasketProductAmountValidator" public="true">
         </service>
 
@@ -287,6 +295,15 @@
             <argument type="service" id="logger" on-invalid="ignore"/>
             <tag name="monolog.logger" channel="request"/>
             <tag name="kernel.event_listener" event="chameleon_system_core.filter_content" method="filterResponse" priority="0"/>
+        </service>
+
+        <service id="chameleon_system_shop.factory.variant_type_data_model_factory" class="ChameleonSystem\ShopBundle\Bridge\Chameleon\Factory\VariantTypeDataModelFactory" public="true">
+            <argument type="string">%chameleon_system_shop.shop_variant_type.data_model%</argument>
+        </service>
+
+        <service id="chameleon_system_shop.factory.variant_type_value_data_model_factory" class="ChameleonSystem\ShopBundle\Bridge\Chameleon\Factory\VariantTypeValueDataModelFactory" public="true">
+            <argument type="service" id="chameleon_system_core.util.url" />
+            <argument type="string">%chameleon_system_shop.shop_variant_type_value.data_model%</argument>
         </service>
 
     </services>
