@@ -25,6 +25,7 @@
         "screenshotfolder_id": ""
     },
     "require": {
+        "ext-json": "*",
         "chameleon-system/chameleon-base": "dev-master",
         "simplepie/simplepie": "~1.3"
     },

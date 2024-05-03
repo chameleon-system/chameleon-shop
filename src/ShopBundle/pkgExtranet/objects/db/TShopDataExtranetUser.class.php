@@ -16,6 +16,8 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
 {
     const COOKIE_NAME_HISTORY = 'shopuserarticleviewhistory';
     const COOKIE_NAME_NOTICELIST = 'shopuserarticlenoticelist';
+    public const MAX_NOTICE_LIST_COOKIE_LENGTH = 17; // this should stay under the critical 4kb string size
+
     /**
      * the article ids last viewed by the user (ie. on the detail page) will be stored here
      * Note: the although the list may grow longer (the complete history will be saved for logged in users)
@@ -408,7 +410,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
                 }
                 if (is_array($aTmpList)) {
                     reset($aTmpList);
-                    foreach ($aTmpList as $iKey => $aNoticeListItemData) {
+                    foreach ($aTmpList as $aNoticeListItemData) {
                         $oNoticeListItem = TdbShopUserNoticeList::GetNewInstance();
                         $oNoticeListItem->LoadFromRow($aNoticeListItemData);
                         $this->aNoticeList[$oNoticeListItem->fieldShopArticleId] = $oNoticeListItem->sqlData;
@@ -418,8 +420,9 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
         }
 
         $noticeList = array();
-        foreach ($this->aNoticeList as $articleId => $item) {
-            $noticeList[$articleId] = TdbShopUserNoticeList::GetNewInstance($item);
+        foreach ($this->aNoticeList as $item) {
+            $item = TdbShopUserNoticeList::GetNewInstance($item);
+            $noticeList[$item->fieldShopArticleId] = $item;
         }
 
         return $noticeList;
@@ -451,7 +454,12 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
         } else {
             $oNoticeListItem = TdbShopUserNoticeList::GetNewInstance();
             /** @var $oNoticeListItem TdbShopUserNoticeList */
-            $aData = array('shop_article_id' => $iArticleId, 'date_added' => date('Y-m-d H:i:s'), 'data_extranet_user_id' => $this->id, 'amount' => $iAmount);
+            $aData = [
+                'shop_article_id' => $iArticleId,
+                'date_added' => date('Y-m-d H:i:s'),
+                'data_extranet_user_id' => $this->id,
+                'amount' => $iAmount,
+            ];
             $oNoticeListItem->LoadFromRow($aData);
             if (!is_null($this->id) && $this->IsLoggedIn()) {
                 $oNoticeListItem->Save();
@@ -490,8 +498,18 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     {
         $aNoticeList = array();
         reset($this->aNoticeList);
+        $counter = 0;
         foreach (array_keys($this->aNoticeList) as $iItemId) {
-            $aNoticeList[$iItemId] = $this->aNoticeList[$iItemId];
+            if ($counter++ >= self::MAX_NOTICE_LIST_COOKIE_LENGTH) {
+                break;
+            }
+
+            $aNoticeList[] = [
+                'shop_article_id' => $this->aNoticeList[$iItemId]['shop_article_id'],
+                'date_added' => $this->aNoticeList[$iItemId]['date_added'],
+                'data_extranet_user_id' => $this->aNoticeList[$iItemId]['data_extranet_user_id'],
+                'amount' => $this->aNoticeList[$iItemId]['amount'],
+            ];
         }
         $sNoticeList = json_encode($aNoticeList);
         $sNoticeList = base64_encode($sNoticeList);
