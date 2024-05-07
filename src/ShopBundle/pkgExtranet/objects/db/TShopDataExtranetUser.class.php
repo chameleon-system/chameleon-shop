@@ -509,7 +509,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
                 break;
             }
 
-            if (true === $this->aNoticeList[$iItemId] instanceof TdbShopUserNoticeList)) {
+            if (true === $this->aNoticeList[$iItemId] instanceof TdbShopUserNoticeList) {
                 // this is for backwards compatibility reasons with old cookie data.
                 // @deprecated can be removed in 2025 when all old cookies lost their validity
                 $noticeListItemData = $this->aNoticeList[$iItemId]->sqlData;
