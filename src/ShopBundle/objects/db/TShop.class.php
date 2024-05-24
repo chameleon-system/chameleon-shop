@@ -368,14 +368,11 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * returns the default country id. this is usually the id set in the shop table, but may also be fetched via
      * ip lookup.
-     *
-     * @return string
-     * @psalm-suppress InvalidReturnType
-     * @FIXME Method is not implemented
      */
-    public function GetDefaultCountryId()
+    public function GetDefaultCountryId(): ?string
     {
-        // Not yet implemented
+        $countryId =  $this->fieldDataCountryId;
+        return (false === empty($countryId)) ? $countryId : null;
     }
 
     /**
