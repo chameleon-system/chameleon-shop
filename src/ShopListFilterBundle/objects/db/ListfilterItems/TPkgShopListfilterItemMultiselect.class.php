@@ -209,7 +209,7 @@ class TPkgShopListfilterItemMultiselect extends TdbPkgShopListfilterItem
     protected function GetTargetTableNameField()
     {
         static $targetTableFieldNameCache = [];
-        if (array_key_exists($this->sItemTableName, $targetTableFieldNameCache)) {
+        if (true === array_key_exists($this->sItemTableName, $targetTableFieldNameCache)) {
             return $targetTableFieldNameCache[$this->sItemTableName];
         }
         $oTargetTableConf = TdbCmsTblConf::GetNewInstance();
