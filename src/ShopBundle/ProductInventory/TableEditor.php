@@ -35,13 +35,13 @@ class TableEditor extends \TCMSTableEditor
         $totalNewStock = $this->getAvailableStock($shopArticleStock->fieldShopArticleId);
 
         $changedAmount = $preChangeData->fieldAmount - $shopArticleStock->fieldAmount;
-        $oldTotalStock = $totalNewStock + $changedAmount;
+        $totalOldStock = $totalNewStock + $changedAmount;
 
         $this->getEventDispatcher()->dispatch(
             new UpdateProductStockEvent(
                 $shopArticleStock->fieldShopArticleId,
                 $totalNewStock,
-                $oldTotalStock
+                $totalOldStock
             ),
             ShopEvents::UPDATE_PRODUCT_STOCK
         );
