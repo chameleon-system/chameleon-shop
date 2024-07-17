@@ -40,7 +40,10 @@ class ProductInventoryService implements ProductInventoryServiceInterface
                 ['id' => $shopArticleId]
             );
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error(
+                sprintf('Unable to getAvailableStock - database error: %s', $e->getMessage()),
+                ['productId' => $shopArticleId, 'exception'=>$e]
+            );
 
             return 0;
         }
@@ -70,7 +73,10 @@ class ProductInventoryService implements ProductInventoryServiceInterface
                 ['amount' => \PDO::PARAM_INT]
             );
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error(
+                sprintf('Unable to addStock - database error: %s', $e->getMessage()),
+                ['productId' => $shopArticleId, 'stock' => $stock, 'exception'=>$e]
+            );
 
             return false;
         }
@@ -102,7 +108,10 @@ class ProductInventoryService implements ProductInventoryServiceInterface
                 ['amount' => \PDO::PARAM_INT]
             );
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error(
+                sprintf('Unable to setStock - database error: %s', $e->getMessage()),
+                ['productId' => $shopArticleId, 'stock' => $stock, 'exception'=>$e]
+            );
 
             return false;
         }
@@ -131,7 +140,10 @@ class ProductInventoryService implements ProductInventoryServiceInterface
             $result = $this->databaseConnection->fetchAssociative($query, ['articleId' => $parentArticleId]);
             $amount = (is_array($result) && isset($result[0])) ? (int)$result[0] : 0;
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error(
+                sprintf('Unable to updateVariantParentStock - database error: %s', $e->getMessage()),
+                ['parentArticleId' => $parentArticleId, 'exception'=>$e]
+            );
             $amount = 0;
         }
 

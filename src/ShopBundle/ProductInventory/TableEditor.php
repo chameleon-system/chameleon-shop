@@ -59,7 +59,10 @@ class TableEditor extends \TCMSTableEditor
                 ['id' => $shopArticleId]
             );
         } catch (Exception $e) {
-            $this->getLogger()->error($e->getMessage());
+            $this->getLogger()->error(
+                sprintf('Unable to getAvailableStock - database error: %s', $e->getMessage()),
+                ['productId' => $shopArticleId, 'exception'=>$e]
+            );
 
             return 0;
         }
