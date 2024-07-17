@@ -13,7 +13,7 @@ namespace ChameleonSystem\ShopBundle\ProductInventory;
 
 use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
 use ChameleonSystem\ShopBundle\ShopEvents;
-use TdbShopArticleStock;
+use Doctrine\DBAL\Exception;
 
 class TableEditor extends \TCMSTableEditor
 {
@@ -24,20 +24,43 @@ class TableEditor extends \TCMSTableEditor
     {
         parent::PostSaveHook($oFields, $oPostTable);
         /**
-         * @var TdbShopArticleStock $shopArticleStock
+         * @var \TdbShopArticleStock $shopArticleStock
          */
         $shopArticleStock = $this->oTable;
         /**
-         * @var TdbShopArticleStock $preChangeData
+         * @var \TdbShopArticleStock $preChangeData
          */
         $preChangeData = $this->oTablePreChangeData;
+
+        $totalNewStock = $this->getAvailableStock($shopArticleStock->fieldShopArticleId);
+
+        $changedAmount = $preChangeData->fieldAmount - $shopArticleStock->fieldAmount;
+        $oldTotalStock = $totalNewStock + $changedAmount;
+
         $this->getEventDispatcher()->dispatch(
             new UpdateProductStockEvent(
                 $shopArticleStock->fieldShopArticleId,
-                $shopArticleStock->fieldAmount,
-                $preChangeData->fieldAmount
+                $totalNewStock,
+                $oldTotalStock
             ),
             ShopEvents::UPDATE_PRODUCT_STOCK
         );
+    }
+
+    public function getAvailableStock($shopArticleId): int
+    {
+        /** @var int[]|false $stock */
+        try {
+            $stock = $this->getDatabaseConnection()->fetchOne(
+                'SELECT SUM(`amount`) AS total_amount FROM `shop_article_stock` WHERE `shop_article_id` = :id GROUP BY `shop_article_id`',
+                ['id' => $shopArticleId]
+            );
+        } catch (Exception $e) {
+            return 0;
+        }
+        if (false === $stock) {
+            return 0;
+        }
+        return (int) $stock;
     }
 }
