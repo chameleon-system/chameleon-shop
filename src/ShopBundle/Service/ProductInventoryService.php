@@ -22,7 +22,8 @@ class ProductInventoryService implements ProductInventoryServiceInterface
 {
     public function __construct(
         private readonly Connection $databaseConnection,
-        private readonly EventDispatcherInterface $eventDispatcher
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly Logger $logger
     ) {
     }
 
@@ -38,6 +39,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
                 ['id' => $shopArticleId]
             );
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
             return 0;
         }
         if (false === $stock) {
@@ -66,6 +68,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
                 ['amount' => \PDO::PARAM_INT]
             );
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
             return false;
         }
         if (0 === $affectedRows) {
@@ -96,6 +99,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
                 ['amount' => \PDO::PARAM_INT]
             );
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
             return false;
         }
 
@@ -123,6 +127,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
             $result = $this->databaseConnection->fetchAssociative($query, ['articleId' => $parentArticleId]);
             $amount = (is_array($result) && isset($result[0])) ? (int)$result[0] : 0;
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
             $amount = 0;
         }
 

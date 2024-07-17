@@ -127,6 +127,7 @@
         <service id="chameleon_system_shop.product_inventory_service_provider" class="ChameleonSystem\ShopBundle\Service\ProductInventoryService">
             <argument key="$databaseConnection" type="service" id="database_connection" />
             <argument key="$eventDispatcher" type="service" id="event_dispatcher" />
+            <argument type="service" id="monolog.logger.schafferer_debug"/>
         </service>
         <service id="chameleon_system_shop.product_inventory_service" class="ChameleonSystem\ShopBundle\Service\ProductInventoryServiceCacheProxy" public="true">
             <argument type="service" id="chameleon_system_shop.product_inventory_service_provider" />
