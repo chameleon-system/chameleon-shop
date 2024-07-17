@@ -50,29 +50,6 @@ class TableEditor extends \TCMSTableEditor
         );
     }
 
-    public function getAvailableStock($shopArticleId): int
-    {
-        /** @var int[]|false $stock */
-        try {
-            $stock = $this->getDatabaseConnection()->fetchOne(
-                'SELECT SUM(`amount`) AS total_amount FROM `shop_article_stock` WHERE `shop_article_id` = :id GROUP BY `shop_article_id`',
-                ['id' => $shopArticleId]
-            );
-        } catch (Exception $e) {
-            $this->getLogger()->error(
-                sprintf('Unable to getAvailableStock - database error: %s', $e->getMessage()),
-                ['productId' => $shopArticleId, 'exception'=>$e]
-            );
-
-            return 0;
-        }
-        if (false === $stock) {
-            return 0;
-        }
-
-        return (int)$stock;
-    }
-
     private function getLogger(): LoggerInterface
     {
         return ServiceLocator::get('monolog.logger.schafferer_debug');
