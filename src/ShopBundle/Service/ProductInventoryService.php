@@ -15,7 +15,6 @@ use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
 use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
 use ChameleonSystem\ShopBundle\ShopEvents;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 
@@ -39,7 +38,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
                 'SELECT SUM(`amount`) AS total_amount FROM `shop_article_stock` WHERE `shop_article_id` = :id GROUP BY `shop_article_id`',
                 ['id' => $shopArticleId]
             );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Unable to getAvailableStock - database error: %s', $e->getMessage()),
                 ['productId' => $shopArticleId, 'exception'=>$e]
@@ -72,7 +71,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
                 ['id' => \TTools::GetUUID(), 'amount' => $stock, 'articleId' => $shopArticleId],
                 ['amount' => \PDO::PARAM_INT]
             );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Unable to addStock - database error: %s', $e->getMessage()),
                 ['productId' => $shopArticleId, 'stock' => $stock, 'exception'=>$e]
@@ -107,7 +106,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
                 ['id' => \TTools::GetUUID(), 'amount' => $stock, 'articleId' => $shopArticleId],
                 ['amount' => \PDO::PARAM_INT]
             );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Unable to setStock - database error: %s', $e->getMessage()),
                 ['productId' => $shopArticleId, 'stock' => $stock, 'exception'=>$e]
@@ -139,7 +138,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
         try {
             $result = $this->databaseConnection->fetchAssociative($query, ['articleId' => $parentArticleId]);
             $amount = (is_array($result) && isset($result[0])) ? (int)$result[0] : 0;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Unable to updateVariantParentStock - database error: %s', $e->getMessage()),
                 ['parentArticleId' => $parentArticleId, 'exception'=>$e]

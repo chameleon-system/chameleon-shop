@@ -14,8 +14,8 @@ namespace ChameleonSystem\ShopBundle\ProductInventory;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
 use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
+use ChameleonSystem\ShopBundle\Service\ProductInventoryService;
 use ChameleonSystem\ShopBundle\ShopEvents;
-use Doctrine\DBAL\Exception;
 use Psr\Log\LoggerInterface;
 
 class TableEditor extends \TCMSTableEditor
