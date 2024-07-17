@@ -16,12 +16,14 @@ use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServi
 use ChameleonSystem\ShopBundle\ShopEvents;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Psr\Log\LoggerInterface;
 
 class ProductInventoryService implements ProductInventoryServiceInterface
 {
     public function __construct(
         private readonly Connection $databaseConnection,
-        private readonly EventDispatcherInterface $eventDispatcher
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -31,15 +33,24 @@ class ProductInventoryService implements ProductInventoryServiceInterface
     public function getAvailableStock($shopArticleId)
     {
         /** @var int[]|false $stock */
-        $stock = $this->databaseConnection->fetchOne(
-            'SELECT SUM(`amount`) AS total_amount FROM `shop_article_stock` WHERE `shop_article_id` = :id GROUP BY `shop_article_id`',
-            array('id' => $shopArticleId)
-        );
+        try {
+            $stock = $this->databaseConnection->fetchOne(
+                'SELECT SUM(`amount`) AS total_amount FROM `shop_article_stock` WHERE `shop_article_id` = :id GROUP BY `shop_article_id`',
+                ['id' => $shopArticleId]
+            );
+        } catch (\Exception $e) {
+            $this->logger->error(
+                sprintf('Unable to getAvailableStock - database error: %s', $e->getMessage()),
+                ['productId' => $shopArticleId, 'exception'=>$e]
+            );
+
+            return 0;
+        }
         if (false === $stock) {
             return 0;
         }
 
-        return (int) $stock;
+        return (int)$stock;
     }
 
     /**
@@ -54,19 +65,25 @@ class ProductInventoryService implements ProductInventoryServiceInterface
                               `shop_article_id` = :articleId
       ON DUPLICATE KEY UPDATE `amount` = `amount` + :amount
                               ';
-        $affectedRows = $this->databaseConnection->executeStatement(
-            $query,
-            array('id' => \TTools::GetUUID(), 'amount' => $stock, 'articleId' => $shopArticleId),
-            array('amount' => \PDO::PARAM_INT)
-        );
+        try {
+            $affectedRows = $this->databaseConnection->executeStatement(
+                $query,
+                ['id' => \TTools::GetUUID(), 'amount' => $stock, 'articleId' => $shopArticleId],
+                ['amount' => \PDO::PARAM_INT]
+            );
+        } catch (\Exception $e) {
+            $this->logger->error(
+                sprintf('Unable to addStock - database error: %s', $e->getMessage()),
+                ['productId' => $shopArticleId, 'stock' => $stock, 'exception'=>$e]
+            );
+
+            return false;
+        }
         if (0 === $affectedRows) {
             return false;
         }
 
-        $this->eventDispatcher->dispatch(
-            new UpdateProductStockEvent($shopArticleId, $stock, $preChangeStock),
-            ShopEvents::UPDATE_PRODUCT_STOCK
-        );
+        $this->dispatchUpdateStockEvent($shopArticleId, ($preChangeStock + $stock), $preChangeStock);
 
         return true;
     }
@@ -83,19 +100,26 @@ class ProductInventoryService implements ProductInventoryServiceInterface
                               `shop_article_id` = :articleId
       ON DUPLICATE KEY UPDATE `amount` = :amount
                               ';
-        $affectedRows = $this->databaseConnection->executeStatement(
-            $query,
-            array('id' => \TTools::GetUUID(), 'amount' => $stock, 'articleId' => $shopArticleId),
-            array('amount' => \PDO::PARAM_INT)
-        );
+        try {
+            $affectedRows = $this->databaseConnection->executeStatement(
+                $query,
+                ['id' => \TTools::GetUUID(), 'amount' => $stock, 'articleId' => $shopArticleId],
+                ['amount' => \PDO::PARAM_INT]
+            );
+        } catch (\Exception $e) {
+            $this->logger->error(
+                sprintf('Unable to setStock - database error: %s', $e->getMessage()),
+                ['productId' => $shopArticleId, 'stock' => $stock, 'exception'=>$e]
+            );
+
+            return false;
+        }
+
         if (0 === $affectedRows) {
             return false;
         }
 
-        $this->eventDispatcher->dispatch(
-            new UpdateProductStockEvent($shopArticleId, $stock, $preChangeStock),
-            ShopEvents::UPDATE_PRODUCT_STOCK
-        );
+        $this->dispatchUpdateStockEvent($shopArticleId, $this->getAvailableStock($shopArticleId), $preChangeStock);
 
         return true;
     }
@@ -111,9 +135,25 @@ class ProductInventoryService implements ProductInventoryServiceInterface
               INNER JOIN `shop_article` ON `shop_article_stock`.`shop_article_id` = `shop_article`.`id`
                    WHERE `shop_article`.`variant_parent_id` = :articleId
         ';
-        $result = $this->databaseConnection->fetchAssociative($query, array('articleId' => $parentArticleId));
-        $amount = (is_array($result) && isset($result[0])) ? (int) $result[0] : 0;
+        try {
+            $result = $this->databaseConnection->fetchAssociative($query, ['articleId' => $parentArticleId]);
+            $amount = (is_array($result) && isset($result[0])) ? (int)$result[0] : 0;
+        } catch (\Exception $e) {
+            $this->logger->error(
+                sprintf('Unable to updateVariantParentStock - database error: %s', $e->getMessage()),
+                ['parentArticleId' => $parentArticleId, 'exception'=>$e]
+            );
+            $amount = 0;
+        }
 
         return $this->setStock($parentArticleId, $amount);
+    }
+
+    private function dispatchUpdateStockEvent(string $shopArticleId, int $newTotalStock, int $oldTotalStock): void
+    {
+        $this->eventDispatcher->dispatch(
+            new UpdateProductStockEvent($shopArticleId, $newTotalStock, $oldTotalStock),
+            ShopEvents::UPDATE_PRODUCT_STOCK
+        );
     }
 }

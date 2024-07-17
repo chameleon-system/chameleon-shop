@@ -11,9 +11,12 @@
 
 namespace ChameleonSystem\ShopBundle\ProductInventory;
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
+use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
+use ChameleonSystem\ShopBundle\Service\ProductInventoryService;
 use ChameleonSystem\ShopBundle\ShopEvents;
-use TdbShopArticleStock;
+use Psr\Log\LoggerInterface;
 
 class TableEditor extends \TCMSTableEditor
 {
@@ -24,20 +27,36 @@ class TableEditor extends \TCMSTableEditor
     {
         parent::PostSaveHook($oFields, $oPostTable);
         /**
-         * @var TdbShopArticleStock $shopArticleStock
+         * @var \TdbShopArticleStock $shopArticleStock
          */
         $shopArticleStock = $this->oTable;
         /**
-         * @var TdbShopArticleStock $preChangeData
+         * @var \TdbShopArticleStock $preChangeData
          */
         $preChangeData = $this->oTablePreChangeData;
+
+        $totalNewStock = $this->getProductInventoryService()->getAvailableStock($shopArticleStock->fieldShopArticleId);
+
+        $changedAmount = $preChangeData->fieldAmount - $shopArticleStock->fieldAmount;
+        $totalOldStock = $totalNewStock + $changedAmount;
+
         $this->getEventDispatcher()->dispatch(
             new UpdateProductStockEvent(
                 $shopArticleStock->fieldShopArticleId,
-                $shopArticleStock->fieldAmount,
-                $preChangeData->fieldAmount
+                $totalNewStock,
+                $totalOldStock
             ),
             ShopEvents::UPDATE_PRODUCT_STOCK
         );
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.schafferer_debug');
+    }
+
+    private function getProductInventoryService(): ProductInventoryServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.product_inventory_service_provider');
     }
 }
