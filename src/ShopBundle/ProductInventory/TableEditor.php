@@ -11,9 +11,12 @@
 
 namespace ChameleonSystem\ShopBundle\ProductInventory;
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
+use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
 use ChameleonSystem\ShopBundle\ShopEvents;
 use Doctrine\DBAL\Exception;
+use Psr\Log\LoggerInterface;
 
 class TableEditor extends \TCMSTableEditor
 {
@@ -32,7 +35,7 @@ class TableEditor extends \TCMSTableEditor
          */
         $preChangeData = $this->oTablePreChangeData;
 
-        $totalNewStock = $this->getAvailableStock($shopArticleStock->fieldShopArticleId);
+        $totalNewStock = $this->getProductInventoryService()->getAvailableStock($shopArticleStock->fieldShopArticleId);
 
         $changedAmount = $preChangeData->fieldAmount - $shopArticleStock->fieldAmount;
         $totalOldStock = $totalNewStock + $changedAmount;
@@ -56,11 +59,24 @@ class TableEditor extends \TCMSTableEditor
                 ['id' => $shopArticleId]
             );
         } catch (Exception $e) {
+            $this->getLogger()->error($e->getMessage());
+
             return 0;
         }
         if (false === $stock) {
             return 0;
         }
-        return (int) $stock;
+
+        return (int)$stock;
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('monolog.logger.schafferer_debug');
+    }
+
+    private function getProductInventoryService(): ProductInventoryServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.product_inventory_service_provider');
     }
 }

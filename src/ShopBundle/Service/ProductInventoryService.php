@@ -17,13 +17,14 @@ use ChameleonSystem\ShopBundle\ShopEvents;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Psr\Log\LoggerInterface;
 
 class ProductInventoryService implements ProductInventoryServiceInterface
 {
     public function __construct(
         private readonly Connection $databaseConnection,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly Logger $logger
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -40,6 +41,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
             );
         } catch (Exception $e) {
             $this->logger->error($e->getMessage());
+
             return 0;
         }
         if (false === $stock) {
@@ -69,6 +71,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
             );
         } catch (Exception $e) {
             $this->logger->error($e->getMessage());
+
             return false;
         }
         if (0 === $affectedRows) {
@@ -100,6 +103,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
             );
         } catch (Exception $e) {
             $this->logger->error($e->getMessage());
+
             return false;
         }
 
