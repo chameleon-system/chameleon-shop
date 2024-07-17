@@ -107,7 +107,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
             return false;
         }
 
-        $this->dispatchUpdateStockEvent($shopArticleId, ($preChangeStock + $stock), $preChangeStock);
+        $this->dispatchUpdateStockEvent($shopArticleId, $this->getAvailableStock($shopArticleId), $preChangeStock);
 
         return true;
     }
