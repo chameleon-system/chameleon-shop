@@ -41,7 +41,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Unable to getAvailableStock - database error: %s', $e->getMessage()),
-                ['productId' => $shopArticleId, 'exception'=>$e]
+                ['productId' => $shopArticleId, 'exception' => $e]
             );
 
             return 0;
@@ -74,7 +74,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Unable to addStock - database error: %s', $e->getMessage()),
-                ['productId' => $shopArticleId, 'stock' => $stock, 'exception'=>$e]
+                ['productId' => $shopArticleId, 'stock' => $stock, 'exception' => $e]
             );
 
             return false;
@@ -109,7 +109,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Unable to setStock - database error: %s', $e->getMessage()),
-                ['productId' => $shopArticleId, 'stock' => $stock, 'exception'=>$e]
+                ['productId' => $shopArticleId, 'stock' => $stock, 'exception' => $e]
             );
 
             return false;
@@ -141,7 +141,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Unable to updateVariantParentStock - database error: %s', $e->getMessage()),
-                ['parentArticleId' => $parentArticleId, 'exception'=>$e]
+                ['parentArticleId' => $parentArticleId, 'exception' => $e]
             );
             $amount = 0;
         }
