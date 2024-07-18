@@ -52,7 +52,7 @@ class TableEditor extends \TCMSTableEditor
 
     private function getLogger(): LoggerInterface
     {
-        return ServiceLocator::get('monolog.logger.schafferer_debug');
+        return ServiceLocator::get('logger');
     }
 
     private function getProductInventoryService(): ProductInventoryServiceInterface
