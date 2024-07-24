@@ -130,9 +130,7 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
         );
         $transaction = $transactionManager->addTransaction($transactionData);
 
-
         return array($transaction);
-
     }
 
     public function cancelOrder(
@@ -143,11 +141,7 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
         // currently we do not pre-authorize, so there is nothing to do. if we ever do, then we need to use to void the authorization using 'METHOD': 'DoVoid','AUTHORIZATIONID': auth_id,
     }
 
-    /**
-     * @param \TdbShopOrder $order
-     * @return string|null
-     */
-    public function getCurrencyFromOrder(\TdbShopOrder $order): ?string
+    private function getCurrencyFromOrder(\TdbShopOrder $order): string
     {
         $currency = 'EUR';
         if (true === method_exists($order, 'getCurrency')) {
@@ -159,6 +153,4 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
 
         return $currency;
     }
-
-
 }
