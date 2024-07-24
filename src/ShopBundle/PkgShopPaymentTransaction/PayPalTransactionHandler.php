@@ -40,17 +40,21 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
     ) {
         $paymentHandler = $order->GetPaymentHandler();
         if (null === $paymentHandler) {
-            throw new \TPkgCmsException(sprintf('Unable to execute paypal refund for order %s - order has no payment handler', $order->id));
+            throw new \TPkgCmsException(
+                sprintf('Unable to execute paypal refund for order %s - order has no payment handler', $order->id)
+            );
         }
 
         $currency = $this->getCurrencyFromOrder($order);
         $transactionId = $paymentHandler->GetUserPaymentDataItem('PAYMENTINFO_0_TRANSACTIONID');
         if (null === $transactionId) {
-            throw new \TPkgCmsException(sprintf('Unable to execute paypal refund for order %s - order has no transaction id', $order->id));
+            throw new \TPkgCmsException(
+                sprintf('Unable to execute paypal refund for order %s - order has no transaction id', $order->id)
+            );
         }
         $isSandbox = 'sandbox' === $this->config->getEnvironment();
         $refundType = 'Partial';
-        if ((int)round($value*100,0) === (int)round($order->fieldValueTotal*100,2)) {
+        if ((int)round($value * 100, 0) === (int)round($order->fieldValueTotal * 100, 2)) {
             $refundType = 'Full';
         }
         $payload = [

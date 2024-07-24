@@ -223,6 +223,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
                 $oOrder->SetStatusPaid();
             }
 
+            // add dummy transaction - so that refunds can later match these
             $transactionManager = new TPkgShopPaymentTransactionManager($oOrder);
             $itemIdList =[];
             $orderItemList = $oOrder->GetFieldShopOrderItemList();
@@ -241,7 +242,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
                     'auto created from execute payment via paypal payment handler'
                 )
             );
-            $transaction = $transactionManager->addTransaction($transactionData);
+            $transactionManager->addTransaction($transactionData);
 
         } else {
             $bPaymentOk = false;
