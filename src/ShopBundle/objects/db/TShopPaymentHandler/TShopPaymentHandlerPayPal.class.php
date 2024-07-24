@@ -243,7 +243,6 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
                 )
             );
             $transactionManager->addTransaction($transactionData);
-
         } else {
             $bPaymentOk = false;
         }
