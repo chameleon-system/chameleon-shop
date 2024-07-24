@@ -26,8 +26,7 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
         $invoiceNumber = null,
         array $orderItemList = null
     ) {
-        // currently not implemented.
-
+        throw new \Exception('paypal payment on shipment is currently not implemented');
     }
 
     public function refund(
