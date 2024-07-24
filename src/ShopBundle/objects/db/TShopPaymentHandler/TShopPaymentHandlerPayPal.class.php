@@ -225,9 +225,9 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
 
             // add dummy transaction - so that refunds can later match these
             $transactionManager = new TPkgShopPaymentTransactionManager($oOrder);
-            $itemIdList =[];
+            $itemIdList = [];
             $orderItemList = $oOrder->GetFieldShopOrderItemList();
-            while($item = $orderItemList->next()) {
+            while ($item = $orderItemList->next()) {
                 $itemIdList[$item->id] = $item->fieldOrderAmount;
             }
             $transactionData = $transactionManager->getTransactionDataFromOrder(
