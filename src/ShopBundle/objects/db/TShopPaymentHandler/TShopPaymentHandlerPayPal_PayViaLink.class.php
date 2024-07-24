@@ -11,6 +11,11 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\ShopBundle\Payment\PaymentConfig\Interfaces\ShopPaymentConfigLoaderInterface;
+use ChameleonSystem\ShopBundle\PkgShopPaymentTransaction\PayPalTransactionHandler;
+use esono\pkgshoppaymentpayone\PkgShopPaymentTransaction\PayonePaymentTransactionHandler;
+use esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface;
+use esono\pkgshoppaymenttransaction\PaymentTransactionHandlerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -18,7 +23,7 @@ use Psr\Log\LoggerInterface;
  * link/form that can be used by the user to pay for the order
  * if you want to accept partial payments, you need to set bAcceptPartialPayments to 1.
 /**/
-class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
+class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler implements PaymentHandlerWithTransactionSupportInterface
 {
     const URL_IDENTIFIER_IPN = '_paypalipn_'; // instant payment notification URL identifier
 
@@ -26,6 +31,49 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler
      * @deprecated since 6.3.0 - not used anymore
      */
     const LOG_FILE = 'paypal.log';
+    protected const PARAMETER_IS_PAYMENT_ON_SHIPMENT = 'isPaymentOnShipment';
+
+    public function paymentTransactionHandlerFactory($portalId)
+    {
+        $config = $this->getShopPaymentConfigLoader()->loadFromPaymentHandlerId($this->id, $portalId);
+
+        return new PayPalTransactionHandler($config);
+    }
+
+    /**
+     * return true if capture on shipment is active.
+     *
+     * @return bool
+     */
+    public function isCaptureOnShipment()
+    {
+        if ($this->GetUserPaymentDataItem(self::PARAMETER_IS_PAYMENT_ON_SHIPMENT)) {
+            return 1 === (int)$this->GetUserPaymentDataItem(self::PARAMETER_IS_PAYMENT_ON_SHIPMENT);
+        }
+
+        return TPkgShopPaymentPayoneConfigManager::PAYMENT_MODE_DELAYED === $this->GetConfigParameter(PayoneConfigConstants::PARAM_PAYMENT_MODE);
+    }
+
+    public function SetPaymentUserData($aPaymentUserData)
+    {
+        if (false === array_key_exists(self::PARAMETER_IS_PAYMENT_ON_SHIPMENT, $aPaymentUserData)) {
+            // fix current value if not set
+            $isDelayedPayment = TPkgShopPaymentPayoneConfigManager::PAYMENT_MODE_DELAYED
+                === $this->GetConfigParameter(PayoneConfigConstants::PARAM_PAYMENT_MODE);
+
+            $aPaymentUserData[self::PARAMETER_IS_PAYMENT_ON_SHIPMENT] = $isDelayedPayment ? '1' : '0';
+        }
+
+        parent::SetPaymentUserData($aPaymentUserData);
+    }
+
+    /**
+     * @return ShopPaymentConfigLoaderInterface
+     */
+    protected function getShopPaymentConfigLoader()
+    {
+        return ServiceLocator::get('chameleon_system_shop.payment.config_loader');
+    }
 
     /**
      * @param TdbShopOrder $oOrder

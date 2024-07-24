@@ -222,6 +222,27 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
             if (array_key_exists('PAYMENTINFO_0_PAYMENTSTATUS', $aAnswer) && 'COMPLETED' == strtoupper($aAnswer['PAYMENTINFO_0_PAYMENTSTATUS'])) {
                 $oOrder->SetStatusPaid();
             }
+
+            $transactionManager = new TPkgShopPaymentTransactionManager($oOrder);
+            $itemIdList =[];
+            $orderItemList = $oOrder->GetFieldShopOrderItemList();
+            while($item = $orderItemList->next()) {
+                $itemIdList[$item->id] = $item->fieldOrderAmount;
+            }
+            $transactionData = $transactionManager->getTransactionDataFromOrder(
+                \TPkgShopPaymentTransactionData::TYPE_PAYMENT,
+                $itemIdList
+            );
+            $transactionData->setTotalValue($oOrder->fieldValueTotal);
+            $transactionData->setConfirmed(true);
+            $transactionData->setConfirmedTimestamp(time());
+            $transactionData->setContext(
+                new \TPkgShopPaymentTransactionContext(
+                    'auto created from execute payment via paypal payment handler'
+                )
+            );
+            $transaction = $transactionManager->addTransaction($transactionData);
+
         } else {
             $bPaymentOk = false;
         }
