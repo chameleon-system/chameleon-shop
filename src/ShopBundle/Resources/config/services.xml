@@ -307,6 +307,17 @@
             <argument type="string">%chameleon_system_shop.shop_variant_type_value.data_model%</argument>
         </service>
 
+        <service id="chameleon_system_shop.breadcrumb.breadcrumb_shop_article_detail_generator" class="ChameleonSystem\ShopBundle\Bridge\Chameleon\Breadcrumb\BreadcrumbShopArticleDetailGenerator" public="false">
+            <tag name="chameleon_system_breadcrumb.generator.breadcrumb_generator" order="3" />
+            <argument type="service" id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_generator_utils" />
+            <argument type="service" id="request_stack" />
+        </service>
+        <service id="chameleon_system_shop.breadcrumb.breadcrumb_shop_category_list_generator" class="ChameleonSystem\ShopBundle\Bridge\Chameleon\Breadcrumb\BreadcrumbShopCategoryListGenerator" public="false">
+            <tag name="chameleon_system_breadcrumb.generator.breadcrumb_generator" order="4" />
+            <argument type="service" id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_generator_utils" />
+            <argument type="service" id="request_stack" />
+        </service>
+
     </services>
 
 </container>
