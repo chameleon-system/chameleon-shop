@@ -24,11 +24,7 @@ final class BreadcrumbShopCategoryListGenerator extends AbstractBreadcrumbGenera
 
     public function isActive(): bool
     {
-        if ($this->requestStack->getCurrentRequest()->attributes->has('activeShopCategory')) {
-            return true;
-        }
-
-        return false;
+        return $this->requestStack->getCurrentRequest()->attributes->has('activeShopCategory');
     }
 
     public function generate(): BreadcrumbDataModel

@@ -24,11 +24,7 @@ final class BreadcrumbShopArticleDetailGenerator extends AbstractBreadcrumbGener
 
     public function isActive(): bool
     {
-        if ($this->requestStack->getCurrentRequest()->attributes->has('activeShopArticle')) {
-            return true;
-        }
-
-        return false;
+        return $this->requestStack->getCurrentRequest()->attributes->has('activeShopArticle');
     }
 
     public function generate(): BreadcrumbDataModel
@@ -84,7 +80,7 @@ final class BreadcrumbShopArticleDetailGenerator extends AbstractBreadcrumbGener
 
     protected function getFromCache(): ?BreadcrumbDataModel
     {
-        return $this->cache->Get($this->generateCacheKey());
+        return $this->cache->get($this->generateCacheKey());
 
     }
 
