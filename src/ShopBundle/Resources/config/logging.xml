@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="chameleon_system_shop.log.order_channel" class="Monolog\Logger" public="false">
-            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <deprecated package="ChameleonShop" version="8">The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
             <argument>chameleon_system_shop.order</argument>
             <call method="pushHandler">
                 <argument type="service" id="cmsPkgCore.logHandler.database"/>
@@ -13,7 +13,7 @@
         </service>
 
         <service id="chameleon_system_shop.log.order" class="TPkgCmsCoreLog" public="true">
-            <deprecated>The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
+            <deprecated package="ChameleonShop" version="8">The "%service_id%" service is deprecated since Chameleon 6.3 and will be removed in 7.0.</deprecated>
             <argument type="service" id="monolog.logger.order"/>
         </service>
 

@@ -81,7 +81,7 @@ class TPkgShopCategoryRouteCollectionGenerator implements CollectionGeneratorInt
         }
 
         $route = new Route('/{categoryPath}/{category}',
-            array('_controller' => 'chameleon_system_shop.product_controller:shopCategory', 'pagedef' => $pageDef),
+            array('_controller' => 'chameleon_system_shop.product_controller::shopCategory', 'pagedef' => $pageDef),
             array(
                 'categoryPath' => "(?i:{$path}){$excludeString}",
                 'category' => '(.+)',

@@ -1,3 +1,3 @@
 chameleon_system_shop.search_suggest:
   path: /searchsuggest
-  defaults: { _controller: chameleon_system_shop.controller.search_suggest:__invoke }
+  defaults: { _controller: chameleon_system_shop.controller.search_suggest }
