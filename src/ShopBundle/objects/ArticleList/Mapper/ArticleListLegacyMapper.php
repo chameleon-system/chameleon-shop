@@ -28,7 +28,7 @@ class ArticleListLegacyMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject(
             'results',
@@ -65,7 +65,7 @@ class ArticleListLegacyMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /** @var $results ResultDataInterface */
         $results = $oVisitor->GetSourceObject('results');
 

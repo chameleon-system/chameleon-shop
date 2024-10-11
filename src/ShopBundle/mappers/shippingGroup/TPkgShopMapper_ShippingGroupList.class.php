@@ -14,7 +14,7 @@ class TPkgShopMapper_ShippingGroupList extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oShippingGroupList', 'TdbShopShippingGroupList');
         $oRequirements->NeedsSourceObject('oActiveShippingGroup', 'TdbShopShippingGroup', null, true);
@@ -24,7 +24,7 @@ class TPkgShopMapper_ShippingGroupList extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oShippingGroupList TdbShopShippingGroupList */
         $oShippingGroupList = $oVisitor->GetSourceObject('oShippingGroupList');

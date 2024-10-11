@@ -14,7 +14,7 @@ class TPkgShopMapper_ArticleAddToBasket extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oObject', 'TdbShopArticle');
         $oRequirements->NeedsSourceObject('bRedirectToBasket', 'bool', false);
@@ -23,7 +23,7 @@ class TPkgShopMapper_ArticleAddToBasket extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oArticle TdbShopArticle */
         $oArticle = $oVisitor->GetSourceObject('oObject');

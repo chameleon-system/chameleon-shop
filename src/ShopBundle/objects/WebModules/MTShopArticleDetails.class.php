@@ -80,7 +80,7 @@ class MTShopArticleDetails extends MTPkgViewRendererAbstractModuleMapper
         }
     }
 
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
         $oRequirements->NeedsSourceObject('oObject', 'TdbShopArticle', $this->oActiveArticle);
@@ -89,7 +89,7 @@ class MTShopArticleDetails extends MTPkgViewRendererAbstractModuleMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /**
          * @var $activeArticle TdbShopArticle

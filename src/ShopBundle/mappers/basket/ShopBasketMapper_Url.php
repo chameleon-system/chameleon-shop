@@ -16,7 +16,7 @@ class ShopBasketMapper_Url extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $requirements)
+    public function GetRequirements(IMapperRequirementsRestricted $requirements): void
     {
         $requirements->NeedsSourceObject('useRedirect', 'boolean', true, true);
         $requirements->NeedsSourceObject('removeModuleMethodCalls', 'boolean', true, true);
@@ -29,7 +29,7 @@ class ShopBasketMapper_Url extends AbstractViewMapper
         IMapperVisitorRestricted $visitor,
         $cachingEnabled,
         IMapperCacheTriggerRestricted $cacheTriggerManager
-    ) {
+    ): void {
         $useRedirect = $visitor->GetSourceObject('useRedirect');
         /** @var ShopServiceInterface $shopService */
         $shopService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');

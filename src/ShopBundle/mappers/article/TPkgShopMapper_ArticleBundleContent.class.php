@@ -14,7 +14,7 @@ class TPkgShopMapper_ArticleBundleContent extends AbstractPkgShopMapper_Article
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
         $oRequirements->NeedsSourceObject('oLocal', 'TCMSLocal', TCMSLocal::GetActive());
@@ -23,7 +23,7 @@ class TPkgShopMapper_ArticleBundleContent extends AbstractPkgShopMapper_Article
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oArticle TdbShopArticle */
         $oArticle = $oVisitor->GetSourceObject('oObject');

@@ -31,7 +31,8 @@ class MTShopCentralHandlerCoreEndPoint extends TUserModelBase
     public function Init()
     {
         parent::Init();
-        $this->aUserData = $this->global->GetUserData(self::URL_DATA);
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $this->aUserData = $inputFilterUtil->getFilteredGetInputArray(self::URL_DATA);
         if (!is_array($this->aUserData)) {
             $this->aUserData = array();
         }
@@ -88,5 +89,13 @@ class MTShopCentralHandlerCoreEndPoint extends TUserModelBase
         $aIncludes = array_merge($aIncludes, $this->getResourcesForSnippetPackage('pkgShop/shopBasket'));
 
         return $aIncludes;
+    }
+
+    /**
+     * @return \ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface
+     */
+    private function getInputFilterUtil()
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

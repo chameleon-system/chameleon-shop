@@ -33,7 +33,7 @@ class TPkgShopManufacturerMapper_Overview extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oConfig', 'TdbShopManufacturerModuleConf');
         $oRequirements->NeedsSourceObject('oManufacturerList', 'TdbShopManufacturerList');
@@ -42,7 +42,7 @@ class TPkgShopManufacturerMapper_Overview extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oConfig TdbShopManufacturerModuleConf */
         $oConfig = $oVisitor->GetSourceObject('oConfig');

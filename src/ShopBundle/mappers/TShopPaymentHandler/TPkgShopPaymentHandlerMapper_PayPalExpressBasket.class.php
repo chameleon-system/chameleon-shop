@@ -16,7 +16,7 @@ class TPkgShopPaymentHandlerMapper_PayPalExpressBasket extends AbstractPkgShopPa
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
         $oRequirements->NeedsSourceObject('sSpotName');
@@ -25,7 +25,7 @@ class TPkgShopPaymentHandlerMapper_PayPalExpressBasket extends AbstractPkgShopPa
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $oPaymentMethod = TdbShopPaymentMethod::GetNewInstance();
         if ($oPaymentMethod->LoadFromFields(array('name_internal' => 'paypal-express', 'active' => '1'))) {

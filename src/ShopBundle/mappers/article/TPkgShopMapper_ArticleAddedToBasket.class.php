@@ -11,7 +11,7 @@
 
 class TPkgShopMapper_ArticleAddedToBasket extends AbstractPkgShopMapper_Article
 {
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
 
@@ -21,7 +21,7 @@ class TPkgShopMapper_ArticleAddedToBasket extends AbstractPkgShopMapper_Article
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $oLocal = TCMSLocal::GetActive();
 

@@ -16,7 +16,7 @@ class TPkgShopMapper_ArticleImageGallery extends AbstractPkgShopMapper_Article
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
         $oRequirements->NeedsSourceObject('sActiveImageId', 'string', null, true);
@@ -25,7 +25,7 @@ class TPkgShopMapper_ArticleImageGallery extends AbstractPkgShopMapper_Article
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oShop TdbShop */
         $oShop = $oVisitor->GetSourceObject('oShop');

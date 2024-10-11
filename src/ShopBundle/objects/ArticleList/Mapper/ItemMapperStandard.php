@@ -23,7 +23,7 @@ class ItemMapperStandard extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('itemMapperBaseData', 'array');
         $oRequirements->NeedsSourceObject('items', 'array');
@@ -40,7 +40,7 @@ class ItemMapperStandard extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /** @var TdbShopArticle[] $items */
         $items = $oVisitor->GetSourceObject('items');
 

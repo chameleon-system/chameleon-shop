@@ -14,7 +14,7 @@ class MTShopViewMyOrderDetailsOrderObjectAsStringMapper extends AbstractViewMapp
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('order', 'TdbShopOrder', null, true);
         $oRequirements->NeedsSourceObject('view', 'string', 'print');
@@ -27,7 +27,7 @@ class MTShopViewMyOrderDetailsOrderObjectAsStringMapper extends AbstractViewMapp
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /** @var $order TdbShopOrder */
         $order = $oVisitor->GetSourceObject('order');
         if (null === $order) {

@@ -211,7 +211,7 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
     public static function GetNewInstance($sData = null, $sLanguage = null): TdbShopPaymentHandlerGroup
     {
         $oInstance = parent::GetNewInstance($sData, $sLanguage);
-        if (false !== $oInstance->sqlData) {
+        if (false !== $oInstance->sqlData && null !== $oInstance->fieldClassname) {
             $sClass = trim($oInstance->fieldClassname);
             if ('' !== $sClass) {
                 /** @var TdbShopPaymentHandlerGroup $oNewClass */

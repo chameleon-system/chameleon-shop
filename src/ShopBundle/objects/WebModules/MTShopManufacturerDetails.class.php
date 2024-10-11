@@ -38,7 +38,7 @@ class MTShopManufacturerDetails extends MTPkgViewRendererAbstractModuleMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
         $oRequirements->NeedsSourceObject('oObject', 'TdbShopManufacturer', $this->oActiveManufacturer);
@@ -47,7 +47,7 @@ class MTShopManufacturerDetails extends MTPkgViewRendererAbstractModuleMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $oManufacturer = $oVisitor->GetSourceObject('oObject');
         $oVisitor->SetMappedValue('oObject', $oManufacturer);

@@ -16,7 +16,7 @@ class TPkgShopMapper_ArticleListOrderBy extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oOrderByList', 'TdbShopModuleArticlelistOrderbyList');
         $oRequirements->NeedsSourceObject('sActiveOrderById', 'string', null);
@@ -27,7 +27,7 @@ class TPkgShopMapper_ArticleListOrderBy extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oOrderByList TdbShopModuleArticlelistOrderbyList */
         $oOrderByList = $oVisitor->GetSourceObject('oOrderByList');

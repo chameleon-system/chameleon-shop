@@ -21,7 +21,7 @@ class SearchRequestMapper extends \AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('shop', 'TdbShop');
         $oRequirements->NeedsSourceObject('stateObject', '\ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface');
@@ -34,7 +34,7 @@ class SearchRequestMapper extends \AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /** @var $shop \TdbShop */
         $shop = $oVisitor->GetSourceObject('shop');
         /** @var $state StateInterface */

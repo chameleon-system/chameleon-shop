@@ -23,7 +23,7 @@ class TPkgExtranetRegistrationGuestMapper_Form extends AbstractViewMapper
      *
      * @param IMapperRequirementsRestricted $oRequirements
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oActiveUser', 'TdbDataExtranetUser', TdbDataExtranetUser::GetInstance());
         $oRequirements->NeedsSourceObject('oExtranetConfiguration', 'TdbDataExtranet', TdbDataExtranet::GetInstance());
@@ -52,7 +52,7 @@ class TPkgExtranetRegistrationGuestMapper_Form extends AbstractViewMapper
      *
      * @return
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oActiveUser TdbDataExtranetUser */
         $oActiveUser = $oVisitor->GetSourceObject('oActiveUser');

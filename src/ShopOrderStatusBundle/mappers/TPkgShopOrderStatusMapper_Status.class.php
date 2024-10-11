@@ -23,7 +23,7 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
      *
      * @param IMapperRequirementsRestricted $oRequirements
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oObject', 'TdbShopOrderStatus|TdbShopOrder', null, true);
         $oRequirements->NeedsSourceObject('local', 'TdbCmsLocals', TdbCmsLocals::GetActive(), true);
@@ -52,7 +52,7 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /** @var TdbCmsLocals $local */
         $local = $oVisitor->GetSourceObject('local');
 

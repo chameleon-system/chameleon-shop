@@ -14,7 +14,7 @@ class TCMSWizardStepMapper_UserProfileEmail extends AbstractTCMSWizardStepMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $sSpotName = $oVisitor->GetSourceObject('sSpotName');
         $sWizardSpotName = $oVisitor->GetSourceObject('sWizardModuleModuleSpot');
@@ -81,7 +81,7 @@ class TCMSWizardStepMapper_UserProfileEmail extends AbstractTCMSWizardStepMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
         $oRequirements->NeedsSourceObject('sSpotName');

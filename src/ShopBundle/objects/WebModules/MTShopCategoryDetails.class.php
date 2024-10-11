@@ -36,7 +36,7 @@ class MTShopCategoryDetails extends MTPkgViewRendererAbstractModuleMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
         $oRequirements->NeedsSourceObject('oObject', 'TdbShopCategory', $this->oActiveCategory);
@@ -49,7 +49,7 @@ class MTShopCategoryDetails extends MTPkgViewRendererAbstractModuleMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         $oActiveCategory = $oVisitor->GetSourceObject('oObject');
         if ($oActiveCategory && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oActiveCategory->table, $oActiveCategory->id);
