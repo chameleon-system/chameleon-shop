@@ -137,7 +137,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
         ';
         try {
             $result = $this->databaseConnection->fetchAssociative($query, ['articleId' => $parentArticleId]);
-            $amount = (is_array($result) && isset($result[0])) ? (int)$result[0] : 0;
+            $amount = (is_array($result) && isset($result['amount'])) ? (int)$result['amount'] : 0;
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Unable to updateVariantParentStock - database error: %s', $e->getMessage()),
