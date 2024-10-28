@@ -32,7 +32,7 @@ class MTShopCentralHandlerCoreEndPoint extends TUserModelBase
     {
         parent::Init();
         $inputFilterUtil = $this->getInputFilterUtil();
-        $this->aUserData = $inputFilterUtil->getFilteredGetInputArray(self::URL_DATA);
+        $this->aUserData = $inputFilterUtil->getFilteredInput(self::URL_DATA);
         if (!is_array($this->aUserData)) {
             $this->aUserData = array();
         }

@@ -40,7 +40,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
         $inputFilterUtil = $this->getInputFilterUtil();
 
         // load current step
-        $sStepName = $inputFilterUtil->getFilteredGetInput(self::URL_PARAM_STEP_SYSTEM_NAME);
+        $sStepName = $inputFilterUtil->getFilteredInput(self::URL_PARAM_STEP_SYSTEM_NAME);
 
         if (TdbShopOrderStep::OrderProcessHasBeenMarkedAsCompleted() && 'thankyou' != $sStepName) {
             // the order has been successfully executed... we redirect to the thank you page
@@ -174,8 +174,8 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
         $inputFilterUtil = $this->getInputFilterUtil();
 
         if (is_null($sStepMethod)) {
-            if ($inputFilterUtil->getFilteredGetInput(self::URL_PARAM_STEP_METHOD)) {
-                $sStepMethod = $inputFilterUtil->getFilteredGetInput(self::URL_PARAM_STEP_METHOD);
+            if ($inputFilterUtil->getFilteredInput(self::URL_PARAM_STEP_METHOD)) {
+                $sStepMethod = $inputFilterUtil->getFilteredInput(self::URL_PARAM_STEP_METHOD);
             }
         }
         if (is_null($sStepMethod) || false === $sStepMethod || empty($sStepMethod)) {
@@ -265,7 +265,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
         $inputFilterUtil = $this->getInputFilterUtil();
         $sHTML = '';
         if (is_null($sStepName)) {
-            $sStepName = $inputFilterUtil->getFilteredGetInput('sStepName');
+            $sStepName = $inputFilterUtil->getFilteredInput('sStepName');
         }
         $oStep = TdbShopOrderStep::GetStep($sStepName);
         if ($oStep) {
@@ -313,12 +313,12 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
         $oPaymentMethod = null;
         $inputFilterUtil = $this->getInputFilterUtil();
         if (is_null($sPaymentMethodId)) {
-            $sPaymentMethodId = $inputFilterUtil->getFilteredGetInput('sPaymentMethodId');
+            $sPaymentMethodId = $inputFilterUtil->getFilteredInput('sPaymentMethodId');
         }
         if (empty($sPaymentMethodId)) {
             $oPaymentMethod = TdbShopPaymentMethod::GetNewInstance();
             if (is_null($sPaymentMethodNameInternal)) {
-                $sPaymentMethodNameInternal = $inputFilterUtil->getFilteredGetInput('sPaymentMethodNameInternal');
+                $sPaymentMethodNameInternal = $inputFilterUtil->getFilteredInput('sPaymentMethodNameInternal');
             }
             $oPaymentMethod->LoadFromField('name_internal', $sPaymentMethodNameInternal);
         }
