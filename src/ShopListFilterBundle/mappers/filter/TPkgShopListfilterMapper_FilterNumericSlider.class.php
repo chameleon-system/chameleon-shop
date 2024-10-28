@@ -18,7 +18,7 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         parent::Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
 
         /** @var $oFilterItem TPkgShopListfilterItemNumeric */
