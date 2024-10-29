@@ -41,8 +41,6 @@ if (array_key_exists('oPaymentData', $aCallTimeVars)) {
     if ($oUserPaymentData->fieldLastUsed) {
         $sChecked = 'checked="checked"';
     } ?>
-            <!--        <input type="radio" name="payment_data" --><?//=$sChecked?><!-- value="-->
-                <?//=TGlobal::OutHTML($sPaymentDataId)?><!--" /> --><?//=TGlobal::OutHTML(TGlobal::Translate('Verwenden'));?>
             <a href="<?=$oPaymentHandler->GetUseSavedPaymentURL($sPaymentDataId); ?>"><?=TGlobal::OutHtml(TGlobal::Translate('chameleon_system_shop.payment_data_trans.action_use_stored_card')); ?></a>
         </td>
         <td>
