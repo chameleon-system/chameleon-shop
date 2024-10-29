@@ -232,7 +232,7 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
      *
      * @return void
      */
-    protected function GetAdditionalViewVariables($oOrder, $aParameter)
+    protected function GetAdditionalViewVariables($oOrder, &$aParameter)
     {
     }
 
