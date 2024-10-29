@@ -44,7 +44,7 @@ class AmazonRefundAmazonAPIException extends \TPkgCmsException_LogAndMessage
         $this->successfulTransactionList = $successfulTransactionList;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
         $sString .= "\n".'with '.count(
