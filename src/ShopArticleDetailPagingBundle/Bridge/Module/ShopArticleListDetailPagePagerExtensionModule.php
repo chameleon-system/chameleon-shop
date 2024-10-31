@@ -21,7 +21,7 @@ class ShopArticleListDetailPagePagerExtensionModule extends \ChameleonSystemShop
      */
     private $requestToListUrlConverter;
 
-    protected function DefineInterface()
+    protected function DefineInterface(): void
     {
         parent::DefineInterface();
         $this->methodCallAllowed[] = 'getAsJson';
@@ -30,7 +30,7 @@ class ShopArticleListDetailPagePagerExtensionModule extends \ChameleonSystemShop
     /**
      * {@inheritdoc}
      */
-    public function AllowAccessWithoutAuthenticityToken($sMethodName)
+    public function AllowAccessWithoutAuthenticityToken($sMethodName): bool
     {
         $allowAccess = parent::AllowAccessWithoutAuthenticityToken($sMethodName);
 
@@ -40,7 +40,7 @@ class ShopArticleListDetailPagePagerExtensionModule extends \ChameleonSystemShop
     /**
      * @return void
      */
-    public function setRequestToListUrlConverter(RequestToListUrlConverterInterface $requestToListUrlConverter)
+    public function setRequestToListUrlConverter(RequestToListUrlConverterInterface $requestToListUrlConverter): void
     {
         $this->requestToListUrlConverter = $requestToListUrlConverter;
     }
@@ -48,7 +48,7 @@ class ShopArticleListDetailPagePagerExtensionModule extends \ChameleonSystemShop
     /**
      * @return array<string, mixed>
      */
-    protected function getAsJson()
+    protected function getAsJson(): array
     {
         $enrichedState = $this->enrichStateWithDefaultsFromConfiguration();
         $results = $this->getResults($enrichedState);
@@ -80,7 +80,7 @@ class ShopArticleListDetailPagePagerExtensionModule extends \ChameleonSystemShop
      *
      * @return array
      */
-    private function mapItemsAsJson(array $itemList)
+    private function mapItemsAsJson(array $itemList): array
     {
         $response = array();
         foreach ($itemList as $item) {
@@ -90,7 +90,7 @@ class ShopArticleListDetailPagePagerExtensionModule extends \ChameleonSystemShop
         return $response;
     }
 
-    protected function getItemMapperBaseData()
+    protected function getItemMapperBaseData(): array
     {
         $baseData = parent::getItemMapperBaseData();
         $baseData['pagerLinkDetails'] = http_build_query($this->requestToListUrlConverter->getPagerParameter($this->sModuleSpotName, $this->getListStateUrl()));

@@ -19,7 +19,7 @@ use TGlobal;
 
 class AmazonShopBasket extends \ChameleonSystemAmazonPaymentBundlepkgShopWebModulesAmazonShopBasketAutoParent
 {
-    public function GetHtmlFooterIncludes()
+    public function GetHtmlFooterIncludes(): array
     {
         $includes = parent::GetHtmlFooterIncludes();
         $activePortal = $this->getActivePortal();
@@ -45,7 +45,7 @@ class AmazonShopBasket extends \ChameleonSystemAmazonPaymentBundlepkgShopWebModu
         return $includes;
     }
 
-    private function getActivePortal()
+    private function getActivePortal(): ?\TdbCmsPortal
     {
         /** @var PortalDomainServiceInterface $portalDomainService */
         $portalDomainService = ServiceLocator::get('chameleon_system_core.portal_domain_service');

@@ -17,7 +17,7 @@ class MTPkgShopArticlePreorder_ShopCentralHandlerCore extends MTPkgShopArticlePr
      * add your custom methods as array to $this->methodCallAllowed here
      * to allow them to be called from web.
      */
-    protected function DefineInterface()
+    protected function DefineInterface(): void
     {
         parent::DefineInterface();
         $this->methodCallAllowed[] = 'PreorderArticle';
