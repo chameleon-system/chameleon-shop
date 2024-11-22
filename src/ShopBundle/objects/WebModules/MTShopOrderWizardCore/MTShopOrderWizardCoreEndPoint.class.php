@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 /**
  * the order wizard coordinates the different steps a user needs to complete to execute an order.
@@ -366,11 +367,11 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
      */
     private static function getPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ServiceLocator::get('chameleon_system_core.page_service');
     }
 
     /**
-     * @return \ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface
+     * @return InputFilterUtilInterface
      */
     private function getInputFilterUtil()
     {

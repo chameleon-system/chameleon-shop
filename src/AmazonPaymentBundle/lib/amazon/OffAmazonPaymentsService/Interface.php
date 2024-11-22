@@ -21,15 +21,11 @@
  * merchants.
  * 
  */
-
 interface  OffAmazonPaymentsService_Interface 
 {
-    
-
-        
     /**
-     * Capture 
-  
+     * Capture
+     *
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_CaptureRequest request
      * or OffAmazonPaymentsService_Model_CaptureRequest object itself
      * @see OffAmazonPaymentsService_Model_CaptureRequest
@@ -39,11 +35,9 @@ interface  OffAmazonPaymentsService_Interface
      */
     public function capture($request);
 
-
-        
     /**
-     * Refund 
-  
+     * Refund
+     *
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_RefundRequest request
      * or OffAmazonPaymentsService_Model_RefundRequest object itself
      * @see OffAmazonPaymentsService_Model_RefundRequest
@@ -53,11 +47,9 @@ interface  OffAmazonPaymentsService_Interface
      */
     public function refund($request);
 
-
-        
     /**
-     * Close Authorization 
-  
+     * Close Authorization
+     *
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_CloseAuthorizationRequest request
      * or OffAmazonPaymentsService_Model_CloseAuthorizationRequest object itself
      * @see OffAmazonPaymentsService_Model_CloseAuthorizationRequest
@@ -67,11 +59,9 @@ interface  OffAmazonPaymentsService_Interface
      */
     public function closeAuthorization($request);
 
-
-        
     /**
-     * Get Refund Details 
-  
+     * Get Refund Details
+     *
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_GetRefundDetailsRequest request
      * or OffAmazonPaymentsService_Model_GetRefundDetailsRequest object itself
      * @see OffAmazonPaymentsService_Model_GetRefundDetailsRequest
@@ -81,11 +71,9 @@ interface  OffAmazonPaymentsService_Interface
      */
     public function getRefundDetails($request);
 
-
-        
     /**
-     * Get Capture Details 
-  
+     * Get Capture Details
+     *
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_GetCaptureDetailsRequest request
      * or OffAmazonPaymentsService_Model_GetCaptureDetailsRequest object itself
      * @see OffAmazonPaymentsService_Model_GetCaptureDetailsRequest
@@ -95,11 +83,9 @@ interface  OffAmazonPaymentsService_Interface
      */
     public function getCaptureDetails($request);
 
-
-        
     /**
-     * Close Order Reference 
-  
+     * Close Order Reference
+     *
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_CloseOrderReferenceRequest request
      * or OffAmazonPaymentsService_Model_CloseOrderReferenceRequest object itself
      * @see OffAmazonPaymentsService_Model_CloseOrderReferenceRequest
@@ -109,11 +95,9 @@ interface  OffAmazonPaymentsService_Interface
      */
     public function closeOrderReference($request);
 
-
-        
     /**
-     * Confirm Order Reference 
-  
+     * Confirm Order Reference
+     *
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_ConfirmOrderReferenceRequest request
      * or OffAmazonPaymentsService_Model_ConfirmOrderReferenceRequest object itself
      * @see OffAmazonPaymentsService_Model_ConfirmOrderReferenceRequest
@@ -123,11 +107,9 @@ interface  OffAmazonPaymentsService_Interface
      */
     public function confirmOrderReference($request);
 
-
-        
     /**
-     * Get Order Reference Details 
-  
+     * Get Order Reference Details
+     *
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_GetOrderReferenceDetailsRequest request
      * or OffAmazonPaymentsService_Model_GetOrderReferenceDetailsRequest object itself
      * @see OffAmazonPaymentsService_Model_GetOrderReferenceDetailsRequest
@@ -137,11 +119,9 @@ interface  OffAmazonPaymentsService_Interface
      */
     public function getOrderReferenceDetails($request);
 
-
-        
     /**
-     * Authorize 
-  
+     * Authorize
+     *
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_AuthorizeRequest request
      * or OffAmazonPaymentsService_Model_AuthorizeRequest object itself
      * @see OffAmazonPaymentsService_Model_AuthorizeRequest
@@ -151,11 +131,9 @@ interface  OffAmazonPaymentsService_Interface
      */
     public function authorize($request);
 
-
-        
     /**
-     * Set Order Reference Details 
-  
+     * Set Order Reference Details
+     *
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_SetOrderReferenceDetailsRequest request
      * or OffAmazonPaymentsService_Model_SetOrderReferenceDetailsRequest object itself
      * @see OffAmazonPaymentsService_Model_SetOrderReferenceDetailsRequest
@@ -165,11 +143,9 @@ interface  OffAmazonPaymentsService_Interface
      */
     public function setOrderReferenceDetails($request);
 
-
-        
     /**
-     * Get Authorization Details 
-  
+     * Get Authorization Details
+     *
      * @see http://docs.amazonwebservices.com/${docPath}GetAuthorizationDetails.html      
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_GetAuthorizationDetailsRequest request
      * or OffAmazonPaymentsService_Model_GetAuthorizationDetailsRequest object itself
@@ -180,11 +156,9 @@ interface  OffAmazonPaymentsService_Interface
      */
     public function getAuthorizationDetails($request);
 
-
-        
     /**
-     * Cancel Order Reference 
-  
+     * Cancel Order Reference
+     *
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_CancelOrderReferenceRequest request
      * or OffAmazonPaymentsService_Model_CancelOrderReferenceRequest object itself
      * @see OffAmazonPaymentsService_Model_CancelOrderReferenceRequest
@@ -193,12 +167,10 @@ interface  OffAmazonPaymentsService_Interface
      * @throws OffAmazonPaymentsService_Exception
      */
     public function cancelOrderReference($request);
-    
-    
-    
+
     /**
-     * Create Order Reference For Id 
-     *   
+     * Create Order Reference For id
+     *
      * @param mixed $request array of parameters for OffAmazonPaymentsService_Model_CreateOrderReferenceForIdRequest request
      * or OffAmazonPaymentsService_Model_CreateOrderReferenceForIdRequest object itself
      * @see OffAmazonPaymentsService_Model_CreateOrderReferenceForIdRequest
@@ -207,9 +179,7 @@ interface  OffAmazonPaymentsService_Interface
      * @throws OffAmazonPaymentsService_Exception
      */
     public function createOrderReferenceForId($request);
-    
-    
-    
+
     /**
      * Get Billing Agreement Details
      *
@@ -221,9 +191,7 @@ interface  OffAmazonPaymentsService_Interface
      * @throws OffAmazonPaymentsService_Exception
      */
     public function getBillingAgreementDetails($request);
-    
-    
-    
+
     /**
      * Set Billing Agreement Details
      *
@@ -235,9 +203,7 @@ interface  OffAmazonPaymentsService_Interface
      * @throws OffAmazonPaymentsService_Exception
      */
     public function setBillingAgreementDetails($request);
-    
-    
-    
+
     /**
      * Confirm Billing Agreement
      *
@@ -249,9 +215,7 @@ interface  OffAmazonPaymentsService_Interface
      * @throws OffAmazonPaymentsService_Exception
      */
     public function confirmBillingAgreement($request);
-    
-    
-    
+
     /**
      * Validate Billing Agreement 
      *   
@@ -263,9 +227,7 @@ interface  OffAmazonPaymentsService_Interface
      * @throws OffAmazonPaymentsService_Exception
      */
     public function validateBillingAgreement($request);
-    
-    
-    
+
     /**
      * Authorize On Billing Agreement
      *
@@ -277,9 +239,7 @@ interface  OffAmazonPaymentsService_Interface
      * @throws OffAmazonPaymentsService_Exception
      */
     public function authorizeOnBillingAgreement($request);
-    
-    
-    
+
     /**
      * Close Billing Agreement
      *
@@ -291,6 +251,4 @@ interface  OffAmazonPaymentsService_Interface
      * @throws OffAmazonPaymentsService_Exception
      */
     public function closeBillingAgreement($request);
-
 }
-?>
