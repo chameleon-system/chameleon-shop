@@ -15,50 +15,9 @@
  * *****************************************************************************
  */
 
-
 /**
  *  @see OffAmazonPaymentsService_Interface
  */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /**
  * Implementation of the OffAmazonPaymentsService interface

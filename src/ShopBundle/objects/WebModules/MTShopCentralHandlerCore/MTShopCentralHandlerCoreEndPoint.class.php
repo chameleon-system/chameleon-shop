@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+
 /**
  * exposes methods that should be callable from all shop modules (via ajax or via get/post)
  * IMPORTANT: do not extend this class. instead extend from MTShopCentralHandlerCore.
@@ -92,10 +95,10 @@ class MTShopCentralHandlerCoreEndPoint extends TUserModelBase
     }
 
     /**
-     * @return \ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface
+     * @return InputFilterUtilInterface
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }
