@@ -22,9 +22,6 @@ class UpdateProductStockEvent extends Event
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getProductId(): string
     {
         return $this->productId;
@@ -32,8 +29,6 @@ class UpdateProductStockEvent extends Event
 
     /**
      * Returns the new total stock, calculated from all stock records across all warehouses.
-     *
-     * @return int
      */
     public function getNewStock(): int
     {
@@ -42,8 +37,6 @@ class UpdateProductStockEvent extends Event
 
     /**
      *  Returns the old total stock, calculated from all stock records across all warehouses.
-     *
-     * @return int
      */
     public function getOldStock(): int
     {
