@@ -281,6 +281,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $sCategoryId,
             'id' => $this->id,
             'table' => $this->table,
+            'portalId' => null !== $portal ? $portal->id : null,
+            'languageId' => null !== $language ? $language->id : null,
         );
         if (is_null($sCategoryId)) {
             $oActiveCategory = $shopService->getActiveCategory();

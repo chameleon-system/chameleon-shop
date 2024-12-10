@@ -454,13 +454,8 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
         } else {
             $oNoticeListItem = TdbShopUserNoticeList::GetNewInstance();
             /** @var $oNoticeListItem TdbShopUserNoticeList */
-            $aData = [
-                'shop_article_id' => $iArticleId,
-                'date_added' => date('Y-m-d H:i:s'),
-                'data_extranet_user_id' => $this->id,
-                'amount' => $iAmount,
-            ];
-            $oNoticeListItem->LoadFromRow($aData);
+            $data = $this->getNoticeListData($iArticleId, $iAmount);
+            $oNoticeListItem->LoadFromRow($data);
             if (!is_null($this->id) && $this->IsLoggedIn()) {
                 $oNoticeListItem->Save();
             }
@@ -489,6 +484,16 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
         return $dNewAmountOnList;
     }
 
+    protected function getNoticeListData(string $productId, int $amount): array
+    {
+        return [
+            'shop_article_id' => $productId,
+            'date_added' => date('Y-m-d H:i:s'),
+            'data_extranet_user_id' => $this->id,
+            'amount' => $amount,
+        ];
+    }
+
     /**
      * save user notice list to cookie.
      *
@@ -496,7 +501,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
      */
     protected function CommitNoticeListToCookie()
     {
-        $aNoticeList = array();
+        $aNoticeList = [];
         reset($this->aNoticeList);
         $counter = 0;
         foreach (array_keys($this->aNoticeList) as $iItemId) {
@@ -504,12 +509,15 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
                 break;
             }
 
-            $aNoticeList[] = [
-                'shop_article_id' => $this->aNoticeList[$iItemId]['shop_article_id'],
-                'date_added' => $this->aNoticeList[$iItemId]['date_added'],
-                'data_extranet_user_id' => $this->aNoticeList[$iItemId]['data_extranet_user_id'],
-                'amount' => $this->aNoticeList[$iItemId]['amount'],
-            ];
+            if (true === $this->aNoticeList[$iItemId] instanceof TdbShopUserNoticeList) {
+                // this is for backwards compatibility reasons with old cookie data.
+                // @deprecated can be removed in 2025 when all old cookies lost their validity
+                $noticeListItemData = $this->aNoticeList[$iItemId]->sqlData;
+            } else {
+                $noticeListItemData = $this->aNoticeList[$iItemId];
+            }
+
+            $aNoticeList[] = $noticeListItemData;
         }
         $sNoticeList = json_encode($aNoticeList);
         $sNoticeList = base64_encode($sNoticeList);

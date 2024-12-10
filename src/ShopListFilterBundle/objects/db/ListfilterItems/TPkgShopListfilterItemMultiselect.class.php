@@ -208,21 +208,23 @@ class TPkgShopListfilterItemMultiselect extends TdbPkgShopListfilterItem
      */
     protected function GetTargetTableNameField()
     {
-        static $sTargetTableName = null;
-        if (is_null($sTargetTableName)) {
-            $oTargetTableConf = TdbCmsTblConf::GetNewInstance();
-            /** @var $oTargetTableConf TdbCmsTblConf */
-            $oTargetTableConf->LoadFromField('name', $this->sItemTableName);
-            $sTargetTableName = $oTargetTableConf->GetNameColumn();
-            $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $oTargetTableConf->fieldName);
-            if (call_user_func(array($sClassName, 'CMSFieldIsTranslated'), $sTargetTableName)) {
-                $sLanguagePrefix = TGlobal::GetLanguagePrefix();
-                if (!empty($sLanguagePrefix)) {
-                    $sTargetTableName = $sTargetTableName.'__'.$sLanguagePrefix;
-                }
+        static $targetTableFieldNameCache = [];
+        if (true === array_key_exists($this->sItemTableName, $targetTableFieldNameCache)) {
+            return $targetTableFieldNameCache[$this->sItemTableName];
+        }
+        $oTargetTableConf = TdbCmsTblConf::GetNewInstance();
+        /** @var $oTargetTableConf TdbCmsTblConf */
+        $oTargetTableConf->LoadFromField('name', $this->sItemTableName);
+        $targetTableFieldName = $oTargetTableConf->GetNameColumn();
+        $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $oTargetTableConf->fieldName);
+        if (call_user_func(array($sClassName, 'CMSFieldIsTranslated'), $targetTableFieldName)) {
+            $sLanguagePrefix = TGlobal::GetLanguagePrefix();
+            if (!empty($sLanguagePrefix)) {
+                $targetTableFieldName = $targetTableFieldName.'__'.$sLanguagePrefix;
             }
         }
+        $targetTableFieldNameCache[$this->sItemTableName] = $targetTableFieldName;
 
-        return $sTargetTableName;
+        return $targetTableFieldName;
     }
 }

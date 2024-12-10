@@ -471,7 +471,12 @@ class TShopBasketArticleCoreList extends TIterator
         foreach ($articlesAffected as  $affectedArticle) {
             // total value used for the article is calculated based on the relative value of the article to the other articles
             // (200*(49/448.95))/1 =
-            $dValueToUse = ($unusedDiscountValue * ($affectedArticle->dPriceTotalAfterDiscountWithoutVouchers / $totalValueOfAffectedItems)) / $affectedArticle->dAmount;
+            if (0 === (int)round($totalValueOfAffectedItems*100,0)) {
+                // if the voucher applies with no value to the articles, we need to prevent a division by zero
+                $dValueToUse = 0;
+            } else {
+                $dValueToUse = ($unusedDiscountValue * ($affectedArticle->dPriceTotalAfterDiscountWithoutVouchers / $totalValueOfAffectedItems)) / $affectedArticle->dAmount;
+            }
             $dValueToUse = $dValueToUse * 100;
             //the reason for adding the 0.5 in the next step is float precision error in php, see http://php.net/float
             $dValueToUse = intval(floor($dValueToUse + 0.5)) / 100;

@@ -26,6 +26,7 @@
     },
     "require": {
         "ext-json": "*",
+        "ext-pdo": "*",
         "chameleon-system/chameleon-base": "dev-master",
         "simplepie/simplepie": "~1.3"
     },

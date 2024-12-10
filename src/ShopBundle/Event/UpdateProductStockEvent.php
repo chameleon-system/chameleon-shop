@@ -15,49 +15,30 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class UpdateProductStockEvent extends Event
 {
-    /**
-     * @var string
-     */
-    private $productId;
-    /**
-     * @var int
-     */
-    private $newStock;
-    /**
-     * @var int
-     */
-    private $oldStock;
-
-    /**
-     * @param string $productId
-     * @param int    $newStock
-     */
-    public function __construct(string $productId, int $newStock, int $oldStock)
-    {
-        $this->productId = $productId;
-        $this->newStock = $newStock;
-        $this->oldStock = $oldStock;
+    public function __construct(
+        private readonly string $productId,
+        private readonly int $newStock,
+        private readonly int $oldStock
+    ) {
     }
-    /**
-     * @return string
-     */
-    public function getProductId()
+
+    public function getProductId(): string
     {
         return $this->productId;
     }
 
     /**
-     * @return int
+     * Returns the new total stock, calculated from all stock records across all warehouses.
      */
-    public function getNewStock()
+    public function getNewStock(): int
     {
         return $this->newStock;
     }
 
     /**
-     * @return int
+     *  Returns the old total stock, calculated from all stock records across all warehouses.
      */
-    public function getOldStock()
+    public function getOldStock(): int
     {
         return $this->oldStock;
     }

@@ -24,7 +24,7 @@ class TShopModuleArticlelistFilterBestseller extends TShopModuleArticlelistFilte
      */
     protected function GetListQueryBase($oListConfig)
     {
-        $sQuery = 'SELECT 0 AS cms_search_weight, `shop_article`.*
+        $sQuery = 'SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
                    FROM `shop_article`
               LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
               LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
