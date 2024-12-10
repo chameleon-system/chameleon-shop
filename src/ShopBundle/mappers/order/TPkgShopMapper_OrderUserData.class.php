@@ -18,7 +18,7 @@ class TPkgShopMapper_OrderUserData extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oObject', 'TdbShopOrder', null, true);
     }
@@ -26,7 +26,7 @@ class TPkgShopMapper_OrderUserData extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oOrder TdbShopOrder */
         $oOrder = $oVisitor->GetSourceObject('oObject');

@@ -33,7 +33,7 @@ class AmazonWidgetMapper extends \AbstractViewMapper
      *
      * @param IMapperRequirementsRestricted $oRequirements
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('basket', 'TShopBasket', TShopBasket::GetInstance());
         $oRequirements->NeedsSourceObject(
@@ -50,7 +50,7 @@ class AmazonWidgetMapper extends \AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /** @var TShopBasket $basket */
         $basket = $oVisitor->GetSourceObject('basket');
         /** @var AmazonPaymentGroupConfig $config */

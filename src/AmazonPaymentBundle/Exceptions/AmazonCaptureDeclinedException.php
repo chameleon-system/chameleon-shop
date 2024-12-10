@@ -47,7 +47,7 @@ class AmazonCaptureDeclinedException extends \TPkgCmsException_LogAndMessage
         $this->reasonCode = $reasonCode;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
         $sString .= "\n".'reasonCode: '.$this->getReasonCode();

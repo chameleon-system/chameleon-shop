@@ -15,50 +15,9 @@
  * *****************************************************************************
  */
 
-
 /**
  *  @see OffAmazonPaymentsService_Interface
  */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /**
  * Implementation of the OffAmazonPaymentsService interface
@@ -769,13 +728,13 @@ class OffAmazonPaymentsService_Client implements OffAmazonPaymentsService_Interf
                             $shouldRetry = false;
                         } else {
                             if ($response['Status'] === 500 || $response['Status'] === 503) {
-                            	
+
 
                             	$errorResponse = OffAmazonPaymentsService_Model_ErrorResponse::fromXML($response['ResponseBody']);
-                            	
+
                             	$errors = $errorResponse->getError();
                             	$shouldRetry = ($errors[0]->getCode() === 'RequestThrottled') ? false : true;
-                            	
+
                             	if ($shouldRetry) {
                             		$this->_pauseOnRetry(++$retries, $response['Status']);
                             	} else {

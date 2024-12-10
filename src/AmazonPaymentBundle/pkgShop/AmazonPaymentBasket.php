@@ -85,6 +85,9 @@ class AmazonPaymentBasket extends \ChameleonSystemAmazonPaymentBundlepkgShopAmaz
         return $this->errorDuringAmazonCheckout;
     }
 
+    /**
+     * @return void
+     */
     public function RecalculateBasket()
     {
         parent::RecalculateBasket();

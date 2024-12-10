@@ -14,7 +14,7 @@ class TPkgShopBasketMapper_ToMiniBasket extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oBasket', 'TShopBasket', TShopBasket::GetInstance());
         $oRequirements->NeedsSourceObject('oShop', 'TdbShop', TdbShop::GetInstance());
@@ -23,7 +23,7 @@ class TPkgShopBasketMapper_ToMiniBasket extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oShop TdbShop */
         $oShop = $oVisitor->GetSourceObject('oShop');

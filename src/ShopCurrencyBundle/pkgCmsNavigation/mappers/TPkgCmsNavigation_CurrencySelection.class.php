@@ -26,7 +26,7 @@ class TPkgCmsNavigation_CurrencySelection extends AbstractViewMapper
      *
      * @param IMapperRequirementsRestricted $oRequirements
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('aTree', 'array', array());
     }
@@ -52,7 +52,7 @@ class TPkgCmsNavigation_CurrencySelection extends AbstractViewMapper
      *
      * @return
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $oCurrencyList = TdbPkgShopCurrencyList::GetList();
         if ($oCurrencyList->Length() < 2) {

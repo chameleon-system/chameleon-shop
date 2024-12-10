@@ -32,7 +32,7 @@ class AmazonIPNTransactionException extends \TPkgCmsException_Log
         $this->errorCode = $errorCode;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $sString = parent::__toString();
 

@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * Es wird ein Modul geschaffen, bei dem eine beliebige Anzahl Bilder definiert werden kann.
  * Bei jedem Bild können Hotspots im Bild positioniert und mit einem Artikel verknüpft werden.
@@ -108,8 +110,10 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
     public function Init()
     {
         parent::Init();
-        if ($this->global->UserDataExists(TdbPkgImageHotspotItem::GetURLParameterBaseForActiveSpot())) {
-            $this->aUserRequestData = $this->global->GetUserData(TdbPkgImageHotspotItem::GetURLParameterBaseForActiveSpot());
+
+        $global = ServiceLocator::get('chameleon_system_core.global');
+        if ($global->UserDataExists(TdbPkgImageHotspotItem::GetURLParameterBaseForActiveSpot())) {
+            $this->aUserRequestData = $global->GetUserData(TdbPkgImageHotspotItem::GetURLParameterBaseForActiveSpot());
             if (!is_array($this->aUserRequestData)) {
                 $this->aUserRequestData = array();
             }
@@ -117,7 +121,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
                 $this->sActiveItemId = $this->aUserRequestData['id'];
             }
         }
-        if (is_null($this->sActiveItemId) || empty($this->sActiveItemId)) {
+        if (empty($this->sActiveItemId)) {
             // get the first entry from the list
             $oItemList = $this->GetHotspotConfig()->GetFieldPkgImageHotspotItemList();
             $oItemList->bAllowItemCache = true;

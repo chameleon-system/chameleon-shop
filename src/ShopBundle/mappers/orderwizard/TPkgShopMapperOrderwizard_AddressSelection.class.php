@@ -14,7 +14,7 @@ class TPkgShopMapperOrderwizard_AddressSelection extends AbstractPkgExtranetMapp
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
         $oRequirements->NeedsSourceObject('selectedAddressId', 'string', null, true);
@@ -23,7 +23,7 @@ class TPkgShopMapperOrderwizard_AddressSelection extends AbstractPkgExtranetMapp
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         parent::Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
         /** @var $oAddressObject TdbDataExtranetUserAddress */

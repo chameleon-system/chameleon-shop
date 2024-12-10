@@ -43,7 +43,7 @@ class TPkgShopMapper_SocialSharePrivacy extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject(
             'activeLanguage',
@@ -59,7 +59,7 @@ class TPkgShopMapper_SocialSharePrivacy extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void{
         $language = 'en';
         /** @var TdbCmsLanguage $activeLanguage */
         $activeLanguage = $oVisitor->GetSourceObject('activeLanguage');

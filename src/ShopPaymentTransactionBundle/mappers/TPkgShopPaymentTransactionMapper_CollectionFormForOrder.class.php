@@ -23,7 +23,7 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
      *
      * @param IMapperRequirementsRestricted $oRequirements
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('order', 'TdbShopOrder');
         $oRequirements->NeedsSourceObject('paymentType'); // must be one of TPkgShopPaymentTransactionData::TYPE_*
@@ -52,7 +52,7 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /** @var TdbShopOrder $order */
         $order = $oVisitor->GetSourceObject('order');
 

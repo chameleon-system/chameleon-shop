@@ -16,7 +16,7 @@ class TPkgShopBasketMapper_VoucherInput extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oMessageManager', 'TCMSMessageManager', TCMSMessageManager::GetInstance());
         $oRequirements->NeedsSourceObject('oActivePage', 'TCMSActivePage', $this->getActivePageService()->getActivePage(), true);
@@ -25,7 +25,7 @@ class TPkgShopBasketMapper_VoucherInput extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $sMessageConsumerParameterName = MTShopBasketCore::URL_REQUEST_PARAMETER.'['.MTShopBasket::URL_MESSAGE_CONSUMER_NAME.']';
 

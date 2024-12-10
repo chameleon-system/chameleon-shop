@@ -22,7 +22,7 @@ class CurrencyBasket extends \ChameleonSystemShopCurrencyBundleBridgeChameleonOb
      *
      * {@inheritdoc}
      */
-    public function SetActivePaymentMethod($oShopPayment)
+    public function SetActivePaymentMethod($oShopPayment): bool
     {
         $oldActivePaymentMethod = $this->GetActivePaymentMethod();
         $isPaymentSet = parent::SetActivePaymentMethod($oShopPayment);

@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 /**
  * the order wizard coordinates the different steps a user needs to complete to execute an order.
@@ -36,8 +38,10 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
     {
         parent::Init();
 
+        $inputFilterUtil = $this->getInputFilterUtil();
+
         // load current step
-        $sStepName = $this->global->GetUserData(self::URL_PARAM_STEP_SYSTEM_NAME);
+        $sStepName = $inputFilterUtil->getFilteredInput(self::URL_PARAM_STEP_SYSTEM_NAME);
 
         if (TdbShopOrderStep::OrderProcessHasBeenMarkedAsCompleted() && 'thankyou' != $sStepName) {
             // the order has been successfully executed... we redirect to the thank you page
@@ -168,9 +172,11 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
             return false;
         } // stop if we have no active step
 
+        $inputFilterUtil = $this->getInputFilterUtil();
+
         if (is_null($sStepMethod)) {
-            if ($this->global->UserDataExists(self::URL_PARAM_STEP_METHOD)) {
-                $sStepMethod = $this->global->GetUserData(self::URL_PARAM_STEP_METHOD);
+            if ($inputFilterUtil->getFilteredInput(self::URL_PARAM_STEP_METHOD)) {
+                $sStepMethod = $inputFilterUtil->getFilteredInput(self::URL_PARAM_STEP_METHOD);
             }
         }
         if (is_null($sStepMethod) || false === $sStepMethod || empty($sStepMethod)) {
@@ -257,9 +263,10 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
      */
     protected function GetStepAsAjax($sStepName = null)
     {
+        $inputFilterUtil = $this->getInputFilterUtil();
         $sHTML = '';
         if (is_null($sStepName)) {
-            $sStepName = $this->global->GetUserData('sStepName');
+            $sStepName = $inputFilterUtil->getFilteredInput('sStepName');
         }
         $oStep = TdbShopOrderStep::GetStep($sStepName);
         if ($oStep) {
@@ -305,13 +312,14 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
     protected function JumpSelectPaymentMethod($sPaymentMethodId = null, $sPaymentMethodNameInternal = null)
     {
         $oPaymentMethod = null;
+        $inputFilterUtil = $this->getInputFilterUtil();
         if (is_null($sPaymentMethodId)) {
-            $sPaymentMethodId = $this->global->GetUserData('sPaymentMethodId');
+            $sPaymentMethodId = $inputFilterUtil->getFilteredInput('sPaymentMethodId');
         }
         if (empty($sPaymentMethodId)) {
             $oPaymentMethod = TdbShopPaymentMethod::GetNewInstance();
             if (is_null($sPaymentMethodNameInternal)) {
-                $sPaymentMethodNameInternal = $this->global->GetUserData('sPaymentMethodNameInternal');
+                $sPaymentMethodNameInternal = $inputFilterUtil->getFilteredInput('sPaymentMethodNameInternal');
             }
             $oPaymentMethod->LoadFromField('name_internal', $sPaymentMethodNameInternal);
         }
@@ -359,6 +367,14 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
      */
     private static function getPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ServiceLocator::get('chameleon_system_core.page_service');
+    }
+
+    /**
+     * @return InputFilterUtilInterface
+     */
+    private function getInputFilterUtil()
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

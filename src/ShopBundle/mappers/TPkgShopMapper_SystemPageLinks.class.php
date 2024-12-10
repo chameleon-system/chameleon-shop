@@ -33,7 +33,7 @@ class TPkgShopMapper_SystemPageLinks extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oShop', 'TdbShop', $this->shopService->getActiveShop());
     }
@@ -41,7 +41,7 @@ class TPkgShopMapper_SystemPageLinks extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oShop TdbShop */
         $oShop = $oVisitor->GetSourceObject('oShop');

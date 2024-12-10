@@ -14,7 +14,7 @@ abstract class AbstractPkgShopPaymentHandlerMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oPaymentHandler', 'TdbShopPaymentHandler');
         $oRequirements->NeedsSourceObject('sPaymentMethodId', 'string'); // the payment method using the payment handler

@@ -32,7 +32,7 @@ class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgEx
      */
     protected $amazonSleepData = null;
 
-    public function __sleep()
+    public function __sleep(): array
     {
         $paramList = parent::__sleep();
         $this->amazonSleepData = array();
@@ -55,12 +55,12 @@ class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgEx
         }
     }
 
-    public function isAmazonPaymentUser()
+    public function isAmazonPaymentUser(): bool
     {
         return true === $this->getAmazonPaymentEnabled();
     }
 
-    public function resetAmazonAddresses()
+    public function resetAmazonAddresses(): void
     {
         if (true === $this->oShippingAddress->getIsAmazonShippingAddress()) {
             $oldShippingAddress = $this->GetShippingAddress();
@@ -85,7 +85,7 @@ class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgEx
         }
     }
 
-    public function setAmazonShippingAddress(\TdbDataExtranetUserAddress $address)
+    public function setAmazonShippingAddress(\TdbDataExtranetUserAddress $address): void
     {
         if (null === $this->oShippingAddress || false === $this->oShippingAddress->getIsAmazonShippingAddress()) {
             $this->originalShippingAddress = $this->oShippingAddress;
@@ -107,7 +107,7 @@ class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgEx
     /**
      * @return bool
      */
-    public function getAmazonPaymentEnabled()
+    public function getAmazonPaymentEnabled(): bool
     {
         return $this->amazonPaymentEnabled;
     }
@@ -115,7 +115,7 @@ class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgEx
     /**
      * @param bool $amazonPaymentEnabled
      */
-    public function setAmazonPaymentEnabled($amazonPaymentEnabled)
+    public function setAmazonPaymentEnabled($amazonPaymentEnabled): void
     {
         $this->amazonPaymentEnabled = $amazonPaymentEnabled;
         if (true === $this->amazonPaymentEnabled) {
@@ -143,7 +143,7 @@ class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgEx
         $this->originalBillingAddress = null;
     }
 
-    public function UpdateShippingAddress($aAddressData)
+    public function UpdateShippingAddress($aAddressData): bool
     {
         $adr = (null !== $this->oShippingAddress) ? clone $this->oShippingAddress : null;
         if (null !== $adr) {
@@ -157,7 +157,7 @@ class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgEx
         return $updated;
     }
 
-    public function UpdateBillingAddress($aAddressData)
+    public function UpdateBillingAddress($aAddressData): bool
     {
         $adr = (null !== $this->oBillingAddress) ? clone $this->oBillingAddress : null;
         if (null !== $adr) {
@@ -171,7 +171,7 @@ class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgEx
         return $updated;
     }
 
-    public function SetAddressAsShippingAddress($sAddressId)
+    public function SetAddressAsShippingAddress($sAddressId): TdbDataExtranetUserAddress
     {
         if ($this->oShippingAddress->getIsAmazonShippingAddress()) {
             return $this->oShippingAddress;
@@ -180,7 +180,7 @@ class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgEx
         return parent::SetAddressAsShippingAddress($sAddressId);
     }
 
-    public function SetAddressAsBillingAddress($sAddressId)
+    public function SetAddressAsBillingAddress($sAddressId): bool|TdbDataExtranetUserAddress|null
     {
         if ($this->oBillingAddress->getIsAmazonShippingAddress()) {
             return $this->oBillingAddress;
@@ -189,7 +189,7 @@ class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgEx
         return parent::SetAddressAsBillingAddress($sAddressId);
     }
 
-    public function GetBillingAddress($bReset = false)
+    public function GetBillingAddress($bReset = false): bool|TdbDataExtranetUserAddress|null
     {
         if (null !== $this->oBillingAddress && $this->oBillingAddress->getIsAmazonShippingAddress()) {
             return $this->oBillingAddress;
@@ -198,7 +198,7 @@ class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgEx
         return parent::GetBillingAddress($bReset);
     }
 
-    public function GetShippingAddress($bReset = false, $bGetFromInput = false)
+    public function GetShippingAddress($bReset = false, $bGetFromInput = false): bool|TdbDataExtranetUserAddress|null
     {
         if (null !== $this->oShippingAddress && $this->oShippingAddress->getIsAmazonShippingAddress()) {
             return $this->oShippingAddress;

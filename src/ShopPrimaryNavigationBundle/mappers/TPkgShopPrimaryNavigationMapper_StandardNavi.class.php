@@ -23,7 +23,7 @@ class TPkgShopPrimaryNavigationMapper_StandardNavi extends AbstractViewMapper
      *
      * @param IMapperRequirementsRestricted $oRequirements
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oPortal', 'TdbCmsPortal');
     }
@@ -49,7 +49,7 @@ class TPkgShopPrimaryNavigationMapper_StandardNavi extends AbstractViewMapper
      *
      * @return
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oPortal TdbCmsPortal */
         $oPortal = $oVisitor->GetSourceObject('oPortal');

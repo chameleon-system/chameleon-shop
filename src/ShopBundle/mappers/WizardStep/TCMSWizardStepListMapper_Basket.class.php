@@ -14,7 +14,7 @@ class TCMSWizardStepListMapper_Basket extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oStepList', 'TdbShopOrderStepList');
         $oRequirements->NeedsSourceObject('oActiveStep', 'TdbShopOrderStep');
@@ -23,7 +23,7 @@ class TCMSWizardStepListMapper_Basket extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oActiveStep TdbShopOrderStep */
         $oActiveStep = $oVisitor->GetSourceObject('oActiveStep');

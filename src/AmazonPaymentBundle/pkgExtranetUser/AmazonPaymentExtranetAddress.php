@@ -31,6 +31,9 @@ class AmazonPaymentExtranetAddress extends \ChameleonSystemAmazonPaymentBundlepk
         $this->isAmazonShippingAddress = $isAmazonShippingAddress;
     }
 
+    /**
+     * @return string|false
+     */
     public function Save()
     {
         if (true === $this->getIsAmazonShippingAddress()) {
@@ -48,6 +51,9 @@ class AmazonPaymentExtranetAddress extends \ChameleonSystemAmazonPaymentBundlepk
         parent::Delete();
     }
 
+    /**
+     * @return false|string
+     */
     public function SaveFieldsFast($aFields)
     {
         if (true === $this->getIsAmazonShippingAddress()) {

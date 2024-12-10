@@ -19,7 +19,7 @@ use TdbShopShippingGroupList;
 
 class AmazonShopOrderWizard extends \ChameleonSystemAmazonPaymentBundlepkgShopWebModulesAmazonShopOrderWizardAutoParent
 {
-    public function GetHtmlFooterIncludes()
+    public function GetHtmlFooterIncludes(): array
     {
         $footerIncludes = array();
         try {
@@ -45,7 +45,7 @@ class AmazonShopOrderWizard extends \ChameleonSystemAmazonPaymentBundlepkgShopWe
         return $footerIncludes;
     }
 
-    private function getActivePortalId()
+    private function getActivePortalId(): ?string
     {
         /** @var PortalDomainServiceInterface $portalDomainService */
         $portalDomainService = ServiceLocator::get('chameleon_system_core.portal_domain_service');

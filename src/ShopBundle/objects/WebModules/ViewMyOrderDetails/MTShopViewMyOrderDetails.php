@@ -34,7 +34,7 @@ class MTShopViewMyOrderDetails extends MTPkgViewRendererAbstractModuleMapper
         return new TPkgShopViewMyOrderDetails($this->getDbAdapter(), $this->getSessionAdapter());
     }
 
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
 
@@ -55,7 +55,7 @@ class MTShopViewMyOrderDetails extends MTPkgViewRendererAbstractModuleMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /** @var $viewOrderDetailHandler IPkgShopViewMyOrderDetails */
         $viewOrderDetailHandler = $oVisitor->GetSourceObject('viewOrderDetailHandler');
         $orderIdRequested = $oVisitor->GetSourceObject('orderIdRequested');

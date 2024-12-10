@@ -29,7 +29,7 @@ class AddSpotToItemLinkMapper extends \AbstractViewMapper
      *
      * @param IMapperRequirementsRestricted $oRequirements
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('sLink', 'string');
         $oRequirements->NeedsSourceObject('pagerLinkDetails', 'string');
@@ -58,7 +58,7 @@ class AddSpotToItemLinkMapper extends \AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         $link = $oVisitor->GetSourceObject('sLink');
         $pagerLinkDetails = $oVisitor->GetSourceObject('pagerLinkDetails');
 

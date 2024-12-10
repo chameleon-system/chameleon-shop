@@ -174,7 +174,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     /**
      * {@inheritdoc}
      */
-    public function Init()
+    public function Init(): void
     {
         parent::Init();
         $this->loadConfiguration(); // need to load config in init because this may affect what get/post parameter are relevant for the state (and thus for caching).
@@ -240,7 +240,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         $enrichedState = $this->enrichStateWithDefaultsFromConfiguration();
         $results = $this->moduleListResult;
         if (null === $results) {
@@ -427,7 +427,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     /**
      * {@inheritdoc}
      */
-    public function _GetCacheParameters()
+    public function _GetCacheParameters(): array
     {
         $cacheParameter = parent::_GetCacheParameters();
         $cacheParameter['list_class'] = 'ChameleonSystem\ShopBundle\objects\ArticleList\Module';
@@ -476,7 +476,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     /**
      * {@inheritdoc}
      */
-    public function _AllowCache()
+    public function _AllowCache(): bool
     {
         if (true === $this->preventCaching) {
             return false;

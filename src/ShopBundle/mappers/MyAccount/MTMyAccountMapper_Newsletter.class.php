@@ -14,7 +14,7 @@ class MTMyAccountMapper_Newsletter extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oNewsletterUser', 'TdbPkgNewsletterUser', null, true);
         $oRequirements->NeedsSourceObject('oMyAccountModuleConfig', 'TdbDataExtranetModuleMyAccount');
@@ -24,7 +24,7 @@ class MTMyAccountMapper_Newsletter extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oNewsletterUser TdbPkgNewsletterUser */
         $oNewsletterUser = $oVisitor->GetSourceObject('oNewsletterUser');

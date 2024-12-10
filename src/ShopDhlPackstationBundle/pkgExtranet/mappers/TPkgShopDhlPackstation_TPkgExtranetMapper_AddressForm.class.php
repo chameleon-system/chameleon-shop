@@ -32,7 +32,7 @@ class TPkgShopDhlPackstation_TPkgExtranetMapper_AddressForm extends TPkgShopDhlP
      *
      * @return
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         parent::Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
 

@@ -14,7 +14,7 @@ abstract class AbstractPkgShopListfilterMapper_Filter extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oFilterItem', 'TdbPkgShopListfilterItem');
         $oRequirements->NeedsSourceObject('oActiveFilter', 'TdbPkgShopListfilter', TdbPkgShopListfilter::GetActiveInstance());
@@ -23,7 +23,7 @@ abstract class AbstractPkgShopListfilterMapper_Filter extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oFilterItem TdbPkgShopListfilterItem */
         $oFilterItem = $oVisitor->GetSourceObject('oFilterItem');

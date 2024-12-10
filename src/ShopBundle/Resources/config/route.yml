@@ -1,12 +1,12 @@
 shop_article_quickshop:
   path: /popup/quickshop_pid_{identifier}/
-  defaults:  { _controller: chameleon_system_shop.product_controller:shopArticleQuickShop }
+  defaults: { _controller: chameleon_system_shop.product_controller::shopArticleQuickShop }
   requirements:
     identifier: \d+
 
 shop_article:
   path: /{productPath}/{productName}_pid_{catid}_{identifier}.html
-  defaults:  { _controller: chameleon_system_shop.product_controller:shopArticle, _format: html }
+  defaults: { _controller: chameleon_system_shop.product_controller::shopArticle, _format: html }
   requirements:
     productPath: '.*'
     productName: '.*'
@@ -15,7 +15,7 @@ shop_article:
 
 shop_article_short:
   path: /{productName}_pid_{identifier}.html
-  defaults:  { _controller: chameleon_system_shop.product_controller:shopArticle, _format: html }
+  defaults: { _controller: chameleon_system_shop.product_controller::shopArticle, _format: html }
   requirements:
     productName: '.*'
     identifier: \d+

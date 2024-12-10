@@ -24,7 +24,7 @@ class AmazonButtonWidgetMapper extends \AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('amazonActionPluginSpotName', 'string', 'amazonActionPlugin');
         $oRequirements->NeedsSourceObject('amazonPaymentMethodInternalName', 'string', 'amazon');
@@ -37,7 +37,7 @@ class AmazonButtonWidgetMapper extends \AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         if (false === \TdbShopShippingGroupList::GetShippingGroupsThatAllowPaymentWith($oVisitor->GetSourceObject('amazonPaymentMethodInternalName'))) {
             $oVisitor->SetMappedValue('amazonPayment', array('amazonPaymentEnabled' => false));
 

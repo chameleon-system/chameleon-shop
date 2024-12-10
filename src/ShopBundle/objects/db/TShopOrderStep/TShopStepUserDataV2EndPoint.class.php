@@ -192,7 +192,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     protected function InitUserData()
     {
         /** @var array<string, mixed>|null $userData */
-        $userData = $this->getInputFilterUtil()->getFilteredPostInput('aUser');
+        $userData = $this->getInputFilterUtil()->getFilteredPostInputArray('aUser');
         if (null === $userData) {
             $oUser = self::getExtranetUserProvider()->getActiveUser();
             $this->SetUserData($oUser->sqlData);
@@ -213,12 +213,12 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
         $inputFilterUtil = $this->getInputFilterUtil();
 
         /** @var array<string, mixed>|null $shippingAddressData */
-        $shippingAddressData = $inputFilterUtil->getFilteredPostInput(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
+        $shippingAddressData = $inputFilterUtil->getFilteredPostInputArray(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
         if (null !== $shippingAddressData) {
             $this->SetShippingAddressData($shippingAddressData);
             $this->bUserDataSubmission = true;
         } else {
-            $billingAddressData = $inputFilterUtil->getFilteredPostInput(TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING);
+            $billingAddressData = $inputFilterUtil->getFilteredPostInputArray(TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING);
             if (null !== $billingAddressData && TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING == $this->AddressUsedAsPrimaryAddress()) {
                 $this->SetShippingAddressData($this->GetBillingAddressData());
             } else {
@@ -244,12 +244,12 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
         $inputFilterUtil = $this->getInputFilterUtil();
 
         /** @var array<string, mixed> $billingAddressData */
-        $billingAddressData = $inputFilterUtil->getFilteredPostInput(TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING);
+        $billingAddressData = $inputFilterUtil->getFilteredPostInputArray(TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING);
         if (null !== $billingAddressData) {
             $this->SetBillingAddressData($billingAddressData);
             $this->bUserDataSubmission = true;
         } else {
-            $shippingAddressData = $inputFilterUtil->getFilteredPostInput(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
+            $shippingAddressData = $inputFilterUtil->getFilteredPostInputArray(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
             if (null !== $shippingAddressData && TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING == $this->AddressUsedAsPrimaryAddress()) {
                 $this->SetBillingAddressData($this->GetShippingAddressData());
             } else {

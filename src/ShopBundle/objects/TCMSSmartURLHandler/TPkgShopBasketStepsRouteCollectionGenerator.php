@@ -141,7 +141,7 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
 
         return new \Symfony\Component\Routing\Route("/{$checkoutBaseUrl}{basketStep}",
             array(
-                '_controller' => 'chameleon_system_shop.basket_step_controller:basketStep',
+                '_controller' => 'chameleon_system_shop.basket_step_controller::basketStep',
                 'basketStepId' => $orderStep->id,
                 'basketStepSystemName' => $orderStep->fieldSystemname,
                 'defaultCheckoutPageId' => $defaultCheckoutPageId,
