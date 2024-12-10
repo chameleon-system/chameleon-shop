@@ -92,7 +92,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
                             $oStep = TdbShopOrderStep::GetStep('thankyou');
                             $oStep->JumpToStep($oStep);
                         } else {
-                            TTools::WriteLogEntry('Unable to complete payment (OnPaymentSuccessHook) for order: '.print_r($oOrder->sqlData, true), 2, __FILE__, __LINE__);
+                            TTools::WriteLogEntry('Unable to complete payment (OnPaymentSuccessHook) for order: '.print_r($oOrder->sqlData, true), 3, __FILE__, __LINE__);
                             // we need the option to redirect to a different page based on the payment selected
                             $oPaymentHandler->OnPaymentErrorAfterInterruptedPaymentHook();
                         }

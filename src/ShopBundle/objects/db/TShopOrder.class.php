@@ -11,18 +11,26 @@
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\ShopBundle\Event\OrderExecutedPaymentEvent;
+use ChameleonSystem\ShopBundle\Event\OrderPostInsertEvent;
+use ChameleonSystem\ShopBundle\Event\OrderPreDeleteEvent;
+use ChameleonSystem\ShopBundle\Event\OrderPreExecutedPaymentEvent;
+use ChameleonSystem\ShopBundle\Event\OrderSavedEvent;
+use ChameleonSystem\ShopBundle\Event\OrderSendToInventoryManagementEvent;
 use ChameleonSystem\ShopBundle\Exception\ConfigurationException;
 use ChameleonSystem\ShopBundle\Payment\PaymentHandler\Interfaces\ShopPaymentHandlerFactoryInterface;
 use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
 use ChameleonSystem\ShopBundle\ProductStatistics\Interfaces\ProductStatisticsServiceInterface;
+use ChameleonSystem\ShopBundle\ShopEvents;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class TShopOrder extends TShopOrderAutoParent
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopOrder';
-    const MAIL_CONFIRM_ORDER = 'shop-confirm-order';
-    const MAIL_STATUS_UPDATE = 'shop-order-status-update';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopOrder';
+    public const MAIL_CONFIRM_ORDER = 'shop-confirm-order';
+    public const MAIL_STATUS_UPDATE = 'shop-order-status-update';
 
     /**
      * we use the post insert hook to set the ordernumber for the order.
@@ -40,13 +48,16 @@ class TShopOrder extends TShopOrderAutoParent
         $aData['ordernumber'] = $iOrderNumber;
         $this->LoadFromRow($aData);
         $this->Save();
+
+        $this->getEventDispatcher()->dispatch(
+            new OrderPostInsertEvent($this),
+            ShopEvents::ORDER_POST_INSERT
+        );
     }
 
     /**
      * fill the order object with data from the basket
      * NOTE: this fills the base order only. None of the lists (article, vat, etc) will be added yet.
-     *
-     * @param TShopBasket $oBasket
      *
      * @return void
      */
@@ -70,7 +81,7 @@ class TShopOrder extends TShopOrderAutoParent
             }
         }
         $request = $this->getCurrentRequest();
-        $aOrderData = array(
+        $aOrderData = [
             'shop_id' => $oShop->id,
             'cms_portal_id' => $oPortal->id,
             'ordernumber' => '',
@@ -120,7 +131,7 @@ class TShopOrder extends TShopOrderAutoParent
             'pkg_shop_affiliate_id' => $pkg_shop_affiliate_id,
             'cms_language_id' => self::getLanguageService()->getActiveLanguageId(),
             'user_ip' => null === $request ? '' : $request->getClientIp(),
-        );
+        ];
         if (property_exists($oBillingAdr, 'fieldAddressAdditionalInfo')) {
             $aOrderData['adr_billing_additional_info'] = $oBillingAdr->fieldAddressAdditionalInfo;
         }
@@ -170,7 +181,7 @@ class TShopOrder extends TShopOrderAutoParent
      * method can be used to modify the data saved to order before the save is executed.
      *
      * @param TShopBasket $oBasket
-     * @param array       $aOrderData
+     * @param array $aOrderData
      *
      * @return void
      */
@@ -182,8 +193,6 @@ class TShopOrder extends TShopOrderAutoParent
      * method can be used to save any custom data to the order. The method is called
      * after all core data has been saved to the order (but before the order is marked as complete).
      *
-     * @param TShopBasket $oBasket
-     *
      * @return void
      */
     public function SaveCustomDataFromBasket(TShopBasket $oBasket)
@@ -194,8 +203,6 @@ class TShopOrder extends TShopOrderAutoParent
      * Saves the vouchers passed to the order to the shop_voucher_use table
      * Note: this will only work if the order has an id.
      * Also Note: existing voucher uses will NOT be removed.
-     *
-     * @param TShopBasketVoucherList $oBasketVoucherList
      *
      * @return void
      */
@@ -213,8 +220,6 @@ class TShopOrder extends TShopOrderAutoParent
      * save basket articles to order. NOTE: the order object must have an id for
      * this method to work.
      *
-     * @param TShopBasketArticleList $oBasketArticleList
-     *
      * @return void
      */
     public function SaveArticles(TShopBasketArticleList $oBasketArticleList)
@@ -230,8 +235,6 @@ class TShopOrder extends TShopOrderAutoParent
     /**
      * store one article with order.
      *
-     * @param TShopBasketArticle $oBasketItem
-     *
      * @return TdbShopOrderItem
      */
     protected function SaveArticle(TShopBasketArticle $oBasketItem)
@@ -241,7 +244,7 @@ class TShopOrder extends TShopOrderAutoParent
         /** @var $oOrderItem TdbShopOrderItem */
         $oManufacturer = TdbShopManufacturer::GetNewInstance();
         $oManufacturer->Load($oBasketItem->fieldShopManufacturerId);
-        $aData = array(
+        $aData = [
             'shop_order_id' => $this->id,
             'basket_item_key' => $oBasketItem->sBasketItemKey,
             'shop_article_id' => $oBasketItem->id,
@@ -278,13 +281,13 @@ class TShopOrder extends TShopOrderAutoParent
             'quantity_in_units' => $oBasketItem->fieldQuantityInUnits,
             'shop_unit_of_measurement_id' => $oBasketItem->fieldShopUnitOfMeasurementId,
             'custom_data' => $oBasketItem->getCustomData(),
-        );
+        ];
         $this->PrepareArticleDataForSave($oBasketItem, $aData);
         $oOrderItem->LoadFromRow($aData);
         $oOrderItem->AllowEditByAll(true);
         $iInsertedOrderArticleId = $oOrderItem->Save();
 
-        //Linking the downloads from BasketItem to OrderItem
+        // Linking the downloads from BasketItem to OrderItem
         $oDownloadFilesList = $oBasketItem->GetDownloads('download');
         while ($oDownloadFile = $oDownloadFilesList->Next()) {
             $sQuery = "INSERT INTO `shop_order_item_download_cms_document_mlt`
@@ -308,7 +311,7 @@ class TShopOrder extends TShopOrderAutoParent
      * use this method to make changes to the order item data before it is saved to the database.
      *
      * @param TShopBasketArticle $oBasketItem
-     * @param array              $aOrderItemData
+     * @param array $aOrderItemData
      *
      * @return void
      */
@@ -319,8 +322,8 @@ class TShopOrder extends TShopOrderAutoParent
     /**
      * save an article (pointed to by $oBundleArticle) belonging to a bundle ($oBasketItem) within the order.
      *
-     * @param TShopBasketArticle   $oBasketItem    - the original basket item
-     * @param TdbShopOrderItem     $oOrderItem     - the generated order item (ie the bundle owner)
+     * @param TShopBasketArticle $oBasketItem - the original basket item
+     * @param TdbShopOrderItem $oOrderItem - the generated order item (ie the bundle owner)
      * @param TdbShopBundleArticle $oBundleArticle - the bundle connection between the owning item and the owned item
      *
      * @return void
@@ -337,7 +340,7 @@ class TShopOrder extends TShopOrderAutoParent
             // make connection
             $oBundleConnection = TdbShopOrderBundleArticle::GetNewInstance();
             /** @var $oBundleConnection TdbShopOrderBundleArticle */
-            $aConnectionData = array('shop_order_item_id' => $oOrderItem->id, 'bundle_article_id' => $oBundleOrderItem->id, 'amount' => $oBundleArticle->fieldAmount, 'position' => $oBundleArticle->fieldPosition);
+            $aConnectionData = ['shop_order_item_id' => $oOrderItem->id, 'bundle_article_id' => $oBundleOrderItem->id, 'amount' => $oBundleArticle->fieldAmount, 'position' => $oBundleArticle->fieldPosition];
             $oBundleConnection->LoadFromRow($aConnectionData);
             $oBundleConnection->AllowEditByAll(true);
             $oBundleConnection->Save();
@@ -348,8 +351,6 @@ class TShopOrder extends TShopOrderAutoParent
      * save vat list to basket. NOTE: the order object must have an id for
      * this method to work.
      *
-     * @param TdbShopVatList $oVatList
-     *
      * @return void
      */
     public function SaveVATList(TdbShopVatList $oVatList)
@@ -359,7 +360,7 @@ class TShopOrder extends TShopOrderAutoParent
             while ($oVat = $oVatList->Next()) {
                 $oOrderVat = TdbShopOrderVat::GetNewInstance();
                 /** @var $oOrderVat TdbShopOrderVat */
-                $aVatData = array('shop_order_id' => $this->id, 'name' => $oVat->GetName(), 'vat_percent' => $oVat->fieldVatPercent, 'value' => $oVat->GetVatValue());
+                $aVatData = ['shop_order_id' => $this->id, 'name' => $oVat->GetName(), 'vat_percent' => $oVat->fieldVatPercent, 'value' => $oVat->GetVatValue()];
                 $oOrderVat->LoadFromRow($aVatData);
                 $oOrderVat->AllowEditByAll(true);
                 $oOrderVat->Save();
@@ -370,8 +371,6 @@ class TShopOrder extends TShopOrderAutoParent
     /**
      * save any user data for the shipping group in the basket
      * NOTE: the order object must have an id for this method to work.
-     *
-     * @param TdbShopShippingGroup $oShippingGroup
      *
      * @return void
      */
@@ -385,8 +384,6 @@ class TShopOrder extends TShopOrderAutoParent
     /**
      * save any user data for the payment method in the basket
      * NOTE: the order object must have an id for this method to work.
-     *
-     * @param TdbShopPaymentMethod $oPaymentMethod
      *
      * @return void
      */
@@ -412,7 +409,7 @@ class TShopOrder extends TShopOrderAutoParent
         if (is_null($oPaymentHandler)) {
             $oPaymentMethod = $this->GetFieldShopPaymentMethod();
             if ($oPaymentMethod) {
-                $aParameter = array();
+                $aParameter = [];
                 $oPaymentParameterList = $this->GetFieldShopOrderPaymentMethodParameterList();
                 while ($oParam = $oPaymentParameterList->Next()) {
                     $aParameter[$oParam->fieldName] = $oParam->fieldValue;
@@ -471,9 +468,15 @@ class TShopOrder extends TShopOrderAutoParent
                 TdbDataExtranetGroup::UpdateAutoAssignToUser($oTmpuser);
             }
         }
+
         if ($this->fieldValueTotal <= 0) {
             $this->SetStatusPaid(true);
         }
+
+        $this->getEventDispatcher()->dispatch(
+            new OrderSavedEvent($this),
+            ShopEvents::ORDER_SAVED
+        );
     }
 
     /**
@@ -487,6 +490,11 @@ class TShopOrder extends TShopOrderAutoParent
      */
     public function ExportOrderForWaWiHook($oPaymentHandler)
     {
+        $this->getEventDispatcher()->dispatch(
+            new OrderSendToInventoryManagementEvent($this),
+            ShopEvents::ORDER_SEND_TO_INVENTORY_MANAGEMENT
+        );
+
         return true;
     }
 
@@ -516,6 +524,7 @@ class TShopOrder extends TShopOrderAutoParent
      *
      * @param string|null $sSendToMail
      * @param string|null $sSendToName
+     *
      * @return bool|string
      */
     public function SendOrderNotification($sSendToMail = null, $sSendToName = null)
@@ -534,10 +543,10 @@ class TShopOrder extends TShopOrderAutoParent
 
         TCMSImage::ForceNonSSLURLs(true); // force image urls to non ssl for use in order email
         if (is_null($oMail)) {
-            if(false === $orderNotificationBeforeSendStatus) {
+            if (false === $orderNotificationBeforeSendStatus) {
                 $this->updateSendOrderNotificationState(false);
             }
-            $bOrderSend = TGlobal::Translate('chameleon_system_shop.order_notification.error_mail_template_not_found', array('%emailTemplate%' => self::MAIL_CONFIRM_ORDER));
+            $bOrderSend = TGlobal::Translate('chameleon_system_shop.order_notification.error_mail_template_not_found', ['%emailTemplate%' => self::MAIL_CONFIRM_ORDER]);
         } else {
             $aMailData = $this->sqlData;
             $aMailData = $this->AddOrderNotificationEmailData($aMailData);
@@ -558,9 +567,9 @@ class TShopOrder extends TShopOrderAutoParent
      * Save additional information to the order for successfully sent notification
      * email and  incorrect sent notification email.
      *
-     * @param bool               $bOrderSend
+     * @param bool $bOrderSend
      * @param TdbDataMailProfile $oMail
-     * @param string             $sSendToMail
+     * @param string $sSendToMail
      *
      * @return void
      */
@@ -593,13 +602,14 @@ class TShopOrder extends TShopOrderAutoParent
      * Add additional data for the order if notification email was send correctly
      * to given array.
      *
-     * @return array<string, mixed>
      * @param array<string, mixed> $aData
+     *
+     * @return array<string, mixed>
      */
     protected function AddOrderNotificationDataForOrderSuccess($aData)
     {
         if (!is_array($aData)) {
-            $aData = array();
+            $aData = [];
         }
         $aData['system_order_notification_send'] = '1';
 
@@ -611,18 +621,18 @@ class TShopOrder extends TShopOrderAutoParent
      * to given array. Add info to the email profile that the notification email was
      * not send correctly. And add the incorrectly sent email profile to the given array.
      *
-     * @param array              $aData
+     * @param array $aData
      * @param TdbDataMailProfile $oMail
-     * @param string             $sSendToMail - target email
+     * @param string $sSendToMail - target email
      *
      * @return array
      */
     protected function AddOrderNotificationDataForOrderFailure($aData, $oMail, $sSendToMail)
     {
-        $aAdditionalMailData = array('iAttemptsToSend' => 1, 'sSendToMail' => $sSendToMail);
+        $aAdditionalMailData = ['iAttemptsToSend' => 1, 'sSendToMail' => $sSendToMail];
         $oMail->AddDataArray($aAdditionalMailData);
         if (!is_array($aData)) {
-            $aData = array();
+            $aData = [];
         }
         $aData['object_mail'] = base64_encode(serialize($oMail));
         $aData['system_order_notification_send'] = '0';
@@ -683,9 +693,9 @@ class TShopOrder extends TShopOrderAutoParent
     /**
      * add name value from given object to given array with given field name as key if object is not null.
      *
-     * @param array      $aMailData
+     * @param array $aMailData
      * @param TCMSRecord $oNameObject
-     * @param string     $sSaveFieldName
+     * @param string $sSaveFieldName
      *
      * @return array
      */
@@ -743,7 +753,7 @@ class TShopOrder extends TShopOrderAutoParent
      * executes payment for order and given payment handler.
      *
      * @param TdbShopPaymentHandler $oPaymentHandler
-     * @param string                $sMessageConsumer - message consummer to send errors to
+     * @param string $sMessageConsumer - message consummer to send errors to
      *
      * @return bool
      */
@@ -771,12 +781,21 @@ class TShopOrder extends TShopOrderAutoParent
      * NOTE: returns true on success, an error code on failure. SO MAKE SURE TO CHECK FOR VALID RESPONSE USING TYPE (ie. use === instead of ==).
      *
      * @param TdbShopPaymentHandler $oPaymentHandler
-     * @param string                $sMessageConsumer - message consumer to send error messages to
+     * @param string $sMessageConsumer - message consumer to send error messages to
      *
      * @return bool
      */
     protected function ExecutePaymentHook($oPaymentHandler, $sMessageConsumer = '')
     {
+        $this->getEventDispatcher()->dispatch(
+            new OrderExecutedPaymentEvent(
+                $this,
+                $oPaymentHandler,
+                $sMessageConsumer
+            ),
+            ShopEvents::ORDER_EXECUTED_PAYMENT
+        );
+
         return $oPaymentHandler->ExecutePayment($this, $sMessageConsumer);
     }
 
@@ -847,13 +866,13 @@ class TShopOrder extends TShopOrderAutoParent
     /**
      * used to display an order.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oOrder', $this);
@@ -875,7 +894,7 @@ class TShopOrder extends TShopOrderAutoParent
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -888,16 +907,16 @@ class TShopOrder extends TShopOrderAutoParent
         $dProductNetValue = 0;
         $oArticles = $this->GetFieldShopOrderItemList();
         $oArticles->GoToStart();
-        $aTaxValueGroups = array();
+        $aTaxValueGroups = [];
         while ($oArticle = $oArticles->Next()) {
             if (!array_key_exists($oArticle->fieldVatPercent, $aTaxValueGroups)) {
-                /**
+                /*
                  * @psalm-suppress InvalidArrayOffset
                  * @FIXME Float array keys are converted to integers - this could lead to unwanted behaviour
                  */
                 $aTaxValueGroups[$oArticle->fieldVatPercent] = 0;
             }
-            /**
+            /*
              * @psalm-suppress InvalidArrayOffset
              * @FIXME Float array keys are converted to integers - this could lead to unwanted behaviour
              */
@@ -918,9 +937,10 @@ class TShopOrder extends TShopOrderAutoParent
     }
 
     /**
-     * change paid state of order
+     * change paid state of order.
      *
      * @param bool $bIsPaid
+     *
      * @return void
      */
     public function SetStatusPaid($bIsPaid = true)
@@ -946,9 +966,10 @@ class TShopOrder extends TShopOrderAutoParent
     }
 
     /**
-     * change canceled state
+     * change canceled state.
      *
      * @param bool $bIsCanceled
+     *
      * @return void
      */
     public function SetStatusCanceled($bIsCanceled = true)
@@ -1048,8 +1069,6 @@ class TShopOrder extends TShopOrderAutoParent
     }
 
     /**
-     * @param TdbShopVoucher $voucher
-     *
      * @return void
      */
     private function postActivateUsedUpVoucher(TdbShopVoucher $voucher)
@@ -1059,8 +1078,6 @@ class TShopOrder extends TShopOrderAutoParent
     }
 
     /**
-     * @param TdbShopVoucher $voucher
-     *
      * @return void
      */
     private function logOnActivatingUsedUpVoucher(TdbShopVoucher $voucher)
@@ -1069,17 +1086,15 @@ class TShopOrder extends TShopOrderAutoParent
             'Can not activate voucher on changing order cancel status because voucher was used up already. Please check your order (%s) for correctness.',
             $this->id
         );
-        $context = array(
+        $context = [
             'orderId' => $this->id,
             'voucherId' => $voucher->id,
             'voucherCode' => $voucher->fieldCode,
-        );
+        ];
         $this->getLogger()->error($message, $context);
     }
 
     /**
-     * @param TdbShopVoucher $voucher
-     *
      * @return void
      */
     private function sendMailOnActivatingUsedUpVoucher(TdbShopVoucher $voucher)
@@ -1097,6 +1112,11 @@ class TShopOrder extends TShopOrderAutoParent
      */
     protected function PreDeleteHook()
     {
+        $this->getEventDispatcher()->dispatch(
+            new OrderPreDeleteEvent($this),
+            ShopEvents::ORDER_PRE_DELETE
+        );
+
         parent::PreDeleteHook();
         $this->UpdateStock(false);
     }
@@ -1143,7 +1163,7 @@ class TShopOrder extends TShopOrderAutoParent
      */
     public static function GetCacheRelevantTables($sViewName = null, $sViewType = null)
     {
-        $aTables = array();
+        $aTables = [];
         $aTables[] = 'shop_order';
         $aTables[] = 'shop_order_item';
         $aTables[] = 'shop_order_payment_method_parameter';
@@ -1167,11 +1187,19 @@ class TShopOrder extends TShopOrderAutoParent
      */
     public function PrePaymentExecuteHook($sMessageConsumer)
     {
-        /**
+        /*
          * call external api and if call fails add an error message
          * $oMsgManager = TCMSMessageManager::GetInstance();
          * $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-SAVE-VIA-API-RETURNED-ERROR');.
          */
+
+        $this->getEventDispatcher()->dispatch(
+            new OrderPreExecutedPaymentEvent(
+                $this,
+                $sMessageConsumer
+            ),
+            ShopEvents::ORDER_EXECUTED_PAYMENT
+        );
 
         return true;
     }
@@ -1189,17 +1217,17 @@ class TShopOrder extends TShopOrderAutoParent
         if (!is_null($this->id) && !is_null($oShopBasketDiscountList) && $oShopBasketDiscountList->Length() > 0) {
             $oShopBasketDiscountList->GoToStart();
             while ($oShopBasketDiscount = $oShopBasketDiscountList->Next()) {
-                //save...
+                // save...
                 $oShopOrderDiscount = TdbShopOrderDiscount::GetNewInstance();
                 /** @var $oShopOrderDiscount TdbShopOrderDiscount */
-                $aConnectionData = array(
+                $aConnectionData = [
                     'shop_order_id' => $this->id,
                     'shop_discount_id' => $oShopBasketDiscount->id,
                     'name' => $oShopBasketDiscount->fieldName,
                     'value' => $oShopBasketDiscount->fieldValueFormated,
                     'valuetype' => $oShopBasketDiscount->fieldValueType,
                     'total' => $oShopBasketDiscount->GetValue(),
-                );
+                ];
                 $aConnectionData = $this->saveDiscountsEnrichDiscountSaveData($this, $oShopBasketDiscount, $aConnectionData);
 
                 $oShopOrderDiscount->LoadFromRow($aConnectionData);
@@ -1232,5 +1260,10 @@ class TShopOrder extends TShopOrderAutoParent
     private function getPortalDomainService(): PortalDomainServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
+    }
+
+    private function getEventDispatcher(): EventDispatcherInterface
+    {
+        return ServiceLocator::get('event_dispatcher');
     }
 }

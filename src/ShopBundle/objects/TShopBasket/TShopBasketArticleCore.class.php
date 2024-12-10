@@ -262,9 +262,10 @@ class TShopBasketArticleCore extends TdbShopArticle
         $this->dPriceTotal = $this->dAmount * $this->dPrice;
         $this->dTotalWeight = $this->dAmount * $this->fieldSizeWeight;
         $this->dTotalVolume = $this->dAmount * $this->dVolume;
-        $this->dPriceAfterDiscount = $this->dPrice;
-        $this->dPriceTotalAfterDiscount = $this->dPriceTotal;
-        $this->dPriceTotalAfterDiscountWithoutVouchers = $this->dPriceTotalAfterDiscount;
+        // discount must always be calculated by basket and not set by the article #64328
+        // $this->dPriceAfterDiscount = $this->dPrice;
+        // $this->dPriceTotalAfterDiscount = $this->dPriceTotal;
+        // $this->dPriceTotalAfterDiscountWithoutVouchers = $this->dPriceTotalAfterDiscount;
     }
 
     /**

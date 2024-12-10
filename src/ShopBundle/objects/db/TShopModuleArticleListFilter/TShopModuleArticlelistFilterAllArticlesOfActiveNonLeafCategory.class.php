@@ -24,7 +24,7 @@ class TShopModuleArticlelistFilterAllArticlesOfActiveNonLeafCategory extends Tdb
      */
     protected function GetListQueryBase($oListConfig)
     {
-        $sQuery = 'select shop_article.* from shop_article
+        $sQuery = 'select DISTINCT shop_article.* from shop_article
                 LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
                 LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
                     where 1=0';
