@@ -23,7 +23,10 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
 TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'en')
-    ->setFields(['name' => 'Shop Sales Statistics Backendmodule']);
+    ->setFields(['name' => 'Shop Sales Statistics Backendmodule'])
+    ->setWhereEquals([
+          'id' => '90eae2e0-796c-4b25-b3c8-62324df047d4',
+      ]);
 TCMSLogChange::update(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module_cms_usergroup_mlt', 'de')
@@ -43,7 +46,10 @@ $data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item', 'de')
 TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item', 'en')
-    ->setFields(['name' => 'Sales statistics']);
+    ->setFields(['name' => 'Sales statistics'])
+    ->setWhereEquals([
+        'id' => '9c06702f-7ffb-426d-afe9-5ffd5a9cd122',
+    ]);
 TCMSLogChange::update(__LINE__, $data);
 
 $menuCategoryId = (string) TCMSLogChange::getDatabaseConnection()
@@ -62,5 +68,8 @@ $data = TCMSLogChange::createMigrationQueryData('cms_menu_item', 'de')
 TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_menu_item', 'en')
-    ->setFields(['name' => 'Sales']);
+    ->setFields(['name' => 'Sales'])
+    ->setWhereEquals([
+        'id' => '552424ec-8131-4102-8406-3f56dad583e6',
+    ]);
 TCMSLogChange::update(__LINE__, $data);
