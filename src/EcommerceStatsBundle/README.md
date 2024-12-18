@@ -3,13 +3,6 @@
 This bundle generates statistics reports and exposes them in multiple ways
 in the backend.
 
-After installation, ensure to create these sym links:
-
-```bash
-$ cd src/extensions/snippets-cms
-$ ln -s ../../../vendor/chameleon-system/ecommerce-stats-bundle/src/Bundle/Resources/views/snippets-cms/ecommerceStats/
-```
-
 ## Extending
 
 There are currently 2 ways of adding statistics to the bundles output:
