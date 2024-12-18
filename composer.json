@@ -101,7 +101,8 @@
             "src/ShopRatingServiceBundle/mappers",
             "src/ShopRatingServiceBundle/objects",
             "src/ShopWishlistBundle/objects",
-            "src/ShopWishlistBundle/pkgExtranet"
+            "src/ShopWishlistBundle/pkgExtranet",
+            ""
         ],
         "psr-4": {
             "ChameleonSystem\\": "src"

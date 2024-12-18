@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <!-- Controller -->
+        <service
+            id="chameleon_system_ecommerce_stats.controller.csv_export"
+            class="ChameleonSystem\EcommerceStatsBundle\Controllers\CsvExportController"
+            autowire="true"
+        />
+
+        <!-- Module -->
+        <service
+            id="chameleon_system_ecommerce_stats.backend_module.ecommerce_stats"
+            class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule"
+            shared="false"
+            autowire="true"
+        >
+            <argument key="$translator" type="service" id="chameleon_system_core.translator" />
+            <argument key="$urlUtil" type="service" id="chameleon_system_core.util.url" />
+            <tag name="chameleon_system.module"/>
+        </service>
+
+        <!-- Provider -->
+        <service
+            id="ChameleonSystem\EcommerceStatsBundle\StatsProvider\StatsProviderCollection"
+            autowire="true"
+        />
+        <service
+            id="chameleon_system_ecommerce_stats.stats_provider.pkg_shop_statistics"
+            class="ChameleonSystem\EcommerceStatsBundle\StatsProvider\PkgShopStatisticsGroupProvider"
+            autowire="true"
+        >
+            <argument key="$translator" type="service" id="chameleon_system_core.translator" />
+            <tag name="chameleon_system_ecommerce_stats.stats_provider" />
+        </service>
+
+        <!-- Services -->
+        <service
+            id="chameleon_system_ecommerce_stats.ecommerce_stats_table"
+            class="ChameleonSystem\EcommerceStatsBundle\Service\StatsTableService"
+            autowire="true"
+        />
+        <service
+            id="chameleon_system_ecommerce_stats.csv_export"
+            class="ChameleonSystem\EcommerceStatsBundle\Service\CsvExportService"
+        >
+            <argument type="service" id="chameleon_system_core.translator" />
+        </service>
+        <service
+            id="chameleon_system_ecommerce_stats.top_seller"
+            class="ChameleonSystem\EcommerceStatsBundle\Service\TopSellerService"
+        >
+            <argument type="service" id="database_connection" />
+        </service>
+
+        <service
+            class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Twig\FormatterTwigExtension"
+            id="chameleon_system_ecommerce_stats.twig.formatter"
+        >
+            <tag name="twig.extension"/>
+        </service>
+
+        <!-- Support for autowiring interfaces -->
+        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\CsvExportServiceInterface" alias="chameleon_system_ecommerce_stats.csv_export" />
+        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface" alias="ChameleonSystem\EcommerceStatsBundle\StatsProvider\StatsProviderCollection" />
+        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface" alias="chameleon_system_ecommerce_stats.ecommerce_stats_table" />
+        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\TopSellerServiceInterface" alias="chameleon_system_ecommerce_stats.top_seller" />
+
+    </services>
+</container>
