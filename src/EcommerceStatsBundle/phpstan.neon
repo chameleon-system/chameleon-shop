@@ -1,0 +1,12 @@
+includes:
+    - vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon
+parameters:
+    level: 8
+    paths:
+        - src
+    ignoreErrors:
+        # Ignore anything that touches tdb
+        - '#(TdbPkgShopStatisticGroup|TdbCmsPortal|TdbCmsUser|TdbCmsLocals)#'
+
+        # Explicitly preferring 'raw' DateTime class
+        - '#Class DateTime is unsafe to use#'

@@ -1,0 +1,60 @@
+{#
+    @var string moduleSpotName
+    @var bool showChange
+    @var string portalId
+    @var string selectedPortalId
+    @var array portalList
+    @var array viewList
+    @var string activeViewName
+    @var string activeDateGroupType
+    @var array dateGroupTypeList
+    @var string csvDownloadUrl
+    @var string topSellerDownloadUrl
+    @var string [] tableData
+#}
+
+<br/>
+<div class="module-shop-statistic">
+    <div class="card standard">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0"><i class="fas fa-chart-pie mr-2"></i>{{ 'chameleon_system_ecommerce_stats.headline'|trans }}</h3>
+            <div class="actionLink">
+                <button class="btn btn-secondary ml-2" onclick="window.print()">
+                    <i class="fa fa-print pr-2"></i>
+                    {{ 'chameleon_system_ecommerce_stats.action_print'|trans }}
+                </button>
+                <a class="btn btn-secondary ml-2 consume-params" href="{{ csvDownloadUrl| raw }}">
+                    <i class="fa fa-download pr-2"></i>
+                    {{ 'chameleon_system_ecommerce_stats.action_download'|trans }}
+                </a>
+                <a class="btn btn-secondary ml-2 consume-params" href="{{ topSellerDownloadUrl| raw }}">
+                    <i class="fa fa-download pr-2"></i>
+                    {{ 'chameleon_system_ecommerce_stats.action_download_top_seller'|trans }}
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="filters">
+                {{ include( '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/filter-form.html.twig' ) }}
+            </div>
+
+            {% if tableData %}
+                {% if tableData.maxGroupCount == 1 %}
+                    <div class="no-data">{{ 'chameleon_system_ecommerce_stats.no_data'| trans }}</div>
+                {% else %}
+
+                <div class="statistics mt-4">
+                    {% set includeFileName = '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/' ~ (activeViewName == 'html.barchart' ? 'html-barchart.html.twig' : 'html-table.html.twig') %}
+                    {{ include( includeFileName , {
+                        level: tableData.level,
+                        blocks: tableData.blocks,
+                        columnNames: tableData.columnNames,
+                        showDiffColumn: tableData.showDiffColumn,
+                        maxGroupCount: tableData.maxGroupCount
+                    } ) }}
+                </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>

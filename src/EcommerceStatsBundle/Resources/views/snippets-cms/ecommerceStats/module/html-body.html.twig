@@ -1,0 +1,37 @@
+{#
+    @var ChameleonSystem\EcommerceStatsBundle\Service\EcommerceStatsGroup group
+    @var int level
+    @var string[] columnNames
+    @var int maxGroupCount
+#}
+
+<tr>
+    <th rowspan="{{ group.rowCount }}">{{ group.groupTitle }}</th>
+
+    {% set emptyGroups = maxGroupCount - level %}
+
+    {% if emptyGroups > 0 %}
+        {% for i in 1..emptyGroups %}
+            <th>{{ 'chameleon_system_ecommerce_stats.total' | trans }}</th>
+        {% endfor %}
+    {% endif %}
+
+    {% set oldVal = 0 %}
+    {% for name in columnNames %}
+        {% set newVal = group.getTotals(name) ?: 0 %}
+        <td>{{ newVal | chameleon_system_ecommerce_stats_format_number(2) }}</td>
+        {% set diff = newVal - oldVal %}
+        {% if showDiffColumn %}
+            <td>{{ diff | chameleon_system_ecommerce_stats_format_number(2) }}</td>
+        {% endif %}
+        {% set oldVal = newVal %}
+    {% endfor %}
+</tr>
+{% for subGroup in group.subGroups %}
+    {{ include( '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/html-body.html.twig' , {
+        group: subGroup,
+        level: level + 1,
+        columnNames: columnNames,
+        maxGroupCount: maxGroupCount,
+    } ) }}
+{% endfor %}
