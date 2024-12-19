@@ -19,40 +19,40 @@ class TShopDiscount extends TShopDiscountAutoParent
     /**
      * discount may be used.
      */
-    const ALLOW_USE = 0;
+    public const ALLOW_USE = 0;
 
     /**
      * the discount is not active (respects both the boolean field and the date fields).
      */
-    const USE_ERROR_DISCOUNT_INACTIVE = 1;
+    public const USE_ERROR_DISCOUNT_INACTIVE = 1;
 
     /**
      * the basket value is below the minimum value specified for the voucher series.
      */
-    const USE_ERROR_BASKET_VALUE_TO_LOW = 2;
+    public const USE_ERROR_BASKET_VALUE_TO_LOW = 2;
 
     /**
      * the discount has been restricted to a set of customers, and the current customer is not in that list.
      */
-    const USE_ERROR_NOT_VALID_FOR_CUSTOMER = 64;
+    public const USE_ERROR_NOT_VALID_FOR_CUSTOMER = 64;
 
     /**
      * the discount has been restricted to a set of customer groups, none of which the current customer is in.
      */
-    const USE_ERROR_NOT_VALID_FOR_CUSTOMER_GROUP = 128;
+    public const USE_ERROR_NOT_VALID_FOR_CUSTOMER_GROUP = 128;
 
     /**
      * the discount may not be used for the shipping country selected by the user.
      */
-    const USE_ERROR_NOT_VALID_FOR_CUSTOMER_SHIPPING_COUNTRY = 256;
+    public const USE_ERROR_NOT_VALID_FOR_CUSTOMER_SHIPPING_COUNTRY = 256;
 
     /**
      * flags can be used to enable/disable checks when calling AllowUseOfDiscount.
      */
-    const DISABLE_CHECK_CURRENT_BASKET_VALUE = 1;
-    const DISABLE_CHECK_CURRENT_BASKET_QUANTITY = 2;
-    const DISABLE_CHECK_USER = 4;
-    const DISABLE_CHECK_SHIPPING_COUNTRY = 8;
+    public const DISABLE_CHECK_CURRENT_BASKET_VALUE = 1;
+    public const DISABLE_CHECK_CURRENT_BASKET_QUANTITY = 2;
+    public const DISABLE_CHECK_USER = 4;
+    public const DISABLE_CHECK_SHIPPING_COUNTRY = 8;
 
     /**
      * the real value of the discount used for an article. this value
@@ -81,6 +81,7 @@ class TShopDiscount extends TShopDiscountAutoParent
      * @param int $iCheckFlag - send a bitmask to enable/disable individual checks. example - disable basket value and quantity check: TdbShopDiscount::DISABLE_CHECK_CURRENT_BASKET_VALUE | TdbShopDiscount::DISABLE_CHECK_CURRENT_BASKET_QUANTITY
      *
      * @return int
+     *
      * @psalm-return TdbShopDiscount::*
      */
     public function AllowUseOfDiscount($iCheckFlag = 0)
@@ -206,8 +207,6 @@ class TShopDiscount extends TShopDiscountAutoParent
     /**
      * return true if the discount may be used for the article.
      *
-     * @param TdbShopArticle $oArticle
-     *
      * @return bool
      */
     public function AllowDiscountForArticle(TdbShopArticle $oArticle)
@@ -329,7 +328,8 @@ class TShopDiscount extends TShopDiscountAutoParent
     }
 
     /**
-     * return true if the discount is restricted to the basket content (such as article or article category)
+     * return true if the discount is restricted to the basket content (such as article or article category).
+     *
      * @return bool
      */
     public function HasBasketContentRestrictions()
@@ -358,13 +358,13 @@ class TShopDiscount extends TShopDiscountAutoParent
         $iStartOperation = time();
         $aArticleRestrictions = $this->GetMLTIdList('shop_article_mlt');
         foreach ($aArticleRestrictions as $sArticelId) {
-            TCacheManager::PerformeTableChange('shop_article', $sArticelId);
+            $this->getCacheService()->callTrigger('shop_article', $sArticelId);
         }
 
         $aCategoryRestrictons = $this->GetMLTIdList('shop_category_mlt');
         $databaseConnection = $this->getDatabaseConnection();
         if (count($aCategoryRestrictons) > 0) {
-            $quotedCategoryRestrictions = implode(',', array_map(array($databaseConnection, 'quote'), $aCategoryRestrictons));
+            $quotedCategoryRestrictions = implode(',', array_map([$databaseConnection, 'quote'], $aCategoryRestrictons));
             $query = "SELECT `shop_article`.`id`
                     FROM `shop_article`
                LEFT JOIN `shop_article_shop_category_mlt` ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
@@ -374,18 +374,18 @@ class TShopDiscount extends TShopDiscountAutoParent
                  ";
             $tRes = MySqlLegacySupport::getInstance()->query($query);
             while ($aRes = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-                TCacheManager::PerformeTableChange('shop_article', $aRes['id']);
+                $this->getCacheService()->callTrigger('shop_article', $aRes['id']);
             }
         }
 
         if (0 === count($aArticleRestrictions) && 0 === count($aCategoryRestrictons)) {
-            TCacheManager::PerformeTableChange('shop_article', null);
+            $this->getCacheService()->callTrigger('shop_article', null);
         }
 
-        $databaseConnection->update($this->table, array(
+        $databaseConnection->update($this->table, [
             'cache_clear_last_executed' => date('Y-m-d H:i:s', $iStartOperation),
-        ), array(
+        ], [
             'id' => $this->id,
-        ));
+        ]);
     }
 }

@@ -339,7 +339,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
         $oGlobal = TGlobal::instance();
         $oCommentReview = TdbShopArticleReview::GetNewInstance();
         if ($oCommentReview->Load($oGlobal->GetUserData('objectid'))) {
-            TCacheManager::PerformeTableChange($oCommentReview->table, $oCommentReview->id);
+            $this->getCacheService()->callTrigger($oCommentReview->table, $oCommentReview->id);
             $oCommentReview->SendReviewCommentNotification($oNewComment);
         }
     }

@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use \ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
  * the shop config object. use GetInstance to fetch the current config.
@@ -807,38 +808,26 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
         }
         $aKey = array('class' => 'TdbShop', 'ident' => 'objectInstance', 'portalid' => $iPortalId);
 
-        return TCacheManager::GetKey($aKey);
+        return ServiceLocator::get('chameleon_system_core.cache')->GetKey($aKey);
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private static function getActivePageService()
+    private static function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return SystemPageServiceInterface
-     */
-    private function getSystemPageService()
+    private function getSystemPageService(): SystemPageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private static function getPortalDomainService()
+    private static function getPortalDomainService(): PortalDomainServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return ShopServiceInterface
-     */
-    private static function getShopService()
+    private static function getShopService(): ShopServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }
