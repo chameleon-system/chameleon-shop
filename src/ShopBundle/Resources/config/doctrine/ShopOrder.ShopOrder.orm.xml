@@ -38,15 +38,6 @@
             <cascade-persist/>
         </one-to-many>
 
-        <one-to-many field="amazonPaymentIdMappingCollection"
-                     target-entity="\ChameleonSystem\AmazonPaymentBundle\Entity\AmazonPaymentIdMapping"
-                     mapped-by="shopOrder" orphan-removal="true">
-            <options>
-                <option name="comment">Amazon Pay</option>
-            </options>
-            <cascade-persist/>
-        </one-to-many>
-
         <one-to-many field="pkgShopPaymentTransactionCollection"
                      target-entity="\ChameleonSystem\ShopPaymentTransactionBundle\Entity\PkgShopPaymentTransaction"
                      mapped-by="shopOrder" orphan-removal="true">
