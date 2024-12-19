@@ -20,11 +20,11 @@ if (!defined('PKG_SEARCH_USE_SEARCH_QUEUE')) {
 
 class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 {
-    const INDEX_SET_SIZE = 500; // indicates how many records are processed by each index step
-    const INDEX_TBL_PREFIX = '_index_';
+    public const INDEX_SET_SIZE = 500; // indicates how many records are processed by each index step
+    public const INDEX_TBL_PREFIX = '_index_';
 
     /** @var string[] */
-    protected $aTablesToProcess = array();
+    protected $aTablesToProcess = [];
 
     /**
      * set to false, if you want to update the index only for those objects that changed.
@@ -199,7 +199,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      */
     protected function IndexCompletedHook()
     {
-        $this->aTablesToProcess = array();
+        $this->aTablesToProcess = [];
         $this->CommitProcessData();
 
         $aData = $this->sqlData;
@@ -253,7 +253,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             }
         }
         if ($bWorkToDo) {
-            $this->aTablesToProcess = array();
+            $this->aTablesToProcess = [];
             $aData = $this->sqlData;
             $aData['started'] = date('Y-m-d H:i:s');
             $aData['completed'] = date('0000-00-00 00:00:00');
@@ -330,7 +330,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     public function CreateIndexTables()
     {
         $aIndexTableNames = TdbShopSearchIndexer::GetAllIndexTableNames();
-        $aTmpIndex = array();
+        $aTmpIndex = [];
         foreach ($aIndexTableNames as $sTableName => $length) {
             $aTmpIndex['_tmp'.$sTableName] = $length;
         }
@@ -481,7 +481,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     {
         static $aNames;
         if (!isset($aNames)) {
-            $aNames = array();
+            $aNames = [];
             $oShop = TdbShopSearchIndexer::GetShopConfigForIndexer();
             for ($i = $oShop->fieldShopSearchMinIndexLength; $i <= $oShop->fieldShopSearchMaxIndexLength; ++$i) {
                 $aNames[TdbShopSearchIndexer::GetIndexTableNameForIndexLength($i)] = $i;
@@ -506,19 +506,19 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     /**
      * return a search for the given search term(s) - but cache the query for later use.
      *
-     * @param string $sSearchTerm  - searched for in all fields (if not empty)
-     * @param array  $aSearchTerms - assoc array with shop_search_field_weight_id as key - search only the specified fields
-     * @param array  $aFilter      - any sql filters you want to add
-     * @param string $sLanguageId  - the language we search in. if null, we get the language from TGlobal
+     * @param string $sSearchTerm - searched for in all fields (if not empty)
+     * @param array $aSearchTerms - assoc array with shop_search_field_weight_id as key - search only the specified fields
+     * @param array $aFilter - any sql filters you want to add
+     * @param string $sLanguageId - the language we search in. if null, we get the language from TGlobal
      *
      * @return string
      */
-    public static function GetSearchQuery($sSearchTerm, $aSearchTerms = null, $aFilter = array(), $sLanguageId = null)
+    public static function GetSearchQuery($sSearchTerm, $aSearchTerms = null, $aFilter = [], $sLanguageId = null)
     {
         $sLanguageId = self::getLanguageService()->getActiveLanguageId();
 
-        $aCacheKeys = array('class' => __CLASS__, 'type' => 'searchquery', 'sSearchTerm' => $sSearchTerm, 'aSearchTerms' => serialize($aSearchTerms), 'cms_language_id' => $sLanguageId);
-        $sCacheKey = TCacheManager::GetKey($aCacheKeys);
+        $aCacheKeys = ['class' => __CLASS__, 'type' => 'searchquery', 'sSearchTerm' => $sSearchTerm, 'aSearchTerms' => serialize($aSearchTerms), 'cms_language_id' => $sLanguageId];
+        $sCacheKey = TCacheManagerRuntimeCache::GetKey($aCacheKeys);
         $sQuery = self::GenerateSearchQuery($sSearchTerm, $sLanguageId, $aSearchTerms);
 
         // now create search cache.. unless a cache entry exists
@@ -542,23 +542,23 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     /**
      * return a search for the given search term(s).
      *
-     * @param string $sSearchTerm  - searched for in all fields (if not empty)
-     * @param string $sLanguageId  - the language we are searching in. is no language passed, then we will get the id from TGlobal
-     * @param array  $aSearchTerms - assoc array with shop_search_field_weight_id as key - search only the specified fields
+     * @param string $sSearchTerm - searched for in all fields (if not empty)
+     * @param string $sLanguageId - the language we are searching in. is no language passed, then we will get the id from TGlobal
+     * @param array $aSearchTerms - assoc array with shop_search_field_weight_id as key - search only the specified fields
      *
      * @return string
      */
     protected static function GenerateSearchQuery($sSearchTerm, $sLanguageId, $aSearchTerms = null)
     {
         // add general word... if it exists
-        $aTableList = array();
-        $aTableQueries = array();
-        $manualArticleSelection = array();
+        $aTableList = [];
+        $aTableQueries = [];
+        $manualArticleSelection = [];
 
         if (!empty($sSearchTerm)) {
-            $bFilterIgnoreIgnoreWords = false; //default = false because we would lose partial words
+            $bFilterIgnoreIgnoreWords = false; // default = false because we would lose partial words
             if (TdbShopSearchIndexer::searchWithAND()) {
-                //we have to exclude ignore words, else you would not get any results for searches with an ignore word
+                // we have to exclude ignore words, else you would not get any results for searches with an ignore word
                 $bFilterIgnoreIgnoreWords = true;
             }
             $aTerms = TdbShopSearchIndexer::PrepareSearchWords($sSearchTerm, $bFilterIgnoreIgnoreWords);
@@ -569,7 +569,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
                 $aTableList = array_merge($aTableList, $aAffectedTables);
                 foreach ($aSearchInfo as $sQueryTableName => $aQueries) {
                     if (!array_key_exists($sQueryTableName, $aTableQueries)) {
-                        $aTableQueries[$sQueryTableName] = array();
+                        $aTableQueries[$sQueryTableName] = [];
                     }
                     $aTableQueries[$sQueryTableName] = array_merge($aTableQueries[$sQueryTableName], $aQueries);
                 }
@@ -589,12 +589,12 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             foreach ($aSearchTerms as $iFieldIndex => $sTerm) {
                 $aTerms = TdbShopSearchIndexer::PrepareSearchWords($sTerm, false);
                 if (count($aTerms) > 0) {
-                    $aSearchInfo = TdbShopSearchIndexer::GetWordListQuery($aTerms, $sLanguageId, array($iFieldIndex), 'AND');
+                    $aSearchInfo = TdbShopSearchIndexer::GetWordListQuery($aTerms, $sLanguageId, [$iFieldIndex], 'AND');
                     $aAffectedTables = array_keys($aSearchInfo);
                     $aTableList = array_merge($aTableList, $aAffectedTables);
                     foreach ($aSearchInfo as $sQueryTableName => $aQueries) {
                         if (!array_key_exists($sQueryTableName, $aTableQueries)) {
-                            $aTableQueries[$sQueryTableName] = array();
+                            $aTableQueries[$sQueryTableName] = [];
                         }
                         $aTableQueries[$sQueryTableName] = array_merge($aTableQueries[$sQueryTableName], $aQueries);
                     }
@@ -612,11 +612,11 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         } else {
             $manualSelectionWeight = '';
             $quotedManualArticleSelectionString = implode(',',
-                array_map(array(self::getDatabaseConnectionStatic(), 'quote'), $manualArticleSelection));
+                array_map([self::getDatabaseConnectionStatic(), 'quote'], $manualArticleSelection));
             if (count($manualArticleSelection) > 0) {
                 $manualSelectionWeight = " + IF(shop_article_id IN ($quotedManualArticleSelectionString),100,0)";
             }
-            $aQueryBlocks = array();
+            $aQueryBlocks = [];
             foreach ($aTableList as $sTableName) {
                 if (count($aTableQueries[$sTableName]) > 1 && TdbShopSearchIndexer::searchWithAND()) {
                     foreach ($aTableQueries[$sTableName] as $sTmpWordString) {
@@ -655,9 +655,8 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      * return subquery that searches for the terms in aTerms in all fields defined by aFieldRestriction
      * if no restrctions are passed, we search in all.
      *
-     * @param array  $aTerms
-     * @param string $sLanguage               - search in which language?
-     * @param array  $aFieldRestrictions
+     * @param array $aTerms
+     * @param array $aFieldRestrictions
      * @param string $sTypeOfFieldRestriction - if the field restrictions are ORed or ANDed
      * @param string $sLanguageId
      *
@@ -665,9 +664,9 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      */
     protected static function GetWordListQuery($aTerms, $sLanguageId, $aFieldRestrictions = null, $sTypeOfFieldRestriction = 'OR')
     {
-        $aTableQueries = array();
+        $aTableQueries = [];
         // get affected tables
-        $aTableList = array();
+        $aTableList = [];
         foreach ($aTerms as $sTerm) {
             $sTableName = TdbShopSearchIndexer::GetIndexTableNameForIndexLength(mb_strlen($sTerm));
             if (!in_array($sTableName, $aTableList)) {
@@ -683,7 +682,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             }
         }
 
-        $aFieldRestrictionQueries = array();
+        $aFieldRestrictionQueries = [];
         if (!is_null($aFieldRestrictions)) {
             reset($aTableList);
             foreach ($aTableList as $sTableName) {
@@ -692,13 +691,13 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         }
 
         // build query
-        $aTableQueries = array();
+        $aTableQueries = [];
         reset($aTerms);
         $sLanguageId = MySqlLegacySupport::getInstance()->real_escape_string($sLanguageId);
         foreach ($aTerms as $sTerm) {
             $sTermTable = TdbShopSearchIndexer::GetIndexTableNameForIndexLength(mb_strlen($sTerm));
             if (!array_key_exists($sTermTable, $aTableQueries)) {
-                $aTableQueries[$sTermTable] = array();
+                $aTableQueries[$sTermTable] = [];
             }
             $sTmpQuery = '';
             $sTmpQuery .= " (`{$sTermTable}`.`substring` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTerm)."' AND (`{$sTermTable}`.`cms_language_id` = '{$sLanguageId}' OR `{$sTermTable}`.`cms_language_id` = '')";
@@ -709,7 +708,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             $aTableQueries[$sTermTable][] = $sTmpQuery;
 
             if (false == TdbShopSearchIndexer::searchWithAND()) {
-                //OR `{$sSoundTable}`.`substring` = '".MySqlLegacySupport::getInstance()->real_escape_string($sSoundEX)."')
+                // OR `{$sSoundTable}`.`substring` = '".MySqlLegacySupport::getInstance()->real_escape_string($sSoundEX)."')
                 $sSoundEX = TdbShopSearchIndexer::GetSoundexForWord($sTerm);
                 if ('0000' != $sSoundEX) {
                     $sSoundTable = TdbShopSearchIndexer::GetIndexTableNameForIndexLength(mb_strlen($sSoundEX));
@@ -731,17 +730,16 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     /**
      * splits the search words into an array with prepared search words.
      *
-     * @param string $sWords
-     * @param bool   $bFilterIgnoreWords - removes ignore words form the list if set
+     * @param bool $bFilterIgnoreWords - removes ignore words form the list if set
      * @param string $sOrigianlString
      *
      * @return array
      */
     public static function PrepareSearchWords($sOrigianlString, $bFilterIgnoreWords = true)
     {
-        $aWords = array();
+        $aWords = [];
         $sOrigianlString = strip_tags($sOrigianlString);
-        $sOrigianlString = str_replace(array('/', "\n", '-', '_', '&', '+'), array(' ', ' ', ' ', ' ', ' ', ' '), $sOrigianlString);
+        $sOrigianlString = str_replace(['/', "\n", '-', '_', '&', '+'], [' ', ' ', ' ', ' ', ' ', ' '], $sOrigianlString);
         $aTmpWords = explode(' ', $sOrigianlString);
         foreach ($aTmpWords as $iIndex => $sWord) {
             $sWord = trim($sWord);
@@ -760,7 +758,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      * cut the word the the right size, remove umlaute, etc.
      *
      * @param string $sWord
-     * @param bool   $bFilterIgnoreWords - removes ignore words if set
+     * @param bool $bFilterIgnoreWords - removes ignore words if set
      *
      * @return string
      */
@@ -768,8 +766,8 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     {
         $sCleanWord = trim($sWord);
 
-        //remove .,:;"'
-        $aRemove = array('°' => '', '´' => '', '*' => '', '`' => '', '.' => '', ',' => '', ':' => '', ';' => '', '"' => '', "'" => '', '-' => '', '?' => '', '!' => '', '(' => '', ')' => '', '#' => '', 'ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', 'Ä' => 'Ae', 'Ö' => 'Oe', 'Ü' => 'Ue');
+        // remove .,:;"'
+        $aRemove = ['°' => '', '´' => '', '*' => '', '`' => '', '.' => '', ',' => '', ':' => '', ';' => '', '"' => '', "'" => '', '-' => '', '?' => '', '!' => '', '(' => '', ')' => '', '#' => '', 'ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', 'Ä' => 'Ae', 'Ö' => 'Oe', 'Ü' => 'Ue'];
         $sCleanWord = str_replace(array_keys($aRemove), array_values($aRemove), $sCleanWord);
 
         $oShop = TdbShopSearchIndexer::GetShopConfigForIndexer();
@@ -807,7 +805,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         static $bCompleteLoad = null;
         // first try to cache all... if we have to many (more than 500) then work an a word base system instead
         if (!isset($aIgnoreWordCache)) {
-            $aIgnoreWordCache = array();
+            $aIgnoreWordCache = [];
             $oShop = TdbShopSearchIndexer::GetShopConfigForIndexer();
             $query = "SELECT DISTINCT `name` FROM `shop_search_ignore_word` WHERE `shop_id`='".MySqlLegacySupport::getInstance()->real_escape_string($oShop->id)."'";
             $tres = MySqlLegacySupport::getInstance()->query($query);
@@ -857,6 +855,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      * @param string $sTable
      * @param string $sId
      * @param string $sType
+     *
      * @return false|null
      */
     public static function UpdateIndex($sTable, $sId, $sType)

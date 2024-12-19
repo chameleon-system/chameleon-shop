@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
 {
     /*
@@ -16,10 +18,10 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
      * @return boolean
     */
     /**
-     * @return bool
-     *
      * @param string $sUserid
      * @param float $dOrderValue
+     *
+     * @return bool
      */
     public static function UpdateAutoAssignToUserQuick($sUserid, $dOrderValue)
     {
@@ -31,7 +33,7 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
                  WHERE `data_extranet_user_data_extranet_group_mlt`.`source_id` = '{$sEscapedUserid}'
                    AND `data_extranet_group`.`auto_assign_active` = '0'
                ";
-        $aUserGroups = array();
+        $aUserGroups = [];
         $tRes = MySqlLegacySupport::getInstance()->query($query);
         while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
             $aUserGroups[] = MySqlLegacySupport::getInstance()->real_escape_string($aRow['target_id']);
@@ -50,7 +52,7 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
         $iRecordsChanged = MySqlLegacySupport::getInstance()->affected_rows();
         if (count($aUserGroups) > 0) {
             $query = 'INSERT INTO `data_extranet_user_data_extranet_group_mlt` (`source_id`,`target_id`) VALUES ';
-            $aInsertParts = array();
+            $aInsertParts = [];
             foreach ($aUserGroups as $sGroupId) {
                 $aInsertParts[] = "('{$sEscapedUserid}','{$sGroupId}')";
             }
@@ -59,7 +61,7 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
             $iRecordsChanged = $iRecordsChanged + MySqlLegacySupport::getInstance()->affected_rows();
         }
         if ($iRecordsChanged > 0) {
-            TCacheManager::PerformeTableChange('data_extranet_user', $sUserid);
+            ServiceLocator::get('chameleon_system_core.cache')->callTrigger('data_extranet_user', $sUserid);
         }
 
         return $iRecordsChanged > 0;

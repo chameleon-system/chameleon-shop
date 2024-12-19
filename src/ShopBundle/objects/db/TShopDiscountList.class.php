@@ -23,7 +23,7 @@ class TShopDiscountList extends TShopDiscountListAutoParent
     {
         static $aActiveDiscountList = array();
         $aKey = array('sFilter' => $sFilter, 'sOrder' => $sOrder);
-        $sKey = TCacheManager::GetKey($aKey);
+        $sKey = TCacheManagerRuntimeCache::GetKey($aKey);
         if (!array_key_exists($sKey, $aActiveDiscountList)) {
             $now = MySqlLegacySupport::getInstance()->real_escape_string(date('Y-m-d H:i:s'));
             if (!empty($sOrder)) {
