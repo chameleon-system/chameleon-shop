@@ -1,21 +1,9 @@
 <h1>Build #1734592869</h1>
 <h2>Date: 2024-12-19</h2>
 <div class="changelog">
-    - #59148: remove amaton payment bundle from action plugin list
+    - #59148: remove amazon payment refrerences from db objects
 </div>
 <?php
-
-/*$data = TCMSLogChange::createMigrationQueryData('cms_portal', 'en')
-  ->setFields([
-      'action_plugin_list' => 'pkgCurrency=TPkgShopCurrency_PkgCmsActionPlugin
-pkgLanguage=TPkgCmsActionPlugin_ChangeLanguage',
-  ])
-  ->setWhereEquals([
-      'id' => '1',
-  ])
-;
-TCMSLogChange::update(__LINE__, $data);*/
-
 
 $dbConnection = TCMSLogChange::getDatabaseConnection();
 $classesToBeDeleted = [
