@@ -36,20 +36,6 @@ foreach ($classesToBeDeleted as $class) {
     $dbConnection->executeStatement($query, ['class' => $class]);
 }
 
-$classesToBeDeleted = [
-    '\ChameleonSystem\AmazonPaymentBundle\pkgShop\OrderSteps\AmazonBasketOrderStep',
-    '\ChameleonSystem\AmazonPaymentBundle\pkgShop\WebModules\AmazonShopOrderWizard',
-    '\ChameleonSystem\AmazonPaymentBundle\pkgShop\AmazonPaymentBasket',
-    '\ChameleonSystem\AmazonPaymentBundle\pkgShop\WebModules\AmazonShopBasket'
-];
-
-foreach ($classesToBeDeleted as $class) {
-    $query = "DELETE FROM `pkg_cms_class_manager_extension`
-                WHERE `class` = :class";
-
-    $dbConnection->executeStatement($query, ['class' => $class]);
-}
-
 $query = "SELECT * 
             FROM `shop_order_step` 
             WHERE `class` LIKE '%AmazonPaymentBundle%';";
