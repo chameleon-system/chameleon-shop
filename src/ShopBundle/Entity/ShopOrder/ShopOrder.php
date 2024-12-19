@@ -2,7 +2,6 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\ShopOrder;
 
-use ChameleonSystem\AmazonPaymentBundle\Entity\AmazonPaymentIdMapping;
 use ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage;
 use ChameleonSystem\DataAccessBundle\Entity\Core\DataCountry;
 use ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal;
@@ -40,10 +39,6 @@ class ShopOrder
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopPaymentIpnMessage> - */
         private Collection $pkgShopPaymentIpnMessageCollection = new ArrayCollection()
-        ,
-        // TCMSFieldPropertyTable
-        /** @var Collection<int, AmazonPaymentIdMapping> - Amazon Pay */
-        private Collection $amazonPaymentIdMappingCollection = new ArrayCollection()
         ,
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopPaymentTransaction> - Transactions */
@@ -412,42 +407,6 @@ class ShopOrder
 
         return $this;
     }
-
-
-
-    // TCMSFieldPropertyTable
-
-    /**
-     * @return Collection<int, AmazonPaymentIdMapping>
-     */
-    public function getAmazonPaymentIdMappingCollection(): Collection
-    {
-        return $this->amazonPaymentIdMappingCollection;
-    }
-
-    public function addAmazonPaymentIdMappingCollection(AmazonPaymentIdMapping $amazonPaymentIdMapping): self
-    {
-        if (!$this->amazonPaymentIdMappingCollection->contains($amazonPaymentIdMapping)) {
-            $this->amazonPaymentIdMappingCollection->add($amazonPaymentIdMapping);
-            $amazonPaymentIdMapping->setShopOrder($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAmazonPaymentIdMappingCollection(AmazonPaymentIdMapping $amazonPaymentIdMapping): self
-    {
-        if ($this->amazonPaymentIdMappingCollection->removeElement($amazonPaymentIdMapping)) {
-            // set the owning side to null (unless already changed)
-            if ($amazonPaymentIdMapping->getShopOrder() === $this) {
-                $amazonPaymentIdMapping->setShopOrder(null);
-            }
-        }
-
-        return $this;
-    }
-
-
 
     // TCMSFieldPropertyTable
 
