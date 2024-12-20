@@ -11,7 +11,7 @@
 
 class TPkgImageHotspotItemSpot extends TAdbPkgImageHotspotItemSpot
 {
-    const VIEW_PATH = 'pkgImageHotspot/views/db/TPkgImageHotspotItemSpot';
+    public const VIEW_PATH = 'pkgImageHotspot/views/db/TPkgImageHotspotItemSpot';
 
     /**
      * return a pointer to the object assigned to the spot.
@@ -46,7 +46,7 @@ class TPkgImageHotspotItemSpot extends TAdbPkgImageHotspotItemSpot
         if ($oSpotObject instanceof TdbCmsTplPage) {
             $sLink = self::getPageService()->getLinkToPageObjectRelative($oSpotObject);
         } elseif ($oSpotObject instanceof TdbShopArticle) {
-            $sLink = $oSpotObject->GetDetailLink();
+            $sLink = $oSpotObject->getLink();
         } elseif ($oSpotObject instanceof TdbShopCategory) {
             $sLink = $oSpotObject->GetLink();
         } elseif ($oCmsConfig->GetConfigParameter('pkgArticle', false, true)) {
@@ -59,8 +59,7 @@ class TPkgImageHotspotItemSpot extends TAdbPkgImageHotspotItemSpot
             } elseif ($oSpotObject instanceof TdbPkgArticleCategory) {
                 $sLink = $oSpotObject->GetURL();
             }
-        } else { //nothing that we know matched - try to use  generic method
-
+        } else { // nothing that we know matched - try to use  generic method
             /** @psalm-suppress UndefinedMethod */
             $sLink = $oSpotObject->GetURL();
             // still no url? trigger a user error
@@ -75,13 +74,13 @@ class TPkgImageHotspotItemSpot extends TAdbPkgImageHotspotItemSpot
     /**
      * render the hotspot image.
      *
-     * @param string $sViewName     - name of the view
-     * @param string $sViewType     - where to look for the view
-     * @param array  $aCallTimeVars - optional parameters to pass to render method
+     * @param string $sViewName - name of the view
+     * @param string $sViewType - where to look for the view
+     * @param array $aCallTimeVars - optional parameters to pass to render method
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oSpot', $this);
@@ -103,6 +102,6 @@ class TPkgImageHotspotItemSpot extends TAdbPkgImageHotspotItemSpot
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 }

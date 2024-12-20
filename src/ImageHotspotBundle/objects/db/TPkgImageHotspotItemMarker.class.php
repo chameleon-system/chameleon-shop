@@ -11,18 +11,18 @@
 
 class TPkgImageHotspotItemMarker extends TAdbPkgImageHotspotItemMarker
 {
-    const VIEW_PATH = 'pkgImageHotspot/views/db/TPkgImageHotspotItemMarker';
+    public const VIEW_PATH = 'pkgImageHotspot/views/db/TPkgImageHotspotItemMarker';
 
     /**
      * render the hotspot image.
      *
-     * @param string $sViewName     - name of the view
-     * @param string $sViewType     - where to look for the view
-     * @param array  $aCallTimeVars - optional parameters to pass to render method
+     * @param string $sViewName - name of the view
+     * @param string $sViewType - where to look for the view
+     * @param array $aCallTimeVars - optional parameters to pass to render method
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oMarker', $this);
@@ -44,7 +44,7 @@ class TPkgImageHotspotItemMarker extends TAdbPkgImageHotspotItemMarker
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -61,7 +61,7 @@ class TPkgImageHotspotItemMarker extends TAdbPkgImageHotspotItemMarker
             if ($oSpotObject instanceof TdbCmsTplPage) {
                 $sLink = $this->getPageService()->getLinkToPageObjectRelative($oSpotObject);
             } elseif ($oSpotObject instanceof TdbShopArticle) {
-                $sLink = $oSpotObject->GetDetailLink();
+                $sLink = $oSpotObject->getLink();
             } elseif ($oSpotObject instanceof TdbShopCategory) {
                 $sLink = $oSpotObject->GetLink();
             } elseif ($oCmsConfig->GetConfigParameter('pkgArticle', false, true)) {
@@ -75,8 +75,7 @@ class TPkgImageHotspotItemMarker extends TAdbPkgImageHotspotItemMarker
                     /** @psalm-suppress UndefinedMethod */
                     $sLink = $oSpotObject->GetURL();
                 }
-            } else { //nothing that we know matched - try to use  generic method
-
+            } else { // nothing that we know matched - try to use  generic method
                 /** @psalm-suppress UndefinedMethod */
                 $sLink = $oSpotObject->GetURL();
 

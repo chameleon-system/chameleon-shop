@@ -10,12 +10,14 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 
 /**
  * Use this package module to register user after creating order with guest account.
  *
  * @psalm-suppress UndefinedInterfaceMethod
+ *
  * @FIXME `HeaderURLRedirect` only exist on one implementation of `ChameleonControllerInterface`
  */
 class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAutoParent
@@ -44,7 +46,7 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
     {
         if (null === $sSuccessURL) {
             if ($this->global->UserDataExists('sSuccessURL')) {
-                $sSuccessURL = $this->global->GetUserData('sSuccessURL', array(), TCMSUserInput::FILTER_URL);
+                $sSuccessURL = $this->global->GetUserData('sSuccessURL', [], TCMSUserInput::FILTER_URL);
             }
             if (empty($sSuccessURL)) {
                 $sSuccessURL = null;
@@ -52,7 +54,7 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
         }
         if (null === $sFailureURL) {
             if ($this->global->UserDataExists('sFailureURL')) {
-                $sFailureURL = $this->global->GetUserData('sFailureURL', array(), TCMSUserInput::FILTER_URL);
+                $sFailureURL = $this->global->GetUserData('sFailureURL', [], TCMSUserInput::FILTER_URL);
             }
             if (empty($sFailureURL)) {
                 $sFailureURL = null;
@@ -81,23 +83,22 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
                     $sNewUserId = $oUser->Register();
                     $this->UpdateUserAddress(null, null, true);
                     $oUserOrder->AllowEditByAll(true);
-                    $oUserOrder->SaveFieldsFast(array('data_extranet_user_id' => $sNewUserId));
+                    $oUserOrder->SaveFieldsFast(['data_extranet_user_id' => $sNewUserId]);
                     $oUserOrder->AllowEditByAll(false);
-                    if (!is_null($sSuccessURL)) {
-                        $this->controller->HeaderURLRedirect($sSuccessURL, true);
+                    if (null !== $sSuccessURL) {
+                        $this->getRedirectService()->redirect($sSuccessURL, true);
                     } else {
                         $oExtranetConf = TdbDataExtranet::GetInstance();
-                        $this->controller->HeaderURLRedirect($oExtranetConf->GetLinkRegisterSuccessPage(), true);
+                        $this->getRedirectService()->redirect($oExtranetConf->GetLinkRegisterSuccessPage(), true);
                     }
-                    $oStep->RemoveLastUserBoughtFromSession();
                 }
             }
         }
         if (null !== $sFailureURL) {
-            $this->controller->HeaderURLRedirect($sFailureURL, true);
+            $this->getRedirectService()->redirect($sFailureURL, true);
         } else {
             $oUser = TdbDataExtranetUser::GetInstance();
-            $this->controller->HeaderURLRedirect($oUser->GetLinkForRegistrationGuest(), true);
+            $this->getRedirectService()->redirect($oUser->GetLinkForRegistrationGuest(), true);
         }
     }
 
@@ -111,7 +112,7 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
         if ($this->ActivePageIsRegisterAfterShopping()) {
             if (!$this->IsAllowedToShowRegisterAfterShoppingPage()) {
                 $oExtranetConfig = TdbDataExtranet::GetInstance();
-                $this->controller->HeaderURLRedirect($oExtranetConfig->GetLinkAccessDeniedPage(), true);
+                $this->getRedirectService()->redirect($oExtranetConfig->GetLinkAccessDeniedPage(), true);
             }
         }
     }
@@ -148,15 +149,15 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
     /**
      * validate the extranet user data (in the current extranet object).
      *
-     * @return bool
-     *
      * @param TdbDataExtranetUser $oUser
+     *
+     * @return bool
      */
     protected function ValidateGivenUserData($oUser)
     {
         $bIsValid = true;
         $oMessages = TCMSMessageManager::GetInstance();
-        $aRequiredFields = array('data_extranet_salutation_id', 'firstname', 'lastname', 'street', 'postalcode', 'city', 'data_country_id');
+        $aRequiredFields = ['data_extranet_salutation_id', 'firstname', 'lastname', 'street', 'postalcode', 'city', 'data_country_id'];
         foreach ($aRequiredFields as $sField) {
             $sValue = trim($oUser->sqlData[$sField]);
 
@@ -188,19 +189,18 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
         return $bActivePageIsRegisterAfterShopping;
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return ExtranetUserProviderInterface
-     */
-    private function getExtranetUserProvider()
+    private function getExtranetUserProvider(): ExtranetUserProviderInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

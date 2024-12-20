@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class TPkgShopArticlePreorder extends TPkgShopArticlePreorderAutoParent
 {
@@ -17,14 +18,13 @@ class TPkgShopArticlePreorder extends TPkgShopArticlePreorderAutoParent
      * send email to users email for the given article.
      *
      * @param TShopArticle $oArticle
-     * @param string       $sEmail
+     * @param string $sEmail
      *
      * @return bool
      */
     public function SendMail($oArticle = null, $sEmail = '')
     {
-        // ------------------------------------------------------------------------
-        static $aPortals = array();
+        static $aPortals = [];
         if (null === $oArticle) {
             $oArticle = $this->GetFieldShopArticle();
         }
@@ -33,7 +33,7 @@ class TPkgShopArticlePreorder extends TPkgShopArticlePreorderAutoParent
         }
         if (!is_null($oArticle) && !empty($sEmail)) {
             $oMail = TdbDataMailProfile::GetProfile('preorder-available');
-            $sArticleDetailLink = $oArticle->GetDetailLink(true);
+            $sArticleDetailLink = $oArticle->getLink(true);
 
             if (!array_key_exists($this->fieldCmsPortalId, $aPortals)) {
                 $oCMSPortal = TdbCmsPortal::GetNewInstance();
@@ -44,12 +44,12 @@ class TPkgShopArticlePreorder extends TPkgShopArticlePreorderAutoParent
 
             $sArticleBasketLink = '';
             if (array_key_exists($this->fieldCmsPortalId, $aPortals)) {
-                $sArticleBasketLink = 'http://'.$aPortals[$this->fieldCmsPortalId]->GetPrimaryDomain().'/'.TdbShopArticle::URL_EXTERNAL_TO_BASKET_REQUEST.'/id/'.urlencode($oArticle->id);
+                $sArticleBasketLink = 'https://'.$aPortals[$this->fieldCmsPortalId]->GetPrimaryDomain().'/'.TdbShopArticle::URL_EXTERNAL_TO_BASKET_REQUEST.'/id/'.urlencode($oArticle->id);
             }
 
             $oMail->AddData('sUserEmail', $sEmail);
 
-            /** @psalm-suppress InvalidPassByReference */
+            /* @psalm-suppress InvalidPassByReference */
             $oMail->AddData('sArticleName', $oArticle->GetName());
             $oMail->AddData('sArticleDetailLink', $sArticleDetailLink);
             $oMail->AddData('sArticleBasketLink', $sArticleBasketLink);
@@ -62,14 +62,10 @@ class TPkgShopArticlePreorder extends TPkgShopArticlePreorderAutoParent
             $this->AllowEditByAll(false);
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
-
-    // ------------------------------------------------------------------------
-
-    // ------------------------------------------------------------------------
 
     /**
      * save new preorder to the DB.
@@ -79,16 +75,16 @@ class TPkgShopArticlePreorder extends TPkgShopArticlePreorderAutoParent
      * @return bool
      *
      * @psalm-suppress UndefinedClass
+     *
      * @FIXME References `TdbShopArticlePreorder` when it probably should be `TdbPkgShopArticlePreorder`
      */
     public function SaveNewPreorder($sArticleId = '')
     {
-        // ------------------------------------------------------------------------
         $oGlobal = TGlobal::instance();
         $oMsgManager = TCMSMessageManager::GetInstance();
-        if ($oGlobal->userDataExists('eMail') && TTools::IsValidEMail($oGlobal->GetuserData('eMail')) && !$oShopArticlePreorder = TdbShopArticlePreorder::LoadFromFields(array('shop_article_id' => $sArticleId, 'preorder_user_email' => $oGlobal->GetuserData('eMail')))) {
+        if ($oGlobal->userDataExists('eMail') && TTools::IsValidEMail($oGlobal->GetuserData('eMail')) && !$oShopArticlePreorder = TdbShopArticlePreorder::LoadFromFields(['shop_article_id' => $sArticleId, 'preorder_user_email' => $oGlobal->GetuserData('eMail')])) {
             $activePortal = $this->getPortalDomainService()->getActivePortal();
-            $aPostData = array('shop_article_id' => $sArticleId, 'preorder_user_email' => $oGlobal->GetuserData('eMail'), 'preorder_date' => date('Y-m-d H:i:s'), 'cms_portal_id' => $activePortal->id);
+            $aPostData = ['shop_article_id' => $sArticleId, 'preorder_user_email' => $oGlobal->GetuserData('eMail'), 'preorder_date' => date('Y-m-d H:i:s'), 'cms_portal_id' => $activePortal->id];
             $this->LoadFromRow($aPostData);
             $this->AllowEditByAll(true);
             $this->Save();
@@ -96,28 +92,25 @@ class TPkgShopArticlePreorder extends TPkgShopArticlePreorderAutoParent
             $oMsgManager->AddMessage('mail-preorder-form-eMail', 'SUCCESS-USER-SIGNUP-PREORDER-ARTICLE');
 
             return true;
-        } else {
-            if (!TTools::IsValidEMail($oGlobal->GetuserData('eMail'))) {
-                $oMsgManager->AddMessage('mail-preorder-form-eMail', 'ERROR-E-MAIL-INVALID-INPUT');
-
-                return false;
-            } else {
-                if ($oShopArticlePreorder = TdbShopArticlePreorder::LoadFromFields(array('shop_article_id' => $sArticleId, 'preorder_user_email' => $oGlobal->GetuserData('eMail')))) {
-                    $oMsgManager->AddMessage('mail-preorder-form-eMail', 'ERROR-USER-SIGNUP-PREORDER-ARTICLE');
-
-                    return false;
-                } else {
-                    return false;
-                }
-            }
         }
+
+        if (!TTools::IsValidEMail($oGlobal->GetuserData('eMail'))) {
+            $oMsgManager->AddMessage('mail-preorder-form-eMail', 'ERROR-E-MAIL-INVALID-INPUT');
+
+            return false;
+        }
+
+        if (TdbShopArticlePreorder::LoadFromFields(['shop_article_id' => $sArticleId, 'preorder_user_email' => $oGlobal->GetuserData('eMail')])) {
+            $oMsgManager->AddMessage('mail-preorder-form-eMail', 'ERROR-USER-SIGNUP-PREORDER-ARTICLE');
+
+            return false;
+        }
+
+        return false;
     }
 
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private function getPortalDomainService()
+    private function getPortalDomainService(): PortalDomainServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }
