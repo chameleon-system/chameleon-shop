@@ -11,7 +11,7 @@
 
 class TShopVariantType extends TAdbShopVariantType
 {
-    const URL_PARAMETER = 'aVariantTypeValues';
+    public const URL_PARAMETER = 'aVariantTypeValues';
 
     /**
      * Verfügbare Variantenwerte.
@@ -21,7 +21,7 @@ class TShopVariantType extends TAdbShopVariantType
     public function GetFieldShopVariantTypeValueList()
     {
         $oValueList = TdbShopVariantTypeValueList::GetListForShopVariantTypeId($this->id, $this->iLanguageId);
-        $oValueList->ChangeOrderBy(array($this->fieldShopVariantTypeValueCmsfieldname => 'ASC'));
+        $oValueList->ChangeOrderBy([$this->fieldShopVariantTypeValueCmsfieldname => 'ASC']);
 
         return $oValueList;
     }
