@@ -25,44 +25,44 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
  *  The module manages access to the basket object.
  * IMPORTANT: do not extend directly form this class. use the "cms Klassen-vererbungsmanager" (pkg_cms_class_manager) instead
  * or, if you have to, extend from  "MTShopBasketCore".
-/**/
+ * /**/
 class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
 {
-    const MSG_CONSUMER_NAME = 'mtshopbasketcoremsg';
-    const MSG_CONSUMER_NAME_MINIBASKET = 'mtshopbasketmini';
+    public const MSG_CONSUMER_NAME = 'mtshopbasketcoremsg';
+    public const MSG_CONSUMER_NAME_MINIBASKET = 'mtshopbasketmini';
 
     /**
      * the request field names that the basket objects understands.
      */
-    const URL_ITEM_ID = 'basket[shop_article_id]';
-    const URL_ITEM_BASKET_KEY = 'basket[sBasketItemKey]';
-    const URL_ITEM_AMOUNT = 'basket[amount]';
-    const URL_REDIRECT_NODE_ID = 'basket[redirectNodeId]';
-    const URL_MESSAGE_CONSUMER = 'basket[consumer]';
-    const URL_ACTION = 'basket[action]';
-    const URL_CLEAR_BASKET = 'basket[bClearBasket]';
+    public const URL_ITEM_ID = 'basket[shop_article_id]';
+    public const URL_ITEM_BASKET_KEY = 'basket[sBasketItemKey]';
+    public const URL_ITEM_AMOUNT = 'basket[amount]';
+    public const URL_REDIRECT_NODE_ID = 'basket[redirectNodeId]';
+    public const URL_MESSAGE_CONSUMER = 'basket[consumer]';
+    public const URL_ACTION = 'basket[action]';
+    public const URL_CLEAR_BASKET = 'basket[bClearBasket]';
 
     /**
      * the request field names cut into the diefferent parts.
      */
-    const URL_REQUEST_PARAMETER = 'basket';
-    const URL_ITEM_ID_NAME = 'shop_article_id';
-    const URL_CUSTOM_PARAMETER = 'custom';
-    const URL_ITEM_BASKET_KEY_NAME = 'sBasketItemKey';
-    const URL_ITEM_AMOUNT_NAME = 'amount';
-    const URL_ACTION_NAME = 'action';
-    const URL_REDIRECT_NODE_ID_NAME = 'redirectNodeId';
-    const URL_CLEAR_BASKET_NAME = 'bClearBasket';
-    const URL_MESSAGE_CONSUMER_NAME = 'consumer';
-    const URL_VOUCHER_CODE = 'sShopVoucherCode';
-    const URL_VOUCHER_BASKET_KEY = 'sBasketVoucherKey';
+    public const URL_REQUEST_PARAMETER = 'basket';
+    public const URL_ITEM_ID_NAME = 'shop_article_id';
+    public const URL_CUSTOM_PARAMETER = 'custom';
+    public const URL_ITEM_BASKET_KEY_NAME = 'sBasketItemKey';
+    public const URL_ITEM_AMOUNT_NAME = 'amount';
+    public const URL_ACTION_NAME = 'action';
+    public const URL_REDIRECT_NODE_ID_NAME = 'redirectNodeId';
+    public const URL_CLEAR_BASKET_NAME = 'bClearBasket';
+    public const URL_MESSAGE_CONSUMER_NAME = 'consumer';
+    public const URL_VOUCHER_CODE = 'sShopVoucherCode';
+    public const URL_VOUCHER_BASKET_KEY = 'sBasketVoucherKey';
 
     protected $bAllowHTMLDivWrapping = true;
 
     /**
-     * @var null|bool
+     * @var bool|null
      */
-    private $basketHasMessages = null;
+    private $basketHasMessages;
 
     public function Init()
     {
@@ -103,7 +103,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
                     unset($aParams['basket'][self::URL_CLEAR_BASKET_NAME]);
                 }
             }
-            $sURL = $this->getActivePageService()->getLinkToActivePageRelative($aParams, array('pagedef'));
+            $sURL = $this->getActivePageService()->getLinkToActivePageRelative($aParams, ['pagedef']);
             $this->getRedirect()->redirect($sURL);
         }
     }
@@ -158,9 +158,9 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * call the method to jump to the basket detail page. it will store the calling URL in the session, so
      * that it becomes possible to jump back to this page from the basket.
      *
-     * @throws RouteNotFoundException
-     *
      * @return void
+     *
+     * @throws RouteNotFoundException
      */
     public function JumpToBasketPage()
     {
@@ -224,20 +224,20 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         $oGlobal = TGlobal::instance();
         $sCallingURL = $oGlobal->GetUserData('sourceurl');
         if (true === empty($sCallingURL)) {
-            //the method will most likely be called on a basket page, in this case, ignore it...
+            // the method will most likely be called on a basket page, in this case, ignore it...
             $activePageService = $this->getActivePageService();
             $oActivePage = $activePageService->getActivePage();
             $checkoutSystemPage = $this->getSystemPageService()->getSystemPage('checkout');
             if (null === $checkoutSystemPage || $checkoutSystemPage->fieldCmsTreeId !== $oActivePage->GetMainTreeId()) {
-                $aExcludeParams = array('module_fnc');
+                $aExcludeParams = ['module_fnc'];
                 // we may be on a category list or an item page... so ignore those parameters, too
                 $aExcludeParams[] = MTShopArticleCatalogCore::URL_CATEGORY_ID;
                 $aExcludeParams[] = MTShopArticleCatalogCore::URL_ITEM_ID;
                 $aExcludeParams[] = MTShopBasketCore::URL_REQUEST_PARAMETER;
 
-                $sCallingURL = $activePageService->getLinkToActivePageRelative(array(), $aExcludeParams);
+                $sCallingURL = $activePageService->getLinkToActivePageRelative([], $aExcludeParams);
             } else {
-                //basket, so try to get from session
+                // basket, so try to get from session
                 if (isset($_SESSION[MTShopOrderWizardCore::SESSION_PARAM_NAME]) && !empty($_SESSION[MTShopOrderWizardCore::SESSION_PARAM_NAME])) {
                     $sCallingURL = $_SESSION[MTShopOrderWizardCore::SESSION_PARAM_NAME];
                 } else {
@@ -287,7 +287,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         if (is_null($aArticleIdsToMove) && array_key_exists(self::URL_ITEM_ID_NAME, $aRequestData)) {
             $aIdList = $aRequestData[self::URL_ITEM_ID_NAME];
             if (!is_array($aIdList)) {
-                $aIdList = array($aIdList);
+                $aIdList = [$aIdList];
             }
 
             $aAmountList = null;
@@ -295,10 +295,10 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
                 $aAmountList = $aRequestData[self::URL_ITEM_AMOUNT_NAME];
             }
             if (is_null($aAmountList)) {
-                $aAmountList = array();
+                $aAmountList = [];
             }
 
-            $aArticleIdsToMove = array();
+            $aArticleIdsToMove = [];
             foreach ($aIdList as $index => $iArticleId) {
                 $aArticleIdsToMove[$iArticleId] = '1';
                 if (!is_array($aAmountList)) {
@@ -311,11 +311,11 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         if (is_null($aKeepOnNoticeList) && array_key_exists(self::URL_ACTION_NAME, $aRequestData)) {
             $aKeepOnNoticeList = $aRequestData[self::URL_ACTION_NAME];
             if (!is_array($aKeepOnNoticeList)) {
-                $aKeepOnNoticeList = array($aKeepOnNoticeList);
+                $aKeepOnNoticeList = [$aKeepOnNoticeList];
             }
         }
         if (is_null($aKeepOnNoticeList)) {
-            $aKeepOnNoticeList = array();
+            $aKeepOnNoticeList = [];
         }
 
         if (is_null($sMessageHandler) && array_key_exists(self::URL_MESSAGE_CONSUMER_NAME, $aRequestData)) {
@@ -334,13 +334,13 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         $oShopConfig = TdbShop::GetInstance();
         $sBasketLinkStart = '<a href="'.$oShopConfig->GetBasketLink().'">';
         $sBasketLinkEnd = '</a>';
-        $aMessageVars = array('BasketLinkStart' => $sBasketLinkStart, 'BasketLinkEnd' => $sBasketLinkEnd);
+        $aMessageVars = ['BasketLinkStart' => $sBasketLinkStart, 'BasketLinkEnd' => $sBasketLinkEnd];
         $oMessage = TCMSMessageManager::GetInstance();
         $oMessage->AddMessage($sMessageHandler, 'NOTICE-LIST-MOVED-ITEM-TO-BASKET', $aMessageVars);
 
         foreach ($aArticleIdsToMove as $iArticleId => $iAmount) {
-            //$this->UpdateBasketItem($a)
-            $aAddToBasketRequest = array(self::URL_ITEM_ID_NAME => $iArticleId, self::URL_ITEM_AMOUNT_NAME => abs($iAmount), self::URL_MESSAGE_CONSUMER_NAME => $sMessageHandler);
+            // $this->UpdateBasketItem($a)
+            $aAddToBasketRequest = [self::URL_ITEM_ID_NAME => $iArticleId, self::URL_ITEM_AMOUNT_NAME => abs($iAmount), self::URL_MESSAGE_CONSUMER_NAME => $sMessageHandler];
             $this->UpdateBasketItem($aAddToBasketRequest, true, true);
 
             $sCommand = 'move';
@@ -366,11 +366,11 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     }
 
     /**
-     * @param array  $aArticleIdsToMove
+     * @param array $aArticleIdsToMove
      * @param string $sMessageHandler
-     * @param bool   $bIsInteralCall
+     * @param bool $bIsInteralCall
      *
-     * @return null|array<string, string>
+     * @return array<string, string>|null
      */
     public function RemoveFromNoticeListAjax($aArticleIdsToMove = null, $sMessageHandler = null, $bIsInteralCall = false)
     {
@@ -380,12 +380,12 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     /**
      * remove item from notice list.
      *
-     * @param array  $aArticleIdsToMove
+     * @param array $aArticleIdsToMove
      * @param string $sMessageHandler
-     * @param bool   $bIsInteralCall
+     * @param bool $bIsInteralCall
      * @param bool $bIsAjaxCall
      *
-     * @return null|array<string, string>
+     * @return array<string, string>|null
      */
     public function RemoveFromNoticeList($aArticleIdsToMove = null, $sMessageHandler = null, $bIsInteralCall = false, $bIsAjaxCall = false)
     {
@@ -394,7 +394,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         if (is_null($aArticleIdsToMove) && array_key_exists(self::URL_ITEM_ID_NAME, $aRequestData)) {
             $aArticleIdsToMove = $aRequestData[self::URL_ITEM_ID_NAME];
             if (!is_array($aArticleIdsToMove)) {
-                $aArticleIdsToMove = array($aArticleIdsToMove);
+                $aArticleIdsToMove = [$aArticleIdsToMove];
             }
         }
 
@@ -412,9 +412,9 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         foreach ($aArticleIdsToMove as $iArticleId) {
             $oUser->RemoveArticleFromNoticeList($iArticleId);
             $oArticle = TdbShopArticle::GetNewInstance();
-            /** @var $oArticle TdbShopArticle */
+            /* @var $oArticle TdbShopArticle */
             $oArticle->Load($iArticleId);
-            $aMessageData = array('sArticleLinkStart' => '<a href="'.TGlobal::OutHTML($oArticle->GetDetailLink()).'">', 'sArticleLinkEnd' => '</a>', 'sArticleName' => $oArticle->GetName());
+            $aMessageData = ['sArticleLinkStart' => '<a href="'.TGlobal::OutHTML($oArticle->GetDetailLink()).'">', 'sArticleLinkEnd' => '</a>', 'sArticleName' => $oArticle->GetName()];
             if (!$bIsAjaxCall) {
                 $oMessageManager->AddMessage($sMessageHandler, 'NOTICE-LIST-REMOVED-ITEM', $aMessageData);
             }
@@ -430,7 +430,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
 
         if (!$bIsInteralCall) {
             if ($bIsAjaxCall) {
-                return array('message' => '');
+                return ['message' => ''];
             } else {
                 $this->RedirectAfterEvent($iRedirectNodeId);
             }
@@ -440,10 +440,10 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     /**
      * moves or copies one or more articles from the basket to the notice list. products to be moved must be passed.
      *
-     * @param int    $iArticleId      - if you pass null, it will attempt to fetch the item id from post
-     * @param int    $iAmount         - amount to add
+     * @param int $iArticleId - if you pass null, it will attempt to fetch the item id from post
+     * @param int $iAmount - amount to add
      * @param string $sMessageHandler - info passed to this handler - uses the default message consumer for the shop if non passed (can also be passed via get/post)
-     * @param bool   $bIsInternalCall
+     * @param bool $bIsInternalCall
      *
      * @return void
      */
@@ -456,10 +456,10 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     /**
      * insert an item into the notice list.
      *
-     * @param int    $iArticleId      - if you pass null, it will attempt to fetch the item id from post
-     * @param int    $iAmount         - amount to add
+     * @param int $iArticleId - if you pass null, it will attempt to fetch the item id from post
+     * @param int $iAmount - amount to add
      * @param string $sMessageHandler - info passed to this handler - uses the default message consumer for the shop if non passed (can also be passed via get/post)
-     * @param bool   $bIsInternalCall
+     * @param bool $bIsInternalCall
      *
      * @return void
      */
@@ -501,7 +501,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
                 // add item to list
                 $oUser = TdbDataExtranetUser::GetInstance();
                 $dNewAmountOnList = $oUser->AddArticleIdToNoticeList($iArticleId, $iAmount);
-                $aInfoData = array('sLinkNoticeListStart' => '<a href="'.$oShop->GetLinkToSystemPage('noticelist').'">', 'sLinkNoticeListEnd' => '</a>', 'sLinkArticleStart' => '<a href="'.$oItem->GetDetailLink().'">', 'sLinkArticleEnd' => '</a>', 'sArticleName' => TGlobal::OutHTML($oItem->GetName()), 'dAddedAmount' => $iAmount, 'dNewAmount' => $dNewAmountOnList, 'sArticleAddedId' => $oItem->id);
+                $aInfoData = ['sLinkNoticeListStart' => '<a href="'.$oShop->GetLinkToSystemPage('noticelist').'">', 'sLinkNoticeListEnd' => '</a>', 'sLinkArticleStart' => '<a href="'.$oItem->getLink().'">', 'sLinkArticleEnd' => '</a>', 'sArticleName' => TGlobal::OutHTML($oItem->GetName()), 'dAddedAmount' => $iAmount, 'dNewAmount' => $dNewAmountOnList, 'sArticleAddedId' => $oItem->id];
                 if (false === $dNewAmountOnList) {
                     // article was already on notice list...
                     $oMsgManager->AddMessage($sMessageHandler, 'NOTICE-LIST-ITEM-ALREADY-ON-LIST', $aInfoData);
@@ -530,10 +530,10 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     /**
      * adds a voucher to the basket. relevant messages will be send to the consumer defined by $sMessageConsumerName.
      *
-     * @param string $sShopVoucherCode       - the voucher code to add
-     * @param string $sMessageHandler        - name of the consumer to which any messages should be send
-     * @param bool   $bIsInternalCall        - set to true, if you want to prevent redirection and get the success/failure as a boolean return value
-     * @param int    $iRedirectSuccessNodeId - optional tree node to which we want to redirect on success to. if not set, we will redirect to the calling page
+     * @param string $sShopVoucherCode - the voucher code to add
+     * @param string $sMessageHandler - name of the consumer to which any messages should be send
+     * @param bool $bIsInternalCall - set to true, if you want to prevent redirection and get the success/failure as a boolean return value
+     * @param int $iRedirectSuccessNodeId - optional tree node to which we want to redirect on success to. if not set, we will redirect to the calling page
      *
      * @return bool
      */
@@ -558,7 +558,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
             $bVoucherAdded = $oBasket->AddVoucher($oVoucher, $sMessageHandler);
         } else {
             $oMessageManager = TCMSMessageManager::GetInstance();
-            $oMessageManager->AddMessage($sMessageHandler, 'VOUCHER-ERROR-NOT-FOUND', array('code' => TGlobal::OutHTML($sShopVoucherCode)));
+            $oMessageManager->AddMessage($sMessageHandler, 'VOUCHER-ERROR-NOT-FOUND', ['code' => TGlobal::OutHTML($sShopVoucherCode)]);
         }
 
         // if this is not an internal call, then we redirect to either the successpage or the calling page
@@ -596,7 +596,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         $oVoucher = TdbShopVoucher::GetNewInstance();
 
         if (strlen($sShopVoucherCode) >= 3) {
-            if ($oVoucher->LoadFromFields(array('code' => $sShopVoucherCode, 'is_used_up' => '0'))) {
+            if ($oVoucher->LoadFromFields(['code' => $sShopVoucherCode, 'is_used_up' => '0'])) {
                 $oValidVoucher = $oVoucher;
             }
         }
@@ -608,8 +608,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * Removes a voucher from the basket. returns result only if $bIsInternalCall is set to true.
      *
      * @param string $sBasketVoucherKey - The sBasketVoucherKey of the voucher that should be removed
-     * @param string $sMessageHandler   - The message handler that should receive the result message
-     * @param bool   $bIsInternalCall   - set this to true if you want to prevent the redirect after the operation
+     * @param string $sMessageHandler - The message handler that should receive the result message
+     * @param bool $bIsInternalCall - set this to true if you want to prevent the redirect after the operation
      *
      * @return bool
      */
@@ -692,9 +692,9 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * basket[][consumer] = z
      * redirectNodeId = y.
      *
-     * @param array $aRequestData               - if no request data is passed, the method will look in get/post
-     * @param bool  $bAddAmountToExistingAmount - if you set this to true, the amount passed will be added to any existing amount, instead of overwriting the amount
-     * @param bool  $bIsInternalCall            - set this to true if you want to manage the messages and the redirects from the calling method
+     * @param array $aRequestData - if no request data is passed, the method will look in get/post
+     * @param bool $bAddAmountToExistingAmount - if you set this to true, the amount passed will be added to any existing amount, instead of overwriting the amount
+     * @param bool $bIsInternalCall - set this to true if you want to manage the messages and the redirects from the calling method
      *
      * @return bool - if this is an internal call, then the method will return false if it was passed invalid data
      */
@@ -709,7 +709,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         $bDataValid = true;
         if (!is_array($aRequestData)) {
             // invalid data
-            $oMessage->AddMessage($this->sModuleSpotName, 'ERROR-UPDATE-BASKET-ITEMS-PARAMETERS-MISSING', array('sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_no_data_sent_to_update_basket_items')));
+            $oMessage->AddMessage($this->sModuleSpotName, 'ERROR-UPDATE-BASKET-ITEMS-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_no_data_sent_to_update_basket_items')]);
             $bDataValid = false;
         }
         if ($bDataValid) {
@@ -760,7 +760,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * @deprecated use RemoveFromBasketViaBasketItemKey whenever possible
      *
      * @param int|null $iArticleId
-     * @param null|string $sConsumer
+     * @param string|null $sConsumer
      * @param bool $bIsInternalCall
      *
      * @return void
@@ -770,7 +770,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         $oGlobal = TGlobal::instance();
         $aRequestData = $oGlobal->GetUserData(self::URL_REQUEST_PARAMETER);
         if (!is_array($aRequestData)) {
-            $aRequestData = array();
+            $aRequestData = [];
         }
         if (!is_null($iArticleId)) {
             $aRequestData[self::URL_ITEM_ID_NAME] = $iArticleId;
@@ -787,7 +787,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * basket[sBasketItemKey] =x, basket[consumer] = y.
      *
      * @param string|null $sBasketItemKey
-     * @param string|null $sConsumer       - optional. if no consumer is give, the response will be send to the global consumer.
+     * @param string|null $sConsumer - optional. if no consumer is give, the response will be send to the global consumer.
      * @param bool $bIsInternalCall
      *
      * @return void
@@ -797,7 +797,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         $oGlobal = TGlobal::instance();
         $aRequestData = $oGlobal->GetUserData(self::URL_REQUEST_PARAMETER);
         if (!is_array($aRequestData)) {
-            $aRequestData = array();
+            $aRequestData = [];
         }
         if (!is_null($sBasketItemKey)) {
             $aRequestData[self::URL_ITEM_BASKET_KEY_NAME] = $sBasketItemKey;
@@ -822,8 +822,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
 
             $sBasketLinkStart = '<a href="'.$oShopConfig->GetBasketLink().'">';
             $sBasketLinkEnd = '</a>';
-            $aMessageVars = array('ArticleName' => $sArticleName, 'BasketLinkStart' => $sBasketLinkStart, 'BasketLinkEnd' => $sBasketLinkEnd, 'amount' => $oRemovedItem->dAmount);
-            $aMessageVars['ArticleLinkStart'] = '<a href="'.$oRemovedItem->GetDetailLink().'">';
+            $aMessageVars = ['ArticleName' => $sArticleName, 'BasketLinkStart' => $sBasketLinkStart, 'BasketLinkEnd' => $sBasketLinkEnd, 'amount' => $oRemovedItem->dAmount];
+            $aMessageVars['ArticleLinkStart'] = '<a href="'.$oRemovedItem->getLink().'">';
             $aMessageVars['ArticleLinkEnd'] = '</a>';
             $oMessage = TCMSMessageManager::GetInstance();
             $oMessage->AddMessage($sConsumer, 'BASKET-REMOVED-ITEM', $aMessageVars);
@@ -837,7 +837,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
             }
         } else {
             $oMessage = TCMSMessageManager::GetInstance();
-            $oMessage->AddMessage($sConsumer, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', array('sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_basket_item_key_unknown', array('%key%' => $sBasketItemKey))));
+            $oMessage->AddMessage($sConsumer, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_basket_item_key_unknown', ['%key%' => $sBasketItemKey])]);
             if (false == $bIsInternalCall) {
                 $this->RedirectToCallingPage();
             }
@@ -852,10 +852,10 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * basket[consumer] = z
      * the consumer is optional and will be used to set the objects respons message. if no conumser is given, the repsonse will be send to the global consumer.
      *
-     * @param array $aRequestData                - you can pass the request data directly. if you do not, the data will be fetched from get/post
-     * @param bool  $bAddAmountToExistingAmount  - if you set this to true, the amount passed will be added to any existing amount, instead of overwriting the amount
-     * @param bool  $bIsInternalCall             - set this to true if you want to manage the messages and the redirects from the calling method
-     * @param bool  $bWriteMessageOnInternalCall - if $bIsInternalCall is set to true you can force the success message by setting $bWriteMessageOnInternalCall to true
+     * @param array $aRequestData - you can pass the request data directly. if you do not, the data will be fetched from get/post
+     * @param bool $bAddAmountToExistingAmount - if you set this to true, the amount passed will be added to any existing amount, instead of overwriting the amount
+     * @param bool $bIsInternalCall - set this to true if you want to manage the messages and the redirects from the calling method
+     * @param bool $bWriteMessageOnInternalCall - if $bIsInternalCall is set to true you can force the success message by setting $bWriteMessageOnInternalCall to true
      *
      * @return bool - if this is an internal call, then the method will return false if it was passed invalid data
      */
@@ -897,17 +897,17 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
 
         if (!is_array($aRequestData)) {
             $bDataValid = false;
-            $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', array('sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_add_to_basket_no_data')));
+            $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_add_to_basket_no_data')]);
         } elseif (!array_key_exists(self::URL_ITEM_ID_NAME, $aRequestData)) {
             $bDataValid = false;
-            $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', array('sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_add_to_basket_no_id')));
+            $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_add_to_basket_no_id')]);
         } else {
             $oArticle = new TShopBasketArticle();
             if (!$oArticle->Load($aRequestData[self::URL_ITEM_ID_NAME])) {
                 $bDataValid = false;
-                $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', array('sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_add_to_basket_id_unknown', array(
+                $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_add_to_basket_id_unknown', [
                         '%id%' => $aRequestData[self::URL_ITEM_ID_NAME],
-                    ))));
+                    ])]);
             }
 
             if (isset($aRequestData[self::URL_ITEM_AMOUNT_NAME])) {
@@ -916,7 +916,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
                     $iAmount = (float) $requestedAmount;
                 } else {
                     $bDataValid = false;
-                    $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', array('sMissingParameters' => TGlobal::Translate('Die Mengenangabe ist ungültig.')));
+                    $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('Die Mengenangabe ist ungültig.')]);
                 }
             }
         }
@@ -964,7 +964,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
             if (!$oArticle->IsBuyable()) {
                 $aErrorCodes = $oArticle->GetSQLWithTablePrefix();
                 $bDataValid = false;
-                $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', array('sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_add_to_basket_not_buyable')));
+                $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_add_to_basket_not_buyable')]);
             }
         }
 
@@ -1000,7 +1000,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
 
                 $sBasketLinkStart = '<a href="'.$oShopConfig->GetBasketLink().'">';
                 $sBasketLinkEnd = '</a>';
-                $aMessageVars = array('ArticleName' => $sArticleName, 'BasketLinkStart' => $sBasketLinkStart, 'BasketLinkEnd' => $sBasketLinkEnd, 'amount' => $iRealAmountAdded, 'sArticleAddedId' => $oArticle->id, 'basketItem' => $oArticle);
+                $aMessageVars = ['ArticleName' => $sArticleName, 'BasketLinkStart' => $sBasketLinkStart, 'BasketLinkEnd' => $sBasketLinkEnd, 'amount' => $iRealAmountAdded, 'sArticleAddedId' => $oArticle->id, 'basketItem' => $oArticle];
 
                 if ($bItemWasUpdated) {
                     if (!$bAddAmountToExistingAmount && null !== $oExistingItem) {
@@ -1009,7 +1009,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
                         $oMessage->AddMessage($sMessageHandler, 'BASKET-ADDED-ARTICLE-TO-BASKET', $aMessageVars);
                     }
                 } else {
-                    $aMessageVars['ArticleLinkStart'] = '<a href="'.$oArticle->GetDetailLink().'">';
+                    $aMessageVars['ArticleLinkStart'] = '<a href="'.$oArticle->getLink().'">';
                     $aMessageVars['ArticleLinkEnd'] = '</a>';
                     $oMessage->AddMessage($sMessageHandler, 'BASKET-REMOVED-ITEM', $aMessageVars);
                 }
@@ -1034,7 +1034,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      * Hook is called after a successful change in the basket... oArticle is what was added/removed from the basket.
      *
      * @param TShopBasketArticle $oArticle
-     * @param bool               $bItemWasUpdated
+     * @param bool $bItemWasUpdated
      *
      * @return void
      */
@@ -1088,7 +1088,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      */
     protected function RedirectToCallingPage()
     {
-        $aParameters = array();
+        $aParameters = [];
         $aIncludeParams = TdbShop::GetURLPageStateParameters();
         $oGlobal = TGlobal::instance();
         foreach ($aIncludeParams as $sKeyName) {
@@ -1134,10 +1134,11 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         return true === $this->basketHasMessages;
     }
 
-    protected function setResponseCacheHeader(Request $request, \Symfony\Component\HttpFoundation\Response $response)
+    protected function setResponseCacheHeader(Request $request, Symfony\Component\HttpFoundation\Response $response)
     {
         $response = parent::setResponseCacheHeader($request, $response);
         $response->setMaxAge(0); // since the basket changes as soon as the user adds an item we need a max age of zero
+
         return $response;
     }
 
@@ -1163,6 +1164,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
 
     /**
      * @param array<string, mixed> $aRequestData
+     *
      * @return string|null
      */
     private function getBasketItemKeyFromUserInput($aRequestData)
@@ -1177,15 +1179,11 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     }
 
     /**
-     * @param TShopBasketArticle $oArticle
-     * @param array              $aRequestData
-     * @param TShopBasketArticle $oExistingItem
-     *
      * @return array
      */
-    private function getCustomDataFromRequest(TShopBasketArticle $oArticle, array $aRequestData, TShopBasketArticle $oExistingItem = null)
+    private function getCustomDataFromRequest(TShopBasketArticle $oArticle, array $aRequestData, ?TShopBasketArticle $oExistingItem = null)
     {
-        $existingCustomData = array();
+        $existingCustomData = [];
         if (null !== $oExistingItem) {
             $existingCustomData = $oExistingItem->getCustomData();
         }
@@ -1194,11 +1192,11 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         if (true === isset($aRequestData[self::URL_CUSTOM_PARAMETER])) {
             $customData = $aRequestData[self::URL_CUSTOM_PARAMETER];
             if (!is_array($customData)) {
-                $customData = array($customData);
+                $customData = [$customData];
             }
         }
         if (null === $customData && true === $oArticle->requiresCustomData()) {
-            $customData = array();
+            $customData = [];
         }
         $customData = array_merge($existingCustomData, $customData);
 
@@ -1206,10 +1204,8 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
     }
 
     /**
-     * @param IPkgShopBasketArticleWithCustomData $oArticle
-     * @param array $customData
-     * @param TCMSMessageManager $oMessage
      * @param string $messageHandler
+     *
      * @return bool
      */
     private function customDataIsValid(IPkgShopBasketArticleWithCustomData $oArticle, array $customData, TCMSMessageManager $oMessage, $messageHandler)
@@ -1238,7 +1234,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      */
     private function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -1246,7 +1242,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      */
     private function getBasketAmountValidator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.basket.basket_product_amount_validator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.basket.basket_product_amount_validator');
     }
 
     /**
@@ -1254,7 +1250,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     /**
@@ -1262,7 +1258,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      */
     private function getSystemPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 
     /**
@@ -1270,7 +1266,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -1278,7 +1274,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      */
     private function getPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
     }
 
     /**
@@ -1286,7 +1282,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -1294,7 +1290,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 
     /**
@@ -1302,7 +1298,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 
     /**
@@ -1310,7 +1306,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      */
     private function getTreeService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.tree_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.tree_service');
     }
 
     /**
@@ -1318,6 +1314,6 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

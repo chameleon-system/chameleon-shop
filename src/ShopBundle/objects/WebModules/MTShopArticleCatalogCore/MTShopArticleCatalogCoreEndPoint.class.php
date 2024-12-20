@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 if (!defined('PKG_SHOP_ALLOWED_PAGE_SIZES')) {
     define('PKG_SHOP_ALLOWED_PAGE_SIZES', '40,60,100,120');
@@ -19,21 +20,21 @@ if (!defined('PKG_SHOP_ALLOWED_PAGE_SIZES')) {
  * the Produkt catalog -> shows all articles of a given category, and the detail item view...
  * IMPORTANT: do not extend this class. instead extend from MTShopArticleCatalogCore.
  *
- * @deprecated since 6.2.0 - no longer used.
+ * @deprecated since 6.2.0 - (but constants of this class are used all over the place).
  **/
 class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
 {
-    const URL_ITEM_ID = 'itemid';
-    const URL_CATEGORY_ID = 'categoryid';
-    const URL_PAGE = 'listpage';
-    const URL_PAGE_SIZE = 'iPageSize';
-    const URL_ORDER_BY = 'sortid';
-    const URL_FILTER = 'lf';
+    public const URL_ITEM_ID = 'itemid';
+    public const URL_CATEGORY_ID = 'categoryid';
+    public const URL_PAGE = 'listpage';
+    public const URL_PAGE_SIZE = 'iPageSize';
+    public const URL_ORDER_BY = 'sortid';
+    public const URL_FILTER = 'lf';
 
-    const MSG_CONSUMER_NAME = 'MTShopArticleCatalogCore';
+    public const MSG_CONSUMER_NAME = 'MTShopArticleCatalogCore';
 
-    const SESSION_CAPTCHA = 'MTShopArticleCatalogCoreSESSIONcaptcha';
-    const SESSION_ACTIVE_ORDER_BY = 'MTShopArticleCatalogCoreSESSIONorderbyid';
+    public const SESSION_CAPTCHA = 'MTShopArticleCatalogCoreSESSIONcaptcha';
+    public const SESSION_ACTIVE_ORDER_BY = 'MTShopArticleCatalogCoreSESSIONorderbyid';
 
     /**
      * current page.
@@ -52,35 +53,35 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
      *
      * @var string
      */
-    protected $iItemId = null;
+    protected $iItemId;
     /**
      * current category - if not set and an item is set, then the items primary category will be used.
      * if neither item nor category is set, then the first root category will be used.
      *
      * @var string
      */
-    protected $iCategoryId = null;
+    protected $iCategoryId;
 
     /**
      * holds the current order by id.
      *
      * @var string
      */
-    protected $iActiveShopModuleArticlelistOrderbyId = null;
+    protected $iActiveShopModuleArticlelistOrderbyId;
 
     /**
      * any filter restrictions for the list.
      *
      * @var array
      */
-    protected $aFilter = array();
+    protected $aFilter = [];
 
     /**
      * the current article list.
      *
      * @var TdbShopArticleList
      */
-    protected $oList = null;
+    protected $oList;
 
     /**
      * set this to false if you need to prevent caching of the list/item.
@@ -94,7 +95,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
      *
      * @var TdbShopArticleCatalogConf
      */
-    protected $oModuleConf = null;
+    protected $oModuleConf;
 
     protected $bAllowHTMLDivWrapping = true;
 
@@ -146,7 +147,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     public function ChangePageAjax($iListIdent = null)
     {
         $oResponse = new MTShopArticleListResponse();
-        /** @var $oResponse MTShopArticleListResponse */
+        /* @var $oResponse MTShopArticleListResponse */
         if (null === $iListIdent) {
             $oGlobal = TGlobal::instance();
             $iListIdent = $oGlobal->GetUserData(TdbShopArticleList::URL_LIST_KEY_NAME);
@@ -160,9 +161,9 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
 
             $aItemRawData = TdbShopArticleList::GetInstanceDataFromSession($iListIdent);
             if (is_array($aItemRawData)) {
-                $bViewNameExists = (array_key_exists('sViewName', $aItemRawData));
-                $bViewTypeExists = (array_key_exists('sViewType', $aItemRawData));
-                $bCallTimeVarsExists = (array_key_exists('aCallTimeVars', $aItemRawData));
+                $bViewNameExists = array_key_exists('sViewName', $aItemRawData);
+                $bViewTypeExists = array_key_exists('sViewType', $aItemRawData);
+                $bCallTimeVarsExists = array_key_exists('aCallTimeVars', $aItemRawData);
             }
             if ($bViewNameExists && $bViewTypeExists && $bCallTimeVarsExists) {
                 // fetch data for requested item
@@ -306,7 +307,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         $this->data['oFilterManufacturer'] = TdbShopManufacturer::GetInstanceForCurrentFilter();
         $this->data['sActiveOrderByString'] = $this->GetActiveOrderByString($this->iActiveShopModuleArticlelistOrderbyId, $this->instanceID);
 
-        $aListRequest = array();
+        $aListRequest = [];
         $oGlobal = TGlobal::instance();
         if ($oGlobal->UserDataExists(TdbShopArticleList::URL_LIST_KEY_NAME)) {
             $aListRequest[$oGlobal->GetUserData(TdbShopArticleList::URL_LIST_KEY_NAME)] = $oGlobal->GetUserData(TdbShopArticleList::URL_LIST_REQUEST);
@@ -343,7 +344,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
                 );
             }
 
-            $aRequiredFields = array('rating', 'author_name', 'author_email');
+            $aRequiredFields = ['rating', 'author_name', 'author_email'];
             foreach ($aRequiredFields as $sFieldName) {
                 $sVal = '';
                 if (array_key_exists($sFieldName, $aUserData)) {
@@ -371,7 +372,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         if ($bDataValide) {
             // save item
             $oReviewItem = TdbShopArticleReview::GetNewInstance();
-            /** @var $oReviewItem TdbShopArticleReview */
+            /* @var $oReviewItem TdbShopArticleReview */
             $aUserData['shop_article_id'] = $this->iItemId;
             $oReviewItem->LoadFromRowProtected($aUserData);
             $oReviewItem->AllowEditByAll(true);
@@ -387,12 +388,9 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
             if (is_object($oActiveCategory)) {
                 $iActiveCategoryId = $oActiveCategory->id;
             }
-            $sURL = $oActiveItm->GetDetailLink(true, $iActiveCategoryId);
-            /**
-             * @psalm-suppress UndefinedInterfaceMethod
-             * @FIXME `HeaderURLRedirect` only exists on a single interface implementation.
-             */
-            $this->controller->HeaderURLRedirect($sURL);
+            $sURL = $oActiveItm->getLink(true, null,[TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $iActiveCategoryId]);
+
+            $this->getRedirectService()->redirect($sURL);
         }
     }
 
@@ -419,7 +417,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         $val = $num1 + $num2;
         $_SESSION[self::SESSION_CAPTCHA] = $val;
 
-        $sCaptchQuestion = TGlobal::Translate('chameleon_system_shop.module_article_catalog.captcha', array('%num1%' => $num1, '%num2%' => $num2));
+        $sCaptchQuestion = TGlobal::Translate('chameleon_system_shop.module_article_catalog.captcha', ['%num1%' => $num1, '%num2%' => $num2]);
 
         return $sCaptchQuestion;
     }
@@ -437,7 +435,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         $oReviewItem = TdbShopArticleReview::GetNewInstance();
         /** @var $oReviewItem TdbShopArticleReview */
         $oGlobal = TGlobal::instance();
-        $aReviewData = array();
+        $aReviewData = [];
         if ($oGlobal->UserDataExists(TdbShopArticleReview::INPUT_BASE_NAME)) {
             $aReviewData = $oGlobal->GetUserData(TdbShopArticleReview::INPUT_BASE_NAME);
         } else {
@@ -536,9 +534,9 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     /**
      * return the active order by id based on session or url parameter.
      *
-     * @return string|null
-     *
      * @param string $sInstanceId
+     *
+     * @return string|null
      */
     public function GetActiveShopModuleArticlelistOrderbyId($sInstanceId = '')
     {
@@ -560,17 +558,17 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
     /**
      * return the current order string for the article lists.
      *
-     * @return string
+     * @param string|null $sDefaultActiveShopModuleArticlelistOrderbyId
+     * @param string|null $sInstanceId
      *
-     * @param null|string $sDefaultActiveShopModuleArticlelistOrderbyId
-     * @param null|string $sInstanceId
+     * @return string
      */
     public function GetActiveOrderByString($sDefaultActiveShopModuleArticlelistOrderbyId = null, $sInstanceId = '')
     {
         static $oOrderBy = null;
         if (is_null($oOrderBy)) {
             // remove default order by - for performance reason we should be allowed to sort by nothing
-            $sOrder = ''; //`shop_article`.`list_rank` DESC, `shop_article`.`name` ASC';
+            $sOrder = ''; // `shop_article`.`list_rank` DESC, `shop_article`.`name` ASC';
             $iActiveShopModuleArticlelistOrderbyId = $this->GetActiveShopModuleArticlelistOrderbyId($sInstanceId);
             if (is_null($iActiveShopModuleArticlelistOrderbyId)) {
                 $iActiveShopModuleArticlelistOrderbyId = $sDefaultActiveShopModuleArticlelistOrderbyId;
@@ -650,28 +648,30 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         $aClearCacheInfo = parent::_GetCacheTableInfos();
 
         if (!is_array($aClearCacheInfo)) {
-            $aClearCacheInfo = array();
+            $aClearCacheInfo = [];
         }
 
         // add all tables required by the article
         $aArticleCacheTables = TdbShopArticle::GetCacheRelevantTables();
         foreach ($aArticleCacheTables as $tableName) {
-            $aClearCacheInfo[] = array('table' => $tableName, 'id' => '');
+            $aClearCacheInfo[] = ['table' => $tableName, 'id' => ''];
         }
 
         // also react to the shop settings
         $oShop = TdbShop::GetInstance();
-        $aClearCacheInfo[] = array('table' => 'shop', 'id' => $oShop->id);
-        $aClearCacheInfo[] = array('table' => 'shop_article_catalog_conf ', 'id' => $this->instanceID);
+        $aClearCacheInfo[] = ['table' => 'shop', 'id' => $oShop->id];
+        $aClearCacheInfo[] = ['table' => 'shop_article_catalog_conf ', 'id' => $this->instanceID];
 
         return $aClearCacheInfo;
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }
