@@ -104,12 +104,6 @@
             <tag name="chameleon_system.mapper"/>
         </service>
 
-        <service id="chameleon_system_shop.mapper.social.social_share_privacy" class="ChameleonSystem\ShopBundle\mappers\social\TPkgShopMapper_SocialSharePrivacy">
-            <tag name="chameleon_system.mapper"/>
-
-            <argument type="service" id="chameleon_system_core.language_service" />
-        </service>
-
         <service id="chameleon_system_shop.mapper.objects.article_list.article_list_legacy" class="ChameleonSystem\ShopBundle\objects\ArticleList\Mapper\ArticleListLegacyMapper">
             <tag name="chameleon_system.mapper"/>
         </service>
