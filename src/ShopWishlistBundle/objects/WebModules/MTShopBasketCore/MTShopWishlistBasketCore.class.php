@@ -67,7 +67,7 @@ class MTShopWishlistBasketCore extends MTShopBasketCore
             if ($oItem->Load($sArticleId)) {
                 $oShop = TdbShop::GetInstance();
                 $oExtranet = TdbDataExtranet::GetInstance();
-                $aInfoData = array('sLinkLoginStart' => '<a href="'.$oExtranet->GetLinkLoginPage().'">', 'sLinkLoginEnd' => '</a>', 'sLinkWishlistStart' => '<a href="'.$oShop->GetLinkToSystemPage('wishlist').'">', 'sLinkWishlistEnd' => '</a>', 'sLinkArticleStart' => '<a href="'.$oItem->GetDetailLink().'">', 'sLinkArticleEnd' => '</a>', 'sArticleName' => TGlobal::OutHTML($oItem->GetName()), 'dAddedAmount' => $dAmount);
+                $aInfoData = array('sLinkLoginStart' => '<a href="'.$oExtranet->GetLinkLoginPage().'">', 'sLinkLoginEnd' => '</a>', 'sLinkWishlistStart' => '<a href="'.$oShop->GetLinkToSystemPage('wishlist').'">', 'sLinkWishlistEnd' => '</a>', 'sLinkArticleStart' => '<a href="'.$oItem->getLink().'">', 'sLinkArticleEnd' => '</a>', 'sArticleName' => TGlobal::OutHTML($oItem->GetName()), 'dAddedAmount' => $dAmount);
                 $oUser = TdbDataExtranetUser::GetInstance();
                 if (!$oUser->IsLoggedIn()) {
                     $oMsgManager->AddMessage($sMessageHandler, 'WISHLIST-USER-NOT-LOGGED-IN', $aInfoData);
@@ -138,7 +138,7 @@ class MTShopWishlistBasketCore extends MTShopBasketCore
             $oWishlistItem->Load($sPkgShopWishlistArticleId);
             $oArticle = $oWishlistItem->GetFieldShopArticle();
             if ($oArticle) {
-                $aMessageData = array('sArticleLinkStart' => '<a href="'.TGlobal::OutHTML($oArticle->GetDetailLink()).'">', 'sArticleLinkEnd' => '</a>', 'sArticleName' => $oArticle->GetName());
+                $aMessageData = array('sArticleLinkStart' => '<a href="'.TGlobal::OutHTML($oArticle->getLink()).'">', 'sArticleLinkEnd' => '</a>', 'sArticleName' => $oArticle->GetName());
             } else {
                 $aMessageData = array();
             }
