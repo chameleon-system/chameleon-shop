@@ -13,24 +13,17 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ShopBundle\Payment\PaymentConfig\Interfaces\ShopPaymentConfigLoaderInterface;
 use ChameleonSystem\ShopBundle\PkgShopPaymentTransaction\PayPalTransactionHandler;
-use esono\pkgshoppaymentpayone\PkgShopPaymentTransaction\PayonePaymentTransactionHandler;
 use esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface;
-use esono\pkgshoppaymenttransaction\PaymentTransactionHandlerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * a simple paypal integration that does not execute the payment on order, but instead provides a payment
  * link/form that can be used by the user to pay for the order
  * if you want to accept partial payments, you need to set bAcceptPartialPayments to 1.
-/**/
+ * /**/
 class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler implements PaymentHandlerWithTransactionSupportInterface
 {
-    const URL_IDENTIFIER_IPN = '_paypalipn_'; // instant payment notification URL identifier
-
-    /**
-     * @deprecated since 6.3.0 - not used anymore
-     */
-    const LOG_FILE = 'paypal.log';
+    public const URL_IDENTIFIER_IPN = '_paypalipn_'; // instant payment notification URL identifier
     protected const PARAMETER_IS_PAYMENT_ON_SHIPMENT = 'isPaymentOnShipment';
 
     public function paymentTransactionHandlerFactory($portalId)
@@ -48,7 +41,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
     public function isCaptureOnShipment()
     {
         if ($this->GetUserPaymentDataItem(self::PARAMETER_IS_PAYMENT_ON_SHIPMENT)) {
-            return 1 === (int)$this->GetUserPaymentDataItem(self::PARAMETER_IS_PAYMENT_ON_SHIPMENT);
+            return 1 === (int) $this->GetUserPaymentDataItem(self::PARAMETER_IS_PAYMENT_ON_SHIPMENT);
         }
 
         return TPkgShopPaymentPayoneConfigManager::PAYMENT_MODE_DELAYED === $this->GetConfigParameter(PayoneConfigConstants::PARAM_PAYMENT_MODE);
@@ -77,10 +70,10 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
 
     /**
      * @param TdbShopOrder $oOrder
-     * @param null         $dAmount
-     * @param string       $sCurrency - you can pass the currency used as an optional parameter to the method. if the currency
-     *                                package is installed and you do not pass the parameter, the method will use the currency
-     *                                of the order. if the package ist not installed, we default to EUR
+     * @param null $dAmount
+     * @param string $sCurrency - you can pass the currency used as an optional parameter to the method. if the currency
+     *                          package is installed and you do not pass the parameter, the method will use the currency
+     *                          of the order. if the package ist not installed, we default to EUR
      *
      * @return string
      */
@@ -103,10 +96,10 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
             $sLanguage = strtoupper($oLanguage->fieldIso6391);
         }
 
-        $aParameter = array();
+        $aParameter = [];
         $aParameter['cmd'] = '_ext-enter';
         $aParameter['redirect_cmd'] = '_xclick';
-        $aParameter['business'] = $this->GetConfigParameter('business'); //$paypal_mail
+        $aParameter['business'] = $this->GetConfigParameter('business'); // $paypal_mail
 
         $aParameter['item_name'] = $oOrder->fieldOrdernumber;
         $aParameter['currency_code'] = $sCurrency;
@@ -146,7 +139,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
             }
             $aParameter['country'] = $sCountry;
         }
-        //$aParameter['forencoding'] = '&#261;'; //
+        // $aParameter['forencoding'] = '&#261;'; //
         $aParameter['charset'] = 'UTF-8';
 
         $sBaseURL = $this->GetConfigParameter('url');
@@ -174,7 +167,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
 
     /**
      * @param TdbShopOrder $oOrder
-     * @param array        $aURLParameter
+     * @param array $aURLParameter
      *
      * @return bool
      */
@@ -183,11 +176,11 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
         $logger = $this->getPaypalLogger();
 
         $sPayPalURL = $this->GetConfigParameter('url');
-        $sPayPalURL = str_replace(array('https://', 'http://'), '', $sPayPalURL);
+        $sPayPalURL = str_replace(['https://', 'http://'], '', $sPayPalURL);
         $sDomain = substr($sPayPalURL, 0, strpos($sPayPalURL, '/'));
         $sPath = substr($sPayPalURL, strpos($sPayPalURL, '/'));
         // send validate message back to paypal
-        $aVerifyData = TGlobal::instance()->GetUserData(null, array(), TCMSUserInput::FILTER_NONE);
+        $aVerifyData = TGlobal::instance()->GetUserData(null, [], TCMSUserInput::FILTER_NONE);
 
         $sData = 'cmd=_notify-validate&'.str_replace('&amp;', '&', TTools::GetArrayAsURL($aVerifyData));
         $sResponse = $this->sendRequest($sDomain, $sPath, $sData);
@@ -234,7 +227,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
         // save the data from paypal with the order
         // save IPN data to order
         foreach ($aURLParameter as $sParamName => $sParamKey) {
-            $aInfo = array('shop_order_id' => $oOrder->id, 'name' => 'IPN '.date('Y-m-d H:i:s').': '.$sParamName, 'value' => $sParamKey);
+            $aInfo = ['shop_order_id' => $oOrder->id, 'name' => 'IPN '.date('Y-m-d H:i:s').': '.$sParamName, 'value' => $sParamKey];
             $oPaymentInfo = TdbShopOrderPaymentMethodParameter::GetNewInstance($aInfo);
             $oPaymentInfo->AllowEditByAll(true);
             $oPaymentInfo->Save();
@@ -272,10 +265,10 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
                 [
                     'order_id' => $oOrder->id,
                     'order_number' => $oOrder->fieldOrdernumber,
-                    'url_parameters' => $aURLParameter
+                    'url_parameters' => $aURLParameter,
                 ]
             );
-            $aInfo = array('shop_order_id' => $oOrder->id, 'name' => 'IPN '.date('Y-m-d H:i:s'), 'value' => 'invalid currency: '.$sPaymentCurrency);
+            $aInfo = ['shop_order_id' => $oOrder->id, 'name' => 'IPN '.date('Y-m-d H:i:s'), 'value' => 'invalid currency: '.$sPaymentCurrency];
             $oPaymentInfo = TdbShopOrderPaymentMethodParameter::GetNewInstance($aInfo);
             $oPaymentInfo->AllowEditByAll(true);
             $oPaymentInfo->Save();
@@ -290,7 +283,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
 
         $bProcessed = true;
         // we need to store this as a diff var to prevent the check below from matching when a payment in a currency other then the orders currency comes in
-        $aInfo = array('shop_order_id' => $oOrder->id, 'name' => 'IPN '.date('Y-m-d H:i:s').': PaymentInOrderCurrency', 'value' => $dPaymentValue);
+        $aInfo = ['shop_order_id' => $oOrder->id, 'name' => 'IPN '.date('Y-m-d H:i:s').': PaymentInOrderCurrency', 'value' => $dPaymentValue];
         $oPaymentInfo = TdbShopOrderPaymentMethodParameter::GetNewInstance($aInfo);
         $oPaymentInfo->AllowEditByAll(true);
         $oPaymentInfo->Save();
@@ -308,7 +301,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
                         'order_number' => $oOrder->fieldOrdernumber,
                         'amount_required' => $oOrder->fieldValueTotal,
                         'amount_payed' => $dPaymentValue,
-                        'url_parameters' => $aURLParameter
+                        'url_parameters' => $aURLParameter,
                     ]
                 );
             }
@@ -330,13 +323,13 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
             }
         }
 
-        if (false == $bPaymentOk) {
+        if (false === $bPaymentOk) {
             $logger->error(
                 'PayPal IPN: payment invalid.',
                 [
                     'order_id' => $oOrder->id,
                     'order_number' => $oOrder->fieldOrdernumber,
-                    'url_parameters' => $aURLParameter
+                    'url_parameters' => $aURLParameter,
                 ]
             );
         } else {
@@ -369,7 +362,6 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
                 ->setPassword(null);
 
             return $oToHostHandler->executeRequest();
-
         } catch (TPkgCmsException_Log $e) {
             return '';
         }
@@ -381,8 +373,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
      * only payments in the orders currency are accepted - so you can assume the currency of the payment to be ok.
      *
      * @param TdbShopOrder $oOrder
-     * @param float        $dPaymentValue
-     * @param string       $sPaymentCurrency
+     * @param float $dPaymentValue
      *
      * @return void
      */
@@ -410,18 +401,18 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
     public function ExtractPayPalNVPResponse($nvpstr)
     {
         $intial = 0;
-        $nvpArray = array();
+        $nvpArray = [];
 
         while (strlen($nvpstr)) {
-            //postion of Key
+            // postion of Key
             $keypos = strpos($nvpstr, '=');
-            //position of value
+            // position of value
             $valuepos = strpos($nvpstr, '&') ? strpos($nvpstr, '&') : strlen($nvpstr);
 
-            /*getting the Key and Value values and storing in a Associative Array*/
+            /* getting the Key and Value values and storing in a Associative Array */
             $keyval = substr($nvpstr, $intial, $keypos);
             $valval = substr($nvpstr, $keypos + 1, $valuepos - $keypos - 1);
-            //decoding the respose
+            // decoding the respose
             $nvpArray[urldecode($keyval)] = urldecode($valval);
             $nvpstr = substr($nvpstr, $valuepos + 1, strlen($nvpstr));
         }
@@ -449,17 +440,11 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
         return parent::GetConfigParameter($sParameterName);
     }
 
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtilService()
+    private function getUrlUtilService(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
     }
 
-    /**
-     * @return LoggerInterface
-     */
     private function getPaypalLogger(): LoggerInterface
     {
         return ServiceLocator::get('monolog.logger.order');

@@ -35,10 +35,10 @@ class MTPkgShopArticlePreorder_ShopCentralHandlerCore extends MTPkgShopArticlePr
                 $oActiveArticle = TdbShop::GetActiveItem();
                 if ($oActiveArticle) {
                     $oActivePortal = $this->getPortalDomainService()->getActivePortal();
-                    $aData = array('shop_article_id' => $oActiveArticle->id, 'preorder_user_email' => $sUserEmail, 'cms_portal_id' => $oActivePortal->id);
+                    $aData = ['shop_article_id' => $oActiveArticle->id, 'preorder_user_email' => $sUserEmail, 'cms_portal_id' => $oActivePortal->id];
                     $oPreorder = TdbPkgShopArticlePreorder::GetNewInstance();
                     if ($oPreorder->LoadFromFields($aData)) {
-                        //do nothing, article already preordered by this email
+                        // do nothing, article already preordered by this email
                     } else {
                         $aData['preorder_date'] = date('Y-m-d H:i:s');
                         $oPreorder->LoadFromRow($aData);
@@ -47,7 +47,7 @@ class MTPkgShopArticlePreorder_ShopCentralHandlerCore extends MTPkgShopArticlePr
                         $oPreorder->AllowEditByAll(false);
                     }
                     $oMsgManager = TCMSMessageManager::GetInstance();
-                    $aMessageData = array('sArticleName' => $oActiveArticle->GetName(), 'sArticleDetailLink' => $oActiveArticle->GetDetailLink());
+                    $aMessageData = ['sArticleName' => $oActiveArticle->GetName(), 'sArticleDetailLink' => $oActiveArticle->getLink()];
                     $oMsgManager->AddMessage('PKG-SHOP-ARTICLE-PREORDER', 'SUCCESS-SIGNUP-PREORDER-ARTICLE', $aMessageData);
                 }
             } else {
@@ -64,6 +64,6 @@ class MTPkgShopArticlePreorder_ShopCentralHandlerCore extends MTPkgShopArticlePr
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

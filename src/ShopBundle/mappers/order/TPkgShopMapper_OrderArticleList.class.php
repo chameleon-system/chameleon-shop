@@ -86,7 +86,7 @@ class TPkgShopMapper_OrderArticleList extends AbstractViewMapper
         if ($oArticle) {
             $aArticle['sImageId'] = $this->getArticleImageId($oArticle, $oCacheTriggerManager, $bCachingEnabled);
             $aArticle = $this->GetVariantInfo($oArticle, $aArticle, $oCacheTriggerManager, $bCachingEnabled);
-            $aArticle['sArticleDetailURL'] = $oArticle->GetDetailLink($this->bAbsoluteArticleUrls);
+            $aArticle['sArticleDetailURL'] = $oArticle->getLink($this->bAbsoluteArticleUrls);
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oArticle->table, $oArticle->id);
             }

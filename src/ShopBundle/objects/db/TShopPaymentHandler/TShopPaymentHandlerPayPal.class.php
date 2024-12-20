@@ -10,28 +10,26 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
 {
-    const URL_IDENTIFIER = '_paypalapi_';
+    public const URL_IDENTIFIER = '_paypalapi_';
 
     /**
      * Version: this is the API version in the request.
      * It is a mandatory parameter for each API request.
      */
-    const PAYPAL_API_VERSION = '84.0';
+    public const PAYPAL_API_VERSION = '84.0';
 
-    /**
-     * @var string|null
-     */
-    protected $sPayPalToken = null;
+    protected ?string $sPayPalToken;
 
     /**
      * @var array<string, mixed>|null
      */
-    protected $aCheckoutDetails = null;
+    protected ?array $aCheckoutDetails;
 
     /**
      * {@inheritdoc}
@@ -65,7 +63,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     {
         $oGlobal = TGlobal::instance();
 
-        $sReturnURLBase = $this->getActivePageService()->getActivePage()->GetRealURLPlain(array(), true);
+        $sReturnURLBase = $this->getActivePageService()->getActivePage()->GetRealURLPlain([], true);
         if ('.html' == substr($sReturnURLBase, -5)) {
             $sReturnURLBase = substr($sReturnURLBase, 0, -5);
         }
@@ -77,11 +75,11 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
 
         $oBasket = TShopBasket::GetInstance();
 
-        $aParameter = array();
+        $aParameter = [];
         $aParameter['PAYMENTREQUEST_0_AMT'] = number_format($oBasket->dCostTotal, 2); // the total value to charge (use US-Format (1000.00)
         $aParameter['PAYMENTREQUEST_0_CURRENCYCODE'] = $this->GetCurrencyIdentifier();
         $aParameter['RETURNURL'] = $sSuccessURL; // go to the checkout complete page
-        $aParameter['CANCELURL'] = $sCancelURL; //urldecode(str_replace('&amp;','&',$oActivePage->GetRealURL(array('paypalreturn'=>'1'),$aExcludes,true))); // return to the cancel page
+        $aParameter['CANCELURL'] = $sCancelURL; // urldecode(str_replace('&amp;','&',$oActivePage->GetRealURL(array('paypalreturn'=>'1'),$aExcludes,true))); // return to the cancel page
 
         // styling
         $aParameter['HDRIMG'] = ''; // - : specify an image to appear at the top left of the payment page
@@ -89,7 +87,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
         $aParameter['HDRBACKCOLOR'] = ''; // - : set the background color for the background of the header of the payment page
         $aParameter['PAYFLOWCOLOR'] = ''; // - : set the background color for the payment page
 
-        //$aParameter['notify_url'] = $this->GetInstantPaymentNotificationListenerURL(); // instant payment notification url
+        // $aParameter['notify_url'] = $this->GetInstantPaymentNotificationListenerURL(); // instant payment notification url
 
         $logger = $this->getPaypalLogger();
 
@@ -109,10 +107,10 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
         }
         if (!$sSuccess) {
             $sResponse = self::GetPayPalErrorMessage($aResponse);
-            $logger->critical('PayPal payment could not be initiated.', array($sResponse));
+            $logger->critical('PayPal payment could not be initiated.', [$sResponse]);
 
             $oMsgManager = TCMSMessageManager::GetInstance();
-            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => 'Error Number: '.$aResponse['L_ERRORCODE0']));
+            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', ['errorMsg' => 'Error Number: '.$aResponse['L_ERRORCODE0']]);
         }
 
         return $sSuccess;
@@ -127,7 +125,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
      */
     protected static function GetPayPalErrorMessage($aMessageData)
     {
-        $aMsg = array();
+        $aMsg = [];
         if (array_key_exists('curl_error_no', $aMessageData)) {
             $aMsg[] = 'Error Number: '.$aMessageData['curl_error_no'];
             $aMsg[] = 'Error Message: '.$aMessageData['curl_error_msg'];
@@ -167,7 +165,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
             if (!empty($sToken)) { // ignore request without a token (paypal would sometimes generate 2 reqeusts via browser redirect - one with and one without payload. we need to ignore the one without)
                 $this->sPayPalToken = $sToken;
                 // now fetch the details
-                $this->aCheckoutDetails = $this->ExecutePayPalCall('GetExpressCheckoutDetails', array('TOKEN' => $this->sPayPalToken));
+                $this->aCheckoutDetails = $this->ExecutePayPalCall('GetExpressCheckoutDetails', ['TOKEN' => $this->sPayPalToken]);
             }
         }
 
@@ -177,8 +175,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     /**
      * executes payment for order - in this case, we commit the paypal payment.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -192,7 +189,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
         }
         $sCurrency = $this->GetCurrencyIdentifier($oCurrency);
         $request = $this->getCurrentRequest();
-        $aCommand = array(
+        $aCommand = [
             'TOKEN' => $this->sPayPalToken,
             'PAYERID' => $this->aCheckoutDetails['PAYERID'],
             'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale',
@@ -201,7 +198,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
             'IPADDRESS' => null === $request ? '' : $request->getClientIp(),
             'PAYMENTREQUEST_0_INVNUM' => $this->GetOrderNumber($oOrder),
             'PAYMENTREQUEST_0_CUSTOM' => $this->id.','.$oOrder->id,
-        );
+        ];
         $sIPNURL = $this->GetInstantPaymentNotificationListenerURL($oOrder);
         if (!empty($sIPNURL)) {
             $aCommand['PAYMENTREQUEST_0_NOTIFYURL'] = $sIPNURL;
@@ -231,14 +228,14 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
                 $itemIdList[$item->id] = $item->fieldOrderAmount;
             }
             $transactionData = $transactionManager->getTransactionDataFromOrder(
-                \TPkgShopPaymentTransactionData::TYPE_PAYMENT,
+                TPkgShopPaymentTransactionData::TYPE_PAYMENT,
                 $itemIdList
             );
             $transactionData->setTotalValue($oOrder->fieldValueTotal);
             $transactionData->setConfirmed(true);
             $transactionData->setConfirmedTimestamp(time());
             $transactionData->setContext(
-                new \TPkgShopPaymentTransactionContext(
+                new TPkgShopPaymentTransactionContext(
                     'auto created from execute payment via paypal payment handler'
                 )
             );
@@ -250,11 +247,11 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
         if (!$bPaymentOk) {
             // error!
             $oMsgManager = TCMSMessageManager::GetInstance();
-            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => self::GetPayPalErrorMessage($aAnswer)));
-            $logContext = array(
+            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', ['errorMsg' => self::GetPayPalErrorMessage($aAnswer)]);
+            $logContext = [
                 'Command' => $aCommand,
                 'PayPalAnswer' => $aAnswer,
-            );
+            ];
             $this->getPaypalLogger()->critical('PayPal payment could not be executed for order id '.$oOrder->id, $logContext);
         }
 
@@ -263,10 +260,6 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
 
     /**
      * Overwrite this if you need to add prefix to order number because you have more than one shop with equal order numbers.
-     *
-     * @param TdbShopOrder $oOrder
-     *
-     * @return mixed
      */
     protected function GetOrderNumber(TdbShopOrder $oOrder)
     {
@@ -282,7 +275,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
      * Function to perform the API call to PayPal using API signature.
      *
      * @param string $methodName - is name of API  method
-     * @param array  $nvp        - name value pairs - see PayPal documentation for details
+     * @param array $nvp - name value pairs - see PayPal documentation for details
      *
      * @return array - returns an associative array containing the response from the server
      */
@@ -301,14 +294,14 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
 
-        //NVPRequest for submitting to server
-        $parameters = array(
+        // NVPRequest for submitting to server
+        $parameters = [
             'METHOD' => $methodName,
             'VERSION' => self::PAYPAL_API_VERSION,
             'PWD' => $this->GetConfigParameter('apiPassword'),
             'USER' => $this->GetConfigParameter('apiUserName'),
             'SIGNATURE' => $this->GetConfigParameter('apiSignatur'),
-        );
+        ];
         foreach ($nvp as $sKey => $sVal) {
             if (!array_key_exists($sKey, $parameters)) {
                 $parameters[$sKey] = $sVal;
@@ -320,14 +313,14 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
         curl_setopt($ch, CURLOPT_POSTFIELDS, $nvpreq);
         $response = curl_exec($ch);
 
-        //converting NVPResponse to an associative array
+        // converting NVPResponse to an associative array
         $nvpResArray = $this->ExtractPayPalNVPResponse($response);
 
         if (curl_errno($ch)) {
-            $logContext = array(
+            $logContext = [
                 'url' => $apiEndpoint,
                 'params' => $parameters,
-            );
+            ];
             $this->getPaypalLogger()->critical('PayPal curl error: '.curl_error($ch).' ('.curl_errno($ch).')', $logContext);
         } else {
             curl_close($ch);
@@ -371,7 +364,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     protected function GetCurrencyIdentifier($oPkgShopCurrency = null)
     {
         $sCurrencyCode = strtoupper(parent::GetCurrencyIdentifier($oPkgShopCurrency));
-        $aAllowedCodes = array('AUD', 'CAD', 'CZK', 'DKK', 'EUR', 'HUF', 'JPY', 'NOK', 'NZD', 'PLN', 'GBP', 'SGD', 'SEK', 'CHF', 'USD');
+        $aAllowedCodes = ['AUD', 'CAD', 'CZK', 'DKK', 'EUR', 'HUF', 'JPY', 'NOK', 'NZD', 'PLN', 'GBP', 'SGD', 'SEK', 'CHF', 'USD'];
         if (!in_array($sCurrencyCode, $aAllowedCodes)) {
             $sCurrencyCode = '';
         }
@@ -379,42 +372,23 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
         return $sCurrencyCode;
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return Request|null
-     */
-    private function getCurrentRequest()
+    private function getCurrentRequest(): ?Request
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
-    }
-
-    /**
-     * @return IPkgCmsCoreLog
-     *
-     * @deprecated - since 6.3.0 - use getPaypalLogger() instead
-     */
-    protected function getLogger()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.logChannel.standard');
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
     private function getPaypalLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
+        return ServiceLocator::get('monolog.logger.order');
     }
 
-    /**
-     * @return ICmsCoreRedirect
-     */
-    private function getRedirect()
+    private function getRedirect(): ICmsCoreRedirect
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

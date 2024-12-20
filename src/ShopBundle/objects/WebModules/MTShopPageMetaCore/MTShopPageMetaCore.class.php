@@ -10,21 +10,19 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class MTShopPageMetaCore extends MTPageMetaCore
 {
     public function _GetTitle()
     {
         // alter the path if we have an active category or an active item
-        $sTitle = '';
-
         //default SEO pattern of the page
         $sTitle = $this->GetSeoPatternString();
 
-        if (strlen($sTitle) < 1) {
+        if ('' === $sTitle) {
             $oShop = TdbShop::GetInstance();
             $oActiveCategory = $oShop->GetActiveCategory();
             $oActiveItem = $oShop->GetActiveItem();
@@ -255,7 +253,7 @@ class MTShopPageMetaCore extends MTPageMetaCore
             if ($oCat) {
                 $iCat = $oCat->id;
             }
-            $sCanonical = $oShopItem->GetDetailLink(true, $iCat);
+            $sCanonical = $oShopItem->getLink(true, [TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $iCat]);
         } else {
             $category = $shopService->getActiveCategory();
             if ($category) {
@@ -274,28 +272,14 @@ class MTShopPageMetaCore extends MTPageMetaCore
         return $sCanonical;
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return InputFilterUtilInterface
-     */
-    private function getInputFilterUtil()
+    private function getInputFilterUtil(): InputFilterUtilInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
-    }
-
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private function getPortalDomainService()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     /**
@@ -303,6 +287,6 @@ class MTShopPageMetaCore extends MTPageMetaCore
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }

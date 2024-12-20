@@ -9,9 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
- * show the current basket.
-/**/
+ * shows the current basket.
+ **/
 class TShopStepBasketCore extends TdbShopOrderStep
 {
     /**
@@ -75,9 +78,7 @@ class TShopStepBasketCore extends TdbShopOrderStep
      */
     protected function ProcessStep()
     {
-        $bContinue = $this->UpdateBasket(true);
-
-        return $bContinue;
+        return $this->UpdateBasket(true);
     }
 
     /**
@@ -128,8 +129,7 @@ class TShopStepBasketCore extends TdbShopOrderStep
     {
         // we use the existing basket module to do all the work...
         $oShop = TdbShop::GetInstance();
-        $oController = TGlobal::GetController();
-        $oBasketModule = $oController->moduleLoader->GetPointerToModule($oShop->fieldBasketSpotName);
+        $oBasketModule = $this->getController()->getModuleLoader()->GetPointerToModule($oShop->fieldBasketSpotName);
         $bSuccess = $oBasketModule->UpdateBasketItems(null, false, true);
 
         // redirect to current page
@@ -138,5 +138,10 @@ class TShopStepBasketCore extends TdbShopOrderStep
         }
 
         return $bSuccess;
+    }
+
+    private function getController(): ChameleonControllerInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.chameleon_controller');
     }
 }

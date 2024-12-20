@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class TPkgShopMapper_ArticleListOrderBy extends AbstractViewMapper
 {
@@ -40,49 +41,46 @@ class TPkgShopMapper_ArticleListOrderBy extends AbstractViewMapper
         $sFieldName = $oVisitor->GetSourceObject('sFieldName');
 
         $aExcludeParams = TCMSSmartURLData::GetActive()->getSeoURLParameters();
-        $aExcludeParams[] = MTShopArticleCatalogCore::URL_ORDER_BY;
+        $aExcludeParams[] = 'sortid';
         $aExcludeParams[] = 'module_fnc';
         $aExcludeParams[] = 'listrequest';
         $aExcludeParams[] = 'listkey';
         $aExcludeParams[] = 'listpage';
         $aOrderByParameter = TGlobal::instance()->GetUserData(null, $aExcludeParams);
-        $aOrderByParameter['module_fnc'] = array('[{sModuleSpotName}]' => 'ChangeOrder');
+        $aOrderByParameter['module_fnc'] = ['[{sModuleSpotName}]' => 'ChangeOrder'];
 
-        $aData = array(
+        $aData = [
             'sName' => $sOrderByTitle,
             'sFormActionUrl' => '?',
             'sFormId' => '',
             'sSelectName' => $sFieldName,
             'sFormHiddenFields' => TTools::GetArrayAsFormInput($aOrderByParameter),
-            'aOptionList' => array(
-            ),
-        );
+            'aOptionList' => [
+            ],
+        ];
         $oActivePage = $this->getActivePageService()->getActivePage();
         if (null !== $oActivePage) {
             $aData['sFormActionUrl'] = $oActivePage->GetRealURLPlain();
         }
 
-        $aOptionList = array();
+        $aOptionList = [];
         while ($oOption = $oOrderByList->Next()) {
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oOption->table, $oOption->id);
             }
-            $aOptionList[] = array(
+            $aOptionList[] = [
                 'sValue' => $oOption->id,
                 'sName' => $oOption->fieldNamePublic,
                 'bSelected' => ($oOption->id == $sActiveOrderById),
-            );
+            ];
         }
         $aData['aOptionList'] = $aOptionList;
 
         $oVisitor->SetMappedValueFromArray($aData);
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

@@ -15,7 +15,6 @@ use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
  * ChangeShipToBillingState - pass a non empty value if you are only changing the state of ship to billing or not
  *                            (this will prevent the method from validating and executing the form.
  *
- *
  * the step can operate in three modes: a) register a new user, b) edit an existing user, c) shop as guest
  * which state is active can be checked via  TShopStepUserDataV2::GetUserMode().
  * you can change the state by calling TShopStepUserDataV2::SetUserMode($sMode)
@@ -25,43 +24,34 @@ use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
  *
  *
  * IMPORTANT: you should always access the class via "TShopStepUserDataV2" (the virtual class entry point)
- * IMPORTANT2: this is a replacement of TShopStepUserDataCore - it is recommended using this newer version
-/**/
+ **/
 class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
 {
     /**
      * holds the user data passed to the form. default. use the Get* and Set* methods to change/read contents from the array
      * do not access it directly!
-     *
-     * @var array
      */
-    protected $aUserData = array();
+    protected array $aUserData = [];
 
     /**
      * set to true if the parameter ChangeShipToBillingState is past with any none-empty value via get/post
      * use IsChangeShipToBillingStateRequest() to check if this is the case.
-     *
-     * @var bool
      */
-    private $bChangeShipToBillingStateRequest = false;
+    private bool $bChangeShipToBillingStateRequest = false;
 
     /**
      * set to true if there is any data send to the step. we need this to handle checkbox fields (they are not submitted
      * at all if they are not set. since it may be necessary to perform some action based on them we need to be able to tell if
      * there was a data request, or if the page was just loaded without data via URL
      * use IsUserDataSubmission() to access the property.
-     *
-     * @var bool
      */
-    private $bUserDataSubmission = false;
+    private bool $bUserDataSubmission = false;
 
     /**
      * if set to true, then the ProcessStep method will not be called.
      * use PreventProcessStepMethodFromExecuting() to access the property.
-     *
-     * @var bool
      */
-    private $bPreventProcessStepMethodFromExecuting = false;
+    private bool $bPreventProcessStepMethodFromExecuting = false;
 
     /**
      * define any methods of the class that may be called via get or post.
@@ -129,7 +119,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      */
     public static function SetUserMode($sMode)
     {
-        $aAllowedModes = array('register', 'user', 'guest');
+        $aAllowedModes = ['register', 'user', 'guest'];
         if (false == in_array($sMode, $aAllowedModes)) {
             trigger_error('invalid mode requested. please use one of '.implode(', ', $aAllowedModes), E_USER_ERROR);
         }
@@ -224,7 +214,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
             } else {
                 $oUser = self::getExtranetUserProvider()->getActiveUser();
                 $oShipping = $oUser->GetShippingAddress();
-                $aShipping = array();
+                $aShipping = [];
                 if ($oShipping) {
                     $aShipping = $oShipping->sqlData;
                 }
@@ -255,7 +245,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
             } else {
                 $oUser = self::getExtranetUserProvider()->getActiveUser();
                 $oBilling = $oUser->GetBillingAddress();
-                $aBilling = array();
+                $aBilling = [];
                 if ($oBilling) {
                     $aBilling = $oBilling->sqlData;
                 }
@@ -442,7 +432,8 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      * will be registered.
      *
      * @param array $aUserData
-     * @return bool|string - `false` if update did not succeed, `true` if it did, id of the record if it did and userMode has been set to `user`.
+     *
+     * @return bool|string - `false` if update did not succeed, `true` if it did, id of the record if it did and userMode has been set to `user`
      */
     protected function UpdateUser($aUserData)
     {
@@ -535,6 +526,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
 
     /**
      * @param string $mail
+     *
      * @return bool
      */
     protected function validateUserEMail($mail)
@@ -646,9 +638,9 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
                 // need to pick another billing address
                 $sAlternativeFor = (TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING == $this->AddressUsedAsPrimaryAddress()) ? (TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING) : (TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING);
                 $sNewAddressId = $this->GetAnotherAddressFromUser($sNewPrimaryAddress, $sAlternativeFor);
-                $aAdrData = array();
+                $aAdrData = [];
                 $oAdr = TdbDataExtranetUserAddress::GetNewInstance();
-                if ($oAdr->LoadFromFields(array('id' => $sNewAddressId, 'data_extranet_user_id' => $oUser->id))) {
+                if ($oAdr->LoadFromFields(['id' => $sNewAddressId, 'data_extranet_user_id' => $oUser->id])) {
                     $aAdrData = $oAdr->sqlData;
                 }
                 if (TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING == $this->AddressUsedAsPrimaryAddress()) {
@@ -657,7 +649,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
                     $this->SetBillingAddressData($aAdrData);
                 }
             }
-            //$this->ChangeSelectedAddress();
+            // $this->ChangeSelectedAddress();
         }
     }
 
@@ -709,6 +701,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      * @param string|null $sReturnThisParameterOnly - if set, then only that field of the address is returned. if that field is not found, we return false
      *
      * @return array|string|false
+     *
      * @psalm-return ($sReturnThisParameterOnly is string ? string|false : array|false)
      */
     protected function GetUserData($sReturnThisParameterOnly = null)
@@ -751,13 +744,13 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
             $aUserData['shop_id'] = $oShop->id;
 
             // add data from the primary address
-            $aPrimaryAddress = array();
+            $aPrimaryAddress = [];
             if (TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING == $this->AddressUsedAsPrimaryAddress()) {
                 $aPrimaryAddress = $this->GetShippingAddressData();
             } else {
                 $aPrimaryAddress = $this->GetBillingAddressData();
             }
-            $aNotAllowed = array('id', 'name', 'cmsident', 'password', 'session_key', 'login_timestamp', 'login_salt', 'shop_id', 'datecreated', 'tmpconfirmkey', 'confirmed', 'confirmedon', 'reg_email_send');
+            $aNotAllowed = ['id', 'name', 'cmsident', 'password', 'session_key', 'login_timestamp', 'login_salt', 'shop_id', 'datecreated', 'tmpconfirmkey', 'confirmed', 'confirmedon', 'reg_email_send'];
             foreach ($aPrimaryAddress as $sField => $sValue) {
                 if (!in_array($sField, $aNotAllowed)) {
                     $aUserData[$sField] = $sValue;
@@ -791,6 +784,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      * @param string|null $sReturnThisParameterOnly - if set, then only that field of the address is returned. if that field is not found, we return false
      *
      * @return array|string|false
+     *
      * @psalm-return ($sReturnThisParameterOnly is string ? string|false : array|false)
      */
     protected function GetShippingAddressData($sReturnThisParameterOnly = null)
@@ -830,6 +824,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      * @param string|null $sReturnThisParameterOnly - if set, then only that field of the address is returned. if that field is not found, we return false
      *
      * @return array|string|false
+     *
      * @psalm-return ($sReturnThisParameterOnly is string ? string|false : array|false)
      */
     protected function GetBillingAddressData($sReturnThisParameterOnly = null)
@@ -908,12 +903,12 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
                             if ($oNewBillingAdr) {
                                 $this->SetBillingAddressData($oNewBillingAdr->sqlData);
                             } else {
-                                $this->SetBillingAddressData(array('selectedAddressId' => 'new'));
+                                $this->SetBillingAddressData(['selectedAddressId' => 'new']);
                             }
                         }
                     }
                 } else {
-                    $this->SetBillingAddressData(array('selectedAddressId' => 'new'));
+                    $this->SetBillingAddressData(['selectedAddressId' => 'new']);
                 }
             }
 
@@ -931,12 +926,12 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
                             if ($oNewShippingAdr) {
                                 $this->SetShippingAddressData($oNewShippingAdr->sqlData);
                             } else {
-                                $this->SetShippingAddressData(array('selectedAddressId' => 'new'));
+                                $this->SetShippingAddressData(['selectedAddressId' => 'new']);
                             }
                         }
                     }
                 } else {
-                    $this->SetShippingAddressData(array('selectedAddressId' => 'new'));
+                    $this->SetShippingAddressData(['selectedAddressId' => 'new']);
                 }
             }
 
@@ -959,7 +954,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      */
     protected function GetUserDataCheckboxFields()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -970,7 +965,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      */
     protected function GetShippingAddressCheckboxFields()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -981,7 +976,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      */
     protected function GetBillingAddressCheckboxFields()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -989,6 +984,6 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      */
     protected static function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 }

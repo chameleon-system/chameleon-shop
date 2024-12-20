@@ -7,10 +7,10 @@
 <div class="TdbShopVariantDisplayHandler TShopVariantDisplayHandlerSelectboxes">
     <div class="vStandard">
         <?php
-        $sArticleDetailURL = $oArticle->GetDetailLink();
+        $sArticleDetailURL = $oArticle->getLink();
         if ($oArticle->IsVariant()) {
             $oParent = $oArticle->GetFieldVariantParent();
-            $sArticleDetailURL = $oParent->GetDetailLink();
+            $sArticleDetailURL = $oParent->getLink();
         }
         ?>
         <form id="sVariantSelect<?=TGlobal::OutHTML($oArticle->id); ?>" accept-charset="utf8" method="post"

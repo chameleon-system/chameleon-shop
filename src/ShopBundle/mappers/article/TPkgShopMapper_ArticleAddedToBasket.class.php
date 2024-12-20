@@ -38,7 +38,7 @@ class TPkgShopMapper_ArticleAddedToBasket extends AbstractPkgShopMapper_Article
         }
 
         $aArticle = array();
-        $aArticle['sArticleDetailURL'] = $oArticle->GetDetailLink();
+        $aArticle['sArticleDetailURL'] = $oArticle->getLink();
 
         //basket-rightbox
         $oImage = $oArticle->GetImagePreviewObject('basket');

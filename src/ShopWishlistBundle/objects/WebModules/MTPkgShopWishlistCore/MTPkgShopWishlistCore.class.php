@@ -9,18 +9,17 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class MTPkgShopWishlistCore extends TUserCustomModelBase
 {
     /**
-     * controlls the mode of the module.
+     * controls the mode of the module.
      */
-    const URL_MODE_PARAMETER_NAME = 'sMode';
-    const MSG_CONSUMER_NAME = 'MTPkgShopWishlistCore';
+    public const URL_MODE_PARAMETER_NAME = 'sMode';
+    public const MSG_CONSUMER_NAME = 'MTPkgShopWishlistCore';
 
-    /**
-     * @var string
-     */
-    protected $sActiveMode = '';
+    protected string $sActiveMode = '';
 
     /**
      * @var array|false
@@ -37,7 +36,7 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
         parent::Init();
         $this->aUserInput = $this->global->GetUserData(TdbPkgShopWishlist::URL_PARAMETER_FILTER_DATA);
         if ($this->global->userdataExists(self::URL_MODE_PARAMETER_NAME)) {
-            $aAllowedModes = array('', 'SendForm');
+            $aAllowedModes = ['', 'SendForm'];
             $sMode = $this->global->GetUserData(self::URL_MODE_PARAMETER_NAME);
             if (in_array($sMode, $aAllowedModes)) {
                 $this->sActiveMode = $sMode;
@@ -88,7 +87,7 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
     protected function ExecuteSendFormMode()
     {
         if (!is_array($this->aUserInput)) {
-            $this->aUserInput = array('to_name' => '', 'to_mail' => '', 'comment' => '');
+            $this->aUserInput = ['to_name' => '', 'to_mail' => '', 'comment' => ''];
         }
         $this->data['aUserInput'] = $this->aUserInput;
     }
@@ -97,7 +96,7 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
     {
         parent::DefineInterface();
         if (!is_array($this->methodCallAllowed)) {
-            $this->methodCallAllowed = array();
+            $this->methodCallAllowed = [];
         }
         $this->methodCallAllowed[] = 'UpdateWishlist';
         $this->methodCallAllowed[] = 'RemoveArticle';
@@ -114,7 +113,7 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
     protected function SendWishlist()
     {
         if (!is_array($this->aUserInput)) {
-            $this->aUserInput = array();
+            $this->aUserInput = [];
         }
         $oMsgManager = TCMSMessageManager::GetInstance();
         // validate input
@@ -126,11 +125,7 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
                     $oMsgManager->AddMessage(self::MSG_CONSUMER_NAME, 'WISHLIST-SEND-MAIL', $this->aUserInput);
                     $oShop = TdbShop::GetInstance();
                     $sURL = $oShop->GetLinkToSystemPage('wishlist');
-                    /**
-                     * @psalm-suppress UndefinedInterfaceMethod
-                     * @FIXME `HeaderURLRedirect` only exists on one of the implementations of the interface
-                     */
-                    $this->controller->HeaderURLRedirect($sURL);
+                    $this->getRedirectService()->redirect($sURL);
                     $oMsgManager->AddMessage(self::MSG_CONSUMER_NAME, 'WISHLIST-UNABLE-TO-SEND-MAIL', $this->aUserInput);
                 }
             }
@@ -145,7 +140,7 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
     protected function SendWishlistDataValid()
     {
         $bIsValid = true;
-        $aRequiredFields = array('to_name', 'to_mail', 'comment');
+        $aRequiredFields = ['to_name', 'to_mail', 'comment'];
         $oMsgManager = TCMSMessageManager::GetInstance();
         foreach ($aRequiredFields as $sFieldName) {
             if (!array_key_exists($sFieldName, $this->aUserInput)) {
@@ -195,13 +190,13 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
             $oWishlist->LoadFromRow($aTmp);
             $oWishlist->Save();
 
-            $aItems = array();
+            $aItems = [];
             if (array_key_exists('aItem', $aInput) && is_array($aInput['aItem'])) {
                 $aItems = $aInput['aItem'];
                 foreach ($aItems as $sWishlistItemId => $aItemData) {
                     $oWishlistItem = TdbPkgShopWishlistArticle::GetNewInstance();
                     /** @var $oWishlistItem TdbPkgShopWishlistArticle */
-                    if ($oWishlistItem->LoadFromFields(array('pkg_shop_wishlist_id' => $oWishlist->id, 'id' => $sWishlistItemId))) {
+                    if ($oWishlistItem->LoadFromFields(['pkg_shop_wishlist_id' => $oWishlist->id, 'id' => $sWishlistItemId])) {
                         $atmpData = $oWishlistItem->sqlData;
                         if (array_key_exists('comment', $aItemData)) {
                             $atmpData['comment'] = $aItemData['comment'];
@@ -218,5 +213,10 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
 
             $oMsgManager->AddMessage($oWishlist->GetMsgConsumerName(), 'WISHLIST-UPDATED-INFOS');
         }
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }
