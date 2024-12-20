@@ -10,21 +10,21 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
-use Symfony\Component\HttpFoundation\Request;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHandlerOgoneAliasGateway
 {
     /**
      * define message manager consumer name.
      */
-    const MSG_MANAGER_NAME = 'TShopPaymentHandlerOgoneDirectLinkWithAliasGatewayMSG';
+    public const MSG_MANAGER_NAME = 'TShopPaymentHandlerOgoneDirectLinkWithAliasGatewayMSG';
 
     /**
      * parsed xml response data.
      *
      * @var array
      */
-    protected $aXMLResponseData = array();
+    protected $aXMLResponseData = [];
 
     /**
      * return the path to the views for the payment handler relative to library/classes.
@@ -50,7 +50,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
         $aViewVariables = parent::GetAdditionalViewVariables($sViewName, $sViewType);
 
         if (!is_array($aViewVariables)) {
-            $aViewVariables = array();
+            $aViewVariables = [];
         }
         $aViewVariables['sPaymentRequestUrl'] = $this->GetPaymentURL();
 
@@ -71,15 +71,15 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
         if ($bContinue) {
             if (isset($this->aPaymentUserData['STATUS'])) {
                 if ('0' == $this->aPaymentUserData['STATUS']) {
-                    //we just created an alias, so create a transaction
+                    // we just created an alias, so create a transaction
                     $bContinue = $this->ExecuteExternalPaymentCall();
                 } elseif ('2' == $this->aPaymentUserData['STATUS']) {
                     $messageManager = TCMSMessageManager::GetInstance();
                     $messageManager->AddMessage(TShopPaymentHandlerOgoneAliasGateway::MSG_MANAGER_NAME, 'PAYMENT-HANDLER-OGONE-ALIAS-GATEWAY-ERROR-NOT-AUTHORIZED');
-                    //alias was updated, check if we have to delete old transaction and create new one (e.g. when currency or basket changed or 3D-Secure PIN was wrong)
-                    //or if we just want to update/renew our transaction
+                    // alias was updated, check if we have to delete old transaction and create new one (e.g. when currency or basket changed or 3D-Secure PIN was wrong)
+                    // or if we just want to update/renew our transaction
                     if (!$this->TransactionMatchesCurrentBasketState() || '0' != $this->aXMLResponseData['NCERROR']) {
-                        if ('0' == $this->aXMLResponseData['NCERROR']) { //only delete when no error occured (=transaction is not yet authorized)
+                        if ('0' == $this->aXMLResponseData['NCERROR']) { // only delete when no error occured (=transaction is not yet authorized)
                             $this->UpdateTransaction('DES');
                         }
                         $bContinue = $this->ExecuteExternalPaymentCall();
@@ -87,7 +87,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
                         $bContinue = $this->UpdateTransaction('REN');
                     }
                 } else {
-                    //status is '1'=error or we dont have a status, something's gone wrong...
+                    // status is '1'=error or we dont have a status, something's gone wrong...
                     $bContinue = false;
                 }
             } else {
@@ -96,17 +96,13 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
         }
 
         if ($bContinue && isset($this->aXMLResponseData['STATUS']) && 46 == $this->aXMLResponseData['STATUS']) {
-            //we need to make a 3D-Secure authentication
+            // we need to make a 3D-Secure authentication
             $s3DSecurePage = $this->GetConfigParameter('3dsecure-shop-system-page-name');
             if (!empty($s3DSecurePage)) {
                 $this->Set3DSecureFormToSession($this->aXMLResponseData['HTML_ANSWER']);
                 $oShop = TdbShop::GetInstance();
                 $sTargetURL = $oShop->GetLinkToSystemPage($s3DSecurePage, null, true);
-                /**
-                 * @psalm-suppress UndefinedInterfaceMethod
-                 * @FIXME `HeaderURLRedirect` only exists in a single implementatino of the interface
-                 */
-                TGlobal::GetController()->HeaderURLRedirect($sTargetURL);
+                $this->getRedirectService()->redirect($sTargetURL);
             }
         }
 
@@ -146,10 +142,10 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
     protected function UpdateTransaction($sMode = 'SAS')
     {
         $oBasket = TShopBasket::GetInstance();
-        $aParameter = array('PSPID' => $this->GetConfigParameter('user_id'), //required
-            'USERID' => $this->GetConfigParameter('api_user_id'), //required
-            'PSWD' => $this->GetConfigParameter('pswd'), //required
-            'AMOUNT' => round($oBasket->dCostTotal * 100), 'OPERATION' => $sMode, );
+        $aParameter = ['PSPID' => $this->GetConfigParameter('user_id'), // required
+            'USERID' => $this->GetConfigParameter('api_user_id'), // required
+            'PSWD' => $this->GetConfigParameter('pswd'), // required
+            'AMOUNT' => round($oBasket->dCostTotal * 100), 'OPERATION' => $sMode, ];
 
         $aParameter = array_merge($aParameter, $this->GetOrderOrPayIdAuthenticationArray());
 
@@ -193,10 +189,10 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      */
     protected function GetTransactionStatus($sPayId = null)
     {
-        $aParameter = array('PSPID' => $this->GetConfigParameter('user_id'), //required
-            'USERID' => $this->GetConfigParameter('api_user_id'), //required
-            'PSWD' => $this->GetConfigParameter('pswd'), //required
-        );
+        $aParameter = ['PSPID' => $this->GetConfigParameter('user_id'), // required
+            'USERID' => $this->GetConfigParameter('api_user_id'), // required
+            'PSWD' => $this->GetConfigParameter('pswd'), // required
+        ];
 
         if (null !== $sPayId) {
             $aParameter['PAYID'] = $sPayId;
@@ -219,8 +215,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
     /**
      * executes payment for order.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -229,7 +224,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
         $bPaymentOk = parent::ExecutePayment($oOrder);
 
         if ($bPaymentOk && $this->TransactionMatchesCurrentBasketState()) {
-            $bPaymentOk = $this->UpdateTransaction('SAS'); //capture
+            $bPaymentOk = $this->UpdateTransaction('SAS'); // capture
         } else {
             $bPaymentOk = false;
         }
@@ -241,8 +236,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      * The method is called from TShopBasket AFTER ExecutePayment was successfully executed.
      * The method is ALSO called, if the payment handler passed execution to an external service from within the ExecutePayment Method.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -302,9 +296,9 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
     {
         if (isset($_SESSION['ogone3DSecureForm'])) {
             return base64_decode($_SESSION['ogone3DSecureForm']);
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     /**
@@ -335,8 +329,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
     {
         if (isset($this->aXMLResponseData['STATUS'])) {
             switch ($this->aXMLResponseData['STATUS']) {
-                case 46: //for 3D Secure - (waiting for identification)
-
+                case 46: // for 3D Secure - (waiting for identification)
                 case 5:
                 case 9:
                 case 51:
@@ -372,7 +365,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      */
     public static function GetDirectLinkResponsePaymentUserDataFields()
     {
-        return array(self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'PAYID', self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'STATUS', self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'AMOUNT', self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'CURRENCY', self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'PM', self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'BRAND', self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'HTML_ANSWER');
+        return [self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'PAYID', self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'STATUS', self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'AMOUNT', self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'CURRENCY', self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'PM', self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'BRAND', self::GetDirectLinkResponsePaymentUserDataFieldPrefix().'HTML_ANSWER'];
     }
 
     /**
@@ -395,17 +388,16 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
         } else {
             $sOrderId = $oBasket->sBasketIdentifier;
         }
-        /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ServiceLocator::get('request_stack')->getCurrentRequest();
         $sUserIpAddress = $request->getClientIp();
-        $aParameter = array('PSPID' => $this->GetConfigParameter('user_id'), //required
-            'ORDERID' => $sOrderId, //required
-            'USERID' => $this->GetConfigParameter('api_user_id'), //required
-            'PSWD' => $this->GetConfigParameter('pswd'), //required
-            'AMOUNT' => round($oBasket->dCostTotal * 100), //required - order value multiplied by 100 because we won't have any thousand or decimal separators
-            'CURRENCY' => $sCurrency, //required
-            'ALIAS' => $this->aPaymentUserData['ALIAS'], 'OPERATION' => 'RES', //required - use RES for reservation or SAL for direct booking (sell) (overrides ogone backend account setting)
-            'REMOTE_ADDR' => $sUserIpAddress, 'RTIMEOUT' => 60, );
+        $aParameter = ['PSPID' => $this->GetConfigParameter('user_id'), // required
+            'ORDERID' => $sOrderId, // required
+            'USERID' => $this->GetConfigParameter('api_user_id'), // required
+            'PSWD' => $this->GetConfigParameter('pswd'), // required
+            'AMOUNT' => round($oBasket->dCostTotal * 100), // required - order value multiplied by 100 because we won't have any thousand or decimal separators
+            'CURRENCY' => $sCurrency, // required
+            'ALIAS' => $this->aPaymentUserData['ALIAS'], 'OPERATION' => 'RES', // required - use RES for reservation or SAL for direct booking (sell) (overrides ogone backend account setting)
+            'REMOTE_ADDR' => $sUserIpAddress, 'RTIMEOUT' => 60, ];
 
         $aParameter = array_merge($aParameter, $this->Get3DSecureParameter());
 
@@ -422,15 +414,15 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      */
     protected function Get3DSecureParameter()
     {
-        $aParameter = array();
-        if ('true' == $this->GetConfigParameter('3DS_ENABLED')) {
+        $aParameter = [];
+        if ('true' === $this->GetConfigParameter('3DS_ENABLED')) {
             $oActivePage = $this->getActivePageService()->getActivePage();
             $oGlobal = TGlobal::instance();
-            $aSuccessCall = array('module_fnc' => array($oGlobal->GetExecutingModulePointer()->sModuleSpotName => 'PostProcessExternalPaymentHandlerHook'));
+            $aSuccessCall = ['module_fnc' => [$oGlobal->GetExecutingModulePointer()->sModuleSpotName => 'PostProcessExternalPaymentHandlerHook']];
 
             $sSuccessURL = urldecode(str_replace('&amp;', '&', $oActivePage->GetRealURLPlain($aSuccessCall, true)));
 
-            $aParameter = array('FLAG3D' => 'Y', 'WIN3DS' => $this->GetConfigParameter('3DS_WIN3DS'), 'ACCEPTURL' => $sSuccessURL, 'DECLINEURL' => $this->GetErrorURL('confirm'), 'EXCEPTIONURL' => $this->GetErrorURL('confirm'), 'HTTP_ACCEPT' => 'Accept: '.$_SERVER['HTTP_ACCEPT'], 'HTTP_USER_AGENT' => 'User-Agent: '.$_SERVER['HTTP_USER_AGENT'], 'LANGUAGE' => 'de_DE');
+            $aParameter = ['FLAG3D' => 'Y', 'WIN3DS' => $this->GetConfigParameter('3DS_WIN3DS'), 'ACCEPTURL' => $sSuccessURL, 'DECLINEURL' => $this->GetErrorURL('confirm'), 'EXCEPTIONURL' => $this->GetErrorURL('confirm'), 'HTTP_ACCEPT' => 'Accept: '.$_SERVER['HTTP_ACCEPT'], 'HTTP_USER_AGENT' => 'User-Agent: '.$_SERVER['HTTP_USER_AGENT'], 'LANGUAGE' => 'de_DE'];
         }
 
         return $aParameter;
@@ -478,21 +470,23 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
      */
     protected function GetOrderOrPayIdAuthenticationArray()
     {
-        $aAuthArray = array();
+        $aAuthArray = [];
         if (isset($this->aXMLResponseData['PAYID']) && !empty($this->aXMLResponseData['PAYID'])) {
-            $aAuthArray = array('PAYID' => $this->aXMLResponseData['PAYID']);
+            $aAuthArray = ['PAYID' => $this->aXMLResponseData['PAYID']];
         } elseif (isset($this->aPaymentUserData['ORDERID']) && !empty($this->aPaymentUserData['ORDERID'])) {
-            $aAuthArray = array('ORDERID' => $this->aPaymentUserData['ORDERID']);
+            $aAuthArray = ['ORDERID' => $this->aPaymentUserData['ORDERID']];
         }
 
         return $aAuthArray;
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }
