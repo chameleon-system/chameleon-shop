@@ -25,7 +25,7 @@ class TShopBreadcrumbItemArticle extends TShopBreadcrumbItem
             $iCategoryId = $oActiveCategory->id;
         }
 
-        return $this->oItem->GetDetailLink(false, $iCategoryId);
+        return $this->oItem->getLink(false, null, [TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $iCategoryId]);
     }
 
     /**
