@@ -485,7 +485,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function GetReviewFormLink($bIncludePortalLink = false, $iCategoryId = null)
     {
-        return $this->GetDetailLink($bIncludePortalLink, $iCategoryId).'#review'.TGlobal::OutHTML($this->id);
+        return $this->getLink($bIncludePortalLink, null, [TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $iCategoryId]).'#review'.TGlobal::OutHTML($this->id);
     }
 
     /**
@@ -1013,7 +1013,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $oExportObject->aImages = $aImageData;
 
         // DeepLink
-        $oExportObject->fieldDeepLink = $this->GetDetailLink(true);
+        $oExportObject->fieldDeepLink = $this->getLink(true);
 
         // Author Lost
         $oContributorList = $this->GetContributorList(['author']);

@@ -25,15 +25,15 @@ class TPkgShop_CmsLanguage extends TPkgShop_CmsLanguageAutoParent
 
         // product page
         $oActiveProduct = TdbShop::GetActiveItem();
-        if (is_object($oActiveProduct)) {
+        if (null !== $oActiveProduct) {
             $oNewProduct = TdbShopArticle::GetNewInstance($oActiveProduct->id, $this->id);
             $oActiveProductCategory = TdbShop::GetActiveCategory();
 
             $sCatId = null;
-            if (is_object($oActiveProductCategory)) {
+            if (null !== $oActiveProductCategory) {
                 $sCatId = $oActiveProductCategory->id;
             }
-            $sTranslatesPageURL = $oNewProduct->GetDetailLink(true, $sCatId);
+            $sTranslatesPageURL = $oNewProduct->getLink(true, null, [TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $sCatId]);
         }
 
         // category page?
@@ -53,7 +53,7 @@ class TPkgShop_CmsLanguage extends TPkgShop_CmsLanguageAutoParent
             $sStepName = $oGlobal->GetUserData(MTShopOrderWizardCore::URL_PARAM_STEP_SYSTEM_NAME);
             if (!empty($sStepName)) {
                 $oActiveStep = TdbShopOrderStep::GetStep($sStepName);
-                $sTranslatesPageURL = $this->getOrderStepPageService()->getLinkToOrderStepPageAbsolute($oActiveStep, array(), null, $this);
+                $sTranslatesPageURL = $this->getOrderStepPageService()->getLinkToOrderStepPageAbsolute($oActiveStep, [], null, $this);
             }
         }
 
@@ -64,11 +64,8 @@ class TPkgShop_CmsLanguage extends TPkgShop_CmsLanguageAutoParent
         return $sTranslatesPageURL;
     }
 
-    /**
-     * @return OrderStepPageServiceInterface
-     */
-    private function getOrderStepPageService()
+    private function getOrderStepPageService(): OrderStepPageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.order_step_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.order_step_page_service');
     }
 }
