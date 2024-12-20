@@ -55,7 +55,7 @@ class TPkgShopMapper_ArticleBundleContent extends AbstractPkgShopMapper_Article
                 $aItem = array(
                     'sAmount' => $oLocal->FormatNumber($oBundleItem->fieldAmount, 0),
                     'sTitle' => $oBundleArticle->GetName(),
-                    'sLink' => $oBundleArticle->GetDetailLink(),
+                    'sLink' => $oBundleArticle->getLink(),
                     'sPrice' => $oLocal->FormatNumber($oBundleArticle->dPrice, 2),
                 );
                 $aBundleArticleList[] = $aItem;
