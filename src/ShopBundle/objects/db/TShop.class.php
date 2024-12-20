@@ -12,28 +12,28 @@
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use \ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
  * the shop config object. use GetInstance to fetch the current config.
-/**/
+ * /**/
 class TShop extends TShopAutoParent implements IPkgShopVatable
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShop';
-    const SESSION_ACTIVE_SEARCH_CACHE_ID = 'session-shop-active-search-cache-id';
-    const SESSION_AFFILIATE_CODE = 'mtshopbasketcoreaffiliatecode';
-    const SESSION_ACTIVE_VARIANT_ARRAY = 'aShopActiveVariantArray';
-    const CMS_COUNTER_ORDER = 'order';
-    const CMS_COUNTER_CUSTOMER = 'customer';
+    public const VIEW_PATH = 'pkgShop/views/db/TShop';
+    public const SESSION_ACTIVE_SEARCH_CACHE_ID = 'session-shop-active-search-cache-id';
+    public const SESSION_AFFILIATE_CODE = 'mtshopbasketcoreaffiliatecode';
+    public const SESSION_ACTIVE_VARIANT_ARRAY = 'aShopActiveVariantArray';
+    public const CMS_COUNTER_ORDER = 'order';
+    public const CMS_COUNTER_CUSTOMER = 'customer';
 
     /**
      * the active search object.
      *
      * @var TdbShopSearchCache
      */
-    protected $oActiveSearchCache = null;
+    protected $oActiveSearchCache;
 
     /**
      * set the affiliate partner code for the current session.
@@ -103,8 +103,6 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * store a copy of the active search object.
      *
-     * @param TdbShopSearchCache $oActiveSearchCache
-     *
      * @return void
      */
     public function SetActiveSearchCacheObject(TdbShopSearchCache $oActiveSearchCache)
@@ -148,7 +146,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
             $aCategoryList = null;
             $oCurrentCategory = self::getShopService()->getActiveCategory();
             if (!is_null($oCurrentCategory)) {
-                $aCategoryList = array();
+                $aCategoryList = [];
                 do {
                     $aCategoryList[$oCurrentCategory->id] = $oCurrentCategory;
                 } while ($oCurrentCategory = $oCurrentCategory->GetParent());
@@ -228,13 +226,13 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
         static $aFilter = 'x';
         if ('x' === $aFilter) {
             $oGlobal = TGlobal::instance();
-            $aFilter = $oGlobal->GetUserData(MTShopArticleCatalogCore::URL_FILTER);
+            $aFilter = $oGlobal->GetUserData('lf');
             if (!is_array($aFilter)) {
-                $aFilter = array();
+                $aFilter = [];
             }
             // now reduce filter list to valid filter fields
             $aValidFilterFields = TdbShop::GetValidFilterFields();
-            $aValidFilter = array();
+            $aValidFilter = [];
             foreach ($aValidFilterFields as $sField) {
                 if (array_key_exists($sField, $aFilter)) {
                     $aValidFilter[$sField] = $aFilter[$sField];
@@ -249,14 +247,14 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     /**
      * return an sql string for the current filter.
      *
-     * @return string
-     *
      * @param string $sExcludeKey
+     *
+     * @return string
      */
     public static function GetActiveFilterString($sExcludeKey = '')
     {
         $aFilter = TdbShop::GetActiveFilter();
-        $aTmp = array();
+        $aTmp = [];
         foreach ($aFilter as $filterKey => $filterVal) {
             if ($filterKey != $sExcludeKey) {
                 $aTmp[] = TdbShop::GetFilterSQLString($filterKey, $filterVal);
@@ -308,7 +306,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      */
     public static function GetValidFilterFields()
     {
-        return array(TdbShopManufacturer::FILTER_KEY_NAME, TdbShopCategory::FILTER_KEY_NAME);
+        return [TdbShopManufacturer::FILTER_KEY_NAME, TdbShopCategory::FILTER_KEY_NAME];
     }
 
     /**
@@ -324,55 +322,13 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     }
 
     /**
-     * Returns the active variant for given article.
-     * If no Variant is active return given article.
-     *
-     * @param TdbShopArticle $oArticle
-     *
-     * @return TdbShopArticle
-     *
-     * @deprecated since 6.2.13 - replaced by ProductVariantServiceInterface::getProductBasedOnSelection()
-     */
-    public static function GetActiveItemVariant($oArticle)
-    {
-        $aVariantTypeSelection = TdbShopVariantDisplayHandler::GetActiveVariantTypeSelection(true);
-        if (is_array($aVariantTypeSelection)) {
-            $oSet = $oArticle->GetFieldShopVariantSet();
-            if (null === $oSet) {
-                return $oArticle;
-            }
-            $oTypes = $oSet->GetFieldShopVariantTypeList();
-            if (count($aVariantTypeSelection) == $oTypes->Length()) {
-                if (!$oArticle->IsVariant()) {
-                    $oVariants = $oArticle->GetFieldShopArticleVariantsList($aVariantTypeSelection);
-                } else {
-                    $oParentArticle = $oArticle->GetFieldVariantParent();
-                    $oVariants = $oParentArticle->GetFieldShopArticleVariantsList($aVariantTypeSelection);
-                }
-
-                if (1 == $oVariants->Length()) {
-                    /** @var TdbShopArticle $oArticle */
-                    $oArticle = $oVariants->Current();
-                }
-            }
-        } elseif (!$oArticle->IsVariant()) {
-            $oVariants = $oArticle->GetFieldShopArticleVariantsList();
-            if (1 == $oVariants->Length()) {
-                /** @var TdbShopArticle $oArticle */
-                $oArticle = $oVariants->Current();
-            }
-        }
-
-        return $oArticle;
-    }
-
-    /**
      * returns the default country id. this is usually the id set in the shop table, but may also be fetched via
      * ip lookup.
      */
     public function GetDefaultCountryId(): ?string
     {
-        $countryId =  $this->fieldDataCountryId;
+        $countryId = $this->fieldDataCountryId;
+
         return (false === empty($countryId)) ? $countryId : null;
     }
 
@@ -405,7 +361,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      */
     public function GetNextFreeOrderNumber()
     {
-        $cmsCounter = new \esono\pkgCmsCounter\CmsCounter(\ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection'));
+        $cmsCounter = new esono\pkgCmsCounter\CmsCounter(ServiceLocator::get('database_connection'));
 
         return $cmsCounter->get($this, self::CMS_COUNTER_ORDER);
     }
@@ -418,31 +374,31 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      */
     public function GetNextFreeCustomerNumber()
     {
-        $cmsCounter = new \esono\pkgCmsCounter\CmsCounter(\ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection'));
+        $cmsCounter = new esono\pkgCmsCounter\CmsCounter(ServiceLocator::get('database_connection'));
 
         return $cmsCounter->get($this, self::CMS_COUNTER_CUSTOMER);
     }
 
-    /* LINK SECTION - this section holds methods that return links to shop specific pages         */
+    /* LINK SECTION - this section holds methods that return links to shop specific pages */
 
     /**
      * return link to checkout page - NOTE: all get/post parameters will be excluded. if you need some
      * make sure you remove them from the list.
      *
-     * @param bool $bJumpAsFarAsPossible             - set to true and the system will try to jump into the order process as far as possible (user step if not logged in, or shipping step if logged in)
+     * @param bool $bJumpAsFarAsPossible - set to true and the system will try to jump into the order process as far as possible (user step if not logged in, or shipping step if logged in)
      * @param bool $bTargetBasketPageWithoutRedirect
      *
      * @return string
      */
     public function GetBasketLink($bJumpAsFarAsPossible = false, $bTargetBasketPageWithoutRedirect = false)
     {
-        $aParams = array('module_fnc['.$this->GetBasketModuleSpotName().']' => 'JumpToBasketPage');
+        $aParams = ['module_fnc['.$this->GetBasketModuleSpotName().']' => 'JumpToBasketPage'];
         if ($bJumpAsFarAsPossible) {
             $aParams['bJumpAsFarAsPossible'] = '1';
         }
         $oGlobal = TGlobal::instance();
         $aUserData = $oGlobal->GetUserData();
-        $aExcludeParams = array();
+        $aExcludeParams = [];
         if (is_array($aUserData)) {
             $aExcludeParams = array_keys($aUserData);
         }
@@ -455,7 +411,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
             $checkoutSystemPage = $systemPageService->getSystemPage('checkout');
             $activePage = $activePageService->getActivePage();
             if (null === $checkoutSystemPage || $activePage->GetMainTreeId() !== $checkoutSystemPage->fieldCmsTreeId) {
-                $aParams['sourceurl'] = $activePageService->getLinkToActivePageRelative(array(), $aExcludeParams);
+                $aParams['sourceurl'] = $activePageService->getLinkToActivePageRelative([], $aExcludeParams);
             }
             try {
                 $sURL = $systemPageService->getLinkToSystemPageRelative('checkout', $aParams);
@@ -477,16 +433,16 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * @deprecated since 6.1.0 - use chameleon_system_core.system_page_service::getLinkToSystemPage*() instead
      *
      * @param string $sSystemPageName
-     * @param array  $aParameters      - optional parameters to add to the link
-     * @param bool   $bForcePortalLink - set to true if you want to include the portal domain (http://..../) part in the link.
-     * @param string $sAnchorName      - set name to jump to within the page
+     * @param array $aParameters - optional parameters to add to the link
+     * @param bool $bForcePortalLink - set to true if you want to include the portal domain (http://..../) part in the link.
+     * @param string $sAnchorName - set name to jump to within the page
      *
      * @return string
      */
     public function GetLinkToSystemPage($sSystemPageName, $aParameters = null, $bForcePortalLink = false, $sAnchorName = '')
     {
         if (null === $aParameters) {
-            $aParameters = array();
+            $aParameters = [];
         }
         try {
             if ($bForcePortalLink) {
@@ -512,15 +468,15 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * @deprecated since 6.1.0 - use chameleon_system_core.system_page_service::getLinkToSystemPageRelative() instead
      *
      * @param string $sSystemPageName
-     * @param array  $aParameters     - optional parameters to add to the link
-     * @param string $sAnchorName     - set name to jump to within the page
+     * @param array $aParameters - optional parameters to add to the link
+     * @param string $sAnchorName - set name to jump to within the page
      *
      * @return string
      */
     public function getLinkToSystemPageRelative($sSystemPageName, $aParameters = null, $sAnchorName = '')
     {
         if (null === $aParameters) {
-            $aParameters = array();
+            $aParameters = [];
         }
         $link = $this->getSystemPageService()->getLinkToSystemPageRelative($sSystemPageName, $aParameters);
         $sAnchorName = trim($sAnchorName);
@@ -538,7 +494,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      */
     public function GetSystemPageNames()
     {
-        $aSystemPages = array();
+        $aSystemPages = [];
         $oPortal = self::getPortalDomainService()->getActivePortal();
         if ($oPortal) {
             $aSystemPages = $oPortal->GetSystemPageNames();
@@ -554,14 +510,14 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      *
      * @deprecated
      *
-     * @param string $sLinkText        - the text to display in the link - no OutHTML will be called - so make sure to escape the incoming text
+     * @param string $sLinkText - the text to display in the link - no OutHTML will be called - so make sure to escape the incoming text
      * @param string $sSystemPageName
-     * @param array  $aParameters      - optional parameters to add to the link
-     * @param bool   $bForcePortalLink - set to true if you want to include the portal domain (http://..../) part in the link.
-     * @param int    $iWidth           - The popup's width in pixels
-     * @param int    $iHeight          - The popup's height in pixels
-     * @param string $sCSSClass        - additional css class to add to the link
-     * @param string $sAnchorName      - set name to jump to within the page*
+     * @param array $aParameters - optional parameters to add to the link
+     * @param bool $bForcePortalLink - set to true if you want to include the portal domain (http://..../) part in the link.
+     * @param int $iWidth - The popup's width in pixels
+     * @param int $iHeight - The popup's height in pixels
+     * @param string $sCSSClass - additional css class to add to the link
+     * @param string $sAnchorName - set name to jump to within the page*
      *
      * @return string
      */
@@ -605,14 +561,14 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     public function GetShopInfo($sShopInfoName)
     {
         $oInfo = TdbShopSystemInfo::GetNewInstance();
-        if (!$oInfo->LoadFromFields(array('shop_id' => $this->id, 'name_internal' => $sShopInfoName))) {
+        if (!$oInfo->LoadFromFields(['shop_id' => $this->id, 'name_internal' => $sShopInfoName])) {
             $oInfo = null;
         }
 
         return $oInfo;
     }
 
-    /* RENDER SECTION - this section holds methods that render shop sepcific information          */
+    /* RENDER SECTION - this section holds methods that render shop sepcific information */
 
     /**
      * render the shipping infos.
@@ -623,7 +579,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      *
      * @return string
      */
-    public function RenderShippingInfo($sViewName, $sViewType, $aCallTimeVars = array())
+    public function RenderShippingInfo($sViewName, $sViewType, $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oShop', $this);
@@ -653,23 +609,23 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /**
      * return ajax url to a function in the central shop handler.
      *
      * @param string $sMethod
-     * @param array  $aParameter
+     * @param array $aParameter
      *
      * @return string
      */
-    public function GetCentralShopHandlerAjaxURL($sMethod, $aParameter = array())
+    public function GetCentralShopHandlerAjaxURL($sMethod, $aParameter = [])
     {
         $oGlobal = TGlobal::instance();
 
         $aParameter[MTShopCentralHandler::URL_CALLING_SPOT_NAME] = $oGlobal->GetExecutingModulePointer()->sModuleSpotName;
-        $aRealParams = array('module_fnc' => array($this->fieldShopCentralHandlerSpotName => 'ExecuteAjaxCall'), '_fnc' => $sMethod, MTShopCentralHandler::URL_DATA => $aParameter);
+        $aRealParams = ['module_fnc' => [$this->fieldShopCentralHandlerSpotName => 'ExecuteAjaxCall'], '_fnc' => $sMethod, MTShopCentralHandler::URL_DATA => $aParameter];
         $oActivePage = self::getActivePageService()->getActivePage();
 
         return $oActivePage->GetRealURLPlain($aRealParams);
@@ -681,6 +637,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * @return TdbPkgShopPrimaryNaviList
      *
      * @psalm-suppress UndefinedClass
+     *
      * @FIXME References `TdbShopPrimaryNaviList` where `TdbPkgShopPrimaryNaviList` is probably meant
      */
     public function GetFieldShopPrimaryNaviList()
@@ -708,10 +665,10 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     public static function RegisterActiveVariantForSpot($sSpotName, $sParentId, $sShopVariantArticleId)
     {
         if (!array_key_exists(TdbShop::SESSION_ACTIVE_VARIANT_ARRAY, $_SESSION)) {
-            $_SESSION[TdbShop::SESSION_ACTIVE_VARIANT_ARRAY] = array();
+            $_SESSION[TdbShop::SESSION_ACTIVE_VARIANT_ARRAY] = [];
         }
         if (!array_key_exists($sSpotName, $_SESSION[TdbShop::SESSION_ACTIVE_VARIANT_ARRAY])) {
-            $_SESSION[TdbShop::SESSION_ACTIVE_VARIANT_ARRAY][$sSpotName] = array();
+            $_SESSION[TdbShop::SESSION_ACTIVE_VARIANT_ARRAY][$sSpotName] = [];
         }
         $_SESSION[TdbShop::SESSION_ACTIVE_VARIANT_ARRAY][$sSpotName][$sParentId] = $sShopVariantArticleId;
     }
@@ -778,7 +735,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      */
     public function CacheGetTriggerList()
     {
-        return array(array('table' => $this->table, 'id' => $this->id));
+        return [['table' => $this->table, 'id' => $this->id]];
     }
 
     /**
@@ -806,7 +763,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
                 $iPortalId = $portal->id;
             }
         }
-        $aKey = array('class' => 'TdbShop', 'ident' => 'objectInstance', 'portalid' => $iPortalId);
+        $aKey = ['class' => 'TdbShop', 'ident' => 'objectInstance', 'portalid' => $iPortalId];
 
         return ServiceLocator::get('chameleon_system_core.cache')->GetKey($aKey);
     }
