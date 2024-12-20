@@ -5,3 +5,7 @@ UPGRADE FROM 7.1 to 8.0
 
 - `MTPkgExternalTracker_MTShopArticleCatalogCore` removed
 - `TCMSWizardStepShopTellAFriend` removed
+- `TShop::GetActiveItemVariant` removed
+- `TShopVariantDisplayHandler::GetActiveVariantTypeSelection` removed
+- `TShopVariantDisplayHandler::GetArticleMatchingCurrentSelection` removed
+- `TShopStepUserDataCore` removed
