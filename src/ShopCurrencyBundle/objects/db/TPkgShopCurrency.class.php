@@ -245,7 +245,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
      */
     public static function ConvertToActiveCurrency($dValue)
     {
-        $oActiveCurrency = TdbPkgShopCurrency::GetActiveInstance();
+        $oActiveCurrency = ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
         if ($oActiveCurrency) {
             $dValue = round($oActiveCurrency->Convert($dValue), 2);
         }

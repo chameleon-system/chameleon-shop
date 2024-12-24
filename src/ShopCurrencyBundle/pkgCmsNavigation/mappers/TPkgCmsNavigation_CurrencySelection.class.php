@@ -64,7 +64,7 @@ class TPkgCmsNavigation_CurrencySelection extends AbstractViewMapper
         );
 
         $aTree = $oVisitor->GetSourceObject('aTree');
-        $oActiveCurrency = TdbPkgShopCurrency::GetActiveInstance();
+        $oActiveCurrency = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
         if ($oActiveCurrency && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oActiveCurrency->table, $oActiveCurrency->id);
         }

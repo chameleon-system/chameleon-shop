@@ -5,7 +5,7 @@ if(!TGlobal::IsCMSMode()) {
         $currencyTypeFieldNameSql = '<?= $sFieldDatabaseName; ?>__currencyType';
         $originalCurrencyFieldNameSql = '<?= $sFieldDatabaseName; ?>__original';
 
-        $oActiveCurrency = TdbPkgShopCurrency::GetActiveInstance();
+        $oActiveCurrency = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
         if(false !== $oActiveCurrency) {
             $currencyTypeOfFieldChanged = false === isset($this->sqlData[$currencyTypeFieldNameSql]);
             $currencyTypeOfFieldChanged = $currencyTypeOfFieldChanged || $this->sqlData[$currencyTypeFieldNameSql] !== $oActiveCurrency->id;

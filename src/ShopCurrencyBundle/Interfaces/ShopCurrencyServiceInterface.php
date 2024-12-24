@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\ShopCurrencyBundle\Interfaces;
 
-use TdbPkgShopCurrency;
-
 interface ShopCurrencyServiceInterface
 {
     /**
@@ -37,10 +35,7 @@ interface ShopCurrencyServiceInterface
      */
     public function reset();
 
-    /**
-     * @return TdbPkgShopCurrency|false
-     */
-    public function getObject();
+    public function getObject(): ?\TdbPkgShopCurrency;
 
     /**
      * @param bool $bUseDefaultIfNotDefinedForUser

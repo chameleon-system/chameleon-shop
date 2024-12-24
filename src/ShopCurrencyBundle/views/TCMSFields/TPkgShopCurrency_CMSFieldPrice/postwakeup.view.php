@@ -4,7 +4,7 @@ if (isset($this->sqlData['<?= $sFieldDatabaseName; ?>'])) {
         $this->sqlData['<?= $sFieldDatabaseName; ?>'] = $this-><?= $sFieldName; ?>Original;
     }
     $this-><?= $sFieldName; ?> = $this->sqlData['<?= $sFieldDatabaseName; ?>'];
-    $oActiveCurrency = TdbPkgShopCurrency::GetActiveInstance();
+    $oActiveCurrency = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
     if ($oActiveCurrency) {
         $this-><?= $sFieldName; ?>Formated = $oActiveCurrency->GetFormattedCurrency($this->sqlData['<?= $sFieldDatabaseName; ?>']);
     }

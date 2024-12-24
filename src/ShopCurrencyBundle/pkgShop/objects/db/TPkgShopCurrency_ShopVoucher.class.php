@@ -33,7 +33,7 @@ class TPkgShopCurrency_ShopVoucher extends TPkgShopCurrency_ShopVoucherAutoParen
     {
         // value used is converted to the base currency - euro
         $oCurrency = TdbPkgShopCurrency::GetBaseCurrency();
-        $oActive = TdbPkgShopCurrency::GetActiveInstance();
+        $oActive = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
         $aData['value_used_in_order_currency'] = $aData['value_used'];
         if (false !== $oCurrency) {
             $aData['pkg_shop_currency_id'] = $oCurrency->id;
@@ -55,7 +55,7 @@ class TPkgShopCurrency_ShopVoucher extends TPkgShopCurrency_ShopVoucherAutoParen
         $dValue = $oVoucherSeries->fieldValue;
         if ('absolut' == $oVoucherSeries->fieldValueType) {
             $oCurrency = TdbPkgShopCurrency::GetBaseCurrency();
-            $oActive = TdbPkgShopCurrency::GetActiveInstance();
+            $oActive = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
             if ($oCurrency && $oActive && $oActive->id != $oCurrency->id) {
                 $dValue = round($oCurrency->Convert($dValue, $oActive), 2);
             }

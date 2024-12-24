@@ -18,7 +18,7 @@ class MTPkgShopCurrencyChangeCurrencyCore extends TUserCustomModelBase
     {
         parent::Execute();
 
-        $this->data['oActiveCurrency'] = TdbPkgShopCurrency::GetActiveInstance();
+        $this->data['oActiveCurrency'] = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
         $this->data['oCurrencyList'] = TdbPkgShopCurrencyList::GetList();
 
         return $this->data;

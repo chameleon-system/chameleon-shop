@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TPkgShopCurrency_ShopShippingGroup extends TPkgShopCurrency_ShopShippingGroupAutoParent
 {
     /**
@@ -21,6 +23,6 @@ class TPkgShopCurrency_ShopShippingGroup extends TPkgShopCurrency_ShopShippingGr
     {
         parent::GetCurrencySymbol();
 
-        return TdbPkgShopCurrency::GetActiveInstance()->GetCurrencyDisplaySymbol();
+        return ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject()?->GetCurrencyDisplaySymbol();
     }
 }
