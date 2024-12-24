@@ -23,19 +23,10 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementPageSize;
 use ChameleonSystem\ShopBundle\objects\ArticleList\StateRequestExtractor\Interfaces\StateRequestExtractorCollectionInterface;
 use esono\pkgCmsCache\CacheInterface;
-use IMapperCacheTriggerRestricted;
-use IMapperVisitorRestricted;
-use MTPkgViewRendererAbstractModuleMapper;
-use MTShopArticleListResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use TdbCmsLocals;
-use TdbPkgShopCurrency;
-use TdbShop;
-use TTools;
-use ViewRenderer;
 
-class Module extends MTPkgViewRendererAbstractModuleMapper
+class Module extends \MTPkgViewRendererAbstractModuleMapper
 {
     /**
      * @var StateFactoryInterface
@@ -74,7 +65,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
      */
     private $activePageService;
     /**
-     * @var ViewRenderer
+     * @var \ViewRenderer
      */
     private $viewRenderer;
     /**
@@ -82,7 +73,8 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
      */
     private $cache;
     /**
-     * Mapping of viewname => twig template path
+     * Mapping of viewname => twig template path.
+     *
      * @var array<string, string>
      */
     private $viewToListViewMapping;
@@ -108,19 +100,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     private $moduleListResult;
 
     /**
-     * @param array<string, string>                    $viewToListViewMapping - Mapping of template name to twig template path
-     * @param RequestStack                             $requestStack
-     * @param StateFactoryInterface                    $stateFactory
-     * @param DbAdapterInterface                       $dbAdapter
-     * @param ResultFactoryInterface                   $resultFactory
-     * @param StateRequestExtractorCollectionInterface $requestExtractorCollection
-     * @param ActivePageServiceInterface               $activePageService
-     * @param ViewRenderer                             $viewRenderer
-     * @param CacheInterface                           $cache
-     * @param StateElementPageSize                     $stateElementPageSize
-     * @param array                                    $validPageSizes
-     * @param UrlUtil                                  $urlUtil
-     * @param MapperLoaderInterface                    $mapperLoader
+     * @param array<string, string> $viewToListViewMapping - Mapping of template name to twig template path
      */
     public function __construct(
         array $viewToListViewMapping,
@@ -130,7 +110,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
         ResultFactoryInterface $resultFactory,
         StateRequestExtractorCollectionInterface $requestExtractorCollection,
         ActivePageServiceInterface $activePageService,
-        ViewRenderer $viewRenderer,
+        \ViewRenderer $viewRenderer,
         CacheInterface $cache,
         StateElementPageSize $stateElementPageSize,
         array $validPageSizes,
@@ -156,6 +136,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @return Request
+     *
      * @psalm-suppress NullableReturnStatement, InvalidNullableReturnType - We know that a request exists here
      */
     protected function getCurrentRequest()
@@ -204,11 +185,6 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
         $this->state = $this->stateFactory->createState($stateData);
     }
 
-    /**
-     * @param array $stateData
-     *
-     * @return array
-     */
     private function makePageSizeValid(array $stateData): array
     {
         $pageSizeKey = $this->stateElementPageSize->getKey();
@@ -237,9 +213,9 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
      * {@inheritdoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         $enrichedState = $this->enrichStateWithDefaultsFromConfiguration();
         $results = $this->moduleListResult;
@@ -253,12 +229,12 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('activePageNumber', $results->getPage());
         $oVisitor->SetMappedValue('listPagerUrl', $this->getListPageUrl());
         $listPageUrl = $this->getListPageUrl();
-        $listPageUrlParams = array(
-            'module_fnc' => array(
+        $listPageUrlParams = [
+            'module_fnc' => [
                 $this->sModuleSpotName => 'ExecuteAjaxCall',
-            ),
+            ],
             '_fnc' => 'getRenderedList',
-        );
+        ];
         $oVisitor->SetMappedValue('listPagerUrlAjax', $this->urlUtil->getArrayAsUrl($listPageUrlParams, $listPageUrl.'&', '&'));
         $oVisitor->SetMappedValue('numberOfPages', $results->getNumberOfPages());
         $oVisitor->SetMappedValue('state', $enrichedState->getStateArrayWithoutQueryParameter());
@@ -304,7 +280,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
      */
     protected function getListPageUrl()
     {
-        $stateData = $this->state->getStateAsUrlQueryArray($this->sModuleSpotName, array(StateInterface::PAGE));
+        $stateData = $this->state->getStateAsUrlQueryArray($this->sModuleSpotName, [StateInterface::PAGE]);
         $stateData[$this->sModuleSpotName][StateInterface::PAGE] = '_pageNumber_';
 
         return $this->getActivePageUrl($stateData);
@@ -315,9 +291,9 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
      */
     protected function getListPageSizeUrl()
     {
-        $stateData = $this->state->getStateAsUrlQueryArray($this->sModuleSpotName, array(StateInterface::PAGE_SIZE, StateInterface::PAGE));
+        $stateData = $this->state->getStateAsUrlQueryArray($this->sModuleSpotName, [StateInterface::PAGE_SIZE, StateInterface::PAGE]);
         $stateData[$this->sModuleSpotName][StateInterface::PAGE_SIZE] = '_pageSize_';
-        $stateData[$this->sModuleSpotName][StateInterface::PAGE] = 0; //we want to go to first page when page size is changed
+        $stateData[$this->sModuleSpotName][StateInterface::PAGE] = 0; // we want to go to first page when page size is changed
 
         return $this->getActivePageUrl($stateData);
     }
@@ -380,8 +356,6 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @param Request $request
-     *
      * @return array
      */
     protected function getStateDataFromRequest(Request $request)
@@ -400,21 +374,19 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     {
         $stateData = $this->state->getStateAsUrlQueryArray(
             $this->sModuleSpotName,
-            array(StateInterface::SORT, StateInterface::PAGE)
+            [StateInterface::SORT, StateInterface::PAGE]
         );
         if (0 === count($stateData)) {
             return '';
         }
 
-        return TTools::GetArrayAsFormInput($stateData);
+        return \TTools::GetArrayAsFormInput($stateData);
     }
 
     /**
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     *
      * @return void
      */
-    protected function configureCacheTrigger(IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    protected function configureCacheTrigger(\IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
         $filterTrigger = $this->resultFactory->_GetCacheTableInfos($this->configuration);
 
@@ -439,24 +411,25 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @return TdbShop
+     * @return \TdbShop
      */
     private function getActiveShop()
     {
-        return TdbShop::GetInstance();
+        return \TdbShop::GetInstance();
     }
 
     /**
-     * @return TdbCmsLocals
+     * @return \TdbCmsLocals
+     *
      * @psalm-suppress FalsableReturnStatement - `GetActive` only returns `false` during the bootstrapping phase, which is not the case here
      */
     private function getActiveLocal()
     {
-        return TdbCmsLocals::GetActive();
+        return \TdbCmsLocals::GetActive();
     }
 
     /**
-     * @return TdbPkgShopCurrency|false
+     * @return \TdbPkgShopCurrency|false
      */
     private function getActiveCurrency()
     {
@@ -496,16 +469,16 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     {
         $configDbObject = $this->configuration->getDatabaseObject();
         $icon = $configDbObject->GetImage(0, 'icon');
-        $data = array(
+        $data = [
             'listTitle' => $configDbObject->fieldName,
             'description_start' => $configDbObject->GetTextField('description_start'),
             'description_end' => $configDbObject->GetTextField('description_end'),
-        );
+        ];
         if ($icon) {
-            $data['listIcon'] = array(
+            $data['listIcon'] = [
                 'id' => $icon->id,
                 'description' => $icon->aData['description'],
-            );
+            ];
         }
 
         return $data;
@@ -533,7 +506,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
      */
     protected function getItemMapperBaseData()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -548,14 +521,14 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
     /**
      * returns a fully rendered list - used to page via ajax.
      *
-     * @return MTShopArticleListResponse
+     * @return \MTShopArticleListResponse
      */
     protected function getRenderedList()
     {
         $enrichedState = $this->enrichStateWithDefaultsFromConfiguration();
         $results = $this->getResults($enrichedState);
 
-        $oResponse = new MTShopArticleListResponse();
+        $oResponse = new \MTShopArticleListResponse();
         $oResponse->bHasNextPage = ($results->getNumberOfPages() > $results->getPage() + 1);
         $oResponse->bHasPreviousPage = ($results->getPage() > 0);
         $oResponse->iListKey = $this->sModuleSpotName;
@@ -571,13 +544,11 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
      * renders product list using the view provided. this should really be in another controller,
      * unfortunately Chameleon currently does not support calling other controllers the way symfony does.
      *
-     * @param string              $viewName
-     * @param ResultDataInterface $results
-     * @param StateInterface      $enrichedState
+     * @param string $viewName
      *
      * @return string
      */
-    protected function renderProducts($viewName, ResultDataInterface $results = null, StateInterface $enrichedState = null)
+    protected function renderProducts($viewName, ?ResultDataInterface $results = null, ?StateInterface $enrichedState = null)
     {
         // need to cache this
         $cacheKey = null;
@@ -601,7 +572,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
 
         $items = $results->asArray();
 
-        $inputData = array(
+        $inputData = [
             'activePageNumber' => $results->getPage(),
             'itemMapperBaseData' => $this->getItemMapperBaseData(),
             'items' => $items,
@@ -621,7 +592,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
             'local' => $this->getActiveLocal(),
             'currency' => $this->getActiveCurrency(),
             'shop' => $this->getActiveShop(),
-        );
+        ];
 
         $inputData = array_merge($inputData, $this->getListInformationFromConfiguration());
 
@@ -639,7 +610,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @param string $viewName
-     * @param array  $inputData
+     * @param array $inputData
      *
      * @return string
      */
@@ -649,7 +620,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
         $moduleConfig = $this->getModuleObject($module, 'classname');
 
         $chainConfig = $moduleConfig->getMapperChains();
-        $mappers = array();
+        $mappers = [];
         if (isset($chainConfig[$this->aModuleConfig['view']])) {
             foreach ($chainConfig[$this->aModuleConfig['view']] as $mapper) {
                 $mappers[] = $this->mapperLoader->getMapper($mapper);

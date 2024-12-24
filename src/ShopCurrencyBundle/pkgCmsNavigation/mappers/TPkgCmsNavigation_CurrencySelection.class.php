@@ -11,7 +11,7 @@
 
 /**
  * add currency selection menu.
-/**/
+ * /**/
 class TPkgCmsNavigation_CurrencySelection extends AbstractViewMapper
 {
     /**
@@ -23,12 +23,10 @@ class TPkgCmsNavigation_CurrencySelection extends AbstractViewMapper
      * $oRequirements->NeedsSourceObject("foo",'stdClass','default-value');
      * $oRequirements->NeedsSourceObject("bar");
      * $oRequirements->NeedsMappedValue("baz");
-     *
-     * @param IMapperRequirementsRestricted $oRequirements
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
-        $oRequirements->NeedsSourceObject('aTree', 'array', array());
+        $oRequirements->NeedsSourceObject('aTree', 'array', []);
     }
 
     /**
@@ -46,11 +44,7 @@ class TPkgCmsNavigation_CurrencySelection extends AbstractViewMapper
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     *
-     * @return
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
@@ -58,13 +52,13 @@ class TPkgCmsNavigation_CurrencySelection extends AbstractViewMapper
         if ($oCurrencyList->Length() < 2) {
             return;
         }
-        $aChangeCurrencyParameter = array(
-            'module_fnc' => array('pkgCurrency' => 'ChangeCurrency'),
+        $aChangeCurrencyParameter = [
+            'module_fnc' => ['pkgCurrency' => 'ChangeCurrency'],
             'sPkgShopCurrencyId' => '',
-        );
+        ];
 
         $aTree = $oVisitor->GetSourceObject('aTree');
-        $oActiveCurrency = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
+        $oActiveCurrency = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
         if ($oActiveCurrency && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oActiveCurrency->table, $oActiveCurrency->id);
         }
@@ -75,7 +69,7 @@ class TPkgCmsNavigation_CurrencySelection extends AbstractViewMapper
         $oNode->sSeoTitle = $oActiveCurrency->fieldSymbol.'/'.$oActiveCurrency->fieldName;
         $oNode->sRel = 'nofollow';
 
-        $aChildren = array();
+        $aChildren = [];
         while ($oCurrency = $oCurrencyList->Next()) {
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oCurrency->table, $oCurrency->id);
