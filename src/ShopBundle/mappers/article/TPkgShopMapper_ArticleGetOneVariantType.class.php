@@ -19,13 +19,14 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
 {
     /**
      * {@inheritdoc}
+     *
      * @throws ErrorException
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
         $aReturnData = [];
         $variantTypeDataModels = [];
-        /** @var \TdbShopArticle $productRecord */
+        /** @var TdbShopArticle $productRecord */
         $productRecord = $oVisitor->GetSourceObject('oObject');
         if ($productRecord && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($productRecord->table, $productRecord->id);
@@ -35,7 +36,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
         if ($variantSetRecord) {
             $variantTypeDataModelFactory = $this->getVariantTypeDataModelFactory();
             $variantTypeValueDataModelFactory = $this->getVariantTypeValueDataModelFactory();
-            
+
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($variantSetRecord->table, $variantSetRecord->id);
             }
@@ -45,7 +46,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
             $loadInactiveItems = false;
             $shopService = $this->getShopService();
             $shopRecord = $shopService->getActiveShop();
-            
+
             if (property_exists($shopRecord, 'fieldLoadInactiveVariants') && $shopRecord->fieldLoadInactiveVariants) {
                 $loadInactiveItems = true;
             }
@@ -77,11 +78,11 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
                     if ('' !== $variantTypeRecord->fieldCmsMediaId && $bCachingEnabled) {
                         $oCacheTriggerManager->addTrigger('cms_media', $variantTypeRecord->fieldCmsMediaId);
                     }
-                    
-                    $variantTypeDataModel = $variantTypeDataModelFactory->createFromVariantTypeRecord($variantTypeRecord, (empty($previousVariantTypeId) || isset($currentSelectedValues[$previousVariantTypeId])));
+
+                    $variantTypeDataModel = $variantTypeDataModelFactory->createFromVariantTypeRecord($variantTypeRecord, empty($previousVariantTypeId) || isset($currentSelectedValues[$previousVariantTypeId]));
 
                     $variantTypes = $variantTypeDataModel->getAllPropertiesAsArray();
-                        
+
                     $variantValues = [];
                     $variantTypeValueDataModels = [];
                     $firstVariantId = '';
@@ -107,9 +108,9 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
                             $sActiveValueForVariantType === $variantValueRecord->id,
                             $productRecord
                         );
-                        
+
                         $variantTypeValueDataModels[] = $variantTypeValueDataModel;
-                        
+
                         $aItem = $variantTypeValueDataModel->getAllPropertiesAsArray();
 
                         $variantValues[] = $aItem;
@@ -130,8 +131,8 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
             }
         }
 
-        /**
-         * @node aVariantTypes is deprecated since 7.1.16
+        /*
+         * @deprecated aVariantTypes is deprecated since 7.1.16
          * Use the variantTypeDataModel instead.
          */
         $oVisitor->SetMappedValue('aVariantTypes', $aReturnData);
@@ -141,7 +142,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
     /**
      * Can be either from the current article (variant) or the user's selection (URL).
      */
-    private function getSelectedTypeValues(\TdbShopArticle $article): array
+    private function getSelectedTypeValues(TdbShopArticle $article): array
     {
         $selectedTypeValues = [];
         if (true === $article->IsVariant()) {
@@ -152,7 +153,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
             }
         } else {
             /** @var array $selectedTypeValues */
-            $selectedTypeValues = $this->getInputFilterUtil()->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
+            $selectedTypeValues = $this->getInputFilterUtil()->getFilteredGetInput(TShopVariantType::URL_PARAMETER, []);
         }
 
         return $selectedTypeValues;
@@ -167,7 +168,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
     {
         return ServiceLocator::get('chameleon_system_shop.factory.variant_type_data_model_factory');
     }
-    
+
     private function getVariantTypeValueDataModelFactory(): VariantTypeValueDataModelFactoryInterface
     {
         return ServiceLocator::get('chameleon_system_shop.factory.variant_type_value_data_model_factory');

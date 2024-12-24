@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -20,12 +22,12 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
     /**
      * MessageManager listener name.
      */
-    const MSG_MANAGER_NAME = 'TShopPaymentHandlerPayOneMSG';
+    public const MSG_MANAGER_NAME = 'TShopPaymentHandlerPayOneMSG';
 
     /**
      * System constant to identify 3DSREDIRECT.
      */
-    const URL_PARAMETER_3D_REDIRECT = '3dsredirect';
+    public const URL_PARAMETER_3D_REDIRECT = '3dsredirect';
 
     /**
      * if true the credit card expiration date will be submitted to the shop
@@ -121,9 +123,9 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
             $query = "DELETE FROM `shop_order_payment_method_parameter` WHERE `shop_order_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iOrderId)."'";
             MySqlLegacySupport::getInstance()->query($query);
             foreach ($aUserPaymentData as $keyId => $keyVal) {
-                //save only if not empty
-                //save only allowed parameters
-                $aNotAllowedParams = array('CREDITCARDNUMBER');
+                // save only if not empty
+                // save only allowed parameters
+                $aNotAllowedParams = ['CREDITCARDNUMBER'];
                 if (!$this->bSubmitExpireDateToShop) {
                     $aNotAllowedParams[] = 'CREDITCARDVALIDTOMONTH';
                     $aNotAllowedParams[] = 'CREDITCARDVALIDTOYEAR';
@@ -132,7 +134,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
                 if ((!in_array(strtoupper(trim($keyId)), $aNotAllowedParams)) && (strlen($keyVal) > 0)) {
                     $oPaymentParameter = TdbShopOrderPaymentMethodParameter::GetNewInstance();
                     /** @var $oPaymentParameter TdbShopOrderPaymentMethodParameter */
-                    $aTmpData = array('shop_order_id' => $iOrderId, 'name' => $keyId, 'value' => $keyVal);
+                    $aTmpData = ['shop_order_id' => $iOrderId, 'name' => $keyId, 'value' => $keyVal];
                     $oPaymentParameter->AllowEditByAll(true);
                     $oPaymentParameter->LoadFromRow($aTmpData);
                     $oPaymentParameter->Save();
@@ -162,7 +164,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
      */
     protected function GetJsMethods()
     {
-        $aData = array();
+        $aData = [];
         $aData['aid'] = $this->GetConfigParameter('aid');
         $aData['encoding'] = $this->GetConfigParameter('encoding');
         $aData['mid'] = $this->GetConfigParameter('mid');
@@ -180,7 +182,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
         $sPayOneMessageLanguageISO = $this->GetCurrentLanguageCode();
 
         $oPaymentMethod = TdbShopPaymentMethod::GetNewInstance();
-        /** @var $oPaymentMethod TdbShopPaymentMethod */
+        /* @var $oPaymentMethod TdbShopPaymentMethod */
         $oPaymentMethod->LoadFromField('name_internal', 'credit_card_payone');
 
         $sTmpJs = "
@@ -214,7 +216,6 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
 
               var oPseudocardpan = document.forms.checkout.elements['aPayment[pseudocardpan]'];
               oPseudocardpan.value = response.get('pseudocardpan');
-
 
               // collect card-type data
               var oCreditCardTypePayone = document.forms.checkout.elements['payone[creditCardType]'];
@@ -375,7 +376,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
      */
     protected function GetJSMethodIsCreditCardPaymentAndCardAlreadyValidated($oPaymentMethod)
     {
-        $sJS = "
+        return "
         function IsCreditCardPaymentAndCardAlreadyValidated() {
           var oForm = document.forms.checkout;
           var returnVal = true;
@@ -403,8 +404,6 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
           return returnVal;
         }
         ";
-
-        return $sJS;
     }
 
     /**
@@ -415,10 +414,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
      */
     protected function GetNextButtonCSSSelector()
     {
-        //$sJQueryButtonSelector = '#tbtn';
-        $sJQueryButtonSelector = '.buttonCheckout';
-
-        return $sJQueryButtonSelector;
+        return '.buttonCheckout';
     }
 
     /**
@@ -429,12 +425,10 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
      */
     protected function GetJSMessageMethod()
     {
-        $sJSMethod = '
+        return '
       function ShowMessage(sMessage) {
         alert(sMessage);
       }';
-
-        return $sJSMethod;
     }
 
     /**
@@ -447,16 +441,13 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
      */
     protected function GetJSMessageMethodCall($sMessage)
     {
-        $sJSMethodCall = 'ShowMessage('.$sMessage.');';
-
-        return $sJSMethodCall;
+        return 'ShowMessage('.$sMessage.');';
     }
 
     /**
      * executes payment for order.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -464,7 +455,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
     {
         $bPaymentOk = parent::ExecutePayment($oOrder, $sMessageConsumer);
 
-        $aParams = array();
+        $aParams = [];
         // payment preauthorization values
         if (isset($_SESSION['3ds_payment'])) {
             $aParams = $_SESSION['3ds_payment'];
@@ -485,7 +476,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
 
         if (!$bPaymentOk) {
             $oMsgManager = TCMSMessageManager::GetInstance();
-            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => $aResponse['errormessage']));
+            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', ['errorMsg' => $aResponse['errormessage']]);
         }
 
         return $bPaymentOk;
@@ -515,12 +506,12 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
                     // Payment api error?!
                     // $aPayOneResponse['status'];
                     if (isset($aPayOneResponse['errormessage'])) {
-                        $sDebugMsg = TGlobal::Translate('chameleon_system_shop.payment_payone.error', array('%errortext%' => $aPayOneResponse['errortext']));
+                        $sDebugMsg = TGlobal::Translate('chameleon_system_shop.payment_payone.error', ['%errortext%' => $aPayOneResponse['errortext']]);
                     }
                     // $aPayOneResponse['errormessage']; // english real error message
 
                     $oMsgManager = TCMSMessageManager::GetInstance();
-                    $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => $sDebugMsg));
+                    $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', ['errorMsg' => $sDebugMsg]);
                 }
             } else {
                 $bSuccess = true;
@@ -546,7 +537,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
                 $bPaymentTransmitOk = true;
             } else {
                 $oMsgManager = TCMSMessageManager::GetInstance();
-                $oMsgManager->AddMessage(self::MSG_MANAGER_NAME, 'ERROR-ORDER-RESPONSE-PAYMENTONE-ERROR', array('errorMsg' => TGlobal::Translate('chameleon_system_shop.payment_payone.error_user_abort')));
+                $oMsgManager->AddMessage(self::MSG_MANAGER_NAME, 'ERROR-ORDER-RESPONSE-PAYMENTONE-ERROR', ['errorMsg' => TGlobal::Translate('chameleon_system_shop.payment_payone.error_user_abort')]);
                 $bPaymentTransmitOk = false;
             }
         }
@@ -561,7 +552,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
      */
     protected function PayOne3dSecure_3dScheck()
     {
-        $aResponse = array();
+        $aResponse = [];
         $aResponse['success'] = false;
 
         $oGlobal = TGlobal::instance();
@@ -575,7 +566,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
         $_SESSION['PayOneResponse']['truncatedcardpan'] = $aUserPaymentData['truncatedcardpan'];
 
         // create success URL
-        $aSuccessCall = array('module_fnc' => array($oGlobal->GetExecutingModulePointer()->sModuleSpotName => 'PostProcessExternalPaymentHandlerHook'));
+        $aSuccessCall = ['module_fnc' => [$oGlobal->GetExecutingModulePointer()->sModuleSpotName => 'PostProcessExternalPaymentHandlerHook']];
 
         $aExcludes = array_keys($aSuccessCall);
         $aExcludes[] = 'aShipping';
@@ -609,24 +600,24 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
 
         $fconnect->setApiUrl($this->GetConfigParameter('serverApiUrlPayOne'));
         $fresponse = $fconnect->processByRequest($frequest);
-        //if(_ES_DEBUG) var_dump($fresponse);
+        // if(_ES_DEBUG) var_dump($fresponse);
 
         $sStatus = $fresponse->getStatus();
 
         $aResponse['success'] = true;
         $aResponse['status'] = $sStatus;
 
-        if ('ENROLLED' == $sStatus) {
+        if ('ENROLLED' === $sStatus) {
             $this->ExecuteExternalPayOneCall($fresponse); // REDIRECT TO EXTERNAL SECURE-PIN-URL!
         } else {
-            if ('VALID' == $sStatus) {
+            if ('VALID' === $sStatus) {
                 // do nothing
             } else {
                 $aResponse['success'] = false;
                 $aResponse['status'] = $sStatus;
                 $aResponse['errormessage'] = $fresponse->getErrorMessage();
                 $aResponse['errortext'] = $fresponse->getCustomerMessage();
-                //if(_ES_DEBUG) print_form($_REQUEST,$info);
+                // if(_ES_DEBUG) print_form($_REQUEST,$info);
             }
         }
 
@@ -665,11 +656,12 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
      *
      * @param array<string, mixed> $aParams
      * @param TdbShopOrder $oOrder
+     *
      * @return array
      */
     protected function PayOnePreauthorization($aParams, $oOrder)
     {
-        $aResponse = array();
+        $aResponse = [];
         $aResponse['success'] = false;
 
         $oBasket = TShopBasket::GetInstance();
@@ -731,15 +723,15 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
 
         $fresponse = $fconnect->processByRequest($frequest);
 
-        if ('APPROVED' == $fresponse->getStatus()) {
-            //print_success($fresponse);
+        if ('APPROVED' === $fresponse->getStatus()) {
+            // print_success($fresponse);
             $aResponse['success'] = true;
         } else {
             $aResponse['success'] = false;
             $aResponse['status'] = $fresponse->getStatus();
             $aResponse['errormessage'] = $fresponse->getErrorMessage();
             $aResponse['errortext'] = $fresponse->getCustomerMessage();
-            //print_form($_REQUEST,$info);
+            // print_form($_REQUEST,$info);
         }
 
         return $aResponse;
@@ -748,13 +740,12 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
     /**
      * perform the API redirect to PayOne using Server-API.
      *
-     * @param mixed $fresponse
      * @return array $fresponse - params to handle request/redirect
      */
     protected function ExecuteExternalPayOneCall($fresponse)
     {
-        $oShop = TShop::GetInstance();
-        $sRedirectURL = $oShop->GetLinkToSystemPage('PayOne3DSecureHelper');
+        $shopService = $this->getShopService()->getActiveShop();
+        $sRedirectURL = $shopService->GetLinkToSystemPage('PayOne3DSecureHelper');
 
         // save 3D Secure Parameter in session to load it in the helper redirect page
         $_SESSION['PayOneRedirectParams']['AcsUrl'] = $fresponse->getAcsUrl();
@@ -775,7 +766,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
     public static function GetCreditCardNameByCode($sCreditCardCode)
     {
         $sReturnVal = $sCreditCardCode;
-        $aCreditCardNames = array();
+        $aCreditCardNames = [];
         $aCreditCardNames['V'] = 'Visa';
         $aCreditCardNames['M'] = 'Mastercard';
         $aCreditCardNames['A'] = 'Amex';
@@ -814,27 +805,23 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
         return $sIdent;
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return Request|null
-     */
-    private function getCurrentRequest()
+    private function getCurrentRequest(): ?Request
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
-    /**
-     * @return ICmsCoreRedirect
-     */
-    private function getRedirect()
+    private function getRedirect(): ICmsCoreRedirect
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ServiceLocator::get('chameleon_system_core.redirect');
+    }
+
+    private function getShopService(): ShopServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }

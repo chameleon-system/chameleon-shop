@@ -23,12 +23,12 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
     /**
      * constant for class specific error messages.
      */
-    const MSG_MANAGER_NAME = 'TShopIPaymentHandlerdMSG';
+    public const MSG_MANAGER_NAME = 'TShopIPaymentHandlerdMSG';
 
     /**
      * System sets constant to url that the system knows its a ipayment call.
      */
-    const URL_PARAMETER_NAME = 'i_payment';
+    public const URL_PARAMETER_NAME = 'i_payment';
 
     /**
      * id for saved payment data on ipayment server.
@@ -108,10 +108,10 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      *
      * @return array $aParameter
      */
-    protected function GetAllInputFieldParameter($aParameter = array())
+    protected function GetAllInputFieldParameter($aParameter = [])
     {
         if (!is_array($aParameter)) {
-            $aParameter = array();
+            $aParameter = [];
         }
         $aParameter = $this->GetStandardInputFieldParameter($aParameter);
         $aParameter['trx_typ'] = $this->GetConfigParameter('trx_typ');
@@ -132,10 +132,10 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      *
      * @return array $aParameter
      */
-    protected function GetStandardInputFieldParameter($aParameter = array())
+    protected function GetStandardInputFieldParameter($aParameter = [])
     {
         if (!is_array($aParameter)) {
-            $aParameter = array();
+            $aParameter = [];
         }
 
         $oShopBasket = TShopBasket::GetInstance();
@@ -188,7 +188,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      */
     protected function GetRedirectUrl()
     {
-        return $this->getActivePageService()->getActivePage()->GetRealURLPlain(array(), true);
+        return $this->getActivePageService()->getActivePage()->GetRealURLPlain([], true);
     }
 
     /**
@@ -199,10 +199,10 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      *
      * @return array $aParameter
      */
-    protected function GetPaymentTypeSpecifivParameter($aParameter = array())
+    protected function GetPaymentTypeSpecifivParameter($aParameter = [])
     {
         if (!is_array($aParameter)) {
-            $aParameter = array();
+            $aParameter = [];
         }
 
         return $aParameter;
@@ -234,7 +234,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
     protected function GetPayFieldParameter($aParameter, $oOrder)
     {
         if (!is_array($aParameter)) {
-            $aParameter = array();
+            $aParameter = [];
         }
         $aParameter = $this->GetStandardInputFieldParameter($aParameter);
         if (!empty($this->sStorageId)) {
@@ -292,7 +292,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      */
     protected function GetUserAddressData()
     {
-        $aUserAddressData = array();
+        $aUserAddressData = [];
         $oActiveUser = TdbDataExtranetUser::GetInstance();
         if ($oActiveUser) {
             $oBillingAddress = $oActiveUser->GetBillingAddress();
@@ -357,12 +357,13 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
     {
         $aViewVariables = parent::GetAdditionalViewVariables($sViewName, $sViewType);
         if (!is_array($aViewVariables)) {
-            $aViewVariables = array();
+            $aViewVariables = [];
         }
         $aViewVariables['sRequestUrl'] = $this->GetRequestURL();
         $aViewVariables['IPaymentHiddenInput'] = $this->GetAllInputFieldParameter();
         $aViewVariables['aUserAddressData'] = $this->GetUserAddressData();
         $aViewVariables['aPaymenttypeSpecificParameter'] = $this->GetPaymentTypeSpecifivParameter();
+
         //      $this->SetErrorCodesFromResponseToMessageManager();
         return $aViewVariables;
     }
@@ -374,7 +375,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      */
     public function getRequestParameters()
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         $aTmp = $this->GetAllInputFieldParameter();
         foreach (array_keys($aTmp) as $sTmpKey) {
@@ -453,7 +454,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
                 // security error - unable to validate hash
                 TTools::WriteLogEntry('iPayment Error: unable to validate security hash. Either the Request is manipulated, or the "Transaktions-Security-Key" was not set in the ipayment configuration', 1, __FILE__, __LINE__);
                 $oMsgManager = TCMSMessageManager::GetInstance();
-                $oMsgManager->AddMessage(TShopPaymentHandlerIPaymentCreditCard::MSG_MANAGER_NAME, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => 'unable to validate security hash. Either the Request is manipulated, or the "Transaktions-Security-Key" was not set in the ipayment configuration'));
+                $oMsgManager->AddMessage(TShopPaymentHandlerIPaymentCreditCard::MSG_MANAGER_NAME, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', ['errorMsg' => 'unable to validate security hash. Either the Request is manipulated, or the "Transaktions-Security-Key" was not set in the ipayment configuration']);
             }
         }
 
@@ -463,8 +464,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
     /**
      * executes payment for order.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -475,6 +475,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
             TdbShopPaymentHandler::SetExecutePaymentInterrupt(true);
             /**
              * @psalm-suppress NoValue
+             *
              * @FIXME `ExecuteIPaymentCall` never returns since it redirects, there is no return value to track.
              */
             $bPaymentOk = $this->ExecuteIPaymentCall($oOrder);
@@ -488,8 +489,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      * The method is ALSO called, if the payment handler passed execution to an external service from within the ExecutePayment
      * Method.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -533,7 +533,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      */
     protected function ExecuteIPaymentCall($oOrder)
     {
-        $parameters = $this->GetPayFieldParameter(array(), $oOrder);
+        $parameters = $this->GetPayFieldParameter([], $oOrder);
         $requestUrl = $this->GetRequestURL();
         $url = $requestUrl.$this->getUrlUtil()->getArrayAsUrl($parameters, '?', '&');
         $this->getRedirect()->redirect($url);
@@ -589,7 +589,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
         $sSharedSecret = $this->GetConfigParameter('shared_secret');
         if (!empty($sSharedSecret)) {
             $sNewChecksum = md5($trxuser_id.$trx_amount.$trx_currency.$trxpassword.$ret_trx_number.$sSharedSecret);
-            if ($sNewChecksum != $sOldChecksum) {
+            if ($sNewChecksum !== $sOldChecksum) {
                 $bChecksumIsOk = false;
             }
         }
@@ -606,13 +606,13 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      */
     protected function GetResultFormResponse($response)
     {
-        $aNeededResponseParameterToCheck = array('ret_status' => '', 'ret_errormsg' => '', 'trxuser_id' => '', 'trx_amount' => '', 'trx_currency' => '', 'ret_authcode' => '', 'ret_trx_number' => '', 'ret_param_checksum' => '');
+        $aNeededResponseParameterToCheck = ['ret_status' => '', 'ret_errormsg' => '', 'trxuser_id' => '', 'trx_amount' => '', 'trx_currency' => '', 'ret_authcode' => '', 'ret_trx_number' => '', 'ret_param_checksum' => ''];
         preg_match('/<a href=".*'.self::URL_PARAMETER_NAME.'\\/(success|error)\?(.*)">/', $response, $aMatch);
         if (count($aMatch) > 2) {
             $aResponseParts = explode('&', $aMatch[2]);
             foreach ($aResponseParts as $sRepsponsePart) {
                 $aResponseKeyValue = explode('=', $sRepsponsePart);
-                if (2 == count($aResponseKeyValue) && array_key_exists($aResponseKeyValue[0], $aNeededResponseParameterToCheck)) {
+                if (2 === count($aResponseKeyValue) && array_key_exists($aResponseKeyValue[0], $aNeededResponseParameterToCheck)) {
                     $aNeededResponseParameterToCheck[$aResponseKeyValue[0]] = $aResponseKeyValue[1];
                 }
             }
@@ -628,7 +628,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
      */
     protected function GetNeedeResponsePostParameterForSecurityCheck()
     {
-        $aParameter = array();
+        $aParameter = [];
         $oGlobal = TGlobal::instance();
         $aParameter['trxuser_id'] = $oGlobal->GetUserData('trxuser_id');
         $aParameter['trx_amount'] = $oGlobal->GetUserData('trx_amount');
@@ -679,18 +679,12 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
         return $sIdent;
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtil()
+    private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
     }
@@ -700,10 +694,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return ICmsCoreRedirect
-     */
-    private function getRedirect()
+    private function getRedirect(): ICmsCoreRedirect
     {
         return ServiceLocator::get('chameleon_system_core.redirect');
     }

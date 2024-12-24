@@ -11,14 +11,14 @@
 
 /**
  * used to show available currencies to the user and to provide a method to change the currency.
-/**/
+ * /**/
 class MTPkgShopCurrencyChangeCurrencyCore extends TUserCustomModelBase
 {
     public function Execute()
     {
         parent::Execute();
 
-        $this->data['oActiveCurrency'] = TdbPkgShopCurrency::GetActiveInstance();
+        $this->data['oActiveCurrency'] = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
         $this->data['oCurrencyList'] = TdbPkgShopCurrencyList::GetList();
 
         return $this->data;
@@ -77,9 +77,9 @@ class MTPkgShopCurrencyChangeCurrencyCore extends TUserCustomModelBase
     {
         $aTrigger = parent::_GetCacheTableInfos();
         if (!is_array($aTrigger)) {
-            $aTrigger = array();
+            $aTrigger = [];
         }
-        $aTrigger[] = array('table' => 'pkg_shop_currency', 'id' => '');
+        $aTrigger[] = ['table' => 'pkg_shop_currency', 'id' => ''];
 
         return $aTrigger;
     }

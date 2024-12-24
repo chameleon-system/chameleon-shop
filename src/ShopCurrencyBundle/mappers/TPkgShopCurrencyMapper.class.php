@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TPkgShopCurrencyMapper extends AbstractViewMapper
 {
     /**
@@ -16,7 +18,8 @@ class TPkgShopCurrencyMapper extends AbstractViewMapper
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
-        $oRequirements->NeedsSourceObject('oCurrency', 'TdbPkgShopCurrency', TdbPkgShopCurrency::GetActiveInstance(), true);
+        $currency = ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
+        $oRequirements->NeedsSourceObject('oCurrency', 'TdbPkgShopCurrency', $currency, true);
     }
 
     /**

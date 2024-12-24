@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
+
 class TPkgShopMapper_ArticleTeaserBase extends AbstractPkgShopMapper_Article
 {
     /**
@@ -42,7 +45,7 @@ class TPkgShopMapper_ArticleTeaserBase extends AbstractPkgShopMapper_Article
             $oCacheTriggerManager->addTrigger($oShop->table, $oShop->id);
         }
 
-        $aData = array();
+        $aData = [];
         $aData['sShippingLink'] = $oShop->GetLinkToSystemPageAsPopUp(TGlobal::Translate('chameleon_system_shop.link.shipping_link'), 'shipping');
 
         $aData['sPrice'] = $oLocal->FormatNumber($oArticle->dPrice, 2);
@@ -81,17 +84,16 @@ class TPkgShopMapper_ArticleTeaserBase extends AbstractPkgShopMapper_Article
      * Add color variant data if available for article
      * Add all other available article variants in separate data.
      *
-     * @param TdbShopArticle                $oArticle
-     * @param array                         $aData
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     * @param bool                          $bCachingEnabled
+     * @param TdbShopArticle $oArticle
+     * @param array $aData
+     * @param bool $bCachingEnabled
      *
      * @return array
      */
     protected function GetVariantInfo($oArticle, $aData, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aColors = array();
-        $aVariantTypeList = array();
+        $aColors = [];
+        $aVariantTypeList = [];
         if ($oArticle->HasVariants()) {
             $oVariantSet = $oArticle->GetFieldShopVariantSet();
             if ($oVariantSet && $bCachingEnabled) {
@@ -100,8 +102,8 @@ class TPkgShopMapper_ArticleTeaserBase extends AbstractPkgShopMapper_Article
             $oVariantTypes = $oVariantSet->GetFieldShopVariantTypeList();
 
             $bLoadInactiveItems = false;
-            $oShop = TShop::GetInstance();
-            if (property_exists($oShop, 'fieldLoadInactiveVariants') && $oShop->fieldLoadInactiveVariants) {
+            $activeShop = $this->getShopService()->getActiveShop();
+            if (property_exists($activeShop, 'fieldLoadInactiveVariants') && $activeShop->fieldLoadInactiveVariants) {
                 $bLoadInactiveItems = true;
             }
 
@@ -119,38 +121,38 @@ class TPkgShopMapper_ArticleTeaserBase extends AbstractPkgShopMapper_Article
                 if (!$oAvailableValues) {
                     continue;
                 }
-                if ('color' == $oVariantType->fieldIdentifier) {
+                if ('color' === $oVariantType->fieldIdentifier) {
                     while ($oValue = $oAvailableValues->Next()) {
                         if ($bCachingEnabled) {
                             $oCacheTriggerManager->addTrigger($oValue->table, $oValue->id);
                         }
-                        $aColors[] = array(
+                        $aColors[] = [
                             'sLink' => $oValue->fieldUrlName,
                             'sHex' => '#'.$oValue->fieldColorCode,
                             'cms_media_id' => $oValue->fieldCmsMediaId,
-                        );
+                        ];
                     }
                 } else {
-                    $aType = array(
+                    $aType = [
                         'sTitle' => $oVariantType->fieldName,
                         'sSystemName' => $oVariantType->fieldIdentifier,
                         'cms_media_id' => $oVariantType->fieldCmsMediaId,
-                        'aItems' => array(),
+                        'aItems' => [],
                         'bAllowSelection' => true,
-                    );
-                    $aItems = array();
+                    ];
+                    $aItems = [];
                     while ($oValue = $oAvailableValues->Next()) {
                         if ($bCachingEnabled) {
                             $oCacheTriggerManager->addTrigger($oValue->table, $oValue->id);
                         }
-                        $aItem = array(
+                        $aItem = [
                             'sTitle' => $oValue->fieldName,
                             'sColor' => $oValue->fieldColorCode,
                             'cms_media_id' => $oValue->fieldCmsMediaId,
                             'bIsActive' => false,  // currently selected article variant (shows activate state)
                             'bArticleIsActive' => '1',
                             'sSelectLink' => '',
-                        );
+                        ];
 
                         if ($bLoadInactiveItems) {
                             if (isset($oValue->sqlData['articleactive']) && $oValue->sqlData['articleactive'] > 0) {
@@ -171,5 +173,10 @@ class TPkgShopMapper_ArticleTeaserBase extends AbstractPkgShopMapper_Article
         $aData['aVariantTypes'] = $aVariantTypeList;
 
         return $aData;
+    }
+
+    private function getShopService(): ShopServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }

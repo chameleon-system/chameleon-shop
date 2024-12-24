@@ -14,18 +14,11 @@ namespace ChameleonSystem\ShopCurrencyBundle\Service;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 use ChameleonSystem\ShopCurrencyBundle\Interfaces\ShopCurrencyServiceInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use TdbPkgShopCurrency;
 
 class ShopCurrencyService implements ShopCurrencyServiceInterface
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
-     * @var ExtranetUserProviderInterface
-     */
-    private $extranetUserProvider;
+    private RequestStack $requestStack;
+    private ExtranetUserProviderInterface $extranetUserProvider;
 
     public function __construct(RequestStack $requestStack, ExtranetUserProviderInterface $extranetUserProvider)
     {
@@ -38,7 +31,7 @@ class ShopCurrencyService implements ShopCurrencyServiceInterface
      */
     public function getSymbol()
     {
-        return $this->getObject()->GetCurrencyDisplaySymbol();
+        return $this->getObject()?->GetCurrencyDisplaySymbol();
     }
 
     /**
@@ -46,7 +39,7 @@ class ShopCurrencyService implements ShopCurrencyServiceInterface
      */
     public function getIso4217Code()
     {
-        return $this->getObject()->getISO4217Code();
+        return $this->getObject()?->getISO4217Code();
     }
 
     /**
@@ -54,23 +47,27 @@ class ShopCurrencyService implements ShopCurrencyServiceInterface
      */
     public function formatNumber($value)
     {
-        return $this->getObject()->GetFormattedCurrency($value);
+        return $this->getObject()?->GetFormattedCurrency($value);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getObject()
+    public function getObject(): ?\TdbPkgShopCurrency
     {
         $activeCurrencyId = $this->getActiveCurrencyId();
-        if (null === $activeCurrencyId || $activeCurrencyId === TdbPkgShopCurrency::GetDefaultCurrency()->id) {
-            return TdbPkgShopCurrency::GetDefaultCurrency();
+
+        $defaultCurrency = \TdbPkgShopCurrency::GetDefaultCurrency();
+
+        if (false === $defaultCurrency) {
+            $defaultCurrency = null;
         }
 
-        $activeCurrency = TdbPkgShopCurrency::GetNewInstance();
+        if (null === $activeCurrencyId || (null !== $defaultCurrency && $activeCurrencyId === $defaultCurrency->id)) {
+            return $defaultCurrency;
+        }
+
+        $activeCurrency = \TdbPkgShopCurrency::GetNewInstance();
         if (false === $activeCurrency->Load($activeCurrencyId)) {
-            $activeCurrency = TdbPkgShopCurrency::GetDefaultCurrency();
-            trigger_error('trying to get active currency, but requested currency id does not exists. loading default currency', E_USER_WARNING);
+            $activeCurrency = \TdbPkgShopCurrency::GetDefaultCurrency();
+            trigger_error('trying to get active currency, but requested currency id does not exist. Loading default currency', E_USER_WARNING);
         }
 
         return $activeCurrency;
@@ -105,8 +102,8 @@ class ShopCurrencyService implements ShopCurrencyServiceInterface
 
         // try cookie
         if (null === $sActiveId) {
-            if (true === $request->cookies->has(TdbPkgShopCurrency::SESSION_NAME)) {
-                $sActiveId = base64_decode($request->cookies->get(TdbPkgShopCurrency::SESSION_NAME));
+            if (true === $request->cookies->has(\TPkgShopCurrency::SESSION_NAME)) {
+                $sActiveId = base64_decode($request->cookies->get(\TPkgShopCurrency::SESSION_NAME));
                 if (empty($sActiveId)) {
                     $sActiveId = null;
                 } else {
@@ -116,13 +113,13 @@ class ShopCurrencyService implements ShopCurrencyServiceInterface
                         $oUser->sqlData['pkg_shop_currency_id'] = $sActiveId;
                         $oUser->fieldPkgShopCurrencyId = $sActiveId;
                     }
-                    $request->getSession()->set(TdbPkgShopCurrency::SESSION_NAME, $sActiveId);
+                    $request->getSession()->set(\TPkgShopCurrency::SESSION_NAME, $sActiveId);
                 }
             }
         }
 
         if (null === $sActiveId && $bUseDefaultIfNotDefinedForUser) {
-            $oDefaultCurrency = TdbPkgShopCurrency::GetDefaultCurrency();
+            $oDefaultCurrency = \TdbPkgShopCurrency::GetDefaultCurrency();
             if ($oDefaultCurrency) {
                 $sActiveId = $oDefaultCurrency->id;
             }

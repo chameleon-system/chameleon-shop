@@ -11,7 +11,7 @@
 
 /**
  * if we have an active currency, set it as default.
-/**/
+ * /**/
 class TPkgShopCurrency_ShopPaymentHandler extends TPkgShopCurrency_ShopPaymentHandlerAutoParent
 {
     /**
@@ -24,7 +24,7 @@ class TPkgShopCurrency_ShopPaymentHandler extends TPkgShopCurrency_ShopPaymentHa
     protected function GetCurrencyIdentifier($oPkgShopCurrency = null)
     {
         if (is_null($oPkgShopCurrency)) {
-            $oPkgShopCurrency = TdbPkgShopCurrency::GetActiveInstance();
+            $oPkgShopCurrency = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
         }
 
         return parent::GetCurrencyIdentifier($oPkgShopCurrency);

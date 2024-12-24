@@ -85,11 +85,10 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      *
      * @return TdbShop
      *
-     * @deprecated use service chameleon_system_shop.shop_service instead
+     * @deprecated use service chameleon_system_shop.shop_service::getActiveShop() instead
      */
     public static function GetInstance($iPortalId = null)
     {
-        $shop = null;
         $activeShopService = self::getShopService();
         if (null === $iPortalId) {
             $shop = $activeShopService->getActiveShop();

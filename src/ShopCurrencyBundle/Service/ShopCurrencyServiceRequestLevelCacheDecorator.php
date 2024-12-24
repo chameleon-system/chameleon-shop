@@ -15,18 +15,9 @@ use ChameleonSystem\ShopCurrencyBundle\Interfaces\ShopCurrencyServiceInterface;
 
 class ShopCurrencyServiceRequestLevelCacheDecorator implements ShopCurrencyServiceInterface
 {
-    /**
-     * @var array
-     */
-    private $cache = array();
-    /**
-     * @var ShopCurrencyServiceInterface
-     */
-    private $subject;
+    private array $cache = [];
+    private ShopCurrencyServiceInterface $subject;
 
-    /**
-     * @param ShopCurrencyServiceInterface $subject
-     */
     public function __construct(ShopCurrencyServiceInterface $subject)
     {
         $this->subject = $subject;
@@ -81,13 +72,10 @@ class ShopCurrencyServiceRequestLevelCacheDecorator implements ShopCurrencyServi
     public function reset()
     {
         $this->subject->reset();
-        $this->cache = array();
+        $this->cache = [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getObject()
+    public function getObject(): ?\TdbPkgShopCurrency
     {
         $cacheKey = 'getObject';
         if (isset($this->cache[$cacheKey])) {
@@ -120,10 +108,7 @@ class ShopCurrencyServiceRequestLevelCacheDecorator implements ShopCurrencyServi
         return $value;
     }
 
-    /**
-     * @return bool
-     */
-    private function allowCache()
+    private function allowCache(): bool
     {
         return null !== $this->getActiveCurrencyId();
     }

@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
 {
-    const SESSION_NAME = 'esono/pkgCurrency/activeCurrencyId';
+    public const SESSION_NAME = 'esono/pkgCurrency/activeCurrencyId';
 
     /**
      * format the double value as a string. includes the currency symbol as part of the response.
@@ -65,11 +65,11 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
      *
      * @static
      *
-     * @return TdbPkgShopCurrency|false
-     *
      * @deprecated use the service chameleon_system_shop_currency.shop_currency instead
      *
      * @param bool $bReset
+     *
+     * @return TdbPkgShopCurrency|false
      */
     public static function GetActiveInstance($bReset = false)
     {
@@ -188,7 +188,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
         $oUser = TdbDataExtranetUser::GetInstance();
 
         if (!is_null($oUser->id) && !empty($oUser->id) && array_key_exists('pkg_shop_currency_id', $oUser->sqlData) && $oUser->sqlData['pkg_shop_currency_id'] != $sCurrencyId && $oUser->IsLoggedIn()) {
-            $oUser->SaveFieldsFast(array('pkg_shop_currency_id' => $sCurrencyId));
+            $oUser->SaveFieldsFast(['pkg_shop_currency_id' => $sCurrencyId]);
         } else {
             $oUser->sqlData['pkg_shop_currency_id'] = $sCurrencyId;
             $oUser->fieldPkgShopCurrencyId = $sCurrencyId;
@@ -208,7 +208,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
      * convert a currency relative to a base currency. if none is passed, we assume the base currency is passed
      * IMPORTANT: Result is NOT ROUNDED!
      *
-     * @param float              $dValue
+     * @param float $dValue
      * @param TdbPkgShopCurrency $oBaseCurrency
      *
      * @return float
@@ -245,7 +245,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
      */
     public static function ConvertToActiveCurrency($dValue)
     {
-        $oActiveCurrency = TdbPkgShopCurrency::GetActiveInstance();
+        $oActiveCurrency = ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
         if ($oActiveCurrency) {
             $dValue = round($oActiveCurrency->Convert($dValue), 2);
         }
