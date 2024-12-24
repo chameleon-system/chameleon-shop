@@ -1,6 +1,3 @@
-TdbShopModuleArticleListFilter::ModuleInitHook is deprecated. we don't want to figure out what filter we have in init since this is pre-cache. currently used in TShopModuleArticlelistFilterSearch
-
-
 post search filter grieft immer nur auf den haupt filter -> nicht auf den fallback
   -> vorteil - mein post search filter muss nur wissen um welche query es geht
 

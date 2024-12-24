@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * always use TPkgShopBasketMapper_BasketItems instead of TPkgShopBasketMapper_BasketItemsEndPoint.
-/**/
+ * /**/
 class TPkgShopBasketMapper_BasketItemsEndPoint extends AbstractViewMapper
 {
     /**
@@ -20,7 +22,8 @@ class TPkgShopBasketMapper_BasketItemsEndPoint extends AbstractViewMapper
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oBasket', 'TShopBasket', TShopBasket::GetInstance());
-        $oRequirements->NeedsSourceObject('oCurrency', 'TdbPkgShopCurrency', TdbPkgShopCurrency::GetActiveInstance());
+        $currency = ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
+        $oRequirements->NeedsSourceObject('oCurrency', 'TdbPkgShopCurrency', $currency);
         $oRequirements->NeedsSourceObject('generateAbsoluteProductUrls', 'bool', false, true);
     }
 
@@ -37,12 +40,17 @@ class TPkgShopBasketMapper_BasketItemsEndPoint extends AbstractViewMapper
 
         $generateAbsoluteProductUrls = $oVisitor->GetSourceObject('generateAbsoluteProductUrls');
 
-        $aBasketItems = array();
+        $aBasketItems = [];
         $oBasketContents = $oBasket->GetBasketContents();
+
+        if (null === $oBasketContents) {
+            return;
+        }
+
         $oBasketContents->GoToStart();
-        /** @var $oItem TShopBasketArticle */
+        /** @var TShopBasketArticle $oItem */
         while ($oItem = $oBasketContents->Next()) {
-            $aBasketItem = array(
+            $aBasketItem = [
                 'sId' => $oItem->id,
                 'sBasketItemKey' => $oItem->sBasketItemKey,
                 'sImageId' => $oItem->GetImagePreviewObject('basket')->GetImageObject()->id,
@@ -56,7 +64,7 @@ class TPkgShopBasketMapper_BasketItemsEndPoint extends AbstractViewMapper
                 'sRemoveFromBasketLink' => $oItem->GetRemoveFromBasketLink(),
                 'bAllowChangeAmount' => true,
                 'sPriceTotal' => TCMSLocal::GetActive()->FormatNumber($oItem->dPriceTotal, 2),
-            );
+            ];
             if ($oItem instanceof IPkgShopBasketArticleWithCustomData && true === $oItem->isConfigurableArticle()) {
                 $aBasketItem['customData'] = $oItem->getCustomDataForTwigOutput();
                 $aBasketItem['customDataTwigTemplate'] = $oItem->getCustomDataTwigTemplate();
@@ -101,27 +109,32 @@ class TPkgShopBasketMapper_BasketItemsEndPoint extends AbstractViewMapper
      */
     protected function GetVariantInfo($oArticle, $aData)
     {
-        $aVariantTypeList = array();
+        $aVariantTypeList = [];
         if ($oArticle) {
             if ($oArticle->IsVariant()) {
                 $oVariantSet = $oArticle->GetFieldShopVariantSet();
+
+                if (null === $oVariantSet) {
+                    return $aData;
+                }
+
                 $oVariantTypes = $oVariantSet->GetFieldShopVariantTypeList();
                 while ($oVariantType = $oVariantTypes->Next()) {
                     $oValue = $oArticle->GetActiveVariantValue($oVariantType->fieldIdentifier);
-                    $aType = array(
+                    $aType = [
                         'sTitle' => $oVariantType->fieldName,
                         'sSystemName' => $oVariantType->fieldIdentifier,
                         'cms_media_id' => $oVariantType->fieldCmsMediaId,
-                        'aItems' => array(),
-                    );
-                    $aItems = array();
-                    $aItem = array(
+                        'aItems' => [],
+                    ];
+                    $aItems = [];
+                    $aItem = [
                         'sTitle' => $oValue->fieldName,
                         'sColor' => $oValue->fieldColorCode,
                         'cms_media_id' => $oValue->fieldCmsMediaId,
                         'bIsActive' => false,
                         'sSelectLink' => '',
-                    );
+                    ];
                     $aItems[] = $aItem;
                     $aType['aItems'] = $aItems;
                     $aVariantTypeList[] = $aType;

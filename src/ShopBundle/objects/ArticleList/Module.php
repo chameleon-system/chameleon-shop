@@ -460,7 +460,7 @@ class Module extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getActiveCurrency()
     {
-        return TdbPkgShopCurrency::GetActiveInstance();
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
     }
 
     /**

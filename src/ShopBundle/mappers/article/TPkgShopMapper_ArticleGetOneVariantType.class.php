@@ -131,7 +131,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
         }
 
         /**
-         * @node aVariantTypes is deprecated since 7.1.16
+         * @deprecated aVariantTypes is deprecated since 7.1.16
          * Use the variantTypeDataModel instead.
          */
         $oVisitor->SetMappedValue('aVariantTypes', $aReturnData);

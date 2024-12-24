@@ -589,7 +589,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
         $sSharedSecret = $this->GetConfigParameter('shared_secret');
         if (!empty($sSharedSecret)) {
             $sNewChecksum = md5($trxuser_id.$trx_amount.$trx_currency.$trxpassword.$ret_trx_number.$sSharedSecret);
-            if ($sNewChecksum != $sOldChecksum) {
+            if ($sNewChecksum !== $sOldChecksum) {
                 $bChecksumIsOk = false;
             }
         }
@@ -612,7 +612,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
             $aResponseParts = explode('&', $aMatch[2]);
             foreach ($aResponseParts as $sRepsponsePart) {
                 $aResponseKeyValue = explode('=', $sRepsponsePart);
-                if (2 == count($aResponseKeyValue) && array_key_exists($aResponseKeyValue[0], $aNeededResponseParameterToCheck)) {
+                if (2 === count($aResponseKeyValue) && array_key_exists($aResponseKeyValue[0], $aNeededResponseParameterToCheck)) {
                     $aNeededResponseParameterToCheck[$aResponseKeyValue[0]] = $aResponseKeyValue[1];
                 }
             }
@@ -679,18 +679,12 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
         return $sIdent;
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtil()
+    private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
     }
@@ -700,10 +694,7 @@ class TShopPaymentHandlerIPaymentEndPoint extends TdbShopPaymentHandler implemen
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return ICmsCoreRedirect
-     */
-    private function getRedirect()
+    private function getRedirect(): ICmsCoreRedirect
     {
         return ServiceLocator::get('chameleon_system_core.redirect');
     }
