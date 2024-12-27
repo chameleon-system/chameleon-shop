@@ -11,18 +11,12 @@
 
 namespace ChameleonSystem\ShopBundle\Interfaces;
 
-use ErrorException;
-use TdbShop;
-use TdbShopArticle;
-use TdbShopCategory;
-use TShopBasket;
-
 interface ShopServiceInterface
 {
     /**
-     * @return TdbShop
+     * @return \TdbShop
      *
-     * @throws ErrorException
+     * @throws \ErrorException
      */
     public function getActiveShop();
 
@@ -31,7 +25,7 @@ interface ShopServiceInterface
      *
      * @return string
      *
-     * @throws ErrorException
+     * @throws \ErrorException
      */
     public function getBasketLink($useRedirect = true);
 
@@ -40,23 +34,23 @@ interface ShopServiceInterface
      *
      * @return string
      *
-     * @throws ErrorException
+     * @throws \ErrorException
      */
     public function getCheckoutLink($useRedirect = true);
 
     /**
      * @param string $cmsPortalId
      *
-     * @return TdbShop
+     * @return \TdbShop
      *
-     * @throws ErrorException
+     * @throws \ErrorException
      */
     public function getShopForPortalId($cmsPortalId);
 
     /**
      * @return string
      *
-     * @throws ErrorException
+     * @throws \ErrorException
      */
     public function getId();
 
@@ -66,17 +60,19 @@ interface ShopServiceInterface
     public function getConfiguration();
 
     /**
-     * @return TdbShopArticle|null
+     * @return \TdbShopArticle|null
      */
     public function getActiveProduct();
 
     /**
-     * @return TdbShopCategory|null
+     * @return \TdbShopCategory|null
      */
     public function getActiveCategory();
 
+    public function getActiveRootCategory(): ?\TdbShopCategory;
+
     /**
-     * @return TShopBasket|null
+     * @return \TShopBasket|null
      */
     public function getActiveBasket();
 

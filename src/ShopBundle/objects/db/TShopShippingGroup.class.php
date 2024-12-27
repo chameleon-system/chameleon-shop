@@ -431,7 +431,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         if (is_null($oVat)) {
             $oVat = null;
-            $oShopConf = TdbShop::GetInstance();
+            $oShopConf = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             if (true === $oShopConf->fieldShippingVatDependsOnBasketContents) {
                 $oBasket = TShopBasket::GetInstance();
                 $oVat = $oBasket->GetLargestVATObject();
@@ -443,7 +443,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
             $oVat = $this->GetFieldShopVat();
             if (is_null($oVat)) {
-                $oShopConf = TdbShop::GetInstance();
+                $oShopConf = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $oVat = $oShopConf->GetVat();
             }
             $this->SetInternalCache('ovat', $oVat);
@@ -465,7 +465,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
     {
         $oView = new TViewParser();
 
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oView->AddVar('oShop', $oShop);
         $oView->AddVar('oShippingGroup', $this);
         $oView->AddVar('oPaymentMethods', $this->GetValidPaymentMethodsSelectableByTheUser());

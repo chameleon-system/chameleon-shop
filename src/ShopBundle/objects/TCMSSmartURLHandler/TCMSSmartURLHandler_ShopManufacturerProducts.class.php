@@ -19,7 +19,7 @@ class TCMSSmartURLHandler_ShopManufacturerProducts extends TCMSSmartURLHandler
         $iPageId = false;
         $oURLData = TCMSSmartURLData::GetActive();
 
-        $oShop = TdbShop::GetInstance($oURLData->iPortalId);
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
 
         $sProductPath = $oShop->GetLinkToSystemPage('manufacturer');
         if ('.html' == substr($sProductPath, -5)) {

@@ -96,7 +96,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
     {
         static $oInstance = null;
         if (is_null($oInstance)) {
-            $oShop = TdbShop::GetInstance();
+            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             $oInstance = $oShop->GetFieldDefaultPkgShopCurrency();
             // none set? just take the first one
             if (!$oInstance) {

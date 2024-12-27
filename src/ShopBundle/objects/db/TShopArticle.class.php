@@ -215,7 +215,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
             if (is_null($oVat)) {
                 // try to fetch from shop
-                $oShopConfig = TdbShop::GetInstance();
+                $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $oVat = $oShopConfig->GetVat();
             }
             $this->SetInternalCache('ovat', $oVat);
@@ -346,7 +346,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         // if no category is given, fetch the first category of the article
         $oCategory = null;
 
-        $oShopConfig = TdbShop::GetInstance();
+        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
 
         if (!is_null($iCategoryId)) {
             $oCategory = TdbShopCategory::GetNewInstance();
@@ -581,7 +581,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if (false === $sMsgConsumerName) {
             $sMsgConsumerName = $this->GetMessageConsumerName();
         }
-        $oShopConfig = TdbShop::GetInstance();
+        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
 
         $aParameters = [
             'module_fnc' => [
@@ -619,7 +619,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function GetRemoveFromNoticeListLink($bIncludePortalLink = false, $sMsgConsumerName = false)
     {
-        $oShopConfig = TdbShop::GetInstance();
+        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         if (false === $sMsgConsumerName) {
             $sMsgConsumerName = $this->GetMessageConsumerName();
         }
@@ -842,7 +842,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         if (is_null($oPrimaryImage)) {
             if (!empty($this->fieldCmsMediaDefaultPreviewImageId) && (!is_numeric($this->fieldCmsMediaDefaultPreviewImageId) || intval($this->fieldCmsMediaDefaultPreviewImageId) > 1000)) {
-                $oShop = TdbShop::GetInstance();
+                $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $aData = ['shop_article_id' => $this->id, 'cms_media_id' => $this->fieldCmsMediaDefaultPreviewImageId, 'position' => 1];
                 $oPrimaryImage = TdbShopArticleImage::GetNewInstance();
                 $oPrimaryImage->LoadFromRow($aData);
@@ -850,7 +850,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
                 $oImages = $this->GetFieldShopArticleImageList();
                 $activePage = $this->getActivePageService()->getActivePage();
                 if (0 == $oImages->Length() && (!is_null($activePage))) {
-                    $oShop = TdbShop::GetInstance();
+                    $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                     $aData = ['shop_article_id' => $this->id, 'cms_media_id' => $oShop->fieldNotFoundImage, 'position' => 1];
                     $oPrimaryImage = TdbShopArticleImage::GetNewInstance();
                     $oPrimaryImage->LoadFromRow($aData);
@@ -986,9 +986,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if (TGlobal::IsCMSMode()) {
             $oPortals = TdbCmsPortalList::GetList();
             $oPortal = $oPortals->Current();
-            $oShop = TdbShop::GetInstance($oPortal->id);
+            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oPortal->id);
         } else {
-            $oShop = TdbShop::GetInstance();
+            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         }
         $oImageSizeList = TdbShopArticleImageSizeList::GetListForShopId($oShop->id);
         $oExportObject->aImages = [];
@@ -1830,7 +1830,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if (is_null($bIsBuyable)) {
             $bIsBuyable = $this->isActive();
             if ($bIsBuyable) {
-                $oShopConfig = TdbShop::GetInstance();
+                $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
 
                 if (isset($oShopConfig->fieldAllowPurchaseOfVariantParents)
                     && !$oShopConfig->fieldAllowPurchaseOfVariantParents
@@ -2280,7 +2280,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function getToBasketLinkBasketParameters($bRedirectToBasket = false, $bReplaceBasketContents = false, $bGetAjaxParameter = false, $sMessageConsumer = MTShopBasketCore::MSG_CONSUMER_NAME_MINIBASKET)
     {
-        $oShopConfig = TdbShop::GetInstance();
+        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $aBasketData = [];
         $aParameters = [];
         if ($bGetAjaxParameter) {

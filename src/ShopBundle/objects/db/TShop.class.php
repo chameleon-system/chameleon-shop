@@ -17,8 +17,8 @@ use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
- * the shop config object. use GetInstance to fetch the current config.
- * /**/
+ * The shop config object. Load via chameleon_system_shop.shop_service::getActiveShop().
+ */
 class TShop extends TShopAutoParent implements IPkgShopVatable
 {
     public const VIEW_PATH = 'pkgShop/views/db/TShop';
@@ -30,10 +30,8 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
 
     /**
      * the active search object.
-     *
-     * @var TdbShopSearchCache
      */
-    protected $oActiveSearchCache;
+    protected ?TdbShopSearchCache $oActiveSearchCache = null;
 
     /**
      * set the affiliate partner code for the current session.
@@ -74,29 +72,6 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
         }
 
         return true;
-    }
-
-    /**
-     * Factory to fetch the config for the active portal.
-     * Note: the method fetches the portal id through the active page, if no portal id is passed. So make sure
-     *       an active page exists if you are not passing a portal id.
-     *
-     * @param int $iPortalId - optional portal id. method fetches the id from the TCMSActivePage if iPortalId is not given
-     *
-     * @return TdbShop
-     *
-     * @deprecated use service chameleon_system_shop.shop_service::getActiveShop() instead
-     */
-    public static function GetInstance($iPortalId = null)
-    {
-        $activeShopService = self::getShopService();
-        if (null === $iPortalId) {
-            $shop = $activeShopService->getActiveShop();
-        } else {
-            $shop = $activeShopService->getShopForPortalId($iPortalId);
-        }
-
-        return $shop;
     }
 
     /**
@@ -182,37 +157,6 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
         }
 
         return $oActiveManufacturer;
-    }
-
-    /**
-     * returns the current active category.
-     *
-     * @return TdbShopCategory|null
-     *
-     * @deprecated - use the service chameleon_system_shop.shop_service instead (method getActiveCategory)
-     */
-    public static function GetActiveCategory()
-    {
-        return self::getShopService()->getActiveCategory();
-    }
-
-    /**
-     * return the active root category.
-     *
-     * @return TdbShopCategory|null
-     */
-    public static function GetActiveRootCategory()
-    {
-        static $oActiveRootCategory = 'x';
-        if ('x' === $oActiveRootCategory) {
-            $oActiveRootCategory = null;
-            $oActiveCategory = self::getShopService()->GetActiveCategory();
-            if (null !== $oActiveCategory) {
-                $oActiveRootCategory = $oActiveCategory->GetRootCategory();
-            }
-        }
-
-        return $oActiveRootCategory;
     }
 
     /**
@@ -306,18 +250,6 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     public static function GetValidFilterFields()
     {
         return [TdbShopManufacturer::FILTER_KEY_NAME, TdbShopCategory::FILTER_KEY_NAME];
-    }
-
-    /**
-     * Get the current active item.
-     *
-     * @return TdbShopArticle|null
-     *
-     * @deprecated - use the service chameleon_system_shop.shop_service instead (method getActiveProduct)
-     */
-    public static function GetActiveItem()
-    {
-        return self::getShopService()->getActiveProduct();
     }
 
     /**
@@ -507,7 +439,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      * the system pages are defined through the shop config in the table shop_system_pages
      * Note: the links will be cached to reduce load.
      *
-     * @deprecated
+     * @deprecated since 6.1.0
      *
      * @param string $sLinkText - the text to display in the link - no OutHTML will be called - so make sure to escape the incoming text
      * @param string $sSystemPageName

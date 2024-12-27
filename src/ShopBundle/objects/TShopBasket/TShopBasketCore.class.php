@@ -380,7 +380,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     {
         if (is_null($this->oActiveShippingGroup)) {
             // fetch the one from the shop
-            $oShopConfig = TdbShop::GetInstance();
+            $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             $oActiveShippingGroup = $oShopConfig->GetFieldShopShippingGroup();
             if (false == $this->SetActiveShippingGroup($oActiveShippingGroup)) {
                 // unable to set - group not in allowed list
@@ -934,7 +934,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $this->dCostVATWithoutShipping = $this->GetActiveVATList()->GetTotalVatValue();
         $this->GetActiveVATList()->GoToStart();
 
-        $oShopConf = TdbShop::GetInstance();
+        $oShopConf = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         if (true === $oShopConf->fieldShippingVatDependsOnBasketContents && $this->dCostVATWithoutShipping > 0) {
             if (is_null($this->GetActiveVouchers()) || !$this->GetActiveVouchers()->HasFreeShippingVoucher()) {
                 // need to add the shipping costs to the max vat group
@@ -1527,7 +1527,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     {
         $oView = new TViewParser();
 
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oView->AddVar('oShop', $oShop);
         $oView->AddVar('oBasket', $this);
         $oView->AddVar('oBasketArticles', $this->GetBasketArticles());

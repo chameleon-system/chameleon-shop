@@ -9,28 +9,31 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * get the path to the product catalog.
-/**/
+ * /**/
 class TCMSSmartURLHandler_ShopRemoteSearch extends TCMSSmartURLHandler
 {
     public function GetPageDef()
     {
-        $iPageId = false;
+        $pageId = false;
         $oURLData = TCMSSmartURLData::GetActive();
 
-        $oShop = TdbShop::GetInstance($oURLData->iPortalId);
+        $shop = ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
 
-        $sProductPath = $oShop->GetLinkToSystemPage('remotesearch');
-        if ('.html' == substr($sProductPath, -5)) {
-            $sProductPath = substr($sProductPath, 0, -5);
+        $productPath = $this->getSystemPageService()->getLinkToSystemPageRelative('remotesearch');
+        if ('.html' === substr($productPath, -5)) {
+            $productPath = substr($productPath, 0, -5);
         }
-        if ('http://' == substr($sProductPath, 0, 7) || 'https://' == substr($sProductPath, 0, 8)) {
-            $sProductPath = substr($sProductPath, strpos($sProductPath, '/', 8));
+        if ('http://' === substr($productPath, 0, 7) || 'https://' == substr($productPath, 0, 8)) {
+            $productPath = substr($productPath, strpos($productPath, '/', 8));
         }
 
-        if (strlen($sProductPath) < strlen($oURLData->sRelativeFullURL) && substr($oURLData->sRelativeFullURL, 0, strlen($sProductPath)) == $sProductPath) {
-            $articlePath = substr($oURLData->sRelativeFullURL, strlen($sProductPath));
+        if (strlen($productPath) < strlen($oURLData->sRelativeFullURL) && substr($oURLData->sRelativeFullURL, 0, strlen($productPath)) == $productPath) {
+            $articlePath = substr($oURLData->sRelativeFullURL, strlen($productPath));
             if (false === strpos($articlePath, '/')) {
                 $articlePath = str_replace('-', '/', $articlePath);
             }
@@ -43,25 +46,29 @@ class TCMSSmartURLHandler_ShopRemoteSearch extends TCMSSmartURLHandler
                     $sView = $aParts[3];
                     $sKey = $aParts[5];
                     // clean key...
-                    $aEndings = array('.csv', '.txt', '.xml');
+                    $aEndings = ['.csv', '.txt', '.xml'];
                     foreach ($aEndings as $sEnding) {
                         if (substr($sKey, -strlen($sEnding)) == $sEnding) {
                             $sKey = substr($sKey, 0, strlen($sKey) - strlen($sEnding));
                         }
                     }
-                    $this->aCustomURLParameters['module_fnc'] = array($sSpotName => 'ExecuteExport');
+                    $this->aCustomURLParameters['module_fnc'] = [$sSpotName => 'ExecuteExport'];
                     $this->aCustomURLParameters['view'] = $sView;
                     $this->aCustomURLParameters['key'] = $sKey;
 
-                    $iNode = $oShop->GetSystemPageNodeId('remotesearch');
+                    $iNode = $shop->GetSystemPageNodeId('remotesearch');
                     $oNode = new TCMSTreeNode();
-                    /** @var $oNode TCMSTreeNode */
                     $oNode->Load($iNode);
-                    $iPageId = $oNode->GetLinkedPage();
+                    $pageId = $oNode->GetLinkedPage();
                 }
             }
         }
 
-        return $iPageId;
+        return $pageId;
+    }
+
+    private function getSystemPageService(): SystemPageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 }

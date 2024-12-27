@@ -17,7 +17,7 @@ class TPkgShopBasketMapper_ToMiniBasket extends AbstractViewMapper
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oBasket', 'TShopBasket', TShopBasket::GetInstance());
-        $oRequirements->NeedsSourceObject('oShop', 'TdbShop', TdbShop::GetInstance());
+        $oRequirements->NeedsSourceObject('oShop', 'TdbShop', \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop());
     }
 
     /**

@@ -17,6 +17,6 @@ abstract class AbstractPkgShopMapper_Article extends AbstractViewMapper
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oObject', 'TdbShopArticle');
-        $oRequirements->NeedsSourceObject('oShop', 'TdbShop', TdbShop::GetInstance());
+        $oRequirements->NeedsSourceObject('oShop', 'TdbShop', \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop());
     }
 }

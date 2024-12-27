@@ -38,7 +38,7 @@ class TPkgExtranetRegistrationGuest_TDataExtranetUser extends TPkgExtranetRegist
     public function GetLinkForRegistrationGuest()
     {
         $oURLData = TCMSSmartURLData::GetActive();
-        $oShop = TdbShop::GetInstance($oURLData->iPortalId);
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
         $sRegisterPath = $oShop->GetLinkToSystemPage(self::NAME_SYSTEM_PAGE);
 
         return $sRegisterPath;

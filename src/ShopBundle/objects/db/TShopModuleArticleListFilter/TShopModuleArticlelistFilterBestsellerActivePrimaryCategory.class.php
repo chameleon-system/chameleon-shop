@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TShopModuleArticlelistFilterBestsellerActivePrimaryCategory extends TShopModuleArticlelistFilterBestseller
 {
     /**
@@ -24,10 +26,8 @@ class TShopModuleArticlelistFilterBestsellerActivePrimaryCategory extends TShopM
      */
     protected function GetListQueryBase($oListConfig)
     {
-        $sQuery = '';
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveRootCategory();
-        if (!is_null($oActiveCategory)) {
+        $oActiveCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveRootCategory();
+        if (null !== $oActiveCategory) {
             $aCategories = $oActiveCategory->GetAllChildrenIds();
             $aCategories[] = $oActiveCategory->id;
             $aCategories = TTools::MysqlRealEscapeArray($aCategories);
@@ -45,7 +45,7 @@ class TShopModuleArticlelistFilterBestsellerActivePrimaryCategory extends TShopM
                 $sQuery = parent::GetListBaseQueryRestrictedToCategories($oListConfig, $aCategories);
                 if ($iNumRecs > 0) {
                     // add the records that have been sold
-                    $aList = array();
+                    $aList = [];
                     while ($aTmpRow = MySqlLegacySupport::getInstance()->fetch_assoc($tres)) {
                         $aList[] = MySqlLegacySupport::getInstance()->real_escape_string($aTmpRow['id']);
                     }

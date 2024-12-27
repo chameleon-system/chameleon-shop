@@ -24,9 +24,7 @@ class TShopModuleArticlelistFilterNewArticlesActiveCategory extends TShopModuleA
      */
     protected function GetListQueryBase($oListConfig)
     {
-        $sQuery = '';
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveCategory();
+        $oActiveCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
         if (!is_null($oActiveCategory)) {
             $aCategories = $oActiveCategory->GetAllChildrenIds();
             $aCategories[] = $oActiveCategory->id;

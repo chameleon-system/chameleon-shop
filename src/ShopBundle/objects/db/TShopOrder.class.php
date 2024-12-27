@@ -42,7 +42,7 @@ class TShopOrder extends TShopOrderAutoParent
         parent::PostInsertHook();
         // we need to add an order number to the order... since generation of this number may differ
         // from shop to shop, we have added the method to fetch a new order number to the shop class
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $iOrderNumber = $oShop->GetNextFreeOrderNumber();
         $aData = $this->sqlData;
         $aData['ordernumber'] = $iOrderNumber;
@@ -63,7 +63,7 @@ class TShopOrder extends TShopOrderAutoParent
      */
     public function LoadFromBasket(TShopBasket $oBasket)
     {
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oPortal = $this->getPortalDomainService()->getActivePortal();
         $oUser = TdbDataExtranetUser::GetInstance();
         $oBillingAdr = $oUser->GetBillingAddress();

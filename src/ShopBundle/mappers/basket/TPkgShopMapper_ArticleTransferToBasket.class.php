@@ -18,7 +18,7 @@ class TPkgShopMapper_ArticleTransferToBasket extends AbstractViewMapper
     {
         $oRequirements->NeedsSourceObject('oObject', 'TdbShopArticle');
         $oRequirements->NeedsSourceObject('bRedirectToBasket', 'bool', false);
-        $oRequirements->NeedsSourceObject('oShop', 'TdbShop', TdbShop::GetInstance());
+        $oRequirements->NeedsSourceObject('oShop', 'TdbShop', \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop());
     }
 
     /**

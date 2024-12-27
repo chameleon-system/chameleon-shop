@@ -575,7 +575,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
                 }
 
                 // fetch manually selected articles for search words
-                $oShop = TdbShop::GetInstance();
+                $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $oManuelArticleSelections = TdbShopSearchKeywordArticleList::GetListForShopKeywords($oShop->id, $aTerms, $sLanguageId);
                 while ($oManuelArticleSelection = $oManuelArticleSelections->Next()) {
                     $aTmpArticleList = $oManuelArticleSelection->GetMLTIdList('shop_article');
@@ -914,7 +914,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     public static function searchWithAND()
     {
         $bUseAnd = false;
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         if ($oShop && array_key_exists('shop_search_use_boolean_and', $oShop->sqlData)) {
             $bUseAnd = ('1' == $oShop->sqlData['shop_search_use_boolean_and']);
         }

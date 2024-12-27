@@ -29,7 +29,7 @@ class TShopModuleArticlelistFilterAllArticlesOfActiveNonLeafCategory extends Tdb
                 LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
                     where 1=0';
 
-        $oActiveCategory = TdbShop::GetActiveCategory();
+        $oActiveCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
         if (!$oActiveCategory) {
             return $sQuery;
         }

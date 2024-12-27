@@ -106,7 +106,7 @@ class TPkgShopPrimaryNavigation_TPkgCmsNavigationNode_Category extends AbstractP
             $this->bIsActive = false;
             /** @var $oNode TdbShopCategory */
             $oNode = $this->getNodeCopy();
-            $oActiveCategory = TdbShop::GetInstance()->GetActiveCategory();
+            $oActiveCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
             if ($oActiveCategory && $oNode && $oActiveCategory->id === $oNode->id) {
                 $this->bIsActive = true;
             }
@@ -122,7 +122,7 @@ class TPkgShopPrimaryNavigation_TPkgCmsNavigationNode_Category extends AbstractP
             if (false === $this->bIsExpanded) {
                 /** @var $oNode TdbShopCategory */
                 $oNode = $this->getNodeCopy();
-                $aCategoryPath = TdbShop::GetInstance()->GetActiveCategoryPath();
+                $aCategoryPath = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop()->GetActiveCategoryPath();
                 if ($oNode && is_array($aCategoryPath) && isset($aCategoryPath[$oNode->id])) {
                     $this->bIsExpanded = true;
                 }

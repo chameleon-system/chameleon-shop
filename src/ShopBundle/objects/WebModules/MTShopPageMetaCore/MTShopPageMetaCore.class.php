@@ -10,47 +10,46 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class MTShopPageMetaCore extends MTPageMetaCore
 {
     public function _GetTitle()
     {
         // alter the path if we have an active category or an active item
-        //default SEO pattern of the page
+        // default SEO pattern of the page
         $sTitle = $this->GetSeoPatternString();
 
         if ('' === $sTitle) {
-            $oShop = TdbShop::GetInstance();
-            $oActiveCategory = $oShop->GetActiveCategory();
-            $oActiveItem = $oShop->GetActiveItem();
+            $oActiveCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+            $oActiveItem = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
 
             if (is_null($oActiveCategory) && is_null($oActiveItem)) {
                 $sTitle = parent::_GetTitle();
             } else {
                 $sTitle = $this->_GetPortalName();
 
-                $aList = array();
+                $aList = [];
 
                 if (!is_null($oActiveItem)) {
                     $oItem = new TShopBreadcrumbItemArticle();
-                    /** @var $oItem TShopBreadcrumbItemArticle */
+                    /* @var $oItem TShopBreadcrumbItemArticle */
                     $oItem->oItem = $oActiveItem;
                     $aList[] = $oItem;
                 }
 
                 if (!is_null($oActiveCategory)) {
                     $oItem = new TShopBreadcrumbItemCategory();
-                    /** @var $oItem TShopBreadcrumbItemCategory */
+                    /* @var $oItem TShopBreadcrumbItemCategory */
                     $oItem->oItem = $oActiveCategory;
                     $aList[] = $oItem;
                     $oCurrentCategory = $oActiveCategory;
 
                     while ($oParent = $oCurrentCategory->GetParent()) {
                         $oItem = new TShopBreadcrumbItemCategory();
-                        /** @var $oItem TShopBreadcrumbItemCategory */
+                        /* @var $oItem TShopBreadcrumbItemCategory */
                         $oItem->oItem = $oParent;
                         $aList[] = $oItem;
                         $oCurrentCategory = $oParent;
@@ -71,9 +70,8 @@ class MTShopPageMetaCore extends MTPageMetaCore
     {
         $aMetaData = parent::_GetMetaData();
 
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveCategory();
-        $oActiveItem = $oShop->GetActiveItem();
+        $oActiveCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+        $oActiveItem = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
 
         if (!is_null($oActiveCategory) || !is_null($oActiveItem)) {
             $aMetaData = $this->addDescription($aMetaData, $oActiveCategory, $oActiveItem);
@@ -108,7 +106,7 @@ class MTShopPageMetaCore extends MTPageMetaCore
 
         if (null !== $product) {
             $keywords = $product->GetMetaKeywords();
-        } else if (null !== $category) {
+        } elseif (null !== $category) {
             $keywords = $category->GetMetaKeywords();
         }
 
@@ -156,9 +154,8 @@ class MTShopPageMetaCore extends MTPageMetaCore
     {
         $aParameters = parent::_GetCacheParameters();
 
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveCategory();
-        $oActiveItem = $oShop->GetActiveItem();
+        $oActiveCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+        $oActiveItem = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
 
         if (!is_null($oActiveCategory)) {
             $aParameters['activecategoryid'] = $oActiveCategory->id;
@@ -185,15 +182,14 @@ class MTShopPageMetaCore extends MTPageMetaCore
     {
         $tableInfo = parent::_GetCacheTableInfos();
 
-        $iarticle = '';
-        $oShop = TdbShop::GetInstance();
-        $oActiveItem = $oShop->GetActiveItem();
+        $articleId = '';
+        $oActiveItem = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveItem)) {
-            $iarticle = $oActiveItem->id;
+            $articleId = $oActiveItem->id;
         }
 
-        $tableInfo[] = array('table' => 'shop_article', 'id' => $iarticle);
-        $tableInfo[] = array('table' => 'shop_category', 'id' => '');
+        $tableInfo[] = ['table' => 'shop_article', 'id' => $articleId];
+        $tableInfo[] = ['table' => 'shop_category', 'id' => ''];
 
         return $tableInfo;
     }
@@ -207,9 +203,7 @@ class MTShopPageMetaCore extends MTPageMetaCore
      */
     protected function GetSeoPatternString($dont_replace = false)
     {
-        //return ''; //why? //#7767
-        $sPattern = ''; //"[{PORTAL_NAME}] - [{PAGE_NAME}]";
-        /** @var $oSeoRenderer TCMSRenderSeoPattern */
+        $sPattern = '';
         $oSeoRenderer = new TCMSRenderSeoPattern();
 
         $sTmpPattern = parent::GetSeoPatternString(true);
@@ -217,20 +211,20 @@ class MTShopPageMetaCore extends MTPageMetaCore
             $sPattern = $sTmpPattern;
         }
 
-        $oActiveArticle = TdbShop::GetActiveItem();
+        $oActiveArticle = $this->getShopService()->getActiveProduct();
         if ($oActiveArticle) {
             $arrRepl = $oActiveArticle->GetSeoPattern($sPattern);
             $oSeoRenderer->AddPatternReplaceValues($arrRepl);
 
             return $oSeoRenderer->RenderPattern($sPattern);
-        } else {
-            $oActiveCategory = TdbShop::GetActiveCategory();
-            if ($oActiveCategory) {
-                $arrRepl = $oActiveCategory->GetSeoPattern($sPattern);
-                $oSeoRenderer->AddPatternReplaceValues($arrRepl);
+        }
 
-                return $oSeoRenderer->RenderPattern($sPattern);
-            }
+        $oActiveCategory = $this->getShopService()->getActiveCategory();
+        if ($oActiveCategory) {
+            $arrRepl = $oActiveCategory->GetSeoPattern($sPattern);
+            $oSeoRenderer->AddPatternReplaceValues($arrRepl);
+
+            return $oSeoRenderer->RenderPattern($sPattern);
         }
 
         return parent::GetSeoPatternString();
@@ -243,7 +237,6 @@ class MTShopPageMetaCore extends MTPageMetaCore
      */
     protected function GetMetaCanonical()
     {
-        $sCanonical = '';
         $shopService = $this->getShopService();
         $oShopItem = $shopService->getActiveProduct();
         /** @var $oShopItem TdbShopArticle */
@@ -253,23 +246,27 @@ class MTShopPageMetaCore extends MTPageMetaCore
             if ($oCat) {
                 $iCat = $oCat->id;
             }
-            $sCanonical = $oShopItem->getLink(true, [TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $iCat]);
+            $canonical = $oShopItem->getLink(true, null, [TShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $iCat]);
         } else {
             $category = $shopService->getActiveCategory();
             if ($category) {
                 $currentPage = $this->getInputFilterUtil()->getFilteredInput(TdbShopArticleList::URL_LIST_CURRENT_PAGE, 0);
-                $additionalParam = array();
+                $additionalParam = [];
                 if ('0' !== $currentPage && 0 !== $currentPage) {
-                    $additionalParam = array(TdbShopArticleList::URL_LIST_CURRENT_PAGE => $currentPage);
+                    $additionalParam = [TdbShopArticleList::URL_LIST_CURRENT_PAGE => $currentPage];
                 }
                 $activePage = $this->getActivePageService()->getActivePage();
 
+                if (null === $activePage) {
+                    return '';
+                }
+
                 return $activePage->GetRealURLPlain($additionalParam, true);
             }
-            $sCanonical = parent::GetMetaCanonical();
+            $canonical = parent::GetMetaCanonical();
         }
 
-        return $sCanonical;
+        return $canonical;
     }
 
     private function getActivePageService(): ActivePageServiceInterface
@@ -282,10 +279,7 @@ class MTShopPageMetaCore extends MTPageMetaCore
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
-    /**
-     * @return ShopServiceInterface
-     */
-    private function getShopService()
+    private function getShopService(): ShopServiceInterface
     {
         return ServiceLocator::get('chameleon_system_shop.shop_service');
     }

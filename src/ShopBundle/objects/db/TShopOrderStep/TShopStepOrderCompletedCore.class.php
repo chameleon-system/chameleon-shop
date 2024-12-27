@@ -64,7 +64,7 @@ class TShopStepOrderCompletedCore extends TShopStepUserData
             $aParameter['sOrderNumber'] = $oUserOrder->fieldOrdernumber;
         }
 
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         // add link to display a printable version of the order
         $aParameter['sLinkPrintableVersion'] = $oShop->GetLinkToSystemPage('print-order', array('id' => $oUserOrder->id));
         $aParameter[strtolower('sLinkPrintableVersion')] = $aParameter['sLinkPrintableVersion']; // links should be all lowercase - some customers force this (and some wysiwyg may require this as well) so we provide both variations

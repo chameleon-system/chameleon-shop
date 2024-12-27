@@ -34,7 +34,7 @@ class TShopModuleArticlelistFilterOtherCustomersBought extends TdbShopModuleArti
                 ';
 
         $sArticleRestriction = '';
-        $oActiveArticle = TdbShop::GetActiveItem();
+        $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveArticle)) {
             $sArticleRestriction = " (`shop_order_item`.`shop_article_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oActiveArticle->id)."')";
         }

@@ -415,7 +415,7 @@ class Module extends \MTPkgViewRendererAbstractModuleMapper
      */
     private function getActiveShop()
     {
-        return \TdbShop::GetInstance();
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
     }
 
     /**

@@ -311,9 +311,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
     public function _GetCacheParameters()
     {
         $aParams = array();
-        $oShop = TdbShop::GetInstance();
-
-        $oActiveCategory = $oShop->GetActiveCategory();
+        $oActiveCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
         if (!is_null($oActiveCategory)) {
             $aParams['activecategoryid'] = $oActiveCategory->id;
         }

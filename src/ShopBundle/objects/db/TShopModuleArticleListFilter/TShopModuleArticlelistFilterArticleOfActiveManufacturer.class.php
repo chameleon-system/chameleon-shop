@@ -11,7 +11,7 @@
 
 /**
  * show all articles from the active manufacturer.
-/**/
+ * /**/
 class TShopModuleArticlelistFilterArticleOfActiveManufacturer extends TdbShopModuleArticleListFilter
 {
     /**
@@ -48,12 +48,10 @@ class TShopModuleArticlelistFilterArticleOfActiveManufacturer extends TdbShopMod
      */
     public function _GetCacheParameters()
     {
-        $aParams = array();
-        $oShop = TdbShop::GetInstance();
-
-        $oActiveCategory = $oShop->GetActiveCategory();
-        if (!is_null($oActiveCategory)) {
-            $aParams['activecategoryid'] = $oActiveCategory->id;
+        $aParams = [];
+        $activeCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+        if (!is_null($activeCategory)) {
+            $aParams['activecategoryid'] = $activeCategory->id;
         }
         $oActiveManufacturer = TdbShop::GetActiveManufacturer();
         if ($oActiveManufacturer) {

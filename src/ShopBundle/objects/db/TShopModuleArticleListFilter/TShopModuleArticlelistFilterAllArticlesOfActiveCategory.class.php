@@ -24,9 +24,7 @@ class TShopModuleArticlelistFilterAllArticlesOfActiveCategory extends TdbShopMod
      */
     protected function GetListQueryBase($oListConfig)
     {
-        $sQuery = '';
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveCategory();
+        $oActiveCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
         if (!is_null($oActiveCategory)) {
             $sQuery = "SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
                      FROM `shop_article`

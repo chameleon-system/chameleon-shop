@@ -65,7 +65,7 @@ class MTShopWishlistBasketCore extends MTShopBasketCore
             $oItem = TdbShopArticle::GetNewInstance();
             /** @var $oItem TdbShopArticle */
             if ($oItem->Load($sArticleId)) {
-                $oShop = TdbShop::GetInstance();
+                $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $oExtranet = TdbDataExtranet::GetInstance();
                 $aInfoData = array('sLinkLoginStart' => '<a href="'.$oExtranet->GetLinkLoginPage().'">', 'sLinkLoginEnd' => '</a>', 'sLinkWishlistStart' => '<a href="'.$oShop->GetLinkToSystemPage('wishlist').'">', 'sLinkWishlistEnd' => '</a>', 'sLinkArticleStart' => '<a href="'.$oItem->getLink().'">', 'sLinkArticleEnd' => '</a>', 'sArticleName' => TGlobal::OutHTML($oItem->GetName()), 'dAddedAmount' => $dAmount);
                 $oUser = TdbDataExtranetUser::GetInstance();

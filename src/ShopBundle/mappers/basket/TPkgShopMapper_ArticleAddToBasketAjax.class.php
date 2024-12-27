@@ -29,7 +29,7 @@ class TPkgShopMapper_ArticleAddToBasketAjax extends AbstractViewMapper
         $oArticle = $oVisitor->GetSourceObject('oObject');
         if (!is_null($oArticle) && !is_null($oArticle->id)) {
             $oVisitor->SetMappedValue('sBasketFormId', 'tobasket'.$oArticle->sqlData['cmsident']);
-            $sAjaxBasketLink = "CHAMELEON.Custom.AddToBasket('".TdbShop::GetInstance()->GetBasketModuleSpotName()."', '".TGlobal::OutHTML($oArticle->id)."', document.tobasket{$oArticle->sqlData['cmsident']}.elements['".MTShopBasketCore::URL_ITEM_AMOUNT."'].value);return false;";
+            $sAjaxBasketLink = "CHAMELEON.Custom.AddToBasket('".\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop()->GetBasketModuleSpotName()."', '".TGlobal::OutHTML($oArticle->id)."', document.tobasket{$oArticle->sqlData['cmsident']}.elements['".MTShopBasketCore::URL_ITEM_AMOUNT."'].value);return false;";
             $oVisitor->SetMappedValue('sAjaxBasketLink', $sAjaxBasketLink);
         }
         if ($oArticle && $bCachingEnabled) {

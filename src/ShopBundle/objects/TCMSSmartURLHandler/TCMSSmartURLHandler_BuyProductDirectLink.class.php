@@ -33,7 +33,7 @@ class TCMSSmartURLHandler_BuyProductDirectLink extends TCMSSmartURLHandler
             /** @var $oArticle TdbShopArticle */
             if ($oArticle->Load($aParts[2])) {
                 // we need to perform a real redirect...
-                $oShopConfig = TdbShop::GetInstance($oURLData->iPortalId);
+                $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
                 $iNode = $oShopConfig->GetSystemPageNodeId('checkout');
                 $oNode = new TCMSTreeNode();
                 /* @var $oNode TCMSTreeNode */

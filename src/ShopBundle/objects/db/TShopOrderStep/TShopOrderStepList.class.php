@@ -153,7 +153,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
         $oView = new TViewParser();
         $oView->AddVar('oSteps', $this);
 
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oView->AddVar('oShop', $oShop);
         $oView->AddVar('sSpotName', $sSpotName);
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);

@@ -69,7 +69,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         parent::Init();
 
         // load affiliate code if passed as param
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oGlobal = TGlobal::instance();
         if ($oGlobal->UserDataExists($oShop->fieldAffiliateParameterName)) {
             $sCode = $oGlobal->GetUserData($oShop->fieldAffiliateParameterName);
@@ -331,7 +331,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         reset($aArticleIdsToMove);
 
         // write message...
-        $oShopConfig = TdbShop::GetInstance();
+        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $sBasketLinkStart = '<a href="'.$oShopConfig->GetBasketLink().'">';
         $sBasketLinkEnd = '</a>';
         $aMessageVars = ['BasketLinkStart' => $sBasketLinkStart, 'BasketLinkEnd' => $sBasketLinkEnd];
@@ -497,7 +497,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
             $oItem = TdbShopArticle::GetNewInstance();
             /** @var $oItem TdbShopArticle */
             if ($oItem->Load($iArticleId)) {
-                $oShop = TdbShop::GetInstance();
+                $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 // add item to list
                 $oUser = TdbDataExtranetUser::GetInstance();
                 $dNewAmountOnList = $oUser->AddArticleIdToNoticeList($iArticleId, $iAmount);
@@ -817,7 +817,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         $oRemovedItem = $oBasket->RemoveItem($sBasketItemKey);
         if ($oRemovedItem) {
             $this->PostRemoveItemInBasketHook($oRemovedItem);
-            $oShopConfig = TdbShop::GetInstance();
+            $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             $sArticleName = $oRemovedItem->GetName();
 
             $sBasketLinkStart = '<a href="'.$oShopConfig->GetBasketLink().'">';
@@ -995,7 +995,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
             // now write messages and redirect - but only if this is not an internal call
             if (false == $bIsInternalCall || true == $bWriteMessageOnInternalCall) {
                 // write success message
-                $oShopConfig = TdbShop::GetInstance();
+                $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $sArticleName = $oArticle->GetName();
 
                 $sBasketLinkStart = '<a href="'.$oShopConfig->GetBasketLink().'">';

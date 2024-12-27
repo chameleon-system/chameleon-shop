@@ -10,24 +10,14 @@
  */
 
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 
 class TPkgShopMapper_OrderStep extends AbstractViewMapper
 {
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-
-    /**
-     * @param InputFilterUtilInterface|null $inputFilterUtil
-     */
-    public function __construct(InputFilterUtilInterface $inputFilterUtil = null)
+    public function __construct(
+        protected readonly InputFilterUtilInterface $inputFilterUtil,
+        protected readonly ShopServiceInterface $shopService)
     {
-        if (null === $inputFilterUtil) {
-            $this->inputFilterUtil = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
-        } else {
-            $this->inputFilterUtil = $inputFilterUtil;
-        }
     }
 
     /**
@@ -36,7 +26,8 @@ class TPkgShopMapper_OrderStep extends AbstractViewMapper
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('sBackLink');
-        $oRequirements->NeedsSourceObject('shop', 'TdbShop', TShop::GetInstance());
+        $activeShop = $this->shopService->getActiveShop();
+        $oRequirements->NeedsSourceObject('shop', 'TdbShop', $activeShop);
     }
 
     /**

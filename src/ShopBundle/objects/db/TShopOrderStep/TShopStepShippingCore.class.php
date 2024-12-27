@@ -176,7 +176,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
     protected function postSelectPaymentHook()
     {
         return $this->oActivePaymentMethod->postSelectPaymentHook(
-            TdbShop::GetInstance(),
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop(),
             TShopBasket::GetInstance(),
             TdbDataExtranetUser::GetInstance(),
             self::MSG_PAYMENT_METHOD

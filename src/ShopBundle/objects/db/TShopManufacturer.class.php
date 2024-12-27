@@ -25,7 +25,7 @@ class TShopManufacturer extends TShopManufacturerAutoParent
      */
     public function GetLinkProducts($bUseAbsoluteURL = false)
     {
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $sLink = $oShop->GetLinkToSystemPage('manufacturer');
         if ('.html' == substr($sLink, -5)) {
             $sLink = substr($sLink, 0, -5).'/';
@@ -43,7 +43,7 @@ class TShopManufacturer extends TShopManufacturerAutoParent
     public function GetSearchRestrictionLink()
     {
         // get current search... then add filter
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oSearchCache = $oShop->GetActiveSearchObject();
         //$oSearchCache->aFilter[TdbShopManufacturer::FILTER_KEY_NAME] = $this->id;
         return $oSearchCache->GetSearchLink(array(TdbShopManufacturer::FILTER_KEY_NAME => $this->id));

@@ -20,7 +20,7 @@ class TShopUserNoticeList extends TAdbShopUserNoticeList
      */
     public function GetRemoveFromNoticeListLink()
     {
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $aParams = array('module_fnc['.$oShop->GetBasketModuleSpotName().']' => 'RemoveFromNoticeList', MTShopBasketCore::URL_ITEM_ID => $this->fieldShopArticleId);
 
         return $this->getActivePageService()->getLinkToActivePageRelative($aParams);
@@ -31,7 +31,7 @@ class TShopUserNoticeList extends TAdbShopUserNoticeList
      */
     public function GetRemoveFromNoticeListLinkAjax()
     {
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $aParams = array('module_fnc['.$oShop->GetBasketModuleSpotName().']' => 'ExecuteAjaxCall', '_fnc' => 'RemoveFromNoticeListAjax', MTShopBasketCore::URL_ITEM_ID => $this->fieldShopArticleId);
 
         return $this->getActivePageService()->getLinkToActivePageRelative($aParams);
