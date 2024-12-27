@@ -73,7 +73,7 @@ class MTPkgCmsSubNavigation_PkgShop extends MTPkgCmsSubNavigation_PkgShopAutoPar
         return $this->getActiveCategory()?->id;
     }
 
-    private function getActiveCategory(): TdbShopCategory
+    private function getActiveCategory(): ?TdbShopCategory
     {
         return ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
     }
