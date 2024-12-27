@@ -142,7 +142,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
         $this->SaveActionIdToComment();
         $oMail = TDataMailProfile::GetProfile('report-review');
         $aData = array();
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oArticle = $this->GetFieldShopArticle();
         $aData['sArticleName'] = $oArticle->GetName();
         $aData['sReviewId'] = $this->id;

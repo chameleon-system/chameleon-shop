@@ -65,7 +65,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
     {
         static $aFilter = 'x';
         if ('x' == $aFilter) {
-            $oShop = TdbShop::GetInstance();
+            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             $aFilter = $oShop->GetActiveFilter();
         }
 
@@ -116,7 +116,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
             }
         }
 
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $sLink = $oShop->GetLinkToSystemPage('search', $aParams);
 
         return $sLink;
@@ -129,7 +129,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
     public function GetSearchLinkForTerm($sTerm)
     {
         $aParams = array(TShopModuleArticlelistFilterSearch::PARAM_QUERY => $sTerm);
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $sLink = $oShop->GetLinkToSystemPage('search', $aParams);
 
         return $sLink;
@@ -207,7 +207,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
     public static function CreateSearchCache($sKey, $sQuery, $sSearchTerm, $aSearchTerms = null, $aFilter = array())
     {
         $sShopId = null;
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         if ($oShop) {
             $sShopId = $oShop->id;
         }

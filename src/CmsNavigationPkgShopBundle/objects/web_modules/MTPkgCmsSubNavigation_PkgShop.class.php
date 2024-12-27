@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * sub navi using category tree if on an active category.
-/**/
+ */
 class MTPkgCmsSubNavigation_PkgShop extends MTPkgCmsSubNavigation_PkgShopAutoParent
 {
     /**
@@ -29,24 +31,20 @@ class MTPkgCmsSubNavigation_PkgShop extends MTPkgCmsSubNavigation_PkgShopAutoPar
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     *
-     * @return
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        $oActiveRootCategory = TdbShop::GetActiveRootCategory();
-        if (null === $oActiveRootCategory) {
+        $activeRootCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveRootCategory();
+        if (null === $activeRootCategory) {
             parent::Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
 
             return;
         }
         $oCacheTriggerManager->addTrigger('shop_category');
         $oRootNode = new TPkgShopPrimaryNavigation_TPkgCmsNavigationNode_Category();
-        $oRootNode->loadFromNode($oActiveRootCategory);
-        $aTree = array($oRootNode);
+        $oRootNode->loadFromNode($activeRootCategory);
+        $aTree = [$oRootNode];
         $oVisitor->SetMappedValue('aTree', $aTree);
     }
 
@@ -65,45 +63,18 @@ class MTPkgCmsSubNavigation_PkgShop extends MTPkgCmsSubNavigation_PkgShopAutoPar
         return $parameters;
     }
 
-    /**
-     * @return null|string
-     */
-    private function getActiveRootCategoryId()
+    private function getActiveRootCategoryId(): ?string
     {
-        $rootCategory = $this->getActiveRootCategory();
-        if (null === $rootCategory) {
-            return null;
-        }
-
-        return $rootCategory->id;
+        return ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveRootCategory()?->id;
     }
 
-    /**
-     * @return TdbShopCategory|null
-     */
-    private function getActiveRootCategory()
+    private function getActiveCategoryId(): ?string
     {
-        return TdbShop::GetActiveRootCategory();
+        return $this->getActiveCategory()?->id;
     }
 
-    /**
-     * @return null|string
-     */
-    private function getActiveCategoryId()
+    private function getActiveCategory(): TdbShopCategory
     {
-        $category = $this->getActiveCategory();
-        if (null === $category) {
-            return null;
-        }
-
-        return $category->id;
-    }
-
-    /**
-     * @return TdbShopCategory
-     */
-    private function getActiveCategory()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+        return ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
     }
 }

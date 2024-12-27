@@ -471,7 +471,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
 
     private function shouldShowEmptyCategories(): bool
     {
-        $shop = TdbShop::GetInstance();
+        $shop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         return null !== $shop && true === $shop->fieldShowEmptyCategories;
     }
 

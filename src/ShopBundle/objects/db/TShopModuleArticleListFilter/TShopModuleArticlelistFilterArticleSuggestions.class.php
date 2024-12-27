@@ -12,7 +12,7 @@
 /**
  * this is just a stub that acts just like a manuell selection for now - we need to define
  * some algorithm that finds articles related to the current article (such as matching tags, attributes, etc).
-/**/
+ * /**/
 class TShopModuleArticlelistFilterArticleSuggestions extends TdbShopModuleArticleListFilter
 {
     /**
@@ -23,9 +23,7 @@ class TShopModuleArticlelistFilterArticleSuggestions extends TdbShopModuleArticl
     public function _GetCacheParameters()
     {
         $aParams = parent::_GetCacheParameters();
-        $oShop = TdbShop::GetInstance();
-
-        $oActiveArticle = $oShop->GetActiveItem();
+        $oActiveArticle = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveArticle)) {
             $aParams['articleId'] = $oActiveArticle->id;
         }

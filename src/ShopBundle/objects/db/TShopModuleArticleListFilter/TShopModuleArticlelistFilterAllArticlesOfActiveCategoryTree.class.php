@@ -11,7 +11,7 @@
 
 /**
  * show all articles in the active category... including the categories children.
-/**/
+ * /**/
 class TShopModuleArticlelistFilterAllArticlesOfActiveCategoryTree extends TdbShopModuleArticleListFilter
 {
     /**
@@ -27,8 +27,7 @@ class TShopModuleArticlelistFilterAllArticlesOfActiveCategoryTree extends TdbSho
      */
     protected function GetListQueryBase($oListConfig)
     {
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveCategory();
+        $oActiveCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
         if (!is_null($oActiveCategory)) {
             $aCategories = $oActiveCategory->GetAllChildrenIds();
             $aCategories[] = $oActiveCategory->id;

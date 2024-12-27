@@ -123,7 +123,7 @@ class MTPkgShopWishlistCore extends TUserCustomModelBase
             if (!is_null($oWishList)) {
                 if ($oWishList->SendPerMail($this->aUserInput['to_mail'], $this->aUserInput['to_name'], $this->aUserInput['comment'])) {
                     $oMsgManager->AddMessage(self::MSG_CONSUMER_NAME, 'WISHLIST-SEND-MAIL', $this->aUserInput);
-                    $oShop = TdbShop::GetInstance();
+                    $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                     $sURL = $oShop->GetLinkToSystemPage('wishlist');
                     $this->getRedirectService()->redirect($sURL);
                     $oMsgManager->AddMessage(self::MSG_CONSUMER_NAME, 'WISHLIST-UNABLE-TO-SEND-MAIL', $this->aUserInput);

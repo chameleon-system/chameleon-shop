@@ -166,7 +166,7 @@ class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMappe
         $oMailProfile->AddDataArray($aData);
         // now add product info as well
         /** @var $oActiveProduct TdbShopArticle */
-        $oActiveProduct = TdbShop::GetActiveItem();
+        $oActiveProduct = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         $aArticleData = $oActiveProduct->GetObjectPropertiesAsArray();
         $oMailProfile->AddDataArray($aArticleData);
         // add link to article

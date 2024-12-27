@@ -18,8 +18,7 @@ class TShopBreadcrumbItemArticle extends TShopBreadcrumbItem
 {
     public function GetLink()
     {
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveCategory();
+        $oActiveCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
         $iCategoryId = null;
         if (!is_null($oActiveCategory)) {
             $iCategoryId = $oActiveCategory->id;

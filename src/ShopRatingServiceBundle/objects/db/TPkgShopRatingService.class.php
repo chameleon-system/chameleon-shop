@@ -177,7 +177,7 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
         $oMailProfile->AddData('rating_service_url', $this->fieldRatingUrl);
         $oMailProfile->AddData('rating_service_email_text', $this->fieldEmailText);
 
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $aShopData = $oShop->GetSQLWithTablePrefix();
         $oMailProfile->AddDataArray($aShopData);
         $oMailProfile->AddData('shop_name', $oShop->fieldName);

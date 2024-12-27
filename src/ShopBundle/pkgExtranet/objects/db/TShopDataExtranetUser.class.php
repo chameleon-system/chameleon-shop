@@ -50,7 +50,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
                 $aUpdateData['customer_number'] = $this->GetCustomerNumber();
             }
             if (empty($this->sqlData['shop_id'])) {
-                $oShop = TdbShop::GetInstance();
+                $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $aUpdateData['shop_id'] = $oShop->id;
             }
             if (count($aUpdateData) > 0) {
@@ -114,7 +114,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     {
         $sCustNr = parent::GetCustomerNumber();
         if (empty($sCustNr)) {
-            $oShop = TdbShop::GetInstance();
+            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             $sCustNr = $oShop->GetNextFreeCustomerNumber();
             $aData = $this->sqlData;
             $aData['customer_number'] = $sCustNr;

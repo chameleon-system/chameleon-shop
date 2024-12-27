@@ -128,7 +128,7 @@ class TShopStepBasketCore extends TdbShopOrderStep
     public function UpdateBasket($bInternalCall = false)
     {
         // we use the existing basket module to do all the work...
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oBasketModule = $this->getController()->getModuleLoader()->GetPointerToModule($oShop->fieldBasketSpotName);
         $bSuccess = $oBasketModule->UpdateBasketItems(null, false, true);
 

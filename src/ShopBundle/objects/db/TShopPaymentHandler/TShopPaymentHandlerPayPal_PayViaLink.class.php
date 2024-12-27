@@ -157,7 +157,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
     protected function GetInstantPaymentNotificationListenerURL($oOrder)
     {
         // change to absolute url
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $sBasketPage = $oShop->GetLinkToSystemPage('checkout', null, true);
         $sURL = $sBasketPage.'/'.self::URL_IDENTIFIER_IPN;
         $sURL = str_replace('&amp;', '&', $sURL);

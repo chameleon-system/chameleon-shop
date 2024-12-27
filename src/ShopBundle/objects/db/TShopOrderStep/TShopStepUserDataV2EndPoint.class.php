@@ -740,7 +740,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
                     break;
             }
 
-            $oShop = TdbShop::GetInstance();
+            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             $aUserData['shop_id'] = $oShop->id;
 
             // add data from the primary address

@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TShopModuleArticlelistFilterNewArticlesActivePrimaryCategory extends TShopModuleArticlelistFilterNewArticles
 {
     /**
@@ -24,10 +26,8 @@ class TShopModuleArticlelistFilterNewArticlesActivePrimaryCategory extends TShop
      */
     protected function GetListQueryBase($oListConfig)
     {
-        $sQuery = '';
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveRootCategory();
-        if (!is_null($oActiveCategory)) {
+        $oActiveCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveRootCategory();
+        if (null !== $oActiveCategory) {
             $aCategories = $oActiveCategory->GetAllChildrenIds();
             $aCategories[] = $oActiveCategory->id;
             $aCategories = TTools::MysqlRealEscapeArray($aCategories);

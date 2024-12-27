@@ -54,7 +54,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
     {
         $this->GetConfigValues();
 
-        $oShop = TdbShop::GetInstance(1);
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId(1);
         $this->sShopID = $oShop->id;
 
         $oLanguage = TdbCmsLanguage::GetNewInstance();
@@ -89,7 +89,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
      */
     protected function GetConfigValues()
     {
-        $oShopConfig = TdbShop::GetInstance(1);
+        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId(1);
         $this->Shopreviewmail_MailDelay = $oShopConfig->fieldShopreviewmailMailDelay;
         $this->Shopreviewmail_PercentOfCustomers = $oShopConfig->fieldShopreviewmailPercentOfCustomers;
         $this->Shopreviewmail_SendForEachOrder = $oShopConfig->fieldShopreviewmailSendForEachOrder;

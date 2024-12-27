@@ -32,7 +32,7 @@ class TShopModuleArticlelistFilterAccessories extends TdbShopModuleArticleListFi
                 ';
 
         $sArticleRestriction = '';
-        $oActiveArticle = TdbShop::GetActiveItem();
+        $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveArticle)) {
             // check if the article has related articles - if it does not and it is a variant, try the parent
             $sRelationKey = $oActiveArticle->id;
@@ -60,9 +60,7 @@ class TShopModuleArticlelistFilterAccessories extends TdbShopModuleArticleListFi
     public function _GetCacheParameters()
     {
         $aParams = parent::_GetCacheParameters();
-        $oShop = TdbShop::GetInstance();
-
-        $oActiveArticle = $oShop->GetActiveItem();
+        $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveArticle)) {
             $aParams['articleId'] = $oActiveArticle->id;
         }

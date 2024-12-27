@@ -10,7 +10,6 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 
 class MTShopBreadcrumbCore extends MTBreadcrumbCore
 {
@@ -20,29 +19,28 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
     {
         parent::Execute();
 
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveCategory();
-        $oActiveItem = $oShop->GetActiveItem();
+        $oActiveCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+        $oActiveItem = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();;
 
         // if we have an active category... generate path there
         if (!is_null($oActiveCategory) || !is_null($oActiveItem)) {
             // we want to use the normal breadcrum view... so we need to generate a breadcrumb class that can simulate the required methos (getlink, gettarget and getname)
             $breadcrumb = new TCMSPageBreadcrumb();
             /** @var $breadcrumb TCMSPageBreadcrumb */
-            $aList = array();
+            $aList = [];
 
             if (!is_null($oActiveCategory)) {
                 $aCatPath = TdbShop::GetActiveCategoryPath();
                 foreach (array_keys($aCatPath) as $iCatId) {
                     $oItem = new TShopBreadcrumbItemCategory();
-                    /** @var $oItem TShopBreadcrumbItemCategory */
+                    /* @var $oItem TShopBreadcrumbItemCategory */
                     $oItem->oItem = $aCatPath[$iCatId];
                     $aList[] = $oItem;
                 }
             }
             if (!is_null($oActiveItem)) {
                 $oItem = new TShopBreadcrumbItemArticle();
-                /** @var $oItem TShopBreadcrumbItemArticle */
+                /* @var $oItem TShopBreadcrumbItemArticle */
                 $oItem->oItem = $oActiveItem;
                 $aList[] = $oItem;
             }
@@ -91,10 +89,8 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
     public function _GetCacheParameters()
     {
         $aParameters = parent::_GetCacheParameters();
-
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveCategory();
-        $oActiveItem = $oShop->GetActiveItem();
+        $oActiveCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+        $oActiveItem = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();;
         if (!is_null($oActiveCategory)) {
             $aParameters['iactivecategoryid'] = $oActiveCategory->id;
         }
@@ -117,20 +113,19 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
     {
         $aTables = parent::_GetCacheTableInfos();
 
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveCategory();
-        $oActiveItem = $oShop->GetActiveItem();
+        $oActiveCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+        $oActiveItem = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveCategory)) {
-            $aTables[] = array('table' => 'shop_category', 'id' => '');
+            $aTables[] = ['table' => 'shop_category', 'id' => ''];
         }
 
         if (!is_null($oActiveItem)) {
-            $aTables[] = array('table' => 'shop_article', 'id' => $oActiveItem->id);
+            $aTables[] = ['table' => 'shop_article', 'id' => $oActiveItem->id];
         }
 
         $activeManufacturer = $this->getActiveManufacturer();
         if (null !== $activeManufacturer) {
-            $aTables[] = array('table' => 'shop_manufacturer', 'id' => $activeManufacturer->id);
+            $aTables[] = ['table' => 'shop_manufacturer', 'id' => $activeManufacturer->id];
         }
 
         return $aTables;
@@ -141,6 +136,6 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
      */
     private function getActiveManufacturer()
     {
-        return \TShop::GetActiveManufacturer();
+        return TShop::GetActiveManufacturer();
     }
 }

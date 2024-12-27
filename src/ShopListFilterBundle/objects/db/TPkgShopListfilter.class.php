@@ -217,7 +217,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
         }
 
         if (null === $instance) {
-            $instance = TdbPkgShopListfilter::GetNewInstance(TdbShop::GetInstance()->fieldPkgShopListfilterPostsearchId);
+            $instance = TdbPkgShopListfilter::GetNewInstance(\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop()->fieldPkgShopListfilterPostsearchId);
         }
 
         $instance->pushStaticFilterToRequest();

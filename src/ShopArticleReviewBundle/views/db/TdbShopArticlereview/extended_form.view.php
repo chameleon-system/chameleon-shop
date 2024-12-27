@@ -5,7 +5,7 @@ $oMsgManager = TCMSMessageManager::GetInstance();
 $sCaptchaQuestion = '';
 $bNeedUserFieldForName = false;
 $iRatingStars = 5;
-$oActiveArticle = TdbShop::GetActiveItem();
+$oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
 if ($oActiveArticle->IsVariant()) {
     $oActiveArticle = $oActiveArticle->GetFieldVariantParent();
 }

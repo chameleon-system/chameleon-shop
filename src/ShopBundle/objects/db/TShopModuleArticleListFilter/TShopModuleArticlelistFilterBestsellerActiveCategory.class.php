@@ -24,9 +24,7 @@ class TShopModuleArticlelistFilterBestsellerActiveCategory extends TShopModuleAr
      */
     protected function GetListQueryBase($oListConfig)
     {
-        $sQuery = '';
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveCategory();
+        $oActiveCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
         if (!is_null($oActiveCategory)) {
             $aCategories = $oActiveCategory->GetAllChildrenIds();
             $aCategories[] = $oActiveCategory->id;
@@ -46,7 +44,7 @@ class TShopModuleArticlelistFilterBestsellerActiveCategory extends TShopModuleAr
                 $sQuery = parent::GetListBaseQueryRestrictedToCategories($oListConfig, $aCategories);
                 if ($iNumRecs > 0) {
                     // add the records that have been sold
-                    $aList = array();
+                    $aList = [];
                     while ($aTmpRow = MySqlLegacySupport::getInstance()->fetch_assoc($tres)) {
                         $aList[] = MySqlLegacySupport::getInstance()->real_escape_string($aTmpRow['id']);
                     }

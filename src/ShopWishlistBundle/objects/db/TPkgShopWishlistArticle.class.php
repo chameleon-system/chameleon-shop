@@ -36,7 +36,7 @@ class TPkgShopWishlistArticle extends TAdbPkgShopWishlistArticle
      */
     public function GetRemoveFromWishlistLink($bIncludePortalLink = false)
     {
-        $oShopConfig = TdbShop::GetInstance();
+        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $aParameters = array('module_fnc['.$oShopConfig->GetBasketModuleSpotName().']' => 'RemoveFromWishlist', MTShopBasketCore::URL_ITEM_ID => $this->id, MTShopBasketCore::URL_MESSAGE_CONSUMER => MTShopBasketCore::MSG_CONSUMER_NAME);
 
         return $this->getActivePageService()->getLinkToActivePageRelative($aParameters);

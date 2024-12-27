@@ -187,7 +187,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         $this->oModuleConf->LoadFromField('cms_tpl_module_instance_id', $this->instanceID);
         $this->iPageSize = $this->GetActivePageSize();
 
-        $oCategory = TdbShop::GetActiveCategory();
+        $oCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
         if (is_object($oCategory)) {
             $this->iActiveShopModuleArticlelistOrderbyId = $this->oModuleConf->GetDefaultOrderBy($oCategory);
         }
@@ -229,7 +229,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         $_SESSION[self::SESSION_ACTIVE_ORDER_BY] = $this->iActiveShopModuleArticlelistOrderbyId;
 
         $oActivePage = $this->getActivePageService()->getActivePage();
-        $oActiveItem = TdbShop::GetActiveItem();
+        $oActiveItem = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!$oActiveItem && isset($oActivePage)) {
             $this->LoadArticleList(); // load the list only if we are not on a detail page
             $_SESSION['sLastPage'] = $oActivePage->GetRealURLPlain();
@@ -266,7 +266,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
      */
     public static function GetActiveItem()
     {
-        return TdbShop::GetActiveItem();
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
     }
 
     /**
@@ -276,7 +276,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
      */
     public static function GetActiveCategory()
     {
-        return TdbShop::GetActiveCategory();
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
     }
 
     public function Execute()
@@ -582,7 +582,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
                 }
             }
             if (is_null($oOrderBy)) {
-                $oShop = TdbShop::GetInstance();
+                $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $oOrderBy = $oShop->GetFieldShopModuleArticlelistOrderby();
             }
             if (!is_null($oOrderBy)) {
@@ -658,7 +658,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         }
 
         // also react to the shop settings
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $aClearCacheInfo[] = ['table' => 'shop', 'id' => $oShop->id];
         $aClearCacheInfo[] = ['table' => 'shop_article_catalog_conf ', 'id' => $this->instanceID];
 

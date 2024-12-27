@@ -211,7 +211,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
     protected function GetDeliveryCosts($oArticle, $aAdditionalData = array())
     {
         $sDeliveryCosts = 0.00;
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $sLanguage = 'DE';
         if (array_key_exists('langauge_iso_name', $aAdditionalData)) {
             $sLanguage = $aAdditionalData['langauge_iso_name'];

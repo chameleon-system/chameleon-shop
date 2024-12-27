@@ -99,7 +99,7 @@ class TPkgShopWishlist extends TAdbPkgShopWishlist
         if (!empty($sMode)) {
             $aAdditionalParameter[MTPkgShopWishlistCore::URL_MODE_PARAMETER_NAME] = $sMode;
         }
-        $oShopConfig = TdbShop::GetInstance();
+        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
 
         return $oShopConfig->GetLinkToSystemPage('wishlist', $aAdditionalParameter, true);
     }
@@ -113,7 +113,7 @@ class TPkgShopWishlist extends TAdbPkgShopWishlist
      */
     public function GetPublicLink($aAdditionalParameter = array())
     {
-        $oShopConfig = TdbShop::GetInstance();
+        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $aAdditionalParameter[MTPkgShopWishlistPublicCore::URL_PARAMETER_NAME] = array('id' => $this->id);
 
         return $oShopConfig->GetLinkToSystemPage('wishlist-public', $aAdditionalParameter, true);

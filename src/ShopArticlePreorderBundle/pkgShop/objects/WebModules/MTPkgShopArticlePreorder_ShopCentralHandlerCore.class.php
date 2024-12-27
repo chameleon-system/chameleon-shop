@@ -32,7 +32,7 @@ class MTPkgShopArticlePreorder_ShopCentralHandlerCore extends MTPkgShopArticlePr
         if ($oGlobal->UserDataExists('user_email')) {
             $sUserEmail = $oGlobal->GetUserData('user_email');
             if (TTools::IsValidEMail($sUserEmail)) {
-                $oActiveArticle = TdbShop::GetActiveItem();
+                $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
                 if ($oActiveArticle) {
                     $oActivePortal = $this->getPortalDomainService()->getActivePortal();
                     $aData = ['shop_article_id' => $oActiveArticle->id, 'preorder_user_email' => $sUserEmail, 'cms_portal_id' => $oActivePortal->id];

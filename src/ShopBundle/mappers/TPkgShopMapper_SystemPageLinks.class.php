@@ -13,10 +13,7 @@ use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 
 class TPkgShopMapper_SystemPageLinks extends AbstractViewMapper
 {
-    /**
-     * @var ShopServiceInterface
-     */
-    private $shopService;
+    private ShopServiceInterface $shopService;
 
     /**
      * @param ShopServiceInterface|null $shopService

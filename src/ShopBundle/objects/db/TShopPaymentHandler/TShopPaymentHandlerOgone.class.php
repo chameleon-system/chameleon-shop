@@ -114,7 +114,7 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
         $sOgonePaymentLayoutSystemPage = trim($this->GetConfigParameter('layout_system_page'));
         $sOgonePaymentLayoutPageURL = false;
         if (!empty($sOgonePaymentLayoutSystemPage)) {
-            $oShop = TdbShop::GetInstance();
+            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             $sOgonePaymentLayoutPageURL = $oShop->GetLinkToSystemPage($sOgonePaymentLayoutSystemPage, null, true);
             $sOgonePaymentLayoutPageURL = str_replace('https://', '', $sOgonePaymentLayoutPageURL);
             $sOgonePaymentLayoutPageURL = str_replace('http://', '', $sOgonePaymentLayoutPageURL);

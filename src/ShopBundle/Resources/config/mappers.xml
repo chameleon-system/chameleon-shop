@@ -89,6 +89,8 @@
         </service>
 
         <service id="chameleon_system_shop.mapper.orderwizard.order_step" class="TPkgShopMapper_OrderStep">
+            <argument type="service" id="chameleon_system_core.util.input_filter" />
+            <argument type="service" id="chameleon_system_shop.shop_service" />
             <tag name="chameleon_system.mapper"/>
         </service>
 

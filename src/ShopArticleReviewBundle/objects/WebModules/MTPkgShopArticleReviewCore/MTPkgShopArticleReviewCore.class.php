@@ -400,7 +400,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      */
     protected function GetReviews()
     {
-        $oActiveArticle = TdbShop::GetActiveItem();
+        $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         $oReviewList = null;
         if ($oActiveArticle) {
             $oReviewList = $this->GetReviewsForArticle($oActiveArticle);
@@ -440,7 +440,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
         if ($oActiveArticle->IsVariant()) {
             $oActiveArticle = $oActiveArticle->GetFieldVariantParent();
         }
-        $oActiveCategory = TdbShop::GetActiveCategory();
+        $oActiveCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
 
         $this->data['oActiveCategory'] = $oActiveCategory;
         $this->data['oActiveArticle'] = $oActiveArticle;
@@ -471,7 +471,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
                     $oReviewItem->sqlData['publish'] = true;
                     $oReviewItem->sqlData['action_id'] = '';
                     $oReviewItem->Save();
-                    $oArticle = TdbShop::GetActiveItem();
+                    $oArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
                     if ($oArticle->IsVariant()) {
                         $oArticle = $oArticle->GetFieldVariantParent();
                     }
@@ -628,7 +628,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
                     $oReviewItem->AllowEditByAll(true);
                     $oReviewItem->Save();
                     $oReviewItem->SendReviewReportNotification();
-                    $oArticle = TdbShop::GetActiveItem();
+                    $oArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
                     if ($oArticle->IsVariant()) {
                         $oArticle = $oArticle->GetFieldVariantParent();
                     }
@@ -774,7 +774,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      */
     protected function GetArticleToReview()
     {
-        $oArticle = TdbShop::GetActiveItem();
+        $oArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if ($oArticle->IsVariant()) {
             $oArticle = $oArticle->GetFieldVariantParent();
         }

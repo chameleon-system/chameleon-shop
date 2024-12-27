@@ -443,7 +443,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
         if (is_null($oVat)) {
             $oVat = $this->GetFieldShopVat();
             if (is_null($oVat)) {
-                $oShopConf = TdbShop::GetInstance();
+                $oShopConf = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $oVat = $oShopConf->GetVat();
             }
 
@@ -467,7 +467,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
         $oView = new TViewParser();
 
         // add view variables
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oView->AddVar('oShop', $oShop);
         $oView->AddVar('oPaymentMethod', $this);
 

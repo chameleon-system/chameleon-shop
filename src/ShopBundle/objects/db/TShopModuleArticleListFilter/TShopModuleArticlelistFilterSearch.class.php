@@ -146,7 +146,7 @@ class TShopModuleArticlelistFilterSearch extends TdbShopModuleArticleListFilter
     public function ModuleInitHook()
     {
         parent::ModuleInitHook();
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         if ($oShop->fieldRedirectToNotFoundPageProductSearchOnNoResults) {
             /**
              * in this case the shop may redirect after running the search. since this occurs in the Execute of the

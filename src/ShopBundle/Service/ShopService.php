@@ -15,10 +15,7 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use Doctrine\DBAL\Connection;
-use ErrorException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use TdbShop;
-use TShopBasket;
 
 class ShopService implements ShopServiceInterface
 {
@@ -27,9 +24,9 @@ class ShopService implements ShopServiceInterface
      */
     private $activePortalId;
     /**
-     * @var TdbShop[] - key = portalId
+     * @var \TdbShop[] - key = portalId
      */
-    private $shops = array();
+    private $shops = [];
     /**
      * @var Connection
      */
@@ -54,8 +51,6 @@ class ShopService implements ShopServiceInterface
     private $basketRecalculationRunning = false;
 
     /**
-     * @param Connection $connection
-     *
      * @return void
      */
     public function setDatabaseConnection(Connection $connection)
@@ -63,11 +58,6 @@ class ShopService implements ShopServiceInterface
         $this->databaseConnection = $connection;
     }
 
-    /**
-     * @param PortalDomainServiceInterface  $portalDomainService
-     * @param RequestStack                  $requestStack
-     * @param ExtranetUserProviderInterface $extranetUserProvider
-     */
     public function __construct(PortalDomainServiceInterface $portalDomainService, RequestStack $requestStack, ExtranetUserProviderInterface $extranetUserProvider)
     {
         $this->requestStack = $requestStack;
@@ -105,7 +95,7 @@ class ShopService implements ShopServiceInterface
     /**
      * {@inheritdoc}
      *
-     * @param null|string $cmsPortalId
+     * @param string|null $cmsPortalId
      */
     public function getShopForPortalId($cmsPortalId)
     {
@@ -118,11 +108,11 @@ class ShopService implements ShopServiceInterface
             INNER JOIN `shop_cms_portal_mlt` ON `shop`.`id` = `shop_cms_portal_mlt`.`source_id`
                  WHERE `shop_cms_portal_mlt`.`target_id` = :portalId';
 
-        $shopData = $this->databaseConnection->fetchAssociative($query, array('portalId' => $cmsPortalId));
+        $shopData = $this->databaseConnection->fetchAssociative($query, ['portalId' => $cmsPortalId]);
         if (false === $shopData) {
-            throw new ErrorException("no shop configured for portal {$cmsPortalId}", 0, E_USER_ERROR, __FILE__, __LINE__);
+            throw new \ErrorException("no shop configured for portal {$cmsPortalId}", 0, E_USER_ERROR, __FILE__, __LINE__);
         }
-        $this->shops[$cmsPortalId] = TdbShop::GetNewInstance($shopData);
+        $this->shops[$cmsPortalId] = \TdbShop::GetNewInstance($shopData);
 
         return $this->shops[$cmsPortalId];
     }
@@ -169,6 +159,18 @@ class ShopService implements ShopServiceInterface
         return $request->attributes->get('activeShopCategory');
     }
 
+    public function getActiveRootCategory(): ?\TdbShopCategory
+    {
+        static $activeRootCategory = false;
+        if (false === $activeRootCategory) {
+            $activeRootCategory = null;
+            $oActiveCategory = $this->getActiveCategory();
+            $activeRootCategory = $oActiveCategory?->GetRootCategory();
+        }
+
+        return $activeRootCategory;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -189,11 +191,11 @@ class ShopService implements ShopServiceInterface
             return null;
         }
 
-        if (false === $session->has(TShopBasket::SESSION_KEY_NAME)) {
-            $session->set(TShopBasket::SESSION_KEY_NAME, new TShopBasket());
+        if (false === $session->has(\TShopBasket::SESSION_KEY_NAME)) {
+            $session->set(\TShopBasket::SESSION_KEY_NAME, new \TShopBasket());
         }
 
-        $oInstance = $session->get(TShopBasket::SESSION_KEY_NAME);
+        $oInstance = $session->get(\TShopBasket::SESSION_KEY_NAME);
 
         if (true === $oInstance->BasketRequiresRecalculation() && false === $this->basketRecalculationRunning) {
             $this->basketRecalculationRunning = true;
@@ -210,12 +212,12 @@ class ShopService implements ShopServiceInterface
 
         $request = $this->requestStack->getCurrentRequest();
         if (null === $request || false == $request->hasSession()) {
-            return ;
+            return;
         }
         $session = $request->getSession();
 
-        if (true === $session->has(TShopBasket::SESSION_KEY_NAME)) {
-            $session->remove(TShopBasket::SESSION_KEY_NAME);
+        if (true === $session->has(\TShopBasket::SESSION_KEY_NAME)) {
+            $session->remove(\TShopBasket::SESSION_KEY_NAME);
         }
     }
 

@@ -23,7 +23,7 @@ class TShopWishlistArticle extends TShopWishlistArticleAutoParent
      */
     public function GetToWishlistLink($bIncludePortalLink = false, $bRedirectToLoginPage = true)
     {
-        $oShopConfig = TdbShop::GetInstance();
+        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
 
         $aParameters = array('module_fnc['.$oShopConfig->GetBasketModuleSpotName().']' => 'AddToWishlist', MTShopBasketCore::URL_ITEM_ID => $this->id, MTShopBasketCore::URL_ITEM_AMOUNT => 1, MTShopBasketCore::URL_MESSAGE_CONSUMER => $this->GetMessageConsumerName());
 
