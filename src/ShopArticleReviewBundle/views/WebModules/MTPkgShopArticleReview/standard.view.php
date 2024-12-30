@@ -43,8 +43,8 @@ if ($oActiveArticle) {
             if ($iCount > $iShowReviewsOnStart) {
                 ?>
                 <script type="text/javascript">
-                    document.write("<" + 'a href="" class="showall" onclick="$(\'.reviewlist .jshide\').toggle(); $(this).toggle();$(\'.showstart\').toggle();return false;"><?php echo TGlobal::OutHtml(TGlobal::Translate('chameleon_system_shop_article_review.action.show_all_reviews')); ?></a' + ">");
-                    document.write("<" + 'a href="" class="showstart" onclick="$(\'.reviewlist .showall\').toggle();$(this).toggle();$(\'.reviewlist .jshide\').toggle();return false;"><?php echo TGlobal::OutHtml(TGlobal::Translate('chameleon_system_shop_article_review.action.show_fewer_reviews')); ?></a' + ">");
+                    document.write("<" + 'a href="" class="showall" onclick="$(\'.reviewlist .jshide\').toggle(); $(this).toggle();$(\'.showstart\').toggle();return false;"><?php echo TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.show_all_reviews')); ?></a' + ">");
+                    document.write("<" + 'a href="" class="showstart" onclick="$(\'.reviewlist .showall\').toggle();$(this).toggle();$(\'.reviewlist .jshide\').toggle();return false;"><?php echo TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.show_fewer_reviews')); ?></a' + ">");
                     $(document).ready(function () {
                         $('.reviewlist .jshide').hide();
                         $('.reviewlist .showstart').hide()
@@ -53,21 +53,21 @@ if ($oActiveArticle) {
                 <?php
             }
         } else {
-            echo '<div class="no-reviews">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.text.no_reviews')).'</div>';
+            echo '<div class="no-reviews">'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.no_reviews')).'</div>';
         } ?>
     </div>
     <?php
     } else {
         ?>
     <div
-        class="please-login-message"><?php echo TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.text.login_required_to_read_reviews')); ?></div>
+        class="please-login-message"><?php echo TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.login_required_to_read_reviews')); ?></div>
     <?php
     } ?>
     <?php if ($bAllowWriteReview) {
         ?>
     <a name="<?php echo MTPkgShopArticleReviewCore::URL_PARAM_REVIEW_WRITE_JUMPER; ?>"></a>
     <div class="reviewForm">
-        <div class="writeheader"><?php echo TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.action.write_review')); ?></div>
+        <div class="writeheader"><?php echo TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.write_review')); ?></div>
         <form name="writereview<?php echo TGlobal::OutHTML($oActiveArticle->sqlData['cmsident']); ?>" accept-charset="utf-8"
               method="post" action="<?php echo $oActiveArticle->getLink(false, null,
                   [TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $data['oActiveCategory']->id]); ?>">
@@ -85,7 +85,7 @@ if ($oActiveArticle) {
     } else {
         ?>
     <div
-        class="please-login-message"><?php echo TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.text.login_required_to_write_review')); ?></div>
+        class="please-login-message"><?php echo TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.login_required_to_write_review')); ?></div>
     <?php
     } ?>
     <?php

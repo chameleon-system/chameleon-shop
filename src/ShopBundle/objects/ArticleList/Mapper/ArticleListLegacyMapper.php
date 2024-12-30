@@ -15,20 +15,15 @@
 
 namespace ChameleonSystem\ShopBundle\objects\ArticleList\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultDataInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
-use ViewRenderer;
 
-class ArticleListLegacyMapper extends AbstractViewMapper
+class ArticleListLegacyMapper extends \AbstractViewMapper
 {
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject(
             'results',
@@ -62,9 +57,9 @@ class ArticleListLegacyMapper extends AbstractViewMapper
      * {@inheritdoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /** @var $results ResultDataInterface */
         $results = $oVisitor->GetSourceObject('results');
@@ -76,32 +71,31 @@ class ArticleListLegacyMapper extends AbstractViewMapper
         /** @var $stateObject StateInterface */
         $stateObject = $oVisitor->GetSourceObject('stateObject');
 
-        $output = array(
+        $output = [
             'sListOptionSort' => $this->getListOptionSort(
-                    $sortList,
-                    $stateObject->getState(StateInterface::SORT),
-                    $oVisitor->GetSourceObject('sortFieldName'),
-                    $oVisitor->GetSourceObject('sortFormStateInputFields'),
-                    $oVisitor->GetSourceObject('sortFormAction')
-                ),
+                $sortList,
+                $stateObject->getState(StateInterface::SORT),
+                $oVisitor->GetSourceObject('sortFieldName'),
+                $oVisitor->GetSourceObject('sortFormStateInputFields'),
+                $oVisitor->GetSourceObject('sortFormAction')
+            ),
             'oList' => $this->getListProxy(
-                    $results,
-                    $stateObject->getState(StateInterface::PAGE),
-                    $stateObject->getState(StateInterface::PAGE_SIZE),
-                    $oVisitor->GetSourceObject('listPagerUrl'),
-                    $oVisitor->GetSourceObject('sModuleSpotName')
-                ),
+                $results,
+                $stateObject->getState(StateInterface::PAGE),
+                $stateObject->getState(StateInterface::PAGE_SIZE),
+                $oVisitor->GetSourceObject('listPagerUrl'),
+                $oVisitor->GetSourceObject('sModuleSpotName')
+            ),
             'listIdent' => $oVisitor->GetSourceObject('sModuleSpotName'),
             'aArticleList' => $this->getRenderedItemList($itemsMappedData, $oVisitor->GetSourceObject('legacyItemView')),
             'oLocal' => $oVisitor->GetSourceObject('local'),
             'oCurrency' => $oVisitor->GetSourceObject('currency'),
-        );
+        ];
 
         $oVisitor->SetMappedValueFromArray($output);
     }
 
     /**
-     * @param array  $sortList
      * @param string $activeOrderById
      * @param string $sortFieldName
      * @param string $sortFormStateInputFields
@@ -116,22 +110,22 @@ class ArticleListLegacyMapper extends AbstractViewMapper
         $sortFormStateInputFields,
         $sortFormAction
     ) {
-        $aData = array(
-            'sName' => \TGlobal::Translate('chameleon_system_shop.product_list.sort'),
+        $aData = [
+            'sName' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.product_list.sort'),
             'sFormActionUrl' => $sortFormAction,
             'sFormId' => '',
             'sSelectName' => $sortFieldName,
             'sFormHiddenFields' => $sortFormStateInputFields,
-            'aOptionList' => array(),
-        );
+            'aOptionList' => [],
+        ];
 
         foreach ($sortList as $sortOption) {
             $sortOption['bSelected'] = ($sortOption['id'] === $activeOrderById);
-            $aData['aOptionList'][] = array(
+            $aData['aOptionList'][] = [
                 'sValue' => $sortOption['id'],
                 'sName' => $sortOption['name'],
                 'bSelected' => ($sortOption['id'] === $activeOrderById),
-            );
+            ];
         }
 
         $oViewRenderer = $this->getViewRenderer();
@@ -141,14 +135,13 @@ class ArticleListLegacyMapper extends AbstractViewMapper
     }
 
     /**
-     * @param array  $itemsMappedData
      * @param string $view
      *
      * @return array
      */
     private function getRenderedItemList(array $itemsMappedData, $view)
     {
-        $renderedItems = array();
+        $renderedItems = [];
         foreach ($itemsMappedData as $item) {
             $viewRenderer = $this->getViewRenderer();
             $viewRenderer->AddSourceObjectsFromArray($item);
@@ -159,7 +152,7 @@ class ArticleListLegacyMapper extends AbstractViewMapper
     }
 
     /**
-     * @return ViewRenderer
+     * @return \ViewRenderer
      */
     private function getViewRenderer()
     {
@@ -167,7 +160,6 @@ class ArticleListLegacyMapper extends AbstractViewMapper
     }
 
     /**
-     * @param ResultDataInterface $results
      * @param int $currentPage
      * @param int $pageSize
      * @param string $listPagerUrl

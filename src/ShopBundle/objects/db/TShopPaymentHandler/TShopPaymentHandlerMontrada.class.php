@@ -138,8 +138,8 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
 
         // add basket design
         $oLocal = TCMSLocal::GetActive();
-        $aParameter['h.1'] = TGlobal::Translate('chameleon_system_shop.payment_montrada.payment_form_h1');
-        $aParameter['h.2'] = TGlobal::Translate('chameleon_system_shop.payment_montrada.payment_form_h2');
+        $aParameter['h.1'] = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_montrada.payment_form_h1');
+        $aParameter['h.2'] = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_montrada.payment_form_h2');
         $oBasketArticles = $oBasket->GetBasketContents();
         $oBasketArticles->GoToStart();
         $aArticleNames = array();
@@ -155,24 +155,24 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
 
         // add shipping & payment costs
         if ($oBasket->dCostShipping > 0) {
-            $aParameter['w.'.$iIndex.'.1'] = TGlobal::Translate('chameleon_system_shop.payment_montrada.payment_form_shipping');
+            $aParameter['w.'.$iIndex.'.1'] = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_montrada.payment_form_shipping');
             $aParameter['w.'.$iIndex.'.2'] = $oLocal->FormatNumber($oBasket->dCostShipping, 2).' EUR';
             ++$iIndex;
         }
         $oLocal = TCMSLocal::GetActive();
         if ($oBasket->dCostPaymentMethodSurcharge > 0) {
-            $aParameter['w.'.$iIndex.'.1'] = TGlobal::Translate('chameleon_system_shop.payment_montrada.payment_form_payment_surcharge');
+            $aParameter['w.'.$iIndex.'.1'] = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_montrada.payment_form_payment_surcharge');
             $aParameter['w.'.$iIndex.'.2'] = $oLocal->FormatNumber($oBasket->dCostPaymentMethodSurcharge, 2).' EUR';
             ++$iIndex;
         }
 
         // remove vouchers
         if ($oBasket->dCostVouchers > 0) {
-            $aParameter['w.'.$iIndex.'.1'] = TGlobal::Translate('chameleon_system_shop.payment_montrada.payment_form_voucher');
+            $aParameter['w.'.$iIndex.'.1'] = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_montrada.payment_form_voucher');
             $aParameter['w.'.$iIndex.'.2'] = '-'.$oLocal->FormatNumber($oBasket->dCostVouchers, 2).' EUR';
             ++$iIndex;
         }
-        $aParameter['w.'.$iIndex.'.1'] = TGlobal::Translate('chameleon_system_shop.payment_montrada.payment_form_help');
+        $aParameter['w.'.$iIndex.'.1'] = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_montrada.payment_form_help');
         $aParameter['w.'.$iIndex.'.2'] = '';
         ++$iIndex;
 
@@ -225,7 +225,7 @@ class TShopPaymentHandlerMontrada extends TdbShopPaymentHandler
         if (curl_errno($ch)) {
             TTools::WriteLogEntry('Call Montrada Page: '.print_r($aData, true).' - '.curl_errno($ch).' - '.curl_error($ch), 1, __FILE__, __LINE__);
             $oMsgManager = TCMSMessageManager::GetInstance();
-            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_montrada.error_request'))));
+            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_montrada.error_request'))));
 
             return $bSuccess;
         } else {

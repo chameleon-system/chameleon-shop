@@ -51,7 +51,7 @@ class TPkgShopBasketMapper_TelephoneOrder extends AbstractViewMapper
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $Step = TdbShopOrderStep::GetStep('user');
-        $aLink = array('sLinkURL' => '#telephoneModal', 'sTitle' => TGlobal::Translate('chameleon_system_shop_order_via_phone.action.open_telefon_order_form'));
+        $aLink = array('sLinkURL' => '#telephoneModal', 'sTitle' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_order_via_phone.action.open_telefon_order_form'));
         $oVisitor->SetMappedValue('aLink', $aLink);
     }
 }

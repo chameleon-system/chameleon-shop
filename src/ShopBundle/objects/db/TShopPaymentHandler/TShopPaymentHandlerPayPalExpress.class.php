@@ -71,7 +71,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
             } else {
                 // user has an ID but is not logged in. That should not happen, so log it and exit
                 $oMsgManager = TCMSMessageManager::GetInstance();
-                $oMsgManager->AddMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => TGlobal::Translate('chameleon_system_shop.payment_paypal_express.error_guest_user_with_id')));
+                $oMsgManager->AddMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_paypal_express.error_guest_user_with_id')));
                 trigger_error('A user with ID was marked as not logged in in TShopBsPaymentHandlerPayPal::PostProcessExternalPaymentHandlerHook', E_USER_WARNING);
                 $bResponse = false;
             }

@@ -32,6 +32,6 @@ class TPkgShopBasketMapper_ToMiniBasket extends AbstractViewMapper
         }
         $oVisitor->SetMappedValue('sBasketURL', $oShop->GetBasketLink(false, true));
         $oVisitor->SetMappedValue('sCheckoutURL', $oShop->GetBasketLink(true, true));
-        $oVisitor->SetMappedValue('sShippingInfoURL', $oShop->GetLinkToSystemPageAsPopUp(TGlobal::Translate('chameleon_system_shop.link.shipping_link'), 'shipping'));
+        $oVisitor->SetMappedValue('sShippingInfoURL', $oShop->GetLinkToSystemPageAsPopUp(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.link.shipping_link'), 'shipping'));
     }
 }

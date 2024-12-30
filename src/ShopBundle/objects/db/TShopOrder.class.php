@@ -546,7 +546,7 @@ class TShopOrder extends TShopOrderAutoParent
             if (false === $orderNotificationBeforeSendStatus) {
                 $this->updateSendOrderNotificationState(false);
             }
-            $bOrderSend = TGlobal::Translate('chameleon_system_shop.order_notification.error_mail_template_not_found', ['%emailTemplate%' => self::MAIL_CONFIRM_ORDER]);
+            $bOrderSend = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.order_notification.error_mail_template_not_found', ['%emailTemplate%' => self::MAIL_CONFIRM_ORDER]);
         } else {
             $aMailData = $this->sqlData;
             $aMailData = $this->AddOrderNotificationEmailData($aMailData);
@@ -810,9 +810,9 @@ class TShopOrder extends TShopOrderAutoParent
      */
     public static function getUserTypeOrdered($sDBValue, $aOrderRow)
     {
-        $sUserType = TGlobal::Translate('chameleon_system_shop.order_list.user_type_guest');
+        $sUserType = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.order_list.user_type_guest');
         if ('' != $sDBValue) {
-            $sUserType = TGlobal::Translate('chameleon_system_shop.order_list.user_type_customer');
+            $sUserType = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.order_list.user_type_customer');
         }
 
         return $sUserType;

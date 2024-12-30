@@ -25,7 +25,7 @@ class TPkgShopPaymentIPN_TCMSTableEditor_PkgShopPaymentIpnMessage extends TCMSTa
 
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'ReplayIPN';
-        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_shop_payment_ipn.action.replay_ipn');
+        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_ipn.action.replay_ipn');
         $oMenuItem->sIcon = 'fas fa-redo-alt';
         $oMenuItem->sOnClick = "document.location.href='?".TTools::GetArrayAsURL($aParam)."'";
         $this->oMenuItems->AddItem($oMenuItem);

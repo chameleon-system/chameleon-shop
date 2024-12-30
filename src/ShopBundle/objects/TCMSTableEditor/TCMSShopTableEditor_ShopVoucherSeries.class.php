@@ -37,7 +37,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
         if ($this->AllowCreatingVoucherCodes()) {
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'createvoucher';
-            $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_shop.voucher.action_create');
+            $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.action_create');
             $oMenuItem->sIcon = 'fas fa-file-invoice-dollar';
 
             $oGlobal = TGlobal::instance();
@@ -45,8 +45,8 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
 
             $aURLData = array('module_fnc' => array($oExecutingModulePointer->sModuleSpotName => 'ExecuteAjaxCall'), '_fnc' => 'CreateVoucherCodes', '_noModuleFunction' => 'true', 'pagedef' => $oGlobal->GetUserData('pagedef'), 'id' => $this->sId, 'tableid' => $this->oTableConf->id);
             $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aURLData);
-            $sNumberOfVouchersToCreatePromptText = TGlobal::OutJS(TGlobal::Translate('chameleon_system_shop.voucher.prompt_number_of_vouchers_to_create'));
-            $sVoucherCodeToCreatePromptText = TGlobal::OutJS(TGlobal::Translate('chameleon_system_shop.voucher.prompt_voucher_code_to_create'));
+            $sNumberOfVouchersToCreatePromptText = TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.prompt_number_of_vouchers_to_create'));
+            $sVoucherCodeToCreatePromptText = TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.prompt_voucher_code_to_create'));
             $sJS = "TCMSShopTableEditor_ShopVoucherSeries_CreateVouchers('{$sURL}','".$sNumberOfVouchersToCreatePromptText."','".$sVoucherCodeToCreatePromptText."');";
             $oMenuItem->sOnClick = $sJS;
             $this->oMenuItems->AddItem($oMenuItem);
@@ -54,7 +54,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
         if ($this->AllowExportingVoucherCodes()) {
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'exportvoucher';
-            $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_shop.voucher.action_export');
+            $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.action_export');
             $oMenuItem->sIcon = 'fas fa-file-download';
 
             $oGlobal = TGlobal::instance();
@@ -211,7 +211,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
             for ($i = 0; $i < count($aCsvVouchers); ++$i) {
                 $sCsv .= '"'.implode('";"', $aCsvVouchers[$i])."\"\n";
             }
-            $sCsv = '"'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.voucher.export_column_code')).'";"'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.voucher.export_column_created')).'";"'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.voucher.export_column_spent')).'";"'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.voucher.export_column_spent_date'))."\"\n".$sCsv;
+            $sCsv = '"'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.export_column_code')).'";"'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.export_column_created')).'";"'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.export_column_spent')).'";"'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.export_column_spent_date'))."\"\n".$sCsv;
 
             while (@ob_end_clean()) {
             }

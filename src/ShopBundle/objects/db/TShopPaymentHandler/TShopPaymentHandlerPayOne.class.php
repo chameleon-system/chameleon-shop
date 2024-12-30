@@ -267,7 +267,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
               ".$this->GetJSMessageMethodCall("response.get('customermessage')").'
               break;
             default:
-              '.$this->GetJSMessageMethodCall("'".TGlobal::Translate('chameleon_system_shop.payment_payone.error_unknown')."'")."
+              '.$this->GetJSMessageMethodCall("'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_payone.error_unknown')."'")."
               break;
           }
         }
@@ -291,7 +291,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
             }
 
             if (sTmpVal.length < 1) {
-              ".$this->GetJSMessageMethodCall("'".TGlobal::Translate('chameleon_system_shop.payment_payone.error_no_card_type')."'")."
+              ".$this->GetJSMessageMethodCall("'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_payone.error_no_card_type')."'")."
               return false;
             } else {
               data.cardtype = sTmpVal;
@@ -299,7 +299,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
 
             var oCreditCardOwnerName = oForm.elements['payone[creditCardOwnerName]'];
             if (oCreditCardOwnerName.value.length < 1) {
-              ".$this->GetJSMessageMethodCall("'".TGlobal::Translate('chameleon_system_shop.payment_payone.error_no_card_owner')."'")."
+              ".$this->GetJSMessageMethodCall("'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_payone.error_no_card_owner')."'")."
               oCreditCardOwnerName.focus();
               return false;
             } else {
@@ -308,7 +308,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
 
             var oCreditCardNumber = oForm.elements['payone[creditCardNumber]'];
             if (oCreditCardNumber.value.length < 1) {
-              ".$this->GetJSMessageMethodCall("'".TGlobal::Translate('chameleon_system_shop.payment_payone.error_no_card_number')."'")."
+              ".$this->GetJSMessageMethodCall("'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_payone.error_no_card_number')."'")."
               oCreditCardNumber.focus();
               return false;
             } else {
@@ -326,7 +326,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
 
             var oCreditCardChecksum = oForm.elements['payone[creditCardChecksum]'];
             if (oCreditCardChecksum.value.length < 1) {
-              ".$this->GetJSMessageMethodCall("'".TGlobal::Translate('chameleon_system_shop.payment_payone.error_no_card_checksum')."'")."
+              ".$this->GetJSMessageMethodCall("'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_payone.error_no_card_checksum')."'")."
               oCreditCardChecksum.focus();
               return false;
             } else {
@@ -506,7 +506,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
                     // Payment api error?!
                     // $aPayOneResponse['status'];
                     if (isset($aPayOneResponse['errormessage'])) {
-                        $sDebugMsg = TGlobal::Translate('chameleon_system_shop.payment_payone.error', ['%errortext%' => $aPayOneResponse['errortext']]);
+                        $sDebugMsg = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_payone.error', ['%errortext%' => $aPayOneResponse['errortext']]);
                     }
                     // $aPayOneResponse['errormessage']; // english real error message
 
@@ -537,7 +537,7 @@ class TShopPaymentHandlerPayOne extends TdbShopPaymentHandler
                 $bPaymentTransmitOk = true;
             } else {
                 $oMsgManager = TCMSMessageManager::GetInstance();
-                $oMsgManager->AddMessage(self::MSG_MANAGER_NAME, 'ERROR-ORDER-RESPONSE-PAYMENTONE-ERROR', ['errorMsg' => TGlobal::Translate('chameleon_system_shop.payment_payone.error_user_abort')]);
+                $oMsgManager->AddMessage(self::MSG_MANAGER_NAME, 'ERROR-ORDER-RESPONSE-PAYMENTONE-ERROR', ['errorMsg' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_payone.error_user_abort')]);
                 $bPaymentTransmitOk = false;
             }
         }

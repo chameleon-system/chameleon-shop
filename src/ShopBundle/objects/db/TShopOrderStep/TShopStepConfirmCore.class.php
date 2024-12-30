@@ -90,7 +90,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
             if ($bRedirectToPreviousPermittedStep) {
                 $oMsgManager = $this->getFlashMessages();
                 if (false == $oMsgManager->consumerHasMessages(TCMSMessageManager::GLOBAL_CONSUMER_NAME)) {
-                    $oMsgManager->addMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => TGlobal::Translate('chameleon_system_shop.error.generic_payment_shipping_error')));
+                    $oMsgManager->addMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.error.generic_payment_shipping_error')));
                 }
                 $oUserStep = TdbShopOrderStep::GetStep('shipping');
                 $this->JumpToStep($oUserStep);

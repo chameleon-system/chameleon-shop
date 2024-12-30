@@ -35,7 +35,7 @@ $oMakers = $oItem->GetFieldPkgImageHotspotItemMarkerList();
         }
         if ($oNextItem) {
             $dBottom = round(($oImage->aData['height'] - 32) / 2);
-            echo "<a style=\"bottom:{$dBottom}px\" class=\"nextItemLink\" rel=\"{$oNextItem->GetAjaxLink()}\" href=\"{$oNextItem->GetLink()}\" title=\"".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_image_hotspot.action.page_next')).': '.TGlobal::OutHTML($oNextItem->fieldName).'"><img src="/static/images/icons/arrow-big-right.png" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_image_hotspot.action.page_next')).'" /></a>';
+            echo "<a style=\"bottom:{$dBottom}px\" class=\"nextItemLink\" rel=\"{$oNextItem->GetAjaxLink()}\" href=\"{$oNextItem->GetLink()}\" title=\"".TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_image_hotspot.action.page_next')).': '.TGlobal::OutHTML($oNextItem->fieldName).'"><img src="/static/images/icons/arrow-big-right.png" alt="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_image_hotspot.action.page_next')).'" /></a>';
         }
         ?>
     </div>

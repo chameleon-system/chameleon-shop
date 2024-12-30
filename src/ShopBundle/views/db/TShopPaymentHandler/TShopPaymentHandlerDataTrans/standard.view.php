@@ -45,15 +45,15 @@ foreach ($aSpecificPaymentParameter as $sKey => $sValue) {
         <div class="isLft"><span class="i i-savely-creditcard"></span></div>
         <div class="isLft">
             <div
-                class="font32 colorblack1"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.security_headline')); ?></div>
-            <div>(<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.security_text')); ?>
+                class="font32 colorblack1"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.security_headline')); ?></div>
+            <div>(<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.security_text')); ?>
                 .)
             </div>
         </div>
         <div class="cleardiv"></div>
     </div>
 
-    <div class="inputLabel font19 colorblack1"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.form_card_type')); ?>:</div>
+    <div class="inputLabel font19 colorblack1"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.form_card_type')); ?>:</div>
     <div>
         <?php if (!array_key_exists('cc_typ', $aUserPaymentData)) {
         $aUserPaymentData['cc_typ'] = '';
@@ -61,9 +61,9 @@ foreach ($aSpecificPaymentParameter as $sKey => $sValue) {
         <?=TTemplateTools::SelectField('cc_typ', array('Mastercard' => 'Mastercard', 'VisaCard' => 'Visa'), 148, $aUserPaymentData['cc_typ']); ?>
     </div>
 
-    <div class="inputLabel font19 colorblack1"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.form_card_number')); ?></div>
+    <div class="inputLabel font19 colorblack1"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.form_card_number')); ?></div>
     <div class="inputLabelSub">
-        (<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.form_card_number_help')); ?>
+        (<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.form_card_number_help')); ?>
         .)
     </div>
     <div>
@@ -73,7 +73,7 @@ foreach ($aSpecificPaymentParameter as $sKey => $sValue) {
         <?=TTemplateTools::TWInputField('cc_number', $aUserPaymentData['cc_number'], false, 148, $sInputControlParameter); ?>
     </div>
 
-    <div class="inputLabel font19 colorblack1"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.form_card_owner')); ?></div>
+    <div class="inputLabel font19 colorblack1"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.form_card_owner')); ?></div>
     <div>
         <?php if (!array_key_exists('addr_name', $aUserPaymentData)) {
         $aUserPaymentData['addr_name'] = '';
@@ -81,8 +81,8 @@ foreach ($aSpecificPaymentParameter as $sKey => $sValue) {
         <?=TTemplateTools::TWInputField('addr_name', $aUserPaymentData['addr_name'], false, 296, $sInputControlParameter); ?>
     </div>
 
-    <div class="inputLabel font19 colorblack1"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.form_card_valid_until')); ?></div>
-    <div>(<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.form_card_valid_until_help')); ?>.)</div>
+    <div class="inputLabel font19 colorblack1"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.form_card_valid_until')); ?></div>
+    <div>(<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.form_card_valid_until_help')); ?>.)</div>
     <div>
         <?php
         $aMonth = array('1' => '01', '2' => '02', '3' => '03', '4' => '04', '5' => '05', '6' => '06', '7' => '07', '8' => '08', '9' => '09', '10' => '10', '11' => '11', '12' => '12');
@@ -99,9 +99,9 @@ foreach ($aSpecificPaymentParameter as $sKey => $sValue) {
         ?>
     </div>
 
-    <div class="inputLabel font19 colorblack1"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.form_card_checksum')); ?></div>
+    <div class="inputLabel font19 colorblack1"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.form_card_checksum')); ?></div>
     <div>
-        (<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.form_card_checksum_help')); ?>
+        (<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.form_card_checksum_help')); ?>
         .)
     </div>
     <div class="checkNo isLft">
@@ -114,7 +114,7 @@ foreach ($aSpecificPaymentParameter as $sKey => $sValue) {
 
     <div class="cleardiv">&nbsp;</div>
     <div
-        class="colorblack1"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.form_card_payment_time')); ?></div>
+        class="colorblack1"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.form_card_payment_time')); ?></div>
 </div>
 
 
@@ -129,32 +129,32 @@ foreach ($aSpecificPaymentParameter as $sKey => $sValue) {
   <?php } ?>
   <tr>
     <td>
-      <input type="radio" class="plain" name="payment_data" value="livedata" <?php if($bInputIsActive) echo 'checked="checked"'; ?> /> <?=TGlobal::OutHTML(TGlobal::Translate('Neue Bankdaten erstellen'));?>
+      <input type="radio" class="plain" name="payment_data" value="livedata" <?php if($bInputIsActive) echo 'checked="checked"'; ?> /> <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Neue Bankdaten erstellen'));?>
     </td>
   </tr>
   <tr>
-    <th><?=TGlobal::OutHTML(TGlobal::Translate("Kreditkarte"))?>:<span class="require">*</span></th>
+    <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans("Kreditkarte"))?>:<span class="require">*</span></th>
     <td>
       <?php if(!array_key_exists("cc_typ",$aUserPaymentData)) $aUserPaymentData['cc_typ'] = ""; ?>
       <?=TTemplateTools::SelectField('cc_typ', array('Mastercard'=>'Mastercard','VisaCard'=>'Visa'), 181, $aUserPaymentData['cc_typ'])?>
     </td>
   </tr>
   <tr>
-    <th><?=TGlobal::OutHTML(TGlobal::Translate("Nummer"))?><span class="require">*</span></th>
+    <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans("Nummer"))?><span class="require">*</span></th>
     <td>
       <?php if(!array_key_exists("cc_number",$aUserPaymentData)) $aUserPaymentData['cc_number'] = ""; ?>
       <?=TTemplateTools::InputField('cc_number', $aUserPaymentData['cc_number'], 200,$sInputControlParameter)?>
     </td>
   </tr>
   <tr>
-    <th><?=TGlobal::OutHTML(TGlobal::Translate("Name"))?><span class="require">*</span></th>
+    <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans("Name"))?><span class="require">*</span></th>
     <td>
       <?php if(!array_key_exists("addr_name",$aUserPaymentData)) $aUserPaymentData['addr_name'] = ""; ?>
       <?=TTemplateTools::InputField('addr_name', $aUserPaymentData['addr_name'], 200,$sInputControlParameter)?>
     </td>
   </tr>
   <tr>
-    <th><?=TGlobal::OutHTML(TGlobal::Translate("Gültig bis"))?><span class="require">*</span></th>
+    <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans("Gültig bis"))?><span class="require">*</span></th>
     <td>
       <?php
         $aMonth = array('1'=>'01','2'=>'02','3'=>'03','4'=>'04','5'=>'05','6'=>'06','7'=>'07','8'=>'08','9'=>'09','10'=>'10','11'=>'11','12'=>'12');
@@ -171,7 +171,7 @@ foreach ($aSpecificPaymentParameter as $sKey => $sValue) {
     </td>
   </tr>
   <tr>
-    <th><?=TGlobal::OutHTML(TGlobal::Translate("Prüfziffer"))?><span class="require">*</span></th>
+    <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans("Prüfziffer"))?><span class="require">*</span></th>
     <td>
       <?php if(!array_key_exists("cc_checkcode",$aUserPaymentData)) $aUserPaymentData['cc_checkcode'] = ""; ?>
       <?=TTemplateTools::InputField('cc_checkcode', $aUserPaymentData['cc_checkcode'], 200,$sInputControlParameter)?>

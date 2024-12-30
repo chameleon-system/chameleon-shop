@@ -251,7 +251,7 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
             $oTableEditorManager->oTableEditor->oTableConf->SetLanguage($originalLanguageId);
         }
 
-        return TGlobal::Translate('chameleon_system_shop.field_shop_variant_details.msg_created_variants', array('%generatedVariantsCount%' => count($aVariantParameters)));
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.field_shop_variant_details.msg_created_variants', array('%generatedVariantsCount%' => count($aVariantParameters)));
     }
 
     /**

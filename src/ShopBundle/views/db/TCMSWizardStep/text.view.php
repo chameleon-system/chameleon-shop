@@ -22,7 +22,7 @@ $oExtranetConfig = TdbDataExtranet::GetInstance();
     } ?>
             <?php if ($sBackLink) {
         ?>
-            <div class="formButtonBack"><a href="<?=$sBackLink; ?>" class="backLink"><?=TGlobal::Translate('chameleon_system_shop.module_wizard_step.action_previous_step'); ?></a>
+            <div class="formButtonBack"><a href="<?=$sBackLink; ?>" class="backLink"><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_wizard_step.action_previous_step'); ?></a>
             </div><?php
     } ?>
         </div>

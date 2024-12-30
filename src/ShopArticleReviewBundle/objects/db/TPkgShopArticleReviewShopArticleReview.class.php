@@ -149,8 +149,8 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
         $aData['sReviewTitle'] = $this->fieldTitle;
         $aData['sReviewText'] = $this->fieldComment;
         $aData['sReviewAuthor'] = $this->fieldAuthorName;
-        $aData['sUnlockReviewLink'] = "<a href='".$this->GetUnlockURL(true)."'>".TGlobal::OutHtml(TGlobal::Translate('chameleon_system_shop_article_review.action.publish_comment')).'</a> ';
-        $aData['sDeleteReviewLink'] = "<a href='".$this->GetDeleteWithActionIdURL(true)."'>".TGlobal::OutHtml(TGlobal::Translate('chameleon_system_shop_article_review.action.delete_comment')).'</a> ';
+        $aData['sUnlockReviewLink'] = "<a href='".$this->GetUnlockURL(true)."'>".TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.publish_comment')).'</a> ';
+        $aData['sDeleteReviewLink'] = "<a href='".$this->GetDeleteWithActionIdURL(true)."'>".TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.delete_comment')).'</a> ';
         $aData['shopname'] = $oShop->GetName();
         $oMail->AddDataArray($aData);
         $oMail->SendUsingObjectView('emails', 'Customer');
