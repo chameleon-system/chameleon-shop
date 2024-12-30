@@ -117,7 +117,7 @@ class ArticleListLegacyMapper extends AbstractViewMapper
         $sortFormAction
     ) {
         $aData = array(
-            'sName' => \TGlobal::Translate('chameleon_system_shop.product_list.sort'),
+            'sName' => \\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.product_list.sort'),
             'sFormActionUrl' => $sortFormAction,
             'sFormId' => '',
             'sSelectName' => $sortFieldName,

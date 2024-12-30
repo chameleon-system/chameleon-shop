@@ -12,7 +12,7 @@ $iCount = 0;
         echo $sIntroText;
     }
     ?>
-    <span class="reviewnumber"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.text.review_count', array('%count%' => $oReviewList->Length()))); ?></span>
+    <span class="reviewnumber"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.review_count', array('%count%' => $oReviewList->Length()))); ?></span>
 </div>
 <div class="modulecontent">
     <?php
@@ -43,8 +43,8 @@ $iCount = 0;
             if ($iCount > $iShowReviewsOnStart) {
                 ?>
                 <script type="text/javascript">
-                    document.write("<" + 'a href="" class="showall" onclick="$(\'.reviewlist .jshide\').toggle(); $(this).toggle();$(\'.showstart\').toggle();return false;"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.action.show_all_reviews')); ?></a' + ">");
-                    document.write("<" + 'a href="" class="showstart" onclick="$(\'.reviewlist .showall\').toggle();$(this).toggle();$(\'.reviewlist .jshide\').toggle();return false;"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.action.show_fewer_reviews')); ?></a' + ">");
+                    document.write("<" + 'a href="" class="showall" onclick="$(\'.reviewlist .jshide\').toggle(); $(this).toggle();$(\'.showstart\').toggle();return false;"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.show_all_reviews')); ?></a' + ">");
+                    document.write("<" + 'a href="" class="showstart" onclick="$(\'.reviewlist .showall\').toggle();$(this).toggle();$(\'.reviewlist .jshide\').toggle();return false;"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.show_fewer_reviews')); ?></a' + ">");
                     $(document).ready(function () {
                         $('.reviewlist .jshide').hide();
                         $('.reviewlist .showstart').hide()
@@ -53,14 +53,14 @@ $iCount = 0;
                 <?php
             }
         } else {
-            echo '<div class="no-reviews">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.text.you_have_no_reviews')).'</div>';
+            echo '<div class="no-reviews">'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.you_have_no_reviews')).'</div>';
         } ?>
     </div>
     <?php
     } else {
         ?>
     <div
-        class="please-login-message"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.text.login_required_to_read_reviews')); ?></div>
+        class="please-login-message"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.login_required_to_read_reviews')); ?></div>
     <?php
     } ?>
     <?php

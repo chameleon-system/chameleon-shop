@@ -417,7 +417,7 @@ class MTShopArticleCatalogCoreEndPoint extends TShopUserCustomModelBase
         $val = $num1 + $num2;
         $_SESSION[self::SESSION_CAPTCHA] = $val;
 
-        $sCaptchQuestion = TGlobal::Translate('chameleon_system_shop.module_article_catalog.captcha', ['%num1%' => $num1, '%num2%' => $num2]);
+        $sCaptchQuestion = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_article_catalog.captcha', ['%num1%' => $num1, '%num2%' => $num2]);
 
         return $sCaptchQuestion;
     }

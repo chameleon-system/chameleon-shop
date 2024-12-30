@@ -12,7 +12,7 @@ if ('0' == $bShipToBillingAddress) {
 ?>
 <script type="text/javascript">
     document.write('<input type="hidden" name="ChangeShipToBillingState" value="" />');
-    document.write('<label><input type="checkbox" name="bShipToBillingAddress" value="0" <?=$sChecked; ?> onclick="document.user.ChangeShipToBillingState.value=\'1\'; document.user.submit()"/> <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.module_checkout.user_different_billing_address')); ?></label>');
+    document.write('<label><input type="checkbox" name="bShipToBillingAddress" value="0" <?=$sChecked; ?> onclick="document.user.ChangeShipToBillingState.value=\'1\'; document.user.submit()"/> <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_checkout.user_different_billing_address')); ?></label>');
 </script>
 <noscript>
     <?php
@@ -30,5 +30,5 @@ if ('0' == $bShipToBillingAddress) {
         echo '1';
     } ?>"/>
     <input type="submit" name="ChangeShipToBillingState"
-           value="<?=TGlobal::OutHTML(TGlobal::Translate($sChangeShippingButtonText)); ?>"/>
+           value="<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans($sChangeShippingButtonText)); ?>"/>
 </noscript>

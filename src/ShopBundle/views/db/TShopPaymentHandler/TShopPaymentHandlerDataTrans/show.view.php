@@ -41,10 +41,10 @@ if (array_key_exists('oPaymentData', $aCallTimeVars)) {
     if ($oUserPaymentData->fieldLastUsed) {
         $sChecked = 'checked="checked"';
     } ?>
-            <a href="<?=$oPaymentHandler->GetUseSavedPaymentURL($sPaymentDataId); ?>"><?=TGlobal::OutHtml(TGlobal::Translate('chameleon_system_shop.payment_data_trans.action_use_stored_card')); ?></a>
+            <a href="<?=$oPaymentHandler->GetUseSavedPaymentURL($sPaymentDataId); ?>"><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.action_use_stored_card')); ?></a>
         </td>
         <td>
-            <a href="<?=$oUser->GetDeletePaymentDataURL($sPaymentDataId, $aCallTimeVars['iPaymentMethodId']); ?>"><?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.action_delete_stored_card')); ?></a>
+            <a href="<?=$oUser->GetDeletePaymentDataURL($sPaymentDataId, $aCallTimeVars['iPaymentMethodId']); ?>"><?= TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.action_delete_stored_card')); ?></a>
         </td>
     </tr>
     <?php

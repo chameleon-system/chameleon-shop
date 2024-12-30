@@ -99,7 +99,7 @@ class TPkgShopMapper_ArticleOtherCategoriesTeaser extends AbstractPkgShopMapper_
      */
     protected function getHeadline()
     {
-        return TGlobal::Translate('chameleon_system_shop.text.other_categories_headline');
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.text.other_categories_headline');
     }
 
     /**

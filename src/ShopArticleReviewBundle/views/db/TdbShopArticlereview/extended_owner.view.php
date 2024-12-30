@@ -28,13 +28,13 @@ if (array_key_exists('iRatingStars', $aCallTimeVars)) {
     <div class="owner">
         <div class="reviewitem">
             <?php
-            $sArticleName = TGlobal::Translate('chameleon_system_shop_article_review.text.unknown_product');
+            $sArticleName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.unknown_product');
             if (!is_null($oArticle)) {
                 $sArticleName = '<a href="'.$oArticle->GetDetailLink().'">'.TGlobal::OutHTML($oArticle->GetName()).'</a>';
             }
-            $status = TGlobal::Translate('chameleon_system_shop_article_review.text.waiting_for_publication');
+            $status = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.waiting_for_publication');
             if ($oReview->fieldPublish) {
-                $status = TGlobal::Translate('chameleon_system_shop_article_review.text.published');
+                $status = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.published');
             }
             ?>
             <a name="<?=TdbShopArticleReview::URL_PARAM_REVIEW_ITEM_JUMPER; ?><?=TGlobal::OutHTML($oReview->sqlData['id']); ?>"></a>
@@ -49,7 +49,7 @@ if (array_key_exists('iRatingStars', $aCallTimeVars)) {
             <?php if ($oReview->fieldHelpfulCount > 0) {
                 ?>
             <div class="rateoverview">
-                <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.text.how_helpful', array(
+                <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.how_helpful', array(
                     '%helpful%' => $oReview->fieldHelpfulCount,
                     '%sumRanked%' => $oReview->fieldHelpfulCount + $oReview->fieldNotHelpfulCount,
                 ))); ?>
@@ -58,18 +58,18 @@ if (array_key_exists('iRatingStars', $aCallTimeVars)) {
             }?>
             <div class="notificationinfo">
                 <?php
-                echo TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.form.send_notifications'));
+                echo TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.send_notifications'));
                 if ($oReview->fieldSendCommentNotification) {
-                    echo TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.text.comment_notification_active'));
-                    echo '<a href="'.$oReview->GetChangeReviewReportNotificationStateURL().'">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.action.disable_comment_notification')).'</a>';
+                    echo TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.comment_notification_active'));
+                    echo '<a href="'.$oReview->GetChangeReviewReportNotificationStateURL().'">'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.disable_comment_notification')).'</a>';
                 } else {
-                    echo TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.text.comment_notification_inactive'));
-                    echo '<a href="'.$oReview->GetChangeReviewReportNotificationStateURL().'">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.action.enable_comment_notification')).'</a>';
+                    echo TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.comment_notification_inactive'));
+                    echo '<a href="'.$oReview->GetChangeReviewReportNotificationStateURL().'">'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.enable_comment_notification')).'</a>';
                 }
                 ?>
             </div>
             <div class="delete"><a
-                href="<?=$oReview->GetDeleteURL(); ?>"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.action.delete_review')); ?></a></div>
+                href="<?=$oReview->GetDeleteURL(); ?>"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.delete_review')); ?></a></div>
             <form name="writereview<?=TGlobal::OutHTML($oReview->sqlData['cmsident']); ?>" accept-charset="utf-8"
                   method="post" action="">
                 <input type="hidden" name="module_fnc[<?=TGlobal::OutHTML($sSpotName); ?>]" value="EditReview"/>
@@ -77,13 +77,13 @@ if (array_key_exists('iRatingStars', $aCallTimeVars)) {
                        value="<?=TGlobal::OutHTML($oReview->id); ?>"/>
                 <table class="standardtable">
                     <tr>
-                        <th><?=TGlobal::OutHtml(TGlobal::Translate('chameleon_system_shop_article_review.form.title')); ?></th>
+                        <th><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.title')); ?></th>
                         <td><input type="text" class="userinput"
                                    name="<?=TGlobal::OutHTML(TdbShopArticleReview::INPUT_BASE_NAME).'[title]'; ?>"
                                    value="<?=TGlobal::OutHTML($oReview->fieldTitle); ?>"/></td>
                     </tr>
                     <tr>
-                        <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.form.rating')).': *'; ?></th>
+                        <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.rating')).': *'; ?></th>
                         <td>
                             <?php
                             echo'<div class="starsContainer">';
@@ -95,7 +95,7 @@ if (array_key_exists('iRatingStars', $aCallTimeVars)) {
                                 }
                                 echo '<label><input class="reviewRadioButton plain" type="radio" name="'.TGlobal::OutHTML(TdbShopArticleReview::INPUT_BASE_NAME)."[rating]\" value=\"{$iRating}\" ".$sChecked.' />';
                                 for ($iTmp = 0; $iTmp < $iRating; ++$iTmp) {
-                                    echo '<img src="/static/images/star.png" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.form.rating_star')).'" border="0" />';
+                                    echo '<img src="/static/images/star.png" alt="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.rating_star')).'" border="0" />';
                                 }
                                 echo '</label>';
                                 echo '</div>';
@@ -105,7 +105,7 @@ if (array_key_exists('iRatingStars', $aCallTimeVars)) {
                         </td>
                     </tr>
                     <tr>
-                        <th class="comment"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.form.comment')); ?>: *</th>
+                        <th class="comment"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.comment')); ?>: *</th>
                         <td>
                             <?php
                             $error_style = '';
@@ -131,7 +131,7 @@ if (array_key_exists('iRatingStars', $aCallTimeVars)) {
                                 } else {
                                     ?>
                 <div
-                    class="mustlogin"><?=TGlobal::OutHtml(TGlobal::Translate('chameleon_system_shop_article_review.text.login_required')); ?></div>
+                    class="mustlogin"><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.login_required')); ?></div>
                 <?php
                                 } ?>
             <?php

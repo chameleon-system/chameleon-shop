@@ -24,18 +24,18 @@ class TPkgRunFrontendAction_SendOrderEMail implements IPkgRunFrontendAction
             if ($oOrder->Load($aParameter['order_id'])) {
                 $bSuccess = $oOrder->SendOrderNotification($aParameter['email']);
                 if ($bSuccess) {
-                    $oStatus->sMessage = TGlobal::Translate('chameleon_system_shop.orders.msg_order_confirm_sent', array('%mail%' => $aParameter['email']));
+                    $oStatus->sMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.msg_order_confirm_sent', array('%mail%' => $aParameter['email']));
                     $oStatus->sMessageType = 'MESSAGE';
                 } else {
-                    $oStatus->sMessage = TGlobal::Translate('chameleon_system_shop.orders.error_sending_confirm_mail', array('%error%' => $bSuccess));
+                    $oStatus->sMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.error_sending_confirm_mail', array('%error%' => $bSuccess));
                     $oStatus->sMessageType = 'ERROR';
                 }
             } else {
-                $oStatus->sMessage = TGlobal::Translate('chameleon_system_shop.orders.error_sending_confirm_order_not_found');
+                $oStatus->sMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.error_sending_confirm_order_not_found');
                 $oStatus->sMessageType = 'ERROR';
             }
         } else {
-            $oStatus->sMessage = TGlobal::Translate('chameleon_system_shop.orders.error_sending_confirm_order_missing_parameter');
+            $oStatus->sMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.error_sending_confirm_order_missing_parameter');
             $oStatus->sMessageType = 'ERROR';
         }
 

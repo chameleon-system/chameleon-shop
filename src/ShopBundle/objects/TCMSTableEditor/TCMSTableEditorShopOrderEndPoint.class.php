@@ -38,7 +38,7 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
     {
         $oMenuItem = new \TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'sendordermail';
-        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_shop.orders.action_send_order_confirm_mail');
+        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.action_send_order_confirm_mail');
         $oMenuItem->sIcon = 'fas fa-envelope';
 
         $oGlobal = TGlobal::instance();
@@ -113,10 +113,10 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
 
         if (true === $bSuccess) {
             $oReturnData->bSuccess = true;
-            $oReturnData->sMessage = TGlobal::Translate('chameleon_system_shop.orders.msg_order_confirm_sent', array('%mail%' => $sMail));
+            $oReturnData->sMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.msg_order_confirm_sent', array('%mail%' => $sMail));
         } else {
             $oReturnData->bSuccess = false;
-            $oReturnData->sMessage = TGlobal::Translate('chameleon_system_shop.orders.error_sending_confirm_mail', array('%error%' => $bSuccess));
+            $oReturnData->sMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.error_sending_confirm_mail', array('%error%' => $bSuccess));
         }
 
         return $oReturnData;

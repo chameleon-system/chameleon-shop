@@ -12,6 +12,6 @@
         <input type="hidden" name="module_fnc[<?=TGlobal::OutHTML($sSpotName); ?>]" value="ExecuteStep"/>
         <input type="hidden" name="umode" value="guest"/>
 
-        <input type="submit" value="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.module_checkout.login_action_order_as_guest')); ?>"/>
+        <input type="submit" value="<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_checkout.login_action_order_as_guest')); ?>"/>
     </form>
 </div>

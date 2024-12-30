@@ -709,7 +709,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
         $bDataValid = true;
         if (!is_array($aRequestData)) {
             // invalid data
-            $oMessage->AddMessage($this->sModuleSpotName, 'ERROR-UPDATE-BASKET-ITEMS-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_no_data_sent_to_update_basket_items')]);
+            $oMessage->AddMessage($this->sModuleSpotName, 'ERROR-UPDATE-BASKET-ITEMS-PARAMETERS-MISSING', ['sMissingParameters' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_basket.error_no_data_sent_to_update_basket_items')]);
             $bDataValid = false;
         }
         if ($bDataValid) {
@@ -837,7 +837,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
             }
         } else {
             $oMessage = TCMSMessageManager::GetInstance();
-            $oMessage->AddMessage($sConsumer, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_basket_item_key_unknown', ['%key%' => $sBasketItemKey])]);
+            $oMessage->AddMessage($sConsumer, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_basket.error_basket_item_key_unknown', ['%key%' => $sBasketItemKey])]);
             if (false == $bIsInternalCall) {
                 $this->RedirectToCallingPage();
             }
@@ -897,15 +897,15 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
 
         if (!is_array($aRequestData)) {
             $bDataValid = false;
-            $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_add_to_basket_no_data')]);
+            $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_basket.error_add_to_basket_no_data')]);
         } elseif (!array_key_exists(self::URL_ITEM_ID_NAME, $aRequestData)) {
             $bDataValid = false;
-            $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_add_to_basket_no_id')]);
+            $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_basket.error_add_to_basket_no_id')]);
         } else {
             $oArticle = new TShopBasketArticle();
             if (!$oArticle->Load($aRequestData[self::URL_ITEM_ID_NAME])) {
                 $bDataValid = false;
-                $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_add_to_basket_id_unknown', [
+                $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_basket.error_add_to_basket_id_unknown', [
                         '%id%' => $aRequestData[self::URL_ITEM_ID_NAME],
                     ])]);
             }
@@ -916,7 +916,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
                     $iAmount = (float) $requestedAmount;
                 } else {
                     $bDataValid = false;
-                    $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('Die Mengenangabe ist ungültig.')]);
+                    $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Die Mengenangabe ist ungültig.')]);
                 }
             }
         }
@@ -964,7 +964,7 @@ class MTShopBasketCoreEndpoint extends TShopUserCustomModelBase
             if (!$oArticle->IsBuyable()) {
                 $aErrorCodes = $oArticle->GetSQLWithTablePrefix();
                 $bDataValid = false;
-                $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => TGlobal::Translate('chameleon_system_shop.module_basket.error_add_to_basket_not_buyable')]);
+                $oMessage->AddMessage($sMessageHandler, 'ERROR-ADD-TO-BASKET-PARAMETERS-MISSING', ['sMissingParameters' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_basket.error_add_to_basket_not_buyable')]);
             }
         }
 

@@ -78,7 +78,7 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
                             $sNewTargetMail = $aBCC;
                         }
                         $oMail->ChangeToAddress($sNewTargetMail, 'SendToName');
-                        $oMail->SetSubject(TGlobal::Translate('chameleon_system_shop.cron_resend_order_mail.subject', array('%mail%' => $sSendToMail, '%date%' => date('Y-m-d H:i:s'))));
+                        $oMail->SetSubject(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_resend_order_mail.subject', array('%mail%' => $sSendToMail, '%date%' => date('Y-m-d H:i:s'))));
                         $oMail->SendUsingObjectView('emails', 'Customer');
                         MySqlLegacySupport::getInstance()->query("UPDATE `shop_order` SET `system_order_notification_send`='1', `object_mail`='' WHERE `id`='".MySqlLegacySupport::getInstance()->real_escape_string($oShopOrder->id)."'");
                     } else {

@@ -65,7 +65,7 @@ $oMessageManager = TCMSMessageManager::GetInstance();
                 <div class="box226 box226_white">
                     <div class="box226_header box_header"><img class="box_header_icon"
                                                                src="/static/images/icons/ordersteps.png"
-                                                               alt="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.module_checkout.navi_header')); ?>"/><span><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.module_checkout.navi_header')); ?></span>
+                                                               alt="<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_checkout.navi_header')); ?>"/><span><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_checkout.navi_header')); ?></span>
                     </div>
                     <div class="box226_main box_main">
                         <div class="box_padding">
@@ -82,7 +82,7 @@ $oMessageManager = TCMSMessageManager::GetInstance();
                 <div class="box226 box226_white">
                     <div class="box226_header box_header"><img class="box_header_icon"
                                                                src="/static/images/icons/notice.gif"
-                                                               alt="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.module_checkout.help_header')); ?>"/><span><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.module_checkout.help_header')); ?></span>
+                                                               alt="<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_checkout.help_header')); ?>"/><span><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.module_checkout.help_header')); ?></span>
                     </div>
                     <div class="box226_main box_main">
                         <div class="box_padding">

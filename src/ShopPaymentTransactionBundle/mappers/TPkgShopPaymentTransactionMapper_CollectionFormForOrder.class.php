@@ -60,14 +60,14 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
         $sHeadline = '';
         switch ($sTransactionType) {
             case TPkgShopPaymentTransactionData::TYPE_PAYMENT:
-                $sHeadline = TGlobal::Translate('chameleon_system_shop_payment_transaction.collection_form.headline_payment');
+                $sHeadline = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.collection_form.headline_payment');
                 break;
             case TPkgShopPaymentTransactionData::TYPE_CREDIT:
             case TPkgShopPaymentTransactionData::TYPE_PAYMENT_REVERSAL:
-                $sHeadline = TGlobal::Translate('chameleon_system_shop_payment_transaction.collection_form.headline_refund');
+                $sHeadline = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.collection_form.headline_refund');
                 break;
             default:
-                $sHeadline = TGlobal::Translate('chameleon_system_shop_payment_transaction.error.invalid_transaction_type', array('%sTransactionType%' => $sTransactionType));
+                $sHeadline = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.error.invalid_transaction_type', array('%sTransactionType%' => $sTransactionType));
                 break;
         }
 

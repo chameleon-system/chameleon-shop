@@ -117,7 +117,7 @@ class TShopStockMessage extends TAdbShopStockMessage
     {
         $sTriggerMessage = $aMessage['oTrigger']->fieldMessage;
         $sString = '<span class="'.$this->getCssClassForMessageForQuantity($aMessage).'">'.
-            TGlobal::Translate(
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
                 'chameleon_system_shop.stock_message.different_shipping_time_applies',
                 array(
                     '%amount%' => $aMessage['amount'],

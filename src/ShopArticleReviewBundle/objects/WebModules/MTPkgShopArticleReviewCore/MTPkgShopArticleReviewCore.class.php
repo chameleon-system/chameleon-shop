@@ -980,12 +980,12 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
                     break;
                 case AuthorDisplayConstants::AUTHOR_DISPLAY_TYPE_ANONYMOUS:
                 default:
-                    $sAuthor = TGlobal::Translate('chameleon_system_shop_article_review.text.anonymous');
+                    $sAuthor = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.anonymous');
                     break;
             }
         }
         if (empty($sAuthor)) {
-            $sAuthor = TGlobal::Translate('chameleon_system_shop_article_review.text.anonymous');
+            $sAuthor = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.anonymous');
         }
 
         return $sAuthor;

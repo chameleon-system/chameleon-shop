@@ -256,7 +256,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'collectall';
-        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_shop_payment_transaction.action.collect_all');
+        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.action.collect_all');
         $oMenuItem->sIcon = 'fas fa-tasks';
 
         $sURL = URL_CMS_CONTROLLER.'?';
@@ -269,7 +269,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         );
         $sURL .= TTools::GetArrayAsURLForJavascript($aParams);
 
-        $oMenuItem->sOnClick = "if (true == confirm('".TGlobal::Translate(
+        $oMenuItem->sOnClick = "if (true == confirm('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
                 'chameleon_system_shop_payment_transaction.confirm.collect_all'
             )."')) {TPkgShopPaymentTransaction_closeForm();document.location.href='{$sURL}';}";
 
@@ -283,7 +283,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'refundall';
-        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_shop_payment_transaction.action.refund_all');
+        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.action.refund_all');
         $oMenuItem->sIcon = 'fas fa-undo-alt';
 
         $sURL = URL_CMS_CONTROLLER.'?';
@@ -296,7 +296,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
         );
         $sURL .= TTools::GetArrayAsURLForJavascript($aParams);
 
-        $oMenuItem->sOnClick = "if (true == confirm('".TGlobal::Translate(
+        $oMenuItem->sOnClick = "if (true == confirm('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
                 'chameleon_system_shop_payment_transaction.confirm.refund_all'
             )."')) {TPkgShopPaymentTransaction_closeForm();document.location.href='{$sURL}'};";
 
@@ -310,7 +310,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'collectpartial';
-        $oMenuItem->sDisplayName = TGlobal::Translate(
+        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
             'chameleon_system_shop_payment_transaction.action.collect_partial'
         );
         $oMenuItem->sIcon = 'fas fa-undo-alt';
@@ -337,7 +337,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'refundpartial';
-        $oMenuItem->sDisplayName = TGlobal::Translate(
+        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
             'chameleon_system_shop_payment_transaction.action.refund_partial'
         );
         $oMenuItem->sIcon = 'fas fa-undo-alt';

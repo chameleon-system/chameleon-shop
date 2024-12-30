@@ -92,7 +92,7 @@ class TShopPaymentHandlerEasyCash_Debit extends TShopPaymentHandlerEasyCash
             } else {
                 TTools::WriteLogEntry('EasyCash ProcessOrderResponse Error OrderID-'.$oOrder->id.': UNABLE TO CONFIRM - giving up after 3 requests; ', 1, __FILE__, __LINE__);
                 $oMsgManager = TCMSMessageManager::GetInstance();
-                $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => TGlobal::Translate('chameleon_system_shop.payment_easy_cash.error_unable_to_confirm_payment')));
+                $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_easy_cash.error_unable_to_confirm_payment')));
             }
         } else {
             TTools::WriteLogEntry('EasyCash ProcessOrderResponse Error OrderID-'.$oOrder->id.': '.$sErrorCode.'; '.$sResponseBody, 1, __FILE__, __LINE__);

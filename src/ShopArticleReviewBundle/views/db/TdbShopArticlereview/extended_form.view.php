@@ -29,7 +29,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
     <?php if (isset($bNeedUserFieldForName) && $bNeedUserFieldForName) {
     ?>
     <tr>
-        <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.form.author_name')).':'; ?></th>
+        <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.author_name')).':'; ?></th>
         <td>
             <input type="text" class="userinput"
                    name="<?=TGlobal::OutHTML(TdbShopArticleReview::INPUT_BASE_NAME).'[author_name]'; ?>"
@@ -51,7 +51,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
     } else {
         ?>
     <tr>
-        <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.form.author_email')).':'; ?></th>
+        <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.author_email')).':'; ?></th>
         <td>
             <input type="text" class="userinput"
                    name="<?=TGlobal::OutHTML(TdbShopArticleReview::INPUT_BASE_NAME).'[author_email]'; ?>"
@@ -61,20 +61,20 @@ $oUser = TdbDataExtranetUser::GetInstance();
     <?php
     } ?>
     <tr>
-        <th><?=TGlobal::OutHtml(TGlobal::Translate('chameleon_system_shop_article_review.form.send_notifications')); ?></th>
+        <th><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.send_notifications')); ?></th>
         <td><input type="checkbox"
                    name="<?=TGlobal::OutHTML(TdbShopArticleReview::INPUT_BASE_NAME).'[send_comment_notification]'; ?>" <?php if ('on' == $aUserData['send_comment_notification']) {
         echo 'checked="checked"';
     }?>></td>
     </tr>
     <tr>
-        <th><?=TGlobal::OutHtml(TGlobal::Translate('chameleon_system_shop_article_review.form.title')); ?></th>
+        <th><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.title')); ?></th>
         <td><input type="text" class="userinput"
                    name="<?=TGlobal::OutHTML(TdbShopArticleReview::INPUT_BASE_NAME).'[title]'; ?>"
                    value="<?=TGlobal::OutHTML($aUserData['title']); ?>"/></td>
     </tr>
     <tr>
-        <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.form.rating')).': *'; ?></th>
+        <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.rating')).': *'; ?></th>
         <td>
             <?php
             echo'<div class="starsContainer">';
@@ -86,7 +86,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
                 }
                 echo '<label><input class="reviewRadioButton plain" type="radio" name="'.TGlobal::OutHTML(TdbShopArticleReview::INPUT_BASE_NAME)."[rating]\" value=\"{$iRating}\" ".$sChecked.' />';
                 for ($iTmp = 0; $iTmp < $iRating; ++$iTmp) {
-                    echo '<img src="/static/images/star.png" alt="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.form.rating_star')).'" border="0" />';
+                    echo '<img src="/static/images/star.png" alt="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.rating_star')).'" border="0" />';
                 }
                 echo '</label>';
                 echo '</div>';
@@ -96,7 +96,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
         </td>
     </tr>
     <tr>
-        <th class="comment"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.form.comment')); ?>: *</th>
+        <th class="comment"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.comment')); ?>: *</th>
         <td>
             <?php
             $error_style = '';
@@ -112,7 +112,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
     <?php if (!empty($sCaptchaQuestion)) {
                 ?>
     <tr>
-        <th class="comment"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.form.captcha')); ?>: *</th>
+        <th class="comment"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.captcha')); ?>: *</th>
         <td>
             <div class="floatleft">
                 <?=TGlobal::OutHTML($sCaptchaQuestion); ?>
@@ -126,7 +126,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
                        name="<?=TdbShopArticleReview::INPUT_BASE_NAME; ?>[captcha]" value=""/>
             </div>
             <div class="infotext floatleft" style="margin:0 0 0 20px; width: 250px;">
-                (<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_article_review.form.captcha_help')); ?>
+                (<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.form.captcha_help')); ?>
                 )
             </div>
             <div class="cleardiv">&nbsp;</div>

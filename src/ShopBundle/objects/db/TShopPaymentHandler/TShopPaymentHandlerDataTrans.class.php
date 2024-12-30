@@ -525,7 +525,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
         $bSendMail = false;
         $oMail = TdbDataMailProfile::GetProfile('payment_datatrans_error_settlement');
         if (!is_null($oMail)) {
-            $sInfo = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.payment_data_trans.settlement_failure_mail_info',
+            $sInfo = TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.settlement_failure_mail_info',
                     array(
                         '%ordernumber%' => $oOrder->fieldOrdernumber,
                         '%ref%' => $this->GetRefNoParameter(false),
