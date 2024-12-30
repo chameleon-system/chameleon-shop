@@ -11,7 +11,7 @@
         {% for block in blocks %}
             <div class="barchart-groupname">{{ block.groupTitle }}</div> <br />
                 <div class="barchart-body">
-                    {{ include( '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig' , {group: block} ) }}
+                    {{ include( '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig' , { group: block, chartId: loop.index }) }}
                 </div>
             <div class="cleardiv"></div> <br />
         {% endfor %}

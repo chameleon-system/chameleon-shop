@@ -1,9 +1,10 @@
 {#
-    @var int level
+    @var int chartId
     @var ChameleonSystem\EcommerceStatsBundle\Service\EcommerceStatsGroup[] group
     @var string[] columnNames
     @var bool showDiffColumn
     @var int maxGroupCount
+    @var ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel group
 #}
 
 {% set barHeight = 200 %}     {# in pixel #}
@@ -12,7 +13,100 @@
 {% set gridCount = 10 %}       {# number of lines to show max #}
 {% set gridDivider = 5 %}       {# number the grid lines are always divisible by #}
 {% set mainBarColor = '#185EA8'%}       {# color for the first bar (total value) #}
-{% set colors = ['#5E98FF', '#807D9A', '#92C1F0', '#A2ACB3', '#7ADEFF'] %}       {# colors for the bars #}
+{% set colors = ['#5E98FF', '#807D9A', '#92C1F0', '#A2ACB3', '#7ADEFF', '#185EA8'] %}
+
+<div>
+    <canvas id="chart{{ chartId }}"></canvas>
+</div>
+
+<script>
+function generateChart{{ chartId }}(chartId) {
+    var labels = [
+        {% for subGroupName, subGroup in group.subGroups %}
+            {% if loop.first %}
+                {% for timeframe, value in subGroup.groupTotals %}
+                '{{ timeframe }}'{{ not loop.last or not loop.parent.last ? ',' : '' }}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    ];
+
+    var data = {
+        labels: labels,
+        datasets: [
+            {% for subGroupName, subGroup in group.subGroups %}
+            {
+                label: '{{ subGroupName }}',
+                data: [
+                {% for timeframe, value in subGroup.groupTotals %}
+                    {{ value }}{{ not loop.last ? ',' : '' }}
+                {% endfor %}
+                ],
+                backgroundColor: '{{ colors[loop.index0] }}',
+            },
+
+            {% endfor %}
+        ]
+    };
+
+    var config = {
+        type: 'bar',
+        data: data,
+        options: {
+            plugins: {
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                },
+            },
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true
+                }
+            }
+        },
+        plugins: [
+            {
+                id: 'stackedSum',
+                beforeDraw: (chart) => {
+                    const {ctx, chartArea, scales} = chart;
+                    const datasets = chart.data.datasets;
+                    const labels = chart.data.labels;
+
+                    labels.forEach((label, index) => {
+                        let sum = 0;
+
+                        datasets.forEach((dataset) => {
+                            sum += dataset.data[index];
+                        });
+
+                        // Kaufmännisch runden
+                        const roundedSum = sum.toFixed(2);
+
+                        // Position und Stil der Summe
+                        ctx.save();
+                        ctx.font = 'bold 12px Arial';
+                        ctx.fillStyle = '#000';
+                        ctx.textAlign = 'center';
+                        const xPos = scales.x.getPixelForValue(label);
+                        const yPos = chartArea.top + 10; // Abstand zu den Labels erhöhen
+                        ctx.fillText(roundedSum, xPos, yPos);
+                        ctx.restore();
+                    });
+                },
+            },
+        ],
+    };
+
+    new Chart(document.getElementById(chartId), config);
+}
+
+generateChart{{ chartId }}('chart{{ chartId }}');
+</script>
 
 <div class="groupcontainer-barchart">
 

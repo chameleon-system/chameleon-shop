@@ -30,7 +30,6 @@
 {% for subGroup in group.subGroups %}
     {{ include( '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/html-body.html.twig' , {
         group: subGroup,
-        level: level + 1,
         columnNames: columnNames,
         maxGroupCount: maxGroupCount,
     } ) }}
