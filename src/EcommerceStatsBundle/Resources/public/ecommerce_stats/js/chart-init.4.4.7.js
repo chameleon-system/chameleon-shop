@@ -16,6 +16,19 @@ CHAMELEON.CORE.Charts = {
                     tooltip: {
                         mode: 'index',
                         intersect: false,
+                        callbacks: {
+                            label: (context) => {
+                                const datasetLabel = context.dataset.label || '';
+                                const value = context.raw;
+
+                                const formattedValue = new Intl.NumberFormat('de-DE', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                }).format(value);
+
+                                return `${datasetLabel}: ${formattedValue} €`;
+                            },
+                        },
                     },
                     legend: options.legend || {},
                 },
@@ -41,10 +54,15 @@ CHAMELEON.CORE.Charts = {
                             let sum = 0;
 
                             datasets.forEach((dataset) => {
-                                sum += dataset.data[index];
+                                if (undefined !== dataset.data[index]) {
+                                    sum += dataset.data[index];
+                                }
                             });
 
-                            const roundedSum = sum.toFixed(2);
+                            const roundedSum = new Intl.NumberFormat('de-DE', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                            }).format(sum);
 
                             // Position and Rotation
                             ctx.save();
@@ -52,10 +70,10 @@ CHAMELEON.CORE.Charts = {
                             ctx.fillStyle = '#989FA5';
                             ctx.translate(
                                 scales.x.getPixelForValue(label),
-                                chartArea.top + 45
+                                chartArea.top + 55
                             );
                             ctx.rotate(-Math.PI / 4); // rotate 45° to the left
-                            ctx.fillText(roundedSum, 0, 0);
+                            ctx.fillText(roundedSum+' €', -5, 0);
                             ctx.restore();
                         });
                     },
