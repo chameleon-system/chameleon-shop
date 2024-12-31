@@ -151,8 +151,8 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $jsPath = $this->global->GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/js/ecommerce-stats.js', false);
         $includes[] = sprintf('<script type="text/javascript" src="%s"></script>', $jsPath);
-        $includes[] = '<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>'; // @todo save chart locally
-
+        $jsPath = $this->global->GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/js/chart.js', false);
+        $includes[] = sprintf('<script type="text/javascript" src="%s"></script>', $jsPath);
         $cssPath = \TGlobal::GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats.css');
         $printCssPath = \TGlobal::GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats-print.css');
         $includes[] = sprintf('<link href="%s" rel="stylesheet" type="text/css">', $cssPath);
