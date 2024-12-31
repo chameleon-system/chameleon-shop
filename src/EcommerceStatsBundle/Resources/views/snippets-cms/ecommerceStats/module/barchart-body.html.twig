@@ -1,138 +1,138 @@
 {#
-    @var int level
+    @var int chartId
     @var ChameleonSystem\EcommerceStatsBundle\Service\EcommerceStatsGroup[] group
     @var string[] columnNames
     @var bool showDiffColumn
     @var int maxGroupCount
+    @var ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel group
 #}
 
-{% set barHeight = 200 %}     {# in pixel #}
-{% set totalBarWidth = 20 %}     {# in pixel #}
-{% set subBarWidth = 10 %}       {# in pixel #}
-{% set gridCount = 10 %}       {# number of lines to show max #}
-{% set gridDivider = 5 %}       {# number the grid lines are always divisible by #}
-{% set mainBarColor = '#185EA8'%}       {# color for the first bar (total value) #}
-{% set colors = ['#5E98FF', '#807D9A', '#92C1F0', '#A2ACB3', '#7ADEFF'] %}       {# colors for the bars #}
+{% set colors = ['#5E98FF', '#807D9A', '#92C1F0', '#A2ACB3', '#7ADEFF', '#185EA8', '#4B86F7', '#96A9C2', '#82BEEA', '#9FD3E8', '#6398B0','#C8E8FF', '#337AB7', '#4DA6FF', '#718CA1'] %}
 
-<div class="groupcontainer-barchart">
-
-    {% set oldVal = 0 %}
-    {% set maxVal = group.maxValue %}
-    {% set divideThrough = maxVal / gridCount %}
-    {% set divideThrough = (divideThrough | round) + (gridDivider - (divideThrough | round) % gridDivider) %}
-    {% if divideThrough == 0 %}
-        {% set totalWithoutRemain = maxVal %}
-    {% else %}
-        {% set remain = maxVal % divideThrough %}
-        {% set totalWithoutRemain = maxVal - remain %}
-    {% endif %}
-
-    <div class="bar-gridline" style="top: {{ barHeight + gridDivider - 1 }}px;"> 0 </div>
-
-    {% if totalWithoutRemain < divideThrough %} {# "range" function in twig dislikes "step" param greater than "end" param :( #}
-        {% set topvalue = barHeight + gridDivider %}
-        <div class="bar-gridline" style="top: {{ topvalue }}px;">{{ 0 }}</div>
-    {% else %}
-        {% for gridHeight in range(0, totalWithoutRemain, divideThrough) %}
-            {% set topvalue = barHeight - (barHeight / maxVal * gridHeight) + gridDivider %}
-            <div class="bar-gridline" style="top: {{ topvalue }}px;">{{ gridHeight }}</div>
-        {% endfor %}
-    {% endif %}
-
-    {% set colorSubcategory = {} %}
-
-    {% for name in columnNames %}
-        <div class="barchart-item">
-            <div class="columnHeader"><strong>{{ name }}</strong></div>
-            <div class="columnBars" style="height: {{ barHeight }}px;">
-                {% set newVal = group.getTotals(name) %}
-
-                <div class="bar-wrapper" style="height: {{ barHeight }}px;">
-                    <div class="bar" style="background-color: {{ mainBarColor }}; width: {{ totalBarWidth }}px; height: {{ barHeight / maxVal * newVal }}px;"></div>
-                </div>
-
-                {% if group.subGroups | length > 0 %}
-                    {% set colorCount = 0 %}
-                    {% set subHeight = [] %}
-                    {% set oldSubHeight = [] %}
-                    {% set barHTML = {} %}
-
-                    {% for subGroupName, subGroup in group.subGroups %}
-                        {% set subGroupColumn = subGroup.subGroupColumn %}
-
-                        {% if subHeight[subGroupColumn] is not defined %}
-                            {% set subHeight = subHeight | merge({(subGroupColumn): null}) %}
-                        {% endif %}
-
-                        {% if oldSubHeight[subGroupColumn] is not defined %}
-                            {% set oldSubHeight = oldSubHeight | merge({(subGroupColumn): 0}) %}
-                        {% endif %}
-
-                        {% if barHTML[subGroupColumn] is not defined %}
-                            {% set barHTML = barHTML | merge({(subGroupColumn): ''}) %}
-                        {% endif %}
-
-                        {% if colors[colorCount] is not defined %}
-                            {% set colorCount = 0 %}
-                        {% endif %}
-
-                        {% set value = subGroup.getTotals(name) %}
-
-                        {% if not subHeight[subGroupColumn] == null %}
-                            {% set oldSubHeight = oldSubHeight | merge({(subGroupColumn): subHeight[subGroupColumn]}) %}
-                        {% endif %}
-
-                        {% set subHeight = subHeight | merge({(subGroupColumn): barHeight / maxVal * value}) %}
-                        {% set subBarData = {(subGroupName): {className: subGroupColumn, bottom: oldSubHeight[subGroupColumn], backgroundColor: colors[colorCount], width: subBarWidth, height: subHeight[subGroupColumn]}} %}
-                        {% set barHTML = barHTML | merge({(subGroupColumn): (barHTML[subGroupColumn] ?: {}) | merge(subBarData) }) %}
-
-                        {% set color = colors[colorCount] %}
-                        {% set colorSubcategory = colorSubcategory | merge( {(subGroupColumn): (colorSubcategory[subGroupColumn] ?: {}) | merge({(color): subGroup.groupTitle}) }) %}
-
-                        {% set colorCount = colorCount + 1 %}
-                    {% endfor %}
-
-                    {% set subBarCount = 1 %}
-
-                    {% for html in barHTML %}
-                        {% if (subBarCount == 1) %}
-                            {% set margin = totalBarWidth %}
-                        {% else %}
-                            {% set margin = subBarWidth %}
-                        {% endif %}
-                        {% if html %}
-                            <div class="bar-wrapper" style="height: {{ barHeight }}px; margin-left: {{ margin }}px;">
-                            {% for barData in html %}
-                                <div class="bar {{ barData.className }}" style="bottom: {{ barData.bottom }}px; background-color: {{ barData.backgroundColor }}; width: {{ barData.width }}px; height: {{ barData.height }}px;"></div>
-                            {% endfor %}
-                            </div>
-                        {% endif %}
-                        {% set subBarCount = subBarCount + 1 %}
-                    {% endfor %}
-                {% endif %}
-
-            </div>  {# of .columnBars #}
-
-            <div class="cleardiv"></div>
-
-            {{ newVal | chameleon_system_ecommerce_stats_format_number(2) }}
-        </div>
-
-        {% set oldVal = newVal %}
-    {% endfor %}
-
-    <div class="cleardiv">&nbsp;</div>
-    <br/>
-    <span class="legend-square" style="background-color:{{ mainBarColor }};"></span> {{ 'chameleon_system_ecommerce_stats.total' | trans }} <br/>
-
-    {% if colorSubcategory | length > 0 %}
-        {% for realColorSubcategory in colorSubcategory %}
-            <span class="legend-divider">&nbsp;</span>
-            {% for color, name in realColorSubcategory %}
-                <span class="legend-square" style="background-color: {{ color }};"></span>{{ name }}<br />
-            {% endfor %}
-        {% endfor %}
-    {% endif %}
-
-    <br/>
+<div>
+    <canvas id="chart{{ chartId }}"></canvas>
 </div>
+
+<script>
+    const generateChart{{ chartId }} = (chartId) => {
+
+        {% if group.subGroups | length < 1 %}
+        const labels = [
+            {% for timeframe, value in group.groupTotals %}
+            '{{ timeframe }}'{{ not loop.last or not loop.parent.last ? ',' : '' }}
+            {% endfor %}
+        ];
+
+        const datasets = [
+            {
+                label: '{{ groupTitle }}',
+                data: [
+                    {% for timeframe, value in group.groupTotals %}
+                    {{ value }}{{ not loop.last ? ',' : '' }}
+                    {% endfor %}
+                ],
+                backgroundColor: '{{ colors[0] }}',
+            }
+        ];
+        {% else %}
+        const labels = [
+            {% for subGroupName, subGroup in group.subGroups %}
+            {% if loop.first %}
+            {% for timeframe, value in subGroup.groupTotals %}
+            '{{ timeframe }}'{{ not loop.last or not loop.parent.last ? ',' : '' }}
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+        ];
+
+        const datasets = [
+            {% for subGroupName, subGroup in group.subGroups %}
+            {
+                label: '{{ subGroupName }}',
+                data: [
+                    {% for timeframe, value in subGroup.groupTotals %}
+                    {{ value }}{{ not loop.last ? ',' : '' }}
+                    {% endfor %}
+                ],
+                backgroundColor: '{{ colors[loop.index0] }}',
+            }
+            {% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+        {% endif %}
+
+        const data = {
+            labels: labels,
+            datasets: datasets,
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    {% if group.subGroups | length < 1 %}
+                        legend: {
+                            display: false
+                        }
+                    {% endif %}
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true,
+                    },
+                },
+            },
+            plugins: [
+                {
+                    id: 'stackedSum',
+                    beforeDraw: (chart) => {
+                        const { ctx, chartArea, scales } = chart;
+                        const datasets = chart.data.datasets;
+                        const labels = chart.data.labels;
+
+                        labels.forEach((label, index) => {
+                            let sum = 0;
+
+                            datasets.forEach((dataset) => {
+                                sum += dataset.data[index];
+                            });
+
+                            const roundedSum = sum.toFixed(2);
+
+                            ctx.save();
+                            ctx.font = 'bold 12px Arial';
+                            ctx.fillStyle = '#000';
+                            ctx.textAlign = 'center';
+                            const xPos = scales.x.getPixelForValue(label);
+                            const yPos = chartArea.top + 20; // Adjust for spacing
+                            ctx.fillText(roundedSum, xPos, yPos);
+                            ctx.restore();
+                        });
+                    },
+                },
+            ],
+        };
+
+        let chart = new Chart(document.getElementById(chartId), config);
+
+        increaseYAxisHeight(chart);
+    }
+
+    generateChart{{ chartId }}('chart{{ chartId }}');
+
+    function increaseYAxisHeight(chart) {
+        let maxHeight = chart.scales.y.end;
+        let increasedMaxHeight = maxHeight + (maxHeight / 100 * 10);
+        chart.config.options.scales.y.suggestedMax = increasedMaxHeight;
+        chart.update();
+    }
+</script>

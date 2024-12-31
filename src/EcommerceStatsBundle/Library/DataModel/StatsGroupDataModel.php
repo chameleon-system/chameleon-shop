@@ -211,6 +211,11 @@ class StatsGroupDataModel
         return $this->groupTotals[$name] ?? 0;
     }
 
+    public function getGroupTotals(): array
+    {
+        return $this->groupTotals;
+    }
+
     /**
      * @return StatsGroupDataModel[]
      */

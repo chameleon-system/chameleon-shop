@@ -11,6 +11,7 @@
     @var string csvDownloadUrl
     @var string topSellerDownloadUrl
     @var string [] tableData
+    @var ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsTableDataModel tableData
 #}
 
 <br/>
@@ -46,7 +47,6 @@
                 <div class="statistics mt-4">
                     {% set includeFileName = '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/' ~ (activeViewName == 'html.barchart' ? 'html-barchart.html.twig' : 'html-table.html.twig') %}
                     {{ include( includeFileName , {
-                        level: tableData.level,
                         blocks: tableData.blocks,
                         columnNames: tableData.columnNames,
                         showDiffColumn: tableData.showDiffColumn,
