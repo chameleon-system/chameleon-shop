@@ -1,10 +1,10 @@
 {#
-    @var int chartId
-    @var ChameleonSystem\EcommerceStatsBundle\Service\EcommerceStatsGroup[] group
-    @var string[] columnNames
-    @var bool showDiffColumn
-    @var int maxGroupCount
-    @var ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel group
+@var int chartId
+@var ChameleonSystem\EcommerceStatsBundle\Service\EcommerceStatsGroup[] group
+@var string[] columnNames
+@var bool showDiffColumn
+@var int maxGroupCount
+@var ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel group
 #}
 
 {% set colors = ['#5E98FF', '#807D9A', '#92C1F0', '#A2ACB3', '#7ADEFF', '#185EA8', '#4B86F7', '#96A9C2', '#82BEEA', '#9FD3E8', '#6398B0','#C8E8FF', '#337AB7', '#4DA6FF', '#718CA1'] %}
@@ -14,16 +14,24 @@
 </div>
 
 <script>
-    const generateChart{{ chartId }} = (chartId) => {
-
-        {% if group.subGroups | length < 1 %}
-        const labels = [
+    const chartData{{ chartId }} = {
+        labels: [
+            {% if group.subGroups | length < 1 %}
             {% for timeframe, value in group.groupTotals %}
-            '{{ timeframe }}'{{ not loop.last or not loop.parent.last ? ',' : '' }}
+            '{{ timeframe }}'{{ not loop.last ? ',' : '' }}
             {% endfor %}
-        ];
-
-        const datasets = [
+            {% else %}
+            {% for subGroupName, subGroup in group.subGroups %}
+            {% if loop.first %}
+            {% for timeframe, value in subGroup.groupTotals %}
+            '{{ timeframe }}'{{ not loop.last ? ',' : '' }}
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        ],
+        datasets: [
+            {% if group.subGroups | length < 1 %}
             {
                 label: '{{ groupTitle }}',
                 data: [
@@ -33,19 +41,7 @@
                 ],
                 backgroundColor: '{{ colors[0] }}',
             }
-        ];
-        {% else %}
-        const labels = [
-            {% for subGroupName, subGroup in group.subGroups %}
-            {% if loop.first %}
-            {% for timeframe, value in subGroup.groupTotals %}
-            '{{ timeframe }}'{{ not loop.last or not loop.parent.last ? ',' : '' }}
-            {% endfor %}
-            {% endif %}
-            {% endfor %}
-        ];
-
-        const datasets = [
+            {% else %}
             {% for subGroupName, subGroup in group.subGroups %}
             {
                 label: '{{ subGroupName }}',
@@ -58,81 +54,19 @@
             }
             {% if not loop.last %},{% endif %}
             {% endfor %}
-        ];
-        {% endif %}
+            {% endif %}
+        ],
+        options: {
+            legend: {
+                display: {{ group.subGroups | length > 0 ? 'true' : 'false' }}
+            }
+        }
+    };
 
-        const data = {
-            labels: labels,
-            datasets: datasets,
-        };
-
-        const config = {
-            type: 'bar',
-            data: data,
-            options: {
-                plugins: {
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    {% if group.subGroups | length < 1 %}
-                        legend: {
-                            display: false
-                        }
-                    {% endif %}
-                },
-                responsive: true,
-                scales: {
-                    x: {
-                        stacked: true,
-                    },
-                    y: {
-                        stacked: true,
-                    },
-                },
-            },
-            plugins: [
-                {
-                    id: 'stackedSum',
-                    beforeDraw: (chart) => {
-                        const { ctx, chartArea, scales } = chart;
-                        const datasets = chart.data.datasets;
-                        const labels = chart.data.labels;
-
-                        labels.forEach((label, index) => {
-                            let sum = 0;
-
-                            datasets.forEach((dataset) => {
-                                sum += dataset.data[index];
-                            });
-
-                            const roundedSum = sum.toFixed(2);
-
-                            ctx.save();
-                            ctx.font = 'bold 12px Arial';
-                            ctx.fillStyle = '#000';
-                            ctx.textAlign = 'center';
-                            const xPos = scales.x.getPixelForValue(label);
-                            const yPos = chartArea.top + 20; // Adjust for spacing
-                            ctx.fillText(roundedSum, xPos, yPos);
-                            ctx.restore();
-                        });
-                    },
-                },
-            ],
-        };
-
-        let chart = new Chart(document.getElementById(chartId), config);
-
-        increaseYAxisHeight(chart);
-    }
-
-    generateChart{{ chartId }}('chart{{ chartId }}');
-
-    function increaseYAxisHeight(chart) {
-        let maxHeight = chart.scales.y.end;
-        let increasedMaxHeight = maxHeight + (maxHeight / 100 * 10);
-        chart.config.options.scales.y.suggestedMax = increasedMaxHeight;
-        chart.update();
-    }
+    CHAMELEON.CORE.Charts.generateChart(
+        'chart{{ chartId }}',
+        chartData{{ chartId }}.labels,
+        chartData{{ chartId }}.datasets,
+        chartData{{ chartId }}.options
+    );
 </script>
