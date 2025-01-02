@@ -21,7 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
-    private const EURO_CURRENCY_ID = 'd6710c0b-e7c2-6a59-b21b-495745250941';
+    private const STANDARD_CURRENCY_ISO_CODE = 'EUR';
 
     private StatsTableServiceInterface $stats;
     private TranslatorInterface $translator;
@@ -54,7 +54,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $dateGroupType = $this->GetUserInput('dateGroupType', StatsProviderInterface::DATA_GROUP_TYPE_DAY);
         $showChange = '1' === $this->GetUserInput('showChange', '0');
         $viewName = $this->GetUserInput('viewName', null);
-        $currencyId = $this->GetUserInput('currency', self::EURO_CURRENCY_ID);
+        $currencyId = $this->GetUserInput('currency', $this->statsCurrencyService->getCurrencyIdByIsoCode(self::STANDARD_CURRENCY_ISO_CODE));
 
         /** @var string $portalId */
         $portalId = $this->GetUserInput('portalId', '');
