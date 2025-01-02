@@ -38,6 +38,7 @@ interface StatsProviderInterface
         \DateTime $startDate,
         \DateTime $endDate,
         string $dateGroupType,
-        string $portalId
+        string $portalId,
+        string $currencyId
     ): StatsTableDataModel;
 }

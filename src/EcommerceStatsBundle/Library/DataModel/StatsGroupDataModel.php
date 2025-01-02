@@ -34,6 +34,8 @@ class StatsGroupDataModel
     private ?string $groupTitle = null;
     public string $subGroupColumn = '';
 
+    public ?StatsCurrencyDataModel $currency = null;
+
     /**
      * @var array<string, float>
      */
@@ -234,5 +236,15 @@ class StatsGroupDataModel
     public function setHasCurrency(bool $hasCurrency): void
     {
         $this->hasCurrency = $hasCurrency;
+    }
+
+    public function getCurrency(): ?StatsCurrencyDataModel
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(?StatsCurrencyDataModel $currency): void
+    {
+        $this->currency = $currency;
     }
 }

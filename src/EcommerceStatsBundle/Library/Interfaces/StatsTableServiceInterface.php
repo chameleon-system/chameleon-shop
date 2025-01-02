@@ -27,6 +27,7 @@ interface StatsTableServiceInterface
         \DateTime $endDate,
         string $dateGroupType,
         bool $showDiffColumn,
-        string $portalId = ''
+        string $portalId = '',
+        string $currencyId = ''
     ): StatsTableDataModel;
 }

@@ -21,6 +21,7 @@
         >
             <argument key="$translator" type="service" id="chameleon_system_core.translator" />
             <argument key="$urlUtil" type="service" id="chameleon_system_core.util.url" />
+            <argument key="$statsCurrencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service" />
             <tag name="chameleon_system.module"/>
         </service>
 
@@ -35,6 +36,7 @@
             autowire="true"
         >
             <argument key="$translator" type="service" id="chameleon_system_core.translator" />
+            <argument key="$currencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service" />
             <tag name="chameleon_system_ecommerce_stats.stats_provider" />
         </service>
 
@@ -64,11 +66,18 @@
             <tag name="twig.extension"/>
         </service>
 
+        <service
+                class="ChameleonSystem\EcommerceStatsBundle\Service\StatsCurrencyService"
+                id="chameleon_system_ecommerce_stats.service.stats_currency_service">
+            <argument type="service" id="database_connection" />
+        </service>
+
         <!-- Support for autowiring interfaces -->
         <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\CsvExportServiceInterface" alias="chameleon_system_ecommerce_stats.csv_export" />
         <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface" alias="ChameleonSystem\EcommerceStatsBundle\StatsProvider\StatsProviderCollection" />
         <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface" alias="chameleon_system_ecommerce_stats.ecommerce_stats_table" />
         <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\TopSellerServiceInterface" alias="chameleon_system_ecommerce_stats.top_seller" />
+        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface" alias="chameleon_system_ecommerce_stats.service.stats_currency_service" />
 
     </services>
 </container>

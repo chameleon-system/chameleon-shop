@@ -114,6 +114,14 @@
                 <source>chameleon_system_ecommerce_stats.no_data</source>
                 <target>Keine Daten vorhanden</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_currency">
+                <source>chameleon_system_ecommerce_stats.form_currency</source>
+                <target>Währung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_no_data_for_current_filters">
+                <source>chameleon_system_ecommerce_stats.form_no_data_for_current_filters</source>
+                <target>Mit den aktuellen Filtern sind keine Daten für die Statistik vorhanden</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

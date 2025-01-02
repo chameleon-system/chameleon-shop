@@ -34,13 +34,13 @@ class StatsTableService implements StatsTableServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function evaluate(\DateTime $startDate, \DateTime $endDate, string $dateGroupType, bool $showDiffColumn, string $portalId = ''): StatsTableDataModel
+    public function evaluate(\DateTime $startDate, \DateTime $endDate, string $dateGroupType, bool $showDiffColumn, string $portalId = '', $currencyId = ''): StatsTableDataModel
     {
         $statsTable = new StatsTableDataModel();
         $statsTable->setShowDiffColumn($showDiffColumn);
 
         foreach ($this->statsProviders as $provider) {
-            $statsTable = $provider->addStatsToTable($statsTable, $startDate, $endDate, $dateGroupType, $portalId);
+            $statsTable = $provider->addStatsToTable($statsTable, $startDate, $endDate, $dateGroupType, $portalId, $currencyId);
         }
 
         $blocks = $statsTable->getBlocks();

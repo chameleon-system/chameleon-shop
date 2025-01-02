@@ -6,6 +6,7 @@ namespace ChameleonSystem\EcommerceStatsBundle\StatsProvider;
 
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsTableDataModel;
+use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
@@ -37,7 +38,8 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
     public function __construct(
         Connection $connection,
         LoggerInterface $logger,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        private readonly StatsCurrencyServiceInterface $currencyService
     ) {
         $this->connection = $connection;
         $this->logger = $logger;
@@ -49,7 +51,8 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         \DateTime $startDate,
         \DateTime $endDate,
         string $dateGroupType,
-        string $portalId
+        string $portalId,
+        string $currencyId
     ): StatsTableDataModel {
         foreach ($this->fetchStatistics() as $group) {
             [$conditionList, $params] = $this->getBaseConditions($group, $startDate, $endDate, $portalId);
@@ -59,13 +62,17 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
             $condition = '';
             if (count($conditionList) > 0) {
                 $condition = 'WHERE ('.implode(') AND (', $conditionList).')';
+
+                if (true === $group->fieldHasCurrency) {
+                    $condition .= ' AND (`shop_order`.`pkg_shop_currency_id` ='."'".$currencyId."')";
+                }
             }
 
             $blockQuery = str_replace(['[{sColumnName}]', '[{sCondition}]'], [$dateQueryPart, $condition], $baseQuery);
             $groupFields = explode(',', $group->fieldGroups);
             $realGroupFields = array_filter(array_map('trim', $groupFields));
 
-            $statsTable = $this->addBlock($statsTable, $group->fieldName, $group->fieldHasCurrency, $blockQuery, $realGroupFields, $params);
+            $statsTable = $this->addBlock($statsTable, $group->fieldName, $group->fieldHasCurrency, $blockQuery, $realGroupFields, $params, $currencyId);
         }
 
         return $statsTable;
@@ -129,13 +136,15 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         bool $hasCurrency,
         string $query,
         array $subGroups = [],
-        array $params = []
+        array $params = [],
+        string $currencyId = ''
     ): StatsTableDataModel {
         $block = $statsTable->getBlock($blockName);
         if (null === $block) {
             $block = new StatsGroupDataModel();
             $block->init($blockName);
             $block->setHasCurrency($hasCurrency);
+            $block->setCurrency($this->currencyService->getCurrencyById($currencyId));
             $statsTable->addBlock($blockName, $block);
         }
 

@@ -9,68 +9,84 @@
 
 {% set colors = ['#5E98FF', '#807D9A', '#92C1F0', '#A2ACB3', '#7ADEFF', '#185EA8', '#4B86F7', '#96A9C2', '#82BEEA', '#9FD3E8', '#6398B0','#C8E8FF', '#337AB7', '#4DA6FF', '#718CA1'] %}
 
-<div>
-    <canvas id="chart{{ chartId }}"></canvas>
-</div>
+{% if group.groupTotals | length > 0 %}
+    <div>
+        <canvas id="chart{{ chartId }}"></canvas>
+    </div>
 
-<script>
-    const chartData{{ chartId }} = {
-        labels: [
-            {% if group.subGroups | length < 1 %}
-            {% for timeframe, value in group.groupTotals %}
-            '{{ timeframe }}'{{ not loop.last ? ',' : '' }}
-            {% endfor %}
-            {% else %}
-            {% for subGroupName, subGroup in group.subGroups %}
-            {% if loop.first %}
-            {% for timeframe, value in subGroup.groupTotals %}
-            '{{ timeframe }}'{{ not loop.last ? ',' : '' }}
-            {% endfor %}
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-        ],
-        datasets: [
-            {% if group.subGroups | length < 1 %}
-            {
-                label: '{{ groupTitle }}',
-                data: [
-                    {% for timeframe, value in group.groupTotals %}
-                    {{ value }}{{ not loop.last ? ',' : '' }}
-                    {% endfor %}
-                ],
-                backgroundColor: '{{ colors[0] }}',
-            }
-            {% else %}
-            {% for subGroupName, subGroup in group.subGroups %}
-            {
-                label: '{{ subGroupName }}',
-                data: [
-                    {% for timeframe, value in subGroup.groupTotals %}
-                    {{ value }}{{ not loop.last ? ',' : '' }}
-                    {% endfor %}
-                ],
-                backgroundColor: '{{ colors[loop.index0] }}',
-            }
-            {% if not loop.last %},{% endif %}
-            {% endfor %}
-            {% endif %}
-        ],
-        options: {
-            legend: {
-                display: {{ group.subGroups | length > 0 ? 'true' : 'false' }}
-            }
-        },
-        additionalConfig: {
-            hasCurrency: {{ group.hasCurrency ? 'true' : 'false' }}
-        },
-    };
+    <script>
+        const chartData{{ chartId }} = {
+            labels: [
+                {% if group.subGroups | length < 1 %}
+                {% for timeframe, value in group.groupTotals %}
+                '{{ timeframe }}'{{ not loop.last ? ',' : '' }}
+                {% endfor %}
+                {% else %}
+                {% for subGroupName, subGroup in group.subGroups %}
+                {% if loop.first %}
+                {% for timeframe, value in subGroup.groupTotals %}
+                '{{ timeframe }}'{{ not loop.last ? ',' : '' }}
+                {% endfor %}
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            ],
+            datasets: [
+                {% if group.subGroups | length < 1 %}
+                {
+                    label: '{{ groupTitle }}',
+                    data: [
+                        {% for timeframe, value in group.groupTotals %}
+                        {{ value }}{{ not loop.last ? ',' : '' }}
+                        {% endfor %}
+                    ],
+                    backgroundColor: '{{ colors[0] }}',
+                }
+                {% else %}
+                {% for subGroupName, subGroup in group.subGroups %}
+                {
+                    label: '{{ subGroupName }}',
+                    data: [
+                        {% for timeframe, value in subGroup.groupTotals %}
+                        {{ value }}{{ not loop.last ? ',' : '' }}
+                        {% endfor %}
+                    ],
+                    backgroundColor: '{{ colors[loop.index0] }}',
+                }
+                {% if not loop.last %},{% endif %}
+                {% endfor %}
+                {% endif %}
+            ],
+            options: {
+                legend: {
+                    display: {{ group.subGroups | length > 0 ? 'true' : 'false' }}
+                }
+            },
+            additionalConfig: {
+                hasCurrency: {{ group.hasCurrency ? 'true' : 'false' }},
+                {% if group.getCurrency is not null %}
+                currency: {
+                    symbol: '{{ group.getCurrency.symbol }}'
+                }
+                {% else %}
+                currency: {
+                    symbol: '€'
+                }
+                {% endif %}
+            },
+        };
 
-    CHAMELEON.CORE.Charts.generateChart(
-        'chart{{ chartId }}',
-        chartData{{ chartId }}.labels,
-        chartData{{ chartId }}.datasets,
-        chartData{{ chartId }}.options,
-        chartData{{ chartId }}.additionalConfig
-    );
-</script>
+        CHAMELEON.CORE.Charts.generateChart(
+            'chart{{ chartId }}',
+            chartData{{ chartId }}.labels,
+            chartData{{ chartId }}.datasets,
+            chartData{{ chartId }}.options,
+            chartData{{ chartId }}.additionalConfig
+        );
+    </script>
+
+{% else %}
+    <div class="chart-no-data-message">
+        {{ 'chameleon_system_ecommerce_stats.form_no_data_for_current_filters' | trans }}
+    </div>
+{% endif %}

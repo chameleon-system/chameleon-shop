@@ -10,6 +10,7 @@
     @var array dateGroupTypeList
     @var string csvDownloadUrl
     @var string topSellerDownloadUrl
+    @var ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsCurrencyDataModel[] currencyList
 #}
 
 <form method="post" action="">
@@ -98,5 +99,21 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-6">
+            <div class="form-group">
+                <label class="font-weight-bold">
+                    {{ 'chameleon_system_ecommerce_stats.form_currency'|trans }}:
+                </label>
+                <select class="form-control" name="{{ moduleSpotName }}[currency]" data-param="currency">
+                    {% for currency in currencyList %}
+                        <option value="{{ currency.getId }}" {% if currency.getIsoCode == 'EUR' %} selected="selected"{% endif %}>{{ currency.getIsoCode }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
     <input class="btn btn-primary" type="submit" name="submit" value="{{ 'chameleon_system_ecommerce_stats.action_show'|trans|e('html_attr') }}" onclick="this.form.classList.add('show-loader-image')" />
 </form>
