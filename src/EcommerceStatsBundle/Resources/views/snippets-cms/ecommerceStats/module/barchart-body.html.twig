@@ -60,13 +60,17 @@
             legend: {
                 display: {{ group.subGroups | length > 0 ? 'true' : 'false' }}
             }
-        }
+        },
+        additionalConfig: {
+            hasCurrency: {{ group.hasCurrency ? 'true' : 'false' }}
+        },
     };
 
     CHAMELEON.CORE.Charts.generateChart(
         'chart{{ chartId }}',
         chartData{{ chartId }}.labels,
         chartData{{ chartId }}.datasets,
-        chartData{{ chartId }}.options
+        chartData{{ chartId }}.options,
+        chartData{{ chartId }}.additionalConfig
     );
 </script>

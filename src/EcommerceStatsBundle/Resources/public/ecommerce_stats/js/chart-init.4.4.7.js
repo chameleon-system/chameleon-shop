@@ -4,7 +4,7 @@ if (typeof CHAMELEON === "undefined" || !CHAMELEON) {
 CHAMELEON.CORE = CHAMELEON.CORE || {};
 
 CHAMELEON.CORE.Charts = {
-    generateChart: function (chartId, labels, datasets, options = {}) {
+    generateChart: function (chartId, labels, datasets, options = {}, additionalConfig = {}) {
         const config = {
             type: 'bar',
             data: {
@@ -20,13 +20,13 @@ CHAMELEON.CORE.Charts = {
                             label: (context) => {
                                 const datasetLabel = context.dataset.label || '';
                                 const value = context.raw;
+                                const formattedValue = CHAMELEON.CORE.Charts.formatValue(value, additionalConfig.hasCurrency);
 
-                                const formattedValue = new Intl.NumberFormat('de-DE', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                }).format(value);
-
-                                return `${datasetLabel}: ${formattedValue} €`;
+                                if (additionalConfig.hasCurrency) {
+                                    return `${datasetLabel}: ${formattedValue} €`;
+                                } else {
+                                    return `${datasetLabel}: ${formattedValue}`;
+                                }
                             },
                         },
                     },
@@ -59,10 +59,7 @@ CHAMELEON.CORE.Charts = {
                                 }
                             });
 
-                            const roundedSum = new Intl.NumberFormat('de-DE', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                            }).format(sum);
+                            const roundedSum = CHAMELEON.CORE.Charts.formatValue(sum, additionalConfig.hasCurrency);
 
                             // Position and Rotation
                             ctx.save();
@@ -73,7 +70,13 @@ CHAMELEON.CORE.Charts = {
                                 chartArea.top + 55
                             );
                             ctx.rotate(-Math.PI / 4); // rotate 45° to the left
-                            ctx.fillText(roundedSum+' €', -5, 0);
+
+                            if (additionalConfig.hasCurrency) {
+                                ctx.fillText(roundedSum+' €', -5, 0);
+                            } else {
+                                ctx.fillText(roundedSum, -5, 0);
+                            }
+
                             ctx.restore();
                         });
                     },
@@ -92,4 +95,30 @@ CHAMELEON.CORE.Charts = {
         chart.config.options.scales.y.suggestedMax = increasedMaxHeight;
         chart.update();
     },
+
+    formatValue(value, hasCurrency) {
+        let roundedSum = 0;
+
+        if (hasCurrency) {
+            roundedSum = new Intl.NumberFormat('de-DE', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(value);
+        } else {
+
+            if (value % 1 !== 0) {
+                roundedSum = new Intl.NumberFormat('de-DE', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                }).format(value);
+            } else {
+                roundedSum = new Intl.NumberFormat('de-DE', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                }).format(value);
+            }
+        }
+
+        return roundedSum;
+    }
 };
