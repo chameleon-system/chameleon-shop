@@ -43,4 +43,14 @@ class StatsCurrencyService implements StatsCurrencyServiceInterface
 
         return new StatsCurrencyDataModel($currency['iso4217'], $currency['id'], $currency['symbol']);
     }
+
+    public function getCurrencyIdByIsoCode(string $isoCode): ?string
+    {
+        $query = 'SELECT `id` FROM `pkg_shop_currency`
+                    WHERE `iso4217` = :isoCode';
+
+        $id = $this->connection->fetchOne($query, ['isoCode' => $isoCode]);
+
+        return $id ?? null;
+    }
 }
