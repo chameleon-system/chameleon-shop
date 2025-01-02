@@ -115,6 +115,14 @@
                 <source>chameleon_system_ecommerce_stats.no_data</source>
                 <target>No data available</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_currency">
+                <source>chameleon_system_ecommerce_stats.form_currency</source>
+                <target>Currency</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_no_data_for_current_filters">
+                <source>chameleon_system_ecommerce_stats.form_no_data_for_current_filters</source>
+                <target>No statistic available for current filters</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

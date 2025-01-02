@@ -14,26 +14,32 @@ declare(strict_types=1);
 namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule;
 
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
+    private const EURO_CURRENCY_ID = 'd6710c0b-e7c2-6a59-b21b-495745250941';
+
     private StatsTableServiceInterface $stats;
     private TranslatorInterface $translator;
     private UrlUtil $urlUtil;
+    private StatsCurrencyServiceInterface $statsCurrencyService;
 
     public function __construct(
         StatsTableServiceInterface $stats,
         TranslatorInterface $translator,
-        UrlUtil $urlUtil
+        UrlUtil $urlUtil,
+        StatsCurrencyServiceInterface $statsCurrencyService
     ) {
         parent::__construct();
 
         $this->stats = $stats;
         $this->translator = $translator;
         $this->urlUtil = $urlUtil;
+        $this->statsCurrencyService = $statsCurrencyService;
     }
 
     /**
@@ -48,6 +54,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $dateGroupType = $this->GetUserInput('dateGroupType', StatsProviderInterface::DATA_GROUP_TYPE_DAY);
         $showChange = '1' === $this->GetUserInput('showChange', '0');
         $viewName = $this->GetUserInput('viewName', null);
+        $currencyId = $this->GetUserInput('currency', self::EURO_CURRENCY_ID);
 
         /** @var string $portalId */
         $portalId = $this->GetUserInput('portalId', '');
@@ -68,10 +75,13 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 $endDate,
                 $dateGroupType,
                 $showChange,
-                $portalId
+                $portalId,
+                $currencyId
             );
             $oVisitor->SetMappedValue('tableData', $tableData);
         }
+
+        $currencyList = $this->statsCurrencyService->getAllCurrencies();
 
         $oVisitor->SetMappedValue('csvDownloadUrl', $csvDownloadUrl);
         $oVisitor->SetMappedValue('topSellerDownloadUrl', $topSellerDownloadUrl);
@@ -85,6 +95,8 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('viewList', $this->getViewList());
         $oVisitor->SetMappedValue('portalList', $this->getPortalList());
         $oVisitor->SetMappedValue('selectedPortalId', $portalId);
+        $oVisitor->SetMappedValue('currencyList', $currencyList);
+        $oVisitor->SetMappedValue('currencyId', $currencyId);
     }
 
     /**

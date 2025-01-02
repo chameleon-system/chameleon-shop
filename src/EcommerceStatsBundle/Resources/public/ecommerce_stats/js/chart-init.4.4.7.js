@@ -23,7 +23,7 @@ CHAMELEON.CORE.Charts = {
                                 const formattedValue = CHAMELEON.CORE.Charts.formatValue(value, additionalConfig.hasCurrency);
 
                                 if (additionalConfig.hasCurrency) {
-                                    return `${datasetLabel}: ${formattedValue} €`;
+                                    return `${datasetLabel}: ${formattedValue} `+ additionalConfig.currency.symbol;
                                 } else {
                                     return `${datasetLabel}: ${formattedValue}`;
                                 }
@@ -72,7 +72,7 @@ CHAMELEON.CORE.Charts = {
                             ctx.rotate(-Math.PI / 4); // rotate 45° to the left
 
                             if (additionalConfig.hasCurrency) {
-                                ctx.fillText(roundedSum+' €', -5, 0);
+                                ctx.fillText(roundedSum + additionalConfig.currency.symbol, -5, 0);
                             } else {
                                 ctx.fillText(roundedSum, -5, 0);
                             }
