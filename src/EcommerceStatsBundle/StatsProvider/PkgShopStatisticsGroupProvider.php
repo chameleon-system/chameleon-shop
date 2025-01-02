@@ -65,7 +65,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
             $groupFields = explode(',', $group->fieldGroups);
             $realGroupFields = array_filter(array_map('trim', $groupFields));
 
-            $statsTable = $this->addBlock($statsTable, $group->fieldName, $group->fieldHasCurrency ,$blockQuery, $realGroupFields, $params);
+            $statsTable = $this->addBlock($statsTable, $group->fieldName, $group->fieldHasCurrency, $blockQuery, $realGroupFields, $params);
         }
 
         return $statsTable;

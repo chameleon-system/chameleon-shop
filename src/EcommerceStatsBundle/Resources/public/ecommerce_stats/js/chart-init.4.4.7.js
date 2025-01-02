@@ -20,13 +20,13 @@ CHAMELEON.CORE.Charts = {
                             label: (context) => {
                                 const datasetLabel = context.dataset.label || '';
                                 const value = context.raw;
+                                const formattedValue = CHAMELEON.CORE.Charts.formatValue(value, additionalConfig.hasCurrency);
 
-                                const formattedValue = new Intl.NumberFormat('de-DE', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                }).format(value);
-
-                                return `${datasetLabel}: ${formattedValue} €`;
+                                if (additionalConfig.hasCurrency) {
+                                    return `${datasetLabel}: ${formattedValue} €`;
+                                } else {
+                                    return `${datasetLabel}: ${formattedValue}`;
+                                }
                             },
                         },
                     },
@@ -59,10 +59,7 @@ CHAMELEON.CORE.Charts = {
                                 }
                             });
 
-                            const roundedSum = new Intl.NumberFormat('de-DE', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                            }).format(sum);
+                            const roundedSum = CHAMELEON.CORE.Charts.formatValue(sum, additionalConfig.hasCurrency);
 
                             // Position and Rotation
                             ctx.save();
@@ -98,4 +95,30 @@ CHAMELEON.CORE.Charts = {
         chart.config.options.scales.y.suggestedMax = increasedMaxHeight;
         chart.update();
     },
+
+    formatValue(value, hasCurrency) {
+        let roundedSum = 0;
+
+        if (hasCurrency) {
+            roundedSum = new Intl.NumberFormat('de-DE', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(value);
+        } else {
+
+            if (value % 1 !== 0) {
+                roundedSum = new Intl.NumberFormat('de-DE', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                }).format(value);
+            } else {
+                roundedSum = new Intl.NumberFormat('de-DE', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                }).format(value);
+            }
+        }
+
+        return roundedSum;
+    }
 };
