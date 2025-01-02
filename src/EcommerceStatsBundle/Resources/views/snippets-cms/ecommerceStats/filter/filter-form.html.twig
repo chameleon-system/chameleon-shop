@@ -108,7 +108,7 @@
                 </label>
                 <select class="form-control" name="{{ moduleSpotName }}[currency]" data-param="currency">
                     {% for currency in currencyList %}
-                        <option value="{{ currency.getId }}" {% if currency.getIsoCode == 'EUR' %} selected="selected"{% endif %}>{{ currency.getIsoCode }}</option>
+                        <option value="{{ currency.getId }}" {% if currency.getId == currencyId %} selected="selected"{% endif %}>{{ currency.getIsoCode }}</option>
                     {% endfor %}
                 </select>
             </div>

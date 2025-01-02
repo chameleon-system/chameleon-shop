@@ -21,6 +21,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
+    private const EURO_CURRENCY_ID = 'd6710c0b-e7c2-6a59-b21b-495745250941';
+
     private StatsTableServiceInterface $stats;
     private TranslatorInterface $translator;
     private UrlUtil $urlUtil;
@@ -52,7 +54,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $dateGroupType = $this->GetUserInput('dateGroupType', StatsProviderInterface::DATA_GROUP_TYPE_DAY);
         $showChange = '1' === $this->GetUserInput('showChange', '0');
         $viewName = $this->GetUserInput('viewName', null);
-        $currency = $this->GetUserInput('currency', null);
+        $currencyId = $this->GetUserInput('currency', self::EURO_CURRENCY_ID);
 
         /** @var string $portalId */
         $portalId = $this->GetUserInput('portalId', '');
@@ -74,7 +76,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 $dateGroupType,
                 $showChange,
                 $portalId,
-                $currency
+                $currencyId
             );
             $oVisitor->SetMappedValue('tableData', $tableData);
         }
@@ -94,6 +96,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('portalList', $this->getPortalList());
         $oVisitor->SetMappedValue('selectedPortalId', $portalId);
         $oVisitor->SetMappedValue('currencyList', $currencyList);
+        $oVisitor->SetMappedValue('currencyId', $currencyId);
     }
 
     /**
