@@ -4,7 +4,7 @@ if (typeof CHAMELEON === "undefined" || !CHAMELEON) {
 CHAMELEON.CORE = CHAMELEON.CORE || {};
 
 CHAMELEON.CORE.Charts = {
-    generateChart: function (chartId, labels, datasets, options = {}) {
+    generateChart: function (chartId, labels, datasets, options = {}, additionalConfig = {}) {
         const config = {
             type: 'bar',
             data: {
@@ -73,7 +73,13 @@ CHAMELEON.CORE.Charts = {
                                 chartArea.top + 55
                             );
                             ctx.rotate(-Math.PI / 4); // rotate 45° to the left
-                            ctx.fillText(roundedSum+' €', -5, 0);
+
+                            if (additionalConfig.hasCurrency) {
+                                ctx.fillText(roundedSum+' €', -5, 0);
+                            } else {
+                                ctx.fillText(roundedSum, -5, 0);
+                            }
+
                             ctx.restore();
                         });
                     },

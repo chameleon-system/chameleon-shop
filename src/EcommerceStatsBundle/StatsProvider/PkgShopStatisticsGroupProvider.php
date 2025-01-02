@@ -65,7 +65,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
             $groupFields = explode(',', $group->fieldGroups);
             $realGroupFields = array_filter(array_map('trim', $groupFields));
 
-            $statsTable = $this->addBlock($statsTable, $group->fieldName, $blockQuery, $realGroupFields, $params);
+            $statsTable = $this->addBlock($statsTable, $group->fieldName, $group->fieldHasCurrency ,$blockQuery, $realGroupFields, $params);
         }
 
         return $statsTable;
@@ -126,6 +126,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
     private function addBlock(
         StatsTableDataModel $statsTable,
         string $blockName,
+        bool $hasCurrency,
         string $query,
         array $subGroups = [],
         array $params = []
@@ -134,6 +135,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         if (null === $block) {
             $block = new StatsGroupDataModel();
             $block->init($blockName);
+            $block->setHasCurrency($hasCurrency);
             $statsTable->addBlock($blockName, $block);
         }
 

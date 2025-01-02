@@ -49,6 +49,8 @@ class StatsGroupDataModel
      */
     private array $columnNames = [];
 
+    private bool $hasCurrency = false;
+
     public function init(string $groupTitle, string $subGroupColumn = ''): void
     {
         $this->groupTitle = $groupTitle;
@@ -222,5 +224,15 @@ class StatsGroupDataModel
     public function getSubGroups(): array
     {
         return $this->subGroups;
+    }
+
+    public function hasCurrency(): bool
+    {
+        return $this->hasCurrency;
+    }
+
+    public function setHasCurrency(bool $hasCurrency): void
+    {
+        $this->hasCurrency = $hasCurrency;
     }
 }
