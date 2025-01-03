@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\StatsProvider;
 
+use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsTableDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
@@ -52,9 +53,10 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         \DateTime $endDate,
         string $dateGroupType,
         string $portalId,
-        string $currencyId
+        string $currencyId,
+        string $selectedStatsGroup
     ): StatsTableDataModel {
-        foreach ($this->fetchStatistics() as $group) {
+        foreach ($this->fetchStatistics($selectedStatsGroup) as $group) {
             [$conditionList, $params] = $this->getBaseConditions($group, $startDate, $endDate, $portalId);
             $dateQueryPart = $this->getDateQueryPart($dateGroupType, $group->fieldDateRestrictionField ?? 'datecreated');
 
@@ -78,12 +80,26 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         return $statsTable;
     }
 
+    public function fetchAllStatisticGroupsNames(): array
+    {
+        $query = "SELECT `name` FROM `pkg_shop_statistic_group`";
+
+        return $this->connection->fetchAllAssociative($query);
+    }
+
     /**
      * @return \Generator<\TdbPkgShopStatisticGroup>
      */
-    private function fetchStatistics(): \Generator
+    private function fetchStatistics(string $selectedStatsGroup): \Generator
     {
-        $groups = \TdbPkgShopStatisticGroupList::GetList();
+        if (EcommerceStatsBackendModule::ALL_STATS_FILTER_NAME === $selectedStatsGroup || '' === $selectedStatsGroup) {
+            $groups = \TdbPkgShopStatisticGroupList::GetList();
+        } else {
+            $query = 'SELECT * FROM `pkg_shop_statistic_group` WHERE `pkg_shop_statistic_group`.`name` = '."'$selectedStatsGroup'";
+
+            $groups = \TdbPkgShopStatisticGroupList::GetList($query);
+        }
+
         while ($group = $groups->Next()) {
             yield $group;
         }

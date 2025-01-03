@@ -22,6 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
     private const STANDARD_CURRENCY_ISO_CODE = 'EUR';
+    public const ALL_STATS_FILTER_NAME = 'allStats';
 
     private StatsTableServiceInterface $stats;
     private TranslatorInterface $translator;
@@ -32,7 +33,8 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         StatsTableServiceInterface $stats,
         TranslatorInterface $translator,
         UrlUtil $urlUtil,
-        StatsCurrencyServiceInterface $statsCurrencyService
+        StatsCurrencyServiceInterface $statsCurrencyService,
+        private readonly StatsProviderInterface $statsProviderCollection
     ) {
         parent::__construct();
 
@@ -55,6 +57,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $showChange = '1' === $this->GetUserInput('showChange', '0');
         $viewName = $this->GetUserInput('viewName', null);
         $currencyId = $this->GetUserInput('currency', $this->statsCurrencyService->getCurrencyIdByIsoCode(self::STANDARD_CURRENCY_ISO_CODE));
+        $selectedStatsGroup = $this->GetUserInput('statsGroup', self::ALL_STATS_FILTER_NAME);
 
         /** @var string $portalId */
         $portalId = $this->GetUserInput('portalId', '');
@@ -76,7 +79,8 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 $dateGroupType,
                 $showChange,
                 $portalId,
-                $currencyId
+                $currencyId,
+                $selectedStatsGroup
             );
             $oVisitor->SetMappedValue('tableData', $tableData);
         }
@@ -97,6 +101,8 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('selectedPortalId', $portalId);
         $oVisitor->SetMappedValue('currencyList', $currencyList);
         $oVisitor->SetMappedValue('currencyId', $currencyId);
+        $oVisitor->SetMappedValue('selectedStatsGroup', $selectedStatsGroup);
+        $oVisitor->SetMappedValue('statsGroupsSelection', $this->statsProviderCollection->fetchAllStatisticGroupsNames());
     }
 
     /**

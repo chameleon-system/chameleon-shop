@@ -122,6 +122,14 @@
                 <source>chameleon_system_ecommerce_stats.form_no_data_for_current_filters</source>
                 <target>Mit den aktuellen Filtern sind keine Daten für die Statistik vorhanden</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_stats_group">
+                <source>chameleon_system_ecommerce_stats.form_stats_group</source>
+                <target>Statistikgruppe</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_all_stats_label">
+                <source>chameleon_system_ecommerce_stats.form_all_stats_label</source>
+                <target>Alle Statistiken</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

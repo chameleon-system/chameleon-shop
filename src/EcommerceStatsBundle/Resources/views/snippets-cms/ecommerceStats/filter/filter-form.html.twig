@@ -113,6 +113,20 @@
                 </select>
             </div>
         </div>
+
+        <div class="col-12 col-sm-6">
+            <div class="form-group">
+                <label class="font-weight-bold">
+                    {{ 'chameleon_system_ecommerce_stats.form_stats_group'|trans }}:
+                </label>
+                <select class="form-control" name="{{ moduleSpotName }}[statsGroup]" data-param="statsGroup">
+                    <option value="allStats" {% if selectedStatsGroup == 'allStats' %} selected="selected" {% endif %}>{{ 'chameleon_system_ecommerce_stats.form_all_stats_label'|trans }}</option>
+                    {% for group in statsGroupsSelection %}
+                        <option value="{{ group.name }}" {% if group.name == selectedStatsGroup %} selected="selected"{% endif %}>{{ group.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
     </div>
 
     <input class="btn btn-primary" type="submit" name="submit" value="{{ 'chameleon_system_ecommerce_stats.action_show'|trans|e('html_attr') }}" onclick="this.form.classList.add('show-loader-image')" />
