@@ -9,5 +9,6 @@ interface StatsCurrencyServiceInterface
     public function getAllCurrencies();
 
     public function getCurrencyById(string $currencyId): ?StatsCurrencyDataModel;
+
     public function getCurrencyIdByIsoCode(string $isoCode): ?string;
 }

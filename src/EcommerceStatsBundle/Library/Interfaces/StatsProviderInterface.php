@@ -40,11 +40,11 @@ interface StatsProviderInterface
         string $dateGroupType,
         string $portalId,
         string $currencyId,
-        string $selectedStatsGroup
+        string $selectedStatsGroupId
     ): StatsTableDataModel;
 
     /**
-     * @return String[]
+     * @return string[]
      */
     public function fetchAllStatisticGroupsNames(): array;
 }

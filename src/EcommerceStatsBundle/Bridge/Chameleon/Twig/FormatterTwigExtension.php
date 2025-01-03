@@ -29,7 +29,7 @@ class FormatterTwigExtension extends AbstractExtension
                 'chameleon_system_ecommerce_stats_format_number',
                 [$this, 'formatNumber'],
                 ['is_safe' => ['html']]
-            )
+            ),
         ];
     }
 
@@ -101,12 +101,13 @@ class FormatterTwigExtension extends AbstractExtension
         $g = (1 - $factor) * $startColor[1] + $factor * $endColor[1];
         $b = (1 - $factor) * $startColor[2] + $factor * $endColor[2];
 
-        return sprintf('#%02x%02x%02x', (int)$r, (int)$g, (int)$b);
+        return sprintf('#%02x%02x%02x', (int) $r, (int) $g, (int) $b);
     }
 
     private function hexToRgb(string $hex): array
     {
         $hex = ltrim($hex, '#');
+
         return [
             hexdec(substr($hex, 0, 2)),
             hexdec(substr($hex, 2, 2)),
