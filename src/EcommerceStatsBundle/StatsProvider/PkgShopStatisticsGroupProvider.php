@@ -84,7 +84,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
     {
         $groupNames = [];
         $groupList = \TdbPkgShopStatisticGroupList::GetList();
-        while($group = $groupList->Next()) {
+        while ($group = $groupList->Next()) {
             $groupNames[$group->id] = $group->fieldName;
         }
 

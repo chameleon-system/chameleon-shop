@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ChameleonSystem\EcommerceStatsBundle\Controllers;
 
 use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
+use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\CsvResponse;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\CsvExportServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
@@ -24,7 +25,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\CsvResponse;
 
 class CsvExportController
 {

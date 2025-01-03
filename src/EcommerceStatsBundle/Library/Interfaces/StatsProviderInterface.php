@@ -44,7 +44,7 @@ interface StatsProviderInterface
     ): StatsTableDataModel;
 
     /**
-     * @return String[]
+     * @return string[]
      */
     public function fetchAllStatisticGroupsNames(): array;
 }
