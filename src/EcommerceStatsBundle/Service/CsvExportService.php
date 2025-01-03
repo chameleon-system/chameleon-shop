@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\Service;
 
-use ChameleonSystem\EcommerceStats\DataModel\StatsGroupDataModel;
-use ChameleonSystem\EcommerceStats\DataModel\StatsTableDataModel;
-use ChameleonSystem\EcommerceStats\Interfaces\CsvExportServiceInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel;
+use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsTableDataModel;
+use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\CsvExportServiceInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CsvExportService implements CsvExportServiceInterface
 {
