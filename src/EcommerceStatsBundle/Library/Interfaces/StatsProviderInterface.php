@@ -39,6 +39,12 @@ interface StatsProviderInterface
         \DateTime $endDate,
         string $dateGroupType,
         string $portalId,
-        string $currencyId
+        string $currencyId,
+        string $selectedStatsGroup
     ): StatsTableDataModel;
+
+    /**
+     * @return String[]
+     */
+    public function fetchAllStatisticGroupsNames(): array;
 }

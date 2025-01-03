@@ -22,6 +22,7 @@
             <argument key="$translator" type="service" id="chameleon_system_core.translator" />
             <argument key="$urlUtil" type="service" id="chameleon_system_core.util.url" />
             <argument key="$statsCurrencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service" />
+            <argument key="$statsProviderCollection" type="service" id="chameleon_system_ecommerce_stats.stats_provider.pkg_shop_statistics" />
             <tag name="chameleon_system.module"/>
         </service>
 
