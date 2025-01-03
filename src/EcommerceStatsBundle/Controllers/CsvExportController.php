@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\Controllers;
 
+use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\CsvExportServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
@@ -51,10 +52,11 @@ class CsvExportController
         $dateGroupType = $request->get('dateGroupType', StatsProviderInterface::DATA_GROUP_TYPE_DAY);
         $showChange = $request->request->getBoolean('showChange');
         $selectedPortalId = $request->get('portalId', '');
+        $selectedStatsGroupId = EcommerceStatsBackendModule::ALL_STATS_FILTER_NAME;
         $startDate = $this->getRequiredDate($request, 'startDate')->setTime(0, 0, 0);
         $endDate = $this->getRequiredDate($request, 'endDate')->setTime(23, 59, 59);
 
-        $statsTable = $this->statsTableService->evaluate($startDate, $endDate, $dateGroupType, $showChange, $selectedPortalId);
+        $statsTable = $this->statsTableService->evaluate($startDate, $endDate, $dateGroupType, $showChange, $selectedPortalId, $selectedStatsGroupId);
         $csvData = $this->csvExportService->getCsvDataFromStatsTable($statsTable);
         $fileName = $this->getCsvFilename('stats', $startDate, $endDate);
 

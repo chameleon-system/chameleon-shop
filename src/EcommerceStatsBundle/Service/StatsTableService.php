@@ -41,13 +41,13 @@ class StatsTableService implements StatsTableServiceInterface
         bool $showDiffColumn,
         string $portalId = '',
         string $currencyId = '',
-        string $selectedStatsGroup = ''): StatsTableDataModel
+        string $selectedStatsGroupId = ''): StatsTableDataModel
     {
         $statsTable = new StatsTableDataModel();
         $statsTable->setShowDiffColumn($showDiffColumn);
 
         foreach ($this->statsProviders as $provider) {
-            $statsTable = $provider->addStatsToTable($statsTable, $startDate, $endDate, $dateGroupType, $portalId, $currencyId, $selectedStatsGroup);
+            $statsTable = $provider->addStatsToTable($statsTable, $startDate, $endDate, $dateGroupType, $portalId, $currencyId, $selectedStatsGroupId);
         }
 
         $blocks = $statsTable->getBlocks();

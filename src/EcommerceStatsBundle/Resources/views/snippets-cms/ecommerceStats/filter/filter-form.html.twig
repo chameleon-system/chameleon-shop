@@ -120,9 +120,9 @@
                     {{ 'chameleon_system_ecommerce_stats.form_stats_group'|trans }}:
                 </label>
                 <select class="form-control" name="{{ moduleSpotName }}[statsGroup]" data-param="statsGroup">
-                    <option value="allStats" {% if selectedStatsGroup == 'allStats' %} selected="selected" {% endif %}>{{ 'chameleon_system_ecommerce_stats.form_all_stats_label'|trans }}</option>
-                    {% for group in statsGroupsSelection %}
-                        <option value="{{ group.name }}" {% if group.name == selectedStatsGroup %} selected="selected"{% endif %}>{{ group.name }}</option>
+                    <option value="allStats" {% if selectedStatsGroupId == 'allStats' %} selected="selected" {% endif %}>{{ 'chameleon_system_ecommerce_stats.form_all_stats_label'|trans }}</option>
+                    {% for groupId, groupName in statsGroupsSelection %}
+                        <option value="{{ groupId }}" {% if groupId == selectedStatsGroupId %} selected="selected"{% endif %}>{{ groupName }}</option>
                     {% endfor %}
                 </select>
             </div>

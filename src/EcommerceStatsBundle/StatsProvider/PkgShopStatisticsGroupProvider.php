@@ -54,9 +54,9 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         string $dateGroupType,
         string $portalId,
         string $currencyId,
-        string $selectedStatsGroup
+        string $selectedStatsGroupId
     ): StatsTableDataModel {
-        foreach ($this->fetchStatistics($selectedStatsGroup) as $group) {
+        foreach ($this->fetchStatistics($selectedStatsGroupId) as $group) {
             [$conditionList, $params] = $this->getBaseConditions($group, $startDate, $endDate, $portalId);
             $dateQueryPart = $this->getDateQueryPart($dateGroupType, $group->fieldDateRestrictionField ?? 'datecreated');
 
@@ -82,20 +82,24 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
 
     public function fetchAllStatisticGroupsNames(): array
     {
-        $query = "SELECT `name` FROM `pkg_shop_statistic_group`";
+        $groupNames = [];
+        $groupList = \TdbPkgShopStatisticGroupList::GetList();
+        while($group = $groupList->Next()) {
+            $groupNames[$group->id] = $group->fieldName;
+        }
 
-        return $this->connection->fetchAllAssociative($query);
+        return $groupNames;
     }
 
     /**
      * @return \Generator<\TdbPkgShopStatisticGroup>
      */
-    private function fetchStatistics(string $selectedStatsGroup): \Generator
+    private function fetchStatistics(string $selectedStatsGroupId): \Generator
     {
-        if (EcommerceStatsBackendModule::ALL_STATS_FILTER_NAME === $selectedStatsGroup || '' === $selectedStatsGroup) {
+        if (EcommerceStatsBackendModule::ALL_STATS_FILTER_NAME === $selectedStatsGroupId || '' === $selectedStatsGroupId) {
             $groups = \TdbPkgShopStatisticGroupList::GetList();
         } else {
-            $query = 'SELECT * FROM `pkg_shop_statistic_group` WHERE `pkg_shop_statistic_group`.`name` = '."'$selectedStatsGroup'";
+            $query = 'SELECT * FROM `pkg_shop_statistic_group` WHERE `pkg_shop_statistic_group`.`id` = '."'$selectedStatsGroupId'";
 
             $groups = \TdbPkgShopStatisticGroupList::GetList($query);
         }
