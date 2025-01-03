@@ -17,6 +17,8 @@ use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\CsvExportServiceInte
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\TopSellerServiceInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -28,15 +30,18 @@ class CsvExportController
     private CsvExportServiceInterface $csvExportService;
     private StatsTableServiceInterface $statsTableService;
     private TopSellerServiceInterface $topSellerService;
+    private SecurityHelperAccess $securityHelperAccess;
 
     public function __construct(
         CsvExportServiceInterface $csvExportService,
         StatsTableServiceInterface $statsTableService,
-        TopSellerServiceInterface $topSellerService
+        TopSellerServiceInterface $topSellerService,
+        SecurityHelperAccess $securityHelperAccess
     ) {
         $this->csvExportService = $csvExportService;
         $this->statsTableService = $statsTableService;
         $this->topSellerService = $topSellerService;
+        $this->securityHelperAccess = $securityHelperAccess;
     }
 
     public function exportStatistics(Request $request): Response
@@ -106,12 +111,8 @@ class CsvExportController
 
     private function throwIfNoBackendUserLoggedIn(): void
     {
-        $user = \TCMSUser::GetActiveUser();
-
-        if (null !== $user && null !== $user->id) {
-            return;
+        if (false === $this->securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)) {
+            throw new AccessDeniedHttpException();
         }
-
-        throw new AccessDeniedHttpException();
     }
 }
