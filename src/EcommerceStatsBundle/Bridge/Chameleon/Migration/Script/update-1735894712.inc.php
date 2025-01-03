@@ -12,15 +12,13 @@ $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en'
         'query' => "SELECT [{sColumnName}] AS sColumnName,
                `shop_order_item`.`order_amount` AS totalordered,
                `shop_order_item`.`order_price_after_discounts` AS dColumnValue,
-               shop_payment_method_name,
-               `shop_manufacturer`.`name` AS manufacturerName,
+               `shop_order`.`shop_payment_method_name`,
+               `shop_order_item`.`shop_manufacturer_name` AS manufacturerName,
                `shop_order_item`.*
           FROM `shop_order_item`
      LEFT JOIN `shop_order` ON `shop_order_item`.`shop_order_id` = `shop_order`.`id`
-     LEFT JOIN `shop_manufacturer` ON `shop_order_item`.`shop_manufacturer_id` = `shop_order_item`.`shop_manufacturer_id`
                [{sCondition}]
            AND `shop_order`.`canceled` = '0'
-           AND `shop_manufacturer`.`id` = `shop_order_item`.`shop_manufacturer_id`
      ORDER BY  [{sColumnName}]
   "
 

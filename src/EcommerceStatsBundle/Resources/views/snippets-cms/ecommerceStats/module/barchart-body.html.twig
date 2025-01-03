@@ -7,8 +7,6 @@
 @var ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel group
 #}
 
-{% set colors = ['#5E98FF', '#807D9A', '#92C1F0', '#A2ACB3', '#7ADEFF', '#185EA8', '#4B86F7', '#96A9C2', '#82BEEA', '#9FD3E8', '#6398B0','#C8E8FF', '#337AB7', '#4DA6FF', '#718CA1'] %}
-
 {% if group.groupTotals | length > 0 %}
     <div>
         <canvas id="chart{{ chartId }}"></canvas>
@@ -32,7 +30,9 @@
                 {% endif %}
             ],
             datasets: [
-                {% if group.subGroups | length < 1 %}
+                {% set totalElements = group.subGroups|length %}
+
+                {% if totalElements < 1 %}
                 {
                     label: '{{ groupTitle }}',
                     data: [
@@ -40,21 +40,21 @@
                         {{ value }}{{ not loop.last ? ',' : '' }}
                         {% endfor %}
                     ],
-                    backgroundColor: '{{ colors[0] }}',
+                    backgroundColor: '{{ generate_color(0, totalElements) }}',
                 }
                 {% else %}
-                {% for subGroupName, subGroup in group.subGroups %}
-                {
-                    label: '{{ subGroupName }}',
-                    data: [
-                        {% for timeframe, value in subGroup.groupTotals %}
-                        {{ value }}{{ not loop.last ? ',' : '' }}
-                        {% endfor %}
-                    ],
-                    backgroundColor: '{{ colors[loop.index0] }}',
-                }
-                {% if not loop.last %},{% endif %}
-                {% endfor %}
+                    {% for subGroupName, subGroup in group.subGroups %}
+                    {
+                        label: '{{ subGroupName }}',
+                        data: [
+                            {% for timeframe, value in subGroup.groupTotals %}
+                            {{ value }}{{ not loop.last ? ',' : '' }}
+                            {% endfor %}
+                        ],
+                        backgroundColor: '{{ generate_color(loop.index0, totalElements) }}',
+                    }
+                    {% if not loop.last %},{% endif %}
+                    {% endfor %}
                 {% endif %}
             ],
             options: {

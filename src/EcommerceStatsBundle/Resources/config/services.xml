@@ -10,7 +10,9 @@
             id="chameleon_system_ecommerce_stats.controller.csv_export"
             class="ChameleonSystem\EcommerceStatsBundle\Controllers\CsvExportController"
             autowire="true"
-        />
+        >
+            <tag name="controller.service_arguments" />
+        </service>
 
         <!-- Module -->
         <service

@@ -1,7 +1,7 @@
 chameleon_system_ecommerce_stats.export_csv.stats:
   path: /cms/chameleon_system_ecommerce_stats/stats.csv
-  defaults: { _controller: chameleon_system_ecommerce_stats.controller.csv_export:exportStatistics }
+  defaults: { _controller: chameleon_system_ecommerce_stats.controller.csv_export::exportStatistics }
 
 chameleon_system_ecommerce_stats.export_csv.topsellers:
   path: /cms/chameleon_system_ecommerce_stats/topsellers.csv
-  defaults: { _controller: chameleon_system_ecommerce_stats.controller.csv_export:exportTopsellers }
+  defaults: { _controller: chameleon_system_ecommerce_stats.controller.csv_export::exportTopsellers }
