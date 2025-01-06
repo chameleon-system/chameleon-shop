@@ -1,5 +1,5 @@
 {#
-    @var ChameleonSystem\EcommerceStatsBundle\Service\EcommerceStatsGroup group
+    @var \ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel group
     @var int level
     @var string[] columnNames
     @var int maxGroupCount
@@ -30,6 +30,7 @@
 {% for subGroup in group.subGroups %}
     {{ include( '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/html-body.html.twig' , {
         group: subGroup,
+        level: level + 1,
         columnNames: columnNames,
         maxGroupCount: maxGroupCount,
     } ) }}
