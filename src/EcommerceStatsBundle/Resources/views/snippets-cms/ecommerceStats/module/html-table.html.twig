@@ -1,5 +1,4 @@
 {#
-    @var int level
     @var ChameleonSystem\EcommerceStatsBundle\Service\EcommerceStatsGroup[] blocks
     @var string[] columnNames
     @var bool showDiffColumn
@@ -28,7 +27,7 @@
             {% for block in blocks %}
                 {{ include( '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/html-body.html.twig' , {
                     group: block,
-                    level: level + 1,
+                    level: 1,
                     columnNames: columnNames,
                     maxGroupCount: maxGroupCount,
                 } ) }}
