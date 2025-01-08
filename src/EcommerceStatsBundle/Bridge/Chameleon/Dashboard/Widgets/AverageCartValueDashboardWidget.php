@@ -1,39 +1,24 @@
 <?php
 
 namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets;
-use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
-use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
+
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
-use DateTime;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use ViewRenderer;
 
-class AverageCartValueDashboardWidget extends DashboardWidget
+class AverageCartValueDashboardWidget extends DashboardBaseWidget
 {
-    private const CART_VALUE_STATISTICS_GROUP_ID = 'd577de75-6494-9075-15b7-7cb887d7b065';
-
-    private ViewRenderer $renderer;
-
-    private StatsTableServiceInterface $stats;
-    private TranslatorInterface $translator;
-    private StatsCurrencyServiceInterface $statsCurrencyService;
+    private const CART_VALUE_STATISTICS_GROUP_SYSTEM_NAME = 'basket_size_without_shipping';
 
     public function __construct(
         CacheInterface $cache,
-        ViewRenderer $renderer,
-        StatsTableServiceInterface $stats,
+        \ViewRenderer $viewRenderer,
+        StatsTableServiceInterface $statsTable,
         TranslatorInterface $translator,
-        StatsCurrencyServiceInterface $statsCurrencyService
-    )
-    {
-        parent::__construct($cache);
-
-        $this->renderer = $renderer;
-        $this->stats = $stats;
-        $this->translator = $translator;
-        $this->statsCurrencyService = $statsCurrencyService;
+        StatsCurrencyServiceInterface $currencyService
+    ) {
+        parent::__construct($cache, $viewRenderer, $statsTable, $translator, $currencyService);
     }
 
     public function getTitle(): string
@@ -43,45 +28,26 @@ class AverageCartValueDashboardWidget extends DashboardWidget
 
     public function getDropdownItems(): array
     {
-        return [ ];
+        return [];
     }
 
     protected function generateBodyHtml(): string
     {
-        $endDate = new DateTime('now');
-
-        $startDate = clone $endDate;
-        $startDate->modify(DashboardWidget::DEFAULT_TIMEFRAME_FOR_STATS);
-
-        $statistic = $this->stats->evaluate(
-            $startDate,
-            $endDate,
-            'day',
-            false,
-            '',
-            $this->statsCurrencyService->getCurrencyIdByIsoCode(EcommerceStatsBackendModule::STANDARD_CURRENCY_ISO_CODE),
-            self::CART_VALUE_STATISTICS_GROUP_ID
-        );
-
-        $this->renderer->AddSourceObject('group', $statistic->getBlocks()['Ø basket value excl. shipping']);
-        $this->renderer->AddSourceObject('chartId', random_int(1, 999999));
+        $this->renderer->AddSourceObject('group', $this->getStatsGroup('basket_size_without_shipping'));
+        $this->renderer->AddSourceObject('chartId', 'averageCartValue');
 
         $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig');
 
         return "<div>
                     <div class='bg-white'>
-                        ".$renderedStatistic."
+                        ".$renderedStatistic.'
                     </div>
-                </div>";
+                </div>';
     }
 
-    public function getFooterIncludes(): array
+    protected function getStatisticGroupSystemName(): string
     {
-        $includes = parent::getFooterIncludes();
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemecommercestats/ecommerce_stats/js/chart.4.4.7.js"></script>';
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemecommercestats/ecommerce_stats/js/chart-init.4.4.7.js"></script>';
-
-        return $includes;
+        return self::CART_VALUE_STATISTICS_GROUP_SYSTEM_NAME;
     }
 
     public function getColorCssClass(): string

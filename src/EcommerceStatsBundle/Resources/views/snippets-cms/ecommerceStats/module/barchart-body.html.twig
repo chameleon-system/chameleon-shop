@@ -76,7 +76,7 @@
             },
         };
 
-        window.onload = function () {
+        document.addEventListener('DOMContentLoaded', function () {
             CHAMELEON.CORE.Charts.generateChart(
                 'chart{{ chartId }}',
                 chartData{{ chartId }}.labels,
@@ -84,7 +84,7 @@
                 chartData{{ chartId }}.options,
                 chartData{{ chartId }}.additionalConfig
             );
-        };
+        });
 
     </script>
 

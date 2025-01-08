@@ -21,7 +21,7 @@ class MyStatsProvider implements StatsProviderInterface {
         string $portalId
     ) : StatsTableDataModel {
     
-        $block = new StatsGroupDataModel('My Example Stats');
+        $block = new StatsGroupDataModel('My Example Stats', 'my_example_stats');
         $block->addRow([ 'pre sale' ], '2020-01-01', 22);
         $block->addRow([ 'evening sale' ], '2020-01-01', 33);
         $block->addRow([ 'pre sale' ], '2020-01-02', 133.5);

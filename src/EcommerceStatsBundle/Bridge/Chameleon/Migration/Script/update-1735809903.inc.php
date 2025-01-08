@@ -5,7 +5,7 @@
 </div>
 <?php
 
-TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('pkg_shop_statistic_group'),'portal_restriction_field','name');
-TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('pkg_shop_statistic_group'),'query','name');
-TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('pkg_shop_statistic_group'),'groups','name');
-TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('pkg_shop_statistic_group'),'date_restriction_field','name');
+TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('pkg_shop_statistic_group'), 'portal_restriction_field', 'name');
+TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('pkg_shop_statistic_group'), 'query', 'name');
+TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('pkg_shop_statistic_group'), 'groups', 'name');
+TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('pkg_shop_statistic_group'), 'date_restriction_field', 'name');

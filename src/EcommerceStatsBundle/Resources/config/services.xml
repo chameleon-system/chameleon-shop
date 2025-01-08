@@ -75,11 +75,21 @@
             <argument type="service" id="database_connection" />
         </service>
 
+        <service class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardBaseWidget" id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.dashboard_base_widget"
+                 abstract="true">
+            <argument id="chameleon_system_cms_cache.cache" type="service"/>
+            <argument id="chameleon_system_view_renderer.view_renderer" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+        </service>
+
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.order_number_dashboard_widget" class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\OrderNumberDashboardWidget">
             <argument id="chameleon_system_cms_cache.cache" type="service"/>
             <argument id="chameleon_system_view_renderer.view_renderer" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="20" />
         </service>
 

@@ -17,8 +17,7 @@ $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en'
                [{sCondition}]
                     AND `shop_order`.`canceled` = '0'
                     ORDER BY  [{sColumnName}]",
-        'id' => $id
-
+        'id' => $id,
     ])
 ;
 TCMSLogChange::insert(__LINE__, $data);

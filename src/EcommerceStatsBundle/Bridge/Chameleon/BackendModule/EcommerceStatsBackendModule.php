@@ -57,7 +57,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $showChange = '1' === $this->GetUserInput('showChange', '0');
         $viewName = $this->GetUserInput('viewName', null);
         $currencyId = $this->GetUserInput('currency', $this->statsCurrencyService->getCurrencyIdByIsoCode(self::STANDARD_CURRENCY_ISO_CODE));
-        $selectedStatsGroupId = $this->GetUserInput('statsGroup', self::ALL_STATS_FILTER_NAME);
+        $selectedStatsGroupSystemName = $this->GetUserInput('statsGroup', self::ALL_STATS_FILTER_NAME);
 
         /** @var string $portalId */
         $portalId = $this->GetUserInput('portalId', '');
@@ -80,7 +80,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 $showChange,
                 $portalId,
                 $currencyId,
-                $selectedStatsGroupId
+                $selectedStatsGroupSystemName
             );
             $oVisitor->SetMappedValue('tableData', $tableData);
         }
@@ -101,7 +101,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('selectedPortalId', $portalId);
         $oVisitor->SetMappedValue('currencyList', $currencyList);
         $oVisitor->SetMappedValue('currencyId', $currencyId);
-        $oVisitor->SetMappedValue('selectedStatsGroupId', $selectedStatsGroupId);
+        $oVisitor->SetMappedValue('selectedStatsGroupSystemName', $selectedStatsGroupSystemName);
         $oVisitor->SetMappedValue('statsGroupsSelection', $this->statsProviderCollection->fetchAllStatisticGroupsNames());
     }
 

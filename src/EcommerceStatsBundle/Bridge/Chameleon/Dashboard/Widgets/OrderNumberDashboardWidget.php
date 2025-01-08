@@ -2,29 +2,23 @@
 
 namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets;
 
-use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
+use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
-use DateTime;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use ViewRenderer;
 
-class OrderNumberDashboardWidget extends DashboardWidget
+class OrderNumberDashboardWidget extends DashboardBaseWidget
 {
-    private const ORDER_NUMBER_STATISTICS_GROUP_ID = '6e4af164-8792-9e01-573b-4bb36fd68cdc';
+    private const ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME = 'sales_count';
 
-    private ViewRenderer $renderer;
-
-    private StatsTableServiceInterface $stats;
-    private TranslatorInterface $translator;
-
-    public function __construct(CacheInterface $cache, ViewRenderer $renderer, StatsTableServiceInterface $stats, TranslatorInterface $translator)
-    {
-        parent::__construct($cache);
-
-        $this->renderer = $renderer;
-        $this->stats = $stats;
-        $this->translator = $translator;
+    public function __construct(
+        CacheInterface $cache,
+        \ViewRenderer $viewRenderer,
+        StatsTableServiceInterface $statsTable,
+        TranslatorInterface $translator,
+        StatsCurrencyServiceInterface $currencyService
+    ) {
+        parent::__construct($cache, $viewRenderer, $statsTable, $translator, $currencyService);
     }
 
     public function getTitle(): string
@@ -34,45 +28,26 @@ class OrderNumberDashboardWidget extends DashboardWidget
 
     public function getDropdownItems(): array
     {
-        return [ ];
+        return [];
     }
 
     protected function generateBodyHtml(): string
     {
-        $endDate = new DateTime('now');
-
-        $startDate = clone $endDate;
-        $startDate->modify(DashboardWidget::DEFAULT_TIMEFRAME_FOR_STATS);
-
-        $statistic = $this->stats->evaluate(
-            $startDate,
-            $endDate,
-            'day',
-            false,
-            '',
-            '',
-            self::ORDER_NUMBER_STATISTICS_GROUP_ID
-        );
-
-        $this->renderer->AddSourceObject('group', $statistic->getBlocks()['Number of orders']);
-        $this->renderer->AddSourceObject('chartId', random_int(1, 999999));
+        $this->renderer->AddSourceObject('group', $this->getStatsGroup('sales_count'));
+        $this->renderer->AddSourceObject('chartId', 'orderNumber');
 
         $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig');
 
         return "<div>
                     <div class='bg-white'>
-                        ".$renderedStatistic."
+                        ".$renderedStatistic.'
                     </div>
-                </div>";
+                </div>';
     }
 
-    public function getFooterIncludes(): array
+    protected function getStatisticGroupSystemName(): string
     {
-        $includes = parent::getFooterIncludes();
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemecommercestats/ecommerce_stats/js/chart.4.4.7.js"></script>';
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemecommercestats/ecommerce_stats/js/chart-init.4.4.7.js"></script>';
-
-        return $includes;
+        return self::ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME;
     }
 
     public function getColorCssClass(): string

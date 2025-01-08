@@ -40,7 +40,7 @@ interface StatsProviderInterface
         string $dateGroupType,
         string $portalId,
         string $currencyId,
-        string $selectedStatsGroupId
+        string $selectedStatsGroupSystemName
     ): StatsTableDataModel;
 
     /**

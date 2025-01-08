@@ -32,6 +32,7 @@ namespace ChameleonSystem\EcommerceStatsBundle\Library\DataModel;
 class StatsGroupDataModel
 {
     private ?string $groupTitle = null;
+    private ?string $systemName = null;
     public string $subGroupColumn = '';
 
     public ?StatsCurrencyDataModel $currency = null;
@@ -53,13 +54,11 @@ class StatsGroupDataModel
 
     private bool $hasCurrency = false;
 
-    public function init(string $groupTitle, string $subGroupColumn = ''): void
+    public function __construct(string $groupTitle, string $systemName, string $subGroupColumn = '')
     {
         $this->groupTitle = $groupTitle;
+        $this->systemName = $systemName;
         $this->subGroupColumn = $subGroupColumn;
-        $this->groupTotals = [];
-        $this->subGroups = [];
-        $this->columnNames = [];
     }
 
     /**
@@ -170,19 +169,17 @@ class StatsGroupDataModel
                 $this->columnNames[] = $columnName;
             }
 
-            // $this->AddDataColumn($dataCell); // disabled to keep low footprint
             return;
         }
 
         while (count($groupNames) > 0) {
-            $subGroupName = array_shift($groupNames);
-            if (false === array_key_exists($subGroupName, $this->subGroups)) {
-                $this->subGroups[$subGroupName] = new self();
-                $subGroupColumn = array_search($subGroupName, $nameToColumnMapping) ?: '';
-                $this->subGroups[$subGroupName]->init($subGroupName, $subGroupColumn);
+            $subGroupSystemName = array_shift($groupNames);
+            if (false === array_key_exists($subGroupSystemName, $this->subGroups)) {
+                $subGroupColumn = array_search($subGroupSystemName, $nameToColumnMapping) ?: '';
+                $this->subGroups[$subGroupSystemName] = new self($subGroupSystemName, $subGroupSystemName, $subGroupColumn);
             }
 
-            $this->subGroups[$subGroupName]->addRow($groupNames, $columnName, $columnValue, $nameToColumnMapping);
+            $this->subGroups[$subGroupSystemName]->addRow($groupNames, $columnName, $columnValue, $nameToColumnMapping);
         }
     }
 
@@ -246,5 +243,10 @@ class StatsGroupDataModel
     public function setCurrency(?StatsCurrencyDataModel $currency): void
     {
         $this->currency = $currency;
+    }
+
+    public function getSystemName(): ?string
+    {
+        return $this->systemName;
     }
 }

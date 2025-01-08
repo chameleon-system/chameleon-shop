@@ -54,9 +54,9 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         string $dateGroupType,
         string $portalId,
         string $currencyId,
-        string $selectedStatsGroupId
+        string $selectedStatsGroupSystemName
     ): StatsTableDataModel {
-        foreach ($this->fetchStatistics($selectedStatsGroupId) as $group) {
+        foreach ($this->fetchStatistics($selectedStatsGroupSystemName) as $group) {
             [$conditionList, $params] = $this->getBaseConditions($group, $startDate, $endDate, $portalId);
             $dateQueryPart = $this->getDateQueryPart($dateGroupType, $group->fieldDateRestrictionField ?? 'datecreated');
 
@@ -74,7 +74,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
             $groupFields = explode(',', $group->fieldGroups);
             $realGroupFields = array_filter(array_map('trim', $groupFields));
 
-            $statsTable = $this->addBlock($statsTable, $group->fieldName, $group->fieldHasCurrency, $blockQuery, $realGroupFields, $params, $currencyId);
+            $statsTable = $this->addBlock($statsTable, $group->fieldName, $group->fieldSystemName, $group->fieldHasCurrency, $blockQuery, $realGroupFields, $params, $currencyId);
         }
 
         return $statsTable;
@@ -85,7 +85,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         $groupNames = [];
         $groupList = \TdbPkgShopStatisticGroupList::GetList();
         while ($group = $groupList->Next()) {
-            $groupNames[$group->id] = $group->fieldName;
+            $groupNames[$group->fieldSystemName] = $group->fieldName;
         }
 
         return $groupNames;
@@ -94,12 +94,12 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
     /**
      * @return \Generator<\TdbPkgShopStatisticGroup>
      */
-    private function fetchStatistics(string $selectedStatsGroupId): \Generator
+    private function fetchStatistics(string $selectedStatsGroupSystemName): \Generator
     {
-        if (EcommerceStatsBackendModule::ALL_STATS_FILTER_NAME === $selectedStatsGroupId || '' === $selectedStatsGroupId) {
+        if (EcommerceStatsBackendModule::ALL_STATS_FILTER_NAME === $selectedStatsGroupSystemName || '' === $selectedStatsGroupSystemName) {
             $groups = \TdbPkgShopStatisticGroupList::GetList();
         } else {
-            $query = 'SELECT * FROM `pkg_shop_statistic_group` WHERE `pkg_shop_statistic_group`.`id` = '."'$selectedStatsGroupId'";
+            $query = 'SELECT * FROM `pkg_shop_statistic_group` WHERE `pkg_shop_statistic_group`.`system_name` = '."'$selectedStatsGroupSystemName'";
 
             $groups = \TdbPkgShopStatisticGroupList::GetList($query);
         }
@@ -152,27 +152,27 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
      */
     private function addBlock(
         StatsTableDataModel $statsTable,
-        string $blockName,
+        string $blockTitle,
+        string $blockSystemName,
         bool $hasCurrency,
         string $query,
         array $subGroups = [],
         array $params = [],
         string $currencyId = ''
     ): StatsTableDataModel {
-        $block = $statsTable->getBlock($blockName);
+        $block = $statsTable->getBlock($blockSystemName);
         if (null === $block) {
-            $block = new StatsGroupDataModel();
-            $block->init($blockName);
+            $block = new StatsGroupDataModel($blockTitle, $blockSystemName);
             $block->setHasCurrency($hasCurrency);
             $block->setCurrency($this->currencyService->getCurrencyById($currencyId));
-            $statsTable->addBlock($blockName, $block);
+            $statsTable->addBlock($blockSystemName, $block);
         }
 
         foreach ($this->fetchRows($query, $params) as $dataRow) {
             if (!\array_key_exists('sColumnName', $dataRow) || !\array_key_exists('dColumnValue', $dataRow)) {
                 $this->logger->error(sprintf(
                     'Could not add block `%s` to table: Query must select at least `sColumnName` and `dColumnValue`',
-                    $blockName
+                    $blockSystemName
                 ));
 
                 return $statsTable;
