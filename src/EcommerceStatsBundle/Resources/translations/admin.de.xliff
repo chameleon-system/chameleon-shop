@@ -130,6 +130,18 @@
                 <source>chameleon_system_ecommerce_stats.form_all_stats_label</source>
                 <target>Alle Statistiken</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_dashboard_widget.order_number_label">
+                <source>chameleon_system_dashboard_widget.order_number_label</source>
+                <target>Bestellungen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_dashboard_widget.sales_volume_label">
+                <source>chameleon_system_dashboard_widget.sales_volume_label</source>
+                <target>Umsatz</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_dashboard_widget.cart_value_label">
+                <source>chameleon_system_dashboard_widget.cart_value_label</source>
+                <target>Warenkorb Wert</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

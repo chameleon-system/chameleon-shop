@@ -21,7 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
-    private const STANDARD_CURRENCY_ISO_CODE = 'EUR';
+    public const STANDARD_CURRENCY_ISO_CODE = 'EUR';
     public const ALL_STATS_FILTER_NAME = 'allStats';
 
     private StatsTableServiceInterface $stats;

@@ -76,13 +76,16 @@
             },
         };
 
-        CHAMELEON.CORE.Charts.generateChart(
-            'chart{{ chartId }}',
-            chartData{{ chartId }}.labels,
-            chartData{{ chartId }}.datasets,
-            chartData{{ chartId }}.options,
-            chartData{{ chartId }}.additionalConfig
-        );
+        window.onload = function () {
+            CHAMELEON.CORE.Charts.generateChart(
+                'chart{{ chartId }}',
+                chartData{{ chartId }}.labels,
+                chartData{{ chartId }}.datasets,
+                chartData{{ chartId }}.options,
+                chartData{{ chartId }}.additionalConfig
+            );
+        };
+
     </script>
 
 {% else %}
