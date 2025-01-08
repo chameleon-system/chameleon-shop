@@ -23,7 +23,9 @@ class AverageCartValueDashboardWidget extends DashboardBaseWidget
 
     public function getTitle(): string
     {
-        return $this->translator->trans('chameleon_system_dashboard_widget.cart_value_label');
+        $statsGroup = $this->getStatsGroup(self::CART_VALUE_STATISTICS_GROUP_SYSTEM_NAME);
+
+        return $statsGroup->getGroupTitle();
     }
 
     public function getDropdownItems(): array
@@ -33,7 +35,7 @@ class AverageCartValueDashboardWidget extends DashboardBaseWidget
 
     protected function generateBodyHtml(): string
     {
-        $this->renderer->AddSourceObject('group', $this->getStatsGroup('basket_size_without_shipping'));
+        $this->renderer->AddSourceObject('group', $this->getStatsGroup(self::CART_VALUE_STATISTICS_GROUP_SYSTEM_NAME));
         $this->renderer->AddSourceObject('chartId', 'averageCartValue');
 
         $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig');
@@ -43,11 +45,6 @@ class AverageCartValueDashboardWidget extends DashboardBaseWidget
                         ".$renderedStatistic.'
                     </div>
                 </div>';
-    }
-
-    protected function getStatisticGroupSystemName(): string
-    {
-        return self::CART_VALUE_STATISTICS_GROUP_SYSTEM_NAME;
     }
 
     public function getColorCssClass(): string

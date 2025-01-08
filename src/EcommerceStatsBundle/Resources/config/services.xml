@@ -90,7 +90,7 @@
             <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
-            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="20" />
+            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="1" />
         </service>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.sales_volume_dashboard_widget" class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\SalesVolumeDashboardWidget">
@@ -99,7 +99,7 @@
             <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
-            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="30" />
+            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="2" />
         </service>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.average_cart_value_dashboard_widget" class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\AverageCartValueDashboardWidget">
@@ -108,7 +108,7 @@
             <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
-            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="30" />
+            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="3" />
         </service>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.payment_method_dashboard_widget" class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\PaymentMethodDashboardWidget">
@@ -117,7 +117,7 @@
             <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
-            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="30" />
+            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="4" />
         </service>
 
         <!-- Support for autowiring interfaces -->

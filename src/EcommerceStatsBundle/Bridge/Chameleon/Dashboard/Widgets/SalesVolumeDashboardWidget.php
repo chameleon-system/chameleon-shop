@@ -9,7 +9,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SalesVolumeDashboardWidget extends DashboardBaseWidget
 {
-    private const ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME = 'sales_count';
+    private const ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME = 'sales_without_shipping';
 
     public function __construct(
         CacheInterface $cache,
@@ -23,7 +23,9 @@ class SalesVolumeDashboardWidget extends DashboardBaseWidget
 
     public function getTitle(): string
     {
-        return $this->translator->trans('chameleon_system_dashboard_widget.sales_volume_label');
+        $statsGroup = $this->getStatsGroup(self::ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME);
+
+        return $statsGroup->getGroupTitle();
     }
 
     public function getDropdownItems(): array
@@ -33,7 +35,7 @@ class SalesVolumeDashboardWidget extends DashboardBaseWidget
 
     protected function generateBodyHtml(): string
     {
-        $this->renderer->AddSourceObject('group', $this->getStatsGroup('sales_without_shipping'));
+        $this->renderer->AddSourceObject('group', $this->getStatsGroup(self::ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME));
         $this->renderer->AddSourceObject('chartId', 'salesVolume');
 
         $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig');
@@ -43,11 +45,6 @@ class SalesVolumeDashboardWidget extends DashboardBaseWidget
                         ".$renderedStatistic.'
                     </div>
                 </div>';
-    }
-
-    protected function getStatisticGroupSystemName(): string
-    {
-        return self::ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME;
     }
 
     public function getColorCssClass(): string

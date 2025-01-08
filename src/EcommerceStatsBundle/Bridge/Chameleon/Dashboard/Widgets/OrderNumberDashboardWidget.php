@@ -23,7 +23,9 @@ class OrderNumberDashboardWidget extends DashboardBaseWidget
 
     public function getTitle(): string
     {
-        return $this->translator->trans('chameleon_system_dashboard_widget.order_number_label');
+        $statsGroup = $this->getStatsGroup(self::ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME);
+
+        return $statsGroup->getGroupTitle();
     }
 
     public function getDropdownItems(): array

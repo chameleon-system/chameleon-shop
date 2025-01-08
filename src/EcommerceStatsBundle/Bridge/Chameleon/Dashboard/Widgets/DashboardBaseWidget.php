@@ -11,6 +11,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class DashboardBaseWidget extends DashboardWidget
 {
+    private array $statsCache = [];
+
+
     public function __construct(
         protected readonly CacheInterface $cache,
         protected readonly \ViewRenderer $renderer,
@@ -38,6 +41,10 @@ abstract class DashboardBaseWidget extends DashboardWidget
 
     protected function getStatsGroup(string $statsSystemName)
     {
+        if (array_key_exists($statsSystemName, $this->statsCache)) {
+            return $this->statsCache[$statsSystemName];
+        }
+
         $endDate = new \DateTime('now');
 
         $startDate = clone $endDate;
@@ -50,17 +57,14 @@ abstract class DashboardBaseWidget extends DashboardWidget
             false,
             '',
             $this->statsCurrencyService->getCurrencyIdByIsoCode(EcommerceStatsBackendModule::STANDARD_CURRENCY_ISO_CODE),
-            $this->getStatisticGroupSystemName()
+            $statsSystemName
         );
 
         $statisticBlocks = $statistic->getBlocks();
 
-        return $statisticBlocks[$statsSystemName] ?? null;
-    }
+        $this->statsCache[$statsSystemName] = $statisticBlocks[$statsSystemName] ?? null;
 
-    protected function getStatisticGroupSystemName(): string
-    {
-        return '';
+        return $this->statsCache[$statsSystemName];
     }
 
     public function getFooterIncludes(): array
