@@ -11,7 +11,7 @@ use ViewRenderer;
 
 class OrderNumberDashboardWidget extends DashboardWidget
 {
-    private const ORDER_NUMBER_STATISTICS_GROUP_ID = '74292e9c-2b9a-11df-9c53-00fcefbad5fb';
+    private const ORDER_NUMBER_STATISTICS_GROUP_ID = '6e4af164-8792-9e01-573b-4bb36fd68cdc';
 
     private ViewRenderer $renderer;
 

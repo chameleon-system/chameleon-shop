@@ -13,7 +13,7 @@ use ViewRenderer;
 
 class SalesVolumeDashboardWidget extends DashboardWidget
 {
-    private const ORDER_NUMBER_STATISTICS_GROUP_ID = 'd577de75-6494-9075-15b7-7cb887d7b065';
+    private const SALES_VOLUME_STATISTICS_GROUP_ID = '74292e9c-2b9a-11df-9c53-00fcefbad5fb';
 
     private ViewRenderer $renderer;
 
@@ -61,10 +61,10 @@ class SalesVolumeDashboardWidget extends DashboardWidget
             false,
             '',
             $this->statsCurrencyService->getCurrencyIdByIsoCode(EcommerceStatsBackendModule::STANDARD_CURRENCY_ISO_CODE),
-            self::ORDER_NUMBER_STATISTICS_GROUP_ID
+            self::SALES_VOLUME_STATISTICS_GROUP_ID
         );
 
-        $this->renderer->AddSourceObject('group', $statistic->getBlocks()['Ø basket value excl. shipping']);
+        $this->renderer->AddSourceObject('group', $statistic->getBlocks()['Revenue excluding shipping']);
         $this->renderer->AddSourceObject('chartId', random_int(1, 999999));
 
         $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig');
