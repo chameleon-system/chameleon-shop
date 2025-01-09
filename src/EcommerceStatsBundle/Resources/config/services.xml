@@ -82,6 +82,8 @@
             <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
         </service>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.order_number_dashboard_widget" class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\OrderNumberDashboardWidget">
@@ -90,6 +92,7 @@
             <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="1" />
         </service>
 
@@ -99,6 +102,7 @@
             <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="2" />
         </service>
 
@@ -108,6 +112,7 @@
             <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="3" />
         </service>
 
@@ -117,7 +122,8 @@
             <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
-            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="4" />
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <tag name="chameleon_system.dashboard_widget" collection="analytics2" priority="4" />
         </service>
 
         <!-- Support for autowiring interfaces -->

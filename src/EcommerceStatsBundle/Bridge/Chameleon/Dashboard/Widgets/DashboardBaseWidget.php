@@ -4,8 +4,10 @@ namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widget
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
+use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\DashboardTimeframeDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
+use DateTime;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -19,7 +21,9 @@ abstract class DashboardBaseWidget extends DashboardWidget
         protected readonly \ViewRenderer $renderer,
         protected readonly StatsTableServiceInterface $stats,
         protected readonly TranslatorInterface $translator,
-        protected readonly StatsCurrencyServiceInterface $statsCurrencyService)
+        protected readonly StatsCurrencyServiceInterface $statsCurrencyService,
+        protected readonly String $defaultTimeframe
+    )
     {
         parent::__construct($cache);
     }
@@ -45,14 +49,11 @@ abstract class DashboardBaseWidget extends DashboardWidget
             return $this->statsCache[$statsSystemName];
         }
 
-        $endDate = new \DateTime('now');
-
-        $startDate = clone $endDate;
-        $startDate->modify(DashboardWidget::DEFAULT_TIMEFRAME_FOR_STATS);
+        $timespan = $this->getTimeframe();
 
         $statistic = $this->stats->evaluate(
-            $startDate,
-            $endDate,
+            $timespan->getStartDate(),
+            $timespan->getEndDate(),
             'day',
             false,
             '',
@@ -74,5 +75,18 @@ abstract class DashboardBaseWidget extends DashboardWidget
         $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemecommercestats/ecommerce_stats/js/chart-init.4.4.7.js"></script>';
 
         return $includes;
+    }
+
+    protected function getTimeframe(): DashboardTimeframeDataModel
+    {
+        $endDate = new DateTime('now');
+
+        $startDate = clone $endDate;
+        $startDate->modify($this->defaultTimeframe);
+
+        return new DashboardTimeframeDataModel(
+            $startDate,
+            $endDate
+        );
     }
 }

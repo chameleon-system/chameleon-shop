@@ -16,9 +16,10 @@ class OrderNumberDashboardWidget extends DashboardBaseWidget
         \ViewRenderer $viewRenderer,
         StatsTableServiceInterface $statsTable,
         TranslatorInterface $translator,
-        StatsCurrencyServiceInterface $currencyService
+        StatsCurrencyServiceInterface $currencyService,
+        String $defaultTimeframe
     ) {
-        parent::__construct($cache, $viewRenderer, $statsTable, $translator, $currencyService);
+        parent::__construct($cache, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe);
     }
 
     public function getTitle(): string

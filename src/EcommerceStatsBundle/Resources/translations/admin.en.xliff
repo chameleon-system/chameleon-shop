@@ -131,22 +131,6 @@
                 <source>chameleon_system_ecommerce_stats.form_all_stats_label</source>
                 <target>All statistics</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_dashboard_widget.order_number_label">
-                <source>chameleon_system_dashboard_widget.order_number_label</source>
-                <target>Orders</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_dashboard_widget.sales_volume_label">
-                <source>chameleon_system_dashboard_widget.sales_volume_label</source>
-                <target>Sales Volume</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_dashboard_widget.cart_value_label">
-                <source>chameleon_system_dashboard_widget.cart_value_label</source>
-                <target>Cart Value</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_dashboard_widget.payment_methods_label">
-                <source>chameleon_system_dashboard_widget.payment_methods_label</source>
-                <target>Payment Methods</target>
-            </trans-unit>
         </body>
     </file>
 </xliff>
