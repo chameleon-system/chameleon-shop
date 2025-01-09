@@ -103,6 +103,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('currencyId', $currencyId);
         $oVisitor->SetMappedValue('selectedStatsGroupSystemName', $selectedStatsGroupSystemName);
         $oVisitor->SetMappedValue('statsGroupsSelection', $this->statsProviderCollection->fetchAllStatisticGroupsNames());
+        $oVisitor->SetMappedValue('displayGraphLabels', true);
     }
 
     /**

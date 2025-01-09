@@ -64,6 +64,7 @@
             },
             additionalConfig: {
                 hasCurrency: {{ group.hasCurrency ? 'true' : 'false' }},
+                displayGraphLabels: {{ displayGraphLabels is not null ? displayGraphLabels : 'false' }},
                 {% if group.getCurrency is not null %}
                 currency: {
                     symbol: '{{ group.getCurrency.symbol }}'
