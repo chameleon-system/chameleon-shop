@@ -20,7 +20,9 @@
 
         <service class="ChameleonSystem\EcommerceStatsBundle\Controllers\WidgetController"
                  id="chameleon_system_ecommerce_stats.controllers.widget_controller"
+                 autoconfigure="true"
                  autowire="true"
+                 public="true"
         >
             <argument type="service" id="service_container" />
             <tag name="controller.service_arguments" />
