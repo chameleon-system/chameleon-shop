@@ -24,9 +24,7 @@ class PaymentMethodDashboardWidget extends DashboardBaseWidget
 
     public function getTitle(): string
     {
-        $statsGroup = $this->getStatsGroup(self::PAYMENT_METHOD_STATISTICS_GROUP_SYSTEM_NAME);
-
-        return $statsGroup->getGroupTitle();
+        return $this->getStatsGroup($this->getStatsSystemName())?->getGroupTitle();
     }
 
     public function getDropdownItems(): array
@@ -34,9 +32,14 @@ class PaymentMethodDashboardWidget extends DashboardBaseWidget
         return [];
     }
 
+    protected function getStatsSystemName(): string
+    {
+        return self::PAYMENT_METHOD_STATISTICS_GROUP_SYSTEM_NAME;
+    }
+
     protected function generateBodyHtml(): string
     {
-        $this->renderer->AddSourceObject('group', $this->getStatsGroup(self::PAYMENT_METHOD_STATISTICS_GROUP_SYSTEM_NAME));
+        $this->renderer->AddSourceObject('group', $this->getStatsGroup($this->getStatsSystemName()));
         $this->renderer->AddSourceObject('chartId', 'paymentMethods');
 
         $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig');

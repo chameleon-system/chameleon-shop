@@ -9,12 +9,12 @@ use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyService
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
 use DateTime;
 use esono\pkgCmsCache\CacheInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class DashboardBaseWidget extends DashboardWidget
 {
     private array $statsCache = [];
-
 
     public function __construct(
         protected readonly CacheInterface $cache,
@@ -66,6 +66,21 @@ abstract class DashboardBaseWidget extends DashboardWidget
         $this->statsCache[$statsSystemName] = $statisticBlocks[$statsSystemName] ?? null;
 
         return $this->statsCache[$statsSystemName];
+    }
+
+    /*
+     * called via API e.g. /cms/chameleon_system_ecommerce_stats/widget/api/{widgetServicdeId}/getStatsDataAsJson
+     */
+    public function getStatsDataAsJson(): JsonResponse
+    {
+        $statsGroup = $this->getStatsGroup($this->getStatsSystemName());
+
+        return new JsonResponse($statsGroup);
+    }
+
+    protected function getStatsSystemName(): string
+    {
+        return '';
     }
 
     public function getFooterIncludes(): array

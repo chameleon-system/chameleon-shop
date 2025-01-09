@@ -24,9 +24,7 @@ class OrderNumberDashboardWidget extends DashboardBaseWidget
 
     public function getTitle(): string
     {
-        $statsGroup = $this->getStatsGroup(self::ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME);
-
-        return $statsGroup->getGroupTitle();
+        return $this->getStatsGroup($this->getStatsSystemName())?->getGroupTitle();
     }
 
     public function getDropdownItems(): array
@@ -34,9 +32,14 @@ class OrderNumberDashboardWidget extends DashboardBaseWidget
         return [];
     }
 
+    protected function getStatsSystemName(): string
+    {
+        return self::ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME;
+    }
+
     protected function generateBodyHtml(): string
     {
-        $this->renderer->AddSourceObject('group', $this->getStatsGroup('sales_count'));
+        $this->renderer->AddSourceObject('group', $this->getStatsGroup($this->getStatsSystemName()));
         $this->renderer->AddSourceObject('chartId', 'orderNumber');
 
         $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig');
@@ -46,11 +49,6 @@ class OrderNumberDashboardWidget extends DashboardBaseWidget
                         ".$renderedStatistic.'
                     </div>
                 </div>';
-    }
-
-    protected function getStatisticGroupSystemName(): string
-    {
-        return self::ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME;
     }
 
     public function getColorCssClass(): string
