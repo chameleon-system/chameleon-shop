@@ -4,6 +4,7 @@ namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widget
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
+use ChameleonSystem\CmsDashboardBundle\Library\Interfaces\ColorGeneratorServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\DashboardTimeframeDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
@@ -23,7 +24,8 @@ abstract class DashboardBaseWidget extends DashboardWidget
         protected readonly StatsTableServiceInterface $stats,
         protected readonly TranslatorInterface $translator,
         protected readonly StatsCurrencyServiceInterface $statsCurrencyService,
-        protected readonly String $defaultTimeframe
+        protected readonly String $defaultTimeframe,
+        protected readonly ColorGeneratorServiceInterface $colorGeneratorService
     )
     {
         parent::__construct($cache);
@@ -40,6 +42,11 @@ abstract class DashboardBaseWidget extends DashboardWidget
     }
 
     protected function generateBodyHtml(): string
+    {
+        return '';
+    }
+
+    protected function getChartId(): string
     {
         return '';
     }
@@ -74,9 +81,42 @@ abstract class DashboardBaseWidget extends DashboardWidget
     {
         $statsGroup = $this->getStatsGroup($this->getStatsSystemName());
 
-        // @todo render json data from statsGroup
+        $goupElements = [];
+        $elementCount = \count($statsGroup->getSubGroups());
 
-        return new JsonResponse($statsGroup);
+        if (1 > $elementCount) {
+            $groupElement = [];
+            $groupElement['label'] = $statsGroup->getGroupTitle();
+            $groupElement['backgroundColor'] = $this->colorGeneratorService->generateColor(0, $elementCount);
+            $data = [];
+            foreach($statsGroup->getGroupTotals() as $value) {
+                $data[] = $value;
+            }
+
+            $groupElement['data'] = $data;
+            $goupElements[] = $groupElement;
+        } else {
+            $index = 0;
+            foreach ($statsGroup->getSubGroups() as $subGroupName => $subGroup) {
+                $groupElement = [];
+                $groupElement['label'] = $subGroupName;
+                $groupElement['backgroundColor'] = $this->colorGeneratorService->generateColor($index, $elementCount);
+                $data = [];
+                foreach ($subGroup->getGroupTotals() as $value) {
+                    $data[] = $value;
+                }
+                $groupElement['data'] = $data;
+                $goupElements[] = $groupElement;
+                $index++;
+            }
+        }
+
+        $dataset = [
+            $goupElements
+        ];
+
+        $encoded = json_encode($dataset);
+        return new JsonResponse($encoded);
     }
 
     protected function getStatsSystemName(): string

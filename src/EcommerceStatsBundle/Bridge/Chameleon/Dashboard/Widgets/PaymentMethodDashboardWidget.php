@@ -2,6 +2,8 @@
 
 namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets;
 
+use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
+use ChameleonSystem\CmsDashboardBundle\Library\Interfaces\ColorGeneratorServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
 use esono\pkgCmsCache\CacheInterface;
@@ -17,9 +19,10 @@ class PaymentMethodDashboardWidget extends DashboardBaseWidget
         StatsTableServiceInterface $statsTable,
         TranslatorInterface $translator,
         StatsCurrencyServiceInterface $currencyService,
-        String $defaultTimeframe
+        String $defaultTimeframe,
+        ColorGeneratorServiceInterface $colorGeneratorService
     ) {
-        parent::__construct($cache, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe);
+        parent::__construct($cache, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe, $colorGeneratorService);
     }
 
     public function getTitle(): string
@@ -29,7 +32,14 @@ class PaymentMethodDashboardWidget extends DashboardBaseWidget
 
     public function getDropdownItems(): array
     {
-        return [];
+        $button = new WidgetDropdownItemDataModel('reload'.$this->getChartId(), 'Neuladen', '');
+
+        return [$button];
+    }
+
+    protected function getChartId(): string
+    {
+        return 'paymentMethods';
     }
 
     protected function getStatsSystemName(): string
@@ -40,9 +50,11 @@ class PaymentMethodDashboardWidget extends DashboardBaseWidget
     protected function generateBodyHtml(): string
     {
         $this->renderer->AddSourceObject('group', $this->getStatsGroup($this->getStatsSystemName()));
-        $this->renderer->AddSourceObject('chartId', 'paymentMethods');
+        $this->renderer->AddSourceObject('chartId', $this->getChartId());
 
         $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig');
+
+        $this->renderer->AddSourceObject('reloadUrl', '/cms/api/dashboard/widget/chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.payment_method_dashboard_widget/getStatsDataAsJson');
 
         return "<div>
                     <div class='bg-white'>

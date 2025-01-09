@@ -87,6 +87,7 @@
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
         </service>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.order_number_dashboard_widget"
@@ -98,6 +99,7 @@
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="1" />
         </service>
 
@@ -110,6 +112,7 @@
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="2" />
         </service>
 
@@ -122,6 +125,7 @@
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <tag name="chameleon_system.dashboard_widget" collection="order-values" priority="3" />
         </service>
 
@@ -134,6 +138,7 @@
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <tag name="chameleon_system.dashboard_widget" collection="order-values" priority="4" />
         </service>
 
