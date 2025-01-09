@@ -79,19 +79,19 @@ TCMSLogChange::update(__LINE__, $data);
 
 TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('pkg_shop_statistic_group'), 'system_name', 'name');
 
-$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de')
+$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en')
   ->setFields([
       // 'name' => 'Genutzte Bezahlmethoden',
       'system_name' => 'used_payments', // prev.: ''
       'position' => '4', // prev.: '0'
   ])
   ->setWhereEquals([
-      'id' => '14f69156-cb66-a761-cce1-c7ba1a6b4630',
+      'name' => 'Payment Method',
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de')
+$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en')
   ->setFields([
       // 'name' => 'Umsatz ohne Versand',
       'system_name' => 'sales_without_shipping', // prev.: ''
@@ -102,7 +102,7 @@ $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de'
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de')
+$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en')
   ->setFields([
       // 'name' => 'Hersteller (Verkäufe)',
       'system_name' => 'sales_by_manufacturer', // prev.: ''
@@ -113,18 +113,18 @@ $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de'
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de')
+$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en')
   ->setFields([
       // 'name' => 'Anzahl Bestellungen',
       'system_name' => 'sales_count', // prev.: ''
   ])
   ->setWhereEquals([
-      'id' => '6e4af164-8792-9e01-573b-4bb36fd68cdc',
+      'name' => 'Number of orders',
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de')
+$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en')
   ->setFields([
       // 'name' => 'Ø Warenkorb Größe',
       'system_name' => 'average_basket_products', // prev.: ''
@@ -135,7 +135,7 @@ $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de'
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de')
+$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en')
   ->setFields([
       // 'name' => 'Ø Warenkorb Wert ohne Versand',
       'system_name' => 'basket_size_without_shipping', // prev.: ''
@@ -146,7 +146,7 @@ $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de'
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de')
+$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en')
     ->setFields([
         // 'name' => 'Anzahl bestellter Artikel',
         'system_name' => 'number_of_ordered_items', // prev.: ''
