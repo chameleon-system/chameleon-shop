@@ -108,7 +108,7 @@
             <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
-            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="3" />
+            <tag name="chameleon_system.dashboard_widget" collection="order-values" priority="3" />
         </service>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.payment_method_dashboard_widget" class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\PaymentMethodDashboardWidget">
@@ -117,7 +117,7 @@
             <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
-            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="4" />
+            <tag name="chameleon_system.dashboard_widget" collection="order-values" priority="4" />
         </service>
 
         <!-- Support for autowiring interfaces -->
