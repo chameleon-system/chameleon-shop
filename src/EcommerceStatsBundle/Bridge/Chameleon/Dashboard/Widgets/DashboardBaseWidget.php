@@ -3,7 +3,7 @@
 namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
-use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
 use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\DashboardTimeframeDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
@@ -69,7 +69,7 @@ abstract class DashboardBaseWidget extends DashboardWidget
         return $this->statsCache[$statsSystemName];
     }
 
-    #[ExposeAsApi(description: "Call this method dynamically via API: /cms/chameleon_system_ecommerce_stats/widget/api/{widgetServicdeId}/getStatsDataAsJson")]
+    #[ExposeAsApi(description: "Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getStatsDataAsJson")]
     public function getStatsDataAsJson(): JsonResponse
     {
         $statsGroup = $this->getStatsGroup($this->getStatsSystemName());

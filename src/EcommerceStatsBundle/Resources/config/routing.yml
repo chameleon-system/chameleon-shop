@@ -5,7 +5,3 @@ chameleon_system_ecommerce_stats.export_csv.stats:
 chameleon_system_ecommerce_stats.export_csv.topsellers:
   path: /cms/chameleon_system_ecommerce_stats/topsellers.csv
   defaults: { _controller: chameleon_system_ecommerce_stats.controller.csv_export::exportTopsellers }
-
-chameleon_system_ecommerce_stats.widget.api:
-  path: /cms/chameleon_system_ecommerce_stats/widget/api/{widgetServiceId}/{methodName}
-  defaults: { _controller: chameleon_system_ecommerce_stats.controllers.widget_controller::callWidgetMethod }
