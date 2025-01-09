@@ -294,6 +294,19 @@
                 <source>chameleon_system_shop.product_search_index.completed</source>
                 <target>Completed</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.last_orders_title">
+                <source>chameleon_system_shop.widget.last_orders_title</source>
+                <target>Latest Orders</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.last_orders_not_found">
+                <source>chameleon_system_shop.widget.last_orders_not_found</source>
+                <target>No orders found</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.last_orders_discounts">
+                <source>chameleon_system_shop.widget.last_orders_discounts</source>
+                <target>Discounts</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

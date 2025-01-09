@@ -1,0 +1,37 @@
+{# @var \ChameleonSystem\ShopBundle\Dashboard\DataModel\LastOrdersItemDataModel orders #}
+
+{% if orders|length == 0 %}
+    <div class="alert alert-info">
+        {{ 'hameleon_system_shop.widget.last_orders_not_found'|trans }}
+    </div>
+{% else %}
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col"><i class="fas fa-receipt"></i></th>
+            <th scope="col"><i class="fas fa-calendar-alt"></i></th>
+            <th scope="col"><i class="fas fa-user"></i></th>
+            <th scope="col"><i class="fas fa-envelope"></i></th>
+            <th scope="col"><i class="fas fa-map-marker-alt"></i></th>
+            <th scope="col"><i class="fas fa-credit-card"></i></th>
+            <th scope="col"><i class="fas fa-euro-sign"></i></th>
+            <th scope="col" title="{{ 'chameleon_system_shop.widget.last_orders_discounts'|trans }}"><i class="fas fa-percentage"></i></th>
+            <th scope="col"><i class="fas fa-cube"></i></th>
+        </tr>
+        </thead>
+    {% for orderDataModel in orders %}
+        <tr class="{% if orderDataModel.isOrderCanceled %}table-warning{% elseif not orderDataModel.isPaymentSuccessful %}table-danger{% endif %}">
+            <td>{{ orderDataModel.orderNumber }}</td>
+            <td>{{ orderDataModel.orderDate }}</td>
+            <td>{{ orderDataModel.customerName }}</td>
+            <td>{{ orderDataModel.customerEmail }}</td>
+            <td>{{ orderDataModel.customerCountryCode }} - {{ orderDataModel.customerCity }}</td>
+            <td>{{ orderDataModel.paymentMethod }}</td>
+            <td>{{ orderDataModel.orderValue }} {{ orderDataModel.orderCurrencyCode }}</td>
+            <td>{{ orderDataModel.discountValue }} {{ orderDataModel.orderCurrencyCode }}</td>
+            <td>{{ orderDataModel.orderItemCount }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endif %}
+
