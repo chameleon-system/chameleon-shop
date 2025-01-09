@@ -19,6 +19,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 readonly class WidgetController
 {
@@ -26,9 +28,14 @@ readonly class WidgetController
     {
     }
 
-    public function callWidgetMethod(string $widgetServiceId, string $methodName, array $parameters = []): mixed
+    public function callWidgetMethod(Request $request, string $widgetServiceId, string $methodName): Response
     {
         try {
+            $parameters = array_merge(
+                $request->query->all(),
+                $request->request->all()
+            );
+
             $widgetService = $this->getWidgetService($widgetServiceId);
 
             $reflectionMethod = new \ReflectionMethod($widgetService, $methodName);
