@@ -55,12 +55,13 @@ class PaymentMethodDashboardWidget extends DashboardBaseWidget
         $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig');
 
         $this->renderer->AddSourceObject('reloadUrl', '/cms/api/dashboard/widget/chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.payment_method_dashboard_widget/getStatsDataAsJson');
+        $renderedReloadJS = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/reloadingJs.html.twig');
 
         return "<div>
                     <div class='bg-white'>
                         ".$renderedStatistic.'
                     </div>
-                </div>';
+                </div>'.$renderedReloadJS;
     }
 
     public function getColorCssClass(): string
