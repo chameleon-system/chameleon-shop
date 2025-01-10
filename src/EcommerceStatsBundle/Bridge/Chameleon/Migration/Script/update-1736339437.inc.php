@@ -10,11 +10,12 @@ $id = TCMSLogChange::createUnusedRecordId('pkg_shop_statistic_group');
 $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en')
     ->setFields([
         'name' => 'Payment Method',
-        'query' => "SELECT `shop_payment_method`.`name` AS sColumnName, 1 AS dColumnValue
+        'query' => "SELECT `shop_order`.`shop_payment_method_name` AS sColumnName, 
+                    COUNT(`shop_order`.`shop_payment_method_name`) AS `dColumnValue`
                     FROM `shop_order`
-                    LEFT JOIN `shop_payment_method` ON `shop_order`.`shop_payment_method_id` = `shop_payment_method`.`id`
                [{sCondition}]
                     AND `shop_order`.`canceled` = '0'
+                    GROUP BY `shop_order`.`shop_payment_method_name`
                     ORDER BY  [{sColumnName}]",
         'id' => $id,
     ])
