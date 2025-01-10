@@ -7,7 +7,7 @@ class LastOrdersItemDataModel
     private string $recordId = '';
     private string $orderNumber = '';
     private string $orderDate = '';
-    private string $customerName = ''; // combined from firstname and lastname and company
+    private string $customerName = ''; // combination from firstname and lastname and company
     private string $customerEmail = '';
     private string $customerCity = '';
     private string $customerCountryCode = '';
@@ -19,6 +19,7 @@ class LastOrdersItemDataModel
     private float $discountValue = 0;
     private bool $paymentSuccessful = false;
     private bool $orderCanceled = false;
+    private bool $isGuestOrder = false;
     private string $detailUrl = '';
 
     public function getRecordId(): string
@@ -179,5 +180,15 @@ class LastOrdersItemDataModel
     public function setDetailUrl(string $detailUrl): void
     {
         $this->detailUrl = $detailUrl;
+    }
+
+    public function isGuestOrder(): bool
+    {
+        return $this->isGuestOrder;
+    }
+
+    public function setIsGuestOrder(bool $isGuestOrder): void
+    {
+        $this->isGuestOrder = $isGuestOrder;
     }
 }

@@ -60,6 +60,7 @@ class LastOrdersDashboardWidget extends DashboardWidget
             $lastOrderItemDataModel->setOrderCanceled($order->fieldCanceled);
             $lastOrderItemDataModel->setPaymentSuccessful($order->fieldSystemOrderPaymentMethodExecuted);
             $lastOrderItemDataModel->setDetailUrl($this->getDetailUrl($order));
+            $lastOrderItemDataModel->setIsGuestOrder('' === $order->fieldDataExtranetUserId);
 
             $orderData[] = $lastOrderItemDataModel;
         }
