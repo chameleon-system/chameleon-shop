@@ -10,7 +10,6 @@ $id = TCMSLogChange::createUnusedRecordId('pkg_shop_statistic_group');
 $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en')
     ->setFields([
         'name' => 'Payment Method',
-        'groups' => 'payment_methods',
         'query' => "SELECT `shop_payment_method`.`name` AS sColumnName, 1 AS dColumnValue
                     FROM `shop_order`
                     LEFT JOIN `shop_payment_method` ON `shop_order`.`shop_payment_method_id` = `shop_payment_method`.`id`
