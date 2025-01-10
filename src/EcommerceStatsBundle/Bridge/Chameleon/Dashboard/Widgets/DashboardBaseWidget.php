@@ -4,6 +4,7 @@ namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widget
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
+use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
 use ChameleonSystem\CmsDashboardBundle\Library\Interfaces\ColorGeneratorServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\DashboardTimeframeDataModel;
@@ -38,7 +39,14 @@ abstract class DashboardBaseWidget extends DashboardWidget
 
     public function getDropdownItems(): array
     {
-        return [];
+        $button = new WidgetDropdownItemDataModel
+        (
+            'reload'.$this->getChartId(),
+            $this->translator->trans('chameleon_system_ecommerce_stats.widgets.reload_button_label'),
+            ''
+        );
+
+        return [$button];
     }
 
     protected function generateBodyHtml(): string

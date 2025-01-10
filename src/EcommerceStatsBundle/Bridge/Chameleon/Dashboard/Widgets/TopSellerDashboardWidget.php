@@ -30,14 +30,6 @@ class TopSellerDashboardWidget extends DashboardBaseWidget
         return $this->getStatsGroup($this->getStatsSystemName())?->getGroupTitle();
     }
 
-    public function getDropdownItems(): array
-    {
-        //todo load title from translation
-        $button = new WidgetDropdownItemDataModel('reload'.$this->getChartId(), 'Neuladen', '');
-
-        return [$button];
-    }
-
     protected function getChartId(): string
     {
         return 'topSeller';

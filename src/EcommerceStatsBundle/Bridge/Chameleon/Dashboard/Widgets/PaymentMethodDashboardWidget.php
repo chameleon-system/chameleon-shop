@@ -30,13 +30,6 @@ class PaymentMethodDashboardWidget extends DashboardBaseWidget
         return $this->getStatsGroup($this->getStatsSystemName())?->getGroupTitle();
     }
 
-    public function getDropdownItems(): array
-    {
-        $button = new WidgetDropdownItemDataModel('reload'.$this->getChartId(), 'Neuladen', '');
-
-        return [$button];
-    }
-
     protected function getChartId(): string
     {
         return 'paymentMethods';
