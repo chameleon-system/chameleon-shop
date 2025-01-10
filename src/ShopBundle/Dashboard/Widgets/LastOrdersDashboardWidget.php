@@ -52,11 +52,14 @@ class LastOrdersDashboardWidget extends DashboardWidget
             $lastOrderItemDataModel->setCustomerEmail($order->fieldUserEmail);
             $lastOrderItemDataModel->setCustomerCity($order->fieldAdrBillingCity);
             $lastOrderItemDataModel->setCustomerCountryCode($order->GetFieldAdrBillingCountry()?->GetFieldTCountry()?->fieldIsoCode2 ?? '');
+            $lastOrderItemDataModel->setOrderCurrencyCode($order->GetFieldPkgShopCurrency()?->fieldIso4217 ?? '');
+            $lastOrderItemDataModel->setOrderCurrencySymbol($order->GetFieldPkgShopCurrency()?->fieldSymbol ?? '');
             $lastOrderItemDataModel->setPaymentMethod($order->fieldShopPaymentMethodName);
             $lastOrderItemDataModel->setOrderItemCount($order->fieldCountArticles);
             $lastOrderItemDataModel->setDiscountValue($order->fieldValueDiscounts);
             $lastOrderItemDataModel->setOrderCanceled($order->fieldCanceled);
             $lastOrderItemDataModel->setPaymentSuccessful($order->fieldSystemOrderPaymentMethodExecuted);
+            $lastOrderItemDataModel->setDetailUrl($this->getDetailUrl($order));
 
             $orderData[] = $lastOrderItemDataModel;
         }
@@ -72,5 +75,10 @@ class LastOrdersDashboardWidget extends DashboardWidget
         }
 
         return $name;
+    }
+
+    private function getDetailUrl(\TdbShopOrder $order): string
+    {
+        return '/cms?pagedef=tableeditor&tableid=268&id='.$order->id;
     }
 }

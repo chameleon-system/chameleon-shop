@@ -14,10 +14,12 @@ class LastOrdersItemDataModel
     private string $paymentMethod = '';
     private float $orderValue = 0.0;
     private string $orderCurrencyCode = '';
+    private string $orderCurrencySymbol = '';
     private int $orderItemCount = 0;
     private float $discountValue = 0;
     private bool $paymentSuccessful = false;
     private bool $orderCanceled = false;
+    private string $detailUrl = '';
 
     public function getRecordId(): string
     {
@@ -157,5 +159,25 @@ class LastOrdersItemDataModel
     public function setOrderCanceled(bool $orderCanceled): void
     {
         $this->orderCanceled = $orderCanceled;
+    }
+
+    public function getOrderCurrencySymbol(): string
+    {
+        return $this->orderCurrencySymbol;
+    }
+
+    public function setOrderCurrencySymbol(string $orderCurrencySymbol): void
+    {
+        $this->orderCurrencySymbol = $orderCurrencySymbol;
+    }
+
+    public function getDetailUrl(): string
+    {
+        return $this->detailUrl;
+    }
+
+    public function setDetailUrl(string $detailUrl): void
+    {
+        $this->detailUrl = $detailUrl;
     }
 }

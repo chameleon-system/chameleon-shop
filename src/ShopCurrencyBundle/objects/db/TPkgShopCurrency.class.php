@@ -31,9 +31,8 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
     public function GetFormattedCurrency($dValue)
     {
         $oLocal = TCMSLocal::GetActive();
-        $sValue = $oLocal->FormatNumber($dValue, 2).' '.$this->GetCurrencyDisplaySymbol();
 
-        return $sValue;
+        return $oLocal->FormatNumber($dValue, 2).' '.$this->GetCurrencyDisplaySymbol();
     }
 
     /**
@@ -96,7 +95,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
     {
         static $oInstance = null;
         if (is_null($oInstance)) {
-            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+            $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             $oInstance = $oShop->GetFieldDefaultPkgShopCurrency();
             // none set? just take the first one
             if (!$oInstance) {
@@ -181,13 +180,13 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
         }
 
         $sDomain = $request->getHost();
-        if ('www.' == substr($sDomain, 0, 4)) {
+        if ('www.' === substr($sDomain, 0, 4)) {
             $sDomain = substr($sDomain, 4);
         }
         setcookie(TdbPkgShopCurrency::SESSION_NAME, base64_encode($sCurrencyId), time() + 60 * 60 * 24 * 365, '/', '.'.$sDomain, false, true);
         $oUser = TdbDataExtranetUser::GetInstance();
 
-        if (!is_null($oUser->id) && !empty($oUser->id) && array_key_exists('pkg_shop_currency_id', $oUser->sqlData) && $oUser->sqlData['pkg_shop_currency_id'] != $sCurrencyId && $oUser->IsLoggedIn()) {
+        if (!empty($oUser->id) && array_key_exists('pkg_shop_currency_id', $oUser->sqlData) && $oUser->sqlData['pkg_shop_currency_id'] != $sCurrencyId && $oUser->IsLoggedIn()) {
             $oUser->SaveFieldsFast(['pkg_shop_currency_id' => $sCurrencyId]);
         } else {
             $oUser->sqlData['pkg_shop_currency_id'] = $sCurrencyId;
@@ -215,7 +214,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
      */
     public function Convert($dValue, $oBaseCurrency = null)
     {
-        if (null == $oBaseCurrency) {
+        if (null === $oBaseCurrency) {
             $oBaseCurrency = TdbPkgShopCurrency::GetBaseCurrency();
         }
         $oDefaultCurrency = TdbPkgShopCurrency::GetBaseCurrency();
@@ -253,10 +252,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
         return $dValue;
     }
 
-    /**
-     * @return EventDispatcherInterface
-     */
-    private function getEventDispatcher()
+    private function getEventDispatcher(): EventDispatcherInterface
     {
         return ServiceLocator::get('event_dispatcher');
     }
