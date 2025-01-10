@@ -302,11 +302,42 @@
                 <source>chameleon_system_shop.widget.last_orders_not_found</source>
                 <target>No orders found</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_shop.widget.last_orders_discounts">
-                <source>chameleon_system_shop.widget.last_orders_discounts</source>
-                <target>Discounts</target>
+            <trans-unit id="chameleon_system_shop.widget.order_number">
+                <source>chameleon_system_shop.widget.order_number</source>
+                <target>Order Number</target>
             </trans-unit>
-
+            <trans-unit id="chameleon_system_shop.widget.order_date">
+                <source>chameleon_system_shop.widget.order_date</source>
+                <target>Order Date</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.customer">
+                <source>chameleon_system_shop.widget.customer</source>
+                <target>Customer</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.email">
+                <source>chameleon_system_shop.widget.email</source>
+                <target>E-Mail</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.user_address">
+                <source>chameleon_system_shop.widget.user_address</source>
+                <target>Address</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.payment_type">
+                <source>chameleon_system_shop.widget.payment_type</source>
+                <target>Payment Type</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.order_total">
+                <source>chameleon_system_shop.widget.order_total</source>
+                <target>Total Value</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.discount_value">
+                <source>chameleon_system_shop.widget.discount_value</source>
+                <target>angewendete Rabatte</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.order_item_count">
+                <source>chameleon_system_shop.widget.order_item_count</source>
+                <target>Order Items</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
