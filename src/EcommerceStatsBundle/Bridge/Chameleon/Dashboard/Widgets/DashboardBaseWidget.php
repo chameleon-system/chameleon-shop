@@ -34,7 +34,7 @@ abstract class DashboardBaseWidget extends DashboardWidget
 
     public function getTitle(): string
     {
-        return '';
+        return $this->getStatsGroup($this->getStatsSystemName())?->getGroupTitle() ?? '';
     }
 
     public function getDropdownItems(): array

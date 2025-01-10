@@ -25,11 +25,6 @@ class SalesVolumeDashboardWidget extends DashboardBaseWidget
         parent::__construct($cache, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe, $colorGeneratorService);
     }
 
-    public function getTitle(): string
-    {
-        return $this->getStatsGroup($this->getStatsSystemName())?->getGroupTitle();
-    }
-
     protected function getChartId(): string
     {
         return 'salesVolume';
