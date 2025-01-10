@@ -338,6 +338,14 @@
                 <source>chameleon_system_shop.widget.order_item_count</source>
                 <target>bestellte Produkte</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.user_type_customer">
+                <source>chameleon_system_shop.widget.user_type_customer</source>
+                <target>Bestandskunde</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.user_type_guest">
+                <source>chameleon_system_shop.widget.user_type_guest</source>
+                <target>Gast Besteller</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

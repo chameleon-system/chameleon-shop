@@ -32,15 +32,20 @@
             {% set warningCssClass = 'table-warning' %}
         {% endif %}
 
-        {# if discount is more than 30% of the order value, add a warning class #}
-        {% if orderDataModel.orderValue and orderDataModel.discountValue / orderDataModel.orderValue > 0.3 %}
+        {# if discount is more than 40% of the order value, add a warning class #}
+        {% if orderDataModel.orderValue and orderDataModel.discountValue / orderDataModel.orderValue > 0.4 %}
             {% set warningCssClass = 'table-warning' %}
+        {% endif %}
+
+        {% set userIcon = '<i class="fas fa-user-circle" title="' ~ 'chameleon_system_shop.widget.user_type_customer'|trans|e('html_attr') ~ '"></i>' %}
+        {% if orderDataModel.isGuestOrder %}
+            {% set userIcon = '<i class="fas fa-user-secret" title="' ~ 'chameleon_system_shop.widget.user_type_guest'|trans|e('html_attr') ~ '"></i>' %}
         {% endif %}
 
         <tr class="{{ warningCssClass }}">
             <td><a href="{{ orderDataModel.detailUrl }}">{{ orderDataModel.orderNumber }}</a></td>
             <td>{{ orderDataModel.orderDate }}</td>
-            <td>{{ orderDataModel.customerName }}</td>
+            <td>{{ userIcon|raw }} {{ orderDataModel.customerName }}</td>
             <td>{{ orderDataModel.customerEmail }}</td>
             <td>{{ orderDataModel.customerCountryCode }} - {{ orderDataModel.customerCity }}</td>
             <td>{{ orderDataModel.paymentMethod }}</td>
