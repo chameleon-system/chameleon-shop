@@ -155,6 +155,19 @@
             <tag name="chameleon_system.dashboard_widget" collection="product-stats" priority="5" />
         </service>
 
+        <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.top_categories_dashboard_widget"
+                 class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\TopCategoriesDashboardWidget"
+                 public="true">
+            <argument id="chameleon_system_cms_cache.cache" type="service"/>
+            <argument id="chameleon_system_view_renderer.view_renderer" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
+            <tag name="chameleon_system.dashboard_widget" collection="product-stats" priority="6" />
+        </service>
+
         <!-- Support for autowiring interfaces -->
         <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\CsvExportServiceInterface" alias="chameleon_system_ecommerce_stats.csv_export" />
         <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface" alias="ChameleonSystem\EcommerceStatsBundle\StatsProvider\StatsProviderCollection" />

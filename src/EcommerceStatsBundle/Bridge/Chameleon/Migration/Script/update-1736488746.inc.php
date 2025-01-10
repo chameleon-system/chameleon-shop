@@ -29,7 +29,7 @@ TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de')
     ->setFields([
-        'name' => 'Kassenschlager',
+        'name' => 'Meistverkaufte Produkte',
         ])
     ->setWhereEquals([
         'id' => $id,
