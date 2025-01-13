@@ -21,7 +21,7 @@ class MyStatsProvider implements StatsProviderInterface {
         string $portalId
     ) : StatsTableDataModel {
     
-        $block = new StatsGroupDataModel('My Example Stats');
+        $block = new StatsGroupDataModel('My Example Stats', 'my_example_stats');
         $block->addRow([ 'pre sale' ], '2020-01-01', 22);
         $block->addRow([ 'evening sale' ], '2020-01-01', 33);
         $block->addRow([ 'pre sale' ], '2020-01-02', 133.5);
@@ -74,3 +74,10 @@ LEFT JOIN `shop_order_item`
 AND `shop_order`.`canceled` = '0'
 ORDER BY datecreated
 ```
+
+## Dashboard Widgets
+
+The bundle also provides dashboard widgets that are registered in the Chameleon Dashboard.
+
+You can set a timeframe for the widget stats by adding a parameter in your parameters.yml or env vars
+like: `chameleon_system_core_dashboard_default_timeframe: '-30 days'` (be sure to set it to a minus value used in DateTime::modify)

@@ -11,14 +11,14 @@
 
 namespace ChameleonSystem\EcommerceStats\Tests\Unit\DataModel;
 
-use ChameleonSystem\EcommerceStats\DataModel\StatsGroupDataModel;
+use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel;
 use PHPUnit\Framework\TestCase;
 
 class EcommerceStatsGroupTest extends TestCase
 {
     public function testAddsCategoryGroupingElementsWhenAddingMoreThanOneCategoryInDepth(): void
     {
-        $group = new StatsGroupDataModel();
+        $group = new StatsGroupDataModel('test', 'test');
         $group->addRow(['foo', 'bar'], 'test', 1);
         $group->addRow(['foo', 'baz'], 'test', 2);
         $group->addRow(['foo', 'bar', 'baz'], 'test', 4);

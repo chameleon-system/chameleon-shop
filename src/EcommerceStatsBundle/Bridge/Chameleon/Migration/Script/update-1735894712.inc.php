@@ -20,8 +20,7 @@ $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en'
                [{sCondition}]
            AND `shop_order`.`canceled` = '0'
      ORDER BY  [{sColumnName}]
-  "
-
+  ",
     ])
     ->setWhereEquals([
         'id' => '5960bc8c-2b9b-11df-9c53-00fcefbad5fb',

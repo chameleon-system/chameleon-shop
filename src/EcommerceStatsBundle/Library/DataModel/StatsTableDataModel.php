@@ -36,14 +36,14 @@ class StatsTableDataModel
         return $this->blocks;
     }
 
-    public function getBlock(string $name): ?StatsGroupDataModel
+    public function getBlock(string $systemName): ?StatsGroupDataModel
     {
-        return $this->blocks[$name] ?? null;
+        return $this->blocks[$systemName] ?? null;
     }
 
-    public function addBlock(string $name, StatsGroupDataModel $block): void
+    public function addBlock(string $systemName, StatsGroupDataModel $block): void
     {
-        $this->blocks[$name] = $block;
+        $this->blocks[$systemName] = $block;
     }
 
     /**

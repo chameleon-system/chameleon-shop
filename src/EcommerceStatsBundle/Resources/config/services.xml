@@ -3,6 +3,10 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="chameleon_system_core.dashboard.default_timeframe">-67 days</parameter>
+    </parameters>
+
     <services>
 
         <!-- Controller -->
@@ -74,6 +78,123 @@
                 id="chameleon_system_ecommerce_stats.service.stats_currency_service">
             <argument type="service" id="database_connection" />
         </service>
+
+        <service class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardBaseWidget"
+                 id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.dashboard_base_widget"
+                 abstract="true">
+            <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
+            <argument id="chameleon_system_view_renderer.view_renderer" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
+        </service>
+
+        <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.order_number_dashboard_widget"
+                 class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\OrderNumberDashboardWidget"
+                 public="true">
+            <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
+            <argument id="chameleon_system_view_renderer.view_renderer" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
+            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="1" />
+        </service>
+
+        <service id="order_number" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.dashboard_base_widget" public="true" />
+
+        <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.sales_volume_dashboard_widget"
+                 class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\SalesVolumeDashboardWidget"
+                 public="true">
+            <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
+            <argument id="chameleon_system_view_renderer.view_renderer" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
+            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="2" />
+        </service>
+
+        <service id="sales-volume" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.sales_volume_dashboard_widget" public="true" />
+
+        <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.average_cart_value_dashboard_widget"
+                 class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\AverageCartValueDashboardWidget"
+                 public="true">
+            <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
+            <argument id="chameleon_system_view_renderer.view_renderer" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
+            <tag name="chameleon_system.dashboard_widget" collection="order-values" priority="3" />
+        </service>
+
+        <service id="average-cart-value" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.average_cart_value_dashboard_widget" public="true" />
+
+        <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.payment_method_dashboard_widget"
+                 class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\PaymentMethodDashboardWidget"
+                 public="true">
+            <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
+            <argument id="chameleon_system_view_renderer.view_renderer" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
+            <tag name="chameleon_system.dashboard_widget" collection="order-values" priority="4" />
+        </service>
+
+        <service id="payment-method" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.payment_method_dashboard_widget" public="true" />
+
+        <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.top_seller_dashboard_widget"
+                 class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\TopSellerDashboardWidget"
+                 public="true">
+            <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
+            <argument id="chameleon_system_view_renderer.view_renderer" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
+            <tag name="chameleon_system.dashboard_widget" collection="product-stats" priority="5" />
+        </service>
+
+        <service id="top-seller" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.top_seller_dashboard_widget" public="true" />
+
+        <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.top_categories_dashboard_widget"
+                 class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\TopCategoriesDashboardWidget"
+                 public="true">
+            <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
+            <argument id="chameleon_system_view_renderer.view_renderer" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
+            <tag name="chameleon_system.dashboard_widget" collection="product-stats" priority="6" />
+        </service>
+
+        <service id="top-categories" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.top_categories_dashboard_widget" public="true" />
+
+        <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.customer_type_dashboard_widget"
+                 class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\CustomerTypeDashboardWidget"
+                 public="true">
+            <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
+            <argument id="chameleon_system_view_renderer.view_renderer" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.ecommerce_stats_table" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
+            <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
+            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
+            <tag name="chameleon_system.dashboard_widget" collection="customer-stats" priority="6" />
+        </service>
+
+        <service id="customer-type" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.customer_type_dashboard_widget" public="true" />
 
         <!-- Support for autowiring interfaces -->
         <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\CsvExportServiceInterface" alias="chameleon_system_ecommerce_stats.csv_export" />

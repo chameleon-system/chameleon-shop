@@ -4,5 +4,4 @@
     - ref #636: add bundle to backend snippet chain
 </div>
 <?php
-TCMSLogChange::addToSnippetChain('@ChameleonSystemEcommerceStatsBundle/Resources/views','@ChameleonSystemAutoclassesBundle/Resources/views',['5f047d9b-0c20-0bfb-2dce-f8193653965c']);
-
+TCMSLogChange::addToSnippetChain('@ChameleonSystemEcommerceStatsBundle/Resources/views', '@ChameleonSystemAutoclassesBundle/Resources/views', ['5f047d9b-0c20-0bfb-2dce-f8193653965c']);

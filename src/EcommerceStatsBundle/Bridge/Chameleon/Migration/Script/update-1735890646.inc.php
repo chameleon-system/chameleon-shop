@@ -5,7 +5,6 @@
 </div>
 <?php
 
-
 $data = TCMSLogChange::createMigrationQueryData('pkg_cms_routing', 'de')
   ->setFields([
       'name' => 'chameleon_system_ecommerce_stats', // prev.: ...'Ecommerce Stats'..., now: ...'chameleon_system_ecommerce_stats'...
@@ -15,4 +14,3 @@ $data = TCMSLogChange::createMigrationQueryData('pkg_cms_routing', 'de')
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
-

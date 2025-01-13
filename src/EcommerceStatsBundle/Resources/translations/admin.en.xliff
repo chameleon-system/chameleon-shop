@@ -131,6 +131,10 @@
                 <source>chameleon_system_ecommerce_stats.form_all_stats_label</source>
                 <target>All statistics</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.widgets.reload_button_label">
+                <source>chameleon_system_ecommerce_stats.widgets.reload_button_label</source>
+                <target>Reload</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

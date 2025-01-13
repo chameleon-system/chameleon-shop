@@ -29,6 +29,6 @@ interface StatsTableServiceInterface
         bool $showDiffColumn,
         string $portalId = '',
         string $currencyId = '',
-        string $selectedStatsGroupId = ''
+        string $selectedStatsGroupSystemName = ''
     ): StatsTableDataModel;
 }

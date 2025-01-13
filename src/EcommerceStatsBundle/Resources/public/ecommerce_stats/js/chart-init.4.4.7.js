@@ -46,6 +46,11 @@ CHAMELEON.CORE.Charts = {
                 {
                     id: 'stackedSum',
                     beforeDraw: (chart) => {
+
+                        if (false == additionalConfig.displayGraphLabels) {
+                            return;
+                        }
+
                         const { ctx, chartArea, scales } = chart;
                         const datasets = chart.data.datasets;
                         const labels = chart.data.labels;

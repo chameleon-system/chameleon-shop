@@ -64,6 +64,7 @@
             },
             additionalConfig: {
                 hasCurrency: {{ group.hasCurrency ? 'true' : 'false' }},
+                displayGraphLabels: {{ displayGraphLabels is not null ? displayGraphLabels : 'false' }},
                 {% if group.getCurrency is not null %}
                 currency: {
                     symbol: '{{ group.getCurrency.symbol }}'
@@ -76,13 +77,16 @@
             },
         };
 
-        CHAMELEON.CORE.Charts.generateChart(
-            'chart{{ chartId }}',
-            chartData{{ chartId }}.labels,
-            chartData{{ chartId }}.datasets,
-            chartData{{ chartId }}.options,
-            chartData{{ chartId }}.additionalConfig
-        );
+        document.addEventListener('DOMContentLoaded', function () {
+            CHAMELEON.CORE.Charts.generateChart(
+                'chart{{ chartId }}',
+                chartData{{ chartId }}.labels,
+                chartData{{ chartId }}.datasets,
+                chartData{{ chartId }}.options,
+                chartData{{ chartId }}.additionalConfig
+            );
+        });
+
     </script>
 
 {% else %}

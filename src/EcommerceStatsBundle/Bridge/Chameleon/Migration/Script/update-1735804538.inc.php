@@ -43,17 +43,17 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-$query ="ALTER TABLE `pkg_shop_statistic_group`
+$query = "ALTER TABLE `pkg_shop_statistic_group`
                         ADD `hasCurrency` ENUM('0','1') DEFAULT '0' NOT NULL COMMENT 'Benötigt Währung: Gibt, an ob diese Gruppe eine Währung benötigt (in der Regel dann der Fall, wenn es sich bei der Gruppe um Zahlungsstatistiken handelt)'";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
-$query ="ALTER TABLE `pkg_shop_statistic_group` ADD INDEX `hasCurrency` (`hasCurrency`)";
+$query = 'ALTER TABLE `pkg_shop_statistic_group` ADD INDEX `hasCurrency` (`hasCurrency`)';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 $statisticGroupsThatNeedCurrencies = [
         '74292e9c-2b9a-11df-9c53-00fcefbad5fb',
         '5960bc8c-2b9b-11df-9c53-00fcefbad5fb',
-        'd577de75-6494-9075-15b7-7cb887d7b065'
+        'd577de75-6494-9075-15b7-7cb887d7b065',
 ];
 
 $dbConnection = TCMSLogChange::getDatabaseConnection();

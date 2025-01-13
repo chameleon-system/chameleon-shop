@@ -15,7 +15,7 @@ namespace ChameleonSystem\EcommerceStatsBundle\Library\DataModel;
 
 class ShopOrderItemDataModel
 {
-    private string $articlenumber;
+    private string $articleNumber;
     private string $name;
     private int $totalOrdered;
     private float $totalOrderedValue;
@@ -28,16 +28,16 @@ class ShopOrderItemDataModel
         float $totalOrderedValue,
         string $categoryPath
     ) {
-        $this->articlenumber = $articlenumber;
+        $this->articleNumber = $articlenumber;
         $this->name = $name;
         $this->totalOrdered = $totalOrdered;
         $this->totalOrderedValue = $totalOrderedValue;
         $this->categoryPath = $categoryPath;
     }
 
-    public function getArticlenumber(): string
+    public function getArticleNumber(): string
     {
-        return $this->articlenumber;
+        return $this->articleNumber;
     }
 
     public function getName(): string

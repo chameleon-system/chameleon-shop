@@ -121,7 +121,7 @@ class CsvExportService implements CsvExportServiceInterface
 
         foreach ($topsellers as $topseller) {
             $data[] = [
-                $topseller->getArticlenumber(),
+                $topseller->getArticleNumber(),
                 $topseller->getName(),
                 $this->local->FormatNumber($topseller->getTotalOrdered(), 0),
                 $this->local->FormatNumber($topseller->getTotalOrderedValue(), 2),
