@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-class TShopStepOrderCompletedCore extends TShopStepUserData
+class TShopStepOrderCompletedCore extends TShopStepUserDataV2
 {
     /**
      * we deactivate the basket step... after all, at this point, it has been reset.
