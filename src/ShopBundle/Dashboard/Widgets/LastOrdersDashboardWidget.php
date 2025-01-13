@@ -3,19 +3,21 @@
 namespace ChameleonSystem\ShopBundle\Dashboard\Widgets;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
 use ChameleonSystem\ShopBundle\Dashboard\DataModel\LastOrdersItemDataModel;
-use esono\pkgCmsCache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LastOrdersDashboardWidget extends DashboardWidget
 {
+    private const LAST_ORDER_SYSTEM_NAME = 'lastOrders';
+
     public function __construct(
-        protected readonly CacheInterface $cache,
+        protected readonly DashboardCacheService $dashboardCacheService,
         protected readonly \ViewRenderer $renderer,
         protected readonly TranslatorInterface $translator)
     {
-        parent::__construct($cache);
+        parent::__construct($dashboardCacheService);
     }
 
     public function getTitle(): string
@@ -26,6 +28,11 @@ class LastOrdersDashboardWidget extends DashboardWidget
     public function getDropdownItems(): array
     {
         return [new WidgetDropdownItemDataModel('LastOrdersDashboardWidget', 'Alle Bestellungen', '/cms?pagedef=tablemanager&id=268')];
+    }
+
+    public function getChartId(): string
+    {
+        return self::LAST_ORDER_SYSTEM_NAME;
     }
 
     protected function generateBodyHtml(): string
