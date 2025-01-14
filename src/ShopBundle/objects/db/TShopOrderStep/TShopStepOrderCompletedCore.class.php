@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-class TShopStepOrderCompletedCore extends TShopStepUserData
+class TShopStepOrderCompletedCore extends TShopStepUserDataV2
 {
     /**
      * we deactivate the basket step... after all, at this point, it has been reset.
@@ -29,7 +29,7 @@ class TShopStepOrderCompletedCore extends TShopStepUserData
      */
     protected function AllowAccessToStep($bRedirectToPreviousPermittedStep = false)
     {
-        if (\ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.debug.debug_last_order')) {
+        if (ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.debug.debug_last_order')) {
             return true;
         }
         $bAllowAccess = true;
@@ -64,9 +64,9 @@ class TShopStepOrderCompletedCore extends TShopStepUserData
             $aParameter['sOrderNumber'] = $oUserOrder->fieldOrdernumber;
         }
 
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         // add link to display a printable version of the order
-        $aParameter['sLinkPrintableVersion'] = $oShop->GetLinkToSystemPage('print-order', array('id' => $oUserOrder->id));
+        $aParameter['sLinkPrintableVersion'] = $oShop->GetLinkToSystemPage('print-order', ['id' => $oUserOrder->id]);
         $aParameter[strtolower('sLinkPrintableVersion')] = $aParameter['sLinkPrintableVersion']; // links should be all lowercase - some customers force this (and some wysiwyg may require this as well) so we provide both variations
         $aParameter['oLastOrder'] = $oUserOrder;
 
@@ -81,7 +81,7 @@ class TShopStepOrderCompletedCore extends TShopStepUserData
      *
      * @return string
      */
-    public function Render($sSpotName = null, $aCallTimeVars = array())
+    public function Render($sSpotName = null, $aCallTimeVars = [])
     {
         $oUser = TdbDataExtranetUser::GetInstance();
         if (!is_null($oUser->fieldName) && !$oUser->IsLoggedIn()) {
