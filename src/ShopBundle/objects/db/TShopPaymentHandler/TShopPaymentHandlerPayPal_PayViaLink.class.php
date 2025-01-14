@@ -23,6 +23,8 @@ use Psr\Log\LoggerInterface;
  * /**/
 class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler implements PaymentHandlerWithTransactionSupportInterface
 {
+    public const PAYMENT_MODE_DELAYED = 'preauthorization';
+    public const PARAM_PAYMENT_MODE = 'payment_mode';
     public const URL_IDENTIFIER_IPN = '_paypalipn_'; // instant payment notification URL identifier
     protected const PARAMETER_IS_PAYMENT_ON_SHIPMENT = 'isPaymentOnShipment';
 
@@ -44,28 +46,20 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
             return 1 === (int) $this->GetUserPaymentDataItem(self::PARAMETER_IS_PAYMENT_ON_SHIPMENT);
         }
 
-        return TPkgShopPaymentPayoneConfigManager::PAYMENT_MODE_DELAYED === $this->GetConfigParameter(PayoneConfigConstants::PARAM_PAYMENT_MODE);
+        return self::PAYMENT_MODE_DELAYED === $this->GetConfigParameter(self::PARAM_PAYMENT_MODE);
     }
 
     public function SetPaymentUserData($aPaymentUserData)
     {
         if (false === array_key_exists(self::PARAMETER_IS_PAYMENT_ON_SHIPMENT, $aPaymentUserData)) {
             // fix current value if not set
-            $isDelayedPayment = TPkgShopPaymentPayoneConfigManager::PAYMENT_MODE_DELAYED
-                === $this->GetConfigParameter(PayoneConfigConstants::PARAM_PAYMENT_MODE);
+            $isDelayedPayment = self::PAYMENT_MODE_DELAYED
+                === $this->GetConfigParameter(self::PARAM_PAYMENT_MODE);
 
             $aPaymentUserData[self::PARAMETER_IS_PAYMENT_ON_SHIPMENT] = $isDelayedPayment ? '1' : '0';
         }
 
         parent::SetPaymentUserData($aPaymentUserData);
-    }
-
-    /**
-     * @return ShopPaymentConfigLoaderInterface
-     */
-    protected function getShopPaymentConfigLoader()
-    {
-        return ServiceLocator::get('chameleon_system_shop.payment.config_loader');
     }
 
     /**
@@ -139,7 +133,6 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
             }
             $aParameter['country'] = $sCountry;
         }
-        // $aParameter['forencoding'] = '&#261;'; //
         $aParameter['charset'] = 'UTF-8';
 
         $sBaseURL = $this->GetConfigParameter('url');
@@ -157,12 +150,11 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
     protected function GetInstantPaymentNotificationListenerURL($oOrder)
     {
         // change to absolute url
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $sBasketPage = $oShop->GetLinkToSystemPage('checkout', null, true);
         $sURL = $sBasketPage.'/'.self::URL_IDENTIFIER_IPN;
-        $sURL = str_replace('&amp;', '&', $sURL);
 
-        return $sURL;
+        return str_replace('&amp;', '&', $sURL);
     }
 
     /**
@@ -180,11 +172,11 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
         $sDomain = substr($sPayPalURL, 0, strpos($sPayPalURL, '/'));
         $sPath = substr($sPayPalURL, strpos($sPayPalURL, '/'));
         // send validate message back to paypal
-        $aVerifyData = TGlobal::instance()->GetUserData(null, [], TCMSUserInput::FILTER_NONE);
+        $aVerifyData = ServiceLocator::get('chameleon_system_core.global')->GetUserData(null, [], TCMSUserInput::FILTER_NONE);
 
-        $sData = 'cmd=_notify-validate&'.str_replace('&amp;', '&', TTools::GetArrayAsURL($aVerifyData));
+        $sData = 'cmd=_notify-validate&'.$this->getUrlUtilService()->getArrayAsUrl($aVerifyData, '', '&');
         $sResponse = $this->sendRequest($sDomain, $sPath, $sData);
-        if (0 != strcmp($sResponse, 'VERIFIED')) {
+        if (0 !== strcmp($sResponse, 'VERIFIED')) {
             $logger->error(
                 'PayPal IPN: unable to send notify-validate response.',
                 [
@@ -207,7 +199,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
         $oPaymentParameterList->AddFilterString("`shop_order_payment_method_parameter`.`name` LIKE 'IPN%payment_status' OR `shop_order_payment_method_parameter`.`name` = 'PAYMENTINFO_0_PAYMENTSTATUS'");
         if ($oPaymentParameterList->Length() > 0) {
             while ($oPaymentParameter = $oPaymentParameterList->Next()) {
-                if ('Completed' == $oPaymentParameter->fieldValue) {
+                if ('Completed' === $oPaymentParameter->fieldValue) {
                     $logger->info(
                         'PayPal IPN: the txn has been processed before and was already set to completed.',
                         [
@@ -234,7 +226,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
         }
 
         // check the payment_status is Completed
-        $bIsComplete = (array_key_exists('payment_status', $aURLParameter) && 0 == strcasecmp($aURLParameter['payment_status'], 'Completed'));
+        $bIsComplete = (array_key_exists('payment_status', $aURLParameter) && 0 === strcasecmp($aURLParameter['payment_status'], 'Completed'));
 
         if (false === $bIsComplete) {
             // some other response other than is paid - we log the info
@@ -259,7 +251,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
         }
         $sCurrency = $this->GetCurrencyIdentifier($oCurrency);
 
-        if (0 != strcasecmp($sCurrency, $sPaymentCurrency)) {
+        if (0 !== strcasecmp($sCurrency, $sPaymentCurrency)) {
             $logger->error(
                 'PayPal IPN: invalid currency in request.',
                 [
@@ -288,7 +280,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
         $oPaymentInfo->AllowEditByAll(true);
         $oPaymentInfo->Save();
 
-        if ('1' != $this->GetConfigParameter('bAcceptPartialPayments')) {
+        if ('1' !== $this->GetConfigParameter('bAcceptPartialPayments')) {
             // no partial payments so make sure the amount/currency matches
             if ($oOrder->fieldValueTotal <= $dPaymentValue) {
                 $bPaymentOk = true;
@@ -315,9 +307,9 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
                 $oPaymentParameterList->AddFilterString("`shop_order_payment_method_parameter`.`name` LIKE 'IPN %PaymentInOrderCurrency'");
                 $dTotalPaid = 0;
                 while ($oParam = $oPaymentParameterList->Next()) {
-                    $dTotalPaid = $dTotalPaid + (float) $oParam->fieldValue;
+                    $dTotalPaid += (float) $oParam->fieldValue;
                 }
-                if ($oOrder->fieldValueTotal == $dTotalPaid) {
+                if ($oOrder->fieldValueTotal === $dTotalPaid) {
                     $bPaymentCompleted = true;
                 }
             }
@@ -340,17 +332,17 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
             $this->IPNPaymentReceivedHook($oOrder, $dPaymentValue);
         }
 
-        return $bProcessed;
+        return true;
     }
 
     private function sendRequest(string $host, string $path, string $data): string
     {
         $data = str_replace('&amp;', '&', $data); // remove encoding
 
-        $oToHostHandler = new TPkgCmsCoreSendToHost();
+        $sendToHostHandler = new TPkgCmsCoreSendToHost();
 
         try {
-            $oToHostHandler
+            $sendToHostHandler
                 ->setHost($host)
                 ->setMethod('POST')
                 ->setPath($path)
@@ -361,7 +353,7 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
                 ->setUser(null)
                 ->setPassword(null);
 
-            return $oToHostHandler->executeRequest();
+            return $sendToHostHandler->executeRequest();
         } catch (TPkgCmsException_Log $e) {
             return '';
         }
@@ -400,21 +392,21 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
      */
     public function ExtractPayPalNVPResponse($nvpstr)
     {
-        $intial = 0;
+        $initial = 0;
         $nvpArray = [];
 
         while (strlen($nvpstr)) {
             // postion of Key
-            $keypos = strpos($nvpstr, '=');
+            $keyPosition = strpos($nvpstr, '=');
             // position of value
-            $valuepos = strpos($nvpstr, '&') ? strpos($nvpstr, '&') : strlen($nvpstr);
+            $valuePosition = strpos($nvpstr, '&') ? strpos($nvpstr, '&') : strlen($nvpstr);
 
             /* getting the Key and Value values and storing in a Associative Array */
-            $keyval = substr($nvpstr, $intial, $keypos);
-            $valval = substr($nvpstr, $keypos + 1, $valuepos - $keypos - 1);
+            $keyValue = substr($nvpstr, $initial, $keyPosition);
+            $valValue = substr($nvpstr, $keyPosition + 1, $valuePosition - $keyPosition - 1);
             // decoding the respose
-            $nvpArray[urldecode($keyval)] = urldecode($valval);
-            $nvpstr = substr($nvpstr, $valuepos + 1, strlen($nvpstr));
+            $nvpArray[urldecode($keyValue)] = urldecode($valValue);
+            $nvpstr = substr($nvpstr, $valuePosition + 1, strlen($nvpstr));
         }
 
         return $nvpArray;
@@ -426,6 +418,8 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
      * @param string $sParameterName - the system name of the handler
      *
      * @return string|false
+     *
+     * @throws ChameleonSystem\ShopBundle\Exception\ConfigurationException
      */
     public function GetConfigParameter($sParameterName)
     {
@@ -438,6 +432,11 @@ class TShopPaymentHandlerPayPal_PayViaLink extends TdbShopPaymentHandler impleme
         }
 
         return parent::GetConfigParameter($sParameterName);
+    }
+
+    protected function getShopPaymentConfigLoader(): ShopPaymentConfigLoaderInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.payment.config_loader');
     }
 
     private function getUrlUtilService(): UrlUtil
