@@ -302,6 +302,14 @@
                 <source>chameleon_system_shop.widget.last_orders_not_found</source>
                 <target>No orders found</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.last_orders_all_orders">
+                <source>chameleon_system_shop.widget.last_orders_all_orders</source>
+                <target>All Orders</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.reload_button_label">
+                <source>chameleon_system_shop.widget.reload_button_label</source>
+                <target>Reload</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_shop.widget.order_number">
                 <source>chameleon_system_shop.widget.order_number</source>
                 <target>Order Number</target>

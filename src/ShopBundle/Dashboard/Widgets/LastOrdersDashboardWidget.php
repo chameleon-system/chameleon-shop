@@ -2,22 +2,24 @@
 
 namespace ChameleonSystem\ShopBundle\Dashboard\Widgets;
 
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
 use ChameleonSystem\ShopBundle\Dashboard\DataModel\LastOrdersItemDataModel;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LastOrdersDashboardWidget extends DashboardWidget
 {
-    private const LAST_ORDER_SYSTEM_NAME = 'lastOrders';
+    private const LAST_ORDER_SYSTEM_NAME = 'last-orders';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
         protected readonly \ViewRenderer $renderer,
         protected readonly TranslatorInterface $translator)
     {
-        parent::__construct($dashboardCacheService);
+        parent::__construct($dashboardCacheService, $translator);
     }
 
     public function getTitle(): string
@@ -27,7 +29,13 @@ class LastOrdersDashboardWidget extends DashboardWidget
 
     public function getDropdownItems(): array
     {
-        return [new WidgetDropdownItemDataModel('LastOrdersDashboardWidget', 'Alle Bestellungen', '/cms?pagedef=tablemanager&id=268')];
+        $reloadItem = new WidgetDropdownItemDataModel('lastOrdersDashboardWidgetReload', $this->translator->trans('chameleon_system_shop.widget.reload_button_label'), '');
+        $reloadItem->addDataAttribute('data-service-alias', 'widget-'.$this->getChartId());
+
+        return [
+            new WidgetDropdownItemDataModel('lastOrdersDashboardWidgetAllOrders', $this->translator->trans('chameleon_system_shop.widget.last_orders_all_orders'), '/cms?pagedef=tablemanager&id=268'),
+            $reloadItem
+        ];
     }
 
     public function getChartId(): string
@@ -42,6 +50,17 @@ class LastOrdersDashboardWidget extends DashboardWidget
         $this->renderer->AddSourceObject('orders', $orders);
 
         return $this->renderer->Render('Dashboard/Widgets/last-orders.html.twig');
+    }
+
+    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getStatsDataAsJson')]
+    public function getWidgetHtmlAsJson(): JsonResponse
+    {
+        $data = [
+            'htmlTable' => $this->getBodyHtml(true),
+            'dateTime' => date('d.m.Y H:i'),
+        ];
+
+        return new JsonResponse(json_encode($data));
     }
 
     private function getLastOrders(): array
@@ -89,4 +108,13 @@ class LastOrdersDashboardWidget extends DashboardWidget
     {
         return '/cms?pagedef=tableeditor&tableid=268&id='.$order->id;
     }
+
+    public function getFooterIncludes(): array
+    {
+        $includes = parent::getFooterIncludes();
+        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemshop/js/dashboard.js"></script>';
+
+        return $includes;
+    }
+
 }
