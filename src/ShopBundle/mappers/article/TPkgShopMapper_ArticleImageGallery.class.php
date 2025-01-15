@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class TPkgShopMapper_ArticleImageGallery extends AbstractPkgShopMapper_Article
 {
@@ -37,8 +38,8 @@ class TPkgShopMapper_ArticleImageGallery extends AbstractPkgShopMapper_Article
 
         $sActiveImageId = $oVisitor->GetSourceObject('sActiveImageId');
 
-        $aActiveItem = array();
-        $aImages = array();
+        $aActiveItem = [];
+        $aImages = [];
         $oImages = $oArticle->GetFieldShopArticleImageList();
         if ($oImages->Length() > 0) {
             while ($oImage = $oImages->Next()) {
@@ -58,41 +59,28 @@ class TPkgShopMapper_ArticleImageGallery extends AbstractPkgShopMapper_Article
         }
         $oVisitor->SetMappedValue('aItems', $aImages);
         $oVisitor->SetMappedValueFromArray($aActiveItem);
-        // add active item
     }
 
-    /**
-     * @param TdbShopArticle                                 $oArticle
-     * @param TdbShopArticleImage|TdbShopArticlePreviewImage $oImage
-     * @param IMapperCacheTriggerRestricted                  $oCacheTriggerManager
-     *
-     * @return array
-     */
-    private function getImageDetails(TdbShopArticle $oArticle, $oImage, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    private function getImageDetails(TdbShopArticle $oArticle, TdbShopArticleImage|TdbShopArticlePreviewImage $oImage, IMapperCacheTriggerRestricted $oCacheTriggerManager): array
     {
         $oCacheTriggerManager->addTrigger('cms_media', $oImage->fieldCmsMediaId);
 
         $router = $this->getRouter();
-        $quickShopLink = $router->generateWithPrefixes('shop_article_quickshop', array('identifier' => $oArticle->sqlData['cmsident']));
-        $quickShopLink = $quickShopLink.'?imageid='.$oImage->id;
+        $quickShopLink = $router->generateWithPrefixes('shop_article_quickshop', ['identifier' => $oArticle->sqlData['cmsident']]);
+        $quickShopLink .= '?imageid='.$oImage->id;
 
-        $aImage = array(
+        return [
             'sImageId' => $oImage->fieldCmsMediaId,
             'sImageTitle' => '',
             'sSelectImageURL' => $quickShopLink,
             'sLargeImageId' => $oImage->fieldCmsMediaId,
             'sLargeTitle' => '',
             'sLargeSelectImageURL' => $quickShopLink,
-        );
-
-        return $aImage;
+        ];
     }
 
-    /**
-     * @return PortalAndLanguageAwareRouterInterface
-     */
-    private function getRouter()
+    private function getRouter(): PortalAndLanguageAwareRouterInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.router.chameleon_frontend');
+        return ServiceLocator::get('chameleon_system_core.router.chameleon_frontend');
     }
 }

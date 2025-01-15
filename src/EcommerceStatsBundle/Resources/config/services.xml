@@ -29,6 +29,7 @@
             <argument key="$urlUtil" type="service" id="chameleon_system_core.util.url" />
             <argument key="$statsCurrencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service" />
             <argument key="$statsProviderCollection" type="service" id="chameleon_system_ecommerce_stats.stats_provider.pkg_shop_statistics" />
+            <argument key="$securityHelperAccess" type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
             <tag name="chameleon_system.module"/>
         </service>
 
@@ -89,6 +90,7 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
         </service>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.order_number_dashboard_widget"
@@ -101,7 +103,8 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="1" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <tag name="chameleon_system.dashboard_widget" collection="sales" priority="1" />
         </service>
 
         <service id="order_number" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.dashboard_base_widget" public="true" />
@@ -116,7 +119,8 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="2" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <tag name="chameleon_system.dashboard_widget" collection="sales" priority="2" />
         </service>
 
         <service id="sales-volume" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.sales_volume_dashboard_widget" public="true" />
@@ -131,7 +135,8 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <tag name="chameleon_system.dashboard_widget" collection="order-values" priority="3" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <tag name="chameleon_system.dashboard_widget" collection="sales" priority="3" />
         </service>
 
         <service id="average-cart-value" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.average_cart_value_dashboard_widget" public="true" />
@@ -146,7 +151,8 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <tag name="chameleon_system.dashboard_widget" collection="order-values" priority="4" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <tag name="chameleon_system.dashboard_widget" collection="customer-stats-and-payment" priority="4" />
         </service>
 
         <service id="payment-method" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.payment_method_dashboard_widget" public="true" />
@@ -161,6 +167,7 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
             <tag name="chameleon_system.dashboard_widget" collection="product-stats" priority="5" />
         </service>
 
@@ -176,6 +183,7 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
             <tag name="chameleon_system.dashboard_widget" collection="product-stats" priority="6" />
         </service>
 
@@ -191,7 +199,8 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <tag name="chameleon_system.dashboard_widget" collection="customer-stats" priority="6" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <tag name="chameleon_system.dashboard_widget" collection="customer-stats-and-payment" priority="6" />
         </service>
 
         <service id="customer-type" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.customer_type_dashboard_widget" public="true" />
