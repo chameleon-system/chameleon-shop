@@ -132,7 +132,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_ecommerce_stats.widgets.reload_button_label">
                 <source>chameleon_system_ecommerce_stats.widgets.reload_button_label</source>
-                <target>Neuladen</target>
+                <target>Aktualisieren</target>
             </trans-unit>
         </body>
     </file>

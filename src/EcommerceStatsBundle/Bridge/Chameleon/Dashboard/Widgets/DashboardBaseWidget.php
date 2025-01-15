@@ -27,7 +27,7 @@ abstract class DashboardBaseWidget extends DashboardWidget
         protected readonly string $defaultTimeframe,
         protected readonly ColorGeneratorServiceInterface $colorGeneratorService
     ) {
-        parent::__construct($dashboardCacheService);
+        parent::__construct($dashboardCacheService, $translator);
     }
 
     public function getTitle(): string
