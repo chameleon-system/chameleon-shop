@@ -66,7 +66,7 @@ class LastOrdersDashboardWidget extends DashboardWidget
         return $this->renderer->Render('Dashboard/Widgets/last-orders.html.twig');
     }
 
-    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getStatsDataAsJson')]
+    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
     public function getWidgetHtmlAsJson(): JsonResponse
     {
         $data = [
