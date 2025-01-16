@@ -326,6 +326,7 @@
             <argument type="service" id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" />
             <argument type="service" id="chameleon_system_view_renderer.view_renderer" />
             <argument type="service" id="chameleon_system_core.translator" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
         </service>
 
         <service id="widget-last-orders" alias="chameleon_system_shop.dashboard_widgets.last_orders_dashboard_widget" public="true" />

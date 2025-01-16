@@ -6,18 +6,21 @@ use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\ShopBundle\Dashboard\DataModel\LastOrdersItemDataModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LastOrdersDashboardWidget extends DashboardWidget
 {
-    private const LAST_ORDER_SYSTEM_NAME = 'last-orders';
+    private const LAST_ORDER_SYSTEM_NAME = 'widget-last-orders';
+    public const CMS_RIGHT_SHOP_SHOW_ORDERS = 'CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
         protected readonly \ViewRenderer $renderer,
-        protected readonly TranslatorInterface $translator)
+        protected readonly TranslatorInterface $translator,
+        protected readonly SecurityHelperAccess $securityHelperAccess)
     {
         parent::__construct($dashboardCacheService, $translator);
     }
@@ -27,14 +30,24 @@ class LastOrdersDashboardWidget extends DashboardWidget
         return $this->translator->trans('chameleon_system_shop.widget.last_orders_title');
     }
 
+    public function showWidget(): bool
+    {
+        return $this->securityHelperAccess->isGranted(self::CMS_RIGHT_SHOP_SHOW_ORDERS);
+    }
+
     public function getDropdownItems(): array
     {
-        $reloadItem = new WidgetDropdownItemDataModel('lastOrdersDashboardWidgetReload', $this->translator->trans('chameleon_system_shop.widget.reload_button_label'), '');
-        $reloadItem->addDataAttribute('data-service-alias', 'widget-'.$this->getChartId());
+        $reloadItem = new WidgetDropdownItemDataModel(
+            'reload-'.$this->getChartId(),
+            $this->translator->trans('chameleon_system_shop.widget.reload_button_label'),
+            ''
+        );
+
+        $reloadItem->addDataAttribute('data-service-alias', $this->getChartId());
 
         return [
             new WidgetDropdownItemDataModel('lastOrdersDashboardWidgetAllOrders', $this->translator->trans('chameleon_system_shop.widget.last_orders_all_orders'), '/cms?pagedef=tablemanager&id=268'),
-            $reloadItem
+            $reloadItem,
         ];
     }
 
@@ -48,11 +61,12 @@ class LastOrdersDashboardWidget extends DashboardWidget
         $orders = $this->getLastOrders();
 
         $this->renderer->AddSourceObject('orders', $orders);
+        $this->renderer->AddSourceObject('reloadEventButtonId', 'reload-'.$this->getChartId());
 
         return $this->renderer->Render('Dashboard/Widgets/last-orders.html.twig');
     }
 
-    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getStatsDataAsJson')]
+    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
     public function getWidgetHtmlAsJson(): JsonResponse
     {
         $data = [
@@ -94,7 +108,7 @@ class LastOrdersDashboardWidget extends DashboardWidget
         return $orderData;
     }
 
-    private function getCustomerName(\TdbShopOrder $order)
+    private function getCustomerName(\TdbShopOrder $order): string
     {
         $name = $order->fieldAdrBillingFirstname.' '.$order->fieldAdrBillingLastname;
         if (!empty($order->fieldAdrBillingCompany)) {
@@ -108,13 +122,4 @@ class LastOrdersDashboardWidget extends DashboardWidget
     {
         return '/cms?pagedef=tableeditor&tableid=268&id='.$order->id;
     }
-
-    public function getFooterIncludes(): array
-    {
-        $includes = parent::getFooterIncludes();
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemshop/js/dashboard.js"></script>';
-
-        return $includes;
-    }
-
 }

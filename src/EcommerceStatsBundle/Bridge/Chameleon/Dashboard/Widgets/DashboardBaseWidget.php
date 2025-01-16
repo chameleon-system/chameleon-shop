@@ -11,6 +11,7 @@ use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\Ecommerc
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\DashboardTimeframeDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -25,7 +26,8 @@ abstract class DashboardBaseWidget extends DashboardWidget
         protected readonly TranslatorInterface $translator,
         protected readonly StatsCurrencyServiceInterface $statsCurrencyService,
         protected readonly string $defaultTimeframe,
-        protected readonly ColorGeneratorServiceInterface $colorGeneratorService
+        protected readonly ColorGeneratorServiceInterface $colorGeneratorService,
+        protected readonly SecurityHelperAccess $securityHelperAccess
     ) {
         parent::__construct($dashboardCacheService, $translator);
     }
@@ -33,6 +35,11 @@ abstract class DashboardBaseWidget extends DashboardWidget
     public function getTitle(): string
     {
         return $this->getStatsGroup($this->getStatsGroupSystemName())?->getGroupTitle() ?? '';
+    }
+
+    public function showWidget(): bool
+    {
+        return $this->securityHelperAccess->isGranted(EcommerceStatsBackendModule::CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE);
     }
 
     public function getDropdownItems(): array

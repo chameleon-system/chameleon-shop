@@ -17,12 +17,14 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
     public const STANDARD_CURRENCY_ISO_CODE = 'EUR';
     public const ALL_STATS_FILTER_NAME = 'allStats';
+    public const CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE = 'CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE';
 
     private StatsTableServiceInterface $stats;
     private TranslatorInterface $translator;
@@ -34,7 +36,8 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         TranslatorInterface $translator,
         UrlUtil $urlUtil,
         StatsCurrencyServiceInterface $statsCurrencyService,
-        private readonly StatsProviderInterface $statsProviderCollection
+        private readonly StatsProviderInterface $statsProviderCollection,
+        private readonly SecurityHelperAccess $securityHelperAccess
     ) {
         parent::__construct();
 
@@ -49,6 +52,12 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     public function Accept(\IMapperVisitorRestricted $oVisitor, $bCachingEnabled, \IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
+        if (false === $this->securityHelperAccess->isGranted(self::CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE)) {
+            $oVisitor->SetMappedValue('accessDenied', true);
+
+            return;
+        }
+
         $startDate = $this->getDateUserInput('startDate', 'Y-m-01')->setTime(0, 0, 0);
         $endDate = $this->getDateUserInput('endDate', 'Y-m-d')->setTime(23, 59, 59);
 

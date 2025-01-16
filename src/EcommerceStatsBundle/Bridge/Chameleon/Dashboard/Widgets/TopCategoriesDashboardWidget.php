@@ -6,6 +6,7 @@ use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheSe
 use ChameleonSystem\CmsDashboardBundle\Library\Interfaces\ColorGeneratorServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TopCategoriesDashboardWidget extends DashboardBaseWidget
@@ -19,9 +20,10 @@ class TopCategoriesDashboardWidget extends DashboardBaseWidget
         TranslatorInterface $translator,
         StatsCurrencyServiceInterface $currencyService,
         string $defaultTimeframe,
-        ColorGeneratorServiceInterface $colorGeneratorService
+        ColorGeneratorServiceInterface $colorGeneratorService,
+        SecurityHelperAccess $securityHelperAccess
     ) {
-        parent::__construct($dashboardCacheService, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe, $colorGeneratorService);
+        parent::__construct($dashboardCacheService, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe, $colorGeneratorService, $securityHelperAccess);
     }
 
     public function getChartId(): string

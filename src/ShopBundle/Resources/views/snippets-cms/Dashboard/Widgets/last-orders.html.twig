@@ -5,7 +5,7 @@
         {{ 'hameleon_system_shop.widget.last_orders_not_found'|trans }}
     </div>
 {% else %}
-    <table class="table table-bordered">
+    <table class="table table-bordered m-0">
         <thead>
         <tr>
             <th scope="col" title="{{ 'chameleon_system_shop.widget.order_number'|trans|e('html_attr') }}"><i class="fas fa-receipt"></i></th>
@@ -55,5 +55,10 @@
         </tr>
     {% endfor %}
     </table>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            initializeWidgetReload("#{{ reloadEventButtonId|e('html_attr') }}");
+        });
+    </script>
 {% endif %}
 

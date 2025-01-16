@@ -134,6 +134,10 @@
                 <source>chameleon_system_ecommerce_stats.widgets.reload_button_label</source>
                 <target>Aktualisieren</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.access_denied">
+                <source>chameleon_system_ecommerce_stats.access_denied</source>
+                <target>Sie haben keine Benutzerrolle mit den passenden Zugriffberechtigungen</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
