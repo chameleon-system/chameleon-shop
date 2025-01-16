@@ -9,22 +9,25 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * sends stats about basket.
-/**/
+ **/
 class TCMSCronJob_ShopSendBasketLogStatisics extends TdbCmsCronjobs
 {
-    const MAIL_SYSTEM_NAME = 'basketstatistics';
+    public const MAIL_SYSTEM_NAME = 'basketstatistics';
 
     /**
-     * Uses error message as a key and a counter as a value
+     * Uses error message as a key and a counter as a value.
+     *
      * @var array<mixed, int>
+     *
      * @psalm-var array<array-key, positive-int>
      */
-    private $aCancelStep = array();
+    private array $aCancelStep = [];
 
-    /** @var int */
-    private $sTotalBaskets = 0;
+    private int $sTotalBaskets = 0;
 
     /** @var float */
     private $sTotalMoneyCanceled = 0;
@@ -68,39 +71,39 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TdbCmsCronjobs
     }
 
     /**
-     * Get overfiew statistics of all processed order baskets.
+     * Get overview statistics of all processed order baskets.
      *
      * @return string
      */
     protected function GetTotalStatistics()
     {
         $sTotalStatistics = "#########################################################\r\n";
-        $sTotalStatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.headline')."\r\n";
+        $sTotalStatistics .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.headline')."\r\n";
         $sTotalStatistics .= "------------------------------------\r\n";
         foreach ($this->aCancelStep as $sStempName => $sValue) {
             $sPercent = round((100 / $this->sTotalBaskets) * $sValue);
-            if ($sStempName != \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.completed')) {
-                $sTotalStatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
-                        'chameleon_system_shop.cron_send_basket_stats.text_aborted',
-                        array(
-                            '%step%' => $sStempName,
-                            '%value%' => $sValue,
-                            '%totalBaskets%' => $this->sTotalBaskets,
-                            '%percent%' => $sPercent,
-                        )
-                    )."\r\n";
+            if ($sStempName !== ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.completed')) {
+                $sTotalStatistics .= ServiceLocator::get('translator')->trans(
+                    'chameleon_system_shop.cron_send_basket_stats.text_aborted',
+                    [
+                        '%step%' => $sStempName,
+                        '%value%' => $sValue,
+                        '%totalBaskets%' => $this->sTotalBaskets,
+                        '%percent%' => $sPercent,
+                    ]
+                )."\r\n";
             } else {
-                $sTotalStatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
-                        'chameleon_system_shop.cron_send_basket_stats.text_completed',
-                        array(
-                            '%value%' => $sValue,
-                            '%totalBaskets%' => $this->sTotalBaskets,
-                            '%percent%' => $sPercent,
-                        )
-                    )."\r\n";
+                $sTotalStatistics .= ServiceLocator::get('translator')->trans(
+                    'chameleon_system_shop.cron_send_basket_stats.text_completed',
+                    [
+                        '%value%' => $sValue,
+                        '%totalBaskets%' => $this->sTotalBaskets,
+                        '%percent%' => $sPercent,
+                    ]
+                )."\r\n";
             }
         }
-        $sTotalStatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.text_total_aborted_orders').': '.$this->sTotalMoneyCanceled;
+        $sTotalStatistics .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.text_total_aborted_orders').': '.$this->sTotalMoneyCanceled;
 
         return $sTotalStatistics."\r\n";
     }
@@ -136,16 +139,16 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TdbCmsCronjobs
     }
 
     /**
-     * If basket was finished completely add it to overfiew statistics.
+     * If basket was finished completely add it to overview statistics.
      *
      * @return void
      */
     protected function AddCompleteOrderToStatistics()
     {
-        if (array_key_exists(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.completed'), $this->aCancelStep)) {
-            ++$this->aCancelStep[\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.completed')];
+        if (array_key_exists(ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.completed'), $this->aCancelStep)) {
+            ++$this->aCancelStep[ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.completed')];
         } else {
-            $this->aCancelStep[\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.completed')] = 1;
+            $this->aCancelStep[ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.completed')] = 1;
         }
     }
 
@@ -159,10 +162,10 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TdbCmsCronjobs
     protected function GetCancelBasketInformation($oOrderBasket)
     {
         $sCancelBasketInformation = '';
-        $sCancelBasketInformation .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.text_general_info')."\r\n";
+        $sCancelBasketInformation .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.text_general_info')."\r\n";
         $sCancelBasketInformation .= "------------------------------------\r\n";
         $oCancelStep = TdbShopOrderStep::GetStep($oOrderBasket->fieldUpdateStepname);
-        $sCancelBasketInformation .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.text_general_aborted', array('%step%' => $oCancelStep->fieldName))."\r\n";
+        $sCancelBasketInformation .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.text_general_aborted', ['%step%' => $oCancelStep->fieldName])."\r\n";
         if (array_key_exists($oCancelStep->fieldName, $this->aCancelStep)) {
             ++$this->aCancelStep[$oCancelStep->fieldName];
         } else {
@@ -183,20 +186,20 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TdbCmsCronjobs
     {
         $sUserStatistics = '';
         $sUserStatistics .= "------------------------------------\r\n\r\n";
-        $sUserStatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.text_user')."\r\n";
+        $sUserStatistics .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.text_user')."\r\n";
         $sUserStatistics .= "------------------------------------\r\n";
         if (count($oUser->sqlData) > 0) {
-            $sUserStatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.user_name').': '.$oUser->fieldFirstname.' '.$oUser->fieldLastname." \r\n";
-            $sUserStatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.user_email').': '.$oUser->fieldName." \r\n";
-            $sUserStatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.user_street').': '.$oUser->fieldStreet.' '.$oUser->fieldStreetnr." \r\n";
-            $sUserStatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.user_zip').': '.$oUser->fieldPostalcode.' '.$oUser->fieldCity." \r\n";
+            $sUserStatistics .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.user_name').': '.$oUser->fieldFirstname.' '.$oUser->fieldLastname." \r\n";
+            $sUserStatistics .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.user_email').': '.$oUser->fieldName." \r\n";
+            $sUserStatistics .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.user_street').': '.$oUser->fieldStreet.' '.$oUser->fieldStreetnr." \r\n";
+            $sUserStatistics .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.user_zip').': '.$oUser->fieldPostalcode.' '.$oUser->fieldCity." \r\n";
             $oCountry = TdbDataCountry::GetNewInstance();
             if ($oCountry->Load($oUser->fieldDataCountryId)) {
-                $sUserStatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.user_country').': '.$oCountry->GetName()." \r\n";
+                $sUserStatistics .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.user_country').': '.$oCountry->GetName()." \r\n";
             }
-            $sUserStatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.user_telefon').': '.$oUser->fieldTelefon." \r\n";
+            $sUserStatistics .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.user_telefon').': '.$oUser->fieldTelefon." \r\n";
         } else {
-            $sUserStatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.guest_user')."\r\n";
+            $sUserStatistics .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.guest_user')."\r\n";
         }
 
         return $sUserStatistics;
@@ -211,32 +214,37 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TdbCmsCronjobs
      */
     protected function GetBasketStatistics($oBasket)
     {
-        $sBasketstatistics = '';
-        $sBasketstatistics .= "------------------------------------\r\n\r\n";
-        $sBasketstatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.basket_content')."\r\n";
-        $sBasketstatistics .= "------------------------------------\r\n";
+        $basketStatistics = '';
+        $basketStatistics .= "------------------------------------\r\n\r\n";
+        $basketStatistics .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.basket_content')."\r\n";
+        $basketStatistics .= "------------------------------------\r\n";
         $oArticleList = $oBasket->GetBasketContents();
+
+        if (null === $oArticleList) {
+            return $basketStatistics;
+        }
+
         $oArticleList->GoToStart();
         while ($oArticle = $oArticleList->Next()) {
-            $sBasketstatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
-                    'chameleon_system_shop.cron_send_basket_stats.basket_content_line',
-                    array(
-                        '%amount%' => '',
-                        '%name%' => '',
-                        '%price%' => '',
-                        '%totalPrice%' => '',
-                    )
-                )."\r\n";
+            $basketStatistics .= ServiceLocator::get('translator')->trans(
+                'chameleon_system_shop.cron_send_basket_stats.basket_content_line',
+                [
+                    '%amount%' => '',
+                    '%name%' => '',
+                    '%price%' => '',
+                    '%totalPrice%' => '',
+                ]
+            )."\r\n";
         }
-        $sBasketstatistics .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.basket_content_total', array('%basketTotal%' => $oBasket->dCostArticlesTotal))."\r\n";
-        $this->sTotalMoneyCanceled = $this->sTotalMoneyCanceled + $oBasket->dCostArticlesTotal;
-        $sBasketstatistics .= "------------------------------------\r\n";
+        $basketStatistics .= ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_send_basket_stats.basket_content_total', ['%basketTotal%' => $oBasket->dCostArticlesTotal])."\r\n";
+        $this->sTotalMoneyCanceled += $oBasket->dCostArticlesTotal;
+        $basketStatistics .= "------------------------------------\r\n";
 
-        return $sBasketstatistics;
+        return $basketStatistics;
     }
 
     /**
-     * Send complete statisticreport to shop owner.
+     * Send complete statistic report to shop owner.
      *
      * @param string $sStatistics
      *
@@ -245,7 +253,12 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TdbCmsCronjobs
     protected function SendBasketStatistics($sStatistics)
     {
         $oMail = TDataMailProfile::GetProfile(self::MAIL_SYSTEM_NAME);
-        $aMailData = array();
+
+        if (null === $oMail) {
+            return;
+        }
+
+        $aMailData = [];
         $aMailData['sStatistics'] = $sStatistics;
         $oMail->AddDataArray($aMailData);
         $oMail->SendUsingObjectView('emails', 'Customer');
