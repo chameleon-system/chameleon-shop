@@ -81,18 +81,21 @@ class ShopProductStatusWidget extends DashboardWidget
                         shopId: $shopId,
                         onlyActive: true,
                         onlyMainProducts: $typeName === 'main',
-                        onlyVariants: $typeName === 'variant'
+                        onlyVariants: $typeName === 'variant',
+                        isVirtualProduct: $typeName === 'virtual'
                     ),
                     'searchable' => $this->shopService->getProductCountForShop(
                         shopId: $shopId,
                         onlyMainProducts: $typeName === 'main',
                         onlyVariants: $typeName === 'variant',
+                        isVirtualProduct: $typeName === 'virtual',
                         isSearchable: true
                     ),
                     'new' => $this->shopService->getProductCountForShop(
                         shopId: $shopId,
                         onlyMainProducts: $typeName === 'main',
                         onlyVariants: $typeName === 'variant',
+                        isVirtualProduct: $typeName === 'virtual',
                         isNew: true
                     ),
                 ];
