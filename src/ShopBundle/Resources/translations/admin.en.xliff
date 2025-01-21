@@ -294,8 +294,48 @@
                 <source>chameleon_system_shop.product_search_index.completed</source>
                 <target>Completed</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_shop.widget.last_orders_title">
-                <source>chameleon_system_shop.widget.last_orders_title</source>
+            <trans-unit id="chameleon_system_shop.widget.shop_status_widget.title">
+                <source>chameleon_system_shop.widget.shop_status_widget.title</source>
+                <target>Shop Status</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.shop_product_status_widget.title">
+                <source>chameleon_system_shop.widget.shop_product_status_widget.title</source>
+                <target>Product Status</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.shop_product_status_widget.products_total">
+                <source>chameleon_system_shop.widget.shop_product_status_widget.products_total</source>
+                <target>Overall</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.shop_product_status_widget.products_main">
+                <source>chameleon_system_shop.widget.shop_product_status_widget.products_main</source>
+                <target>Main Products</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.shop_product_status_widget.products_variants">
+                <source>chameleon_system_shop.widget.shop_product_status_widget.products_variants</source>
+                <target>Variants</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.shop_product_status_widget.products_virtual">
+                <source>chameleon_system_shop.widget.shop_product_status_widget.products_virtual</source>
+                <target>Virtual Products</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.shop_product_status_widget.products_new">
+                <source>chameleon_system_shop.widget.shop_product_status_widget.products_new</source>
+                <target>New</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.shop_product_status_widget.products_active">
+                <source>chameleon_system_shop.widget.shop_product_status_widget.products_active</source>
+                <target>Active</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.shop_product_status_widget.products_searchable">
+                <source>chameleon_system_shop.widget.shop_product_status_widget.products_searchable</source>
+                <target>Searchable</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.shop_product_status_widget.products_quantity">
+                <source>chameleon_system_shop.widget.shop_product_status_widget.products_quantity</source>
+                <target>Quantity</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.last_orders.title">
+                <source>chameleon_system_shop.widget.last_orders.title</source>
                 <target>Latest Orders</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop.widget.last_orders_not_found">

@@ -31,11 +31,6 @@ class OrderNumberDashboardWidget extends DashboardBaseWidget
         return 'order-number';
     }
 
-    public function getColorCssClass(): string
-    {
-        return 'text-white bg-info';
-    }
-
     protected function getStatsGroupSystemName(): string
     {
         return self::ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME;

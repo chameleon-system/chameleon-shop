@@ -31,11 +31,6 @@ class TopCategoriesDashboardWidget extends DashboardBaseWidget
         return 'top-categories';
     }
 
-    public function getColorCssClass(): string
-    {
-        return 'text-white bg-info';
-    }
-
     protected function getStatsGroupSystemName(): string
     {
         return self::TOP_CATEGORIES_STATISTICS_GROUP_SYSTEM_NAME;

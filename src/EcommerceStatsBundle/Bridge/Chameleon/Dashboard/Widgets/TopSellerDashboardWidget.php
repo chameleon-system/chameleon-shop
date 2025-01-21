@@ -31,11 +31,6 @@ class TopSellerDashboardWidget extends DashboardBaseWidget
         return 'top-seller';
     }
 
-    public function getColorCssClass(): string
-    {
-        return 'text-white bg-info';
-    }
-
     protected function getStatsGroupSystemName(): string
     {
         return self::TOP_SELLER_STATISTICS_GROUP_SYSTEM_NAME;

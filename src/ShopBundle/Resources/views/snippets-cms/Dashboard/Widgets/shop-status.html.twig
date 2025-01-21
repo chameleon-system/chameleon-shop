@@ -1,0 +1,26 @@
+{#
+    @var string reloadEventButtonId
+    @var ChameleonSystem\SearchBundle\DataModel\ShopSearchStatusDataModel searchIndexStatusDataModel
+    @var array shopData
+#}
+<table class="table table-bordered mb-0">
+    <tr>
+        <td>
+            Suchindex ({{ searchIndexStatusDataModel.started|date('d.m.Y, H:i') }} / {{ searchIndexStatusDataModel.completed|date('d.m.Y, H:i') }})
+        </td>
+        <td>
+            Elemente: {{ searchIndexStatusDataModel.totalRowsProcessed }}
+        </td>
+    </tr>
+    {% for shop in shopsData %}
+    <tr>
+        <td>{{ shop.name }}</td>
+        <td>Aktive Kategorien: {{ shop.categoryCount }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        initializeWidgetReload("#{{ reloadEventButtonId|e('html_attr') }}");
+    });
+</script>

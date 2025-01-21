@@ -31,11 +31,6 @@ class AverageCartValueDashboardWidget extends DashboardBaseWidget
         return 'average-cart-value';
     }
 
-    public function getColorCssClass(): string
-    {
-        return 'text-white bg-info';
-    }
-
     protected function getStatsGroupSystemName(): string
     {
         return self::CART_VALUE_STATISTICS_GROUP_SYSTEM_NAME;

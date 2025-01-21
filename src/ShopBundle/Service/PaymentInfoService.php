@@ -16,26 +16,17 @@ use Doctrine\DBAL\Connection;
 
 class PaymentInfoService implements PaymentInfoServiceInterface
 {
-    /**
-     * @var Connection
-     */
-    private $databaseConnection;
-
-    /**
-     * @param Connection $databaseConnection
-     */
-    public function __construct(Connection $databaseConnection)
+    public function __construct(private readonly Connection $databaseConnection)
     {
-        $this->databaseConnection = $databaseConnection;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isPaymentMethodActive($paymentMethodInternalName, \TdbCmsPortal $portal = null)
+    public function isPaymentMethodActive($paymentMethodInternalName, ?\TdbCmsPortal $portal = null)
     {
         $query = 'SELECT COUNT(*) FROM `shop_payment_method`';
-        $parameters = array();
+        $parameters = [];
 
         if (null !== $portal) {
             $query .= "\nLEFT JOIN `shop_payment_method_cms_portal_mlt` ON `shop_payment_method`.`id` = `shop_payment_method_cms_portal_mlt`.`source_id`

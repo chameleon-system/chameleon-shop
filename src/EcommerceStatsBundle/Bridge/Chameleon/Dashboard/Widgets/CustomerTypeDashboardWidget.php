@@ -31,11 +31,6 @@ class CustomerTypeDashboardWidget extends DashboardBaseWidget
         return 'customer-type';
     }
 
-    public function getColorCssClass(): string
-    {
-        return 'text-white bg-info';
-    }
-
     protected function getStatsGroupSystemName(): string
     {
         return self::CUSTOMER_TYPE_STATISTICS_GROUP_SYSTEM_NAME;

@@ -27,7 +27,7 @@ class LastOrdersDashboardWidget extends DashboardWidget
 
     public function getTitle(): string
     {
-        return $this->translator->trans('chameleon_system_shop.widget.last_orders_title');
+        return $this->translator->trans('chameleon_system_shop.widget.last_orders.title');
     }
 
     public function showWidget(): bool

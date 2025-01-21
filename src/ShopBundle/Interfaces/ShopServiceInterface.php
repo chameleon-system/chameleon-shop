@@ -80,4 +80,23 @@ interface ShopServiceInterface
      * @return void
      */
     public function resetBasket();
+
+    /**
+     * @return array - key = id, value = name
+     */
+    public function getAllShops(): array;
+
+    public function getProductCountForShop(
+        string $shopId,
+        bool $onlyActive = false,
+        bool $onlyMainProducts = false,
+        bool $onlyVariants = false,
+        bool $isVirtualProduct = false,
+        bool $isNew = false,
+        bool $isSearchable = false
+    ): int;
+
+    public function getCategoryCountForShop(
+        string $shopId,
+    ): int;
 }
