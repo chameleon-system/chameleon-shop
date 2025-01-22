@@ -333,7 +333,7 @@
 
         <service class="ChameleonSystem\ShopBundle\Dashboard\Widgets\ShopStatusWidget"
                  id="chameleon_system_shop.dashboard_widgets.shop_status_widget">
-            <tag name="chameleon_system.dashboard_widget" collection="shop-admin" priority="2"/>
+            <tag name="chameleon_system.dashboard_widget" collection="shop-status" priority="1"/>
             <argument type="service" id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" />
             <argument type="service" id="chameleon_system_view_renderer.view_renderer" />
             <argument type="service" id="chameleon_system_core.translator" />

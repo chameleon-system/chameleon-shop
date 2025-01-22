@@ -1,24 +1,88 @@
 {#
+    @var int manufacturerCount
+    @var int productGroupCount
+    @var int variantSetsCount
     @var string reloadEventButtonId
     @var ChameleonSystem\SearchBundle\DataModel\ShopSearchStatusDataModel searchIndexStatusDataModel
     @var array shopData
 #}
-<table class="table table-bordered mb-0">
-    <tr>
-        <td>
-            Suchindex ({{ searchIndexStatusDataModel.started|date('d.m.Y, H:i') }} / {{ searchIndexStatusDataModel.completed|date('d.m.Y, H:i') }})
-        </td>
-        <td>
-            Elemente: {{ searchIndexStatusDataModel.totalRowsProcessed }}
-        </td>
-    </tr>
+
+<div class="row g-4">
+    {% set widgetCount = 0 %}
+    <div class="col-6 col-lg-4 col-xl-3 col-xxl-2">
+        <div class="card text-white" style="background-color: {{ generate_color(widgetCount, 5) }} !important;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="fs-4 fw-semibold">{{ searchIndexStatusDataModel.totalRowsProcessed }}</div>
+                    <i class="fas fa-search fs-1"></i>
+                </div>
+                <div class="small text-white text-opacity-75 text-uppercase fw-semibold text-truncate">
+                    {{ 'chameleon_system_shop.widget.shop_status_widget.search_index'|trans }}
+                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{ 'chameleon_system_shop.widget.shop_status_widget.search_indexing_started'|trans|e('html_attr') }}: {{ searchIndexStatusDataModel.started|date('d.m H:i') }}  {{ 'chameleon_system_shop.widget.shop_status_widget.search_indexing_ended'|trans|e('html_attr') }}: {{ searchIndexStatusDataModel.completed|date('d.m H:i') }}"></i>
+                </div>
+            </div>
+        </div>
+    </div>
     {% for shop in shopsData %}
-    <tr>
-        <td>{{ shop.name }}</td>
-        <td>Aktive Kategorien: {{ shop.categoryCount }}</td>
-    </tr>
+        {% set widgetCount = widgetCount + 1 %}
+    <div class="col-6 col-lg-4 col-xl-3 col-xxl-2">
+        <div class="card text-white" style="background-color: {{ generate_color(widgetCount, 5) }} !important;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="fs-4 fw-semibold">{{ shop.categoryCount }}</div>
+                    <i class="fas fa-folder fs-1"></i>
+                </div>
+                <div class="small text-white text-opacity-75 text-uppercase fw-semibold text-truncate">
+                    {{ 'chameleon_system_shop.widget.shop_status_widget.active_categories'|trans }}
+                    <i class="fas fa-info-circle" data-toggle="tooltip" title="Shop: {{ shop.name|e('html_attr') }}"></i>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endfor %}
-</table>
+    {% set widgetCount = widgetCount + 1 %}
+    <div class="col-6 col-lg-4 col-xl-3 col-xxl-2">
+        <div class="card text-white" style="background-color: {{ generate_color(widgetCount, 5) }} !important;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="fs-4 fw-semibold">{{ manufacturerCount }}</div>
+                    <i class="fas fa-industry fs-1"></i>
+                </div>
+                <div class="small text-white text-opacity-75 text-uppercase fw-semibold text-truncate">
+                    {{ 'chameleon_system_shop.widget.shop_status_widget.manufacturer'|trans }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% set widgetCount = widgetCount + 1 %}
+    <div class="col-6 col-lg-4 col-xl-3 col-xxl-2">
+        <div class="card text-white" style="background-color: {{ generate_color(widgetCount, 5) }} !important;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="fs-4 fw-semibold">{{ productGroupCount }}</div>
+                    <i class="fas fa-boxes fs-1"></i>
+                </div>
+                <div class="small text-white text-opacity-75 text-uppercase fw-semibold text-truncate">
+                    {{ 'chameleon_system_shop.widget.shop_status_widget.product_groups'|trans }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% set widgetCount = widgetCount + 1 %}
+    <div class="col-6 col-lg-4 col-xl-3 col-xxl-2">
+        <div class="card text-white" style="background-color: {{ generate_color(widgetCount, 5) }} !important;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="fs-4 fw-semibold">{{ variantSetsCount }}</div>
+                    <i class="fas fa-stream fs-1"></i>
+                </div>
+                <div class="small text-white text-opacity-75 text-uppercase fw-semibold text-truncate">
+                    {{ 'chameleon_system_shop.widget.shop_status_widget.variant_sets'|trans }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         initializeWidgetReload("#{{ reloadEventButtonId|e('html_attr') }}");

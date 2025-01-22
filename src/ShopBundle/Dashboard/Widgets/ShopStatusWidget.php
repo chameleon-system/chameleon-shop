@@ -87,8 +87,32 @@ class ShopStatusWidget extends DashboardWidget
 
         $searchIndexStatusDataModel = $this->shopSearchStatusService->getSearchStatus();
         $this->renderer->AddSourceObject('searchIndexStatusDataModel', $searchIndexStatusDataModel);
+        $this->renderer->AddSourceObject('manufacturerCount', $this->getManufacturerCount());
+        $this->renderer->AddSourceObject('productGroupCount', $this->getProductGroupCount());
+        $this->renderer->AddSourceObject('variantSetsCount', $this->getVariantSetsCount());
         $this->renderer->AddSourceObject('reloadEventButtonId', 'reload-'.$this->getChartId());
 
         return $this->renderer->Render('Dashboard/Widgets/shop-status.html.twig');
+    }
+
+    private function getManufacturerCount(): int
+    {
+        $query = "SELECT COUNT(*) FROM `shop_manufacturer`";
+
+        return $this->databaseConnection->fetchOne($query);
+    }
+
+    private function getProductGroupCount(): int
+    {
+        $query = "SELECT COUNT(*) FROM `shop_article_group`";
+
+        return $this->databaseConnection->fetchOne($query);
+    }
+
+    private function getVariantSetsCount(): int
+    {
+        $query = "SELECT COUNT(*) FROM `shop_variant_set`";
+
+        return $this->databaseConnection->fetchOne($query);
     }
 }
