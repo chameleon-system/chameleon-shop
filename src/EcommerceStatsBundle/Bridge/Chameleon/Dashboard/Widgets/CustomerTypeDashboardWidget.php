@@ -26,7 +26,7 @@ class CustomerTypeDashboardWidget extends DashboardBaseWidget
         DashboardBaseWidget::__construct($dashboardCacheService, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe, $colorGeneratorService, $securityHelperAccess);
     }
 
-    public function getChartId(): string
+    public function getWidgetId(): string
     {
         return 'customer-type';
     }

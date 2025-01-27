@@ -39,7 +39,7 @@ class ShopProductStatusWidget extends DashboardWidget
         return $this->securityHelperAccess->isGranted('CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE');
     }
 
-    public function getChartId(): string
+    public function getWidgetId(): string
     {
         return self::WIDGET_NAME;
     }
@@ -48,7 +48,7 @@ class ShopProductStatusWidget extends DashboardWidget
     {
         $chartData = $this->buildChartData();
         $this->renderer->AddSourceObject('chartData', $chartData);
-        $this->renderer->AddSourceObject('reloadEventButtonId', 'reload-'.$this->getChartId());
+        $this->renderer->AddSourceObject('reloadEventButtonId', 'reload-'.$this->getWidgetId());
 
         return $this->renderer->Render('Dashboard/Widgets/shop-product-status.html.twig');
     }

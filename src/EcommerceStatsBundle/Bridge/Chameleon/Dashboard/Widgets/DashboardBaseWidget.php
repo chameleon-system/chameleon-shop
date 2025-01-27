@@ -45,12 +45,12 @@ abstract class DashboardBaseWidget extends DashboardWidget
     public function getDropdownItems(): array
     {
         $button = new WidgetDropdownItemDataModel(
-            'reload'.$this->getChartId(),
+            'reload'.$this->getWidgetId(),
             $this->translator->trans('chameleon_system_ecommerce_stats.widgets.reload_button_label'),
             ''
         );
 
-        $button->addDataAttribute('data-service-alias', $this->getChartId());
+        $button->addDataAttribute('data-service-alias', $this->getWidgetId());
         $button->addDataAttribute('data-reload-chart', 'reload'); // just a dummy for the event listener
 
         return [$button];
@@ -64,7 +64,7 @@ abstract class DashboardBaseWidget extends DashboardWidget
     protected function generateBodyHtml(): string
     {
         $this->renderer->AddSourceObject('statsData', $this->getStatsDataAsArray());
-        $this->renderer->AddSourceObject('chartId', str_replace('-', '', $this->getChartId()));
+        $this->renderer->AddSourceObject('chartId', str_replace('-', '', $this->getWidgetId()));
 
         $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/dashboard-barchart.html.twig');
 
@@ -129,7 +129,7 @@ abstract class DashboardBaseWidget extends DashboardWidget
 
             $groupElements[] = [
                 'label' => $statsGroup->getGroupTitle(),
-                'backgroundColor' => $backgroundColors, // color array
+                'backgroundColor' => $backgroundColors,
                 'data' => array_values($statsGroup->getGroupTotals()),
             ];
         } else {

@@ -26,7 +26,7 @@ class OrderNumberDashboardWidget extends DashboardBaseWidget
         parent::__construct($dashboardCacheService, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe, $colorGeneratorService, $securityHelperAccess);
     }
 
-    public function getChartId(): string
+    public function getWidgetId(): string
     {
         return 'order-number';
     }

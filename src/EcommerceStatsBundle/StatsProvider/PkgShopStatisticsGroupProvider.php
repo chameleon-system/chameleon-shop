@@ -205,7 +205,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
             return;
         }
 
-        while ($dataRow = $sqlStatement->fetch(FetchMode::ASSOCIATIVE)) {
+        while ($dataRow = $sqlStatement->fetchAssociative()) {
             yield $dataRow;
         }
     }
@@ -220,13 +220,14 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
     {
         $realNames = [];
         foreach ($subGroups as $groupName) {
-            if (\strlen($dataRow[$groupName] ?? '') > 0) {
+            if (isset($dataRow[$groupName]) && trim($dataRow[$groupName]) !== '') {
+                // Use the actual value if it's not empty
                 $realNames[] = $dataRow[$groupName];
             } else {
+                // Use translation for 'not_assigned'
                 $realNames[] = $this->translator->trans('chameleon_system_ecommerce_stats.nothing_assigned');
             }
         }
-
         return $realNames;
     }
 }

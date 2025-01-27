@@ -39,7 +39,12 @@ class ShopStatusWidget extends DashboardWidget
         return $this->securityHelperAccess->isGranted('CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE');
     }
 
-    public function getChartId(): string
+    public function useWidgetContainerTemplate(): bool
+    {
+        return false;
+    }
+
+    public function getWidgetId(): string
     {
         return self::WIDGET_NAME;
     }
@@ -47,12 +52,12 @@ class ShopStatusWidget extends DashboardWidget
     public function getDropdownItems(): array
     {
         $reloadItem = new WidgetDropdownItemDataModel(
-            'reload-'.$this->getChartId(),
+            'reload-'.$this->getWidgetId(),
             $this->translator->trans('chameleon_system_shop.widget.reload_button_label'),
             ''
         );
 
-        $reloadItem->addDataAttribute('data-service-alias', $this->getChartId());
+        $reloadItem->addDataAttribute('data-service-alias', $this->getWidgetId());
 
         return [
             $reloadItem,
@@ -90,7 +95,7 @@ class ShopStatusWidget extends DashboardWidget
         $this->renderer->AddSourceObject('manufacturerCount', $this->getManufacturerCount());
         $this->renderer->AddSourceObject('productGroupCount', $this->getProductGroupCount());
         $this->renderer->AddSourceObject('variantSetsCount', $this->getVariantSetsCount());
-        $this->renderer->AddSourceObject('reloadEventButtonId', 'reload-'.$this->getChartId());
+        $this->renderer->AddSourceObject('reloadEventButtonId', 'reload-'.$this->getWidgetId());
 
         return $this->renderer->Render('Dashboard/Widgets/shop-status.html.twig');
     }
