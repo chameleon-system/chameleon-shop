@@ -117,7 +117,6 @@ class ShopProductStatusWidget extends DashboardWidget
         $includes = parent::getFooterIncludes();
         $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemecommercestats/ecommerce_stats/js/chart.4.4.7.js"></script>';
         $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemecommercestats/ecommerce_stats/js/chart-init.4.4.7.js"></script>';
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemshop/js/dashboard.js"></script>';
 
         return $includes;
     }
