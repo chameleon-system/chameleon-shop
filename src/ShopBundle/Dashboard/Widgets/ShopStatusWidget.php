@@ -80,7 +80,7 @@ class ShopStatusWidget extends DashboardWidget
         $shops = $this->shopService->getAllShops();
 
         $shopsData = [];
-        foreach($shops as $hopId => $shopName) {
+        foreach ($shops as $hopId => $shopName) {
             $shopData = [];
             $shopData['name'] = $shopName;
             $shopData['id'] = $hopId;
@@ -102,21 +102,21 @@ class ShopStatusWidget extends DashboardWidget
 
     private function getManufacturerCount(): int
     {
-        $query = "SELECT COUNT(*) FROM `shop_manufacturer`";
+        $query = 'SELECT COUNT(*) FROM `shop_manufacturer`';
 
         return $this->databaseConnection->fetchOne($query);
     }
 
     private function getProductGroupCount(): int
     {
-        $query = "SELECT COUNT(*) FROM `shop_article_group`";
+        $query = 'SELECT COUNT(*) FROM `shop_article_group`';
 
         return $this->databaseConnection->fetchOne($query);
     }
 
     private function getVariantSetsCount(): int
     {
-        $query = "SELECT COUNT(*) FROM `shop_variant_set`";
+        $query = 'SELECT COUNT(*) FROM `shop_variant_set`';
 
         return $this->databaseConnection->fetchOne($query);
     }

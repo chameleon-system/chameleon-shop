@@ -65,13 +65,13 @@ class ShopProductStatusWidget extends DashboardWidget
                 'totalActive' => 0,
                 'totalSearchable' => 0,
                 'totalNew' => 0,
-                'types' => []
+                'types' => [],
             ];
 
             $types = [
                 'main' => $this->shopService->getProductCountForShop($shopId, onlyMainProducts: true),
                 'variant' => $this->shopService->getProductCountForShop($shopId, onlyVariants: true),
-                'virtual' => $this->shopService->getProductCountForShop($shopId, isVirtualProduct: true)
+                'virtual' => $this->shopService->getProductCountForShop($shopId, isVirtualProduct: true),
             ];
 
             foreach ($types as $typeName => $typeCount) {
@@ -80,22 +80,22 @@ class ShopProductStatusWidget extends DashboardWidget
                     'active' => $this->shopService->getProductCountForShop(
                         shopId: $shopId,
                         onlyActive: true,
-                        onlyMainProducts: $typeName === 'main',
-                        onlyVariants: $typeName === 'variant',
-                        isVirtualProduct: $typeName === 'virtual'
+                        onlyMainProducts: 'main' === $typeName,
+                        onlyVariants: 'variant' === $typeName,
+                        isVirtualProduct: 'virtual' === $typeName
                     ),
                     'searchable' => $this->shopService->getProductCountForShop(
                         shopId: $shopId,
-                        onlyMainProducts: $typeName === 'main',
-                        onlyVariants: $typeName === 'variant',
-                        isVirtualProduct: $typeName === 'virtual',
+                        onlyMainProducts: 'main' === $typeName,
+                        onlyVariants: 'variant' === $typeName,
+                        isVirtualProduct: 'virtual' === $typeName,
                         isSearchable: true
                     ),
                     'new' => $this->shopService->getProductCountForShop(
                         shopId: $shopId,
-                        onlyMainProducts: $typeName === 'main',
-                        onlyVariants: $typeName === 'variant',
-                        isVirtualProduct: $typeName === 'virtual',
+                        onlyMainProducts: 'main' === $typeName,
+                        onlyVariants: 'variant' === $typeName,
+                        isVirtualProduct: 'virtual' === $typeName,
                         isNew: true
                     ),
                 ];

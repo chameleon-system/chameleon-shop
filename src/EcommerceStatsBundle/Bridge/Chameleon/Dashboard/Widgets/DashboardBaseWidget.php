@@ -124,7 +124,7 @@ abstract class DashboardBaseWidget extends DashboardWidget
             foreach ($statsGroup->getGroupTotals() as $timeframe => $value) {
                 $labels[] = $timeframe;
                 $backgroundColors[] = $this->colorGeneratorService->generateColor($colorIndex, $elementCount);
-                $colorIndex++;
+                ++$colorIndex;
             }
 
             $groupElements[] = [
