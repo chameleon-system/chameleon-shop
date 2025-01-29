@@ -363,6 +363,18 @@
                 <source>chameleon_system_shop.widget.shop_status_widget.search_indexing_ended</source>
                 <target>abgeschlossen</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_product-stats">
+                <source>chameleon_system_cms_dashboard.widget.group_name_product-stats</source>
+                <target>Produktdatenstamm</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_shop-status">
+                <source>chameleon_system_cms_dashboard.widget.group_name_shop-status</source>
+                <target>Shop Status</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_shop-admin">
+                <source>chameleon_system_cms_dashboard.widget.group_name_shop-admin</source>
+                <target>Shop Administrator</target>
+            </trans-unit>
 
             <trans-unit id="chameleon_system_shop.widget.last_orders.title">
                 <source>chameleon_system_shop.widget.last_orders.title</source>

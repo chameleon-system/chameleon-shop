@@ -139,6 +139,18 @@
                 <source>chameleon_system_ecommerce_stats.access_denied</source>
                 <target>You do not have a user role with the appropriate access authorisations</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_sales">
+                <source>chameleon_system_cms_dashboard.widget.group_name_sales</source>
+                <target>Verkäufe</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_customer-stats-and-payment">
+                <source>chameleon_system_cms_dashboard.widget.group_name_customer-stats-and-payment</source>
+                <target>Customer and Payment Types</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_analytics-orders">
+                <source>chameleon_system_cms_dashboard.widget.group_name_analytics-orders</source>
+                <target>Orders</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
