@@ -18,25 +18,26 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (!response.ok) {
                         throw new Error(`HTTP-Error! Status: ${response.status}`);
                     }
-                    return response.json();
+                    return response.json(); // Direkt JSON parsen lassen
                 })
-                .then(data => {
-                    const parsedData = JSON.parse(data);
-                    console.log(parsedData);
+                .then(parsedData => {
                     const chart = Chart.getChart(`chart${sanitizedServiceAlias}`);
 
+                    // Update the labels and datasets
+                    chart.data.labels = parsedData['labels'];
                     chart.data.datasets = parsedData['datasets'];
+
+                    // Update the chart
                     chart.update();
 
+                    // Update the timestamp in the footer
                     const footerElement = document.querySelector(`#widget-${serviceAlias} .card-footer .widget-timestamp`);
                     if (footerElement) {
-                        const now = new Date();
-                        const formattedTime = `${now.toLocaleDateString()} ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-                        footerElement.textContent = `${parsedData['dateTime']}`;
+                        footerElement.textContent = parsedData['dateTime'];
                     }
                 })
                 .catch(error => {
-                    console.error("Error loading the chat data:", error);
+                    console.error("Error loading the widget data:", error);
                 });
         });
     });

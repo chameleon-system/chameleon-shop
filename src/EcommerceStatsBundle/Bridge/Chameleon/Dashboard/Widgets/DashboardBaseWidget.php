@@ -45,12 +45,12 @@ abstract class DashboardBaseWidget extends DashboardWidget
     public function getDropdownItems(): array
     {
         $button = new WidgetDropdownItemDataModel(
-            'reload'.$this->getChartId(),
+            'reload'.$this->getWidgetId(),
             $this->translator->trans('chameleon_system_ecommerce_stats.widgets.reload_button_label'),
             ''
         );
 
-        $button->addDataAttribute('data-service-alias', $this->getChartId());
+        $button->addDataAttribute('data-service-alias', $this->getWidgetId());
         $button->addDataAttribute('data-reload-chart', 'reload'); // just a dummy for the event listener
 
         return [$button];
@@ -63,10 +63,10 @@ abstract class DashboardBaseWidget extends DashboardWidget
 
     protected function generateBodyHtml(): string
     {
-        $this->renderer->AddSourceObject('group', $this->getStatsGroup($this->getStatsGroupSystemName()));
-        $this->renderer->AddSourceObject('chartId', str_replace('-', '', $this->getChartId()));
+        $this->renderer->AddSourceObject('statsData', $this->getStatsDataAsArray());
+        $this->renderer->AddSourceObject('chartId', str_replace('-', '', $this->getWidgetId()));
 
-        $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/barchart-body.html.twig');
+        $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/dashboard-barchart.html.twig');
 
         return "<div>
                     <div class='bg-white'>
@@ -104,45 +104,59 @@ abstract class DashboardBaseWidget extends DashboardWidget
     public function getStatsDataAsJson(): JsonResponse
     {
         $this->getBodyHtml(true); // trigger widget rendering to update the cache
+        $dataset = $this->getStatsDataAsArray();
 
+        return new JsonResponse($dataset);
+    }
+
+    private function getStatsDataAsArray(): array
+    {
         $statsGroup = $this->getStatsGroup($this->getStatsGroupSystemName());
 
         $groupElements = [];
+        $labels = [];
         $elementCount = \count($statsGroup->getSubGroups());
 
         if (1 > $elementCount) {
-            $groupElement = [];
-            $groupElement['label'] = $statsGroup->getGroupTitle();
-            $groupElement['backgroundColor'] = $this->colorGeneratorService->generateColor(0, $elementCount);
-            $data = [];
-            foreach ($statsGroup->getGroupTotals() as $value) {
-                $data[] = $value;
+            // Single group case
+            $backgroundColors = [];
+            $colorIndex = 0;
+            foreach ($statsGroup->getGroupTotals() as $timeframe => $value) {
+                $labels[] = $timeframe;
+                $backgroundColors[] = $this->colorGeneratorService->generateColor($colorIndex, $elementCount);
+                ++$colorIndex;
             }
 
-            $groupElement['data'] = $data;
-            $groupElements[] = $groupElement;
+            $groupElements[] = [
+                'label' => $statsGroup->getGroupTitle(),
+                'backgroundColor' => $backgroundColors,
+                'data' => array_values($statsGroup->getGroupTotals()),
+            ];
         } else {
-            $index = 0;
+            // Sub-Groups case
             foreach ($statsGroup->getSubGroups() as $subGroupName => $subGroup) {
-                $groupElement = [];
-                $groupElement['label'] = $subGroupName;
-                $groupElement['backgroundColor'] = $this->colorGeneratorService->generateColor($index, $elementCount);
-                $data = [];
-                foreach ($subGroup->getGroupTotals() as $value) {
-                    $data[] = $value;
+                if (empty($labels)) {
+                    // Add labels from the first subgroup
+                    foreach ($subGroup->getGroupTotals() as $timeframe => $value) {
+                        $labels[] = $timeframe;
+                    }
                 }
-                $groupElement['data'] = $data;
-                $groupElements[] = $groupElement;
-                ++$index;
+
+                $groupElements[] = [
+                    'label' => $subGroupName,
+                    'backgroundColor' => $this->colorGeneratorService->generateColor(count($groupElements), $elementCount),
+                    'data' => array_values($subGroup->getGroupTotals()),
+                ];
             }
         }
 
-        $dataset = [
+        return [
+            'labels' => $labels,
             'datasets' => $groupElements,
             'dateTime' => date('d.m.Y H:i'),
+            'hasCurrency' => $statsGroup->hasCurrency(),
+            'currency' => $statsGroup->getCurrency() ? $statsGroup->getCurrency()->getSymbol() : '€',
         ];
-
-        return new JsonResponse(json_encode($dataset));
     }
 
     public function getFooterIncludes(): array

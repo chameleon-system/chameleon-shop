@@ -5,22 +5,19 @@ namespace ChameleonSystem\SearchBundle\Entity;
 use ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage;
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
 use ChameleonSystem\ShopBundle\Entity\ShopCore\Shop;
-use DateTime;
 
 class ShopSearchLog
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldExtendedLookup
         /** @var CmsLanguage|null - Language */
-        private ?CmsLanguage $cmsLanguage = null
-        ,
+        private ?CmsLanguage $cmsLanguage = null,
         // TCMSFieldVarchar
         /** @var string - Search term */
         private string $name = '',
@@ -28,8 +25,8 @@ class ShopSearchLog
         /** @var int - Number of results */
         private int $numberOfResults = 0,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Search date */
-        private ?DateTime $searchDate = null,
+        /** @var \DateTime|null - Search date */
+        private ?\DateTime $searchDate = null,
         // TCMSFieldLookupParentID
         /** @var DataExtranetUser|null - Executed by */
         private ?DataExtranetUser $dataExtranetUser = null
@@ -73,7 +70,6 @@ class ShopSearchLog
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getCmsLanguage(): ?CmsLanguage
     {
@@ -86,7 +82,6 @@ class ShopSearchLog
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -101,7 +96,6 @@ class ShopSearchLog
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getNumberOfResults(): int
     {
@@ -115,20 +109,18 @@ class ShopSearchLog
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getSearchDate(): ?DateTime
+    public function getSearchDate(): ?\DateTime
     {
         return $this->searchDate;
     }
 
-    public function setSearchDate(?DateTime $searchDate): self
+    public function setSearchDate(?\DateTime $searchDate): self
     {
         $this->searchDate = $searchDate;
 
         return $this;
     }
-
 
     // TCMSFieldLookupParentID
     public function getDataExtranetUser(): ?DataExtranetUser
@@ -142,6 +134,4 @@ class ShopSearchLog
 
         return $this;
     }
-
-
 }

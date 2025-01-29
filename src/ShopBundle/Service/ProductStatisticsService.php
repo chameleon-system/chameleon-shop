@@ -18,10 +18,7 @@ use Doctrine\DBAL\Connection;
 
 class ProductStatisticsService implements ProductStatisticsServiceInterface
 {
-    /**
-     * @var Connection
-     */
-    private $databaseConnection;
+    private Connection $databaseConnection;
 
     /**
      * @param string $articleId
@@ -31,7 +28,7 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
     public function getStats($articleId)
     {
         $query = 'SELECT * FROM `shop_article_stats` WHERE `shop_article_id` = :articleId';
-        $data = $this->databaseConnection->fetchAssociative($query, array('articleId' => $articleId));
+        $data = $this->databaseConnection->fetchAssociative($query, ['articleId' => $articleId]);
         if (is_array($data)) {
             $stats = $this->createStatsObject($data);
         } else {
@@ -61,7 +58,9 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
      * @param string $articleId
      * @param int $type
      * @param float $amount
+     *
      * @psalm-param self::TYPE_* $type
+     *
      * @return void
      */
     public function add($articleId, $type, $amount)
@@ -75,8 +74,8 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
                               ";
         $this->databaseConnection->executeQuery(
             $query,
-            array('id' => \TTools::GetUUID(), 'amount' => $amount, 'articleId' => $articleId),
-            array('amount' => \PDO::PARAM_INT)
+            ['id' => \TTools::GetUUID(), 'amount' => $amount, 'articleId' => $articleId],
+            ['amount' => \PDO::PARAM_INT]
         );
     }
 
@@ -84,7 +83,9 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
      * @param string $articleId
      * @param int $type
      * @param float $amount
+     *
      * @psalm-param self::TYPE_* $type
+     *
      * @return void
      */
     public function set($articleId, $type, $amount)
@@ -98,13 +99,14 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
                               ";
         $this->databaseConnection->executeQuery(
             $query,
-            array('id' => \TTools::GetUUID(), 'amount' => $amount, 'articleId' => $articleId),
-            array('amount' => \PDO::PARAM_INT)
+            ['id' => \TTools::GetUUID(), 'amount' => $amount, 'articleId' => $articleId],
+            ['amount' => \PDO::PARAM_INT]
         );
     }
 
     /**
      * @param string $parentArticleId
+     *
      * @return void
      */
     public function updateAllBasedOnVariants($parentArticleId)
@@ -118,18 +120,18 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
               INNER JOIN `shop_article` ON `shop_article_stats`.`shop_article_id` = `shop_article`.`id`
                    WHERE `shop_article`.`variant_parent_id` = :articleId
         ';
-        $result = $this->databaseConnection->fetchAssociative($query, array('articleId' => $parentArticleId));
+        $result = $this->databaseConnection->fetchAssociative($query, ['articleId' => $parentArticleId]);
         if (is_array($result)) {
             $stats = $this->createStatsObject($result);
         } else {
             $stats = new ProductStatistics();
         }
 
-        $updateData = array(
+        $updateData = [
             'stats_sales' => $stats->getSales(),
             'stats_detail_views' => $stats->getDetailViews(),
             'articleId' => $parentArticleId,
-        );
+        ];
         $query = 'INSERT INTO `shop_article_stats`
                           SET `stats_sales` = :stats_sales,
                               `stats_detail_views` = :stats_detail_views,
@@ -142,13 +144,11 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
         $this->databaseConnection->executeQuery(
             $query,
             $updateData,
-            array('amount' => \PDO::PARAM_INT)
+            ['amount' => \PDO::PARAM_INT]
         );
     }
 
     /**
-     * @param Connection $connection
-     *
      * @return void
      */
     public function setDatabaseConnection(Connection $connection)
@@ -157,9 +157,9 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
     }
 
     /**
-     * @return null|string
-     *
      * @param int $type
+     *
+     * @return string|null
      */
     private function getTargetField($type)
     {

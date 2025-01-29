@@ -80,6 +80,7 @@
             <argument type="service" id="database_connection" />
         </service>
 
+        <!-- Dashboard Widgets -->
         <service class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardBaseWidget"
                  id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.dashboard_base_widget"
                  abstract="true">
@@ -104,10 +105,10 @@
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
-            <tag name="chameleon_system.dashboard_widget" collection="sales" priority="1" />
+            <tag name="chameleon_system.dashboard_widget" collection="sales" priority="1" collectionPriority="100" />
         </service>
 
-        <service id="order_number" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.dashboard_base_widget" public="true" />
+        <service id="order-number" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.order_number_dashboard_widget" public="true" />
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.sales_volume_dashboard_widget"
                  class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\SalesVolumeDashboardWidget"

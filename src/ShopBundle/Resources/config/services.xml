@@ -330,6 +330,35 @@
         </service>
 
         <service id="widget-last-orders" alias="chameleon_system_shop.dashboard_widgets.last_orders_dashboard_widget" public="true" />
+
+        <service class="ChameleonSystem\ShopBundle\Dashboard\Widgets\ShopStatusWidget"
+                 id="chameleon_system_shop.dashboard_widgets.shop_status_widget">
+            <tag name="chameleon_system.dashboard_widget" collection="shop-status" priority="1"/>
+            <argument type="service" id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" />
+            <argument type="service" id="chameleon_system_view_renderer.view_renderer" />
+            <argument type="service" id="chameleon_system_core.translator" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument id="chameleon_system_search.bridge.shop_search_status_service" type="service"/>
+            <argument id="chameleon_system_shop.shop_service" type="service"/>
+            <argument id="database_connection" type="service"/>
+        </service>
+
+        <service id="widget-shop-status" alias="chameleon_system_shop.dashboard_widgets.shop_status_widget" public="true" />
+
+        <service class="ChameleonSystem\ShopBundle\Dashboard\Widgets\ShopProductStatusWidget"
+                 id="chameleon_system_shop.dashboard_widgets.shop_product_status_widget">
+            <tag name="chameleon_system.dashboard_widget" collection="shop-admin" priority="1"/>
+            <argument type="service" id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" />
+            <argument type="service" id="chameleon_system_view_renderer.view_renderer" />
+            <argument type="service" id="chameleon_system_core.translator" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument id="chameleon_system_shop.shop_service" type="service"/>
+            <argument id="database_connection" type="service"/>
+        </service>
+
+        <service id="widget-shop-product-status" alias="chameleon_system_shop.dashboard_widgets.shop_product_status_widget" public="true" />
+
+
     </services>
 
 </container>

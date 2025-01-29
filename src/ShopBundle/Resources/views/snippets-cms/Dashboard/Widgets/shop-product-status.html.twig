@@ -1,0 +1,73 @@
+{# array chartData #}
+<div class="bg-white" id="charts-container">
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const shops = {{ chartData|json_encode|raw }};
+
+        const container = document.getElementById('charts-container');
+
+        shops.forEach((shop, index) => {
+            const canvas = document.createElement('canvas');
+            canvas.id = `chart-${index}`;
+            if (index !== shops.length - 1) {
+                canvas.style.marginBottom = '40px';
+            }
+            container.appendChild(canvas);
+
+            new Chart(canvas.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: [
+                        '{{ 'chameleon_system_shop.widget.shop_product_status_widget.products_total'|trans|e('js') }}',
+                        '{{ 'chameleon_system_shop.widget.shop_product_status_widget.products_main'|trans|e('js') }}',
+                        '{{ 'chameleon_system_shop.widget.shop_product_status_widget.products_variants'|trans|e('js') }}',
+                        '{{ 'chameleon_system_shop.widget.shop_product_status_widget.products_virtual'|trans|e('js') }}'
+                    ],
+                    datasets: [
+                        {
+                            label: '{{ 'chameleon_system_shop.widget.shop_product_status_widget.products_total'|trans|e('js') }}',
+                            data: [shop.total, shop.types.main.total, shop.types.variant.total, shop.types.virtual.total],
+                            backgroundColor: '{{ generate_color(0, 4) }}'
+                        },
+                        {
+                            label: '{{ 'chameleon_system_shop.widget.shop_product_status_widget.products_active'|trans|e('js') }}',
+                            data: [shop.totalActive, shop.types.main.active, shop.types.variant.active, 0],
+                            backgroundColor: '{{ generate_color(1, 4) }}'
+                        },
+                        {
+                            label: '{{ 'chameleon_system_shop.widget.shop_product_status_widget.products_searchable'|trans|e('js') }}',
+                            data: [shop.totalSearchable, shop.types.main.searchable, shop.types.variant.searchable, 0],
+                            backgroundColor: '{{ generate_color(2, 4) }}'
+                        },
+                        {
+                            label: '{{ 'chameleon_system_shop.widget.shop_product_status_widget.products_new'|trans|e('js') }}',
+                            data: [shop.totalNew, shop.types.main.new, shop.types.variant.new, 0],
+                            backgroundColor: '{{ generate_color(3, 4) }}'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true },
+                        title: {
+                            display: true,
+                            text: `${shop.name}`
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '{{ 'chameleon_system_shop.widget.shop_product_status_widget.products_quantity'|trans|e('js') }}'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    });
+</script>

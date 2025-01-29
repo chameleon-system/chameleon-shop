@@ -1,0 +1,41 @@
+{#
+@var int chartId
+@var array statsData
+#}
+{% if statsData.datasets | length > 0 %}
+    <div>
+        <canvas id="chart{{ chartId }}"></canvas>
+    </div>
+    <script>
+        const chartData{{ chartId }} = {
+            labels: {{ statsData.labels|json_encode|raw }},
+            datasets: {{ statsData.datasets|json_encode|raw }},
+            options: {
+                legend: {
+                    display: {{ statsData.datasets | length > 1 ? 'true' : 'false' }}
+                }
+            },
+            additionalConfig: {
+                hasCurrency: {{ statsData.hasCurrency ? 'true' : 'false' }},
+                displayGraphLabels: {{ displayGraphLabels is not null ? displayGraphLabels : 'false' }},
+                currency: {
+                    symbol: '{{ statsData.currency }}'
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            CHAMELEON.CORE.Charts.generateChart(
+                'chart{{ chartId }}',
+                chartData{{ chartId }}.labels,
+                chartData{{ chartId }}.datasets,
+                chartData{{ chartId }}.options,
+                chartData{{ chartId }}.additionalConfig
+            );
+        });
+    </script>
+{% else %}
+    <div class="chart-no-data-message">
+        {{ 'chameleon_system_ecommerce_stats.form_no_data_for_current_filters' | trans }}
+    </div>
+{% endif %}

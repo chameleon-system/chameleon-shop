@@ -11,6 +11,10 @@
             <argument type="service" id="request_stack" />
         </service>
 
+        <service class="ChameleonSystem\SearchBundle\Bridge\ShopSearchStatusService"
+                 id="chameleon_system_search.bridge.shop_search_status_service">
+        </service>
+
         <service id="chameleon_system_search.logger" class="ChameleonSystem\SearchBundle\Bridge\ShopSearchLoggerBridge">
             <argument type="service" id="chameleon_system_shop.shop_service" />
             <argument type="service" id="chameleon_system_core.language_service" />

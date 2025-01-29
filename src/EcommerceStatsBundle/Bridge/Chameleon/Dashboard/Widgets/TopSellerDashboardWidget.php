@@ -26,14 +26,9 @@ class TopSellerDashboardWidget extends DashboardBaseWidget
         parent::__construct($dashboardCacheService, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe, $colorGeneratorService, $securityHelperAccess);
     }
 
-    public function getChartId(): string
+    public function getWidgetId(): string
     {
         return 'top-seller';
-    }
-
-    public function getColorCssClass(): string
-    {
-        return 'text-white bg-info';
     }
 
     protected function getStatsGroupSystemName(): string

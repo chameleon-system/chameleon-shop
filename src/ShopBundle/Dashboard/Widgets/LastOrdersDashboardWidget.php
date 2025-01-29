@@ -27,7 +27,7 @@ class LastOrdersDashboardWidget extends DashboardWidget
 
     public function getTitle(): string
     {
-        return $this->translator->trans('chameleon_system_shop.widget.last_orders_title');
+        return $this->translator->trans('chameleon_system_shop.widget.last_orders.title');
     }
 
     public function showWidget(): bool
@@ -38,12 +38,12 @@ class LastOrdersDashboardWidget extends DashboardWidget
     public function getDropdownItems(): array
     {
         $reloadItem = new WidgetDropdownItemDataModel(
-            'reload-'.$this->getChartId(),
+            'reload-'.$this->getWidgetId(),
             $this->translator->trans('chameleon_system_shop.widget.reload_button_label'),
             ''
         );
 
-        $reloadItem->addDataAttribute('data-service-alias', $this->getChartId());
+        $reloadItem->addDataAttribute('data-service-alias', $this->getWidgetId());
 
         return [
             new WidgetDropdownItemDataModel('lastOrdersDashboardWidgetAllOrders', $this->translator->trans('chameleon_system_shop.widget.last_orders_all_orders'), '/cms?pagedef=tablemanager&id=268'),
@@ -51,7 +51,7 @@ class LastOrdersDashboardWidget extends DashboardWidget
         ];
     }
 
-    public function getChartId(): string
+    public function getWidgetId(): string
     {
         return self::LAST_ORDER_SYSTEM_NAME;
     }
@@ -61,7 +61,7 @@ class LastOrdersDashboardWidget extends DashboardWidget
         $orders = $this->getLastOrders();
 
         $this->renderer->AddSourceObject('orders', $orders);
-        $this->renderer->AddSourceObject('reloadEventButtonId', 'reload-'.$this->getChartId());
+        $this->renderer->AddSourceObject('reloadEventButtonId', 'reload-'.$this->getWidgetId());
 
         return $this->renderer->Render('Dashboard/Widgets/last-orders.html.twig');
     }
