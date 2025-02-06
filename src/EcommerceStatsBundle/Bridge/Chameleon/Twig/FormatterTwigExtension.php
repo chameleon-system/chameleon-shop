@@ -13,11 +13,8 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Twig;
 
-use ChameleonSystem\CmsDashboardBundle\Library\Interfaces\ColorGeneratorServiceInterface;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class FormatterTwigExtension extends AbstractExtension
 {
@@ -32,13 +29,6 @@ class FormatterTwigExtension extends AbstractExtension
                 [$this, 'formatNumber'],
                 ['is_safe' => ['html']]
             ),
-        ];
-    }
-
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('generate_color', [$this, 'generateColor']),
         ];
     }
 
@@ -59,29 +49,8 @@ class FormatterTwigExtension extends AbstractExtension
         return $local->FormatNumber($value, $fractionDigits);
     }
 
-    public function generateColor(int $index, int $total): string
-    {
-        return $this->getColorGeneratorService()->generateColor($index, $total);
-    }
-
-    private function hexToRgb(string $hex): array
-    {
-        $hex = ltrim($hex, '#');
-
-        return [
-            hexdec(substr($hex, 0, 2)),
-            hexdec(substr($hex, 2, 2)),
-            hexdec(substr($hex, 4, 2)),
-        ];
-    }
-
     private function getLocal(): ?\TCMSLocal
     {
         return \TCMSLocal::GetActive() ?: null;
-    }
-
-    private function getColorGeneratorService(): ColorGeneratorServiceInterface
-    {
-        return ServiceLocator::get('chameleon_system_cms_dashboard.service.color_generator_service');
     }
 }

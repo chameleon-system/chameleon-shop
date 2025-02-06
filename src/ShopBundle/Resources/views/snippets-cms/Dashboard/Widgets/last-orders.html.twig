@@ -5,56 +5,58 @@
         {{ 'chameleon_system_shop.widget.last_orders_not_found'|trans }}
     </div>
 {% else %}
-    <table class="table table-bordered m-0">
-        <thead>
-        <tr>
-            <th scope="col" title="{{ 'chameleon_system_shop.widget.order_number'|trans|e('html_attr') }}"><i class="fas fa-receipt"></i></th>
-            <th scope="col" title="{{ 'chameleon_system_shop.widget.order_date'|trans|e('html_attr') }}"><i class="fas fa-calendar-alt"></i></th>
-            <th scope="col" title="{{ 'chameleon_system_shop.widget.customer'|trans|e('html_attr') }}"><i class="fas fa-user"></i></th>
-            <th scope="col" title="{{ 'chameleon_system_shop.widget.email'|trans|e('html_attr') }}"><i class="fas fa-envelope"></i></th>
-            <th scope="col" title="{{ 'chameleon_system_shop.widget.user_address'|trans|e('html_attr') }}"><i class="fas fa-map-marker-alt"></i></th>
-            <th scope="col" title="{{ 'chameleon_system_shop.widget.payment_type'|trans|e('html_attr') }}"><i class="fas fa-credit-card"></i></th>
-            <th scope="col" title="{{ 'chameleon_system_shop.widget.order_total'|trans|e('html_attr') }}"><i class="fas fa-euro-sign"></i></th>
-            <th scope="col" title="{{ 'chameleon_system_shop.widget.discount_value'|trans|e('html_attr') }}"><i class="fas fa-percentage"></i></th>
-            <th scope="col" title="{{ 'chameleon_system_shop.widget.order_item_count'|trans|e('html_attr') }}"><i class="fas fa-cube"></i></th>
-        </tr>
-        </thead>
-    {% for orderDataModel in orders %}
-        {% set currency = orderDataModel.orderCurrencyCode %}
-        {% if orderDataModel.orderCurrencySymbol %}
-            {% set currency = orderDataModel.orderCurrencySymbol %}
-        {% endif %}
+    <div class="table-responsive">
+        <table class="table table-bordered m-0">
+            <thead>
+            <tr>
+                <th scope="col" title="{{ 'chameleon_system_shop.widget.order_number'|trans|e('html_attr') }}"><i class="fas fa-receipt"></i></th>
+                <th scope="col" title="{{ 'chameleon_system_shop.widget.order_date'|trans|e('html_attr') }}"><i class="fas fa-calendar-alt"></i></th>
+                <th scope="col" title="{{ 'chameleon_system_shop.widget.customer'|trans|e('html_attr') }}"><i class="fas fa-user"></i></th>
+                <th scope="col" title="{{ 'chameleon_system_shop.widget.email'|trans|e('html_attr') }}"><i class="fas fa-envelope"></i></th>
+                <th scope="col" title="{{ 'chameleon_system_shop.widget.user_address'|trans|e('html_attr') }}"><i class="fas fa-map-marker-alt"></i></th>
+                <th scope="col" title="{{ 'chameleon_system_shop.widget.payment_type'|trans|e('html_attr') }}"><i class="fas fa-credit-card"></i></th>
+                <th scope="col" title="{{ 'chameleon_system_shop.widget.order_total'|trans|e('html_attr') }}"><i class="fas fa-euro-sign"></i></th>
+                <th scope="col" title="{{ 'chameleon_system_shop.widget.discount_value'|trans|e('html_attr') }}"><i class="fas fa-percentage"></i></th>
+                <th scope="col" title="{{ 'chameleon_system_shop.widget.order_item_count'|trans|e('html_attr') }}"><i class="fas fa-cube"></i></th>
+            </tr>
+            </thead>
+        {% for orderDataModel in orders %}
+            {% set currency = orderDataModel.orderCurrencyCode %}
+            {% if orderDataModel.orderCurrencySymbol %}
+                {% set currency = orderDataModel.orderCurrencySymbol %}
+            {% endif %}
 
-        {% set warningCssClass = '' %}
-        {% if not orderDataModel.isPaymentSuccessful %}
-            {% set warningCssClass = 'table-danger' %}
-        {% elseif orderDataModel.isOrderCanceled %}
-            {% set warningCssClass = 'table-warning' %}
-        {% endif %}
+            {% set warningCssClass = '' %}
+            {% if not orderDataModel.isPaymentSuccessful %}
+                {% set warningCssClass = 'table-danger' %}
+            {% elseif orderDataModel.isOrderCanceled %}
+                {% set warningCssClass = 'table-warning' %}
+            {% endif %}
 
-        {# if discount is more than 40% of the order value, add a warning class #}
-        {% if orderDataModel.orderValue and orderDataModel.discountValue / orderDataModel.orderValue > 0.4 %}
-            {% set warningCssClass = 'table-warning' %}
-        {% endif %}
+            {# if discount is more than 40% of the order value, add a warning class #}
+            {% if orderDataModel.orderValue and orderDataModel.discountValue / orderDataModel.orderValue > 0.4 %}
+                {% set warningCssClass = 'table-warning' %}
+            {% endif %}
 
-        {% set userIcon = '<i class="fas fa-user-circle" title="' ~ 'chameleon_system_shop.widget.user_type_customer'|trans|e('html_attr') ~ '"></i>' %}
-        {% if orderDataModel.isGuestOrder %}
-            {% set userIcon = '<i class="fas fa-user-secret" title="' ~ 'chameleon_system_shop.widget.user_type_guest'|trans|e('html_attr') ~ '"></i>' %}
-        {% endif %}
+            {% set userIcon = '<i class="fas fa-user-circle" title="' ~ 'chameleon_system_shop.widget.user_type_customer'|trans|e('html_attr') ~ '"></i>' %}
+            {% if orderDataModel.isGuestOrder %}
+                {% set userIcon = '<i class="fas fa-user-secret" title="' ~ 'chameleon_system_shop.widget.user_type_guest'|trans|e('html_attr') ~ '"></i>' %}
+            {% endif %}
 
-        <tr class="{{ warningCssClass }}">
-            <td><a href="{{ orderDataModel.detailUrl }}">{{ orderDataModel.orderNumber }}</a></td>
-            <td>{{ orderDataModel.orderDate }}</td>
-            <td>{{ userIcon|raw }} {{ orderDataModel.customerName }}</td>
-            <td>{{ orderDataModel.customerEmail }}</td>
-            <td>{{ orderDataModel.customerCountryCode }} - {{ orderDataModel.customerCity }}</td>
-            <td>{{ orderDataModel.paymentMethod }}</td>
-            <td>{{ orderDataModel.orderValue| number_format(2, ',', '.') }} {{ currency }}</td>
-            <td>{{ orderDataModel.discountValue| number_format(2, ',', '.') }} {{ currency }}</td>
-            <td>{{ orderDataModel.orderItemCount }}</td>
-        </tr>
-    {% endfor %}
-    </table>
+            <tr class="{{ warningCssClass }}">
+                <td><a href="{{ orderDataModel.detailUrl }}">{{ orderDataModel.orderNumber }}</a></td>
+                <td>{{ orderDataModel.orderDate }}</td>
+                <td>{{ userIcon|raw }} {{ orderDataModel.customerName }}</td>
+                <td>{{ orderDataModel.customerEmail }}</td>
+                <td>{{ orderDataModel.customerCountryCode }} - {{ orderDataModel.customerCity }}</td>
+                <td>{{ orderDataModel.paymentMethod }}</td>
+                <td>{{ orderDataModel.orderValue| number_format(2, ',', '.') }} {{ currency }}</td>
+                <td>{{ orderDataModel.discountValue| number_format(2, ',', '.') }} {{ currency }}</td>
+                <td>{{ orderDataModel.orderItemCount }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             initializeWidgetReload("#{{ reloadEventButtonId|e('html_attr') }}");
