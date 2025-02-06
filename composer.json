@@ -32,8 +32,6 @@
     },
     "require-dev": {
         "chameleon-system/code-style-config": "dev-master@dev",
-        "chameleon-system/sanitycheck": "dev-master@dev",
-        "chameleon-system/sanitycheck-bundle": "dev-master@dev",
         "phpspec/prophecy-phpunit": "^2.0.0",
         "phpunit/phpunit": "^9.5.1",
         "vimeo/psalm": "^4.22",
