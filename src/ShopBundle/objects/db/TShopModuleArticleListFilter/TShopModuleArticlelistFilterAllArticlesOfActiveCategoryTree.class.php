@@ -9,9 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
+
 /**
  * show all articles in the active category... including the categories children.
-/**/
+ */
 class TShopModuleArticlelistFilterAllArticlesOfActiveCategoryTree extends TdbShopModuleArticleListFilter
 {
     /**
@@ -27,27 +30,35 @@ class TShopModuleArticlelistFilterAllArticlesOfActiveCategoryTree extends TdbSho
      */
     protected function GetListQueryBase(&$oListConfig)
     {
-        $oShop = TdbShop::GetInstance();
-        $oActiveCategory = $oShop->GetActiveCategory();
-        if (!is_null($oActiveCategory)) {
-            $aCategories = $oActiveCategory->GetAllChildrenIds();
-            $aCategories[] = $oActiveCategory->id;
-            $aCategories = TTools::MysqlRealEscapeArray($aCategories);
-            $sQuery = "SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
-                     FROM `shop_article`
-                LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
-                LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
-                    WHERE `shop_article`.`id` IN (SELECT DISTINCT `shop_article_shop_category_mlt`.`source_id` FROM `shop_article_shop_category_mlt` WHERE `shop_article_shop_category_mlt`.`target_id` IN ('".implode("', '", $aCategories)."'))
-                ";
+        $shopService = $this->getShopService();
+        $activeCategory = $shopService->GetActiveCategory();
+
+        if (null !== $activeCategory) {
+            $categories = $activeCategory->GetAllChildrenIds();
+            $categories[] = $activeCategory->id;
+            $categories = TTools::MysqlRealEscapeArray($categories);
+
+            $query = "SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
+                   FROM `shop_article`
+                   LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
+                   LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
+                   INNER JOIN `shop_article_shop_category_mlt`
+                        ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
+                        AND `shop_article_shop_category_mlt`.`target_id` IN ('".implode("', '", $categories)."')";
         } else {
-            $sQuery = parent::GetListQueryBase($oListConfig);
+            $query = parent::GetListQueryBase($oListConfig);
         }
 
-        return $sQuery;
+        return $query;
     }
 
     public function PreventUseOfParentObjectWhenNoRecordsAreFound()
     {
         return true;
+    }
+
+    private function getShopService(): ShopServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }
