@@ -24,6 +24,9 @@ foreach ($outdatedPaymentHandlers as $paymentHandler) {
         continue;
     }
 
+    $tableEditor = \TTools::GetTableEditorManager('shop_payment_handler');
+    $tableEditor->AllowDeleteByAll(true);
+
     //Delete everything references
-    \TTools::GetTableEditorManager('shop_payment_handler')->Delete($paymentHandlerId);
+    $tableEditor->Delete($paymentHandlerId);
 }
