@@ -11,7 +11,12 @@ $mapperToBeDeleted = [
     'chameleon_system_shop.mapper.social.social_share_privacy',
 ];
 
-$moduleManager = TCMSLogChange::getModuleManager('MTShopArticleDetails');
+try {
+    $moduleManager = TCMSLogChange::getModuleManager('MTShopArticleDetails');
+}catch(\ErrorException $e){
+    TCMSLogChange::addInfoMessage('Template-Module: "MTShopArticleDetails" not found, couldn\'t delete mapper "TPkgShopMapper_SocialSharePrivacy" and "chameleon_system_shop.mapper.social.social_share_privacy" please remove them manually', TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);
+    return;
+}
 $mapperConfig = $moduleManager->getMapperConfig();
 $hasChanges = false;
 foreach ($mapperToBeDeleted as $mapper) {
