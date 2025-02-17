@@ -98,65 +98,6 @@
                 <target>Your account will be charged as soon as the products are shipped to you.</target>
             </trans-unit>
 
-
-            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_h1">
-                <source>chameleon_system_shop.payment_montrada.payment_form_h1</source>
-                <target>Description</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_h2">
-                <source>chameleon_system_shop.payment_montrada.payment_form_h2</source>
-                <target>Price</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_shipping">
-                <source>chameleon_system_shop.payment_montrada.payment_form_shipping</source>
-                <target>Shipping costs</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_payment_surcharge">
-                <source>chameleon_system_shop.payment_montrada.payment_form_payment_surcharge</source>
-                <target>Payment surcharge</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_voucher">
-                <source>chameleon_system_shop.payment_montrada.payment_form_voucher</source>
-                <target>Vouchers</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_help">
-                <source>chameleon_system_shop.payment_montrada.payment_form_help</source>
-                <target>ATTENTION: Please click on "BACK TO SHOP" after finishing your payment so we can complete your order. After that your account will be charged and the products will be sent to you / your download will be activated.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_montrada.error_request">
-                <source>chameleon_system_shop.payment_montrada.error_request</source>
-                <target>Error while processing the request to Montrada.</target>
-            </trans-unit>
-
-            <trans-unit id="chameleon_system_shop.payment_payone.error_unknown">
-                <source>chameleon_system_shop.payment_payone.error_unknown</source>
-                <target>An unknown error occurred.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_payone.error_no_card_type">
-                <source>chameleon_system_shop.payment_payone.error_no_card_type</source>
-                <target>Please select a credit card type.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_payone.error_no_card_owner">
-                <source>chameleon_system_shop.payment_payone.error_no_card_owner</source>
-                <target>Please enter the name of the credit card holder.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_payone.error_no_card_number">
-                <source>chameleon_system_shop.payment_payone.error_no_card_number</source>
-                <target>Please enter the credit card number.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_payone.error_no_card_checksum">
-                <source>chameleon_system_shop.payment_payone.error_no_card_checksum</source>
-                <target>Please enter the credit card verification code (CVC).</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_payone.error">
-                <source>chameleon_system_shop.payment_payone.error</source>
-                <target>Error: %errortext%</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_payone.error_user_abort">
-                <source>chameleon_system_shop.payment_payone.error_user_abort</source>
-                <target>User abort</target>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_shop.payment_paypal_express.error_guest_user_with_id">
                 <source>chameleon_system_shop.payment_paypal_express.error_guest_user_with_id</source>
                 <target>User data invalid. A user with ID is marked as not logged in.</target>
