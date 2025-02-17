@@ -162,11 +162,6 @@
                 <target>User data invalid. A user with ID is marked as not logged in.</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_shop.payment_easy_cash.error_unable_to_confirm_payment">
-                <source>chameleon_system_shop.payment_easy_cash.error_unable_to_confirm_payment</source>
-                <target>Could not verify PayMaster payment details after three attempts. Please try again later.</target>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_shop.module_article_catalog.captcha">
                 <source>chameleon_system_shop.module_article_catalog.captcha</source>
                 <target>What is the sum of %num1% + %num2%?</target>

@@ -162,11 +162,6 @@
                 <target>Benutzerdaten nicht OK. Ein User mit ID ist als nicht angemeldet markiert</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_shop.payment_easy_cash.error_unable_to_confirm_payment">
-                <source>chameleon_system_shop.payment_easy_cash.error_unable_to_confirm_payment</source>
-                <target>Konnte die Zahlungsdetails beim PayMaster auch nach 3 Versuchen nicht bestätigen. Bitte versuchen Sie es später erneut.</target>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_shop.module_article_catalog.captcha">
                 <source>chameleon_system_shop.module_article_catalog.captcha</source>
                 <target>Was ergibt %num1% + %num2%?</target>
