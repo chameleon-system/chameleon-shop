@@ -25,4 +25,12 @@ UPGRADE FROM 7.1 to 8.0
   - `hop->GetActiveItem()` -> manually replace with `\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct()`
   - `TdbShop::GetActiveRootCategory()` -> `\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveRootCategory()`
   - `TShop::GetActiveRootCategory()` -> `\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveRootCategory()`
-  - finaly search for `->GetActiveRootCategory()` to find any other calles maybe based on TShop service instances 
+  - finaly search for `->GetActiveRootCategory()` to find any other calles maybe based on TShop service instances
+
+### Removed PaymentHandlers:
+ By executing the `update-1739765632.inc.php` the payment handlers should be removed
+ - TShopPaymentHandlerEasyCash.class.php
+ - TShopPaymentHandlerEasyCash_Debit.class.php
+ - TShopPaymentHandlerSofortueberweisung.class.php
+ - TShopPaymentHandlerMontrada.class.php
+ - TShopPaymentHandlerPayOne.class.php (Please do not confuse with the Payone Payment Bundle)

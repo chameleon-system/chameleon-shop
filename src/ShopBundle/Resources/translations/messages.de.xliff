@@ -98,73 +98,9 @@
                 <target>Die Belastung Ihres Kontos erfolgt mit dem Versand der Ware.</target>
             </trans-unit>
 
-
-            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_h1">
-                <source>chameleon_system_shop.payment_montrada.payment_form_h1</source>
-                <target>Beschreibung</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_h2">
-                <source>chameleon_system_shop.payment_montrada.payment_form_h2</source>
-                <target>Preis</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_shipping">
-                <source>chameleon_system_shop.payment_montrada.payment_form_shipping</source>
-                <target>Versandkosten</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_payment_surcharge">
-                <source>chameleon_system_shop.payment_montrada.payment_form_payment_surcharge</source>
-                <target>Zahlungsaufschlag</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_voucher">
-                <source>chameleon_system_shop.payment_montrada.payment_form_voucher</source>
-                <target>Gutscheine</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_montrada.payment_form_help">
-                <source>chameleon_system_shop.payment_montrada.payment_form_help</source>
-                <target>HINWEIS: Bitte nach der durchgeführten Zahlung auf "WEITER ZUM SHOP" klicken, damit wir Ihre Bestellung vollständig durchführen können. Erst DANACH werden Ihnen Ihre Produkte zugesandt bzw. Ihr Download bereitgestellt und Ihr Konto belastet.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_montrada.error_request">
-                <source>chameleon_system_shop.payment_montrada.error_request</source>
-                <target>Fehler beim Verarbeiten des Requests an Montrada.</target>
-            </trans-unit>
-
-            <trans-unit id="chameleon_system_shop.payment_payone.error_unknown">
-                <source>chameleon_system_shop.payment_payone.error_unknown</source>
-                <target>Ein unbekannter Fehler ist aufgetreten.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_payone.error_no_card_type">
-                <source>chameleon_system_shop.payment_payone.error_no_card_type</source>
-                <target>Bitte den Kartentyp auswählen.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_payone.error_no_card_owner">
-                <source>chameleon_system_shop.payment_payone.error_no_card_owner</source>
-                <target>Bitte den Namen des Kreditkarteninhabers eintragen.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_payone.error_no_card_number">
-                <source>chameleon_system_shop.payment_payone.error_no_card_number</source>
-                <target>Bitte die Kreditkartennummer eintragen.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_payone.error_no_card_checksum">
-                <source>chameleon_system_shop.payment_payone.error_no_card_checksum</source>
-                <target>Bitte die Prüfziffer eintragen.</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_payone.error">
-                <source>chameleon_system_shop.payment_payone.error</source>
-                <target>Fehler: %errortext%</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_shop.payment_payone.error_user_abort">
-                <source>chameleon_system_shop.payment_payone.error_user_abort</source>
-                <target>Abbruch durch den Benutzer.</target>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_shop.payment_paypal_express.error_guest_user_with_id">
                 <source>chameleon_system_shop.payment_paypal_express.error_guest_user_with_id</source>
                 <target>Benutzerdaten nicht OK. Ein User mit ID ist als nicht angemeldet markiert</target>
-            </trans-unit>
-
-            <trans-unit id="chameleon_system_shop.payment_easy_cash.error_unable_to_confirm_payment">
-                <source>chameleon_system_shop.payment_easy_cash.error_unable_to_confirm_payment</source>
-                <target>Konnte die Zahlungsdetails beim PayMaster auch nach 3 Versuchen nicht bestätigen. Bitte versuchen Sie es später erneut.</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_shop.module_article_catalog.captcha">
