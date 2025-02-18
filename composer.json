@@ -130,7 +130,7 @@
         "chameleon-system/pkgshopprimarynavigation": "*",
         "chameleon-system/pkgshopproductexport": "*",
         "chameleon-system/pkgshopratingservice": "*",
-        "chameleon-system/pkgshopwishlist": "*",
+        "chameleon-system/pkgshopwishlist": "*"
     },
     "scripts": {
         "analyze": "psalm --no-cache"
