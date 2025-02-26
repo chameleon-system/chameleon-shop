@@ -7,7 +7,7 @@
 
 $data = TCMSLogChange::createMigrationQueryData('cms_right', 'en')
   ->setFields([
-      'name' => '',
+      'name' => 'ecommerce_stats_show_module',
       'id' => '7dca3b88-ab6f-7a22-ef56-7b628cd98145',
       '049_trans' => 'Show e-commerce sales statistics', // prev.: ''
   ])
@@ -16,7 +16,7 @@ TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_right', 'de')
   ->setFields([
-      'name' => 'ecommerce_stats_show_module', // prev.: ''
+      'name' => 'ecommerce_stats_show_module',
       '049_trans' => 'E-Commerce Umsatzstatistiken anzeigen', // prev.: ''
   ])
   ->setWhereEquals([
