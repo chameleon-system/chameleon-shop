@@ -436,6 +436,10 @@
                 <source>chameleon_system_shop.widget.user_type_guest</source>
                 <target>Gast Besteller</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.used_voucher_series.title">
+                <source>chameleon_system_shop.widget.used_voucher_series.title</source>
+                <target>Verwendete Gutscheine</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -1,0 +1,53 @@
+{# array chartData #}
+<div class="bg-white" id="used-vouchers-chart-container">
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const voucherSeries = {{ chartData|json_encode|raw }};
+
+        const container = document.getElementById('used-vouchers-chart-container');
+        const canvas = document.createElement('canvas');
+        canvas.id = `chart-used-vouchers`;
+        container.appendChild(canvas);
+
+        new Chart(canvas.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for voucherSeries in chartData %}
+                    '{{ voucherSeries.seriesName }}',
+                    {% endfor %}
+                ],
+                datasets: [
+                    {
+                        data: [
+                            {% for voucherSeries in chartData %}
+                            '{{ voucherSeries.usedVoucherCount }}',
+                            {% endfor %}
+                            ],
+                        backgroundColor: '{{ generate_color(0, 4) }}'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: false,
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '{{ 'chameleon_system_shop.widget.shop_product_status_widget.products_quantity'|trans|e('js') }}'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
