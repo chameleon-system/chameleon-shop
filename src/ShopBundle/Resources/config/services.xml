@@ -358,6 +358,16 @@
 
         <service id="widget-shop-product-status" alias="chameleon_system_shop.dashboard_widgets.shop_product_status_widget" public="true" />
 
+        <service class="ChameleonSystem\ShopBundle\Dashboard\Widgets\UsedVoucherSeriesDashboardWidget"
+                 id="chameleon_system_shop.dashboard_widgets.used_voucher_series_dashboard_widget">
+            <tag name="chameleon_system.dashboard_widget" collection="voucher-info" priority="1"/>
+            <argument type="service" id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" />
+            <argument type="service" id="chameleon_system_core.translator" />
+            <argument type="service" id="chameleon_system_view_renderer.view_renderer" />
+            <argument id="database_connection" type="service"/>
+        </service>
+
+        <service id="widget-used-voucher-series" alias="chameleon_system_shop.dashboard_widgets.used_voucher_series_dashboard_widget" public="true" />
 
     </services>
 
