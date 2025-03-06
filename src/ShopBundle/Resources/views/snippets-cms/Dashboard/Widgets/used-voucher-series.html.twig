@@ -16,7 +16,7 @@
             data: {
                 labels: [
                     {% for voucherSeries in chartData %}
-                    '{{ voucherSeries.seriesName }}',
+                    '{{ voucherSeries.seriesName | raw }}',
                     {% endfor %}
                 ],
                 datasets: [
