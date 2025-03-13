@@ -25,6 +25,10 @@ class ChameleonSystemEcommerceStatsExtension extends Extension
      */
     public function load(array $config, ContainerBuilder $container): void
     {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $config);
+        $container->setParameter('chameleon_system_shop_ecommerce_stats.enable_dashboard', $config['enable_dashboard']);
+
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');
     }

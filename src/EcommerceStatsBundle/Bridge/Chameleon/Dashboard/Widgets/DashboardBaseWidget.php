@@ -27,7 +27,8 @@ abstract class DashboardBaseWidget extends DashboardWidget
         protected readonly StatsCurrencyServiceInterface $statsCurrencyService,
         protected readonly string $defaultTimeframe,
         protected readonly ColorGeneratorServiceInterface $colorGeneratorService,
-        protected readonly SecurityHelperAccess $securityHelperAccess
+        protected readonly SecurityHelperAccess $securityHelperAccess,
+        protected readonly bool $enableDashboard
     ) {
         parent::__construct($dashboardCacheService, $translator);
     }
@@ -39,7 +40,7 @@ abstract class DashboardBaseWidget extends DashboardWidget
 
     public function showWidget(): bool
     {
-        return $this->securityHelperAccess->isGranted(EcommerceStatsBackendModule::CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE);
+        return $this->securityHelperAccess->isGranted(EcommerceStatsBackendModule::CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE) && true === $this->enableDashboard;
     }
 
     public function getDropdownItems(): array
@@ -115,7 +116,7 @@ abstract class DashboardBaseWidget extends DashboardWidget
 
         $groupElements = [];
         $labels = [];
-        $elementCount = \count($statsGroup->getSubGroups());
+        $elementCount = \count($statsGroup?->getSubGroups() ?? []);
 
         if (1 > $elementCount) {
             // Single group case

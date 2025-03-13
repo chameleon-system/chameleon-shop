@@ -4,6 +4,7 @@ namespace ChameleonSystem\ShopBundle\Dashboard\Widgets;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
+use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use Doctrine\DBAL\Connection;
@@ -19,7 +20,9 @@ class ShopProductStatusWidget extends DashboardWidget
         protected readonly TranslatorInterface $translator,
         protected readonly SecurityHelperAccess $securityHelperAccess,
         protected readonly ShopServiceInterface $shopService,
-        protected readonly Connection $databaseConnection)
+        protected readonly Connection $databaseConnection,
+        protected readonly bool $enableDashboard
+    )
     {
         parent::__construct($dashboardCacheService, $translator);
     }
@@ -36,7 +39,7 @@ class ShopProductStatusWidget extends DashboardWidget
 
     public function showWidget(): bool
     {
-        return $this->securityHelperAccess->isGranted('CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE');
+        return $this->securityHelperAccess->isGranted(EcommerceStatsBackendModule::CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE) && true === $this->enableDashboard;
     }
 
     public function getWidgetId(): string

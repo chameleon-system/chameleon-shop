@@ -21,9 +21,10 @@ class CustomerTypeDashboardWidget extends DashboardBaseWidget
         StatsCurrencyServiceInterface $currencyService,
         string $defaultTimeframe,
         ColorGeneratorServiceInterface $colorGeneratorService,
-        SecurityHelperAccess $securityHelperAccess
+        SecurityHelperAccess $securityHelperAccess,
+        bool $enableDashboard
     ) {
-        DashboardBaseWidget::__construct($dashboardCacheService, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe, $colorGeneratorService, $securityHelperAccess);
+        DashboardBaseWidget::__construct($dashboardCacheService, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe, $colorGeneratorService, $securityHelperAccess, $enableDashboard);
     }
 
     public function getWidgetId(): string

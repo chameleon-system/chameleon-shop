@@ -21,9 +21,10 @@ class AverageCartValueDashboardWidget extends DashboardBaseWidget
         StatsCurrencyServiceInterface $currencyService,
         string $defaultTimeframe,
         ColorGeneratorServiceInterface $colorGeneratorService,
-        SecurityHelperAccess $securityHelperAccess
+        SecurityHelperAccess $securityHelperAccess,
+        bool $enableDashboard
     ) {
-        parent::__construct($dashboardCacheService, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe, $colorGeneratorService, $securityHelperAccess);
+        parent::__construct($dashboardCacheService, $viewRenderer, $statsTable, $translator, $currencyService, $defaultTimeframe, $colorGeneratorService, $securityHelperAccess, $enableDashboard);
     }
 
     public function getWidgetId(): string
