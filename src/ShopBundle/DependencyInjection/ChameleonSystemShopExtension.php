@@ -26,6 +26,10 @@ class ChameleonSystemShopExtension extends Extension implements PrependExtension
      */
     public function load(array $config, ContainerBuilder $container)
     {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $config);
+        $container->setParameter('chameleon_system_shop.enable_dashboard', $config['enable_dashboard']);
+
         $loader = new XMLFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('cronjobs.xml');
         $loader->load('logging.xml');
