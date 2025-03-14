@@ -34,3 +34,12 @@ Product URLs contain the cmsident of the product as the last part of the URL. If
 another field (such as the id or the article number) you can do so by replacing the class used in the
 chameleon_system_shop.shop_route_article_factory service. Simply define the service parameter chameleon_system_shop.shop_route_article_factory.class
 to a class that implements the ChameleonSystem\ShopBundle\Interfaces\ShopRouteArticleFactoryInterface
+
+Configuration
+-------------
+
+Deactivate Shop-Related Dashboard Widgets
+.........................................
+
+It is possible to disable the dashboard widgets related to the shop (found in ``ChameleonSystem\ShopBundle\Dashboard\Widgets`` and ``ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets``)
+by setting the parameter ``chameleon_system_shop.enable_dashboard`` to false.
