@@ -20,8 +20,7 @@ class UsedVoucherSeriesDashboardWidget extends DashboardWidget
         protected readonly Connection $databaseConnection,
         protected readonly SecurityHelperAccess $securityHelperAccess,
         protected readonly bool $enableDashboard
-    )
-    {
+    ) {
         parent::__construct($dashboardCacheService, $translator);
     }
 
@@ -55,7 +54,6 @@ class UsedVoucherSeriesDashboardWidget extends DashboardWidget
         $voucherSerieses = $this->databaseConnection->fetchAllAssociative($query);
 
         foreach ($voucherSerieses as $voucherSeries) {
-
             $query = "SELECT COUNT(*) as voucherCount FROM `shop_voucher`
                           WHERE `shop_voucher_series_id` = :voucherSeriesId
                           AND `is_used_up` = '1'

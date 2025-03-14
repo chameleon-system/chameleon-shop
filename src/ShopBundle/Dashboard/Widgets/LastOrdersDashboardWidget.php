@@ -23,8 +23,7 @@ class LastOrdersDashboardWidget extends DashboardWidget
         protected readonly TranslatorInterface $translator,
         protected readonly SecurityHelperAccess $securityHelperAccess,
         protected readonly bool $enableDashboard
-    )
-    {
+    ) {
         parent::__construct($dashboardCacheService, $translator);
     }
 

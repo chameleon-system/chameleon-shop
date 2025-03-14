@@ -22,8 +22,7 @@ class ShopProductStatusWidget extends DashboardWidget
         protected readonly ShopServiceInterface $shopService,
         protected readonly Connection $databaseConnection,
         protected readonly bool $enableDashboard
-    )
-    {
+    ) {
         parent::__construct($dashboardCacheService, $translator);
     }
 
