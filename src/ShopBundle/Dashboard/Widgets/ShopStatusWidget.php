@@ -6,6 +6,7 @@ use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
+use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
 use ChameleonSystem\SearchBundle\Bridge\ShopSearchStatusService;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
@@ -24,8 +25,9 @@ class ShopStatusWidget extends DashboardWidget
         protected readonly SecurityHelperAccess $securityHelperAccess,
         protected readonly ShopSearchStatusService $shopSearchStatusService,
         protected readonly ShopServiceInterface $shopService,
-        protected readonly Connection $databaseConnection)
-    {
+        protected readonly Connection $databaseConnection,
+        protected readonly bool $enableDashboard
+    ) {
         parent::__construct($dashboardCacheService, $translator);
     }
 
@@ -36,7 +38,7 @@ class ShopStatusWidget extends DashboardWidget
 
     public function showWidget(): bool
     {
-        return $this->securityHelperAccess->isGranted('CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE');
+        return $this->securityHelperAccess->isGranted(EcommerceStatsBackendModule::CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE) && true === $this->enableDashboard;
     }
 
     public function useWidgetContainerTemplate(): bool

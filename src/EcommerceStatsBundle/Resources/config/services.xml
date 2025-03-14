@@ -92,6 +92,7 @@
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
         </service>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.order_number_dashboard_widget"
@@ -105,6 +106,7 @@
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
             <tag name="chameleon_system.dashboard_widget" collection="sales" priority="1" collectionPriority="100" />
         </service>
 
@@ -121,6 +123,7 @@
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
             <tag name="chameleon_system.dashboard_widget" collection="sales" priority="2" />
         </service>
 
@@ -137,6 +140,7 @@
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
             <tag name="chameleon_system.dashboard_widget" collection="sales" priority="3" />
         </service>
 
@@ -153,6 +157,7 @@
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
             <tag name="chameleon_system.dashboard_widget" collection="customer-stats-and-payment" priority="4" />
         </service>
 
@@ -169,6 +174,7 @@
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
             <tag name="chameleon_system.dashboard_widget" collection="product-stats" priority="5" />
         </service>
 
@@ -185,6 +191,7 @@
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
             <tag name="chameleon_system.dashboard_widget" collection="product-stats" priority="6" />
         </service>
 
@@ -201,6 +208,7 @@
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
             <tag name="chameleon_system.dashboard_widget" collection="customer-stats-and-payment" priority="6" />
         </service>
 
