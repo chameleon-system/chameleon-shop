@@ -34,3 +34,7 @@ UPGRADE FROM 7.1 to 8.0
  - TShopPaymentHandlerSofortueberweisung.class.php
  - TShopPaymentHandlerMontrada.class.php
  - TShopPaymentHandlerPayOne.class.php (Please do not confuse with the Payone Payment Bundle)
+
+### Removed Smart Url Handler
+ By executing the `update-1742202279.inc.php` the smart url handler should be removed
+ - TCMSSmartURLHandler_ShopPaymentSofortueberweisungAPI.class.php
