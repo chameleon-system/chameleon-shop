@@ -114,6 +114,10 @@ abstract class DashboardBaseWidget extends DashboardWidget
     {
         $statsGroup = $this->getStatsGroup($this->getStatsGroupSystemName());
 
+        if (null === $statsGroup) {
+            return [];
+        }
+
         $groupElements = [];
         $labels = [];
         $elementCount = \count($statsGroup?->getSubGroups() ?? []);
