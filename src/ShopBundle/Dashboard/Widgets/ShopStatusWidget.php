@@ -106,20 +106,20 @@ class ShopStatusWidget extends DashboardWidget
     {
         $query = 'SELECT COUNT(*) FROM `shop_manufacturer`';
 
-        return $this->databaseConnection->fetchOne($query);
+        return (int) $this->databaseConnection->fetchOne($query);
     }
 
     private function getProductGroupCount(): int
     {
         $query = 'SELECT COUNT(*) FROM `shop_article_group`';
 
-        return $this->databaseConnection->fetchOne($query);
+        return (int) $this->databaseConnection->fetchOne($query);
     }
 
     private function getVariantSetsCount(): int
     {
         $query = 'SELECT COUNT(*) FROM `shop_variant_set`';
 
-        return $this->databaseConnection->fetchOne($query);
+        return (int) $this->databaseConnection->fetchOne($query);
     }
 }

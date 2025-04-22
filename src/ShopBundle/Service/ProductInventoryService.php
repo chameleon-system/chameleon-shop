@@ -46,11 +46,12 @@ class ProductInventoryService implements ProductInventoryServiceInterface
 
             return 0;
         }
+
         if (false === $stock) {
             return 0;
         }
 
-        return (int)$stock;
+        return (int) $stock;
     }
 
     /**
@@ -79,6 +80,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
 
             return false;
         }
+
         if (0 === $affectedRows) {
             return false;
         }
@@ -137,7 +139,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
         ';
         try {
             $result = $this->databaseConnection->fetchAssociative($query, ['articleId' => $parentArticleId]);
-            $amount = (is_array($result) && isset($result['amount'])) ? (int)$result['amount'] : 0;
+            $amount = (is_array($result) && isset($result['amount'])) ? (int) $result['amount'] : 0;
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Unable to updateVariantParentStock - database error: %s', $e->getMessage()),

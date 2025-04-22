@@ -15,7 +15,6 @@ use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use ChameleonSystem\ShopBundle\objects\TShopBasket\BasketItemEvent;
 use ChameleonSystem\ShopBundle\ShopEvents;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -1829,7 +1828,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                     if ($databaseConnection->isTransactionActive()) {
                         try {
                             $databaseConnection->rollBack();
-                        } catch (DBALException $e) {
+                        } catch (\Throwable $e) {
                             // ignore (we will try again and maybe exceed the maximum try count)
                         }
                     }

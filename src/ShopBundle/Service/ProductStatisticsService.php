@@ -72,7 +72,7 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
                               `shop_article_id` = :articleId
       ON DUPLICATE KEY UPDATE `{$field}` = `{$field}` + :amount
                               ";
-        $this->databaseConnection->executeQuery(
+        $this->databaseConnection->executeStatement(
             $query,
             ['id' => \TTools::GetUUID(), 'amount' => $amount, 'articleId' => $articleId],
             ['amount' => \PDO::PARAM_INT]
@@ -97,7 +97,7 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
                               `shop_article_id` = :articleId
       ON DUPLICATE KEY UPDATE `{$field}` = :amount
                               ";
-        $this->databaseConnection->executeQuery(
+        $this->databaseConnection->executeStatement(
             $query,
             ['id' => \TTools::GetUUID(), 'amount' => $amount, 'articleId' => $articleId],
             ['amount' => \PDO::PARAM_INT]
@@ -141,7 +141,7 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
                               `stats_detail_views` = :stats_detail_views
                               ';
         $updateData['id'] = \TTools::GetUUID();
-        $this->databaseConnection->executeQuery(
+        $this->databaseConnection->executeStatement(
             $query,
             $updateData,
             ['amount' => \PDO::PARAM_INT]
@@ -166,16 +166,12 @@ class ProductStatisticsService implements ProductStatisticsServiceInterface
         switch ($type) {
             case self::TYPE_SALES:
                 return 'stats_sales';
-                break;
             case self::TYPE_DETAIL_VIEWS:
                 return 'stats_detail_views';
-                break;
             case self::TYPE_REVIEW_AVERAGE:
                 return 'stats_review_average';
-                break;
             case self::TYPE_REVIEW_COUNT:
                 return 'stats_review_count';
-                break;
         }
 
         return null;

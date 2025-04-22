@@ -90,16 +90,13 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
      * @param string $languageId
      *
      * @return array
-     *
-     * @throws \Doctrine\DBAL\DBALException
      */
     private function getShopOrderStepList($languageId)
     {
         $query = 'SELECT * FROM `shop_order_step` ORDER BY `position`';
-        $statement = $this->databaseConnection->prepare($query);
-        $result = $statement->executeQuery();
+        $result = $this->databaseConnection->executeQuery($query)->fetchAllAssociative();
         $steps = array();
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $step = new TdbShopOrderStep();
             $step->SetLanguage($languageId);
             $step->LoadFromRow($row);
