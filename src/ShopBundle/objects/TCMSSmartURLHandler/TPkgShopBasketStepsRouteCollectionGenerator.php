@@ -29,11 +29,6 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
      */
     private $routingUtil;
 
-    /**
-     * @param SystemPageServiceInterface $systemPageService
-     * @param Connection                 $databaseConnection
-     * @param RoutingUtilInterface       $routingUtil
-     */
     public function __construct(SystemPageServiceInterface $systemPageService, Connection $databaseConnection, RoutingUtilInterface $routingUtil)
     {
         $this->systemPageService = $systemPageService;
@@ -44,14 +39,14 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
     /**
      * {@inheritdoc}
      */
-    public function getCollection($config, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
+    public function getCollection($config, TdbCmsPortal $portal, TdbCmsLanguage $language)
     {
-        $collection = new \Symfony\Component\Routing\RouteCollection();
+        $collection = new Symfony\Component\Routing\RouteCollection();
 
         $checkoutSystemPage = $this->systemPageService->getSystemPage('checkout', $portal, $language);
 
         if (null === $checkoutSystemPage) {
-            throw new TPkgCmsException_Log('Failed to create routing definition for basket steps because there is no system page "checkout" for the requested portal.', array('portal' => $portal->id));
+            throw new TPkgCmsException_Log('Failed to create routing definition for basket steps because there is no system page "checkout" for the requested portal.', ['portal' => $portal->id]);
         }
 
         $defaultCheckoutNodeId = $checkoutSystemPage->fieldCmsTreeId;
@@ -74,7 +69,7 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
                 $checkoutBaseUrl,
                 $checkoutSystemPage->id,
                 $defaultCheckoutNodeId,
-                (true === $firstStep)
+                true === $firstStep
             );
             $collection->add('shop_checkout_'.$basketStep->fieldSystemname, $route);
             $firstStep = false;
@@ -95,7 +90,7 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
     {
         $query = 'SELECT * FROM `shop_order_step` ORDER BY `position`';
         $result = $this->databaseConnection->executeQuery($query)->fetchAllAssociative();
-        $steps = array();
+        $steps = [];
         foreach ($result as $row) {
             $step = new TdbShopOrderStep();
             $step->SetLanguage($languageId);
@@ -107,12 +102,12 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
     }
 
     /**
-     * @param false|null|string $checkoutBaseUrl
+     * @param false|string|null $checkoutBaseUrl
      * @param string $defaultCheckoutPageId
      * @param string $defaultCheckoutNodeId
      * @param bool $isFirstStep
      *
-     * @return \Symfony\Component\Routing\Route
+     * @return Symfony\Component\Routing\Route
      */
     private function getRouteForBasketStep(
         TdbShopOrderStep $orderStep,
@@ -125,7 +120,7 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
 
         $node = TdbCmsTree::GetNewInstance($stepCheckoutNodeId);
         $linkedPage = $node->GetLinkedPageObject();
-        $schemes = array();
+        $schemes = [];
         if ($linkedPage->fieldUsessl) {
             $schemes[] = 'https';
         }
@@ -133,11 +128,11 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
         $stepCheckoutPageId = $linkedPage->id;
         $basketStepPattern = "(?i:/{$orderStep->fieldUrlName})/?";
         if (true === $isFirstStep) {
-            $basketStepPattern = "|/";
+            $basketStepPattern = '|/';
         }
 
-        return new \Symfony\Component\Routing\Route("/{$checkoutBaseUrl}{basketStep}",
-            array(
+        return new Symfony\Component\Routing\Route("/{$checkoutBaseUrl}{basketStep}",
+            [
                 '_controller' => 'chameleon_system_shop.basket_step_controller::basketStep',
                 'basketStepId' => $orderStep->id,
                 'basketStepSystemName' => $orderStep->fieldSystemname,
@@ -146,11 +141,11 @@ class TPkgShopBasketStepsRouteCollectionGenerator implements CollectionGenerator
                 'stepCheckoutPageId' => $stepCheckoutPageId,
                 'stepCheckoutNodeId' => $stepCheckoutNodeId,
                 'containsPortalAndLanguagePrefix' => true,
-            ),
-            array(
+            ],
+            [
                 'basketStep' => $basketStepPattern,
-            ),
-            array(),
+            ],
+            [],
             '',
             $schemes
         );

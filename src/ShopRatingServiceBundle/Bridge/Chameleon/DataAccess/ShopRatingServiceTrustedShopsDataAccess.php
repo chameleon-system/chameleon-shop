@@ -11,8 +11,8 @@
 
 namespace ChameleonSystem\ShopRatingServiceBundle\Bridge\Chameleon\DataAccess;
 
-use Doctrine\DBAL\Connection;
 use ChameleonSystem\ShopRatingService\DataAccess\ShopRatingServiceTrustedShopsDataAccessInterface;
+use Doctrine\DBAL\Connection;
 
 class ShopRatingServiceTrustedShopsDataAccess implements ShopRatingServiceTrustedShopsDataAccessInterface
 {

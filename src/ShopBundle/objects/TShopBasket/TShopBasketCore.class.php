@@ -27,51 +27,58 @@ use Symfony\Component\HttpFoundation\Request;
  * Der Warenkorb kann optional anzeigen, ab welcher Summe die nächstgünstigere
  * Versandkostenschwelle erreicht würde. Diese Information kann im Miniwarenkorb
  * sowie im Hauptwarenkorb angezeigt werden.
-/**/
+ * /**/
 class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWakeupListener
 {
-    const VIEW_PATH = 'pkgShop/views/TShopBasket';
+    public const VIEW_PATH = 'pkgShop/views/TShopBasket';
 
     /**
      * The calculated gross sum of all articles in the basket.
-     * This is the price calculated before discounts or vouchers have been applied
+     * This is the price calculated before discounts or vouchers have been applied.
+     *
      * @var float
      */
     public $dCostArticlesTotal = 0;
 
     /**
-     * the total delivery costs (gross)
+     * the total delivery costs (gross).
+     *
      * @var float
      */
     public $dCostShipping = 0;
 
     /**
-     * the total wrapping costs for the basket (gross)
+     * the total wrapping costs for the basket (gross).
+     *
      * @var float
      */
     public $dCostWrapping = 0;
 
     /**
-     * the total gross wrapping card costs
+     * the total gross wrapping card costs.
+     *
      * @var float
      */
     public $dCostWrappingCards = 0;
 
     /**
      * total gross voucher value for the basket
-     * NOTE: includes ONLY sponsored vouchers
+     * NOTE: includes ONLY sponsored vouchers.
+     *
      * @var float
      */
     public $dCostVouchers = 0;
 
     /**
      * the total for all NONE sponsored vouchers (vouchers that act as discounts - so DO affect VAT).
+     *
      * @var float
      */
     public $dCostNoneSponsoredVouchers = 0;
 
     /**
-     * the total gross discount sum
+     * the total gross discount sum.
+     *
      * @var float
      */
     public $dCostDiscounts = 0;
@@ -90,25 +97,29 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     public $dCostArticlesTotalAfterDiscountsWithoutNoneSponsoredVouchers = 0;
 
     /**
-     * the sum of all VAT costs
+     * the sum of all VAT costs.
+     *
      * @var float
      */
     public $dCostVAT = 0;
 
     /**
-     * the sum of all VAT costs excluding shipping costs
+     * the sum of all VAT costs excluding shipping costs.
+     *
      * @var float
      */
     public $dCostVATWithoutShipping = 0;
 
     /**
-     * the grand total for the basket
+     * the grand total for the basket.
+     *
      * @var float
      */
     public $dCostTotal = 0;
 
     /**
-     * the grand total for the basket excluding shipping costs
+     * the grand total for the basket excluding shipping costs.
+     *
      * @var float
      */
     public $dCostTotalWithoutShipping = 0;
@@ -147,7 +158,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      *
      * @var array
      */
-    public $aCompletedOrderStepList = array();
+    public $aCompletedOrderStepList = [];
 
     /**
      * the basket identifier is set when the basket is commited to db (in the order process) the first time
@@ -155,76 +166,77 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      *
      * @var string
      */
-    public $sBasketIdentifier = null;
+    public $sBasketIdentifier;
 
     /**
      * @var TdbShopWrappingCard|null
      */
-    protected $oWrappingCard = null;
+    protected $oWrappingCard;
     /**
      * @var TdbShopWrapping|null
      */
-    protected $oWrapping = null;
+    protected $oWrapping;
     /**
      * use GetActiveVatList to access the property.
      *
      * @var TdbShopVatList|null
      */
-    private $oActiveVatList = null;
+    private $oActiveVatList;
     /**
      * holds the articles of the basket - NOT: you should NOT access this directly. instead use GetBasketArticles().
      *
      * @var TShopBasketArticleList|null
      */
-    protected $oBasketArticles = null;
+    protected $oBasketArticles;
     /**
      * use GetActiveDiscounts to access the property.
      *
      * @var TShopBasketDiscountList|null
      */
-    private $oActiveDiscounts = null;
+    private $oActiveDiscounts;
 
     /**
      * use GetActiveShippingGroup to access this property.
      *
      * @var TdbShopShippingGroup|null
      */
-    private $oActiveShippingGroup = null;
+    private $oActiveShippingGroup;
 
     /**
      * use GetActivePaymentMethod to access the property.
      *
      * @var TdbShopPaymentMethod|null
      */
-    private $oActivePaymentMethod = null;
+    private $oActivePaymentMethod;
 
     /**
      * use GetActiveVouchers to access the property.
      *
      * @var TShopBasketVoucherList
      */
-    private $oActiveVouchers = null;
+    private $oActiveVouchers;
 
     /**
      * @FIXME private property that is never accessed.
+     *
      * @var null
      */
-    private $rawBasket = null;
+    private $rawBasket;
 
-    const SESSION_KEY_NAME = 'esono/pkgShop/activeBasket';
+    public const SESSION_KEY_NAME = 'esono/pkgShop/activeBasket';
 
     /**
      * as soon as an order request is issued, we try to create an order id, and
      * store it in $_SESSION[self::SESSION_KEY_PROCESSING_BASKET]. This way, we can prevent a reload from
      * generating a second order.
      */
-    const SESSION_KEY_PROCESSING_BASKET = 'basketobjectprocessingkey';
+    public const SESSION_KEY_PROCESSING_BASKET = 'basketobjectprocessingkey';
 
     /**
      * when creating an order we place the order id into this session var and keep it there
      * this is usefull if you, for example, want to show the order as a print version to the user.
      */
-    const SESSION_KEY_LAST_CREATED_ORDER_ID = 'basketobjectlastorderid';
+    public const SESSION_KEY_LAST_CREATED_ORDER_ID = 'basketobjectlastorderid';
 
     public const VOUCHER_TYPE_NOT_SET = -1;
     public const VOUCHER_SPONSORED = 0;
@@ -232,6 +244,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * @var int
+     *
      * @psalm-var self::VOUCHER_*
      */
     private $voucherTypeCurrentlyRecalculating = self::VOUCHER_TYPE_NOT_SET;
@@ -251,6 +264,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * @var int
+     *
      * @psam-var positive-int|0
      */
     private $recalculationDepth = 0;
@@ -379,7 +393,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     {
         if (is_null($this->oActiveShippingGroup)) {
             // fetch the one from the shop
-            $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+            $oShopConfig = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             $oActiveShippingGroup = $oShopConfig->GetFieldShopShippingGroup();
             if (false == $this->SetActiveShippingGroup($oActiveShippingGroup)) {
                 // unable to set - group not in allowed list
@@ -495,7 +509,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     {
         $this->UnlockBasket();
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         if (null !== $request && true === $request->hasSession()) {
             $request->getSession()->remove(self::SESSION_KEY_NAME);
         }
@@ -519,7 +533,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     public static function GetInstance($bReset = false, $bReloadFromSession = false)
     {
         /** @var $shopService ShopServiceInterface */
-        $shopService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        $shopService = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
         if ($bReset) {
             $shopService->resetBasket();
         }
@@ -535,7 +549,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     public static function BasketInSession()
     {
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         if (null === $request || false === $request->hasSession()) {
             return false;
         }
@@ -550,7 +564,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     {
         $this->SetActivePaymentMethod(null);
         $this->SetActiveShippingGroup(null);
-        //$this->RecalculateBasket();
+        // $this->RecalculateBasket();
         $this->SetBasketRecalculationFlag();
     }
 
@@ -593,8 +607,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                 $oUser->ObserverUnregister('oUserBasket');
 
                 /** @var Request $request */
-                $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
-                /** @var TPKgCmsSession $session */
+                $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+                /* @var TPKgCmsSession $session */
                 if (null !== $request && true === $request->hasSession()) {
                     $session = $request->getSession();
                     $session->set(self::SESSION_KEY_NAME, $this);
@@ -605,8 +619,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * exposes the GetBasketSumForVoucher method in TShopBasketArticleList.
-     *
-     * @param TShopVoucher $oVoucher
      *
      * @return float
      */
@@ -635,8 +647,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * exposes the GetBasketQuantityForVoucher method in TShopBasketArticleList.
      *
-     * @param TShopVoucher $oVoucher
-     *
      * @return float
      */
     public function GetBasketQuantityForVoucher(TShopVoucher $oVoucher)
@@ -647,8 +657,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * exposes the GetBasketSumForDiscount method in TShopBasketArticleList.
      *
-     * @param TShopDiscount $oDiscount
-     *
      * @return float
      */
     public function GetBasketSumForDiscount(TShopDiscount $oDiscount)
@@ -658,8 +666,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * exposes the GetBasketQuantityForDiscount method in TShopBasketArticleList.
-     *
-     * @param TShopDiscount $oDiscount
      *
      * @return float
      */
@@ -672,8 +678,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * add a TShopBasketArticle to the article list. if such an item is already in the basket, we just add the amount
      * instead of inserting a new entry.
      * return true if the item was updated, false if it was removed (happens when the amount falls below zero).
-     *
-     * @param TShopBasketArticle $oItem
      *
      * @return bool
      */
@@ -719,8 +723,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * update the amount of the item in the basket. if it does not exists, it will be added instead
      * if the resulting amount is less than or equal to zero, the item will be removed
      * return true if the item was updated, false if it was removed (happens when the amount falls below zero).
-     *
-     * @param TShopBasketArticle $oItem
      *
      * @return bool
      */
@@ -822,7 +824,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $this->dCostTotal = $this->dCostTotal - $this->dCostVouchers; // - $this->dCostDiscounts;
         $this->dCostTotalWithoutShipping = $this->dCostTotal - $this->dCostShipping;
 
-        /**
+        /*
          * since the payment method may have a basket value restriction, we need to check its validity again after
          * we have the final basket value. If the final basket value invalidates the payment, then we need to call the recalculate again
          * if this again results in an invalid payment method, then we throw an exception.
@@ -856,7 +858,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     {
         $oDiscountList = TdbShopDiscountList::GetActiveDiscountList();
         $this->GetActiveDiscounts()->Destroy();
-        $this->oActiveDiscounts = null; //because TdbShopDiscountList has no RemoveInvalidDiscounts()!
+        $this->oActiveDiscounts = null; // because TdbShopDiscountList has no RemoveInvalidDiscounts()!
         while ($oDiscount = $oDiscountList->Next()) {
             $this->GetActiveDiscounts()->AddItem($oDiscount);
         }
@@ -933,7 +935,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $this->dCostVATWithoutShipping = $this->GetActiveVATList()->GetTotalVatValue();
         $this->GetActiveVATList()->GoToStart();
 
-        $oShopConf = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShopConf = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         if (true === $oShopConf->fieldShippingVatDependsOnBasketContents && $this->dCostVATWithoutShipping > 0) {
             if (is_null($this->GetActiveVouchers()) || !$this->GetActiveVouchers()->HasFreeShippingVoucher()) {
                 // need to add the shipping costs to the max vat group
@@ -1009,7 +1011,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * get the total gross value of all items (including shipping, payment methods, etc) for the vat
      * group.
      *
-     * @param TdbShopVat $oVat
      * @param bool $bIncludePaymentAndShipping
      *
      * @return float
@@ -1088,8 +1089,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * returns array with pointers to all basket articles that match the shipping type.
      *
-     * @param TdbShopShippingType $oShippingType
-     *
      * @return TShopBasketArticleList
      */
     public function GetArticlesAffectedByShippingType(TdbShopShippingType $oShippingType)
@@ -1101,7 +1100,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * create an order based on the current basket. returns the order created on success, false on failure.
      *
      * @param string $sMessageConsumer - who should recieve error messages
-     * @param bool   $bForcePayment    - set to true if you want to force the selected payment EVEN if it is not allowed for the current user
+     * @param bool $bForcePayment - set to true if you want to force the selected payment EVEN if it is not allowed for the current user
      *
      * @return TdbShopOrder|false
      */
@@ -1114,7 +1113,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $bSkipPaymentValidation = $bForcePayment; // skip the payment validation if the payment is to be forced
         $this->getLogger()->info('create order');
         if ($this->CreateOrderAllowCreation($sMessageConsumer, $bSkipPaymentValidation) && $bBasketVouchersValidated) {
-            $this->getLogger()->info('create order: order creation permitted', array('basket' => $this, 'user' => TdbDataExtranetUser::GetInstance()));
+            $this->getLogger()->info('create order: order creation permitted', ['basket' => $this, 'user' => TdbDataExtranetUser::GetInstance()]);
             // lock basket to prevent a second request from creating the order again.
             $this->LockBasket();
             // now create order
@@ -1127,7 +1126,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             // we are not logged in yet, but trying to create the order... so we need to set allow edit all
             $oOrder->AllowEditByAll(true);
             $oOrder->Save();
-            //'order_ident'=>$oBasket->sBasketIdentifier
+            // 'order_ident'=>$oBasket->sBasketIdentifier
             if (!empty($oBasketCopy->sBasketIdentifier)) { // if the basket has no identifier, then we do not update the shop_order_basket record
                 $query = "UPDATE `shop_order_basket` SET `shop_order_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oOrder->id)."' WHERE `order_ident` = '".MySqlLegacySupport::getInstance()->real_escape_string($oBasketCopy->sBasketIdentifier)."'";
                 MySqlLegacySupport::getInstance()->query($query);
@@ -1181,7 +1180,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                     } else {
                         $sErrorMsg = $this->OnPaymentErrorHook($bPaymentOK, $oOrder, $oPaymentHandler);
                         $oMsgManager = TCMSMessageManager::GetInstance();
-                        $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-PAYMENT-METHOD-REJECTED', array('errorMsg' => $sErrorMsg));
+                        $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-PAYMENT-METHOD-REJECTED', ['errorMsg' => $sErrorMsg]);
                         $bOrderCreated = false;
                     }
                 } else {
@@ -1262,8 +1261,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * and before any other processing (payment, export, etc) begins.
      * NOTE: if the method returns false, the order is NOT canceled - but other processing (payment, export etc) is STOPPED.
      *
-     * @param string       $sMessageConsumer
-     * @param TdbShopOrder $oOrder
+     * @param string $sMessageConsumer
      *
      * @return bool
      */
@@ -1293,7 +1291,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * The Method is usually called via $this->CreateOrder(...) - hower, it may also be called to
      * complete the order process after the user returns from an external payment handler called bby the ExecutePayment method.
      *
-     * @param TdbShopOrder          $oOrder
      * @param TdbShopPaymentHandler $oPaymentHandler
      * @param string $sMessageConsumer
      *
@@ -1321,7 +1318,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         } else {
             $sErrorMsg = $this->OnPaymentErrorHook($bPostPaymentOk, $oOrder, $oPaymentHandler);
             $oMsgManager = TCMSMessageManager::GetInstance();
-            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-PAYMENT-METHOD-REJECTED', array('errorMsg' => $sErrorMsg));
+            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-PAYMENT-METHOD-REJECTED', ['errorMsg' => $sErrorMsg]);
             $bPostPaymentOk = false;
         }
 
@@ -1332,8 +1329,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * called when the payment handler returns something other than true
      * The method should return the error string to display.
      *
-     * @param bool                  $bPaymentErrorCode
-     * @param TdbShopOrder          $oOrder            - the order just created
+     * @param bool $bPaymentErrorCode
+     * @param TdbShopOrder $oOrder - the order just created
      * @param TdbShopPaymentHandler $oPaymentHandler
      *
      * @return string
@@ -1391,7 +1388,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $oLastOrder = TShopBasket::GetLastCreatedOrder();
         if (is_object($oLastOrder)) {
             $iLastOrderCreated = strtotime($oLastOrder->fieldDatecreated);
-            if (((time() - $iLastOrderCreated)) < 10) {
+            if ((time() - $iLastOrderCreated) < 10) {
                 $bIsReorder = true;
             }
         }
@@ -1402,8 +1399,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * return true if the basket may be saved as an order, false if we want to prevent saving the order.
      *
-     * @param string $sMessageConsumer       - message manager who we want to send errors to
-     * @param bool   $bSkipPaymentValidation - set to true if you want to skip the validation of the selected payment method
+     * @param string $sMessageConsumer - message manager who we want to send errors to
+     * @param bool $bSkipPaymentValidation - set to true if you want to skip the validation of the selected payment method
      *
      * @return bool
      */
@@ -1516,17 +1513,17 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * used to display the basket.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'mini', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'mini', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oView->AddVar('oShop', $oShop);
         $oView->AddVar('oBasket', $this);
         $oView->AddVar('oBasketArticles', $this->GetBasketArticles());
@@ -1549,7 +1546,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }
@@ -1587,6 +1584,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * @return int - TShopBasketCore::VOUCHER_TYPE_NOT_SET|TShopBasketCore::VOUCHER_NOT_SPONSORED|TShopBasketCore::VOUCHER_SPONSORED
+     *
      * @psalm-return self::VOUCHER_*
      */
     public function getVoucherTypeCurrentlyRecalculating(): int
@@ -1596,14 +1594,17 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * @psalm-param self::VOUCHER_* $type
+     *
      * @return void
      */
-    private function setVoucherTypeCurrentlyRecalculating(int $type) {
+    private function setVoucherTypeCurrentlyRecalculating(int $type)
+    {
         $this->voucherTypeCurrentlyRecalculating = $type;
     }
 
     /**
      * @param TShopBasketArticleList $oArticles
+     *
      * @return void
      */
     protected function setBasketArticles($oArticles)
@@ -1622,8 +1623,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     /**
      * Attempts to add the voucher to the basket. Error and success messages are sent to $sMessageHandler.
      *
-     * @param TdbShopVoucher $oVoucher
-     * @param string         $sMessageHandler - send any messages to this message consumer
+     * @param string $sMessageHandler - send any messages to this message consumer
      *
      * @return bool
      */
@@ -1639,8 +1639,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
         $cAllowUseOfVoucherResult = $oVoucher->AllowUseOfVoucher();
         if (TdbShopVoucher::ALLOW_USE != $cAllowUseOfVoucherResult) {
-            if (TdbShopVoucher::USE_ERROR_NOT_VALID_FOR_CUSTOMER_GROUP_MISSING_LOGIN == $cAllowUseOfVoucherResult ||
-               TdbShopVoucher::USE_ERROR_NOT_VALID_FOR_CUSTOMER_MISSING_LOGIN == $cAllowUseOfVoucherResult) {
+            if (TdbShopVoucher::USE_ERROR_NOT_VALID_FOR_CUSTOMER_GROUP_MISSING_LOGIN == $cAllowUseOfVoucherResult
+               || TdbShopVoucher::USE_ERROR_NOT_VALID_FOR_CUSTOMER_MISSING_LOGIN == $cAllowUseOfVoucherResult) {
                 $oExtranet = TdbDataExtranet::GetInstance();
                 if (!is_null($oExtranet)) {
                     $aMessageData['sLinkLoginStart'] = '<a href="'.$oExtranet->GetLinkLoginPage().'">';
@@ -1751,8 +1751,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      * note: the method is normally called by the order steps - you should not need to call it from
      * a different context.
      *
-     * @param bool   $bCreateNewIdent - set to true, if you want to create a new identifier (every request adds a count postfix)
-     * @param string $stepSystemName  - save the stepname to basket
+     * @param bool $bCreateNewIdent - set to true, if you want to create a new identifier (every request adds a count postfix)
+     * @param string $stepSystemName - save the stepname to basket
      *
      * @return string
      */
@@ -1762,7 +1762,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $user = $this->getExtranetUserProvider()->getActiveUser();
         $request = $this->getRequest();
         if (null === $request || false === $request->hasSession()) {
-            $sessionCopy = array();
+            $sessionCopy = [];
             $sessionId = '';
         } else {
             $session = $request->getSession();
@@ -1791,9 +1791,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                      * the call to this method of course).
                      */
                     $query = 'SELECT `id` FROM `shop_order` WHERE `order_ident` = :ident';
-                    $res = $databaseConnection->fetchColumn($query, array(
+                    $res = $databaseConnection->fetchColumn($query, [
                         'ident' => $orderIdent,
-                    ));
+                    ]);
                     if (false !== $res) {
                         continue;
                     }
@@ -1810,7 +1810,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                                       `rawdata_session` = :rawdata_session,
                                       `update_stepname` = :update_stepname
                          ';
-                    $databaseConnection->executeQuery($query, array(
+                    $databaseConnection->executeQuery($query, [
                         'id' => TTools::GetUUID(),
                         'order_ident' => $orderIdent,
                         'session_id' => $sessionId,
@@ -1820,7 +1820,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                         'rawdata_user' => base64_encode(serialize($user)),
                         'rawdata_session' => base64_encode(serialize($sessionCopy)),
                         'update_stepname' => $stepSystemName,
-                    ));
+                    ]);
                     $databaseConnection->commit();
                     $this->sBasketIdentifier = $orderIdent;
                     $insertOk = true;
@@ -1828,7 +1828,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                     if ($databaseConnection->isTransactionActive()) {
                         try {
                             $databaseConnection->rollBack();
-                        } catch (\Throwable $e) {
+                        } catch (Throwable $e) {
                             // ignore (we will try again and maybe exceed the maximum try count)
                         }
                     }
@@ -1850,7 +1850,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                          `update_stepname` = :update_stepname
                       WHERE `order_ident` = :old_order_ident
                  ';
-            $databaseConnection->executeQuery($query, array(
+            $databaseConnection->executeQuery($query, [
                 'order_ident' => $orderIdent,
                 'lastmodified' => $time,
                 'rawdata_basket' => base64_encode(serialize($this)),
@@ -1858,7 +1858,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                 'rawdata_session' => base64_encode(serialize($sessionCopy)),
                 'update_stepname' => $stepSystemName,
                 'old_order_ident' => $this->sBasketIdentifier,
-            ));
+            ]);
             $this->sBasketIdentifier = $orderIdent;
         }
 
@@ -1867,8 +1867,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
     /**
      * generates a vachouer code by $iLength.
-     *
-     * @param int $iLength
      *
      * @return string
      */
@@ -1888,9 +1886,9 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     }
 
     /**
-     * validate the contents of the basket (such as allowable stock)
+     * validate the contents of the basket (such as allowable stock).
      *
-     * @param null|string $sMessageManager
+     * @param string|null $sMessageManager
      *
      * @return bool
      */
@@ -1906,7 +1904,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             return true;
         }
 
-        /**
+        /*
          * Prevent basket validation if the basket was loaded during an ongoing payment process.
          * If an order exists already and the basket has not been reset yet, it would otherwise check again for the
          * stock value and create an error if the stock fell to zero with the created order.
@@ -1921,7 +1919,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $this->GetBasketArticles()->Refresh();
 
         $isValid = $this->GetBasketArticles()->ValidateBasketContents($sMessageManager);
-        /**
+        /*
          * Validate the vouchers as they were stored in the session and
          * maybe could be used by another order (when vouchers with the same code exist).
          */
@@ -1947,7 +1945,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         //      $oDiscountList = TdbShopDiscountList::GetActiveDiscountList("`shop_discount`.`restrict_to_value_from` > ".MySqlLegacySupport::getInstance()->real_escape_string($this->dCostArticlesTotal),"`shop_discount`.`restrict_to_value_from` ASC");
         $oDiscountList = $this->GetActiveDiscounts();
         $oDiscountList->GoToStart();
-        $aDiscountId = array();
+        $aDiscountId = [];
         while ($oDiscount = $oDiscountList->Next()) {
             $aDiscountId[] = "(`shop_discount`.`id` != '".MySqlLegacySupport::getInstance()->real_escape_string($oDiscount->id)."' AND `shop_discount`.`restrict_to_value_from` >= '".MySqlLegacySupport::getInstance()->real_escape_string($oDiscount->sqlData['restrict_to_value_from'])."' AND `shop_discount`.`restrict_to_articles_from` >= '".MySqlLegacySupport::getInstance()->real_escape_string($oDiscount->sqlData['restrict_to_articles_from'])."')";
         }
@@ -1996,7 +1994,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                     if (($bVoucherLoaded && $oVoucher->fieldIsUsedUp) || !$bVoucherLoaded) {
                         $oNextAvailableVoucher = $this->GetNextAvailableVoucher($sVoucherCode, $sBasketVoucherSeriesId, $sMessageConsumer);
 
-                        /**
+                        /*
                          * next voucher with same code is available, so auto add that one.
                          * as we do not want to inform the customer that this happened,
                          * we create a temporary message consumer for RemoveVoucher and AddVoucher messages and clear them afterwards.
@@ -2010,7 +2008,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
                             $bBasketVoucherAvailable = false;
                             $this->bMarkAsRecalculationNeeded = true;
                             $oMsgManager = TCMSMessageManager::GetInstance();
-                            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-VOUCHER-NOT-LONGER-AVAILABLE', array('sVoucherCode' => $sVoucherCode));
+                            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-VOUCHER-NOT-LONGER-AVAILABLE', ['sVoucherCode' => $sVoucherCode]);
                         }
                     }
                 }
@@ -2034,7 +2032,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     {
         $oNextAvailableVoucher = null;
         $oVoucher = TdbShopVoucher::GetNewInstance();
-        if ($oVoucher->LoadFromFields(array('code' => $sVoucherCode, 'is_used_up' => '0', 'shop_voucher_series_id' => $sSeriesId))) {
+        if ($oVoucher->LoadFromFields(['code' => $sVoucherCode, 'is_used_up' => '0', 'shop_voucher_series_id' => $sSeriesId])) {
             $oNextAvailableVoucher = $oVoucher;
         }
 
@@ -2139,7 +2137,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         }
 
         /** @var LanguageServiceInterface $languageService */
-        $languageService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        $languageService = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
         $activeLanguage = $languageService->getActiveLanguage();
 
         $this->GetBasketArticles()->GoToStart();
@@ -2173,8 +2171,6 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     }
 
     /**
-     * @param IPkgCmsEvent $oEvent
-     *
      * @return void
      */
     public function sessionWakeupHook()
@@ -2188,10 +2184,10 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
     public function myOrderDetailHandlerFactory()
     {
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
 
         return new TPkgShopViewMyOrderDetails(
-            new TPkgShopViewMyOrderDetailsDbAdapter(\ChameleonSystem\CoreBundle\ServiceLocator::get(
+            new TPkgShopViewMyOrderDetailsDbAdapter(ChameleonSystem\CoreBundle\ServiceLocator::get(
                 'database_connection'
             )),
             new TPkgShopViewMyOrderDetailsSessionAdapter($request->getSession())
@@ -2205,20 +2201,20 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     protected function getOrderLogger()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.log.order');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.log.order');
     }
 
     protected function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
     }
 
     /**
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @return Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected function getEventDispatcher()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('event_dispatcher');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('event_dispatcher');
     }
 
     /**
@@ -2226,7 +2222,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
     }
 
     /**
@@ -2234,7 +2230,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     private function getRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -2242,14 +2238,14 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 
     /**
-     * @return \ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface
+     * @return ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface
      */
     private function getRequestInfoService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.request_info_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.request_info_service');
     }
 }
