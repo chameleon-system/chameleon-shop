@@ -16,7 +16,6 @@ namespace ChameleonSystem\EcommerceStatsBundle\Service;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\ShopOrderItemDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\TopSellerServiceInterface;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\FetchMode;
 
 class TopSellerService implements TopSellerServiceInterface
 {
@@ -105,7 +104,7 @@ class TopSellerService implements TopSellerServiceInterface
     private function executeQuery(string $query): \Generator
     {
         $results = $this->connection->executeQuery($query);
-        while ($row = $results->fetch(FetchMode::ASSOCIATIVE)) {
+        while ($row = $results->fetchAssociative()) {
             yield $row;
         }
     }

@@ -15,8 +15,8 @@ use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
 use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
 use ChameleonSystem\ShopBundle\ShopEvents;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ProductInventoryService implements ProductInventoryServiceInterface
 {
@@ -32,7 +32,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
      */
     public function getAvailableStock($shopArticleId)
     {
-        /** @var int[]|false $stock */
+        /* @var int[]|false $stock */
         try {
             $stock = $this->databaseConnection->fetchOne(
                 'SELECT SUM(`amount`) AS total_amount FROM `shop_article_stock` WHERE `shop_article_id` = :id GROUP BY `shop_article_id`',
@@ -46,11 +46,12 @@ class ProductInventoryService implements ProductInventoryServiceInterface
 
             return 0;
         }
+
         if (false === $stock) {
             return 0;
         }
 
-        return (int)$stock;
+        return (int) $stock;
     }
 
     /**
@@ -79,11 +80,12 @@ class ProductInventoryService implements ProductInventoryServiceInterface
 
             return false;
         }
+
         if (0 === $affectedRows) {
             return false;
         }
 
-        $this->dispatchUpdateStockEvent($shopArticleId, ($preChangeStock + $stock), $preChangeStock);
+        $this->dispatchUpdateStockEvent($shopArticleId, $preChangeStock + $stock, $preChangeStock);
 
         return true;
     }
@@ -137,7 +139,7 @@ class ProductInventoryService implements ProductInventoryServiceInterface
         ';
         try {
             $result = $this->databaseConnection->fetchAssociative($query, ['articleId' => $parentArticleId]);
-            $amount = (is_array($result) && isset($result['amount'])) ? (int)$result['amount'] : 0;
+            $amount = (is_array($result) && isset($result['amount'])) ? (int) $result['amount'] : 0;
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Unable to updateVariantParentStock - database error: %s', $e->getMessage()),

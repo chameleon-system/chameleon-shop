@@ -10,7 +10,6 @@ use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsTableDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -198,7 +197,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
     {
         try {
             $sqlStatement = $this->connection->executeQuery($query, $params);
-        } catch (DBALException $e) {
+        } catch (\Throwable $e) {
             $this->logger->error(sprintf('Error adding ecommerce stats block'), ['exception' => $e]);
 
             return;

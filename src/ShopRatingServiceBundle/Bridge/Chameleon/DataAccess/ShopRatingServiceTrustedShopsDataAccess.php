@@ -11,8 +11,8 @@
 
 namespace ChameleonSystem\ShopRatingServiceBundle\Bridge\Chameleon\DataAccess;
 
-use Doctrine\DBAL\Connection;
 use ChameleonSystem\ShopRatingService\DataAccess\ShopRatingServiceTrustedShopsDataAccessInterface;
+use Doctrine\DBAL\Connection;
 
 class ShopRatingServiceTrustedShopsDataAccess implements ShopRatingServiceTrustedShopsDataAccessInterface
 {
@@ -29,11 +29,11 @@ class ShopRatingServiceTrustedShopsDataAccess implements ShopRatingServiceTruste
     public function getItemCountForRemoteKey($remoteKey)
     {
         $itemCountQuery = 'SELECT COUNT(*) AS item_count FROM pkg_shop_rating_service_rating WHERE remote_key = :remoteKey';
-        $itemCount = $this->databaseConnection->fetchColumn($itemCountQuery, array(
+        $itemCount = $this->databaseConnection->fetchOne($itemCountQuery, [
             'remoteKey' => $remoteKey,
-        ));
+        ]);
 
-        return intval($itemCount);
+        return (int) $itemCount;
     }
 
     public function insertItem(array $data)
@@ -48,7 +48,6 @@ class ShopRatingServiceTrustedShopsDataAccess implements ShopRatingServiceTruste
                                    rating_text = :ratingText,
                                    rating_date = :ratingDate
             ';
-        $statement = $this->databaseConnection->prepare($insertQuery);
-        $statement->execute($data);
+        $this->databaseConnection->executeStatement($insertQuery, $data);
     }
 }
