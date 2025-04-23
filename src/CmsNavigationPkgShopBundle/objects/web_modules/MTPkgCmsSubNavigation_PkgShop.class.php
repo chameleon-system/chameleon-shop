@@ -18,7 +18,7 @@ class MTPkgCmsSubNavigation_PkgShop extends MTPkgCmsSubNavigation_PkgShopAutoPar
 {
     /**
      * To map values from models to views the mapper has to implement iVisitable.
-     * The ViewRender will pass a prepared MapeprVisitor instance to the mapper.
+     * The ViewRender will pass a prepared MapperVisitor instance to the mapper.
      *
      * The mapper has to fill the values it is responsible for in the visitor.
      *
