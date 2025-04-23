@@ -121,6 +121,48 @@ class TShopOrderItem extends TAdbShopOrderItem
     }
 
     /**
+     * use the method to up the sales count for the article.
+     *
+     * @return void
+     */
+    protected function PostInsertHook()
+    {
+        parent::PostInsertHook();
+
+        if (null === $this->fieldShopArticleId || '' === $this->fieldShopArticleId) {
+            return;
+        }
+
+        /** @var ProductInventoryServiceInterface $productInventoryService */
+        $productInventoryService = ServiceLocator::get('chameleon_system_shop.product_inventory_service');
+        $productInventoryService->addStock($this->fieldShopArticleId, -1 * $this->fieldOrderAmount);
+        /** @var ProductStatisticsServiceInterface $productStatisticService */
+        $productStatisticService = ServiceLocator::get('chameleon_system_shop.product_stats_service');
+        $productStatisticService->add($this->fieldShopArticleId, $productStatisticService::TYPE_SALES, -1 * $this->fieldOrderAmount);
+    }
+
+    /**
+     * update the article counter.
+     *
+     * @return void
+     */
+    protected function PreDeleteHook()
+    {
+        parent::PreDeleteHook();
+
+        if (null === $this->fieldShopArticleId || '' === $this->fieldShopArticleId) {
+            return;
+        }
+
+        /** @var ProductInventoryServiceInterface $productInventoryService */
+        $productInventoryService = ServiceLocator::get('chameleon_system_shop.product_inventory_service');
+        $productInventoryService->addStock($this->fieldShopArticleId, $this->fieldOrderAmount);
+        /** @var ProductStatisticsServiceInterface $productStatisticService */
+        $productStatisticService = ServiceLocator::get('chameleon_system_shop.product_stats_service');
+        $productStatisticService->add($this->fieldShopArticleId, $productStatisticService::TYPE_SALES, -1 * $this->fieldOrderAmount);
+    }
+
+    /**
      * used to display an order item.
      *
      * @param string $sViewName     - the view to use
