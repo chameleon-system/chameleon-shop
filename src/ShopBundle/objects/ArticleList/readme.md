@@ -1,20 +1,40 @@
-post search filter grieft immer nur auf den haupt filter -> nicht auf den fallback
-  -> vorteil - mein post search filter muss nur wissen um welche query es geht
+# ArticleList – Post Search Filter Logik
 
-ablauf:
-	* post-search-filter module muss auf eine Liste einschränkbar sein. aus der Konfiguration kann es sich den filter suchen
-	* die liste muss schauen ob ein post-search-filter konfiguriert ist -> und wenn ja, sich von dem den state holen
-	* für den state brauche ich den spot...
+## Grundprinzip
 
+Der **Post Search Filter** greift ausschließlich auf den Hauptfilter zu, **nicht** auf einen Fallback.
 
-	postSearchFilterApi = new PostSearchFilterApi();
-	postSearchFilter = postSearchFilterApi->getPostSearchFilter()
-	stateHash = postSearchFilter->getStateHash()
-	queryString = postSearchFilter->getFilteredQuery(sourceQuery)
+**Vorteil:**  
+Der Post-Search-Filter muss nur wissen, **welche Query** verwendet wird – das vereinfacht die Logik.
 
+---
 
+## Ablauf & Interaktion
 
-	listQuery = postSearchFilterApi->getListQuery()
-	queryString = postSearchFilter->getFilteredQuery(sourceQuery)
-	// ... show filter
+### 1. Einschränkung durch Konfiguration
 
+- Das **Post-Search-Filter-Modul** muss auf eine Liste einschränkbar sein.
+- Es liest die nötigen Filterdaten aus der **Konfiguration**.
+
+### 2. Liste prüft auf Filter-Konfiguration
+
+- Die **Liste prüft**, ob ein Post-Search-Filter konfiguriert ist.
+- Falls ja, **holt sie sich den State** vom Filtermodul.
+
+### 3. Für den State wird der **Spot** benötigt.
+
+---
+
+## Beispielhafte Logik in Code
+
+```php
+$postSearchFilterApi = new PostSearchFilterApi();
+$postSearchFilter = $postSearchFilterApi->getPostSearchFilter();
+
+$stateHash = $postSearchFilter->getStateHash();
+$queryString = $postSearchFilter->getFilteredQuery($sourceQuery);
+
+$listQuery = $postSearchFilterApi->getListQuery();
+$queryString = $postSearchFilter->getFilteredQuery($sourceQuery);
+
+// Danach: Filteranzeige anzeigen
