@@ -15,7 +15,7 @@ use ChameleonSystem\ShopBundle\ProductStatistics\Interfaces\ProductStatisticsSer
 
 class TShopOrderItem extends TAdbShopOrderItem
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopOrderItem';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopOrderItem';
 
     /**
      * loads the owning bundle order item IF this item belongs to a bundle. returns false if it is not.
@@ -37,7 +37,7 @@ class TShopOrderItem extends TAdbShopOrderItem
                    ";
                 if ($aOwner = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
                     $oOwningOrderItem = TdbShopOrderItem::GetNewInstance();
-                    /** @var $oOwningOrderItem TdbShopOrderItem */
+                    /* @var $oOwningOrderItem TdbShopOrderItem */
                     $oOwningOrderItem->LoadFromRow($aOwner);
                 }
             }
@@ -61,7 +61,7 @@ class TShopOrderItem extends TAdbShopOrderItem
             $oOwningBundleConnection = false;
             if (!is_null($this->id)) {
                 $oOwningBundleConnection = TdbShopOrderBundleArticle::GetNewInstance();
-                /** @var $oOwningOrderItem TdbShopOrderBundleArticle */
+                /* @var $oOwningOrderItem TdbShopOrderBundleArticle */
                 if (!$oOwningBundleConnection->LoadFromField('bundle_article_id', $this->id)) {
                     $oOwningBundleConnection = false;
                 }
@@ -106,7 +106,6 @@ class TShopOrderItem extends TAdbShopOrderItem
                     $dAmountDelta = $oOldData->fieldOrderAmount - $this->sqlData['order_amount'];
                     $productInventoryService->addStock($this->fieldShopArticleId, $dAmountDelta);
                     $productStatisticService->add($this->fieldShopArticleId, ProductStatisticsServiceInterface::TYPE_SALES, -1 * $dAmountDelta);
-
                 } else {
                     $productInventoryService->addStock($oOldData->fieldShopArticleId, $oOldData->fieldOrderAmount);
                     $productStatisticService->add($oOldData->fieldShopArticleId, ProductStatisticsServiceInterface::TYPE_SALES, -1 * $oOldData->fieldOrderAmount);
@@ -121,15 +120,57 @@ class TShopOrderItem extends TAdbShopOrderItem
     }
 
     /**
+     * use the method to up the sales count for the article.
+     *
+     * @return void
+     */
+    protected function PostInsertHook()
+    {
+        parent::PostInsertHook();
+
+        if (null === $this->fieldShopArticleId || '' === $this->fieldShopArticleId) {
+            return;
+        }
+
+        /** @var ProductInventoryServiceInterface $productInventoryService */
+        $productInventoryService = ServiceLocator::get('chameleon_system_shop.product_inventory_service');
+        $productInventoryService->addStock($this->fieldShopArticleId, -1 * $this->fieldOrderAmount);
+        /** @var ProductStatisticsServiceInterface $productStatisticService */
+        $productStatisticService = ServiceLocator::get('chameleon_system_shop.product_stats_service');
+        $productStatisticService->add($this->fieldShopArticleId, $productStatisticService::TYPE_SALES, -1 * $this->fieldOrderAmount);
+    }
+
+    /**
+     * update the article counter.
+     *
+     * @return void
+     */
+    protected function PreDeleteHook()
+    {
+        parent::PreDeleteHook();
+
+        if (null === $this->fieldShopArticleId || '' === $this->fieldShopArticleId) {
+            return;
+        }
+
+        /** @var ProductInventoryServiceInterface $productInventoryService */
+        $productInventoryService = ServiceLocator::get('chameleon_system_shop.product_inventory_service');
+        $productInventoryService->addStock($this->fieldShopArticleId, $this->fieldOrderAmount);
+        /** @var ProductStatisticsServiceInterface $productStatisticService */
+        $productStatisticService = ServiceLocator::get('chameleon_system_shop.product_stats_service');
+        $productStatisticService->add($this->fieldShopArticleId, $productStatisticService::TYPE_SALES, -1 * $this->fieldOrderAmount);
+    }
+
+    /**
      * used to display an order item.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oOrderItem', $this);
@@ -147,10 +188,10 @@ class TShopOrderItem extends TAdbShopOrderItem
      */
     public function isDownload()
     {
-        $db = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $db = ServiceLocator::get('database_connection');
         $query = 'select COUNT(*) AS matches FROM `shop_order_item_download_cms_document_mlt`
                    WHERE `source_id` = :shopOrderItemId';
-        $result = $db->fetchAssociative($query, array('shopOrderItemId' => $this->id));
+        $result = $db->fetchAssociative($query, ['shopOrderItemId' => $this->id]);
 
         return intval($result['matches']) > 0;
     }
@@ -166,7 +207,7 @@ class TShopOrderItem extends TAdbShopOrderItem
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD */
@@ -181,7 +222,7 @@ class TShopOrderItem extends TAdbShopOrderItem
      */
     public static function GetCacheRelevantTables($sViewName = null, $sViewType = null)
     {
-        $aTables = array();
+        $aTables = [];
         $aTables[] = 'shop_order_item';
 
         return $aTables;

@@ -1118,7 +1118,6 @@ class TShopOrder extends TShopOrderAutoParent
         );
 
         parent::PreDeleteHook();
-        $this->UpdateStock(false);
     }
 
     /**
