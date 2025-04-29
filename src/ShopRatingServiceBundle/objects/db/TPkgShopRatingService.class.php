@@ -36,6 +36,7 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
 
         return $oInstance;
     }
+
     /**
      * Return new instance of "row-object".
      *

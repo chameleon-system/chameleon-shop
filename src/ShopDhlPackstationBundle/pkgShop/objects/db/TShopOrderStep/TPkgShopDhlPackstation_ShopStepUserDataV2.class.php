@@ -144,6 +144,7 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
 
         return $sAlternativeAddressId;
     }
+
     /**
      * validate billing address.
      *

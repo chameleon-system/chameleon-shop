@@ -505,6 +505,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         return $oPaymentMethods;
     }
+
     /**
      * use this method to add any variables to the render method that you may
      * require for some view.

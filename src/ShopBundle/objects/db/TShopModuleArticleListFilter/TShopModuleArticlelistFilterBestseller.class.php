@@ -50,4 +50,5 @@ class TShopModuleArticlelistFilterBestseller extends TShopModuleArticlelistFilte
         }
 
         return $sQuery;
-    }}
+    }
+}

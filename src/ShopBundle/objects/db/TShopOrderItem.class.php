@@ -53,6 +53,7 @@ class TShopOrderItem extends TAdbShopOrderItem
 
         return $oOwningOrderItem;
     }
+
     /**
      * if this order item belongs to a bundle, then this method will return the connecting table.
      *

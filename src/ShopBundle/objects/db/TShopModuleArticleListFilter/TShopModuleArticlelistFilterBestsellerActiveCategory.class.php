@@ -58,4 +58,5 @@ class TShopModuleArticlelistFilterBestsellerActiveCategory extends TShopModuleAr
         }
 
         return $sQuery;
-    }}
+    }
+}

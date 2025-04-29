@@ -80,6 +80,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
         return "\nLEFT JOIN `shop_payment_method_cms_portal_mlt` ON `shop_payment_method`.`id` = `shop_payment_method_cms_portal_mlt`.`source_id`
             WHERE (`shop_payment_method_cms_portal_mlt`.`target_id` = {$quotedPortalId} OR `shop_payment_method_cms_portal_mlt`.`target_id` IS NULL)";
     }
+
     /**
      * @param string $paymentGroupId
      *
@@ -93,6 +94,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
 
         return " `shop_shipping_group_shop_payment_method_mlt`.`source_id` = {$quotedGroupId}";
     }
+
     /**
      * return all public payment methods for a given shipping group.
      *
@@ -141,6 +143,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
         $query .= ' ORDER BY `shop_payment_method`.`position`';
         $this->Load($query);
     }
+
     /**
      * remove list items that are restricted to some user or user group.
      *
@@ -172,6 +175,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
         $query .= ' ORDER BY `shop_payment_method`.`position`';
         $this->Load($query);
     }
+
     /**
      * return the total costs of all shipping types in the list.
      *

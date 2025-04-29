@@ -74,6 +74,7 @@ class TPkgShopPaymentIPNManager
 
         return $sIdentifier;
     }
+
     /**
      * @return LanguageServiceInterface
      */

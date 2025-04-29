@@ -44,7 +44,8 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
             $aItemIds = array_keys($aNoticeList);
 
             if (count($aItemIds) > 0) {
-                $sTmpTableName = $this->CreateTempNotice($aNoticeList); // diese Methode sollte intern schon auf DBAL setzen
+                // create tmp table for items
+                $sTmpTableName = $this->CreateTempNotice($aNoticeList);
                 $quotedTmpTableName = $connection->quoteIdentifier($sTmpTableName);
 
                 $sQuery = "
@@ -62,6 +63,7 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
 
         return $sQuery;
     }
+
     /**
      * returns the order by part of the query.
      *
@@ -119,6 +121,7 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
 
         return $sTmpTableName;
     }
+
     /**
      * define the group by for the query.
      *

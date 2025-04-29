@@ -42,4 +42,5 @@ class TCMSCronJob_CleanWishlist extends TdbCmsCronjobs
                 }
             }
         }
-    }}
+    }
+}

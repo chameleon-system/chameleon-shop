@@ -399,6 +399,7 @@ class TShopVoucher extends TShopVoucherAutoParent
 
         return $dValueUsed;
     }
+
     /**
      * marks the voucher as used in the database, and logs the voucher  data for the current user
      * in the shop_voucher_use table.

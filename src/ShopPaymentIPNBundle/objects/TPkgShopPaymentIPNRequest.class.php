@@ -240,6 +240,7 @@ class TPkgShopPaymentIPNRequest
             $oTriggerAction->SaveFieldsFast($aData);
         }
     }
+
     /**
      * @param null|string $sRequestIP
      *

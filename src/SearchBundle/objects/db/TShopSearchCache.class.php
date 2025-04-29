@@ -179,6 +179,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
             if (null !== $oItem && -1 == $oItem->fieldNumberOfRecordsFound) {
                 $itemDate = DateTime::createFromFormat('Y-m-d H:i:s', $oItem->fieldLastUsedDate);
                 if ((time() - $itemDate->getTimestamp()) < 5) {
+                    // search is being executed by another process... give it a chance to complete
                     --$iMaxNumberOfAttempts;
                     usleep(50000);
                 } else {
@@ -195,6 +196,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
         return $oItem;
     }
+
     /**
      * creates/refreshes a search cache query.
      *
@@ -229,7 +231,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
             $oItem->LoadFromRow($aData);
             $oItem->AllowEditByAll(true);
             $oItem->Save();
-
+            //die(0);
             $quotedItemId = $connection->quote($oItem->id);
 
             $sTmpQuery = "
@@ -295,6 +297,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
         return $oItem;
     }
+
     /**
      * callback usable to manipulate the search cache query before it is executed.
      *
@@ -389,14 +392,15 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
             $oCatList = TdbShopCategoryList::GetList($query);
 
-            // Organize into a tree...
+            // now organize list into a tree... we trace back each node untill we reach a root node... in the end we
+            // will have a collection of rows. then we merge these
             while ($oCat = $oCatList->Next()) {
                 if (!array_key_exists($oCat->id, $aHits)) {
                     $aHits[$oCat->id] = 0;
                 }
                 $aHits[$oCat->id] += $oCat->sqlData['shop_search_cache_item_count'];
 
-                // Add all parents
+                // add all children to vector
                 while ($oParent = $oCat->GetParent()) {
                     $oParent->sqlData['shop_search_cache_item_count'] = $oCat->sqlData['shop_search_cache_item_count'];
                     if (!array_key_exists($oParent->id, $aHits)) {
@@ -418,6 +422,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
         return $aHits;
     }
+
     /**
      * return number of records found.
      *
@@ -450,6 +455,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
         return $this->fieldNumberOfRecordsFound;
     }
+
     /**
      * return true if the cache has become stale - will remove stale cache entries.
      *
@@ -490,6 +496,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
         $this->id = null;
         $this->sqlData['id'] = null;
     }
+
     /**
      * @return void
      */

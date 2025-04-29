@@ -118,6 +118,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         return TdbShopContributorList::GetList($sQuery);
     }
+
     /**
      * fetch the base price of the item.
      *
@@ -1175,6 +1176,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         return $oOwningBundleItem;
     }
+
     /**
      * if this order item belongs to a bundle, then this method will return the connecting table.
      *
@@ -1371,6 +1373,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         return $oVariantValueList;
     }
+
     /**
      * returns an array of IDs of all variant articles of this article.
      *
@@ -1404,6 +1407,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         return $aArticleIdList;
     }
+
     /**
      * return all variant values that are available for the given type and this article.
      *
@@ -1414,31 +1418,24 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function GetVariantValuesAvailableForType($oVariantType, $aSelectedTypeValues = [])
     {
-        /* @var $connection \Doctrine\DBAL\Connection */
+        /** @var \Doctrine\DBAL\Connection $connection */
         $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $oVariantValueList = null;
         $aArticleIdList = $this->getVariantIDList($aSelectedTypeValues, true);
 
         if (count($aArticleIdList) > 0) {
-            // Einzelne Artikel-IDs escapen (ohne quotes außen)
-            $escapedArticleIds = array_map(function ($id) use ($connection) {
-                $escaped = $connection->quote($id);
-                return substr($escaped, 1, -1);
-            }, $aArticleIdList);
+            $quotedTypeId = $connection->quote($oVariantType->id);
+            $quotedFieldName = $connection->quoteIdentifier($oVariantType->fieldShopVariantTypeValueCmsfieldname);
+            $quotedArticleIds = array_map([$connection, 'quote'], $aArticleIdList);
 
-            $escapedVariantTypeId = substr($connection->quote($oVariantType->id), 1, -1);
-            $escapedOrderByField = substr($connection->quote($oVariantType->fieldShopVariantTypeValueCmsfieldname), 1, -1);
-
-            $query = "
-            SELECT `shop_variant_type_value`.*
-              FROM `shop_variant_type_value`
-        INNER JOIN `shop_article_shop_variant_type_value_mlt`
-                ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
-             WHERE `shop_variant_type_value`.`shop_variant_type_id` = '{$escapedVariantTypeId}'
-               AND `shop_article_shop_variant_type_value_mlt`.`source_id` IN ('" . implode("','", $escapedArticleIds) . "')
-          GROUP BY `shop_variant_type_value`.`id`
-          ORDER BY `shop_variant_type_value`.`{$escapedOrderByField}`
+            $query = "SELECT `shop_variant_type_value`.*
+                FROM `shop_variant_type_value`
+          INNER JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
+               WHERE `shop_variant_type_value`.`shop_variant_type_id` = {$quotedTypeId}
+                 AND `shop_article_shop_variant_type_value_mlt`.`source_id` IN (".implode(', ', $quotedArticleIds).")
+            GROUP BY `shop_variant_type_value`.`id`
+            ORDER BY `shop_variant_type_value`.{$quotedFieldName}
         ";
 
             $oVariantValueList = TdbShopVariantTypeValueList::GetList($query);
@@ -1446,6 +1443,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         return $oVariantValueList;
     }
+
     /**
      * return all variant values that are available for the given type and this article.
      *
@@ -1489,6 +1487,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         return $oVariantValueList;
     }
+
     /**
      * returns a list of variants for the current article each with a unqiue value for $sVariantTypeIdentifier.
      *
@@ -1556,6 +1555,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         return $oArticleList;
     }
+
     /**
      * returns the variant type value for the given identifier.
      *
@@ -1574,7 +1574,11 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         $oVariantValueObject = null;
 
-        /** @var array<string, TdbShopVariantTypeValue>|null $aVariantValues */
+        /**
+         * Use variant type name as key.
+         *
+         * @var array<string, TdbShopVariantTypeValue>|null $aVariantValues
+         */
         $aVariantValues = $this->GetFromInternalCache('aActiveVariantValues');
 
         if (is_null($aVariantValues)) {
@@ -1604,6 +1608,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         return $oVariantValueObject;
     }
+
     /**
      * returns the id of the active value for the given variant type.
      *
@@ -1705,7 +1710,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
             $query .= ' GROUP BY `shop_article`.`id`';
             $query .= ' HAVING COUNT(`shop_article`.`id`) = ' . count($aParts);
-            $query .= ' ORDER BY `shop_article`.`active` DESC';
+            $query .= ' ORDER BY `shop_article`.`active` DESC'; // we want the active article if multiple present
 
             $aMatch = $connection->fetchAssociative($query);
             if ($aMatch) {
@@ -1715,7 +1720,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         }
 
         return $oArticle;
-    }    /**
+    }
+
+    /**
      * article detail images
      * returns a list object of all detail article images. Image #1 is used for preview most often.
      * The image may be overwritten using images in the preview image list.
@@ -1738,7 +1745,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
                 $this->iLanguageId,
                 "`shop_article_image`.`shop_article_id`= {$quotedId} 
              AND `shop_article_image`.`cms_media_id` NOT IN ('','0','1','2','3','4','5','6','7','8','9','11','12','13','14')"
-            );
+            ); // exclude broken records and template images
 
             $oImages = TdbShopArticleImageList::GetList($query);
             $oImages->bAllowItemCache = true;
@@ -1761,6 +1768,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         return $oImages;
     }
+
     /**
      * return the message consumer name of this article. note that varaints
      * always talk through their parents - so if you want to talk to the
@@ -2105,6 +2113,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             $connection->executeStatement($query);
         }
     }
+
     /**
      * hook called when the stock value of the article changed.
      *

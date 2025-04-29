@@ -150,6 +150,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
             }
         }
     }
+
     /**
      * return the shipping date past which a review notification should be send.
      *
@@ -227,6 +228,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
 
         return $bAllowSendingMail;
     }
+
     /**
      * send the shop review mail and log the action in es_shop_review
      * returns true if the mail was send. note that the method checks if the customer is allowed
@@ -284,6 +286,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
 
         return $bMailWasSend;
     }
+
     /**
      * Try to cleanup incomming shop_order.affiliate_code.
      *
@@ -453,6 +456,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
         // (so it includes orders which had their expected order date passed - Frau Sommer 25.11.08)
         return $iNumberOfReviewMailsToBeSend;
     }
+
     /**
      * @param bool $bDisableSentHistory
      * @return void

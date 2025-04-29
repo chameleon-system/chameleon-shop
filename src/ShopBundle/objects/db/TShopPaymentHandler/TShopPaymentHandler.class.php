@@ -102,7 +102,9 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
         }
 
         return $oInstance;
-    }    /**
+    }
+
+    /**
      * @param array       $row
      * @param string|null $languageId
      *
@@ -347,6 +349,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
             }
         }
     }
+
     /**
      * hook is called before the payment data is committed to the database. use it to cleanup/filter/add data you may
      * want to include/exclude from the database.

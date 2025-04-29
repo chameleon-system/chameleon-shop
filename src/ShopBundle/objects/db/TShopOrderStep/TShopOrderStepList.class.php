@@ -50,6 +50,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
 
         return $oNextStep;
     }
+
     /**
      * return the previous step in line (null if there no other step).
      *
@@ -75,6 +76,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
 
         return $oPreviousStep;
     }
+
     /**
      * returns all navi steps marked as navi steps. the active step will be marked as "is active".
      *
@@ -127,6 +129,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
 
         return $oSteps;
     }
+
     /**
      * returns the position of the currently active step. if no step is marked as active,
      * it will return false. Step positions will start at 1 (not zero).

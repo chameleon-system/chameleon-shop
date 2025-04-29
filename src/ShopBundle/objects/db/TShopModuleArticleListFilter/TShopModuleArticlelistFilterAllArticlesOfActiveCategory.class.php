@@ -47,4 +47,5 @@ class TShopModuleArticlelistFilterAllArticlesOfActiveCategory extends TdbShopMod
         }
 
         return $sQuery;
-    }}
+    }
+}

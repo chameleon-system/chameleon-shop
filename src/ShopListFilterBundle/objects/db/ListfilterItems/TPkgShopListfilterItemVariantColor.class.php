@@ -60,4 +60,5 @@ class TPkgShopListfilterItemVariantColor extends TPkgShopListfilterItemVariant
                 $aOptions = $aNewOptions;
             }
         }
-    }}
+    }
+}

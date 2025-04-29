@@ -250,6 +250,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
 
         return $sSQL;
     }
+
     /**
      * returns all fields that may be passed as filter fields.
      *

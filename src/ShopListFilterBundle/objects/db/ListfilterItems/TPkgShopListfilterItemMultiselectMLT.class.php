@@ -44,6 +44,7 @@ class TPkgShopListfilterItemMultiselectMLT extends TPkgShopListfilterItemMultise
 
         return $sQuery;
     }
+
     /**
      * builds the sql query for the GetQueryRestrictionForActiveFilter method
      * we only want to show results that are values of the selected shop attribute in the filter item.
@@ -68,6 +69,7 @@ class TPkgShopListfilterItemMultiselectMLT extends TPkgShopListfilterItemMultise
 
         return $sItemListQuery;
     }
+
     /**
      * return option as assoc array (name=>count).
      *

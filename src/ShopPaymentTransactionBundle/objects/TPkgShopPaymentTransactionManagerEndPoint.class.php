@@ -339,6 +339,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
 
         return (float) round($dTotal, 2);
     }
+
     /**
      * returns the transaction sequence for the next transaction.
      *
@@ -363,6 +364,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
 
         return $iSequenceNumber;
     }
+
     /**
      * the max value is always an absolute value (ie positive).
      *
@@ -423,6 +425,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
 
         return 0 !== $iNumberOfTransactions;
     }
+
     /**
      * returns an array with all products that have not been billed via a transaction.
      *
@@ -553,6 +556,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
 
         return $iTotal;
     }
+
     /**
      * return the sum for the non-product entry in the positions with position type $sTransactionPositionType.
      *
@@ -568,9 +572,10 @@ class TPkgShopPaymentTransactionManagerEndPoint
         $sTransactionPositionType,
         $bIncludeUnconfirmedTransactions = true
     ) {
+        $iTotal = 0;
+        /** @var \Doctrine\DBAL\Connection $connection */
         $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
-        $iTotal = 0;
         $quotedOrderId = $connection->quote($this->order->id);
         $quotedTransactionPositionType = $connection->quote($sTransactionPositionType);
 
@@ -588,12 +593,14 @@ class TPkgShopPaymentTransactionManagerEndPoint
             GROUP BY `pkg_shop_payment_transaction`.`shop_order_id`
     ";
 
-        if ($aRow = $connection->fetchAssociative($query)) {
-            $iTotal = $aRow['value_total'];
+        $result = $connection->executeQuery($query);
+        if (false !== ($aRow = $result->fetchNumeric())) {
+            $iTotal = $aRow[0];
         }
 
-        return round((float) $iTotal, 2);
+        return round($iTotal, 2);
     }
+
     /**
      * return the transaction details for a completed order.
      *

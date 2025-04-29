@@ -362,7 +362,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             $connection->executeStatement($query);
         }
 
-        // Drop index fields not needed
+        // drop index fields not needed
         $sBaseName = '_tmp' . self::INDEX_TBL_PREFIX;
         $quotedLike = $connection->quote($sBaseName . '%');
         $query = "SHOW TABLES LIKE {$quotedLike}";
@@ -376,6 +376,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             }
         }
     }
+
     /**
      * @return false|null
      */
@@ -478,7 +479,8 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             }
         }
 
-        // Now drop index tables no longer needed
+        // now drop indext tables no longer needed
+        // drop index fields not needed
         $sBaseName = self::INDEX_TBL_PREFIX;
 
         foreach (['', '_tmp'] as $prefix) {
@@ -499,6 +501,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         TdbShopSearchCache::ClearCompleteCache();
         $logger->info('search index create completed');
     }
+
     /**
      * get all index tables for the field.
      *
@@ -577,6 +580,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
         return $sQuery;
     }
+
     /**
      * return a search for the given search term(s).
      *
@@ -724,7 +728,6 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             }
         }
 
-        // build field restrictions for each table
         $aFieldRestrictionQueries = [];
         if (is_array($aFieldRestrictions)) {
             foreach ($aTableList as $sTableName) {
@@ -735,6 +738,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             }
         }
 
+        // build query
         $aTableQueries = [];
         $quotedLanguageId = $connection->quote($sLanguageId);
 
@@ -757,6 +761,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             $aTableQueries[$sTermTable][] = $sTmpQuery;
 
             if (false === TdbShopSearchIndexer::searchWithAND()) {
+                // OR `{$sSoundTable}`.`substring` = '".MySqlLegacySupport::getInstance()->real_escape_string($sSoundEX)."')
                 $sSoundEX = TdbShopSearchIndexer::GetSoundexForWord($sTerm);
                 if ('0000' !== $sSoundEX) {
                     $sSoundTable = TdbShopSearchIndexer::GetIndexTableNameForIndexLength(mb_strlen($sSoundEX));
@@ -782,6 +787,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
         return $aTableQueries;
     }
+
     /**
      * splits the search words into an array with prepared search words.
      *
@@ -896,6 +902,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         if (array_key_exists($sTmpWord, $aIgnoreWordCache)) {
             $bIgnore = true;
         } elseif (false === $bCompleteLoad) {
+            // check if we find it in the db
             $oShop = TdbShopSearchIndexer::GetShopConfigForIndexer();
 
             $quotedShopId = $connection->quote($oShop->id);
@@ -918,6 +925,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
         return $bIgnore;
     }
+
     /**
      * original word.
      *
@@ -968,6 +976,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
         $quotedTable = $connection->quote($sTable);
 
+        // also trigger changes in the search index (cache)
         $query = "
         SELECT `shop_search_field_weight`.*, `shop_search_query`.`query`
           FROM `shop_search_field_weight`
@@ -1012,6 +1021,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             $connection->executeStatement($query);
         }
     }
+
     /**
      * returns always true!
      * non AND searches are disabled currently.

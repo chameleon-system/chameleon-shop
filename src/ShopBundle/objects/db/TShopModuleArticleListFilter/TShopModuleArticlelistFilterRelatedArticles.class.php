@@ -36,6 +36,7 @@ class TShopModuleArticlelistFilterRelatedArticles extends TdbShopModuleArticleLi
 
         $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (null !== $oActiveArticle) {
+            // check if the article has related articles - if it does not and it is a variant, try the parent
             $sRelationKey = $oActiveArticle->id;
             if ($oActiveArticle->IsVariant()) {
                 $oRelations = $oActiveArticle->GetFieldShopArticleList();
@@ -53,6 +54,7 @@ class TShopModuleArticlelistFilterRelatedArticles extends TdbShopModuleArticleLi
 
         return $sQuery;
     }
+
     /**
      * return any cache relevant parameters to the list class here.
      *

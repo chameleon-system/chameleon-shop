@@ -98,6 +98,7 @@ class TPkgShopRatingService_EkomiEndPoint extends TdbPkgShopRatingService
             $connection->insert('pkg_shop_rating_service_rating', $data);
         }
     }
+
     /**
      * Fetches the csv data from the api and saves it to the rating cache.
      *

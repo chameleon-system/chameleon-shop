@@ -59,6 +59,7 @@ class TCMSTableEditorShopUser extends TableEditorExtranetUser
             }
         }
     }
+
     /**
      * @param string $iUserId
      *
@@ -82,6 +83,7 @@ class TCMSTableEditorShopUser extends TableEditorExtranetUser
             $oEditor->Delete($aRow['id']);
         }
     }
+
     /**
      * {@inheritdoc}
      *

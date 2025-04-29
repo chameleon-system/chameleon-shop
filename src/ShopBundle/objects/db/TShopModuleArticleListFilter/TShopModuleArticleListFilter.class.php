@@ -294,6 +294,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
 
         return '';
     }
+
     /**
      * overwrite this if you want to prevent the list from caching this filter result.
      *

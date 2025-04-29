@@ -258,6 +258,7 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
             }
         }
     }
+
     /**
      * insert soundex for word.
      *

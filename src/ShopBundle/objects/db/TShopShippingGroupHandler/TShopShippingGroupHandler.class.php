@@ -37,4 +37,5 @@ class TShopShippingGroupHandler extends TAdbShopShippingGroupHandler
         }
 
         return $oInstance;
-    }}
+    }
+}

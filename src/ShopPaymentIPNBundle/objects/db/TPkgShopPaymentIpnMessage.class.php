@@ -104,6 +104,7 @@ class TPkgShopPaymentIpnMessage extends TPkgShopPaymentIpnMessageAutoParent
 
         return $oStatus;
     }
+
     /**
      * @return Request|null
      */

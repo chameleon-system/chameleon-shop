@@ -620,6 +620,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
             }
         }
     }
+
     /**
      * Reports one review to shop owner and lock reported review.
      * Shop owner owner will get an email with delete and unlock link.
@@ -954,6 +955,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
 
         return $bReviewLocked;
     }
+
     /**
      * Checks if user have to enter user name manually or user name comes from logged in user.
      *

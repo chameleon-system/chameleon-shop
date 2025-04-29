@@ -37,4 +37,5 @@ class TShop_DataExtranetGroupList extends TShop_DataExtranetGroupListAutoParent
     ";
 
         return TdbDataExtranetGroupList::GetList($query);
-    }}
+    }
+}

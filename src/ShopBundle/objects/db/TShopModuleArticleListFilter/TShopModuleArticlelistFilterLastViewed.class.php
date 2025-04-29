@@ -33,6 +33,7 @@ class TShopModuleArticlelistFilterLastViewed extends TdbShopModuleArticleListFil
         $oExtranetUser = $this->getExtranetUserProvider()->getActiveUser();
 
         if ($oExtranetUser->IsLoggedIn()) {
+            // we can link with the real user table
             $quotedUserId = $connection->quote($oExtranetUser->id);
 
             $sQuery = "SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*, HISTLIST.`datecreated` AS item_added_to_list_date
@@ -48,6 +49,8 @@ class TShopModuleArticlelistFilterLastViewed extends TdbShopModuleArticleListFil
                 $quotedTmpTableName = $connection->quoteIdentifier('_tmp'.session_id().'histlist');
                 $this->CreateTempHistory($aHistoryList);
 
+                // restricting the query to the items affected has a dramatic performance effect - I have no idea why... but using the join alone is much slower
+                // strangely, this only applies to the temporary memory table below - not to the same query above being used against data_extranet_user_shop_article_history...
                 $aKeys = array_map(static function ($item) use ($connection) {
                     return $connection->quote($item->fieldShopArticleId);
                 }, array_values($aHistoryList));
@@ -70,6 +73,7 @@ class TShopModuleArticlelistFilterLastViewed extends TdbShopModuleArticleListFil
 
         return $sQuery;
     }
+
     /**
      * @param array $aHistoryList
      *
@@ -80,6 +84,7 @@ class TShopModuleArticlelistFilterLastViewed extends TdbShopModuleArticleListFil
         /* @var $connection \Doctrine\DBAL\Connection */
         $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
+        // create tmp table for items
         $tmpTableName = '_tmp'.session_id().'histlist';
         $quotedTmpTableName = $connection->quoteIdentifier($tmpTableName);
 
@@ -104,6 +109,7 @@ class TShopModuleArticlelistFilterLastViewed extends TdbShopModuleArticleListFil
             );
         }
     }
+
     /**
      * returns the order by part of the query.
      *

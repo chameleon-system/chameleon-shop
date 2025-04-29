@@ -83,6 +83,7 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
                 } else {
                     $iAttemps = $oMail->GetData('iAttemptsToSend');
                     if ($iAttemps > self::MAX_TRIES) {
+                        //give up, send notification
                         $sSendToMail = $oMail->GetData('sSendToMail');
                         $sText = date('Y-m-d H:i:s') . ' - ' . $sSendToMail . ' - Send E-Mail Error';
                         TTools::WriteLogEntrySimple($sText, 1, __FILE__, __LINE__);
@@ -134,11 +135,14 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
                 }
             } else {
                 $bOrderSend = false;
+                //we don't have a mail object, most likely system crashed before calling SendOrderNotifaction => try sending without the mail object
 
                 $oOrderItems = $oShopOrder->GetFieldShopOrderItemList();
                 if (0 == $oOrderItems->Length() || $oOrderItems->FindItemWithProperty('fieldShopArticleId', '') || $oOrderItems->FindItemWithProperty('fieldShopArticleId', '0')) {
+                    // order broken!
                     $bOrderSend = false;
                 } else {
+                    // send order
                     $bOrderSend = $oShopOrder->SendOrderNotification();
                 }
 
@@ -165,9 +169,10 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
             ";
                 $connection->executeStatement($updateQuery);
             }
-        }
+        } // while
 
         $this->languageService->setActiveLanguage($initialLanguageId);
     }
+
     // function
 }

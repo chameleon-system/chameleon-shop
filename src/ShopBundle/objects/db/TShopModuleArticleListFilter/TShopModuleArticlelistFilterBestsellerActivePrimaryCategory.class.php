@@ -49,6 +49,7 @@ class TShopModuleArticlelistFilterBestsellerActivePrimaryCategory extends TShopM
             if (($oListConfig->fieldNumberOfArticles > 0 && $iNumRecs < $oListConfig->fieldNumberOfArticles) || ($iNumRecs < 1)) {
                 $sQuery = parent::GetListBaseQueryRestrictedToCategories($oListConfig, $aCategories);
                 if ($iNumRecs > 0) {
+                    // add the records that have been sold
                     $aList = array_map(fn($row) => $connection->quote($row['id']), $results);
                     if (count($aList) > 0) {
                         $sQuery .= ' OR `shop_article`.`id` IN ('.implode(',', $aList).')';

@@ -96,6 +96,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
             $bUseRandomCode = (empty($sCode));
 
             if (!$bUseRandomCode) {
+                // make sure that the code does not exist in another series
                 $quotedSeriesId = $connection->quote($this->sId);
                 $quotedCode = $connection->quote($sCode);
                 $query = "SELECT * FROM `shop_voucher`
@@ -136,12 +137,13 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
                     $oVoucherCodeEditor->Save($aData);
                 }
                 $this->getCache()->enable();
-                $this->getCache()->callTrigger('shop_voucher', null);
+                $this->getCache()->callTrigger('shop_voucher', null); // flush all cache entries related to the voucher table
             }
         }
 
         return $oReturn;
     }
+
     /**
      * return true if the current user has the right to create codes in the shop_voucher table.
      *
@@ -208,7 +210,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
                 if ('0000-00-00 00:00:00' != $oVoucher->fieldDatecreated) {
                     $aCsvVouchers[$count][1] = date('d.m.Y H:i', strtotime($oVoucher->fieldDatecreated));
                 } else {
-                    $aCsvVouchers[$count][1] = '';
+                    $aCsvVouchers[$count][3] = '';
                 }
                 $aCsvVouchers[$count][2] = $oVoucher->fieldIsUsedUp;
                 if ('0000-00-00 00:00:00' != $oVoucher->fieldDateUsedUp) {
@@ -241,6 +243,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
             echo 'Keine Berechtigung';
         }
     }
+
     private function getCache(): CacheInterface
     {
         return ServiceLocator::get('chameleon_system_core.cache');

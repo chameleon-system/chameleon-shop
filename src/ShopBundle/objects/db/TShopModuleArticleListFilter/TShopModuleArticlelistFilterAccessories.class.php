@@ -54,6 +54,7 @@ class TShopModuleArticlelistFilterAccessories extends TdbShopModuleArticleListFi
 
         return $sQuery;
     }
+
     /**
      * return any cache relevant parameters to the list class here.
      *

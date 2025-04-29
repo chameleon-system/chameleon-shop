@@ -49,4 +49,5 @@ class TCMSCronJob_ShopSearchCacheGarbageCollector extends TdbCmsCronjobs
         ";
             $connection->executeStatement($deleteCacheQuery);
         }
-    }}
+    }
+}

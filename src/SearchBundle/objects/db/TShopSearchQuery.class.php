@@ -41,8 +41,10 @@ class TShopSearchQuery extends TAdbShopSearchQuery
 
         if (!$this->IndexIsRunning()) {
             $query = $this->fieldQuery . ' LIMIT 0,1';
+            // we do not care about the type contents of the fields... just how many there are
             $statement = $connection->executeQuery($query);
 
+            // got something.... so start indexeer
             if ($tmp = $statement->fetchAssociative()) {
                 $aData = $this->sqlData;
                 $aData['index_running'] = '1';
@@ -53,6 +55,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
 
                 $sFields = '';
                 $aFields = array_keys($tmp);
+                // the last entry in the list will be renamed to shop_article_id
                 $aFields[count($aFields) - 1] = 'xxx_shop_article_id';
 
                 foreach ($aFields as $iFieldIndex => $sFieldName) {
@@ -79,7 +82,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
             ";
                 $connection->executeStatement($query);
 
-                // Copy data
+                // now copy data...
                 $query = "
                 INSERT INTO {$quotedTableName} (" . implode(',', $aFields) . ") 
                 " . $this->fieldQuery;
@@ -92,7 +95,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
             ";
                 $connection->executeStatement($query);
 
-                // Delete unnecessary records if not regenerating complete index
+                // now delete all records that do not require changes
                 if (!$bRegenerateCompleteIndex) {
                     $query = "
                     DELETE {$quotedTableName}
@@ -104,7 +107,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
                     $connection->executeStatement($query);
                 }
 
-                // Handle variant fields
+                // now unset all varianten fields that can not be changed + change the id of the varaint to the variant parent
                 $oVariantSets = TdbShopVariantSetList::GetList();
                 $oVariantSets->GoToStart();
                 while ($oVariantSet = $oVariantSets->Next()) {
@@ -143,6 +146,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
             }
         }
     }
+
     /**
      * creates index for the number of rows requested. returns the real number of rows processed.
      *
@@ -163,6 +167,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
             usleep(CMS_SHOP_INDEX_LOAD_DELAY_MILLISECONDS * 1000);
         }
 
+        // fetch as many rows as we can....
         $sLimit = '';
         if ($iNumberOfRowsToProcess >= 0) {
             $sLimit = " LIMIT 0, {$iNumberOfRowsToProcess}";
@@ -201,6 +206,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
 
         return $iRealNumberProcessed;
     }
+
     /**
      * returns the number of records that still need to be indext for the query
      * will stop the index if no entries are left to index.
@@ -243,6 +249,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
 
         return $iCount;
     }
+
     /**
      * stop the current index operation.
      *
@@ -270,6 +277,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
         $this->AllowEditByAll(true);
         $this->Save();
     }
+
     /**
      * return the index table name.
      *

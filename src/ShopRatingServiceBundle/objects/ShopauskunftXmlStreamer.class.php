@@ -60,6 +60,7 @@ class ShopauskunftXmlStreamer extends XmlStreamer
 
         return true;
     }
+
     /**
      * checks if an rating exists.
      *
@@ -81,6 +82,7 @@ class ShopauskunftXmlStreamer extends XmlStreamer
 
         return true;
     }
+
     /**
      * Calculates the average score over all criterions.
      *

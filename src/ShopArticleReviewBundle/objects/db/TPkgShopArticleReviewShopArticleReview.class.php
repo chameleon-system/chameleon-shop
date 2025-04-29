@@ -102,6 +102,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
             $_SESSION['TPkgShopArticleReviewShopArticleReviewRated'][(string) $this->id] = time();
         }
     }
+
     /**
      * Returns the URL to report a review.
      *

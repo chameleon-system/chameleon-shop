@@ -25,64 +25,53 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
      */
     public static function UpdateAutoAssignToUserQuick($sUserid, $dOrderValue)
     {
-        /* @var $connection \Doctrine\DBAL\Connection */
+        /** @var \Doctrine\DBAL\Connection $connection */
         $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
-        $quotedUserId = $connection->quote($sUserid);
+        $quotedUserid = $connection->quote($sUserid);
 
         // get all assigned groups that are NOT auto assigned
-        $query = "
-        SELECT `data_extranet_user_data_extranet_group_mlt`.`target_id`
-          FROM `data_extranet_user_data_extranet_group_mlt`
-    INNER JOIN `data_extranet_group`
-            ON `data_extranet_user_data_extranet_group_mlt`.`target_id` = `data_extranet_group`.`id`
-         WHERE `data_extranet_user_data_extranet_group_mlt`.`source_id` = {$quotedUserId}
-           AND `data_extranet_group`.`auto_assign_active` = '0'
-    ";
-
+        $query = "SELECT `data_extranet_user_data_extranet_group_mlt`.`target_id`
+              FROM `data_extranet_user_data_extranet_group_mlt`
+        INNER JOIN `data_extranet_group` ON `data_extranet_user_data_extranet_group_mlt`.`target_id` = `data_extranet_group`.`id`
+             WHERE `data_extranet_user_data_extranet_group_mlt`.`source_id` = {$quotedUserid}
+               AND `data_extranet_group`.`auto_assign_active` = '0'
+           ";
         $aUserGroups = [];
-        $statement = $connection->executeQuery($query);
-
-        while ($aRow = $statement->fetchAssociative()) {
-            $aUserGroups[] = $connection->quote($aRow['target_id']);
+        $result = $connection->executeQuery($query);
+        while (false !== ($row = $result->fetchAssociative())) {
+            $aUserGroups[] = $connection->quote($row['target_id']);
         }
 
         // now add groups set via auto assign
         $oGroups = TdbDataExtranetGroupList::GetAutoGroupsForValue($dOrderValue);
-
         while ($oGroup = $oGroups->Next()) {
             $aUserGroups[] = $connection->quote($oGroup->id);
         }
 
         // update user
-        $deleteQuery = "
-        DELETE FROM `data_extranet_user_data_extranet_group_mlt`
-              WHERE `source_id` = {$quotedUserId}
-    ";
-        $deletedRows = $connection->executeStatement($deleteQuery);
-
-        $insertedRows = 0;
+        // note: we use a query here to prevent overhead
+        $deleteQuery = "DELETE FROM `data_extranet_user_data_extranet_group_mlt`
+                    WHERE `source_id` = {$quotedUserid}";
+        $iRecordsChanged = $connection->executeStatement($deleteQuery);
 
         if (count($aUserGroups) > 0) {
+            $insertQuery = 'INSERT INTO `data_extranet_user_data_extranet_group_mlt` (`source_id`,`target_id`) VALUES ';
             $aInsertParts = [];
-            foreach ($aUserGroups as $quotedGroupId) {
-                $aInsertParts[] = "({$quotedUserId}, {$quotedGroupId})";
+            foreach ($aUserGroups as $sGroupId) {
+                $aInsertParts[] = "({$quotedUserid},{$sGroupId})";
             }
-
-            $insertQuery = "
-            INSERT INTO `data_extranet_user_data_extranet_group_mlt`
-                (`source_id`, `target_id`)
-             VALUES " . implode(', ', $aInsertParts);
-
-            $insertedRows = $connection->executeStatement($insertQuery);
+            $insertQuery .= implode(', ', $aInsertParts);
+            $iRecordsChanged += $connection->executeStatement($insertQuery);
         }
 
-        if (($deletedRows + $insertedRows) > 0) {
+        if ($iRecordsChanged > 0) {
             ServiceLocator::get('chameleon_system_core.cache')->callTrigger('data_extranet_user', $sUserid);
         }
 
-        return ($deletedRows + $insertedRows) > 0;
+        return $iRecordsChanged > 0;
     }
+
     /*
      * update ALL users
      * @return int
@@ -124,7 +113,7 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
 
         if (0.01 == $this->fieldAutoAssignOrderValueEnd) {
             $selectQuery .= ' OR SUM(`shop_order`.`value_total`) IS NULL';
-        }
+        } // allow users that have no orders
 
         $insertQuery = "
         INSERT INTO `data_extranet_user_data_extranet_group_mlt` (`source_id`, `target_id`)

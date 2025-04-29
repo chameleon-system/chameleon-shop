@@ -81,6 +81,7 @@ class TShopVoucherSeries extends TShopVoucherSeriesAutoParent implements IPkgSho
 
         return $iNumberOfVouchersUsed;
     }
+
     /**
      * create a new voucher.
      *

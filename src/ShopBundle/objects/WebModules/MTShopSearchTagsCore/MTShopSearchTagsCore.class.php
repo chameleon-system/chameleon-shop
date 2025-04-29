@@ -62,6 +62,7 @@ class MTShopSearchTagsCore extends TShopUserCustomModelBase
 
         return TCMSTagCloud::GetCloud($query, 'TdbShopSearchLog', $aCustomWords);
     }
+
     private function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');

@@ -67,6 +67,7 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
 
         return $oList;
     }
+
     /**
      * return all published items.
      *
@@ -90,6 +91,7 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
 
         return $oList;
     }
+
     /**
      * use the method to set the owning article id when generating a list for only one article.
      *

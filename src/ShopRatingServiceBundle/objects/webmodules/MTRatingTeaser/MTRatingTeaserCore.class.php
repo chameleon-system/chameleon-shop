@@ -87,6 +87,7 @@ class MTRatingTeaserCore extends TUserCustomModelBase
 
         return $oRatingItem;
     }
+
     /**
      * loads config for instance.
      *

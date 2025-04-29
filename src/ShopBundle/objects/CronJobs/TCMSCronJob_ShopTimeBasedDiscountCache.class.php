@@ -47,4 +47,5 @@ class TCMSCronJob_ShopTimeBasedDiscountCache extends TdbCmsCronjobs
         while ($oDiscount = $oDiscountList->Next()) {
             $oDiscount->ClearCacheOnAllAffectedArticles();
         }
-    }}
+    }
+}

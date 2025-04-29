@@ -1216,6 +1216,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
         return $bOrderCreated;
     }
+
     /**
      * if CMS_PAYMENT_REDIRECT_ON_FAILURE is defined with correct order step system name do redirect
      * to defined step.
@@ -1979,6 +1980,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
 
         return $oNextDiscount;
     }
+
     /**
      * Check all vouchers in basket and check if voucher was not in use by other order.
      * If one voucher was used in other order try to get another one with in the same series and voucher code.

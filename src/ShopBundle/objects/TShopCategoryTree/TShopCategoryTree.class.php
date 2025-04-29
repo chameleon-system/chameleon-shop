@@ -130,6 +130,7 @@ class TShopCategoryTree
 
         return $sSelect;
     }
+
     /**
      * Resets all item count in all category trees.
      *

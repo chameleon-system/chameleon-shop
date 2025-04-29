@@ -187,6 +187,7 @@ class TPkgShopListfilterItemMultiselect extends TdbPkgShopListfilterItem
 
         return $sQuery;
     }
+
     /**
      * return setting of element as hidden input fields.
      *

@@ -90,7 +90,8 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
 
         $this->GoToStart();
         while ($oItem = $this->Next()) {
-            $oBasket->ResetAllShippingMarkers();
+            $oBasket->ResetAllShippingMarkers(); // we need to reset the shipping marker on every group call - since we want
+            // to consider every single item in the basket
 
             if ($oItem->isAvailableIgnoreGroupRestriction()) {
                 $aValidIds[] = $oItem->id;
@@ -98,8 +99,8 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
             }
         }
 
-        $oBasket->ResetAllShippingMarkers();
-
+        $oBasket->ResetAllShippingMarkers(); // once we are done, we want to clear the marker again
+        // remove any shipping groups that are not allowed to be shown when other shipping groups are available
         $aRealValidIds = [];
         foreach ($aValidIds as $sShippingGroupId) {
             /** @var $oItem TdbShopShippingGroup */
@@ -125,6 +126,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
         $query .= 'ORDER BY `shop_shipping_group`.`position`';
         $this->Load($query);
     }
+
     /**
      * remove list items that are restricted to some user or user group.
      *
@@ -135,6 +137,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
         /* @var $connection \Doctrine\DBAL\Connection */
         $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
+        // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
         $aValidIds = [];
         $this->GoToStart();
         while ($oItem = $this->Next()) {
@@ -156,4 +159,5 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
 
         $query .= 'ORDER BY `shop_shipping_group`.`position`';
         $this->Load($query);
-    }}
+    }
+}

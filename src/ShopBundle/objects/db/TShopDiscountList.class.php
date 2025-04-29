@@ -59,6 +59,7 @@ class TShopDiscountList extends TShopDiscountListAutoParent
 
         return $aActiveDiscountList[$sKey];
     }
+
     /**
      * return all discounts matching the article
      * @param TdbShopArticle $oArticle

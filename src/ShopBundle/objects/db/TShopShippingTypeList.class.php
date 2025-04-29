@@ -119,6 +119,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
 
         return $oList;
     }
+
     /**
      * @deprecated since 6.1.4 - method was only called by GetAvailableTypes. this is no longer the case.
      *
@@ -129,6 +130,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
         /* @var $connection \Doctrine\DBAL\Connection */
         $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
+        // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
         $allIds = [];
         $validIds = [];
         $this->GoToStart();
@@ -158,6 +160,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
         $query .= ' ORDER BY `shop_shipping_type`.`position`';
         $this->Load($query);
     }
+
     /**
      * remove list items that are restricted to some user or user group.
      *
@@ -168,6 +171,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
         /* @var $connection \Doctrine\DBAL\Connection */
         $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
+        // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
         $validIds = [];
         $this->GoToStart();
         while ($oItem = $this->Next()) {
@@ -189,6 +193,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
         $query .= ' ORDER BY `shop_shipping_type`.`position`';
         $this->Load($query);
     }
+
     /**
      * return the total costs of all shipping types in the list.
      *

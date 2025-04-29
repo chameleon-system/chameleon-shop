@@ -292,7 +292,7 @@ class TShopOrder extends TShopOrderAutoParent
         $oOrderItem->AllowEditByAll(true);
         $iInsertedOrderArticleId = $oOrderItem->Save();
 
-        // Downloads verlinken
+        // Linking the downloads from BasketItem to OrderItem
         $oDownloadFilesList = $oBasketItem->GetDownloads('download');
         while ($oDownloadFile = $oDownloadFilesList->Next()) {
             $escapedSource = $connection->quote($iInsertedOrderArticleId);
@@ -307,6 +307,7 @@ class TShopOrder extends TShopOrderAutoParent
         }
 
         if ($oBasketItem->fieldIsBundle) {
+            // also save bundle articles
             $oBundleArticles = $oBasketItem->GetFieldShopBundleArticleList();
             while ($oBundleArticle = $oBundleArticles->Next()) {
                 $this->SaveBundleArticle($oBasketItem, $oOrderItem, $oBundleArticle);
@@ -315,6 +316,7 @@ class TShopOrder extends TShopOrderAutoParent
 
         return $oOrderItem;
     }
+
     /**
      * use this method to make changes to the order item data before it is saved to the database.
      *

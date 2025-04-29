@@ -626,6 +626,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
 
         return $dValue;
     }
+
     /**
      * return an array of variable names that are flagged as protected and
      * will be saved to the new session on logout.

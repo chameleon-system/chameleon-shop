@@ -69,4 +69,5 @@ class TPkgShopNewsletterSignupWithOrder_TShopStepConfirm extends TPkgShopNewslet
         }
 
         return $aViewVariables;
-    }}
+    }
+}

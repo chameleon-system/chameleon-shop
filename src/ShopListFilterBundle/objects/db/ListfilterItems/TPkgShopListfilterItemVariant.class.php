@@ -109,6 +109,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
             }
         }
     }
+
     /**
      * return the item name for a given ID.
      *
@@ -191,6 +192,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
                     $sItemListQuery .= ' AND ('.$sActiveRestrictions.')';
                 }
 
+                //echo $sItemListQuery;echo "\n\n";
                 $aIdList = [];
                 $result = $connection->executeQuery($sItemListQuery);
                 while ($row = $result->fetchAssociative()) {
@@ -207,6 +209,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
 
         return $sQuery;
     }
+
     /**
      * return option as assoc array (name=>count).
      *

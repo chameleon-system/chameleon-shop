@@ -31,6 +31,7 @@ class TShopArticleCatalogConf extends TShopArticleCatalogConfAutoParent
         $sActiveCategoryId = $oActiveCategory->id;
 
         do {
+            // is there another order by set for this category or any of its parents
             $query = "
             SELECT `shop_category`.`id`,
                    `shop_category`.`url_path`,

@@ -195,27 +195,34 @@ class TShopStockMessage extends TAdbShopStockMessage
         $oShopStockMessageTrigger = $this->GetFromInternalCache('oActive_shop_stock_message_trigger_id');
 
         if (is_null($oShopStockMessageTrigger)) {
-            /* @var $connection \Doctrine\DBAL\Connection */
+            /** @var \Doctrine\DBAL\Connection $connection */
             $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
-            $quotedMessageId = $connection->quote($this->id);
-            $quotedStock = $connection->quote($this->GetArticle()->getAvailableStock());
+            $quotedShopStockMessageId = $connection->quote($this->id);
+            $quotedAvailableStock = $connection->quote($this->GetArticle()->getAvailableStock());
 
-            $query = "SELECT *
-                  FROM `shop_stock_message_trigger`
-                 WHERE `shop_stock_message_id` = {$quotedMessageId}
-                   AND `amount` >= {$quotedStock}
-              ORDER BY `amount` ASC
-                 LIMIT 1";
+            $sQuery = "SELECT *
+                    FROM `shop_stock_message_trigger`
+                WHERE `shop_stock_message_id` = {$quotedShopStockMessageId}
+                    AND `amount` >= {$quotedAvailableStock}
+                ORDER BY `amount` ASC
+                LIMIT 1
+                ";
 
-            $result = $connection->fetchAssociative($query);
+            $result = $connection->executeQuery($sQuery);
+            $row = $result->fetchAssociative();
 
-            $oShopStockMessageTrigger = null;
-            if ($result && isset($result['id'])) {
-                $oShopStockMessageTrigger = TdbShopStockMessageTrigger::GetNewInstance();
-                if (!$oShopStockMessageTrigger->LoadFromField('id', $result['id'])) {
+            $oShopStockMessageTrigger = TdbShopStockMessageTrigger::GetNewInstance();
+            /** @var $oShopStockMessageTrigger TdbShopStockMessageTrigger */
+
+            //if (!$oShopStockMessageTrigger->LoadFromRow(MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($sQuery)))) $oShopStockMessageTrigger = null;
+            if (false !== $row) {
+                $oTmp = (object) $row;
+                if (!$oShopStockMessageTrigger->LoadFromField('id', $oTmp->id)) {
                     $oShopStockMessageTrigger = null;
                 }
+            } else {
+                $oShopStockMessageTrigger = null;
             }
 
             $this->SetInternalCache('oActive_shop_stock_message_trigger_id', $oShopStockMessageTrigger);
@@ -223,6 +230,7 @@ class TShopStockMessage extends TAdbShopStockMessage
 
         return $oShopStockMessageTrigger;
     }
+
     /**
      * returns an array of trigger messages with the quantity for each message the is relevant if the user
      * tries to order dQuantityRequested.
@@ -286,6 +294,7 @@ class TShopStockMessage extends TAdbShopStockMessage
 
         return $aStock;
     }
+
     public function GetFieldShopStockMessageTriggerList()
     {
         return $this->GetFieldShopStockMessageTriggerListOrdered();
