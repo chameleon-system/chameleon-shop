@@ -102,18 +102,23 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
      */
     public static function GetPublicShippingTypes($iGroupId)
     {
-        $query = "SELECT `shop_shipping_type`.*
-                  FROM `shop_shipping_type`
-            INNER JOIN `shop_shipping_group_shop_shipping_type_mlt` ON `shop_shipping_type`.`id` = `shop_shipping_group_shop_shipping_type_mlt`.`target_id`
-                 WHERE `shop_shipping_group_shop_shipping_type_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iGroupId)."'
-               ";
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $quotedGroupId = $connection->quote($iGroupId);
+        $query = "
+        SELECT `shop_shipping_type`.*
+          FROM `shop_shipping_type`
+    INNER JOIN `shop_shipping_group_shop_shipping_type_mlt`
+            ON `shop_shipping_type`.`id` = `shop_shipping_group_shop_shipping_type_mlt`.`target_id`
+         WHERE `shop_shipping_group_shop_shipping_type_mlt`.`source_id` = {$quotedGroupId}
+    ";
 
         $oList = TdbShopShippingTypeList::GetList($query);
         $oList->RemoveRestrictedItems();
 
         return $oList;
     }
-
     /**
      * @deprecated since 6.1.4 - method was only called by GetAvailableTypes. this is no longer the case.
      *
@@ -121,34 +126,38 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
      */
     public function RemoveInvalidItems()
     {
-        // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
-        $allIds = array();
-        $aValidIds = array();
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $allIds = [];
+        $validIds = [];
         $this->GoToStart();
+
         while ($oItem = $this->Next()) {
             $allIds[] = $oItem->id;
             if ($oItem->IsAvailable()) {
-                $aValidIds[] = MySqlLegacySupport::getInstance()->real_escape_string($oItem->id);
+                $validIds[] = $connection->quote($oItem->id);
             }
         }
-        if (count($allIds) === count($aValidIds)) {
-            $this->GoToStart();
 
+        if (count($allIds) === count($validIds)) {
+            $this->GoToStart();
             return;
         }
 
         $query = 'SELECT `shop_shipping_type`.*
-                  FROM `shop_shipping_type`
-                 WHERE ';
-        if (count($aValidIds) > 0) {
-            $query .= " `shop_shipping_type`.`id` IN ('".implode("','", $aValidIds)."') ";
+              FROM `shop_shipping_type`
+             WHERE ';
+
+        if (count($validIds) > 0) {
+            $query .= ' `shop_shipping_type`.`id` IN (' . implode(',', $validIds) . ') ';
         } else {
             $query .= ' 1 = 0 ';
         }
+
         $query .= ' ORDER BY `shop_shipping_type`.`position`';
         $this->Load($query);
     }
-
     /**
      * remove list items that are restricted to some user or user group.
      *
@@ -156,27 +165,30 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
      */
     public function RemoveRestrictedItems()
     {
-        // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
-        $aValidIds = array();
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $validIds = [];
         $this->GoToStart();
         while ($oItem = $this->Next()) {
             if ($oItem->IsPublic()) {
-                $aValidIds[] = MySqlLegacySupport::getInstance()->real_escape_string($oItem->id);
+                $validIds[] = $connection->quote($oItem->id);
             }
         }
 
         $query = 'SELECT `shop_shipping_type`.*
-                  FROM `shop_shipping_type`
-                 WHERE ';
-        if (count($aValidIds) > 0) {
-            $query .= " `shop_shipping_type`.`id` IN ('".implode("','", $aValidIds)."') ";
+              FROM `shop_shipping_type`
+             WHERE ';
+
+        if (count($validIds) > 0) {
+            $query .= ' `shop_shipping_type`.`id` IN (' . implode(',', $validIds) . ') ';
         } else {
             $query .= ' 1 = 0 ';
         }
+
         $query .= ' ORDER BY `shop_shipping_type`.`position`';
         $this->Load($query);
     }
-
     /**
      * return the total costs of all shipping types in the list.
      *

@@ -20,19 +20,22 @@ class TShopArticleGroupList extends TAdbShopArticleGroupList
      */
     public static function GetArticleGroups($iArticleId)
     {
-        $oList = null;
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
-        $query = "SELECT `shop_article_group`.*
-                  FROM `shop_article_group`
-            INNER JOIN `shop_article_article_group_mlt` ON `shop_article_group`.`id` = `shop_article_article_group_mlt`.`target_id`
-                 WHERE `shop_article_article_group_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iArticleId)."'
-              ORDER BY `shop_article_group`.`name`
-               ";
-        $oList = TdbShopArticleGroupList::GetList($query);
+        $quotedArticleId = $connection->quote($iArticleId);
 
-        return $oList;
+        $query = "
+        SELECT `shop_article_group`.*
+          FROM `shop_article_group`
+    INNER JOIN `shop_article_article_group_mlt`
+            ON `shop_article_group`.`id` = `shop_article_article_group_mlt`.`target_id`
+         WHERE `shop_article_article_group_mlt`.`source_id` = {$quotedArticleId}
+      ORDER BY `shop_article_group`.`name`
+    ";
+
+        return TdbShopArticleGroupList::GetList($query);
     }
-
     /**
      * returns the max vat from the group list.
      *

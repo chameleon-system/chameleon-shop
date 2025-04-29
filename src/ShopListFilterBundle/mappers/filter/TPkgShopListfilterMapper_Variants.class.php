@@ -55,26 +55,28 @@ class TPkgShopListfilterMapper_Variants extends TPkgShopListfilterMapper_FilterS
     {
         parent::Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
 
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $aFilterData = $oVisitor->GetSourceObject('aFilterData');
         $sShopVariantTypeIds = $oVisitor->GetSourceObject('sShopVariantTypeIds');
 
-        $aRestriction = array();
-        reset($aFilterData);
+        $aRestriction = [];
         foreach ($aFilterData as $aFilter) {
-            $aRestriction[] = MySqlLegacySupport::getInstance()->real_escape_string($aFilter['sValue']);
+            $aRestriction[] = $connection->quote($aFilter['sValue']);
         }
 
         $query = "SELECT *
-                    FROM `shop_variant_type_value`
-                   WHERE `shop_variant_type_id` IN ({$sShopVariantTypeIds})
-                     AND `name` IN ('".implode("','", $aRestriction)."')
-                 ";
+                FROM `shop_variant_type_value`
+               WHERE `shop_variant_type_id` IN ({$sShopVariantTypeIds})
+                 AND `name` IN (".implode(',', $aRestriction).")
+             ";
         $oValueList = TdbShopVariantTypeValueList::GetList($query);
-        $aMapping = array();
+
+        $aMapping = [];
         while ($oValue = $oValueList->Next()) {
             $aMapping[$oValue->fieldName] = $oValue;
         }
-        reset($aFilterData);
+
         foreach ($aFilterData as $sIndex => $aFilter) {
             if (isset($aMapping[$aFilter['sValue']])) {
                 $aFilterData[$sIndex]['color_code'] = $aMapping[$aFilter['sValue']]->fieldColorCode;
@@ -82,7 +84,6 @@ class TPkgShopListfilterMapper_Variants extends TPkgShopListfilterMapper_FilterS
                 $aFilterData[$sIndex]['named_grouped'] = $aMapping[$aFilter['sValue']]->fieldNameGrouped;
             }
         }
-        reset($aFilterData);
 
         $oVisitor->SetMappedValue('aFilterData', $aFilterData);
     }

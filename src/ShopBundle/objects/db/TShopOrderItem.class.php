@@ -30,14 +30,21 @@ class TShopOrderItem extends TAdbShopOrderItem
         if (is_null($oOwningOrderItem)) {
             $oOwningOrderItem = false;
             if (!is_null($this->id)) {
-                $query = "SELECT `shop_order_item`.*
-                      FROM `shop_order_item`
-                INNER JOIN `shop_order_bundle_article` ON `shop_order_item`.`id` = `shop_order_bundle_article`.`shop_order_item_id`
-                     WHERE `shop_order_bundle_article`.`bundle_article_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                   ";
-                if ($aOwner = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+                /* @var $connection \Doctrine\DBAL\Connection */
+                $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+                $escapedId = $connection->quote($this->id);
+
+                $query = "
+                SELECT `shop_order_item`.*
+                  FROM `shop_order_item`
+            INNER JOIN `shop_order_bundle_article`
+                    ON `shop_order_item`.`id` = `shop_order_bundle_article`.`shop_order_item_id`
+                 WHERE `shop_order_bundle_article`.`bundle_article_id` = {$escapedId}
+            ";
+
+                if ($aOwner = $connection->fetchAssociative($query)) {
                     $oOwningOrderItem = TdbShopOrderItem::GetNewInstance();
-                    /* @var $oOwningOrderItem TdbShopOrderItem */
                     $oOwningOrderItem->LoadFromRow($aOwner);
                 }
             }
@@ -46,7 +53,6 @@ class TShopOrderItem extends TAdbShopOrderItem
 
         return $oOwningOrderItem;
     }
-
     /**
      * if this order item belongs to a bundle, then this method will return the connecting table.
      *

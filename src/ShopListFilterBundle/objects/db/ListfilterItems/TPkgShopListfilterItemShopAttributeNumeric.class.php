@@ -87,17 +87,22 @@ class TPkgShopListfilterItemShopAttributeNumeric extends TPkgShopListfilterItemM
         $dStartValue = $this->GetActiveStartValue();
         $dEndValue = $this->GetActiveEndValue();
         $sQuery = '';
-        if (false !== $dStartValue && false !== $dEndValue) {
-            $sEscapedTargetTable = MySqlLegacySupport::getInstance()->real_escape_string($this->sItemTableName);
-            $sEscapedTargetMLTTable = MySqlLegacySupport::getInstance()->real_escape_string('shop_article_'.$this->sItemTableName.'_mlt');
-            $oShopAttribute = $this->GetFieldShopAttribute();
 
-            $sQuery = "SELECT `{$sEscapedTargetMLTTable}`.*
-                     FROM `{$sEscapedTargetTable}`
-               INNER JOIN `{$sEscapedTargetMLTTable}` ON `{$sEscapedTargetTable}`.`id` = `{$sEscapedTargetMLTTable}`.`target_id`
-                    WHERE ".$this->GetTargetTableNameField().' >= '.MySqlLegacySupport::getInstance()->real_escape_string($dStartValue).'
-                      AND '.$this->GetTargetTableNameField().' <= '.MySqlLegacySupport::getInstance()->real_escape_string($dEndValue)."
-                      AND `{$sEscapedTargetTable}`.`shop_attribute_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oShopAttribute->id)."'";
+        if (false !== $dStartValue && false !== $dEndValue) {
+            $connection = $this->getDatabaseConnection();
+            $quotedTargetTable = $connection->quoteIdentifier($this->sItemTableName);
+            $quotedMLTTable = $connection->quoteIdentifier('shop_article_' . $this->sItemTableName . '_mlt');
+            $quotedStart = $connection->quote($dStartValue);
+            $quotedEnd = $connection->quote($dEndValue);
+            $quotedAttributeId = $connection->quote($this->GetFieldShopAttribute()->id);
+            $fieldName = $this->GetTargetTableNameField();
+
+            $sQuery = "SELECT {$quotedMLTTable}.*
+                   FROM {$quotedTargetTable}
+             INNER JOIN {$quotedMLTTable} ON {$quotedTargetTable}.`id` = {$quotedMLTTable}.`target_id`
+                  WHERE {$fieldName} >= {$quotedStart}
+                    AND {$fieldName} <= {$quotedEnd}
+                    AND {$quotedTargetTable}.`shop_attribute_id` = {$quotedAttributeId}";
         }
 
         return $sQuery;

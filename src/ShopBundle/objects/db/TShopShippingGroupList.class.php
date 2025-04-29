@@ -77,30 +77,33 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
      */
     public function RemoveInvalidItems()
     {
-        // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oBasket = TShopBasket::GetInstance();
         if (null === $oBasket) {
             return;
         }
-        $aValidIds = array();
+
+        $aValidIds = [];
+        $aValidShippingGroupItems = [];
+
         $this->GoToStart();
-        $aValidShippingGroupItems = array();
         while ($oItem = $this->Next()) {
-            $oBasket->ResetAllShippingMarkers(); // we need to reset the shipping marker on every group call - since we want
-            // to consider every single item in the basket
+            $oBasket->ResetAllShippingMarkers();
 
             if ($oItem->isAvailableIgnoreGroupRestriction()) {
-                $aValidIds[] = MySqlLegacySupport::getInstance()->real_escape_string($oItem->id);
-                $aValidShippingGroupItems['x'.$oItem->id] = $oItem;
+                $aValidIds[] = $oItem->id;
+                $aValidShippingGroupItems['x' . $oItem->id] = $oItem;
             }
         }
-        $oBasket->ResetAllShippingMarkers(); // once we are done, we want to clear the marker again
 
-        // remove any shipping groups that are not allowed to be shown when other shipping groups are available
-        $aRealValidIds = array();
+        $oBasket->ResetAllShippingMarkers();
+
+        $aRealValidIds = [];
         foreach ($aValidIds as $sShippingGroupId) {
             /** @var $oItem TdbShopShippingGroup */
-            $oItem = $aValidShippingGroupItems['x'.$sShippingGroupId];
+            $oItem = $aValidShippingGroupItems['x' . $sShippingGroupId];
             if ($oItem->allowedForShippingGroupList($aValidIds)) {
                 $aRealValidIds[] = $sShippingGroupId;
             }
@@ -109,17 +112,19 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
         unset($aRealValidIds);
 
         $query = 'SELECT `shop_shipping_group`.*
-                  FROM `shop_shipping_group`
-                 WHERE ';
+              FROM `shop_shipping_group`
+             WHERE ';
+
         if (count($aValidIds) > 0) {
-            $query .= " `shop_shipping_group`.`id` IN ('".implode("','", $aValidIds)."') ";
+            $quotedIds = array_map([$connection, 'quote'], $aValidIds);
+            $query .= '`shop_shipping_group`.`id` IN (' . implode(',', $quotedIds) . ') ';
         } else {
-            $query .= ' 1 = 0 ';
+            $query .= '1 = 0 ';
         }
-        $query .= ' ORDER BY `shop_shipping_group`.`position`';
+
+        $query .= 'ORDER BY `shop_shipping_group`.`position`';
         $this->Load($query);
     }
-
     /**
      * remove list items that are restricted to some user or user group.
      *
@@ -127,24 +132,28 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
      */
     public function RemoveRestrictedItems()
     {
-        // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
-        $aValidIds = array();
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $aValidIds = [];
         $this->GoToStart();
         while ($oItem = $this->Next()) {
             if ($oItem->IsPublic()) {
-                $aValidIds[] = MySqlLegacySupport::getInstance()->real_escape_string($oItem->id);
+                $aValidIds[] = $oItem->id;
             }
         }
 
         $query = 'SELECT `shop_shipping_group`.*
-                  FROM `shop_shipping_group`
-                 WHERE ';
+              FROM `shop_shipping_group`
+             WHERE ';
+
         if (count($aValidIds) > 0) {
-            $query .= " `shop_shipping_group`.`id` IN ('".implode("','", $aValidIds)."') ";
+            $quotedIds = array_map([$connection, 'quote'], $aValidIds);
+            $query .= '`shop_shipping_group`.`id` IN (' . implode(',', $quotedIds) . ') ';
         } else {
-            $query .= ' 1 = 0 ';
+            $query .= '1 = 0 ';
         }
-        $query .= ' ORDER BY `shop_shipping_group`.`position`';
+
+        $query .= 'ORDER BY `shop_shipping_group`.`position`';
         $this->Load($query);
-    }
-}
+    }}

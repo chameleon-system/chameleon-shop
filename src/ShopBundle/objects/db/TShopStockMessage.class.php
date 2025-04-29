@@ -195,30 +195,34 @@ class TShopStockMessage extends TAdbShopStockMessage
         $oShopStockMessageTrigger = $this->GetFromInternalCache('oActive_shop_stock_message_trigger_id');
 
         if (is_null($oShopStockMessageTrigger)) {
-            $sQuery = "SELECT *
-                     FROM `shop_stock_message_trigger`
-                    WHERE `shop_stock_message_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                      AND `amount` >= '".MySqlLegacySupport::getInstance()->real_escape_string($this->GetArticle()->getAvailableStock())."'
-                 ORDER BY `amount` ASC
-                    LIMIT 1
-                  ";
-            $oShopStockMessageTrigger = TdbShopStockMessageTrigger::GetNewInstance();
-            /** @var $oShopStockMessageTrigger TdbShopStockMessageTrigger */
-            $oTmp = MySqlLegacySupport::getInstance()->fetch_object(MySqlLegacySupport::getInstance()->query($sQuery));
-            //if (!$oShopStockMessageTrigger->LoadFromRow(MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($sQuery)))) $oShopStockMessageTrigger = null;
-            if (is_object($oTmp)) {
-                if (!$oShopStockMessageTrigger->LoadFromField('id', $oTmp->id)) {
+            /* @var $connection \Doctrine\DBAL\Connection */
+            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+            $quotedMessageId = $connection->quote($this->id);
+            $quotedStock = $connection->quote($this->GetArticle()->getAvailableStock());
+
+            $query = "SELECT *
+                  FROM `shop_stock_message_trigger`
+                 WHERE `shop_stock_message_id` = {$quotedMessageId}
+                   AND `amount` >= {$quotedStock}
+              ORDER BY `amount` ASC
+                 LIMIT 1";
+
+            $result = $connection->fetchAssociative($query);
+
+            $oShopStockMessageTrigger = null;
+            if ($result && isset($result['id'])) {
+                $oShopStockMessageTrigger = TdbShopStockMessageTrigger::GetNewInstance();
+                if (!$oShopStockMessageTrigger->LoadFromField('id', $result['id'])) {
                     $oShopStockMessageTrigger = null;
                 }
-            } else {
-                $oShopStockMessageTrigger = null;
             }
+
             $this->SetInternalCache('oActive_shop_stock_message_trigger_id', $oShopStockMessageTrigger);
         }
 
         return $oShopStockMessageTrigger;
     }
-
     /**
      * returns an array of trigger messages with the quantity for each message the is relevant if the user
      * tries to order dQuantityRequested.
@@ -230,13 +234,16 @@ class TShopStockMessage extends TAdbShopStockMessage
      */
     protected function GetMessagesFromTriggerForQuantity($dQuantityRequested)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         // need to find range for every stock type first
         $aStock = array();
         $iTotalStock = $this->GetArticle()->getAvailableStock();
         $oTriggerList = $this->GetFieldShopStockMessageTriggerListOrdered(array('amount' => 'ASC'));
         $oActiveTrigger = $this->GetFieldShopStockMessageTrigger();
         if ($oActiveTrigger) {
-            $oTriggerList->AddFilterString("`shop_stock_message_trigger`.`id` != '".MySqlLegacySupport::getInstance()->real_escape_string($oActiveTrigger->id)."'");
+            $oTriggerList->AddFilterString("`shop_stock_message_trigger`.`id` != ".$connection->quote($oActiveTrigger->id));
         }
         if ($oTriggerList->Length() > 0) {
             $oPrevious = null;
@@ -279,7 +286,6 @@ class TShopStockMessage extends TAdbShopStockMessage
 
         return $aStock;
     }
-
     public function GetFieldShopStockMessageTriggerList()
     {
         return $this->GetFieldShopStockMessageTriggerListOrdered();

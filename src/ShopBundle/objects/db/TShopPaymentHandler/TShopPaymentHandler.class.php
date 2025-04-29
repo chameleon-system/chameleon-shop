@@ -88,16 +88,21 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      */
     public static function GetInstance($id)
     {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oInstance = null;
-        $query = "SELECT * FROM `shop_payment_handler` WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";
-        if ($row = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+        $quotedId = $connection->quote($id);
+
+        $query = "SELECT * FROM `shop_payment_handler` WHERE `id` = {$quotedId}";
+        $row = $connection->fetchAssociative($query);
+
+        if ($row) {
             $oInstance = static::getInstanceFromDataRow($row);
         }
 
         return $oInstance;
-    }
-
-    /**
+    }    /**
      * @param array       $row
      * @param string|null $languageId
      *
@@ -317,22 +322,31 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      */
     public function SaveUserPaymentDataToOrder($iOrderId)
     {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $aUserPaymentData = $this->GetUserPaymentData();
         $aUserPaymentData = $this->PreSaveUserPaymentDataToOrderHook($aUserPaymentData);
+
         if (is_array($aUserPaymentData)) {
-            $query = "DELETE FROM `shop_order_payment_method_parameter` WHERE `shop_order_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iOrderId)."'";
-            MySqlLegacySupport::getInstance()->query($query);
+            $quotedOrderId = $connection->quote($iOrderId);
+            $query = "DELETE FROM `shop_order_payment_method_parameter` WHERE `shop_order_id` = {$quotedOrderId}";
+            $connection->executeStatement($query);
+
             foreach ($aUserPaymentData as $keyId => $keyVal) {
                 $oPaymentParameter = TdbShopOrderPaymentMethodParameter::GetNewInstance();
                 /** @var $oPaymentParameter TdbShopOrderPaymentMethodParameter */
-                $aTmpData = array('shop_order_id' => $iOrderId, 'name' => $keyId, 'value' => $keyVal);
+                $aTmpData = [
+                    'shop_order_id' => $iOrderId,
+                    'name' => $keyId,
+                    'value' => $keyVal,
+                ];
                 $oPaymentParameter->AllowEditByAll(true);
                 $oPaymentParameter->LoadFromRow($aTmpData);
                 $oPaymentParameter->Save();
             }
         }
     }
-
     /**
      * hook is called before the payment data is committed to the database. use it to cleanup/filter/add data you may
      * want to include/exclude from the database.

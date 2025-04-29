@@ -24,23 +24,27 @@ class TShopModuleArticlelistFilterAllArticlesOfActiveCategory extends TdbShopMod
      */
     protected function GetListQueryBase($oListConfig)
     {
-        $oActiveCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $oActiveCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
         if (!is_null($oActiveCategory)) {
+            $quotedCategoryId = $connection->quote($oActiveCategory->id);
+
             $sQuery = "SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
-                     FROM `shop_article`
-                LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
-                LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
-                LEFT JOIN `shop_article_shop_category_mlt` ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
-                    WHERE (
-                            `shop_article_shop_category_mlt`.`target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oActiveCategory->id)."'
-                            OR
-                             `shop_article`.`shop_category_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oActiveCategory->id)."'
-                          )
-                ";
+                 FROM `shop_article`
+            LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
+            LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
+            LEFT JOIN `shop_article_shop_category_mlt` ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
+                WHERE (
+                        `shop_article_shop_category_mlt`.`target_id` = {$quotedCategoryId}
+                        OR
+                         `shop_article`.`shop_category_id` = {$quotedCategoryId}
+                      )
+            ";
         } else {
             $sQuery = parent::GetListQueryBase($oListConfig);
         }
 
         return $sQuery;
-    }
-}
+    }}

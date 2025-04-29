@@ -57,36 +57,51 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
      */
     public function RateReview($bRateUp = true)
     {
-        if (false == $this->ReviewRatedByActiveUser()) {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        if (false === $this->ReviewRatedByActiveUser()) {
             $sRateString = 'helpful_count';
-            //helpful_count
-            //not_helpful_count
-            if (false == $bRateUp) {
+            if (false === $bRateUp) {
                 $sRateString = 'not_helpful_count';
             }
-            $query = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->table)."`
-                     SET `{$sRateString}` = `{$sRateString}`+1
-                   WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                   LIMIT 1
-                 ";
-            MySqlLegacySupport::getInstance()->query($query);
-            // get value from disc
-            $query = "SELECT `{$sRateString}` FROM `".MySqlLegacySupport::getInstance()->real_escape_string($this->table)."` WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
-            if ($aTmp = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+
+            $quotedTable = $connection->quoteIdentifier($this->table);
+            $quotedId = $connection->quote($this->id);
+
+            // Update Rating
+            $query = "
+            UPDATE {$quotedTable}
+               SET `{$sRateString}` = `{$sRateString}` + 1
+             WHERE `id` = {$quotedId}
+             LIMIT 1
+        ";
+            $connection->executeStatement($query);
+
+            // Fetch updated value
+            $query = "
+            SELECT `{$sRateString}`
+              FROM {$quotedTable}
+             WHERE `id` = {$quotedId}
+        ";
+            $statement = $connection->executeQuery($query);
+            if ($aTmp = $statement->fetchAssociative()) {
                 $this->sqlData[$sRateString] = $aTmp[$sRateString];
+
                 if ($bRateUp) {
                     $this->fieldHelpfulCount = $this->sqlData[$sRateString];
                 } else {
                     $this->fieldNotHelpfulCount = $this->sqlData[$sRateString];
                 }
             }
+
             if (!array_key_exists('TPkgShopArticleReviewShopArticleReviewRated', $_SESSION)) {
-                $_SESSION['TPkgShopArticleReviewShopArticleReviewRated'] = array();
+                $_SESSION['TPkgShopArticleReviewShopArticleReviewRated'] = [];
             }
+
             $_SESSION['TPkgShopArticleReviewShopArticleReviewRated'][(string) $this->id] = time();
         }
     }
-
     /**
      * Returns the URL to report a review.
      *

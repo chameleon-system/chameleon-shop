@@ -287,12 +287,13 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
     protected function GetListQueryLimit($oListConfig)
     {
         if ($oListConfig->fieldNumberOfArticles > 0) {
-            return 'LIMIT 0,'.MySqlLegacySupport::getInstance()->real_escape_string($oListConfig->fieldNumberOfArticles);
-        } else {
-            return '';
-        }
-    }
+            $limit = (int) $oListConfig->fieldNumberOfArticles;
 
+            return 'LIMIT 0,'.$limit;
+        }
+
+        return '';
+    }
     /**
      * overwrite this if you want to prevent the list from caching this filter result.
      *

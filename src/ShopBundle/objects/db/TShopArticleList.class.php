@@ -70,90 +70,84 @@ class TShopArticleList extends TShopArticleListAutoParent
      *
      * @return TdbShopArticleList
      */
-    public static function LoadCategoryArticleListForCategoryList($aCategoryIdList, $sOrderString = null, $iLimit = -1, $aFilter = array(), $sCustomBaseQuery = null)
+    public static function LoadCategoryArticleListForCategoryList($aCategoryIdList, $sOrderString = null, $iLimit = -1, $aFilter = [], $sCustomBaseQuery = null)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         if (is_null($sOrderString)) {
             $sOrderString = '`shop_article`.`list_rank` DESC, `shop_article`.`name` ASC';
         }
 
         if (is_null($sCustomBaseQuery)) {
-            // see comment at end of method to find out why we select id or * depending on presence of order by
             $sQueryFieldsToSelect = '`shop_article`.`id`';
             if (empty($sOrderString)) {
                 $sQueryFieldsToSelect = '`shop_article`.*';
             }
-            $query = "SELECT DISTINCT {$sQueryFieldsToSelect}
-                  FROM `shop_article`
-            INNER JOIN `shop_article_shop_category_mlt` ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
-                 WHERE
-               ";
+
+            $query = "
+            SELECT DISTINCT {$sQueryFieldsToSelect}
+              FROM `shop_article`
+        INNER JOIN `shop_article_shop_category_mlt`
+                ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
+             WHERE
+        ";
         } else {
             $query = $sCustomBaseQuery;
         }
 
-        //            INNER JOIN `shop_article_shop_category_mlt` ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
-
-        $sCatRestriction = '';
+        // Kategorie-Einschränkung
         if (is_array($aCategoryIdList)) {
-            $aCategoryIdList = TTools::MysqlRealEscapeArray($aCategoryIdList);
-            $sCatRestriction = " `shop_article_shop_category_mlt`.`target_id` IN ('".implode("','", $aCategoryIdList)."') ";
+            $quotedCategoryIds = array_map([$connection, 'quote'], $aCategoryIdList);
+            $sCatRestriction = "`shop_article_shop_category_mlt`.`target_id` IN (" . implode(',', $quotedCategoryIds) . ")";
         } else {
-            $sCatRestriction = " `shop_article_shop_category_mlt`.`target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($aCategoryIdList)."' ";
+            $sCatRestriction = "`shop_article_shop_category_mlt`.`target_id` = " . $connection->quote($aCategoryIdList);
         }
-        if (!empty($sCatRestriction)) {
-            //$query .= " `shop_article`.`id` IN (SELECT `shop_article_shop_category_mlt`.`source_id` FROM `shop_article_shop_category_mlt` WHERE {$sCatRestriction}) ";
-            $query .= $sCatRestriction;
-        } else {
-            $query .= ' 1 ';
-        }
-        //      $query .= $sCatRestriction;
 
+        $query .= $sCatRestriction ?: '1';
+
+        // Aktive-Artikel-Einschränkung
         $sActiveArticleSnippid = TdbShopArticleList::GetActiveArticleQueryRestriction();
         if (!empty($sActiveArticleSnippid)) {
-            $query .= ' AND ('.$sActiveArticleSnippid.')';
+            $query .= ' AND (' . $sActiveArticleSnippid . ')';
         }
-        if (count($aFilter) > 0) {
-            $aTmpFilter = array();
+
+        // Zusätzliche Filter
+        if (!empty($aFilter)) {
+            $aTmpFilter = [];
             foreach ($aFilter as $sKey => $sField) {
-                $aTmpFilter[] = MySqlLegacySupport::getInstance()->real_escape_string($sKey)."='".MySqlLegacySupport::getInstance()->real_escape_string($sField)."'";
+                $escapedKey = $connection->quoteIdentifier($sKey);
+                $quotedValue = $connection->quote($sField);
+                $aTmpFilter[] = "{$escapedKey} = {$quotedValue}";
             }
-            $query .= ' AND ('.implode(' AND ', $aTmpFilter).')';
+            $query .= ' AND (' . implode(' AND ', $aTmpFilter) . ')';
         }
 
-        //      die($query);
-        //
-
+        // Order & Limit
         $sRestrictions = '';
         if (!empty($sOrderString)) {
-            $sRestrictions .= ' ORDER BY '.$sOrderString;
+            $sRestrictions .= ' ORDER BY ' . $sOrderString;
         }
 
         if ($iLimit > 0) {
-            $sRestrictions .= ' LIMIT 0,'.$iLimit;
+            $sRestrictions .= ' LIMIT 0,' . (int)$iLimit;
         }
 
-        $sFullQuery = $query.$sRestrictions;
+        $sFullQuery = $query . $sRestrictions;
 
-        /**
-         * for some reason, ordering the subquery with a select on only id and then joining that with the full article table is a) super fast and b) results in the correct order
-         * while select all records right away on the order query is extremely slow (factor 10).
-         */
+        // Optimierter Re-Join, falls ORDER BY vorhanden
         if (!empty($sOrderString)) {
-            $sFullQuery = "SELECT `shop_article`.*
-                         FROM `shop_article`
-                   INNER JOIN ({$sFullQuery}) AS X ON `shop_article`.`id` = X.`id`";
+            $sFullQuery = "
+            SELECT `shop_article`.*
+              FROM `shop_article`
+        INNER JOIN (
+            {$sFullQuery}
+        ) AS X ON `shop_article`.`id` = X.`id`
+        ";
         }
 
-        /*      $sFullQuery = "SELECT `shop_article`.*
-        FROM `shop_article`
-       WHERE `shop_article`.`id` IN (
-        {$query}
-       ) {$sRestrictions}";*/
-        $oList = TdbShopArticleList::GetList($sFullQuery, null, false);
-
-        return $oList;
+        return TdbShopArticleList::GetList($sFullQuery, null, false);
     }
-
     /**
      * return active article list.
      *
@@ -164,39 +158,46 @@ class TShopArticleList extends TShopArticleListAutoParent
      *
      * @return TdbShopArticleList
      */
-    public static function LoadArticleList($sOrderString = null, $iLimit = -1, $aFilter = array())
+    public static function LoadArticleList($sOrderString = null, $iLimit = -1, $aFilter = [])
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         if (is_null($sOrderString)) {
             $sOrderString = '`shop_article`.`list_rank` DESC, `shop_article`.`name` ASC';
         }
-        $query = "SELECT `shop_article`.*
-                  FROM `shop_article`
-                 WHERE `shop_article`.`variant_parent_id` = ''
-               ";
+
+        $query = "
+        SELECT `shop_article`.*
+          FROM `shop_article`
+         WHERE `shop_article`.`variant_parent_id` = ''
+    ";
+
         $sActiveArticleSnippid = TdbShopArticleList::GetActiveArticleQueryRestriction();
         if (!empty($sActiveArticleSnippid)) {
-            $query .= ' AND ('.$sActiveArticleSnippid.')';
+            $query .= ' AND (' . $sActiveArticleSnippid . ')';
         }
-        if (count($aFilter) > 0) {
-            $aTmpFilter = array();
-            foreach ($aFilter as $sKey => $sField) {
-                $aTmpFilter[] = MySqlLegacySupport::getInstance()->real_escape_string($sKey)."='".MySqlLegacySupport::getInstance()->real_escape_string($sField)."'";
+
+        if (!empty($aFilter)) {
+            $aTmpFilter = [];
+            foreach ($aFilter as $key => $value) {
+                $escapedKey = $connection->quoteIdentifier($key);
+                $escapedValue = $connection->quote($value);
+                $aTmpFilter[] = "{$escapedKey} = {$escapedValue}";
             }
-            $query .= ' AND ('.implode(' AND ', $aTmpFilter).')';
+            $query .= ' AND (' . implode(' AND ', $aTmpFilter) . ')';
         }
+
         if (!empty($sOrderString)) {
-            $query .= ' ORDER BY '.$sOrderString;
+            $query .= ' ORDER BY ' . $sOrderString;
         }
 
         if ($iLimit > 0) {
-            $query .= ' LIMIT 0,'.$iLimit;
+            $query .= ' LIMIT 0,' . (int)$iLimit;
         }
 
-        $oList = TdbShopArticleList::GetList($query);
-
-        return $oList;
+        return TdbShopArticleList::GetList($query);
     }
-
     /**
      * used to display the article list.
      *

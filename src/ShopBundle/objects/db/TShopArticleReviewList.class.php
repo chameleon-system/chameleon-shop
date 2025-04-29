@@ -53,8 +53,13 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
      */
     public static function GetPublishedReviews($iArticle, $iLanguage = null)
     {
-        $sFilter = "`shop_article_review`.`shop_article_id`='".MySqlLegacySupport::getInstance()->real_escape_string($iArticle)."' ";
-        $sFilter .= "AND `shop_article_review`.`publish`='1' ";
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $quotedArticleId = $connection->quote($iArticle);
+
+        $sFilter = "`shop_article_review`.`shop_article_id` = {$quotedArticleId} ";
+        $sFilter .= "AND `shop_article_review`.`publish` = '1'";
 
         $sQuery = self::GetDefaultQuery($iLanguage, $sFilter);
         $oList = TdbShopArticleReviewList::GetList($sQuery, $iLanguage);
@@ -62,7 +67,6 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
 
         return $oList;
     }
-
     /**
      * return all published items.
      *
@@ -73,15 +77,19 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
      */
     public static function GetPublishedReviewsForUser($iUserId, $iLanguage = null)
     {
-        $sFilter = "`shop_article_review`.`data_extranet_user_id`='".MySqlLegacySupport::getInstance()->real_escape_string($iUserId)."' ";
-        $sFilter .= "AND `shop_article_review`.`publish`='1' ";
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $quotedUserId = $connection->quote($iUserId);
+
+        $sFilter = "`shop_article_review`.`data_extranet_user_id` = {$quotedUserId} ";
+        $sFilter .= "AND `shop_article_review`.`publish` = '1'";
 
         $sQuery = self::GetDefaultQuery($iLanguage, $sFilter);
         $oList = TdbShopArticleReviewList::GetList($sQuery, $iLanguage);
 
         return $oList;
     }
-
     /**
      * use the method to set the owning article id when generating a list for only one article.
      *

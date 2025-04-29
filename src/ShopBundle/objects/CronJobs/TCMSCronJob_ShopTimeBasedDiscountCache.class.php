@@ -22,24 +22,29 @@ class TCMSCronJob_ShopTimeBasedDiscountCache extends TdbCmsCronjobs
      */
     protected function _ExecuteCron()
     {
-        $sToday = MySqlLegacySupport::getInstance()->real_escape_string(date('Y-m-d H:i:s'));
-        $query = "SELECT `shop_discount`.*
-                 FROM `shop_discount`
-                WHERE `shop_discount`.`active` = '1'
-                  AND
-                      (
-                        `cache_clear_last_executed` < `active_from` AND
-                        (`active_from` <= '{$sToday}' AND (`active_to` != '0000-00-00 00:00:00' OR `active_to` >= '{$sToday}'))
-                      )
-                      OR
-                      (
-                        `cache_clear_last_executed` < `active_to` AND
-                        (`active_to` != '0000-00-00 00:00:00' && `active_to` <= '{$sToday}')
-                      )
-              ";
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $quotedToday = $connection->quote(date('Y-m-d H:i:s'));
+
+        $query = "
+        SELECT `shop_discount`.*
+          FROM `shop_discount`
+         WHERE `shop_discount`.`active` = '1'
+           AND (
+                (`cache_clear_last_executed` < `active_from`
+                    AND (`active_from` <= {$quotedToday} AND (`active_to` != '0000-00-00 00:00:00' OR `active_to` >= {$quotedToday}))
+                )
+                OR
+                (`cache_clear_last_executed` < `active_to`
+                    AND (`active_to` != '0000-00-00 00:00:00' AND `active_to` <= {$quotedToday})
+                )
+            )
+    ";
+
         $oDiscountList = TdbShopDiscountList::GetList($query);
+
         while ($oDiscount = $oDiscountList->Next()) {
             $oDiscount->ClearCacheOnAllAffectedArticles();
         }
-    }
-}
+    }}

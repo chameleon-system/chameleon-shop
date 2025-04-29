@@ -27,20 +27,24 @@ class TShopModuleArticlelistFilterArticleOfActiveManufacturer extends TdbShopMod
      */
     protected function GetListQueryBase($oListConfig)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oActiveManufacturer = TdbShop::GetActiveManufacturer();
         if (!is_null($oActiveManufacturer)) {
+            $quotedManufacturerId = $connection->quote($oActiveManufacturer->id);
+
             $sQuery = "SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
-                         FROM `shop_article`
-                    LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
-                    LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
-                        WHERE `shop_article`.`shop_manufacturer_id`  = '".MySqlLegacySupport::getInstance()->real_escape_string($oActiveManufacturer->id)."'";
+                     FROM `shop_article`
+                LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
+                LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
+                    WHERE `shop_article`.`shop_manufacturer_id`  = {$quotedManufacturerId}";
         } else {
             $sQuery = parent::GetListQueryBase($oListConfig);
         }
 
         return $sQuery;
     }
-
     /**
      * return any cache relevant parameters to the list class here.
      *

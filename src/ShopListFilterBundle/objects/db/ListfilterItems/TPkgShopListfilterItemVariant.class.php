@@ -72,25 +72,35 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
     {
         // get the variant type based on the first value
         if (count($aOptions) > 0) {
-            $aTmpOption = TTools::MysqlRealEscapeArray(array_keys($aOptions));
+            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+            $aTmpOption = array_keys($aOptions);
             $sKey = $aTmpOption[0];
+            $quotedKey = $connection->quote($sKey);
+            $quotedIdentifier = $connection->quote($this->sVariantTypeIdentifier);
+
             $query = "SELECT `shop_variant_type`.*
-                    FROM `shop_variant_type_value`
-              INNER JOIN `shop_variant_type` ON `shop_variant_type_value`.`shop_variant_type_id` = `shop_variant_type`.`id`
-                   WHERE `shop_variant_type_value`.`name` = '".$sKey."'
-                     AND `shop_variant_type`.`identifier` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sVariantTypeIdentifier)."'
-                 ";
-            if ($aType = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+                  FROM `shop_variant_type_value`
+            INNER JOIN `shop_variant_type` ON `shop_variant_type_value`.`shop_variant_type_id` = `shop_variant_type`.`id`
+                 WHERE `shop_variant_type_value`.`name` = {$quotedKey}
+                   AND `shop_variant_type`.`identifier` = {$quotedIdentifier}";
+
+            $aType = $connection->fetchAssociative($query);
+
+            if ($aType) {
+                $quotedIdentifier = $connection->quote($this->sVariantTypeIdentifier);
+                $escapedOptions = array_map(fn($val) => $connection->quote($val), $aTmpOption);
+                $orderField = $connection->quoteIdentifier($aType['shop_variant_type_value_cmsfieldname']);
+
                 $query = "SELECT `shop_variant_type_value`.`name`
                       FROM `shop_variant_type_value`
                 INNER JOIN `shop_variant_type` ON `shop_variant_type_value`.`shop_variant_type_id` = `shop_variant_type`.`id`
-                     WHERE `shop_variant_type`.`identifier` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sVariantTypeIdentifier)."'
-                       AND `shop_variant_type_value`.`name` IN ('".implode("','", $aTmpOption)."')
-                  ORDER BY `shop_variant_type_value`.`".MySqlLegacySupport::getInstance()->real_escape_string($aType['shop_variant_type_value_cmsfieldname']).'`
-                   ';
-                $tRes = MySqlLegacySupport::getInstance()->query($query);
-                $aNewOptions = array();
-                while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
+                     WHERE `shop_variant_type`.`identifier` = {$quotedIdentifier}
+                       AND `shop_variant_type_value`.`name` IN (".implode(', ', $escapedOptions).")
+                  ORDER BY {$orderField}";
+
+                $result = $connection->fetchAssociative($query);
+                $aNewOptions = [];
+                foreach ($result as $aRow) {
                     if (array_key_exists($aRow['name'], $aOptions)) {
                         $aNewOptions[$aRow['name']] = $aOptions[$aRow['name']];
                     }
@@ -99,7 +109,6 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
             }
         }
     }
-
     /**
      * return the item name for a given ID.
      *
@@ -161,32 +170,35 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
                 }
             }
             if (count($aValues) > 0) {
-                $aValues = TTools::MysqlRealEscapeArray($aValues);
-                //          $oVariantType = $this->GetVariantType();
+                $connection = $this->getDatabaseConnection();
+                $quotedValues = array_map(fn($v) => $connection->quote($v), $aValues);
+                $quotedIdentifier = $connection->quote($this->sVariantTypeIdentifier);
+
+                // $oVariantType = $this->GetVariantType();
 
                 $sItemListQuery = "SELECT DISTINCT `shop_article`.`variant_parent_id`
-                      FROM `shop_variant_type_value`
-                INNER JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
-                INNER JOIN `shop_article` ON `shop_article_shop_variant_type_value_mlt`.`source_id` = `shop_article`.`id`
-                INNER JOIN `shop_article` AS PARENTARTICLE ON `shop_article`.`variant_parent_id` = PARENTARTICLE.`id`
-                INNER JOIN `shop_variant_type` ON `shop_variant_type_value`.`shop_variant_type_id` = `shop_variant_type`.`id`
-                     WHERE (`shop_variant_type_value`.`name` IN ('".implode("','", $aValues)."') OR `shop_variant_type_value`.`name_grouped` IN ('".implode("','", $aValues)."'))
-                       AND `shop_variant_type`.`identifier` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sVariantTypeIdentifier)."'
-                       AND PARENTARTICLE.`active` = '1'
-                   ";
+                  FROM `shop_variant_type_value`
+            INNER JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
+            INNER JOIN `shop_article` ON `shop_article_shop_variant_type_value_mlt`.`source_id` = `shop_article`.`id`
+            INNER JOIN `shop_article` AS PARENTARTICLE ON `shop_article`.`variant_parent_id` = PARENTARTICLE.`id`
+            INNER JOIN `shop_variant_type` ON `shop_variant_type_value`.`shop_variant_type_id` = `shop_variant_type`.`id`
+                 WHERE (`shop_variant_type_value`.`name` IN (".implode(',', $quotedValues).") OR `shop_variant_type_value`.`name_grouped` IN (".implode(',', $quotedValues)."))
+                   AND `shop_variant_type`.`identifier` = {$quotedIdentifier}
+                   AND PARENTARTICLE.`active` = '1'
+               ";
                 $sActiveRestrictions = TdbShopArticleList::GetActiveArticleQueryRestriction(false);
                 if (!empty($sActiveRestrictions)) {
                     $sItemListQuery .= ' AND ('.$sActiveRestrictions.')';
                 }
-                $tRes = MySqlLegacySupport::getInstance()->query($sItemListQuery);
-                //echo $sItemListQuery;echo "\n\n";
-                $aIdList = array();
-                while ($aItemRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-                    $aIdList[] = MySqlLegacySupport::getInstance()->real_escape_string($aItemRow['variant_parent_id']);
+
+                $aIdList = [];
+                $result = $connection->executeQuery($sItemListQuery);
+                while ($row = $result->fetchAssociative()) {
+                    $aIdList[] = $connection->quote($row['variant_parent_id']);
                 }
 
                 if (count($aIdList) > 0) {
-                    $sQuery = "`shop_article`.`id` IN ('".implode("','", $aIdList)."')";
+                    $sQuery = "`shop_article`.`id` IN (".implode(',', $aIdList).")";
                 }
             }
 
@@ -195,7 +207,6 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
 
         return $sQuery;
     }
-
     /**
      * return option as assoc array (name=>count).
      *
@@ -247,12 +258,16 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
     public function getVariantTypeIds()
     {
         $aId = array();
-        $query = "SELECT `id` FROM shop_variant_type WHERE `identifier` = '{$this->sVariantTypeIdentifier}'";
-        $tRes = MySqlLegacySupport::getInstance()->query($query);
-        while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-            $aId[] = MySqlLegacySupport::getInstance()->real_escape_string($aRow['id']);
+        $connection = $this->getDatabaseConnection();
+
+        $quotedIdentifier = $connection->quote($this->sVariantTypeIdentifier);
+        $query = "SELECT `id` FROM shop_variant_type WHERE `identifier` = {$quotedIdentifier}";
+        $result = $connection->executeQuery($query);
+
+        while ($aRow = $result->fetchAssociative()) {
+            $aId[] = $connection->quote($aRow['id']);
         }
 
-        return "'".implode("','", $aId)."'";
+        return implode(',', $aId);
     }
 }

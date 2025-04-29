@@ -22,15 +22,19 @@ class TShop_DataExtranetGroupList extends TShop_DataExtranetGroupListAutoParent
      */
     public static function GetAutoGroupsForValue($dOrderValue)
     {
-        $dEscaped = MySqlLegacySupport::getInstance()->real_escape_string($dOrderValue);
-        $query = "SELECT *
-                  FROM `data_extranet_group`
-                 WHERE `auto_assign_active` = '1'
-                   AND `auto_assign_order_value_start` <= {$dEscaped}
-                   AND (`auto_assign_order_value_end` > {$dEscaped} OR `auto_assign_order_value_end` = 0)
-              ORDER BY `auto_assign_order_value_start`
-               ";
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $quotedOrderValue = $connection->quote($dOrderValue);
+
+        $query = "
+        SELECT *
+          FROM `data_extranet_group`
+         WHERE `auto_assign_active` = '1'
+           AND `auto_assign_order_value_start` <= {$quotedOrderValue}
+           AND (`auto_assign_order_value_end` > {$quotedOrderValue} OR `auto_assign_order_value_end` = 0)
+      ORDER BY `auto_assign_order_value_start`
+    ";
 
         return TdbDataExtranetGroupList::GetList($query);
-    }
-}
+    }}

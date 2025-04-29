@@ -217,7 +217,11 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
      */
     public static function GetFilterSQLString($sFilterKey, $sFilterVal)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sSQL = '';
+
         switch ($sFilterKey) {
             case TdbShopCategory::FILTER_KEY_NAME:
                 $oCat = TdbShopCategory::GetNewInstance();
@@ -225,23 +229,27 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
                 if ($oCat->Load($sFilterVal)) {
                     $aCatIdList = $oCat->GetAllChildrenIds();
                     $aCatIdList[] = $oCat->id;
-                    $aCatIdList = TTools::MysqlRealEscapeArray($aCatIdList);
-                    $sSQL .= "`shop_article_shop_category_mlt`.`target_id` IN ('".implode("', '", $aCatIdList)."')";
-                }
 
+                    $quotedCatIds = array_map(function ($id) use ($connection) {
+                        return $connection->quote($id);
+                    }, $aCatIdList);
+
+                    $sSQL .= "`shop_article_shop_category_mlt`.`target_id` IN (" . implode(', ', $quotedCatIds) . ")";
+                }
                 break;
 
             default:
-                $sSQL .= "{$sFilterKey} = '".MySqlLegacySupport::getInstance()->real_escape_string($sFilterVal)."'";
+                $quotedValue = $connection->quote($sFilterVal);
+                $sSQL .= "{$sFilterKey} = {$quotedValue}";
                 break;
         }
+
         if (!empty($sSQL)) {
             $sSQL = "({$sSQL})";
         }
 
         return $sSQL;
     }
-
     /**
      * returns all fields that may be passed as filter fields.
      *

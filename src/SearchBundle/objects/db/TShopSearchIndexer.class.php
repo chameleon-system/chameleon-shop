@@ -329,149 +329,176 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      */
     public function CreateIndexTables()
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $aIndexTableNames = TdbShopSearchIndexer::GetAllIndexTableNames();
         $aTmpIndex = [];
         foreach ($aIndexTableNames as $sTableName => $length) {
-            $aTmpIndex['_tmp'.$sTableName] = $length;
+            $aTmpIndex['_tmp' . $sTableName] = $length;
         }
         $aIndexTableNames = $aTmpIndex;
+
         foreach ($aIndexTableNames as $sTableName => $iLength) {
             if (TCMSRecord::TableExists($sTableName)) {
-                $query = "DROP TABLE `{$sTableName}`";
-                MySqlLegacySupport::getInstance()->query($query);
+                $quotedTableName = $connection->quoteIdentifier($sTableName);
+                $query = "DROP TABLE {$quotedTableName}";
+                $connection->executeStatement($query);
             }
-            $query = 'CREATE TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` (
-                    `id` int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    `shop_article_id` CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'the shop article',
-                    `substring` CHAR( {$iLength} ) NOT NULL COMMENT 'the substring',
-                    `cms_language_id` CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'language of substring',
-                    `occurrences` INT NOT NULL COMMENT 'Number of times the substring occured in the field for that article',
-                    `weight` FLOAT NOT NULL COMMENT 'calculated weight for the substring',
-                    `shop_search_field_weight_id` CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'field for which the search term was made'
-                  )";
-            MySqlLegacySupport::getInstance()->query($query);
+
+            $quotedTableName = $connection->quoteIdentifier($sTableName);
+
+            $query = "
+            CREATE TABLE {$quotedTableName} (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `shop_article_id` CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'the shop article',
+                `substring` CHAR({$iLength}) NOT NULL COMMENT 'the substring',
+                `cms_language_id` CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'language of substring',
+                `occurrences` INT NOT NULL COMMENT 'Number of times the substring occured in the field for that article',
+                `weight` FLOAT NOT NULL COMMENT 'calculated weight for the substring',
+                `shop_search_field_weight_id` CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'field for which the search term was made'
+            )
+        ";
+            $connection->executeStatement($query);
         }
 
-        // drop index fields not needed
-        $sBaseName = '_tmp'.self::INDEX_TBL_PREFIX;
-        $query = "SHOW TABLES LIKE '".MySqlLegacySupport::getInstance()->real_escape_string($sBaseName)."%'";
-        $rTableRes = MySqlLegacySupport::getInstance()->query($query);
-        while ($aTableData = MySqlLegacySupport::getInstance()->fetch_row($rTableRes)) {
+        // Drop index fields not needed
+        $sBaseName = '_tmp' . self::INDEX_TBL_PREFIX;
+        $quotedLike = $connection->quote($sBaseName . '%');
+        $query = "SHOW TABLES LIKE {$quotedLike}";
+        $statement = $connection->executeQuery($query);
+
+        while (false !== ($aTableData = $statement->fetchNumeric())) {
             if (!array_key_exists($aTableData[0], $aIndexTableNames)) {
-                $query = 'DROP TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($aTableData[0]).'`';
-                MySqlLegacySupport::getInstance()->query($query);
+                $quotedTableToDrop = $connection->quoteIdentifier($aTableData[0]);
+                $dropQuery = "DROP TABLE {$quotedTableToDrop}";
+                $connection->executeStatement($dropQuery);
             }
         }
     }
-
     /**
      * @return false|null
      */
     protected function CopyIndexTables()
     {
-        /**
-         * @var $logger LoggerInterface
-         */
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /* @var $logger \Psr\Log\LoggerInterface */
         $logger = ServiceLocator::get('monolog.logger.search_indexer');
 
         $logger->info('copy index tables start');
         $aIndexTableNames = TdbShopSearchIndexer::GetAllIndexTableNames();
         foreach ($aIndexTableNames as $sTableName => $iLength) {
-            $logger->info('Load data for table '.$sTableName);
-            $sTmpTableName = MySqlLegacySupport::getInstance()->real_escape_string('_tmp'.$sTableName);
+            $logger->info('Load data for table ' . $sTableName);
+            $sTmpTableName = '_tmp' . $sTableName;
+            $quotedTmpTable = $connection->quoteIdentifier($sTmpTableName);
+
             if (CMS_SEARCH_INDEX_USE_LOAD_FILE) {
                 $sFile = TdbShopSearchFieldWeight::GetTmpFileNameForTableImport($sTmpTableName);
                 if (file_exists($sFile)) {
-                    // since this would work only, if file privilages are granted (security), we block read the data instead
-                    $query = "LOAD DATA LOCAL INFILE '{$sFile}' INTO TABLE ".$sTmpTableName.' (shop_article_id, substring, occurrences, weight, shop_search_field_weight_id)';
-                    MySqlLegacySupport::getInstance()->query($query);
+                    $quotedFile = $connection->quote($sFile);
+                    $query = "LOAD DATA LOCAL INFILE {$quotedFile} INTO TABLE {$quotedTmpTable} (shop_article_id, substring, occurrences, weight, shop_search_field_weight_id)";
+                    $connection->executeStatement($query);
                     unlink($sFile);
                 }
             }
-            $logger->info('Load data for table '.$sTableName.' DONE');
+            $logger->info('Load data for table ' . $sTableName . ' DONE');
 
             if ($this->bRegenerateCompleteIndex) {
-                $logger->info('recreate index for table '.$sTableName);
-                $query = 'ALTER TABLE `'.$sTmpTableName.'` ADD INDEX ( `substring`, `cms_language_id`,`shop_search_field_weight_id` ) ';
-                MySqlLegacySupport::getInstance()->query($query);
-                $query = 'ALTER TABLE `'.$sTmpTableName.'` ADD INDEX ( `shop_search_field_weight_id`, `cms_language_id`) ';
-                MySqlLegacySupport::getInstance()->query($query);
-                $query = 'ALTER TABLE `'.$sTmpTableName.'` ADD INDEX ( `shop_article_id` , `substring`, `shop_search_field_weight_id`, `cms_language_id` ) ';
-                MySqlLegacySupport::getInstance()->query($query);
-                $logger->info('recreate index for table '.$sTableName.' DONE ');
+                $logger->info('recreate index for table ' . $sTableName);
+
+                $queries = [
+                    "ALTER TABLE {$quotedTmpTable} ADD INDEX (`substring`, `cms_language_id`, `shop_search_field_weight_id`)",
+                    "ALTER TABLE {$quotedTmpTable} ADD INDEX (`shop_search_field_weight_id`, `cms_language_id`)",
+                    "ALTER TABLE {$quotedTmpTable} ADD INDEX (`shop_article_id`, `substring`, `shop_search_field_weight_id`, `cms_language_id`)",
+                ];
+                foreach ($queries as $query) {
+                    $connection->executeStatement($query);
+                }
+
+                $logger->info('recreate index for table ' . $sTableName . ' DONE');
             } else {
-                $query = "INSERT INTO `{$sTableName}` (`shop_article_id`,`substring`,`occurrences`,`weight`,`shop_search_field_weight_id`,`cms_language_id`)
-                               SELECT `shop_article_id`,`substring`,`occurrences`,`weight`,`shop_search_field_weight_id`,`cms_language_id` FROM `{$sTmpTableName}`";
-                MySqlLegacySupport::getInstance()->query($query);
-                $query = "DROP TABLE `{$sTmpTableName}`";
-                MySqlLegacySupport::getInstance()->query($query);
+                $quotedTable = $connection->quoteIdentifier($sTableName);
+                $query = "
+                INSERT INTO {$quotedTable} (shop_article_id, substring, occurrences, weight, shop_search_field_weight_id, cms_language_id)
+                SELECT shop_article_id, substring, occurrences, weight, shop_search_field_weight_id, cms_language_id
+                FROM {$quotedTmpTable}
+            ";
+                $connection->executeStatement($query);
+
+                $query = "DROP TABLE {$quotedTmpTable}";
+                $connection->executeStatement($query);
             }
         }
 
         if ($this->bRegenerateCompleteIndex) {
-            $logger->info('start table rename ');
+            $logger->info('start table rename');
             reset($aIndexTableNames);
 
-            // we only rename if at least one of the tmp index tables contains at least one item
             $bAllowIndexRename = false;
             foreach ($aIndexTableNames as $sTableName => $iLength) {
-                $sTmpTableName = MySqlLegacySupport::getInstance()->real_escape_string('_tmp'.$sTableName);
-                $query = "SELECT COUNT(*) AS matches FROM `{$sTmpTableName}`";
-                if ($aMaches = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-                    if ($aMaches['matches'] > 0) {
-                        $bAllowIndexRename = true;
-                        break;
-                    }
+                $sTmpTableName = '_tmp' . $sTableName;
+                $quotedTmpTable = $connection->quoteIdentifier($sTmpTableName);
+                $query = "SELECT COUNT(*) AS matches FROM {$quotedTmpTable}";
+                $statement = $connection->executeQuery($query);
+                $aMatches = $statement->fetchAssociative();
+
+                if ($aMatches && (int) $aMatches['matches'] > 0) {
+                    $bAllowIndexRename = true;
+                    break;
                 }
             }
-            reset($aIndexTableNames);
-            if (false === $bAllowIndexRename) {
-                // no content in index - so log and exit
-                $logger->info('NO data in tmp index tables - keeping old index!');
 
+            if (false === $bAllowIndexRename) {
+                $logger->info('NO data in tmp index tables - keeping old index!');
                 return false;
             }
+
             foreach ($aIndexTableNames as $sTableName => $iLength) {
-                $logger->info('rename '.$sTableName);
-                $sTmpTableName = MySqlLegacySupport::getInstance()->real_escape_string('_tmp'.$sTableName);
+                $logger->info('rename ' . $sTableName);
+                $sTmpTableName = '_tmp' . $sTableName;
+                $quotedTmpTable = $connection->quoteIdentifier($sTmpTableName);
+                $quotedTable = $connection->quoteIdentifier($sTableName);
+
                 if (TGlobal::TableExists($sTableName)) {
-                    $query = 'RENAME TABLE  `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'` to  `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."_tmp`,  `{$sTmpTableName}`  TO `".MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'`';
-                    MySqlLegacySupport::getInstance()->query($query);
-                    $query = 'DROP TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'_tmp`';
-                    MySqlLegacySupport::getInstance()->query($query);
+                    $tmpOldTable = $connection->quoteIdentifier($sTableName . '_tmp');
+                    $query = "
+                    RENAME TABLE {$quotedTable} TO {$tmpOldTable},
+                                 {$quotedTmpTable} TO {$quotedTable}
+                ";
+                    $connection->executeStatement($query);
+
+                    $query = "DROP TABLE {$tmpOldTable}";
+                    $connection->executeStatement($query);
                 } else {
-                    $query = "RENAME TABLE `{$sTmpTableName}`  TO `".MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'`';
-                    MySqlLegacySupport::getInstance()->query($query);
+                    $query = "RENAME TABLE {$quotedTmpTable} TO {$quotedTable}";
+                    $connection->executeStatement($query);
                 }
-                $logger->info('rename '.$sTableName.' DONE');
+                $logger->info('rename ' . $sTableName . ' DONE');
             }
         }
 
-        // now drop indext tables no longer needed
-        // drop index fields not needed
+        // Now drop index tables no longer needed
         $sBaseName = self::INDEX_TBL_PREFIX;
-        $query = "SHOW TABLES LIKE '".MySqlLegacySupport::getInstance()->real_escape_string($sBaseName)."%'";
-        $rTableRes = MySqlLegacySupport::getInstance()->query($query);
-        while ($aTableData = MySqlLegacySupport::getInstance()->fetch_row($rTableRes)) {
-            if (!array_key_exists($aTableData[0], $aIndexTableNames)) {
-                $query = 'DROP TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($aTableData[0]).'`';
-                MySqlLegacySupport::getInstance()->query($query);
-            }
-        }
-        $sBaseName = self::INDEX_TBL_PREFIX;
-        $query = "SHOW TABLES LIKE '".MySqlLegacySupport::getInstance()->real_escape_string('_tmp'.$sBaseName)."%'";
-        $rTableRes = MySqlLegacySupport::getInstance()->query($query);
-        while ($aTableData = MySqlLegacySupport::getInstance()->fetch_row($rTableRes)) {
-            if (!array_key_exists($aTableData[0], $aIndexTableNames)) {
-                $query = 'DROP TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string('_tmp'.$aTableData[0]).'`';
-                MySqlLegacySupport::getInstance()->query($query);
+
+        foreach (['', '_tmp'] as $prefix) {
+            $likePattern = $prefix . $sBaseName . '%';
+            $quotedPattern = $connection->quote($likePattern);
+            $query = "SHOW TABLES LIKE {$quotedPattern}";
+            $statement = $connection->executeQuery($query);
+
+            while (false !== ($aTableData = $statement->fetchNumeric())) {
+                if (!array_key_exists(str_replace('_tmp', '', $aTableData[0]), $aIndexTableNames)) {
+                    $quotedOldTable = $connection->quoteIdentifier($aTableData[0]);
+                    $query = "DROP TABLE {$quotedOldTable}";
+                    $connection->executeStatement($query);
+                }
             }
         }
 
         TdbShopSearchCache::ClearCompleteCache();
         $logger->info('search index create completed');
     }
-
     /**
      * get all index tables for the field.
      *
@@ -515,30 +542,41 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      */
     public static function GetSearchQuery($sSearchTerm, $aSearchTerms = null, $aFilter = [], $sLanguageId = null)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sLanguageId = self::getLanguageService()->getActiveLanguageId();
 
-        $aCacheKeys = ['class' => __CLASS__, 'type' => 'searchquery', 'sSearchTerm' => $sSearchTerm, 'aSearchTerms' => serialize($aSearchTerms), 'cms_language_id' => $sLanguageId];
+        $aCacheKeys = [
+            'class' => __CLASS__,
+            'type' => 'searchquery',
+            'sSearchTerm' => $sSearchTerm,
+            'aSearchTerms' => serialize($aSearchTerms),
+            'cms_language_id' => $sLanguageId,
+        ];
         $sCacheKey = TCacheManagerRuntimeCache::GetKey($aCacheKeys);
         $sQuery = self::GenerateSearchQuery($sSearchTerm, $sLanguageId, $aSearchTerms);
 
         // now create search cache.. unless a cache entry exists
         $oSearchCache = TdbShopSearchCache::CreateSearchCache($sCacheKey, $sQuery, $sSearchTerm, $aSearchTerms, $aFilter);
 
-        $sQuery = "SELECT DISTINCT
-                        `shop_search_cache_item`.`weight` AS cms_search_weight,
-                        `shop_article`.*
-                   FROM `shop_article`
-              LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
-             INNER JOIN `shop_search_cache_item` ON `shop_article`.`id` = `shop_search_cache_item`.`shop_article_id`
-              LEFT JOIN `shop_manufacturer` ON `shop_article`.`shop_manufacturer_id` = `shop_manufacturer`.`id`
-              LEFT JOIN `shop_category` ON `shop_article`.`shop_category_id`  = `shop_category`.`id`
-              LEFT JOIN `shop_article_shop_category_mlt` ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
-                  WHERE `shop_search_cache_item`.`shop_search_cache_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oSearchCache->id)."'
-                ";
+        $quotedCacheId = $connection->quote($oSearchCache->id);
+
+        $sQuery = "
+        SELECT DISTINCT
+            `shop_search_cache_item`.`weight` AS cms_search_weight,
+            `shop_article`.*
+        FROM `shop_article`
+        LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
+        INNER JOIN `shop_search_cache_item` ON `shop_article`.`id` = `shop_search_cache_item`.`shop_article_id`
+        LEFT JOIN `shop_manufacturer` ON `shop_article`.`shop_manufacturer_id` = `shop_manufacturer`.`id`
+        LEFT JOIN `shop_category` ON `shop_article`.`shop_category_id` = `shop_category`.`id`
+        LEFT JOIN `shop_article_shop_category_mlt` ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
+        WHERE `shop_search_cache_item`.`shop_search_cache_id` = {$quotedCacheId}
+    ";
 
         return $sQuery;
     }
-
     /**
      * return a search for the given search term(s).
      *
@@ -664,59 +702,77 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      */
     protected static function GetWordListQuery($aTerms, $sLanguageId, $aFieldRestrictions = null, $sTypeOfFieldRestriction = 'OR')
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $aTableQueries = [];
+
         // get affected tables
         $aTableList = [];
         foreach ($aTerms as $sTerm) {
             $sTableName = TdbShopSearchIndexer::GetIndexTableNameForIndexLength(mb_strlen($sTerm));
-            if (!in_array($sTableName, $aTableList)) {
+            if (!in_array($sTableName, $aTableList, true)) {
                 $aTableList[] = $sTableName;
             }
 
-            if (false == TdbShopSearchIndexer::searchWithAND()) {
+            if (false === TdbShopSearchIndexer::searchWithAND()) {
                 $sSoundEX = TdbShopSearchIndexer::GetSoundexForWord($sTerm);
                 $sSoundTable = TdbShopSearchIndexer::GetIndexTableNameForIndexLength(mb_strlen($sSoundEX));
-                if (!in_array($sSoundTable, $aTableList)) {
+                if (!in_array($sSoundTable, $aTableList, true)) {
                     $aTableList[] = $sSoundTable;
                 }
             }
         }
 
+        // build field restrictions for each table
         $aFieldRestrictionQueries = [];
-        if (!is_null($aFieldRestrictions)) {
-            reset($aTableList);
+        if (is_array($aFieldRestrictions)) {
             foreach ($aTableList as $sTableName) {
-                $aFieldRestrictionQueries[$sTableName] = " ('".implode("','", $aFieldRestrictions)."')";
+                $quotedRestrictions = array_map(function ($value) use ($connection) {
+                    return $connection->quote($value);
+                }, $aFieldRestrictions);
+                $aFieldRestrictionQueries[$sTableName] = '(' . implode(',', $quotedRestrictions) . ')';
             }
         }
 
-        // build query
         $aTableQueries = [];
-        reset($aTerms);
-        $sLanguageId = MySqlLegacySupport::getInstance()->real_escape_string($sLanguageId);
+        $quotedLanguageId = $connection->quote($sLanguageId);
+
         foreach ($aTerms as $sTerm) {
             $sTermTable = TdbShopSearchIndexer::GetIndexTableNameForIndexLength(mb_strlen($sTerm));
             if (!array_key_exists($sTermTable, $aTableQueries)) {
                 $aTableQueries[$sTermTable] = [];
             }
-            $sTmpQuery = '';
-            $sTmpQuery .= " (`{$sTermTable}`.`substring` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTerm)."' AND (`{$sTermTable}`.`cms_language_id` = '{$sLanguageId}' OR `{$sTermTable}`.`cms_language_id` = '')";
-            if (is_array($aFieldRestrictions)) {
-                $sTmpQuery .= " AND `{$sTermTable}`.`shop_search_field_weight_id` IN {$aFieldRestrictionQueries[$sTermTable]}";
+
+            $quotedTerm = $connection->quote($sTerm);
+
+            $sTmpQuery = " (
+            {$sTermTable}.`substring` = {$quotedTerm}
+            AND ({$sTermTable}.`cms_language_id` = {$quotedLanguageId} OR {$sTermTable}.`cms_language_id` = '')
+        ";
+            if (isset($aFieldRestrictionQueries[$sTermTable])) {
+                $sTmpQuery .= " AND {$sTermTable}.`shop_search_field_weight_id` IN {$aFieldRestrictionQueries[$sTermTable]}";
             }
             $sTmpQuery .= ')';
             $aTableQueries[$sTermTable][] = $sTmpQuery;
 
-            if (false == TdbShopSearchIndexer::searchWithAND()) {
-                // OR `{$sSoundTable}`.`substring` = '".MySqlLegacySupport::getInstance()->real_escape_string($sSoundEX)."')
+            if (false === TdbShopSearchIndexer::searchWithAND()) {
                 $sSoundEX = TdbShopSearchIndexer::GetSoundexForWord($sTerm);
-                if ('0000' != $sSoundEX) {
+                if ('0000' !== $sSoundEX) {
                     $sSoundTable = TdbShopSearchIndexer::GetIndexTableNameForIndexLength(mb_strlen($sSoundEX));
 
-                    $sTmpQuerySoundex = '';
-                    $sTmpQuerySoundex .= " (`{$sSoundTable}`.`substring` = '".MySqlLegacySupport::getInstance()->real_escape_string($sSoundEX)."' AND (`{$sSoundTable}`.`cms_language_id` = '{$sLanguageId}' OR `{$sSoundTable}`.`cms_language_id` = '')";
-                    if (is_array($aFieldRestrictions)) {
-                        $sTmpQuerySoundex .= " AND `{$sSoundTable}`.`shop_search_field_weight_id` IN {$aFieldRestrictionQueries[$sSoundTable]}";
+                    if (!array_key_exists($sSoundTable, $aTableQueries)) {
+                        $aTableQueries[$sSoundTable] = [];
+                    }
+
+                    $quotedSoundEX = $connection->quote($sSoundEX);
+
+                    $sTmpQuerySoundex = " (
+                    {$sSoundTable}.`substring` = {$quotedSoundEX}
+                    AND ({$sSoundTable}.`cms_language_id` = {$quotedLanguageId} OR {$sSoundTable}.`cms_language_id` = '')
+                ";
+                    if (isset($aFieldRestrictionQueries[$sSoundTable])) {
+                        $sTmpQuerySoundex .= " AND {$sSoundTable}.`shop_search_field_weight_id` IN {$aFieldRestrictionQueries[$sSoundTable]}";
                     }
                     $sTmpQuerySoundex .= ')';
                     $aTableQueries[$sSoundTable][] = $sTmpQuerySoundex;
@@ -726,7 +782,6 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
         return $aTableQueries;
     }
-
     /**
      * splits the search words into an array with prepared search words.
      *
@@ -801,21 +856,35 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      */
     protected static function IsIgnoreWord($sWord)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         static $aIgnoreWordCache;
         static $bCompleteLoad = null;
-        // first try to cache all... if we have to many (more than 500) then work an a word base system instead
+
+        // first try to cache all... if we have too many (more than 500) then work on a word base system instead
         if (!isset($aIgnoreWordCache)) {
             $aIgnoreWordCache = [];
             $oShop = TdbShopSearchIndexer::GetShopConfigForIndexer();
-            $query = "SELECT DISTINCT `name` FROM `shop_search_ignore_word` WHERE `shop_id`='".MySqlLegacySupport::getInstance()->real_escape_string($oShop->id)."'";
-            $tres = MySqlLegacySupport::getInstance()->query($query);
-            if (MySqlLegacySupport::getInstance()->num_rows($tres) <= 500) {
+
+            $quotedShopId = $connection->quote($oShop->id);
+
+            $query = "
+            SELECT DISTINCT `name`
+              FROM `shop_search_ignore_word`
+             WHERE `shop_id` = {$quotedShopId}
+        ";
+
+            $statement = $connection->executeQuery($query);
+
+            if ($statement->rowCount() <= 500) {
                 $bCompleteLoad = true;
             } else {
                 $bCompleteLoad = false;
             }
+
             $count = 0;
-            while ($count < 500 && ($aRow = MySqlLegacySupport::getInstance()->fetch_row($tres))) {
+            while ($count < 500 && ($aRow = $statement->fetchNumeric())) {
                 $aIgnoreWordCache[mb_strtolower($aRow[0])] = 1; // store as assoc so we later have a quick lookup
                 ++$count;
             }
@@ -823,14 +892,25 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
         $sTmpWord = mb_strtolower($sWord);
         $bIgnore = false;
+
         if (array_key_exists($sTmpWord, $aIgnoreWordCache)) {
             $bIgnore = true;
-        } elseif (!$bCompleteLoad) {
-            // check if we find it in the db
+        } elseif (false === $bCompleteLoad) {
             $oShop = TdbShopSearchIndexer::GetShopConfigForIndexer();
-            $query = "SELECT DISTINCT `name` FROM `shop_search_ignore_word` WHERE `shop_id`='".MySqlLegacySupport::getInstance()->real_escape_string($oShop->id)."' AND `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sWord)."'";
-            $tres = MySqlLegacySupport::getInstance()->query($query);
-            if (MySqlLegacySupport::getInstance()->num_rows($tres) > 0) {
+
+            $quotedShopId = $connection->quote($oShop->id);
+            $quotedWord = $connection->quote($sWord);
+
+            $query = "
+            SELECT DISTINCT `name`
+              FROM `shop_search_ignore_word`
+             WHERE `shop_id` = {$quotedShopId}
+               AND `name` = {$quotedWord}
+        ";
+
+            $statement = $connection->executeQuery($query);
+
+            if ($statement->rowCount() > 0) {
                 $aIgnoreWordCache[$sTmpWord] = 1;
                 $bIgnore = true;
             }
@@ -838,7 +918,6 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
         return $bIgnore;
     }
-
     /**
      * original word.
      *
@@ -860,51 +939,79 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
      */
     public static function UpdateIndex($sTable, $sId, $sType)
     {
-        if (PKG_SEARCH_USE_SEARCH_QUEUE == false) {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        if (false === PKG_SEARCH_USE_SEARCH_QUEUE) {
             return false;
         }
+
         static $bReindexQueueExists = false;
-        if (false == $bReindexQueueExists) {
+
+        if (false === $bReindexQueueExists) {
             $bReindexQueueExists = true;
-            if (false == TGlobal::TableExists('shop_search_reindex_queue')) {
-                $query = "CREATE TABLE IF NOT EXISTS `shop_search_reindex_queue` (
-                      `object_id` char(36) NOT NULL,
-                      `datecreated` datetime NOT NULL,
-                      `action` enum('update','delete') NOT NULL,
-                      `processing` enum('0','1') NOT NULL,
-                      KEY `processing` (`processing`),
-                      KEY `action` (`action`),
-                      UNIQUE `object_id` (`object_id`)
-                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='holds ids of objects that need to be reindext'";
-                MySqlLegacySupport::getInstance()->query($query);
+            if (false === TGlobal::TableExists('shop_search_reindex_queue')) {
+                $query = "
+                CREATE TABLE IF NOT EXISTS `shop_search_reindex_queue` (
+                    `object_id` CHAR(36) NOT NULL,
+                    `datecreated` DATETIME NOT NULL,
+                    `action` ENUM('update','delete') NOT NULL,
+                    `processing` ENUM('0','1') NOT NULL,
+                    KEY `processing` (`processing`),
+                    KEY `action` (`action`),
+                    UNIQUE `object_id` (`object_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='holds ids of objects that need to be reindext'
+            ";
+                $connection->executeStatement($query);
             }
         }
-        // also trigger changes in the search index (cache)
-        $query = "SELECT `shop_search_field_weight`.*,`shop_search_query`.`query`
-                  FROM `shop_search_field_weight`
-            INNER JOIN `shop_search_query` ON `shop_search_field_weight`.`shop_search_query_id` = `shop_search_query`.`id`
-                 WHERE `shop_search_field_weight`.`tablename` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTable)."'
-              GROUP BY `shop_search_query_id`";
-        $tRes = MySqlLegacySupport::getInstance()->query($query);
-        while ($aSearchField = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
+
+        $quotedTable = $connection->quote($sTable);
+
+        $query = "
+        SELECT `shop_search_field_weight`.*, `shop_search_query`.`query`
+          FROM `shop_search_field_weight`
+    INNER JOIN `shop_search_query` ON `shop_search_field_weight`.`shop_search_query_id` = `shop_search_query`.`id`
+         WHERE `shop_search_field_weight`.`tablename` = {$quotedTable}
+      GROUP BY `shop_search_query_id`
+    ";
+
+        $statement = $connection->executeQuery($query);
+
+        while ($aSearchField = $statement->fetchAssociative()) {
             $sQuery = $aSearchField['query'];
-            // ADD restriction
+
+            // Add restriction
             $oRecordList = new TCMSRecordList();
             $oRecordList->Load($sQuery);
-            $oRecordList->AddFilterString('`'.MySqlLegacySupport::getInstance()->real_escape_string($sTable)."`.`id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sId)."'");
+            $oRecordList->AddFilterString('`' . $sTable . "`.`id` = " . $connection->quote($sId));
             $sNewQuery = $oRecordList->GetActiveQuery();
-            $sTmpQuery = "SELECT CMSQUERY._shop_article_id AS shop_article_id, '".date('Y-m-d H:i:s')."', '".MySqlLegacySupport::getInstance()->real_escape_string($sType)."','0' FROM (".$sNewQuery.') AS CMSQUERY';
-            MySqlLegacySupport::getInstance()->query($sTmpQuery);
-            $sError = MySqlLegacySupport::getInstance()->error();
-            if (!empty($sError)) {
-                $sTmpQuery = "SELECT CMSQUERY.shop_article_id AS shop_article_id, '".date('Y-m-d H:i:s')."', '".MySqlLegacySupport::getInstance()->real_escape_string($sType)."','0' FROM (".$sNewQuery.') AS CMSQUERY';
+
+            $quotedType = $connection->quote($sType);
+            $currentDateTime = $connection->quote(date('Y-m-d H:i:s'));
+
+            $sTmpQuery = "
+            SELECT CMSQUERY._shop_article_id AS shop_article_id, {$currentDateTime}, {$quotedType}, '0'
+              FROM ({$sNewQuery}) AS CMSQUERY
+        ";
+
+            try {
+                $connection->executeStatement($sTmpQuery);
+            } catch (\Exception $e) {
+                // Fallback in case of alias name problems
+                $sTmpQuery = "
+                SELECT CMSQUERY.shop_article_id AS shop_article_id, {$currentDateTime}, {$quotedType}, '0'
+                  FROM ({$sNewQuery}) AS CMSQUERY
+            ";
             }
 
-            $sQuery = "REPLACE DELAYED `shop_search_reindex_queue` (`object_id`,`datecreated`,`action`,`processing`) {$sTmpQuery}";
-            MySqlLegacySupport::getInstance()->query($sQuery);
+            $query = "
+            REPLACE DELAYED `shop_search_reindex_queue` (`object_id`, `datecreated`, `action`, `processing`)
+            {$sTmpQuery}
+        ";
+            $connection->executeStatement($query);
         }
     }
-
     /**
      * returns always true!
      * non AND searches are disabled currently.

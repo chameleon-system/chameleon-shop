@@ -223,20 +223,27 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
      */
     public static function AddQueryBlock($bCollect, $sTableName, $aData)
     {
-        static $aQueries = array();
-        static $aQSize = array();
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        static $aQueries = [];
+        static $aQSize = [];
+
         if ($bCollect) {
             if (!array_key_exists($sTableName, $aQueries)) {
                 $aQueries[$sTableName] = "INSERT INTO `{$sTableName}` (shop_article_id, substring, occurrences, weight, shop_search_field_weight_id, cms_language_id) VALUES ";
                 $aQSize[$sTableName] = 0;
             }
-            $aQueries[$sTableName] .= "('{$aData['shop_article_id']}','".MySqlLegacySupport::getInstance()->real_escape_string($aData['substring'])."','{$aData['occurrences']}','{$aData['weight']}','{$aData['shop_search_field_weight_id']}','{$aData['cms_language_id']}'),";
+
+            $quotedSubstring = $connection->quote($aData['substring']);
+
+            $aQueries[$sTableName] .= "('{$aData['shop_article_id']}',{$quotedSubstring},'{$aData['occurrences']}','{$aData['weight']}','{$aData['shop_search_field_weight_id']}','{$aData['cms_language_id']}'),";
             ++$aQSize[$sTableName];
+
             if ($aQSize[$sTableName] > 1000) {
                 $sQuery = mb_substr($aQueries[$sTableName], 0, -1);
-                MySqlLegacySupport::getInstance()->query($sQuery);
-                unset($aQueries[$sTableName]);
-                unset($aQSize[$sTableName]);
+                $connection->executeStatement($sQuery);
+                unset($aQueries[$sTableName], $aQSize[$sTableName]);
             }
         } else {
             reset($aQueries);
@@ -245,13 +252,12 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
                     continue;
                 }
                 $sQuery = mb_substr($sSourceQuery, 0, -1);
-                MySqlLegacySupport::getInstance()->query($sQuery);
+                $connection->executeStatement($sQuery);
                 $aQueries[$sTableName] = '';
                 $aQSize[$sTableName] = 0;
             }
         }
     }
-
     /**
      * insert soundex for word.
      *

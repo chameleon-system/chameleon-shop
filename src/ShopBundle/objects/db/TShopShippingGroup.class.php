@@ -483,23 +483,28 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      */
     public function GetValidPaymentMethodsSelectableByTheUser()
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oPaymentMethods = clone $this->GetValidPaymentMethods(true);
-        $aInvalidMethods = array();
+        $aInvalidMethods = [];
+
         $oPaymentMethods->GoToStart();
         while ($oPaymentMethod = $oPaymentMethods->Next()) {
             $oHandler = $oPaymentMethod->GetFieldShopPaymentHandler();
             if ($oHandler && $oHandler->isBlockForUserSelection()) {
-                $aInvalidMethods[] = MySqlLegacySupport::getInstance()->real_escape_string($oPaymentMethod->id);
+                $aInvalidMethods[] = $connection->quote($oPaymentMethod->id);
             }
         }
+
         if (count($aInvalidMethods) > 0) {
-            $oPaymentMethods->AddFilterString("`shop_payment_method`.`id` NOT IN ('".implode("','", $aInvalidMethods)."')");
+            $oPaymentMethods->AddFilterString('`shop_payment_method`.`id` NOT IN (' . implode(',', $aInvalidMethods) . ')');
         }
+
         $oPaymentMethods->GoToStart();
 
         return $oPaymentMethods;
     }
-
     /**
      * use this method to add any variables to the render method that you may
      * require for some view.

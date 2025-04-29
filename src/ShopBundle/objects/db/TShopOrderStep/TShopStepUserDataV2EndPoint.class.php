@@ -663,11 +663,16 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      */
     protected function GetAnotherAddressFromUser($sReferenceAddressId, $sForAddressForm = TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING)
     {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sAlternativeAddressId = 'new';
         $oUser = self::getExtranetUserProvider()->getActiveUser();
         if ($oUser && !empty($oUser->id)) {
             $oAdrLis = $oUser->GetFieldDataExtranetUserAddressList();
-            $oAdrLis->AddFilterString("`data_extranet_user_address`.`id` != '".MySqlLegacySupport::getInstance()->real_escape_string($sReferenceAddressId)."'");
+            $quotedReferenceAddressId = $connection->quote($sReferenceAddressId);
+            $quotedReferenceAddressId = substr($quotedReferenceAddressId, 1, -1); // quote entfernt
+            $oAdrLis->AddFilterString("`data_extranet_user_address`.`id` != '".$quotedReferenceAddressId."'");
             if ($oAdrLis->Length() > 0) {
                 $sAlternativeAddressId = $oAdrLis->Current()->id;
             }
@@ -675,7 +680,6 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
 
         return $sAlternativeAddressId;
     }
-
     /**
      * return 1 if the user wants to ship to the billing address, else 0.
      *

@@ -123,14 +123,19 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
      */
     protected function GetAnotherAddressFromUser($sReferenceAddressId, $sForAddressForm = TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING)
     {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sAlternativeAddressId = 'new';
         if (TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING == $sForAddressForm) {
             $sAlternativeAddressId = parent::GetAnotherAddressFromUser($sReferenceAddressId, $sForAddressForm);
         } else {
             $oUser = TdbDataExtranetUser::GetInstance();
             if ($oUser && !empty($oUser->id)) {
+                $quotedReferenceAddressId = $connection->quote($sReferenceAddressId);
                 $oAdrLis = $oUser->GetFieldDataExtranetUserAddressList();
-                $oAdrLis->AddFilterString("`data_extranet_user_address`.`is_dhl_packstation` = '0' AND `data_extranet_user_address`.`id` != '".MySqlLegacySupport::getInstance()->real_escape_string($sReferenceAddressId)."'");
+                $oAdrLis->AddFilterString(
+                    "`data_extranet_user_address`.`is_dhl_packstation` = '0' AND `data_extranet_user_address`.`id` != {$quotedReferenceAddressId}"
+                );
                 if ($oAdrLis->Length() > 0) {
                     $sAlternativeAddressId = $oAdrLis->Current()->id;
                 }
@@ -139,7 +144,6 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
 
         return $sAlternativeAddressId;
     }
-
     /**
      * validate billing address.
      *

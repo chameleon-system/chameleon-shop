@@ -40,16 +40,24 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
      */
     protected function _ExecuteCron()
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sMinDate = date('Y-m-d H:i:s', time() - (self::MAX_AGE_DAYS * 24 * 3600));
-        $oShopOrders = TdbShopOrderList::GetList("SELECT *
-                                                  FROM `shop_order`
-                                                 WHERE `system_order_save_completed` = '1'
-                                                   AND `system_order_notification_send` = '0'
-                                                   AND `datecreated` > '".$sMinDate."'
-                                                   AND `canceled` = '0'
-                                              GROUP BY `cms_language_id`
-                                              ORDER BY `datecreated` ASC
-                                                 LIMIT 1000");
+
+        $sQuery = "
+        SELECT *
+          FROM `shop_order`
+         WHERE `system_order_save_completed` = '1'
+           AND `system_order_notification_send` = '0'
+           AND `datecreated` > '{$sMinDate}'
+           AND `canceled` = '0'
+      GROUP BY `cms_language_id`
+      ORDER BY `datecreated` ASC
+         LIMIT 1000
+    ";
+        $oShopOrders = TdbShopOrderList::GetList($sQuery);
+
         $currentLanguageId = $this->languageService->getActiveLanguageId();
         $initialLanguageId = $currentLanguageId;
 
@@ -62,14 +70,23 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
             if (!empty($oShopOrder->fieldObjectMail)) {
                 $oMail = unserialize(base64_decode($oShopOrder->fieldObjectMail));
                 if ($oMail->SendUsingObjectView('emails', 'Customer')) {
-                    MySqlLegacySupport::getInstance()->query("UPDATE `shop_order` SET `system_order_notification_send`='1', `object_mail`='' WHERE `id`='".MySqlLegacySupport::getInstance()->real_escape_string($oShopOrder->id)."'");
+                    $quotedOrderId = $connection->quote($oShopOrder->id);
+
+                    $updateQuery = "
+                    UPDATE `shop_order`
+                       SET `system_order_notification_send` = '1',
+                           `object_mail` = ''
+                     WHERE `id` = {$quotedOrderId}
+                ";
+                    $connection->executeStatement($updateQuery);
+
                 } else {
                     $iAttemps = $oMail->GetData('iAttemptsToSend');
                     if ($iAttemps > self::MAX_TRIES) {
-                        //give up, send notification
                         $sSendToMail = $oMail->GetData('sSendToMail');
-                        $sText = date('Y-m-d H:i:s').' - '.$sSendToMail.' - Send E-Mail Error';
+                        $sText = date('Y-m-d H:i:s') . ' - ' . $sSendToMail . ' - Send E-Mail Error';
                         TTools::WriteLogEntrySimple($sText, 1, __FILE__, __LINE__);
+
                         $sNewTargetMail = $this->developmentEmailAddress;
                         $aBCC = explode("\n", $oMail->sqlData['mailbcc']);
                         if (is_array($aBCC) && count($aBCC) > 0) {
@@ -77,45 +94,80 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
                         } elseif (!is_array($aBCC) && !empty($aBCC)) {
                             $sNewTargetMail = $aBCC;
                         }
+
                         $oMail->ChangeToAddress($sNewTargetMail, 'SendToName');
-                        $oMail->SetSubject(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.cron_resend_order_mail.subject', array('%mail%' => $sSendToMail, '%date%' => date('Y-m-d H:i:s'))));
+                        $oMail->SetSubject(
+                            \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
+                                'chameleon_system_shop.cron_resend_order_mail.subject',
+                                [
+                                    '%mail%' => $sSendToMail,
+                                    '%date%' => date('Y-m-d H:i:s'),
+                                ]
+                            )
+                        );
                         $oMail->SendUsingObjectView('emails', 'Customer');
-                        MySqlLegacySupport::getInstance()->query("UPDATE `shop_order` SET `system_order_notification_send`='1', `object_mail`='' WHERE `id`='".MySqlLegacySupport::getInstance()->real_escape_string($oShopOrder->id)."'");
+
+                        $quotedOrderId = $connection->quote($oShopOrder->id);
+
+                        $updateQuery = "
+                        UPDATE `shop_order`
+                           SET `system_order_notification_send` = '1',
+                               `object_mail` = ''
+                         WHERE `id` = {$quotedOrderId}
+                    ";
+                        $connection->executeStatement($updateQuery);
+
                     } else {
-                        $iAttemps = $iAttemps + 1;
+                        $iAttemps++;
                         $oMail->AddData('iAttemptsToSend', $iAttemps);
-                        MySqlLegacySupport::getInstance()->query("UPDATE `shop_order` SET `object_mail`='".base64_encode(serialize($oMail))."' WHERE `id`='".MySqlLegacySupport::getInstance()->real_escape_string($oShopOrder->id)."'");
+
+                        $quotedOrderId = $connection->quote($oShopOrder->id);
+                        $quotedObjectMail = $connection->quote(base64_encode(serialize($oMail)));
+
+                        $updateQuery = "
+                        UPDATE `shop_order`
+                           SET `object_mail` = {$quotedObjectMail}
+                         WHERE `id` = {$quotedOrderId}
+                    ";
+                        $connection->executeStatement($updateQuery);
                     }
                 }
             } else {
                 $bOrderSend = false;
-                //we don't have a mail object, most likely system crashed before calling SendOrderNotifaction => try sending without the mail object
+
                 $oOrderItems = $oShopOrder->GetFieldShopOrderItemList();
                 if (0 == $oOrderItems->Length() || $oOrderItems->FindItemWithProperty('fieldShopArticleId', '') || $oOrderItems->FindItemWithProperty('fieldShopArticleId', '0')) {
-                    // order broken!
                     $bOrderSend = false;
                 } else {
-                    // send order
                     $bOrderSend = $oShopOrder->SendOrderNotification();
                 }
 
                 if (!$bOrderSend) {
                     $oMail = TDataMailProfile::GetProfile(self::MAIL_SEND_FAIL);
-                    $aMailData = array();
-                    $aMailData['ordernumber'] = $oShopOrder->fieldOrdernumber;
-                    $aMailData['customer_name'] = $oShopOrder->fieldAdrBillingFirstname.' '.$oShopOrder->fieldAdrBillingLastname;
-                    $aMailData['customer_email'] = $oShopOrder->fieldUserEmail;
-                    $aMailData['orderid'] = $oShopOrder->id;
+
+                    $aMailData = [
+                        'ordernumber'    => $oShopOrder->fieldOrdernumber,
+                        'customer_name'  => $oShopOrder->fieldAdrBillingFirstname . ' ' . $oShopOrder->fieldAdrBillingLastname,
+                        'customer_email' => $oShopOrder->fieldUserEmail,
+                        'orderid'        => $oShopOrder->id,
+                    ];
+
                     $oMail->AddDataArray($aMailData);
                     $oMail->SendUsingObjectView('emails', 'Customer');
                 }
 
-                $sQuery = "UPDATE `shop_order` SET `system_order_notification_send`='1' WHERE `id`='".$oShopOrder->id."'";
-                MySqlLegacySupport::getInstance()->query($sQuery);
+                $quotedOrderId = $connection->quote($oShopOrder->id);
+
+                $updateQuery = "
+                UPDATE `shop_order`
+                   SET `system_order_notification_send` = '1'
+                 WHERE `id` = {$quotedOrderId}
+            ";
+                $connection->executeStatement($updateQuery);
             }
-        } // while
+        }
+
         $this->languageService->setActiveLanguage($initialLanguageId);
     }
-
     // function
 }

@@ -54,14 +54,18 @@ class TPkgShopPaymentIPNManager
     private function getIPNIdentifierFromOrder(TdbShopOrder $oOrder)
     {
         $sIdentifier = null;
+        $connection = $this->getDatabaseConnection();
+        $quotedOrderId = $connection->quote($oOrder->id);
+
         $query = "SELECT `shop_payment_handler_group`.*
-                    FROM `shop_payment_handler_group`
-              INNER JOIN `shop_payment_handler` on `shop_payment_handler_group`.`id` = `shop_payment_handler`.`shop_payment_handler_group_id`
-              INNER JOIN `shop_payment_method` on `shop_payment_handler`.`id` = `shop_payment_method`.`shop_payment_handler_id`
-              INNER JOIN `shop_order` on `shop_payment_method`.`id` = `shop_order`.`shop_payment_method_id`
-                   WHERE `shop_order`.`id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oOrder->id)."'
-        ";
-        if ($aGroup = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+                FROM `shop_payment_handler_group`
+          INNER JOIN `shop_payment_handler` ON `shop_payment_handler_group`.`id` = `shop_payment_handler`.`shop_payment_handler_group_id`
+          INNER JOIN `shop_payment_method` ON `shop_payment_handler`.`id` = `shop_payment_method`.`shop_payment_handler_id`
+          INNER JOIN `shop_order` ON `shop_payment_method`.`id` = `shop_order`.`shop_payment_method_id`
+               WHERE `shop_order`.`id` = {$quotedOrderId}
+    ";
+        $aGroup = $connection->fetchAssociative($query);
+        if ($aGroup) {
             $sIdentifier = trim($aGroup['ipn_group_identifier']);
             if ('' === $sIdentifier) {
                 $sIdentifier = trim($aGroup['system_name']);
@@ -70,7 +74,6 @@ class TPkgShopPaymentIPNManager
 
         return $sIdentifier;
     }
-
     /**
      * @return LanguageServiceInterface
      */

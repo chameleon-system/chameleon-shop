@@ -31,9 +31,15 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      */
     public static function GetNextStep($oStep)
     {
-        $oNextStep = null;
-        $query = "SELECT * FROM `shop_order_step` WHERE `position` > '".MySqlLegacySupport::getInstance()->real_escape_string($oStep->fieldPosition)."' ORDER BY `position`";
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $quotedPosition = $connection->quote($oStep->fieldPosition);
+
+        $query = "SELECT * FROM `shop_order_step` WHERE `position` > {$quotedPosition} ORDER BY `position`";
         $oSteps = TdbShopOrderStepList::GetList($query);
+        $oNextStep = null;
+
         if ($oSteps->Length() > 0) {
             /** @var TdbShopOrderStep $oNextStep */
             $oNextStep = $oSteps->Current();
@@ -44,7 +50,6 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
 
         return $oNextStep;
     }
-
     /**
      * return the previous step in line (null if there no other step).
      *
@@ -54,9 +59,15 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      */
     public static function GetPreviousStep($oStep)
     {
-        $oPreviousStep = null;
-        $query = "SELECT * FROM `shop_order_step` WHERE `position` < '".MySqlLegacySupport::getInstance()->real_escape_string($oStep->fieldPosition)."' ORDER BY `position` DESC";
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $quotedPosition = $connection->quote($oStep->fieldPosition);
+
+        $query = "SELECT * FROM `shop_order_step` WHERE `position` < {$quotedPosition} ORDER BY `position` DESC";
         $oSteps = TdbShopOrderStepList::GetList($query);
+        $oPreviousStep = null;
+
         if ($oSteps->Length() > 0) {
             /** @var TdbShopOrderStep $oPreviousStep */
             $oPreviousStep = $oSteps->Current();
@@ -64,7 +75,6 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
 
         return $oPreviousStep;
     }
-
     /**
      * returns all navi steps marked as navi steps. the active step will be marked as "is active".
      *
@@ -74,47 +84,49 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      */
     public static function GetNavigationStepList(TdbShopOrderStep $oActiveStep)
     {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $query = "SELECT *
-                 FROM `shop_order_step`
-                WHERE `show_in_navigation` = '1'
-             ORDER BY `position` ASC
-              ";
+              FROM `shop_order_step`
+             WHERE `show_in_navigation` = '1'
+          ORDER BY `position` ASC";
         $oSteps = TdbShopOrderStepList::GetList($query);
         $oSteps->bAllowItemCache = true;
-        $stepIdList = array();
+
+        $stepIdList = [];
         while ($oStep = $oSteps->Next()) {
             if (false === $oStep->IsActive()) {
                 continue;
             }
-            $stepIdList[] = MySqlLegacySupport::getInstance()->real_escape_string($oStep->id);
-            if ($oActiveStep->id == $oStep->id) {
-                $oStep->bIsTheActiveStep = true;
-            } else {
-                $oStep->bIsTheActiveStep = false;
-            }
-        }
-
-        $query = "SELECT *
-                 FROM `shop_order_step`
-                WHERE `show_in_navigation` = '1' AND `id` IN ('".implode("','", $stepIdList)."')
-             ORDER BY `position` ASC
-              ";
-        $oSteps = TdbShopOrderStepList::GetList($query);
-        $oSteps->bAllowItemCache = true;
-        while ($oStep = $oSteps->Next()) {
             $stepIdList[] = $oStep->id;
-            if ($oActiveStep->id == $oStep->id) {
-                $oStep->bIsTheActiveStep = true;
-            } else {
-                $oStep->bIsTheActiveStep = false;
-            }
+            $oStep->bIsTheActiveStep = ($oActiveStep->id === $oStep->id);
         }
 
-        $oSteps->GoToStart();
+        if (count($stepIdList) > 0) {
+            $quotedIds = array_map(
+                static function ($id) use ($connection) {
+                    return $connection->quote($id);
+                },
+                $stepIdList
+            );
+
+            $query = "SELECT *
+                  FROM `shop_order_step`
+                 WHERE `show_in_navigation` = '1' AND `id` IN (".implode(',', $quotedIds).")
+              ORDER BY `position` ASC";
+            $oSteps = TdbShopOrderStepList::GetList($query);
+            $oSteps->bAllowItemCache = true;
+
+            while ($oStep = $oSteps->Next()) {
+                $oStep->bIsTheActiveStep = ($oActiveStep->id === $oStep->id);
+            }
+
+            $oSteps->GoToStart();
+        }
 
         return $oSteps;
     }
-
     /**
      * returns the position of the currently active step. if no step is marked as active,
      * it will return false. Step positions will start at 1 (not zero).

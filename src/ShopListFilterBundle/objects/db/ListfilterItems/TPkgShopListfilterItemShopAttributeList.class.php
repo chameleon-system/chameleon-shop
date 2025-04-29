@@ -190,10 +190,12 @@ class TPkgShopListfilterItemShopAttributeList extends TPkgShopListfilterItemMult
     protected function GetSQLQueryForQueryRestrictionForActiveFilter()
     {
         $sItemListQuery = parent::GetSQLQueryForQueryRestrictionForActiveFilter();
-        $quotedItemTableName = $this->getDatabaseConnection()->quoteIdentifier($this->sItemTableName);
-        $sItemListQuery .= " AND $quotedItemTableName.`shop_attribute_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(
-                $this->fieldShopAttribute
-            )."'";
+        $connection = $this->getDatabaseConnection();
+
+        $quotedItemTableName = $connection->quoteIdentifier($this->sItemTableName);
+        $quotedShopAttribute = $connection->quote($this->fieldShopAttribute);
+
+        $sItemListQuery .= " AND {$quotedItemTableName}.`shop_attribute_id` = {$quotedShopAttribute}";
 
         return $sItemListQuery;
     }

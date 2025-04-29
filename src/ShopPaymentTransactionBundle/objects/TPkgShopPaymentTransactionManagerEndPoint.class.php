@@ -318,26 +318,27 @@ class TPkgShopPaymentTransactionManagerEndPoint
     public function getTransactionBalance($bIncludeUnconfirmedTransactions = false)
     {
         $dTotal = 0.00;
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $quotedOrderId = $connection->quote($this->order->id);
+
         $sRestriction = '';
         if (false === $bIncludeUnconfirmedTransactions) {
             $sRestriction .= " AND `pkg_shop_payment_transaction`.`confirmed` = '1'";
         }
+
         $query = "SELECT SUM(`pkg_shop_payment_transaction`.`amount`) AS total
-                    FROM `pkg_shop_payment_transaction`
-                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance(
-            )->real_escape_string(
-                $this->order->id
-            )."'
-                    {$sRestriction}
-                GROUP BY `pkg_shop_payment_transaction`.`shop_order_id`
-                 ";
-        if ($aSum = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+                FROM `pkg_shop_payment_transaction`
+               WHERE `pkg_shop_payment_transaction`.`shop_order_id` = {$quotedOrderId}
+                {$sRestriction}
+            GROUP BY `pkg_shop_payment_transaction`.`shop_order_id`
+             ";
+
+        if ($aSum = $connection->fetchAssociative($query)) {
             $dTotal = $aSum['total'];
         }
 
         return (float) round($dTotal, 2);
     }
-
     /**
      * returns the transaction sequence for the next transaction.
      *
@@ -345,15 +346,16 @@ class TPkgShopPaymentTransactionManagerEndPoint
      */
     protected function getNextTransactionSequenceNumber()
     {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $quotedOrderId = $connection->quote($this->order->id);
+
         $query = "SELECT MAX(sequence_number) AS max_sequence_number
-                    FROM `pkg_shop_payment_transaction`
-                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance(
-            )->real_escape_string(
-                $this->order->id
-            )."'
-                GROUP BY `pkg_shop_payment_transaction`.`shop_order_id`
-                 ";
-        if ($aSum = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+                FROM `pkg_shop_payment_transaction`
+               WHERE `pkg_shop_payment_transaction`.`shop_order_id` = {$quotedOrderId}
+            GROUP BY `pkg_shop_payment_transaction`.`shop_order_id`
+             ";
+
+        if ($aSum = $connection->fetchAssociative($query)) {
             $iSequenceNumber = $aSum['max_sequence_number'] + 1;
         } else {
             $iSequenceNumber = 1;
@@ -361,7 +363,6 @@ class TPkgShopPaymentTransactionManagerEndPoint
 
         return $iSequenceNumber;
     }
-
     /**
      * the max value is always an absolute value (ie positive).
      *
@@ -398,28 +399,30 @@ class TPkgShopPaymentTransactionManagerEndPoint
      */
     public function hasTransactions($sTransactionType = null)
     {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $iNumberOfTransactions = 0;
         $sTransactionTypeRestriction = '';
         if (null !== $sTransactionType) {
             $oTransactionType = $this->getTransactionTypeObject($sTransactionType);
-            $sTransactionId = MySqlLegacySupport::getInstance()->real_escape_string($oTransactionType->id);
-            $sTransactionTypeRestriction = " AND `pkg_shop_payment_transaction`.`pkg_shop_payment_transaction_type_id` = '{$sTransactionId}'";
+            $quotedTransactionTypeId = $connection->quote($oTransactionType->id);
+            $sTransactionTypeRestriction = " AND `pkg_shop_payment_transaction`.`pkg_shop_payment_transaction_type_id` = {$quotedTransactionTypeId}";
         }
+
+        $quotedOrderId = $connection->quote($this->order->id);
+
         $query = "SELECT COUNT(*) AS transactions
-                    FROM `pkg_shop_payment_transaction`
-                   WHERE `pkg_shop_payment_transaction`.`shop_order_id` = '".MySqlLegacySupport::getInstance(
-            )->real_escape_string(
-                $this->order->id
-            )."'
-                    {$sTransactionTypeRestriction}
-                 ";
-        if ($aRow = MySqlLegacySupport::getInstance()->fetch_row(MySqlLegacySupport::getInstance()->query($query))) {
-            $iNumberOfTransactions = intval($aRow[0]);
+                FROM `pkg_shop_payment_transaction`
+               WHERE `pkg_shop_payment_transaction`.`shop_order_id` = {$quotedOrderId}
+                {$sTransactionTypeRestriction}
+             ";
+
+        if ($aRow = $connection->fetchAssociative($query)) {
+            $iNumberOfTransactions = (int) $aRow['transactions'];
         }
 
         return 0 !== $iNumberOfTransactions;
     }
-
     /**
      * returns an array with all products that have not been billed via a transaction.
      *
@@ -521,31 +524,35 @@ class TPkgShopPaymentTransactionManagerEndPoint
         $sTransactionTypeSystemName,
         $bIncludeUnconfirmedTransactions = true
     ) {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sTransactionTypeId = $this->getTransactionTypeObject($sTransactionTypeSystemName)->id;
+        $quotedOrderItemId = $connection->quote($sOrderItemId);
+        $quotedTransactionTypeId = $connection->quote($sTransactionTypeId);
+        $quotedOrderId = $connection->quote($this->order->id);
+
         $iTotal = 0;
-        $sOrderItemId = MySqlLegacySupport::getInstance()->real_escape_string($sOrderItemId);
-        $sTransactionTypeId = MySqlLegacySupport::getInstance()->real_escape_string($sTransactionTypeId);
-        $sOrderId = MySqlLegacySupport::getInstance()->real_escape_string($this->order->id);
         $sIncompleteRestriction = '';
         if (false === $bIncludeUnconfirmedTransactions) {
             $sIncompleteRestriction = " AND `pkg_shop_payment_transaction`.`confirmed` = '1'";
         }
+
         $query = "SELECT SUM(`pkg_shop_payment_transaction_position`.`amount`) AS amount_total
-                    FROM `pkg_shop_payment_transaction_position`
-              INNER JOIN `pkg_shop_payment_transaction` ON `pkg_shop_payment_transaction_position`.`pkg_shop_payment_transaction_id` = `pkg_shop_payment_transaction`.`id`
-                   WHERE `pkg_shop_payment_transaction_position`.`shop_order_item_id` = '{$sOrderItemId}'
-                     AND `pkg_shop_payment_transaction`.`shop_order_id` = '{$sOrderId}'
-                     AND `pkg_shop_payment_transaction`.`pkg_shop_payment_transaction_type_id` = '{$sTransactionTypeId}'
-                     {$sIncompleteRestriction}
-                GROUP BY `pkg_shop_payment_transaction`.`shop_order_id`
-        ";
-        if ($aRow = MySqlLegacySupport::getInstance()->fetch_row(MySqlLegacySupport::getInstance()->query($query))) {
-            $iTotal = intval($aRow[0]);
+                FROM `pkg_shop_payment_transaction_position`
+          INNER JOIN `pkg_shop_payment_transaction` ON `pkg_shop_payment_transaction_position`.`pkg_shop_payment_transaction_id` = `pkg_shop_payment_transaction`.`id`
+               WHERE `pkg_shop_payment_transaction_position`.`shop_order_item_id` = {$quotedOrderItemId}
+                 AND `pkg_shop_payment_transaction`.`shop_order_id` = {$quotedOrderId}
+                 AND `pkg_shop_payment_transaction`.`pkg_shop_payment_transaction_type_id` = {$quotedTransactionTypeId}
+                 {$sIncompleteRestriction}
+            GROUP BY `pkg_shop_payment_transaction`.`shop_order_id`
+    ";
+
+        if ($aRow = $connection->fetchAssociative($query)) {
+            $iTotal = (int) $aRow['amount_total'];
         }
 
         return $iTotal;
     }
-
     /**
      * return the sum for the non-product entry in the positions with position type $sTransactionPositionType.
      *
@@ -561,28 +568,32 @@ class TPkgShopPaymentTransactionManagerEndPoint
         $sTransactionPositionType,
         $bIncludeUnconfirmedTransactions = true
     ) {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $iTotal = 0;
-        $sOrderId = MySqlLegacySupport::getInstance()->real_escape_string($this->order->id);
+        $quotedOrderId = $connection->quote($this->order->id);
+        $quotedTransactionPositionType = $connection->quote($sTransactionPositionType);
+
         $sIncompleteRestriction = '';
         if (false === $bIncludeUnconfirmedTransactions) {
             $sIncompleteRestriction = " AND `pkg_shop_payment_transaction`.`confirmed` = '1'";
         }
-        $sTransactionPositionType = MySqlLegacySupport::getInstance()->real_escape_string($sTransactionPositionType);
+
         $query = "SELECT SUM(`pkg_shop_payment_transaction_position`.`amount` * `pkg_shop_payment_transaction_position`.`value`) AS value_total
-                    FROM `pkg_shop_payment_transaction_position`
-              INNER JOIN `pkg_shop_payment_transaction` ON `pkg_shop_payment_transaction_position`.`pkg_shop_payment_transaction_id` = `pkg_shop_payment_transaction`.`id`
-                   WHERE `pkg_shop_payment_transaction_position`.`type` = '{$sTransactionPositionType}'
-                     AND `pkg_shop_payment_transaction`.`shop_order_id` = '{$sOrderId}'
-                     {$sIncompleteRestriction}
-                GROUP BY `pkg_shop_payment_transaction`.`shop_order_id`
-        ";
-        if ($aRow = MySqlLegacySupport::getInstance()->fetch_row(MySqlLegacySupport::getInstance()->query($query))) {
-            $iTotal = $aRow[0];
+                FROM `pkg_shop_payment_transaction_position`
+          INNER JOIN `pkg_shop_payment_transaction` ON `pkg_shop_payment_transaction_position`.`pkg_shop_payment_transaction_id` = `pkg_shop_payment_transaction`.`id`
+               WHERE `pkg_shop_payment_transaction_position`.`type` = {$quotedTransactionPositionType}
+                 AND `pkg_shop_payment_transaction`.`shop_order_id` = {$quotedOrderId}
+                 {$sIncompleteRestriction}
+            GROUP BY `pkg_shop_payment_transaction`.`shop_order_id`
+    ";
+
+        if ($aRow = $connection->fetchAssociative($query)) {
+            $iTotal = $aRow['value_total'];
         }
 
-        return round($iTotal, 2);
+        return round((float) $iTotal, 2);
     }
-
     /**
      * return the transaction details for a completed order.
      *

@@ -120,15 +120,16 @@ class TShopCategoryTree
      */
     protected function GetQuery($sChildCategoryId)
     {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sSelect = "SELECT `shop_category`.*
-                    FROM `shop_category`
-                   WHERE `shop_category`.`shop_category_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sChildCategoryId)."'
-      OR `shop_category`.`id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sChildCategoryId)."'
-                ORDER BY `shop_category`.`position`";
+                FROM `shop_category`
+               WHERE `shop_category`.`shop_category_id` = ".$connection->quote($sChildCategoryId)."
+                  OR `shop_category`.`id` = ".$connection->quote($sChildCategoryId)."
+            ORDER BY `shop_category`.`position`";
 
         return $sSelect;
     }
-
     /**
      * Resets all item count in all category trees.
      *

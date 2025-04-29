@@ -24,28 +24,30 @@ class TShopModuleArticlelistFilterBestseller extends TShopModuleArticlelistFilte
      */
     protected function GetListQueryBase($oListConfig)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sQuery = 'SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
-                   FROM `shop_article`
-              LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
-              LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
-                  WHERE `shop_article_stats`.`stats_sales` > 0
-                ';
-        $tres = MySqlLegacySupport::getInstance()->query($sQuery);
-        $iNumRecs = MySqlLegacySupport::getInstance()->num_rows($tres);
+               FROM `shop_article`
+          LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
+          LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
+              WHERE `shop_article_stats`.`stats_sales` > 0';
+
+        $results = $connection->fetchAllAssociative($sQuery);
+        $iNumRecs = count($results);
+
         if (($oListConfig->fieldNumberOfArticles > 0 && $iNumRecs < $oListConfig->fieldNumberOfArticles) || ($iNumRecs < 1)) {
             $sQuery = parent::GetListBaseQueryRestrictedToCategories($oListConfig);
             if ($iNumRecs > 0) {
-                // add the records that have been sold
-                $aList = array();
-                while ($aTmpRow = MySqlLegacySupport::getInstance()->fetch_assoc($tres)) {
-                    $aList[] = MySqlLegacySupport::getInstance()->real_escape_string($aTmpRow['id']);
-                }
+                $aList = array_map(
+                    fn(array $row) => $connection->quote($row['id']),
+                    $results
+                );
                 if (count($aList) > 0) {
-                    $sQuery .= " OR `shop_article`.`id` IN ('".implode("','", $aList)."')";
+                    $sQuery .= ' OR `shop_article`.`id` IN ('.implode(',', $aList).')';
                 }
             }
         }
 
         return $sQuery;
-    }
-}
+    }}

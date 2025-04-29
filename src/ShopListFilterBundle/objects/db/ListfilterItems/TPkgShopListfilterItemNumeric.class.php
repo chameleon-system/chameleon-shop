@@ -83,17 +83,18 @@ class TPkgShopListfilterItemNumeric extends TdbPkgShopListfilterItem
      */
     public function GetQueryRestrictionForActiveFilter()
     {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sQuery = '';
         $dStartValue = $this->GetActiveStartValue();
         $dEndValue = $this->GetActiveEndValue();
+
         if ($dStartValue > 0 && $dEndValue > 0) {
-            $sQuery = "`shop_article`.`{$this->sItemFieldName}` >= '".MySqlLegacySupport::getInstance()->real_escape_string(
-                $dStartValue
-            )."' AND `shop_article`.`{$this->sItemFieldName}` <= '".MySqlLegacySupport::getInstance()->real_escape_string($dEndValue)."'";
+            $sQuery = "`shop_article`.`{$this->sItemFieldName}` >= ".$connection->quote($dStartValue)." AND `shop_article`.`{$this->sItemFieldName}` <= ".$connection->quote($dEndValue);
         } elseif ($dStartValue > 0) {
-            $sQuery = "`shop_article`.`{$this->sItemFieldName}` >= '".MySqlLegacySupport::getInstance()->real_escape_string($dStartValue)."'";
+            $sQuery = "`shop_article`.`{$this->sItemFieldName}` >= ".$connection->quote($dStartValue);
         } elseif ($dEndValue > 0) {
-            $sQuery = "`shop_article`.`{$this->sItemFieldName}` <= '".MySqlLegacySupport::getInstance()->real_escape_string($dEndValue)."'";
+            $sQuery = "`shop_article`.`{$this->sItemFieldName}` <= ".$connection->quote($dEndValue);
         }
 
         return $sQuery;

@@ -41,6 +41,8 @@ class MTRatingTeaserCore extends TUserCustomModelBase
      */
     protected function GetRatingItem()
     {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $iMaxItems = null;
         $iSelectLimit = 0;
         $aItemCache = array();
@@ -56,10 +58,12 @@ class MTRatingTeaserCore extends TUserCustomModelBase
             if (!empty($sQueryRatings)) {
                 $sQueryRatings .= "\nUNION\n";
             }
-            $sQueryRatings .= "(SELECT * FROM pkg_shop_rating_service_rating WHERE pkg_shop_rating_service_id = '".MySqlLegacySupport::getInstance()->real_escape_string($oServiceItem->id)."'";
+            $quotedServiceId = $connection->quote($oServiceItem->id);
+            $sQueryRatings .= "(SELECT * FROM pkg_shop_rating_service_rating WHERE pkg_shop_rating_service_id = {$quotedServiceId}";
             if ($iSelectLimit > 0) {
-                $sQueryRatings .= ' LIMIT '.MySqlLegacySupport::getInstance()->real_escape_string($iSelectLimit).')';
+                $sQueryRatings .= ' LIMIT '.$connection->quote($iSelectLimit);
             }
+            $sQueryRatings .= ')';
         }
 
         $sQueryRatings = "SELECT T.* FROM ({$sQueryRatings}) AS T";
@@ -83,7 +87,6 @@ class MTRatingTeaserCore extends TUserCustomModelBase
 
         return $oRatingItem;
     }
-
     /**
      * loads config for instance.
      *

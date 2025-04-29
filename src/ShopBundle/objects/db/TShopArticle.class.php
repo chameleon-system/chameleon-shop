@@ -91,22 +91,33 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function GetContributorList($aContributorTypes)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         if (!is_array($aContributorTypes)) {
             $aContributorTypes = [$aContributorTypes];
         }
-        $aContributorTypes = TTools::MysqlRealEscapeArray($aContributorTypes);
-        $sQuery = "SELECT `shop_contributor`.*
-                   FROM `shop_article_contributor`
-              LEFT JOIN `shop_contributor` ON `shop_article_contributor`.`shop_contributor_id` = `shop_contributor`.`id`
-              LEFT JOIN `shop_contributor_type` ON `shop_article_contributor`.`shop_contributor_type_id` = `shop_contributor_type`.`id`
-                  WHERE `shop_contributor_type`.`identifier` in ('".implode("', '", $aContributorTypes)."')
-                    AND `shop_article_contributor`.`shop_article_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-               ORDER BY `shop_article_contributor`.`position`
-              ";
+
+        $quotedContributorTypes = array_map(function ($type) use ($connection) {
+            return $connection->quote($type);
+        }, $aContributorTypes);
+
+        $quotedArticleId = $connection->quote($this->id);
+
+        $sQuery = "
+        SELECT `shop_contributor`.*
+          FROM `shop_article_contributor`
+     LEFT JOIN `shop_contributor`
+            ON `shop_article_contributor`.`shop_contributor_id` = `shop_contributor`.`id`
+     LEFT JOIN `shop_contributor_type`
+            ON `shop_article_contributor`.`shop_contributor_type_id` = `shop_contributor_type`.`id`
+         WHERE `shop_contributor_type`.`identifier` IN (" . implode(', ', $quotedContributorTypes) . ")
+           AND `shop_article_contributor`.`shop_article_id` = {$quotedArticleId}
+      ORDER BY `shop_article_contributor`.`position`
+    ";
 
         return TdbShopContributorList::GetList($sQuery);
     }
-
     /**
      * fetch the base price of the item.
      *
@@ -1135,23 +1146,35 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         if (is_null($oOwningBundleItem)) {
             $oOwningBundleItem = false;
-            if (!is_null($this->id)) {
-                $query = "SELECT `shop_article`.*
-                      FROM `shop_article`
-                INNER JOIN `shop_bundle_article` ON `shop_article`.`id` = `shop_bundle_article`.`shop_article_id`
-                     WHERE `shop_bundle_article`.`bundle_article_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                   ";
-                if ($aOwner = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+
+            if (null !== $this->id) {
+                /* @var $connection \Doctrine\DBAL\Connection */
+                $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+                $quotedId = $connection->quote($this->id);
+
+                $query = "
+                SELECT `shop_article`.*
+                  FROM `shop_article`
+           INNER JOIN `shop_bundle_article`
+                  ON `shop_article`.`id` = `shop_bundle_article`.`shop_article_id`
+                 WHERE `shop_bundle_article`.`bundle_article_id` = {$quotedId}
+            ";
+
+                $statement = $connection->executeQuery($query);
+                $aOwner = $statement->fetchAssociative();
+
+                if (false !== $aOwner) {
                     $oOwningBundleItem = TdbShopArticle::GetNewInstance();
                     $oOwningBundleItem->LoadFromRow($aOwner);
                 }
             }
+
             $this->SetInternalCache('oOwningBundleItem', $oOwningBundleItem);
         }
 
         return $oOwningBundleItem;
     }
-
     /**
      * if this order item belongs to a bundle, then this method will return the connecting table.
      *
@@ -1321,22 +1344,33 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     public function GetFieldShopVariantTypeValueList($sOrderBy = '')
     {
         $oVariantValueList = $this->GetFromInternalCache('oFieldShopVariantTypeValueList');
+
         if (is_null($oVariantValueList)) {
-            $query = "SELECT `shop_variant_type_value`.*
-                    FROM `shop_variant_type_value`
-              INNER JOIN `shop_variant_type` ON `shop_variant_type_value`.`shop_variant_type_id` = `shop_variant_type`.`id`
-              INNER JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
-                   WHERE `shop_article_shop_variant_type_value_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                ORDER BY `shop_variant_type`.`position`
-                 ";
+            /* @var $connection \Doctrine\DBAL\Connection */
+            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+            $quotedArticleId = $connection->quote($this->id);
+
+            $query = "
+            SELECT `shop_variant_type_value`.*
+              FROM `shop_variant_type_value`
+        INNER JOIN `shop_variant_type`
+                ON `shop_variant_type_value`.`shop_variant_type_id` = `shop_variant_type`.`id`
+        INNER JOIN `shop_article_shop_variant_type_value_mlt`
+                ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
+             WHERE `shop_article_shop_variant_type_value_mlt`.`source_id` = {$quotedArticleId}
+          ORDER BY `shop_variant_type`.`position`
+        ";
+
             $oVariantValueList = TdbShopVariantTypeValueList::GetList($query, $this->iLanguageId);
+
             $this->SetInternalCache('oFieldShopVariantTypeValueList', $oVariantValueList);
         }
+
         $oVariantValueList->GoToStart();
 
         return $oVariantValueList;
     }
-
     /**
      * returns an array of IDs of all variant articles of this article.
      *
@@ -1347,8 +1381,12 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function getVariantIDList($aSelectedTypeValues = [], $bLoadActiveOnly = true)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $aArticleIdList = [];
         $oVariantList = null;
+
         if ($this->IsVariant()) {
             $oParent = $this->GetFieldVariantParent();
             $oVariantList = $oParent->GetFieldShopArticleVariantsList($aSelectedTypeValues, $bLoadActiveOnly);
@@ -1359,13 +1397,13 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if ($oVariantList->Length() > 0) {
             $oVariantList->GoToStart();
             while ($oVariantArticle = $oVariantList->Next()) {
-                $aArticleIdList[] = MySqlLegacySupport::getInstance()->real_escape_string($oVariantArticle->id);
+                $escapedId = substr($connection->quote($oVariantArticle->id), 1, -1);
+                $aArticleIdList[] = $escapedId;
             }
         }
 
         return $aArticleIdList;
     }
-
     /**
      * return all variant values that are available for the given type and this article.
      *
@@ -1376,25 +1414,38 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function GetVariantValuesAvailableForType($oVariantType, $aSelectedTypeValues = [])
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oVariantValueList = null;
         $aArticleIdList = $this->getVariantIDList($aSelectedTypeValues, true);
 
         if (count($aArticleIdList) > 0) {
-            $query = "SELECT `shop_variant_type_value`.*
-                FROM `shop_variant_type_value`
-          INNER JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
-               WHERE `shop_variant_type_value`.`shop_variant_type_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oVariantType->id)."'
-                 AND `shop_article_shop_variant_type_value_mlt`.`source_id` IN ('".implode("','", $aArticleIdList)."')
-            GROUP BY `shop_variant_type_value`.`id`
-            ORDER BY `shop_variant_type_value`.`".MySqlLegacySupport::getInstance()->real_escape_string($oVariantType->fieldShopVariantTypeValueCmsfieldname).'`
-             ';
+            // Einzelne Artikel-IDs escapen (ohne quotes außen)
+            $escapedArticleIds = array_map(function ($id) use ($connection) {
+                $escaped = $connection->quote($id);
+                return substr($escaped, 1, -1);
+            }, $aArticleIdList);
+
+            $escapedVariantTypeId = substr($connection->quote($oVariantType->id), 1, -1);
+            $escapedOrderByField = substr($connection->quote($oVariantType->fieldShopVariantTypeValueCmsfieldname), 1, -1);
+
+            $query = "
+            SELECT `shop_variant_type_value`.*
+              FROM `shop_variant_type_value`
+        INNER JOIN `shop_article_shop_variant_type_value_mlt`
+                ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
+             WHERE `shop_variant_type_value`.`shop_variant_type_id` = '{$escapedVariantTypeId}'
+               AND `shop_article_shop_variant_type_value_mlt`.`source_id` IN ('" . implode("','", $escapedArticleIds) . "')
+          GROUP BY `shop_variant_type_value`.`id`
+          ORDER BY `shop_variant_type_value`.`{$escapedOrderByField}`
+        ";
 
             $oVariantValueList = TdbShopVariantTypeValueList::GetList($query);
         }
 
         return $oVariantValueList;
     }
-
     /**
      * return all variant values that are available for the given type and this article.
      *
@@ -1405,25 +1456,39 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function GetVariantValuesAvailableForTypeIncludingInActive($oVariantType, $aSelectedTypeValues = [])
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oVariantValueList = null;
         $aArticleIdList = $this->getVariantIDList($aSelectedTypeValues, false);
 
         if (count($aArticleIdList) > 0) {
-            $query = "SELECT `shop_variant_type_value`.*, SUM(CASE WHEN `shop_article`.`active` = '1' THEN 1 ELSE 0 END) AS articleactive
-                    FROM `shop_variant_type_value`
-              INNER JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
-              LEFT JOIN `shop_article` ON `shop_article`.`id` = `shop_article_shop_variant_type_value_mlt`.`source_id`
-                   WHERE `shop_variant_type_value`.`shop_variant_type_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oVariantType->id)."'
-                     AND `shop_article_shop_variant_type_value_mlt`.`source_id` IN ('".implode("','", $aArticleIdList)."')
-                GROUP BY `shop_variant_type_value`.`id`
-                ORDER BY `shop_variant_type_value`.`".MySqlLegacySupport::getInstance()->real_escape_string($oVariantType->fieldShopVariantTypeValueCmsfieldname).'`
-                 ';
+            $quotedArticleIds = array_map(function ($id) use ($connection) {
+                return $connection->quote($id);
+            }, $aArticleIdList);
+
+            $quotedVariantTypeId = $connection->quote($oVariantType->id);
+            $quotedOrderByField = $connection->quoteIdentifier($oVariantType->fieldShopVariantTypeValueCmsfieldname);
+
+            $query = "
+            SELECT `shop_variant_type_value`.*, 
+                   SUM(CASE WHEN `shop_article`.`active` = '1' THEN 1 ELSE 0 END) AS articleactive
+              FROM `shop_variant_type_value`
+        INNER JOIN `shop_article_shop_variant_type_value_mlt`
+                ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
+         LEFT JOIN `shop_article`
+                ON `shop_article`.`id` = `shop_article_shop_variant_type_value_mlt`.`source_id`
+             WHERE `shop_variant_type_value`.`shop_variant_type_id` = {$quotedVariantTypeId}
+               AND `shop_article_shop_variant_type_value_mlt`.`source_id` IN (" . implode(',', $quotedArticleIds) . ")
+          GROUP BY `shop_variant_type_value`.`id`
+          ORDER BY {$quotedOrderByField}
+        ";
+
             $oVariantValueList = TdbShopVariantTypeValueList::GetList($query);
         }
 
         return $oVariantValueList;
     }
-
     /**
      * returns a list of variants for the current article each with a unqiue value for $sVariantTypeIdentifier.
      *
@@ -1433,8 +1498,11 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function GetVariantsForVariantTypeName($sVariantTypeIdentifier)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         /** @var TdbShopArticleList|null $oArticleList */
-        $oArticleList = $this->GetFromInternalCache('VariantsForVariantTypeName'.$sVariantTypeIdentifier);
+        $oArticleList = $this->GetFromInternalCache('VariantsForVariantTypeName' . $sVariantTypeIdentifier);
 
         if (is_null($oArticleList)) {
             $oArticleList = null;
@@ -1444,41 +1512,50 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
                 if (!is_null($oVariantType)) {
                     $sQueryAddition = '';
                     if ($this->IsVariant()) {
-                        $sCommmonParentId = $this->fieldVariantParentId;
-                        // make sure the current article is part of the list
+                        $quotedCurrentId = $connection->quote($this->id);
                         $sActingValueForTypeId = $this->GetVariantTypeActiveValue($oVariantType->id);
-                        $sQueryAddition .= "AND ((`shop_article`.`id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."' AND `shop_variant_type_value`.`id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sActingValueForTypeId)."') OR (`shop_article`.`id` != '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."' AND `shop_variant_type_value`.`id` != '".MySqlLegacySupport::getInstance()->real_escape_string($sActingValueForTypeId)."'))";
+                        $quotedActingValueForTypeId = $connection->quote($sActingValueForTypeId);
+                        $sQueryAddition .= "AND ((`shop_article`.`id` = {$quotedCurrentId} AND `shop_variant_type_value`.`id` = {$quotedActingValueForTypeId}) OR (`shop_article`.`id` != {$quotedCurrentId} AND `shop_variant_type_value`.`id` != {$quotedActingValueForTypeId}))";
+                        $sCommmonParentId = $this->fieldVariantParentId;
                     } else {
                         $sCommmonParentId = $this->id;
                     }
+
+                    $quotedCommonParentId = $connection->quote($sCommmonParentId);
+                    $quotedVariantTypeId = $connection->quote($oVariantType->id);
+
                     $sActiveArticleRestriction = TdbShopArticleList::GetActiveArticleQueryRestriction(false);
                     if (!empty($sActiveArticleRestriction)) {
-                        $sQueryAddition = $sQueryAddition.' AND ('.$sActiveArticleRestriction.')';
+                        $sQueryAddition .= ' AND (' . $sActiveArticleRestriction . ')';
                     }
 
-                    $query = "SELECT `shop_article`.*
-                        FROM `shop_article`
-                  INNER JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_article`.`id` = `shop_article_shop_variant_type_value_mlt`.`source_id`
-                  INNER JOIN `shop_variant_type_value` ON `shop_article_shop_variant_type_value_mlt`.`target_id` = `shop_variant_type_value`.`id`
-                       WHERE `shop_article`.`variant_parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sCommmonParentId)."'
-                         AND `shop_variant_type_value`.`shop_variant_type_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oVariantType->id)."'
-                         {$sQueryAddition}
+                    $query = "
+                    SELECT `shop_article`.*
+                      FROM `shop_article`
+                INNER JOIN `shop_article_shop_variant_type_value_mlt`
+                      ON `shop_article`.`id` = `shop_article_shop_variant_type_value_mlt`.`source_id`
+                INNER JOIN `shop_variant_type_value`
+                      ON `shop_article_shop_variant_type_value_mlt`.`target_id` = `shop_variant_type_value`.`id`
+                     WHERE `shop_article`.`variant_parent_id` = {$quotedCommonParentId}
+                       AND `shop_variant_type_value`.`shop_variant_type_id` = {$quotedVariantTypeId}
+                       {$sQueryAddition}
                     GROUP BY `shop_variant_type_value`.`id`
-                     ";
+                ";
+
                     if (!empty($oVariantType->fieldShopVariantTypeValueCmsfieldname)) {
-                        $query .= 'ORDER BY `shop_variant_type_value`.`'.MySqlLegacySupport::getInstance()->real_escape_string($oVariantType->fieldShopVariantTypeValueCmsfieldname).'`';
+                        $quotedOrderByField = $connection->quoteIdentifier($oVariantType->fieldShopVariantTypeValueCmsfieldname);
+                        $query .= " ORDER BY `shop_variant_type_value`.{$quotedOrderByField}";
                     }
-                    //            print_r($query);exit();
+
                     $oArticleList = TdbShopArticleList::GetList($query);
                     $oArticleList->bAllowItemCache = true;
-                    $this->SetInternalCache('VariantsForVariantTypeName'.$sVariantTypeIdentifier, $oArticleList);
+                    $this->SetInternalCache('VariantsForVariantTypeName' . $sVariantTypeIdentifier, $oArticleList);
                 }
             }
         }
 
         return $oArticleList;
     }
-
     /**
      * returns the variant type value for the given identifier.
      *
@@ -1492,35 +1569,41 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function GetActiveVariantValue($sVariantTypeIdentifier)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oVariantValueObject = null;
 
-        /**
-         * Use variant type name as key.
-         *
-         * @var array<string, TdbShopVariantTypeValue>|null $aVariantValues
-         */
+        /** @var array<string, TdbShopVariantTypeValue>|null $aVariantValues */
         $aVariantValues = $this->GetFromInternalCache('aActiveVariantValues');
 
         if (is_null($aVariantValues)) {
-            $query = "SELECT `shop_variant_type_value`.*, `shop_variant_type`.`identifier` AS variantTypeName
-                    FROM `shop_variant_type_value`
-              INNER JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
-              INNER JOIN `shop_variant_type` ON `shop_variant_type_value`.`shop_variant_type_id` = `shop_variant_type`.`id`
-                   WHERE `shop_article_shop_variant_type_value_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                 ";
+            $quotedId = $connection->quote($this->id);
+
+            $query = "
+            SELECT `shop_variant_type_value`.*, 
+                   `shop_variant_type`.`identifier` AS variantTypeName
+              FROM `shop_variant_type_value`
+        INNER JOIN `shop_article_shop_variant_type_value_mlt`
+                ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
+        INNER JOIN `shop_variant_type`
+                ON `shop_variant_type_value`.`shop_variant_type_id` = `shop_variant_type`.`id`
+             WHERE `shop_article_shop_variant_type_value_mlt`.`source_id` = {$quotedId}
+        ";
+
             $oVariantValues = TdbShopVariantTypeValueList::GetList($query);
             while ($oVariantValue = $oVariantValues->Next()) {
                 $aVariantValues[$oVariantValue->sqlData['variantTypeName']] = $oVariantValue;
             }
             $this->SetInternalCache('aActiveVariantValues', $aVariantValues);
         }
+
         if (is_array($aVariantValues) && array_key_exists($sVariantTypeIdentifier, $aVariantValues)) {
             $oVariantValueObject = $aVariantValues[$sVariantTypeIdentifier];
         }
 
         return $oVariantValueObject;
     }
-
     /**
      * returns the id of the active value for the given variant type.
      *
@@ -1592,32 +1675,47 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function GetVariantFromValues($aTypeValuePairs)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oArticle = null;
         if (!$this->IsVariant()) {
-            $query = "SELECT `shop_article`.*
-                    FROM `shop_article`
-              INNER JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_article`.`id` = `shop_article_shop_variant_type_value_mlt`.`source_id`
-              INNER JOIN `shop_variant_type_value` ON `shop_article_shop_variant_type_value_mlt`.`target_id` = `shop_variant_type_value`.`id`
-                   WHERE `shop_article`.`variant_parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                 ";
+            $quotedParentId = $connection->quote($this->id);
+
+            $query = "
+            SELECT `shop_article`.*
+              FROM `shop_article`
+        INNER JOIN `shop_article_shop_variant_type_value_mlt`
+                ON `shop_article`.`id` = `shop_article_shop_variant_type_value_mlt`.`source_id`
+        INNER JOIN `shop_variant_type_value`
+                ON `shop_article_shop_variant_type_value_mlt`.`target_id` = `shop_variant_type_value`.`id`
+             WHERE `shop_article`.`variant_parent_id` = {$quotedParentId}
+        ";
+
             $aParts = [];
             foreach ($aTypeValuePairs as $sVariantTypeId => $sVariantTypeValueId) {
-                $aParts[] = "`shop_variant_type_value`.`shop_variant_type_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sVariantTypeId)."' AND `shop_variant_type_value`.`id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sVariantTypeValueId)."'";
+                $quotedTypeId = $connection->quote($sVariantTypeId);
+                $quotedValueId = $connection->quote($sVariantTypeValueId);
+                $aParts[] = "`shop_variant_type_value`.`shop_variant_type_id` = {$quotedTypeId} AND `shop_variant_type_value`.`id` = {$quotedValueId}";
             }
-            $query .= ' AND ('.implode(') OR (', $aParts).')';
+
+            if (!empty($aParts)) {
+                $query .= ' AND (' . implode(') OR (', $aParts) . ')';
+            }
+
             $query .= ' GROUP BY `shop_article`.`id`';
-            $query .= ' HAVING COUNT(`shop_article`.`id`) = '.MySqlLegacySupport::getInstance()->real_escape_string(count($aParts));
-            $query .= ' ORDER BY `shop_article`.`active` DESC'; // we want the active article if multiple present
-            if ($aMatch = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+            $query .= ' HAVING COUNT(`shop_article`.`id`) = ' . count($aParts);
+            $query .= ' ORDER BY `shop_article`.`active` DESC';
+
+            $aMatch = $connection->fetchAssociative($query);
+            if ($aMatch) {
                 $oArticle = TdbShopArticle::GetNewInstance();
                 $oArticle->LoadFromRow($aMatch);
             }
         }
 
         return $oArticle;
-    }
-
-    /**
+    }    /**
      * article detail images
      * returns a list object of all detail article images. Image #1 is used for preview most often.
      * The image may be overwritten using images in the preview image list.
@@ -1629,12 +1727,23 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function GetFieldShopArticleImageList()
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oImages = $this->GetFromInternalCache('FieldShopArticleImageList');
         if (is_null($oImages)) {
-            $query = TdbShopArticleImageList::GetDefaultQuery($this->iLanguageId, "`shop_article_image`.`shop_article_id`= '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."' AND `shop_article_image`.`cms_media_id` NOT IN ('','0','1','2','3','4','5','6','7','8','9','11','12','13','14')"); // exclude broken records and template images
+            $quotedId = $connection->quote($this->id);
+
+            $query = TdbShopArticleImageList::GetDefaultQuery(
+                $this->iLanguageId,
+                "`shop_article_image`.`shop_article_id`= {$quotedId} 
+             AND `shop_article_image`.`cms_media_id` NOT IN ('','0','1','2','3','4','5','6','7','8','9','11','12','13','14')"
+            );
+
             $oImages = TdbShopArticleImageList::GetList($query);
             $oImages->bAllowItemCache = true;
-            if (0 == $oImages->Length() && $this->IsVariant()) {
+
+            if (0 === $oImages->Length() && $this->IsVariant()) {
                 $oParent = $this->GetFieldVariantParent();
                 if ($oParent) {
                     $oImages = $oParent->GetFieldShopArticleImageList();
@@ -1642,15 +1751,16 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
                     trigger_error('Variants [ID = '.TGlobal::OutHTML($this->id).'] parent is missing', E_USER_WARNING);
                 }
             }
+
             $this->SetInternalCache('FieldShopArticleImageList', $oImages);
         }
+
         if (!is_null($oImages)) {
             $oImages->GoToStart();
         }
 
         return $oImages;
     }
-
     /**
      * return the message consumer name of this article. note that varaints
      * always talk through their parents - so if you want to talk to the
@@ -1958,6 +2068,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     protected function UpdateVariantParentActiveField()
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $bParentActiveChanged = false;
         if ($this->IsVariant()) {
             $sParentId = $this->fieldVariantParentId;
@@ -1974,21 +2087,24 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             $sActiveValue = $this->fieldActive;
             $bParentActiveChanged = true;
         }
+
         if ($bParentActiveChanged) {
-            if (true === $sActiveValue) {
-                $sActiveValue = 1;
-            } else {
-                $sActiveValue = 0;
-            }
+            $sActiveValue = ($sActiveValue === true) ? 1 : 0;
 
             $this->sqlData['variant_parent_is_active'] = $sActiveValue;
-            $this->fieldVariantParentIsActive = (1 == $sActiveValue) ? (true) : (false);
-            $sQuery = "UPDATE `shop_article` SET `variant_parent_is_active` = '".MySqlLegacySupport::getInstance()->real_escape_string($sActiveValue)."'
-                      WHERE `shop_article`.`variant_parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sParentId)."'";
-            MySqlLegacySupport::getInstance()->query($sQuery);
+            $this->fieldVariantParentIsActive = (1 === $sActiveValue);
+
+            $quotedActiveValue = $connection->quote($sActiveValue);
+            $quotedParentId = $connection->quote($sParentId);
+
+            $query = "
+            UPDATE `shop_article`
+               SET `variant_parent_is_active` = {$quotedActiveValue}
+             WHERE `shop_article`.`variant_parent_id` = {$quotedParentId}
+        ";
+            $connection->executeStatement($query);
         }
     }
-
     /**
      * hook called when the stock value of the article changed.
      *
