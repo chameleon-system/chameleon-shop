@@ -24,26 +24,29 @@ class TShopModuleArticlelistFilterRelatedArticles extends TdbShopModuleArticleLi
      */
     protected function GetListQueryBase($oListConfig)
     {
-        $sQuery = 'SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
-                   FROM `shop_article`
-              LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
-              LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
-             INNER JOIN `shop_article_shop_article_mlt` ON `shop_article`.`id` = `shop_article_shop_article_mlt`.`target_id`
-                ';
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
-        $sArticleRestriction = '';
+        $sQuery = 'SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
+               FROM `shop_article`
+          LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
+          LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
+         INNER JOIN `shop_article_shop_article_mlt` ON `shop_article`.`id` = `shop_article_shop_article_mlt`.`target_id`
+            ';
+
         $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
-        if (!is_null($oActiveArticle)) {
+        if (null !== $oActiveArticle) {
             // check if the article has related articles - if it does not and it is a variant, try the parent
             $sRelationKey = $oActiveArticle->id;
             if ($oActiveArticle->IsVariant()) {
                 $oRelations = $oActiveArticle->GetFieldShopArticleList();
-                if (0 == $oRelations->Length()) {
+                if (0 === $oRelations->Length()) {
                     $sRelationKey = $oActiveArticle->fieldVariantParentId;
                 }
             }
 
-            $sArticleRestriction = " (`shop_article_shop_article_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sRelationKey)."')";
+            $quotedRelationKey = $connection->quote($sRelationKey);
+            $sArticleRestriction = " (`shop_article_shop_article_mlt`.`source_id` = {$quotedRelationKey})";
             $sQuery .= ' WHERE '.$sArticleRestriction;
         } else {
             $sQuery = parent::GetListQueryBase($oListConfig);

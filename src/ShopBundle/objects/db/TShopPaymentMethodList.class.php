@@ -73,8 +73,12 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
      */
     protected static function getPortalQueryRestriction($portalId)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $quotedPortalId = $connection->quote($portalId);
+
         return "\nLEFT JOIN `shop_payment_method_cms_portal_mlt` ON `shop_payment_method`.`id` = `shop_payment_method_cms_portal_mlt`.`source_id`
-                WHERE (`shop_payment_method_cms_portal_mlt`.`target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($portalId)."' OR `shop_payment_method_cms_portal_mlt`.`target_id` IS NULL)";
+            WHERE (`shop_payment_method_cms_portal_mlt`.`target_id` = {$quotedPortalId} OR `shop_payment_method_cms_portal_mlt`.`target_id` IS NULL)";
     }
 
     /**
@@ -84,7 +88,11 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
      */
     protected static function getPaymentGroupQueryRestriction($paymentGroupId)
     {
-        return " `shop_shipping_group_shop_payment_method_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($paymentGroupId)."'";
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $quotedGroupId = $connection->quote($paymentGroupId);
+
+        return " `shop_shipping_group_shop_payment_method_mlt`.`source_id` = {$quotedGroupId}";
     }
 
     /**
@@ -110,23 +118,28 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
      */
     public function RemoveInvalidItems()
     {
-        // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
-        $aValidIds = array();
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        // since this is a tcmsrecord list, we need to collect all valid ids, and then reload the list with them
+        $aValidIds = [];
         $this->GoToStart();
         while ($oItem = $this->Next()) {
             if ($oItem->IsAvailable()) {
-                $aValidIds[] = MySqlLegacySupport::getInstance()->real_escape_string($oItem->id);
+                $aValidIds[] = $connection->quote($oItem->id);
             }
         }
 
         $query = 'SELECT `shop_payment_method`.*
-                  FROM `shop_payment_method`
-                 WHERE ';
+              FROM `shop_payment_method`
+             WHERE ';
+
         if (count($aValidIds) > 0) {
-            $query .= " `shop_payment_method`.`id` IN ('".implode("','", $aValidIds)."') ";
+            $query .= ' `shop_payment_method`.`id` IN (' . implode(',', $aValidIds) . ') ';
         } else {
             $query .= ' 1 = 0 ';
         }
+
         $query .= ' ORDER BY `shop_payment_method`.`position`';
         $this->Load($query);
     }
@@ -138,23 +151,27 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
      */
     public function RemoveRestrictedItems()
     {
-        // since this is a tcmsrecord list, we need to collect all valid ids, and then reload the list with them
-        $aValidIds = array();
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $aValidIds = [];
         $this->GoToStart();
         while ($oItem = $this->Next()) {
             if ($oItem->IsPublic()) {
-                $aValidIds[] = MySqlLegacySupport::getInstance()->real_escape_string($oItem->id);
+                $aValidIds[] = $connection->quote($oItem->id);
             }
         }
 
         $query = 'SELECT `shop_payment_method`.*
-                  FROM `shop_payment_method`
-                 WHERE ';
+              FROM `shop_payment_method`
+             WHERE ';
+
         if (count($aValidIds) > 0) {
-            $query .= " `shop_payment_method`.`id` IN ('".implode("','", $aValidIds)."') ";
+            $query .= ' `shop_payment_method`.`id` IN (' . implode(',', $aValidIds) . ') ';
         } else {
             $query .= ' 1 = 0 ';
         }
+
         $query .= ' ORDER BY `shop_payment_method`.`position`';
         $this->Load($query);
     }

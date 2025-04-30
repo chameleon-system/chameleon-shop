@@ -374,19 +374,27 @@ class TShopVoucher extends TShopVoucherAutoParent
      */
     public function GetValuePreviouslyUsed()
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         // we have to make sure that is value is accurate... so we will fetch it from database every time
         // performance should not be a big issue, since it only affects users that include a voucher in their basket
         $dValueUsed = 0;
-        $query = "SELECT SUM(`value_used`) AS totalused
-                  FROM `shop_voucher_use`
-            INNER JOIN `shop_order` ON `shop_voucher_use`.`shop_order_id` = `shop_order`.`id`
-                 WHERE `shop_voucher_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                   AND `shop_order`.`canceled` = '0'
-                 ";
-        if ($aValue = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-            if (null !== $aValue['totalused']) {
-                $dValueUsed = $aValue['totalused'];
-            }
+
+        $quotedId = $connection->quote($this->id);
+
+        $query = "
+        SELECT SUM(`value_used`) AS totalused
+          FROM `shop_voucher_use`
+    INNER JOIN `shop_order` ON `shop_voucher_use`.`shop_order_id` = `shop_order`.`id`
+         WHERE `shop_voucher_id` = {$quotedId}
+           AND `shop_order`.`canceled` = '0'
+    ";
+
+        $aValue = $connection->fetchAssociative($query);
+
+        if ($aValue && null !== $aValue['totalused']) {
+            $dValueUsed = $aValue['totalused'];
         }
 
         return $dValueUsed;

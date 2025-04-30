@@ -26,31 +26,36 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
      */
     protected function GetListQueryBase($oListConfig)
     {
-        $sQuery = '';
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
         $oExtranetUser = $this->getExtranetUserProvider()->getActiveUser();
 
         if ($oExtranetUser->IsLoggedIn()) {
-            // we can link with the real user table
-            $sQuery = "SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*, NOTICELISTTABLE.`date_added` AS item_added_to_list_date
-                     FROM `shop_article`
-                LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
-                LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
-               INNER JOIN `shop_user_notice_list` AS NOTICELISTTABLE ON `shop_article`.`id` = NOTICELISTTABLE.`shop_article_id`
-                    WHERE NOTICELISTTABLE.`data_extranet_user_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oExtranetUser->id)."'
-                  ";
+            $quotedUserId = $connection->quote($oExtranetUser->id);
+            $sQuery = "
+            SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*, NOTICELISTTABLE.`date_added` AS item_added_to_list_date
+              FROM `shop_article`
+         LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
+         LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
+        INNER JOIN `shop_user_notice_list` AS NOTICELISTTABLE ON `shop_article`.`id` = NOTICELISTTABLE.`shop_article_id`
+             WHERE NOTICELISTTABLE.`data_extranet_user_id` = {$quotedUserId}
+        ";
         } else {
             $aNoticeList = $oExtranetUser->GetNoticeListArticles();
             $aItemIds = array_keys($aNoticeList);
+
             if (count($aItemIds) > 0) {
                 // create tmp table for items
                 $sTmpTableName = $this->CreateTempNotice($aNoticeList);
-                $sQuery = "SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*, NOTICELISTTABLE.`date_added` AS item_added_to_list_date
-                       FROM `shop_article`
-                  LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
-                  LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
-                 INNER JOIN `{$sTmpTableName}` AS NOTICELISTTABLE ON `shop_article`.`id` = NOTICELISTTABLE.`shop_article_id`
-                      WHERE 1
-                    ";
+                $quotedTmpTableName = $connection->quoteIdentifier($sTmpTableName);
+
+                $sQuery = "
+                SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*, NOTICELISTTABLE.`date_added` AS item_added_to_list_date
+                  FROM `shop_article`
+             LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
+             LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
+            INNER JOIN {$quotedTmpTableName} AS NOTICELISTTABLE ON `shop_article`.`id` = NOTICELISTTABLE.`shop_article_id`
+                 WHERE 1
+            ";
             } else {
                 $sQuery = parent::GetListQueryBase($oListConfig);
             }
@@ -88,25 +93,30 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
      */
     protected function CreateTempNotice($aNoticeList)
     {
-        /** @var string $sTmpTableName */
-        $sTmpTableName = MySqlLegacySupport::getInstance()->real_escape_string('_tmp'.session_id().'noticelist');
-        $query = "CREATE TEMPORARY  TABLE `{$sTmpTableName}` (
-                              `date_added` datetime NOT NULL,
-                              `shop_article_id` char(36) NOT NULL,
-                              `amount` decimal(10,2) NOT NULL default '1.00',
-                              KEY `shop_article_id` (`shop_article_id`),
-                              KEY `date_added` (`date_added`)
-                            ) ENGINE=MEMORY  DEFAULT CHARSET=utf8";
-        MySqlLegacySupport::getInstance()->query($query);
-        reset($aNoticeList);
-        foreach ($aNoticeList as $iArticleId => $oNoteItem) {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $sTmpTableName = '_tmp'.session_id().'noticelist';
+        $quotedTmpTableName = $connection->quoteIdentifier($sTmpTableName);
+
+        $query = "
+        CREATE TEMPORARY TABLE {$quotedTmpTableName} (
+            `date_added` datetime NOT NULL,
+            `shop_article_id` char(36) NOT NULL,
+            `amount` decimal(10,2) NOT NULL default '1.00',
+            KEY `shop_article_id` (`shop_article_id`),
+            KEY `date_added` (`date_added`)
+        ) ENGINE=MEMORY DEFAULT CHARSET=utf8
+    ";
+        $connection->executeStatement($query);
+
+        foreach ($aNoticeList as $oNoteItem) {
             /** @var $oNoteItem TdbShopUserNoticeList */
-            $query = "INSERT INTO `{$sTmpTableName}`
-                  	                  SET `date_added` = '".MySqlLegacySupport::getInstance()->real_escape_string($oNoteItem->fieldDateAdded)."',
-                  	                      `shop_article_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oNoteItem->fieldShopArticleId)."',
-                  	                      `amount` = '".MySqlLegacySupport::getInstance()->real_escape_string($oNoteItem->fieldAmount)."'
-                  	         ";
-            MySqlLegacySupport::getInstance()->query($query);
+            $connection->insert($sTmpTableName, [
+                'date_added' => $oNoteItem->fieldDateAdded,
+                'shop_article_id' => $oNoteItem->fieldShopArticleId,
+                'amount' => $oNoteItem->fieldAmount,
+            ]);
         }
 
         return $sTmpTableName;

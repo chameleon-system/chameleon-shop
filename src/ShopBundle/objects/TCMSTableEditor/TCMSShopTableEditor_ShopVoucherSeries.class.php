@@ -78,6 +78,9 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
      */
     public function CreateVoucherCodes($sCode = null, $iNumberOfVouchers = null)
     {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oReturn = new stdClass();
         $oReturn->bError = false;
         $oReturn->sMessage = 'Gutscheine erstellt';
@@ -85,7 +88,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
         if ($this->AllowCreatingVoucherCodes()) {
             $oGlobal = TGlobal::instance();
             if (is_null($iNumberOfVouchers)) {
-                $iNumberOfVouchers = intval($oGlobal->GetUserData('iNumberOfVouchers'));
+                $iNumberOfVouchers = (int) $oGlobal->GetUserData('iNumberOfVouchers');
             }
             if (is_null($sCode)) {
                 $sCode = $oGlobal->GetUserData('sCode');
@@ -94,22 +97,25 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
 
             if (!$bUseRandomCode) {
                 // make sure that the code does not exist in another series
+                $quotedSeriesId = $connection->quote($this->sId);
+                $quotedCode = $connection->quote($sCode);
                 $query = "SELECT * FROM `shop_voucher`
-                     WHERE `shop_voucher_series_id` <> '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'
-                       AND `code` = '".MySqlLegacySupport::getInstance()->real_escape_string($sCode)."'";
-                $tRes = MySqlLegacySupport::getInstance()->query($query);
-                if (MySqlLegacySupport::getInstance()->num_rows($tRes) > 0) {
-                    // invalid code
+                      WHERE `shop_voucher_series_id` <> {$quotedSeriesId}
+                        AND `code` = {$quotedCode}";
+                $result = $connection->fetchAssociative($query);
+
+                if ($result) {
                     $oReturn->bError = true;
                     $oReturn->sMessage = 'Code wurde bereits in mindestens einer anderen Gutscheinserie verwendet!';
                 }
             }
+
             if (!$oReturn->bError) {
                 $oVoucher = TdbShopVoucher::GetNewInstance();
                 /** @var $oVoucher TdbShopVoucher */
                 $oVoucherCodeTableConf = $oVoucher->GetTableConf();
                 $oVoucherCodeEditor = new TCMSTableEditorManager();
-                /** @var $oEditor TCMSTableEditorManager */
+                /** @var $oVoucherCodeEditor TCMSTableEditorManager */
                 $oVoucherCodeEditor->Init($oVoucherCodeTableConf->id, null);
 
                 $oVoucher->AllowEditByAll(true);
@@ -118,13 +124,16 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
                     if ($bUseRandomCode) {
                         do {
                             $sCode = strtolower(TTools::GenerateVoucherCode(10));
-                            if ($oVoucher->LoadFromFields(array('code' => $sCode))) {
+                            if ($oVoucher->LoadFromFields(['code' => $sCode])) {
                                 $sCode = '';
                             }
                         } while (empty($sCode));
                     }
-                    $aData = array('shop_voucher_series_id' => $this->sId, 'code' => $sCode, 'datecreated' => date('Y-m-d H:i:s'));
-                    // save entrie...
+                    $aData = [
+                        'shop_voucher_series_id' => $this->sId,
+                        'code' => $sCode,
+                        'datecreated' => date('Y-m-d H:i:s'),
+                    ];
                     $oVoucherCodeEditor->Save($aData);
                 }
                 $this->getCache()->enable();
@@ -188,9 +197,14 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
         $sReturn = '';
 
         if ($this->AllowExportingVoucherCodes()) {
-            $oVouchers = TdbShopVoucherList::GetList("SELECT * FROM `shop_voucher` WHERE `shop_voucher_series_id`='".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'");
+            /** @var \Doctrine\DBAL\Connection $connection */
+            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+            $quotedSeriesId = $connection->quote($this->sId);
+
+            $oVouchers = TdbShopVoucherList::GetList("SELECT * FROM `shop_voucher` WHERE `shop_voucher_series_id` = {$quotedSeriesId}");
             $oVouchers->GoToStart();
             $count = 0;
+            $aCsvVouchers = [];
             while ($oVoucher = $oVouchers->Next()) {
                 $aCsvVouchers[$count][0] = str_replace('"', '""', $oVoucher->fieldCode);
                 if ('0000-00-00 00:00:00' != $oVoucher->fieldDatecreated) {
@@ -211,7 +225,9 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
             for ($i = 0; $i < count($aCsvVouchers); ++$i) {
                 $sCsv .= '"'.implode('";"', $aCsvVouchers[$i])."\"\n";
             }
-            $sCsv = '"'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.export_column_code')).'";"'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.export_column_created')).'";"'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.export_column_spent')).'";"'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.export_column_spent_date'))."\"\n".$sCsv;
+
+            $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+            $sCsv = '"'.TGlobal::OutHTML($translator->trans('chameleon_system_shop.voucher.export_column_code')).'";"'.TGlobal::OutHTML($translator->trans('chameleon_system_shop.voucher.export_column_created')).'";"'.TGlobal::OutHTML($translator->trans('chameleon_system_shop.voucher.export_column_spent')).'";"'.TGlobal::OutHTML($translator->trans('chameleon_system_shop.voucher.export_column_spent_date'))."\"\n".$sCsv;
 
             while (@ob_end_clean()) {
             }

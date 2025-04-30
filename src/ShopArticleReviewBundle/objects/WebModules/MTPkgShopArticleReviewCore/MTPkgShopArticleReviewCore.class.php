@@ -594,14 +594,25 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      */
     protected function DeleteConnectedComments($oReviewItem)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         if ($this->AllowToCommentReview()) {
-            $sQuery = "SELECT `pkg_comment`.* FROM `cms_tbl_conf`
-                    INNER JOIN `pkg_comment_type` ON `pkg_comment_type`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
-                    INNER JOIN `pkg_comment` ON `pkg_comment`.`pkg_comment_type_id` = `pkg_comment_type`.`id`
-                    WHERE `pkg_comment_type`.`class_name` = 'TPkgCommentTypePkgShopArticleReview'
-                    AND `cms_tbl_conf`.`name` = '".MySqlLegacySupport::getInstance()->real_escape_string($oReviewItem->table)."'
-                    AND `pkg_comment`.`item_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oReviewItem->id)."'";
+            $quotedTableName = $connection->quote($oReviewItem->table);
+            $quotedItemId = $connection->quote($oReviewItem->id);
+
+            $sQuery = "
+            SELECT `pkg_comment`.*
+              FROM `cms_tbl_conf`
+        INNER JOIN `pkg_comment_type` ON `pkg_comment_type`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
+        INNER JOIN `pkg_comment` ON `pkg_comment`.`pkg_comment_type_id` = `pkg_comment_type`.`id`
+             WHERE `pkg_comment_type`.`class_name` = 'TPkgCommentTypePkgShopArticleReview'
+               AND `cms_tbl_conf`.`name` = {$quotedTableName}
+               AND `pkg_comment`.`item_id` = {$quotedItemId}
+        ";
+
             $oConnectedCommentList = TdbPkgCommentList::GetList($sQuery);
+
             while ($oConnectedComment = $oConnectedCommentList->Next()) {
                 $oCommentEditor = TTools::GetTableEditorManager('pkg_comment', $oConnectedComment->id);
                 $oCommentEditor->AllowDeleteByAll(true);
@@ -894,30 +905,50 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      */
     protected function InsertOfReviewLocked()
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $bReviewLocked = false;
+
         $oArticle = $this->GetArticleToReview();
-        if (isset($_SESSION[TdbShopArticleReview::SESSION_REVIEWED_KEY_NAME]) &&
+
+        if (
+            isset($_SESSION[TdbShopArticleReview::SESSION_REVIEWED_KEY_NAME]) &&
             is_array($_SESSION[TdbShopArticleReview::SESSION_REVIEWED_KEY_NAME]) &&
-            in_array($oArticle->id, $_SESSION[TdbShopArticleReview::SESSION_REVIEWED_KEY_NAME])
+            in_array($oArticle->id, $_SESSION[TdbShopArticleReview::SESSION_REVIEWED_KEY_NAME], true)
         ) {
             $bReviewLocked = true;
         }
+
         if (!$bReviewLocked) {
-            $sQuery = "SELECT COUNT(*) as count FROM `shop_article_review`
-                        WHERE `shop_article_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oArticle->id)."'";
+            $quotedArticleId = $connection->quote($oArticle->id);
+
+            $sQuery = "
+            SELECT COUNT(*) AS count
+              FROM `shop_article_review`
+             WHERE `shop_article_id` = {$quotedArticleId}
+        ";
+
             $oUser = TdbDataExtranetUser::GetInstance();
+
             if ($oUser->IsLoggedIn()) {
-                $sQuery .= " AND `data_extranet_user_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oUser->id)."'";
+                $quotedUserId = $connection->quote($oUser->id);
+                $sQuery .= " AND `data_extranet_user_id` = {$quotedUserId}";
             } else {
                 $sUserIp = TCMSSmartURLData::GetUserIp();
                 if (CHAMELEON_PKG_SHOP_REVIEWS_ANONYMIZE_IP) {
                     $sUserIp = md5($sUserIp);
                 }
-                $sQuery .= " AND `user_ip` = '".MySqlLegacySupport::getInstance()->real_escape_string($sUserIp)."' AND `datecreated` > '".date('Y-m-d H:i:s', time() - 60 * 60 * 3)."'";
+                $quotedUserIp = $connection->quote($sUserIp);
+                $quotedDateCreated = $connection->quote(date('Y-m-d H:i:s', time() - 60 * 60 * 3));
+
+                $sQuery .= " AND `user_ip` = {$quotedUserIp} AND `datecreated` > {$quotedDateCreated}";
             }
 
-            $aRow = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($sQuery));
-            if (!$aRow || $aRow['count'] > 0) {
+            $statement = $connection->executeQuery($sQuery);
+            $aRow = $statement->fetchAssociative();
+
+            if (!$aRow || (int) $aRow['count'] > 0) {
                 $bReviewLocked = true;
             }
         }

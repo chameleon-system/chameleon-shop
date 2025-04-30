@@ -213,16 +213,17 @@ class TPkgShopPaymentIPNRequest
             return;
         }
 
+        $connection = $this->getDatabaseConnection();
+        $quotedStatusId = $connection->quote($oStatus->id);
+        $quotedGroupId = $connection->quote($oGroup->id);
+
         $query = "SELECT `pkg_shop_payment_ipn_trigger`.*
-                    FROM `pkg_shop_payment_ipn_trigger`
-              INNER JOIN `pkg_shop_payment_ipn_trigger_pkg_shop_payment_ipn_status_mlt` ON `pkg_shop_payment_ipn_trigger`.`id` = `pkg_shop_payment_ipn_trigger_pkg_shop_payment_ipn_status_mlt`.`source_id`
-                   WHERE `pkg_shop_payment_ipn_trigger_pkg_shop_payment_ipn_status_mlt`.`target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(
-                $oStatus->id
-            )."'
-                     AND `pkg_shop_payment_ipn_trigger`.`shop_payment_handler_group_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(
-                $oGroup->id
-            )."'
-        ";
+                FROM `pkg_shop_payment_ipn_trigger`
+          INNER JOIN `pkg_shop_payment_ipn_trigger_pkg_shop_payment_ipn_status_mlt`
+                  ON `pkg_shop_payment_ipn_trigger`.`id` = `pkg_shop_payment_ipn_trigger_pkg_shop_payment_ipn_status_mlt`.`source_id`
+               WHERE `pkg_shop_payment_ipn_trigger_pkg_shop_payment_ipn_status_mlt`.`target_id` = {$quotedStatusId}
+                 AND `pkg_shop_payment_ipn_trigger`.`shop_payment_handler_group_id` = {$quotedGroupId}
+    ";
         $oTriggerList = TdbPkgShopPaymentIpnTriggerList::GetList($query);
         if (0 === $oTriggerList->Length()) {
             return;
@@ -230,12 +231,12 @@ class TPkgShopPaymentIPNRequest
 
         while ($oTrigger = $oTriggerList->Next()) {
             $oTriggerAction = TdbPkgShopPaymentIpnMessageTrigger::GetNewInstance();
-            $aData = array(
+            $aData = [
                 'pkg_shop_payment_ipn_trigger_id' => $oTrigger->id,
                 'pkg_shop_payment_ipn_message_id' => $oMessage->id,
                 'datecreated' => date('Y-m-d H:i:s'),
                 'next_attempt' => date('Y-m-d H:i:s'),
-            );
+            ];
             $oTriggerAction->SaveFieldsFast($aData);
         }
     }

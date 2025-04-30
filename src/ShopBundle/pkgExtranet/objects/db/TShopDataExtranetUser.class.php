@@ -604,21 +604,24 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
      */
     public function GetTotalOrderValue($sStartDate = null, $sEndDate = null)
     {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $query = "SELECT SUM(value_total) AS ordervalue
-                  FROM `shop_order`
-                 WHERE `data_extranet_user_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                   AND (`shop_order`.`id` IS NULL OR `shop_order`.`canceled` = '0')
-               ";
-        if (!is_null($sStartDate)) {
-            $query .= " AND `datecreated` >= '".MySqlLegacySupport::getInstance()->real_escape_string($sStartDate)."' ";
+              FROM `shop_order`
+             WHERE `data_extranet_user_id` = ".$connection->quote($this->id)."
+               AND (`shop_order`.`id` IS NULL OR `shop_order`.`canceled` = '0')";
+        if (null !== $sStartDate) {
+            $query .= " AND `datecreated` >= ".$connection->quote($sStartDate)." ";
         }
-        if (!is_null($sEndDate)) {
-            $query .= " AND `datecreated` <= '".MySqlLegacySupport::getInstance()->real_escape_string($sEndDate)."' ";
+        if (null !== $sEndDate) {
+            $query .= " AND `datecreated` <= ".$connection->quote($sEndDate)." ";
         }
         $query .= ' GROUP BY `data_extranet_user_id`';
+
         $dValue = 0;
-        if ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-            $dValue = $aRow['ordervalue'];
+        $row = $connection->fetchAssociative($query);
+        if (false !== $row && null !== $row['ordervalue']) {
+            $dValue = $row['ordervalue'];
         }
 
         return $dValue;

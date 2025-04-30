@@ -162,18 +162,24 @@ class TPkgShopListfilterItemMultiselect extends TdbPkgShopListfilterItem
         $sQuery = $this->GetFromInternalCache('sQueryRestrictionForActiveFilter');
 
         if (is_null($sQuery)) {
+            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
             $aValues = $this->aActiveFilterData;
+
             if (is_array($aValues) && count($aValues) > 0) {
-                $aValues = TTools::MysqlRealEscapeArray($aValues);
-                $sItemListQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sItemTableName).'` WHERE '.$this->GetTargetTableNameField()." IN ('".implode("','", $aValues)."')";
-                $tRes = MySqlLegacySupport::getInstance()->query($sItemListQuery);
-                $aIdList = array();
-                while ($aItemRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-                    $aIdList[] = MySqlLegacySupport::getInstance()->real_escape_string($aItemRow['id']);
+                $quotedValues = array_map([$connection, 'quote'], $aValues);
+                $quotedTargetField = $connection->quoteIdentifier($this->GetTargetTableNameField());
+                $quotedTable = $connection->quoteIdentifier($this->sItemTableName);
+                $sItemListQuery = "SELECT * FROM {$quotedTable} WHERE {$quotedTargetField} IN (".implode(',', $quotedValues).")";
+
+                $aIdList = [];
+                $result = $connection->executeQuery($sItemListQuery);
+                while ($row = $result->fetchAssociative()) {
+                    $aIdList[] = $connection->quote($row['id']);
                 }
 
                 if (count($aIdList) > 0) {
-                    $sQuery = '`shop_article`.`'.MySqlLegacySupport::getInstance()->real_escape_string($this->sItemFieldName)."` IN ('".implode("','", $aIdList)."')";
+                    $quotedField = $connection->quoteIdentifier($this->sItemFieldName);
+                    $sQuery = "`shop_article`.{$quotedField} IN (".implode(',', $aIdList).")";
                 }
             }
             $this->SetInternalCache('sQueryRestrictionForActiveFilter', $sQuery);

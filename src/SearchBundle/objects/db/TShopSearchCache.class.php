@@ -143,25 +143,29 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      */
     protected static function GetSearchCacheItem($sKey, $sShopId = null)
     {
-        $oItem = null;
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oItem = TdbShopSearchCache::GetNewInstance();
         $oItem->SetEnableObjectCaching(false);
 
-        $aFindSearchCacheFilter = array(
-            "`searchkey` = '".MySqlLegacySupport::getInstance()->real_escape_string($sKey)."'",
-        );
+        $aFindSearchCacheFilter = [
+            "`searchkey` = " . $connection->quote($sKey),
+        ];
         if (null !== $sShopId) {
-            $aFindSearchCacheFilter[] = "`shop_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sShopId)."'";
+            $aFindSearchCacheFilter[] = "`shop_id` = " . $connection->quote($sShopId);
         }
 
         $query = 'SELECT * FROM `shop_search_cache`
-                   WHERE '.implode(' AND ', $aFindSearchCacheFilter).'
-                 ';
+              WHERE ' . implode(' AND ', $aFindSearchCacheFilter);
 
         $iMaxNumberOfAttempts = 50;
         $bDone = false;
         do {
-            if ($aItem = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+            $statement = $connection->executeQuery($query);
+            $aItem = $statement->fetchAssociative();
+
+            if ($aItem) {
                 /** @var $oItem TdbShopSearchCache */
                 $oItem->LoadFromRow($aItem);
                 if ($oItem->CacheIsStale()) {
@@ -206,6 +210,9 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      */
     public static function CreateSearchCache($sKey, $sQuery, $sSearchTerm, $aSearchTerms = null, $aFilter = array())
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sShopId = null;
         $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         if ($oShop) {
@@ -215,46 +222,68 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
         if (null === $oItem) {
             $oItem = TdbShopSearchCache::GetNewInstance();
-            $aData = array('shop_id' => $oShop->id, 'searchkey' => $sKey, 'last_used_date' => date('Y-m-d H:i:s'), 'number_of_records_found' => -1);
+            $aData = [
+                'shop_id' => $oShop->id,
+                'searchkey' => $sKey,
+                'last_used_date' => date('Y-m-d H:i:s'),
+                'number_of_records_found' => -1,
+            ];
             $oItem->LoadFromRow($aData);
             $oItem->AllowEditByAll(true);
             $oItem->Save();
             //die(0);
-            $sTmpQuery = "SELECT MD5(CONCAT('".MySqlLegacySupport::getInstance()->real_escape_string($oItem->id)."-',tmpres.shop_article_id)) AS shop_search_cache_item_id,
-        '".MySqlLegacySupport::getInstance()->real_escape_string($oItem->id)."' AS shop_search_cache_id, sum(tmpres.cms_search_weight) As cms_search_weight, tmpres.shop_article_id AS id from (".$sQuery.') AS tmpres group by tmpres.shop_article_id';
+            $quotedItemId = $connection->quote($oItem->id);
+
+            $sTmpQuery = "
+            SELECT
+                MD5(CONCAT({$quotedItemId}, '-', tmpres.shop_article_id)) AS shop_search_cache_item_id,
+                {$quotedItemId} AS shop_search_cache_id,
+                SUM(tmpres.cms_search_weight) AS cms_search_weight,
+                tmpres.shop_article_id AS id
+            FROM ({$sQuery}) AS tmpres
+            GROUP BY tmpres.shop_article_id
+        ";
+
             if (TdbShopSearchIndexer::searchWithAND()) {
                 $aTerms = TdbShopSearchIndexer::PrepareSearchWords($sSearchTerm, true);
-                $sTmpQuery .= ' HAVING SUM(tmpres.wordhit) >= '.count($aTerms);
+                $sTmpQuery .= ' HAVING SUM(tmpres.wordhit) >= ' . count($aTerms);
             }
+
             $sTmpQuery = $oItem->ProcessSearchQueryBeforeInsert($sTmpQuery);
 
-            $query = "INSERT INTO `shop_search_cache_item` (`id`,`shop_search_cache_id`,`weight`, `shop_article_id`) {$sTmpQuery}";
-            MySqlLegacySupport::getInstance()->query($query);
-            $oItem->sqlData['number_of_records_found'] = MySqlLegacySupport::getInstance()->affected_rows();
-            $oItem->fieldNumberOfRecordsFound = $oItem->sqlData['number_of_records_found'];
+            $insertQuery = "
+            INSERT INTO `shop_search_cache_item` (`id`, `shop_search_cache_id`, `weight`, `shop_article_id`)
+            {$sTmpQuery}
+        ";
+
+            $affectedRows = $connection->executeStatement($insertQuery);
+
+            $oItem->sqlData['number_of_records_found'] = $affectedRows;
+            $oItem->fieldNumberOfRecordsFound = $affectedRows;
             $oItem->AllowEditByAll(true);
-            $oItem->SaveFieldsFast(array('number_of_records_found' => $oItem->fieldNumberOfRecordsFound));
+            $oItem->SaveFieldsFast(['number_of_records_found' => $oItem->fieldNumberOfRecordsFound]);
         } else {
             $aData = $oItem->sqlData;
             $aData['last_used_date'] = date('Y-m-d H:i:s');
             $oItem->LoadFromRow($aData);
             $oItem->AllowEditByAll(true);
-            $oItem->SaveFieldsFast(array('last_used_date' => $aData['last_used_date']));
+            $oItem->SaveFieldsFast(['last_used_date' => $aData['last_used_date']]);
         }
 
         $oItem->sSearchTerm = $sSearchTerm;
+
         if (true === CMS_SHOP_SEARCH_ENABLE_SPELLCHECKER) {
             $oSpellCheck = TCMSSpellcheck::GetInstance();
             $oSearchCacheObject = TdbShopSearchCache::GetNewInstance();
             $aCorrections = false;
             if (!empty($sSearchTerm)) {
-                $aCorrections = $oSpellCheck->SuggestCorrection($oItem->sSearchTerm, array($oSearchCacheObject, 'GetBestSuggestion'));
+                $aCorrections = $oSpellCheck->SuggestCorrection($oItem->sSearchTerm, [$oSearchCacheObject, 'GetBestSuggestion']);
             }
             if ($aCorrections) {
                 $oItem->sSearchTermSpellChecked = $aCorrections['string'];
                 $oItem->sSearchTermSpellCheckedFormated = $oItem->sSearchTerm;
                 foreach ($aCorrections['corrections'] as $sOrg => $sCorrection) {
-                    $oItem->sSearchTermSpellCheckedFormated = str_replace($sOrg, '<span class="correction">'.$sCorrection.'</span>', $oItem->sSearchTermSpellCheckedFormated);
+                    $oItem->sSearchTermSpellCheckedFormated = str_replace($sOrg, '<span class="correction">' . $sCorrection . '</span>', $oItem->sSearchTermSpellCheckedFormated);
                 }
             } else {
                 $oItem->sSearchTermSpellChecked = null;
@@ -287,6 +316,9 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      */
     public function GetBestSuggestion($aWords)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sBestWord = '';
         reset($aWords);
 
@@ -294,21 +326,27 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
             $sEscapedWord = TShopSearchIndexer::PrepareSearchWord($sWord);
             if (!empty($sEscapedWord)) {
                 $sIndexTable = TShopSearchIndexer::GetIndexTableNameForIndexLength(mb_strlen($sEscapedWord));
-                $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sIndexTable)."` WHERE `substring` = '".MySqlLegacySupport::getInstance()->real_escape_string($sEscapedWord)."'";
-                $tRes = MySqlLegacySupport::getInstance()->query($query);
-                if (MySqlLegacySupport::getInstance()->num_rows($tRes) > 0) {
+
+                $quotedTable = $connection->quoteIdentifier($sIndexTable);
+                $quotedWord = $connection->quote($sEscapedWord);
+
+                $query = "SELECT * FROM {$quotedTable} WHERE `substring` = {$quotedWord}";
+
+                $statement = $connection->executeQuery($query);
+
+                if ($statement->rowCount() > 0) {
                     $sBestWord = $sWord;
                 }
             }
             next($aWords);
         }
-        if (empty($sBestWord)) {
+
+        if (empty($sBestWord) && !empty($aWords)) {
             $sBestWord = $aWords[0];
         }
 
         return $sBestWord;
     }
-
     /**
      * return array with categorie ids and number of hits for that category.
      *
@@ -317,43 +355,51 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      */
     public function GetSearchResultCategoryHits($sFilters = '')
     {
-        $aHits = array();
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $aHits = [];
         if (!empty($this->fieldCategoryHits) && empty($sFilters)) {
             $aHits = unserialize($this->fieldCategoryHits);
         } else {
-            $aCategoryCount = array();
-            $sRestrcition = '';
+            $aCategoryCount = [];
+            $sRestriction = '';
 
             $query = '';
+            $quotedId = $connection->quote($this->id);
+
             if (!empty($sFilters)) {
-                $query = "SELECT COUNT(DISTINCT `shop_search_cache_item`.`id`) AS shop_search_cache_item_count, `shop_category`.*
-                      FROM `shop_search_cache_item`
-                INNER JOIN `shop_article` ON `shop_search_cache_item`.`shop_article_id` = `shop_article`.`id`
-                INNER JOIN `shop_article_shop_category_mlt` ON `shop_search_cache_item`.`shop_article_id` = `shop_article_shop_category_mlt`.`source_id`
-                INNER JOIN `shop_category` ON `shop_article_shop_category_mlt`.`target_id` = `shop_category`.`id`
-                     WHERE `shop_search_cache_item`.`shop_search_cache_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                       AND {$sFilters}
-                  GROUP BY `shop_category`.`id`
-                   ";
+                $query = "
+                SELECT COUNT(DISTINCT `shop_search_cache_item`.`id`) AS shop_search_cache_item_count, `shop_category`.*
+                  FROM `shop_search_cache_item`
+            INNER JOIN `shop_article` ON `shop_search_cache_item`.`shop_article_id` = `shop_article`.`id`
+            INNER JOIN `shop_article_shop_category_mlt` ON `shop_search_cache_item`.`shop_article_id` = `shop_article_shop_category_mlt`.`source_id`
+            INNER JOIN `shop_category` ON `shop_article_shop_category_mlt`.`target_id` = `shop_category`.`id`
+                 WHERE `shop_search_cache_item`.`shop_search_cache_id` = {$quotedId}
+                   AND {$sFilters}
+              GROUP BY `shop_category`.`id`
+            ";
             } else {
-                $query = "SELECT COUNT(DISTINCT `shop_search_cache_item`.`id`) AS shop_search_cache_item_count, `shop_category`.*
-                      FROM `shop_search_cache_item`
-                INNER JOIN `shop_article_shop_category_mlt` ON `shop_search_cache_item`.`shop_article_id` = `shop_article_shop_category_mlt`.`source_id`
-                INNER JOIN `shop_category` ON `shop_article_shop_category_mlt`.`target_id` = `shop_category`.`id`
-                     WHERE `shop_search_cache_item`.`shop_search_cache_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                  GROUP BY `shop_category`.`id`
-                   ";
+                $query = "
+                SELECT COUNT(DISTINCT `shop_search_cache_item`.`id`) AS shop_search_cache_item_count, `shop_category`.*
+                  FROM `shop_search_cache_item`
+            INNER JOIN `shop_article_shop_category_mlt` ON `shop_search_cache_item`.`shop_article_id` = `shop_article_shop_category_mlt`.`source_id`
+            INNER JOIN `shop_category` ON `shop_article_shop_category_mlt`.`target_id` = `shop_category`.`id`
+                 WHERE `shop_search_cache_item`.`shop_search_cache_id` = {$quotedId}
+              GROUP BY `shop_category`.`id`
+            ";
             }
+
             $oCatList = TdbShopCategoryList::GetList($query);
 
             // now organize list into a tree... we trace back each node untill we reach a root node... in the end we
             // will have a collection of rows. then we merge these
-
             while ($oCat = $oCatList->Next()) {
                 if (!array_key_exists($oCat->id, $aHits)) {
                     $aHits[$oCat->id] = 0;
                 }
                 $aHits[$oCat->id] += $oCat->sqlData['shop_search_cache_item_count'];
+
                 // add all children to vector
                 while ($oParent = $oCat->GetParent()) {
                     $oParent->sqlData['shop_search_cache_item_count'] = $oCat->sqlData['shop_search_cache_item_count'];
@@ -384,10 +430,23 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      */
     public function GetNumberOfHits()
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         if ($this->fieldNumberOfRecordsFound < 0) {
-            $query = "SELECT COUNT(*) AS recs FROM `shop_search_cache_item` WHERE `shop_search_cache_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
-            if ($row = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-                $this->fieldNumberOfRecordsFound = $row['recs'];
+            $quotedId = $connection->quote($this->id);
+
+            $query = "
+            SELECT COUNT(*) AS recs
+              FROM `shop_search_cache_item`
+             WHERE `shop_search_cache_id` = {$quotedId}
+        ";
+
+            $statement = $connection->executeQuery($query);
+            $row = $statement->fetchAssociative();
+
+            if ($row) {
+                $this->fieldNumberOfRecordsFound = (int) $row['recs'];
                 $this->sqlData['number_of_records_found'] = $this->fieldNumberOfRecordsFound;
                 $this->AllowEditByAll(true);
                 $this->Save();
@@ -417,10 +476,23 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      */
     public function ClearCache()
     {
-        $query = "DELETE FROM `shop_search_cache_item` WHERE `shop_search_cache_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."' ";
-        MySqlLegacySupport::getInstance()->query($query);
-        $query = "DELETE FROM `shop_search_cache` WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
-        MySqlLegacySupport::getInstance()->query($query);
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $quotedId = $connection->quote($this->id);
+
+        $query = "
+        DELETE FROM `shop_search_cache_item`
+         WHERE `shop_search_cache_id` = {$quotedId}
+    ";
+        $connection->executeStatement($query);
+
+        $query = "
+        DELETE FROM `shop_search_cache`
+         WHERE `id` = {$quotedId}
+    ";
+        $connection->executeStatement($query);
+
         $this->id = null;
         $this->sqlData['id'] = null;
     }

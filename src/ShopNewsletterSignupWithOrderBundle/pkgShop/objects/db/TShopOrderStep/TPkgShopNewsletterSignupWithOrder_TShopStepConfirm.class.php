@@ -52,20 +52,20 @@ class TPkgShopNewsletterSignupWithOrder_TShopStepConfirm extends TPkgShopNewslet
             $aViewVariables['newsletter'] = true;
         }
 
+        $connection = $this->getDatabaseConnection();
         $oUser = TdbDataExtranetUser::GetInstance();
         // show newsletter signup at all?
         $aCondition = array(
-            "`email` = '".MySqlLegacySupport::getInstance()->real_escape_string($oUser->GetUserEMail())."'",
+            "`email` = ".$connection->quote($oUser->GetUserEMail()),
         );
 
         if ($oUser && $oUser->IsLoggedIn()) {
-            $aCondition[] = "`data_extranet_user_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oUser->id)."'";
+            $aCondition[] = "`data_extranet_user_id` = ".$connection->quote($oUser->id);
         }
         $query = "SELECT COUNT(*) AS total FROM `pkg_newsletter_user` WHERE `optin` = '1' AND ((".implode(') OR (', $aCondition).'))';
-        if ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-            if ($aRow['total'] > 0) {
-                $aViewVariables['bShowNewsletterSignup'] = false;
-            }
+        $aRow = $connection->fetchAssociative($query);
+        if ($aRow && $aRow['total'] > 0) {
+            $aViewVariables['bShowNewsletterSignup'] = false;
         }
 
         return $aViewVariables;

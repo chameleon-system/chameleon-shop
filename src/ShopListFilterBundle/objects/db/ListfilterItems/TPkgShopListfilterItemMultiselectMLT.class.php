@@ -24,18 +24,19 @@ class TPkgShopListfilterItemMultiselectMLT extends TPkgShopListfilterItemMultise
 
         if (is_null($sQuery)) {
             if (true === is_array($this->aActiveFilterData) && count($this->aActiveFilterData) > 0) {
+                $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
                 $sItemListQuery = $this->GetSQLQueryForQueryRestrictionForActiveFilter();
-                $aIdList = array();
+                $aIdList = [];
+
                 if (!empty($sItemListQuery)) {
-                    $tRes = MySqlLegacySupport::getInstance()->query($sItemListQuery);
-                    $aIdList = array();
-                    while ($aItemRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-                        $aIdList[] = MySqlLegacySupport::getInstance()->real_escape_string($aItemRow['source_id']);
+                    $result = $connection->executeQuery($sItemListQuery);
+                    while ($row = $result->fetchAssociative()) {
+                        $aIdList[] = $connection->quote($row['source_id']);
                     }
                 }
 
                 if (count($aIdList) > 0) {
-                    $sQuery = "`shop_article`.`id` IN ('".implode("','", $aIdList)."')";
+                    $sQuery = "`shop_article`.`id` IN (".implode(',', $aIdList).")";
                 }
             }
             $this->SetInternalCache('sQueryRestrictionForActiveFilter', $sQuery);
@@ -52,14 +53,19 @@ class TPkgShopListfilterItemMultiselectMLT extends TPkgShopListfilterItemMultise
      */
     protected function GetSQLQueryForQueryRestrictionForActiveFilter()
     {
-        $aValues = TTools::MysqlRealEscapeArray($this->aActiveFilterData);
-        $sEscapedTargetTable = MySqlLegacySupport::getInstance()->real_escape_string($this->sItemTableName);
-        $sEscapedTargetMLTTable = MySqlLegacySupport::getInstance()->real_escape_string('shop_article_'.$this->sItemTableName.'_mlt');
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
-        $sItemListQuery = "SELECT `{$sEscapedTargetMLTTable}`.*
-                           FROM `{$sEscapedTargetTable}`
-                     INNER JOIN `{$sEscapedTargetMLTTable}` ON `{$sEscapedTargetTable}`.`id` = `{$sEscapedTargetMLTTable}`.`target_id`
-                          WHERE ".$this->GetTargetTableNameField()." IN ('".implode("','", $aValues)."')";
+        $aValues = array_map(function ($value) use ($connection) {
+            return $connection->quote($value);
+        }, $this->aActiveFilterData);
+
+        $sEscapedTargetTable = $connection->quoteIdentifier($this->sItemTableName);
+        $sEscapedTargetMLTTable = $connection->quoteIdentifier('shop_article_'.$this->sItemTableName.'_mlt');
+
+        $sItemListQuery = "SELECT {$sEscapedTargetMLTTable}.*
+                       FROM {$sEscapedTargetTable}
+                 INNER JOIN {$sEscapedTargetMLTTable} ON {$sEscapedTargetTable}.`id` = {$sEscapedTargetMLTTable}.`target_id`
+                      WHERE ".$this->GetTargetTableNameField()." IN (".implode(',', $aValues).")";
 
         return $sItemListQuery;
     }

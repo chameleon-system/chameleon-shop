@@ -22,8 +22,12 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
      */
     public static function GetInstanceFromSystemName($sSystemName)
     {
-        $sQuery = "SELECT * FROM `pkg_shop_rating_service` WHERE `system_name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sSystemName)."'";
-        $aData = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($sQuery));
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $quotedSystemName = $connection->quote($sSystemName);
+        $query = "SELECT * FROM `pkg_shop_rating_service` WHERE `system_name` = {$quotedSystemName}";
+        $aData = $connection->fetchAssociative($query);
+
         if (is_array($aData)) {
             $oInstance = TdbPkgShopRatingService::GetNewInstance($aData); // need to do this to morph to the correct subclass
         } else {

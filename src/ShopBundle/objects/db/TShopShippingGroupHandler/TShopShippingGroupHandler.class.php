@@ -20,9 +20,16 @@ class TShopShippingGroupHandler extends TAdbShopShippingGroupHandler
      */
     public static function GetInstance($id)
     {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oInstance = null;
-        $query = "SELECT * FROM `shop_shipping_group_handler` WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";
-        if ($row = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+        $quotedId = $connection->quote($id);
+
+        $query = "SELECT * FROM `shop_shipping_group_handler` WHERE `id` = {$quotedId}";
+        $row = $connection->fetchAssociative($query);
+
+        if ($row) {
             $sClassName = $row['class'];
             $oInstance = new $sClassName();
             /** @var $oInstance TdbShopShippingGroupHandler */

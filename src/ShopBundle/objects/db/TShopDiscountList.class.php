@@ -21,26 +21,36 @@ class TShopDiscountList extends TShopDiscountListAutoParent
      */
     public static function GetActiveDiscountList($sFilter = null, $sOrder = '`shop_discount`.`position`')
     {
-        static $aActiveDiscountList = array();
-        $aKey = array('sFilter' => $sFilter, 'sOrder' => $sOrder);
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        static $aActiveDiscountList = [];
+        $aKey = ['sFilter' => $sFilter, 'sOrder' => $sOrder];
         $sKey = TCacheManagerRuntimeCache::GetKey($aKey);
+
         if (!array_key_exists($sKey, $aActiveDiscountList)) {
-            $now = MySqlLegacySupport::getInstance()->real_escape_string(date('Y-m-d H:i:s'));
+            $now = $connection->quote(date('Y-m-d H:i:s'));
+
             if (!empty($sOrder)) {
                 $sOrder = "ORDER BY {$sOrder}";
             }
+
             if (is_null($sFilter)) {
                 $sFilter = '';
             } else {
                 $sFilter = " AND ({$sFilter})";
             }
-            $query = "SELECT *
-                    FROM `shop_discount`
-                   WHERE `shop_discount`.`active` = '1'
-                     AND (`shop_discount`.`active_from` <= '{$now}' AND (`shop_discount`.`active_to` >= '{$now}' || `shop_discount`.`active_to` = '0000-00-00 00:00:00'))
-                         {$sFilter}
-                         {$sOrder}
-                 ";
+
+            $query = "
+            SELECT *
+              FROM `shop_discount`
+             WHERE `shop_discount`.`active` = '1'
+               AND (`shop_discount`.`active_from` <= {$now}
+                    AND (`shop_discount`.`active_to` >= {$now} OR `shop_discount`.`active_to` = '0000-00-00 00:00:00'))
+               {$sFilter}
+               {$sOrder}
+        ";
+
             $aActiveDiscountList[$sKey] = parent::GetList($query);
             $aActiveDiscountList[$sKey]->bAllowItemCache = true;
         } else {

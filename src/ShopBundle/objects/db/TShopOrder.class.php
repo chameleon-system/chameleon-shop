@@ -239,11 +239,15 @@ class TShopOrder extends TShopOrderAutoParent
      */
     protected function SaveArticle(TShopBasketArticle $oBasketItem)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $oVat = $oBasketItem->GetVat();
         $oOrderItem = TdbShopOrderItem::GetNewInstance();
         /** @var $oOrderItem TdbShopOrderItem */
         $oManufacturer = TdbShopManufacturer::GetNewInstance();
         $oManufacturer->Load($oBasketItem->fieldShopManufacturerId);
+
         $aData = [
             'shop_order_id' => $this->id,
             'basket_item_key' => $oBasketItem->sBasketItemKey,
@@ -282,6 +286,7 @@ class TShopOrder extends TShopOrderAutoParent
             'shop_unit_of_measurement_id' => $oBasketItem->fieldShopUnitOfMeasurementId,
             'custom_data' => $oBasketItem->getCustomData(),
         ];
+
         $this->PrepareArticleDataForSave($oBasketItem, $aData);
         $oOrderItem->LoadFromRow($aData);
         $oOrderItem->AllowEditByAll(true);
@@ -290,10 +295,15 @@ class TShopOrder extends TShopOrderAutoParent
         // Linking the downloads from BasketItem to OrderItem
         $oDownloadFilesList = $oBasketItem->GetDownloads('download');
         while ($oDownloadFile = $oDownloadFilesList->Next()) {
-            $sQuery = "INSERT INTO `shop_order_item_download_cms_document_mlt`
-                           SET `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iInsertedOrderArticleId)."',
-                               `target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oDownloadFile->id)."'";
-            MySqlLegacySupport::getInstance()->query($sQuery);
+            $escapedSource = $connection->quote($iInsertedOrderArticleId);
+            $escapedTarget = $connection->quote($oDownloadFile->id);
+
+            $sQuery = "
+            INSERT INTO `shop_order_item_download_cms_document_mlt`
+                 SET `source_id` = {$escapedSource},
+                     `target_id` = {$escapedTarget}
+        ";
+            $connection->executeStatement($sQuery);
         }
 
         if ($oBasketItem->fieldIsBundle) {

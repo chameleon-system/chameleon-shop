@@ -25,41 +25,46 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
      */
     public static function UpdateAutoAssignToUserQuick($sUserid, $dOrderValue)
     {
-        $sEscapedUserid = MySqlLegacySupport::getInstance()->real_escape_string($sUserid);
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $quotedUserid = $connection->quote($sUserid);
+
         // get all assigned groups that are NOT auto assigned
         $query = "SELECT `data_extranet_user_data_extranet_group_mlt`.`target_id`
-                  FROM `data_extranet_user_data_extranet_group_mlt`
-            INNER JOIN `data_extranet_group` ON `data_extranet_user_data_extranet_group_mlt`.`target_id` = `data_extranet_group`.`id`
-                 WHERE `data_extranet_user_data_extranet_group_mlt`.`source_id` = '{$sEscapedUserid}'
-                   AND `data_extranet_group`.`auto_assign_active` = '0'
-               ";
+              FROM `data_extranet_user_data_extranet_group_mlt`
+        INNER JOIN `data_extranet_group` ON `data_extranet_user_data_extranet_group_mlt`.`target_id` = `data_extranet_group`.`id`
+             WHERE `data_extranet_user_data_extranet_group_mlt`.`source_id` = {$quotedUserid}
+               AND `data_extranet_group`.`auto_assign_active` = '0'
+           ";
         $aUserGroups = [];
-        $tRes = MySqlLegacySupport::getInstance()->query($query);
-        while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-            $aUserGroups[] = MySqlLegacySupport::getInstance()->real_escape_string($aRow['target_id']);
+        $result = $connection->executeQuery($query);
+        while (false !== ($row = $result->fetchAssociative())) {
+            $aUserGroups[] = $connection->quote($row['target_id']);
         }
+
         // now add groups set via auto assign
         $oGroups = TdbDataExtranetGroupList::GetAutoGroupsForValue($dOrderValue);
         while ($oGroup = $oGroups->Next()) {
-            $aUserGroups[] = MySqlLegacySupport::getInstance()->real_escape_string($oGroup->id);
+            $aUserGroups[] = $connection->quote($oGroup->id);
         }
 
         // update user
         // note: we use a query here to prevent overhead
-        $query = "DELETE FROM `data_extranet_user_data_extranet_group_mlt`
-                      WHERE `source_id` = '{$sEscapedUserid}'";
-        MySqlLegacySupport::getInstance()->query($query);
-        $iRecordsChanged = MySqlLegacySupport::getInstance()->affected_rows();
+        $deleteQuery = "DELETE FROM `data_extranet_user_data_extranet_group_mlt`
+                    WHERE `source_id` = {$quotedUserid}";
+        $iRecordsChanged = $connection->executeStatement($deleteQuery);
+
         if (count($aUserGroups) > 0) {
-            $query = 'INSERT INTO `data_extranet_user_data_extranet_group_mlt` (`source_id`,`target_id`) VALUES ';
+            $insertQuery = 'INSERT INTO `data_extranet_user_data_extranet_group_mlt` (`source_id`,`target_id`) VALUES ';
             $aInsertParts = [];
             foreach ($aUserGroups as $sGroupId) {
-                $aInsertParts[] = "('{$sEscapedUserid}','{$sGroupId}')";
+                $aInsertParts[] = "({$quotedUserid},{$sGroupId})";
             }
-            $query .= implode(', ', $aInsertParts);
-            MySqlLegacySupport::getInstance()->query($query);
-            $iRecordsChanged = $iRecordsChanged + MySqlLegacySupport::getInstance()->affected_rows();
+            $insertQuery .= implode(', ', $aInsertParts);
+            $iRecordsChanged += $connection->executeStatement($insertQuery);
         }
+
         if ($iRecordsChanged > 0) {
             ServiceLocator::get('chameleon_system_core.cache')->callTrigger('data_extranet_user', $sUserid);
         }
@@ -76,32 +81,49 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
      */
     public function UpdateAutoAssignAllUsers()
     {
-        // get all users that no longer apply
-        $query = "DELETE FROM `data_extranet_user_data_extranet_group_mlt` WHERE `data_extranet_user_data_extranet_group_mlt`.`target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
-        MySqlLegacySupport::getInstance()->query($query);
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
-        // now add group to every one with the corrseponding value
-        $query = "SELECT `data_extranet_user`.`id` AS source_id, '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."' AS target_id
-                  FROM `data_extranet_user`
-             LEFT JOIN `shop_order` ON `data_extranet_user`.`id` = `shop_order`.`data_extranet_user_id`
-                   AND (`shop_order`.`id` IS NULL OR `shop_order`.`canceled` = '0')
-              GROUP BY `data_extranet_user` .`id`
-                HAVING
-                       (SUM(`shop_order`.`value_total`) >= {$this->fieldAutoAssignOrderValueStart}
-               ";
+        $quotedGroupId = $connection->quote($this->id);
+
+        // delete old group assignments
+        $deleteQuery = "
+        DELETE FROM `data_extranet_user_data_extranet_group_mlt`
+         WHERE `data_extranet_user_data_extranet_group_mlt`.`target_id` = {$quotedGroupId}
+    ";
+        $connection->executeStatement($deleteQuery);
+
+        // build new assignment query
+        $selectQuery = "
+        SELECT `data_extranet_user`.`id` AS source_id,
+               {$quotedGroupId} AS target_id
+          FROM `data_extranet_user`
+     LEFT JOIN `shop_order`
+            ON `data_extranet_user`.`id` = `shop_order`.`data_extranet_user_id`
+           AND (`shop_order`.`id` IS NULL OR `shop_order`.`canceled` = '0')
+      GROUP BY `data_extranet_user`.`id`
+     HAVING (SUM(`shop_order`.`value_total`) >= {$this->fieldAutoAssignOrderValueStart}
+    ";
+
         if ($this->fieldAutoAssignOrderValueEnd > 0) {
-            $query .= "AND SUM(`shop_order`.`value_total`) < {$this->fieldAutoAssignOrderValueEnd}";
+            $selectQuery .= " AND SUM(`shop_order`.`value_total`) < {$this->fieldAutoAssignOrderValueEnd}";
         }
-        $query .= ')';
+
+        $selectQuery .= ")";
+
         if (0.01 == $this->fieldAutoAssignOrderValueEnd) {
-            $query .= ' OR SUM(  `shop_order`.`value_total` ) IS NULL';
+            $selectQuery .= ' OR SUM(`shop_order`.`value_total`) IS NULL';
         } // allow users that have no orders
-        $query = 'INSERT INTO `data_extranet_user_data_extranet_group_mlt` (`source_id`,`target_id`) '.$query;
-        MySqlLegacySupport::getInstance()->query($query);
 
-        return MySqlLegacySupport::getInstance()->affected_rows();
+        $insertQuery = "
+        INSERT INTO `data_extranet_user_data_extranet_group_mlt` (`source_id`, `target_id`)
+        {$selectQuery}
+    ";
+
+        $insertedRows = $connection->executeStatement($insertQuery);
+
+        return $insertedRows;
     }
-
     /*
      * update the group assignment for the user. return true if at least one group was changed
      * @return boolean

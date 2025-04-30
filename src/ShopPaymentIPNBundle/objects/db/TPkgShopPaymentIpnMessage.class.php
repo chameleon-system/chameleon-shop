@@ -80,20 +80,25 @@ class TPkgShopPaymentIpnMessage extends TPkgShopPaymentIpnMessageAutoParent
     {
         $oStatus = null;
         $oPaymentHandler = $oOrder->GetPaymentHandler();
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $quotedOrderId = $connection->quote($oOrder->id);
+        $quotedHandlerGroupId = $connection->quote($oPaymentHandler->fieldShopPaymentHandlerGroupId);
+        $quotedStatusCode = $connection->quote($sStatusCode);
+
         $query = "SELECT `pkg_shop_payment_ipn_message`.*
-                    FROM `pkg_shop_payment_ipn_message`
-              INNER JOIN `pkg_shop_payment_ipn_status` ON `pkg_shop_payment_ipn_message`.`pkg_shop_payment_ipn_status_id` = `pkg_shop_payment_ipn_status`.`id`
-                   WHERE (
-                            `pkg_shop_payment_ipn_message`.`shop_order_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oOrder->id)."'
-                            AND `pkg_shop_payment_ipn_message`.`shop_payment_handler_group_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(
-            $oPaymentHandler->fieldShopPaymentHandlerGroupId
-        )."'
-                            AND `pkg_shop_payment_ipn_message`.`success` = '1'
-                            AND `pkg_shop_payment_ipn_message`.`completed` = '1'
-                         )
-                     AND `pkg_shop_payment_ipn_status`.`code` = '".MySqlLegacySupport::getInstance()->real_escape_string($sStatusCode)."'
-                 ";
-        if ($aMessage = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+                FROM `pkg_shop_payment_ipn_message`
+          INNER JOIN `pkg_shop_payment_ipn_status`
+                  ON `pkg_shop_payment_ipn_message`.`pkg_shop_payment_ipn_status_id` = `pkg_shop_payment_ipn_status`.`id`
+               WHERE (
+                        `pkg_shop_payment_ipn_message`.`shop_order_id` = {$quotedOrderId}
+                        AND `pkg_shop_payment_ipn_message`.`shop_payment_handler_group_id` = {$quotedHandlerGroupId}
+                        AND `pkg_shop_payment_ipn_message`.`success` = '1'
+                        AND `pkg_shop_payment_ipn_message`.`completed` = '1'
+                     )
+                 AND `pkg_shop_payment_ipn_status`.`code` = {$quotedStatusCode}
+           ";
+
+        if ($aMessage = $connection->fetchAssociative($query)) {
             $oStatus = TdbPkgShopPaymentIpnMessage::GetNewInstance($aMessage);
         }
 

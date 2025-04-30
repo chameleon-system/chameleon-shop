@@ -36,11 +36,16 @@ class TShopSearchQuery extends TAdbShopSearchQuery
      */
     public function StartIndex($bRegenerateCompleteIndex = true)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         if (!$this->IndexIsRunning()) {
-            $res = MySqlLegacySupport::getInstance()->query($this->fieldQuery.' LIMIT 0,1');
+            $query = $this->fieldQuery . ' LIMIT 0,1';
             // we do not care about the type contents of the fields... just how many there are
-            if ($tmp = MySqlLegacySupport::getInstance()->fetch_assoc($res)) {
-                // got something.... so start indexeer
+            $statement = $connection->executeQuery($query);
+
+            // got something.... so start indexeer
+            if ($tmp = $statement->fetchAssociative()) {
                 $aData = $this->sqlData;
                 $aData['index_running'] = '1';
                 $aData['index_started'] = date('Y-m-d H:i:s');
@@ -52,63 +57,91 @@ class TShopSearchQuery extends TAdbShopSearchQuery
                 $aFields = array_keys($tmp);
                 // the last entry in the list will be renamed to shop_article_id
                 $aFields[count($aFields) - 1] = 'xxx_shop_article_id';
+
                 foreach ($aFields as $iFieldIndex => $sFieldName) {
-                    $aFields[$iFieldIndex] = '`'.MySqlLegacySupport::getInstance()->real_escape_string($sFieldName).'`';
-                    if ('id' == $sFieldName || '_id' == substr($sFieldName, -3)) {
-                        $sFields .= "{$aFields[$iFieldIndex]} CHAR(36) NOT NULL ,";
-                    } elseif ('cmsident' == $sFieldName) {
-                        $sFields .= "{$aFields[$iFieldIndex]} BIGINT UNSIGNED NOT NULL ,";
+                    $quotedField = $connection->quoteIdentifier($sFieldName);
+                    $aFields[$iFieldIndex] = $quotedField;
+
+                    if ('id' === $sFieldName || '_id' === substr($sFieldName, -3)) {
+                        $sFields .= "{$quotedField} CHAR(36) NOT NULL, ";
+                    } elseif ('cmsident' === $sFieldName) {
+                        $sFields .= "{$quotedField} BIGINT UNSIGNED NOT NULL, ";
                     } else {
-                        $sFields .= "{$aFields[$iFieldIndex]} TEXT NOT NULL ,";
+                        $sFields .= "{$quotedField} TEXT NOT NULL, ";
                     }
                 }
+
                 $sTableName = $this->GetIndexRawTableName();
-                $query = 'CREATE TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` (
-                      {$sFields}
-                      `sysid` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY
-                    ) ENGINE = InnoDB";
-                MySqlLegacySupport::getInstance()->query($query);
+                $quotedTableName = $connection->quoteIdentifier($sTableName);
+
+                $query = "
+                CREATE TABLE {$quotedTableName} (
+                    {$sFields}
+                    `sysid` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY
+                ) ENGINE=InnoDB
+            ";
+                $connection->executeStatement($query);
+
                 // now copy data...
-                $query = 'INSERT INTO `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'` ('.implode(',', $aFields).') '.$this->fieldQuery;
-                MySqlLegacySupport::getInstance()->query($query);
-                $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'` ADD INDEX (  `xxx_shop_article_id` )';
-                MySqlLegacySupport::getInstance()->query($query);
+                $query = "
+                INSERT INTO {$quotedTableName} (" . implode(',', $aFields) . ") 
+                " . $this->fieldQuery;
+                $connection->executeStatement($query);
+
+                // Add index
+                $query = "
+                ALTER TABLE {$quotedTableName} 
+                ADD INDEX (`xxx_shop_article_id`)
+            ";
+                $connection->executeStatement($query);
 
                 // now delete all records that do not require changes
                 if (!$bRegenerateCompleteIndex) {
-                    $query = 'DELETE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'`
-                             FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'`
-                        LEFT JOIN shop_search_reindex_queue ON `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."`.`xxx_shop_article_id`= shop_search_reindex_queue.object_id
-                            WHERE `shop_search_reindex_queue`.`object_id` IS NULL OR (`shop_search_reindex_queue`.`processing`='1' AND `shop_search_reindex_queue`.`action` = 'delete')
-                            ";
-                    MySqlLegacySupport::getInstance()->query($query);
+                    $query = "
+                    DELETE {$quotedTableName}
+                      FROM {$quotedTableName}
+                 LEFT JOIN `shop_search_reindex_queue` ON {$quotedTableName}.`xxx_shop_article_id` = `shop_search_reindex_queue`.`object_id`
+                     WHERE `shop_search_reindex_queue`.`object_id` IS NULL
+                        OR (`shop_search_reindex_queue`.`processing` = '1' AND `shop_search_reindex_queue`.`action` = 'delete')
+                ";
+                    $connection->executeStatement($query);
                 }
+
                 // now unset all varianten fields that can not be changed + change the id of the varaint to the variant parent
                 $oVariantSets = TdbShopVariantSetList::GetList();
                 $oVariantSets->GoToStart();
                 while ($oVariantSet = $oVariantSets->Next()) {
                     $aDeleteFields = $aFields;
+
                     foreach ($aDeleteFields as $iFieldIndex => $sField) {
-                        if ($oVariantSet->AllowEditOfField($sField)) {
+                        // remove fields allowed to be edited
+                        if ($oVariantSet->AllowEditOfField(str_replace('`', '', $sField))) {
                             unset($aDeleteFields[$iFieldIndex]);
                         }
                     }
-                    $query = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'` AS TARGET
-                  INNER JOIN shop_article AS PA ON TARGET.xxx_shop_article_id = PA.id
-                  INNER JOIN shop_article AS P ON PA.variant_parent_id = P.id
-            SET TARGET.xxx_shop_article_id = P.id
-                       ';
-                    $aFixedList = array('`xxx_shop_article_id`', '`id`');
+
+                    $query = "
+                    UPDATE {$quotedTableName} AS TARGET
+                    INNER JOIN `shop_article` AS PA ON TARGET.`xxx_shop_article_id` = PA.`id`
+                    INNER JOIN `shop_article` AS P ON PA.`variant_parent_id` = P.`id`
+                    SET TARGET.`xxx_shop_article_id` = P.`id`
+                ";
+
+                    $aFixedList = ['`xxx_shop_article_id`', '`id`'];
                     if (count($aDeleteFields) > 0) {
-                        reset($aDeleteFields);
                         foreach ($aDeleteFields as $sDeleteField) {
-                            if (!in_array($sDeleteField, $aFixedList)) {
+                            if (!in_array($sDeleteField, $aFixedList, true)) {
                                 $query .= ", TARGET.{$sDeleteField} = ''";
                             }
                         }
                     }
-                    $query .= " WHERE P.shop_variant_set_id = '".$oVariantSet->id."'";
-                    MySqlLegacySupport::getInstance()->query($query);
+
+                    $quotedVariantSetId = $connection->quote($oVariantSet->id);
+                    $query .= "
+                    WHERE P.`shop_variant_set_id` = {$quotedVariantSetId}
+                ";
+
+                    $connection->executeStatement($query);
                 }
             }
         }
@@ -123,37 +156,52 @@ class TShopSearchQuery extends TAdbShopSearchQuery
      */
     public function CreateIndexTick($iNumberOfRowsToProcess)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $iRealNumberProcessed = 0;
+
         $oFields = TdbShopSearchFieldWeightList::GetListForShopSearchQueryId($this->id);
+
         if (CMS_SHOP_INDEX_LOAD_DELAY_MILLISECONDS > 0) {
             usleep(CMS_SHOP_INDEX_LOAD_DELAY_MILLISECONDS * 1000);
         }
 
         // fetch as many rows as we can....
-        $sLimit = " LIMIT 0,{$iNumberOfRowsToProcess}";
-        if ($iNumberOfRowsToProcess < 0) {
-            $sLimit = '';
+        $sLimit = '';
+        if ($iNumberOfRowsToProcess >= 0) {
+            $sLimit = " LIMIT 0, {$iNumberOfRowsToProcess}";
         }
-        $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->GetIndexRawTableName())."` {$sLimit}";
-        $tres = MySqlLegacySupport::getInstance()->query($query);
-        $sError = MySqlLegacySupport::getInstance()->error();
-        if (!empty($sError)) {
-            trigger_error('SQL Error: '.$sError, E_USER_WARNING);
-        } else {
-            while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($tres)) {
+
+        $quotedTableName = $connection->quoteIdentifier($this->GetIndexRawTableName());
+        $query = "SELECT * FROM {$quotedTableName}{$sLimit}";
+
+        try {
+            $statement = $connection->executeQuery($query);
+
+            while ($aRow = $statement->fetchAssociative()) {
                 $oFields->GoToStart();
                 while ($oField = $oFields->Next()) {
                     $oField->CreateIndexTick($aRow);
                 }
-                $query = 'DELETE FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->GetIndexRawTableName())."` WHERE `sysid` = '".MySqlLegacySupport::getInstance()->real_escape_string($aRow['sysid'])."'";
-                MySqlLegacySupport::getInstance()->query($query);
+
+                $quotedSysId = $connection->quote($aRow['sysid']);
+
+                $deleteQuery = "
+                DELETE FROM {$quotedTableName}
+                 WHERE `sysid` = {$quotedSysId}
+            ";
+                $connection->executeStatement($deleteQuery);
+
                 ++$iRealNumberProcessed;
             }
+        } catch (\Exception $e) {
+            trigger_error('SQL Error: ' . $e->getMessage(), E_USER_WARNING);
         }
 
         if (($iRealNumberProcessed < $iNumberOfRowsToProcess) || ($iNumberOfRowsToProcess < 0)) {
-            $query = 'DROP TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->GetIndexRawTableName()).'`';
-            MySqlLegacySupport::getInstance()->query($query);
+            $dropQuery = "DROP TABLE {$quotedTableName}";
+            $connection->executeStatement($dropQuery);
         }
 
         return $iRealNumberProcessed;
@@ -167,18 +215,33 @@ class TShopSearchQuery extends TAdbShopSearchQuery
      */
     public function NumberOfRecordsLeftToIndex()
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $iCount = 0;
+
         if ($this->fieldIndexRunning) {
             $sIndexTableName = $this->GetIndexRawTableName();
-            $query = "SHOW TABLES LIKE '".MySqlLegacySupport::getInstance()->real_escape_string($sIndexTableName)."'";
-            $tRes = MySqlLegacySupport::getInstance()->query($query);
-            $bTableExists = (MySqlLegacySupport::getInstance()->num_rows($tRes) >= 1);
+            $quotedTableNameLike = $connection->quote($sIndexTableName);
+
+            $query = "SHOW TABLES LIKE {$quotedTableNameLike}";
+            $statement = $connection->executeQuery($query);
+            $bTableExists = ($statement->rowCount() >= 1);
+
             if ($bTableExists) {
-                $query = 'SELECT COUNT(sysid) AS reccount FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sIndexTableName).'`';
-                if ($trow = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-                    $iCount = $trow['reccount'];
+                $quotedTableName = $connection->quoteIdentifier($sIndexTableName);
+                $query = "
+                SELECT COUNT(`sysid`) AS reccount
+                  FROM {$quotedTableName}
+            ";
+                $statement = $connection->executeQuery($query);
+                $row = $statement->fetchAssociative();
+
+                if ($row) {
+                    $iCount = (int) $row['reccount'];
                 }
             }
+
             if ($iCount < 1) {
                 $this->StopIndex();
             }
@@ -194,15 +257,22 @@ class TShopSearchQuery extends TAdbShopSearchQuery
      */
     public function StopIndex()
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sIndexTableName = $this->GetIndexRawTableName();
+
         if (TCMSRecord::TableExists($sIndexTableName)) {
-            $query = 'DROP TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sIndexTableName).'`';
-            MySqlLegacySupport::getInstance()->query($query);
+            $quotedTableName = $connection->quoteIdentifier($sIndexTableName);
+
+            $query = "DROP TABLE {$quotedTableName}";
+            $connection->executeStatement($query);
         }
 
         $aData = $this->sqlData;
         $aData['index_running'] = '0';
         $aData['index_completed'] = date('Y-m-d H:i:s');
+
         $this->LoadFromRow($aData);
         $this->AllowEditByAll(true);
         $this->Save();

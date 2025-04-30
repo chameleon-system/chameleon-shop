@@ -56,8 +56,10 @@ class TPkgShopListfilterItemIsOnStock extends TPkgShopListfilterItemBoolean
     {
         $sQuery = '';
         $sValue = $this->GetActiveValue();
-        if ('1' == $sValue) {
-            $sQuery = '`shop_article_stock`.`'.MySqlLegacySupport::getInstance()->real_escape_string($this->sItemFieldName).'` > 0';
+        if ('1' === $sValue) {
+            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+            $quotedField = $connection->quoteIdentifier($this->sItemFieldName);
+            $sQuery = "`shop_article_stock`.$quotedField > 0";
         }
 
         return $sQuery;

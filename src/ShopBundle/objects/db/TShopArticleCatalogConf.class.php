@@ -22,6 +22,9 @@ class TShopArticleCatalogConf extends TShopArticleCatalogConfAutoParent
      */
     public function GetDefaultOrderBy(TdbShopCategory $oActiveCategory)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sDefaultOrderBy = $this->fieldShopModuleArticlelistOrderbyId;
 
         $bDone = false;
@@ -29,15 +32,27 @@ class TShopArticleCatalogConf extends TShopArticleCatalogConfAutoParent
 
         do {
             // is there another order by set for this category or any of its parents
-            $query = "SELECT `shop_category`.`id`, `shop_category`.`url_path`, `shop_category`.`shop_category_id`,
-                               `shop_article_catalog_conf_default_order`.`shop_module_articlelist_orderby_id`
-                          FROM `shop_category`
-                     LEFT JOIN `shop_article_catalog_conf_default_order_shop_category_mlt` ON `shop_category`.`id` = `shop_article_catalog_conf_default_order_shop_category_mlt`.`target_id`
-                     LEFT JOIN `shop_article_catalog_conf_default_order` ON (`shop_article_catalog_conf_default_order_shop_category_mlt`.`source_id` = `shop_article_catalog_conf_default_order`.`id` AND `shop_article_catalog_conf_default_order`.`shop_article_catalog_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."')
-                         WHERE `shop_category`.`id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sActiveCategoryId)."'
-                       ";
-            if ($aCategoryDetails = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-                if (isset($aCategoryDetails['shop_module_articlelist_orderby_id']) && !empty($aCategoryDetails['shop_module_articlelist_orderby_id'])) {
+            $query = "
+            SELECT `shop_category`.`id`,
+                   `shop_category`.`url_path`,
+                   `shop_category`.`shop_category_id`,
+                   `shop_article_catalog_conf_default_order`.`shop_module_articlelist_orderby_id`
+              FROM `shop_category`
+         LEFT JOIN `shop_article_catalog_conf_default_order_shop_category_mlt`
+                ON `shop_category`.`id` = `shop_article_catalog_conf_default_order_shop_category_mlt`.`target_id`
+         LEFT JOIN `shop_article_catalog_conf_default_order`
+                ON (`shop_article_catalog_conf_default_order_shop_category_mlt`.`source_id` = `shop_article_catalog_conf_default_order`.`id`
+                    AND `shop_article_catalog_conf_default_order`.`shop_article_catalog_conf_id` = :confId)
+             WHERE `shop_category`.`id` = :catId
+        ";
+
+            $aCategoryDetails = $connection->fetchAssociative($query, [
+                'confId' => $this->id,
+                'catId' => $sActiveCategoryId,
+            ]);
+
+            if ($aCategoryDetails) {
+                if (!empty($aCategoryDetails['shop_module_articlelist_orderby_id'])) {
                     $bDone = true;
                     $sDefaultOrderBy = $aCategoryDetails['shop_module_articlelist_orderby_id'];
                 }

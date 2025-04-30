@@ -117,39 +117,47 @@ class TShopManufacturer extends TShopManufacturerAutoParent
      */
     public function GetNumberOfHitsForSearchCacheId($iShopSearchCacheId, $bApplyActiveFilter = false)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $iNumHits = 0;
 
+        $quotedCacheId = $connection->quote($iShopSearchCacheId);
+        $quotedManufacturerId = $connection->quote($this->id);
+
         if ($bApplyActiveFilter) {
-            $query = "SELECT COUNT(DISTINCT `shop_search_cache_item`.`id`) AS hits
-                    FROM `shop_search_cache_item`
-              INNER JOIN `shop_article` ON `shop_search_cache_item`.`shop_article_id` = `shop_article`.`id`
-               LEFT JOIN `shop_article_shop_category_mlt` ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
-                   WHERE `shop_search_cache_item`.`shop_search_cache_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iShopSearchCacheId)."'
-                     AND `shop_article`.`shop_manufacturer_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                  ";
+            $query = "
+            SELECT COUNT(DISTINCT `shop_search_cache_item`.`id`) AS hits
+              FROM `shop_search_cache_item`
+        INNER JOIN `shop_article` ON `shop_search_cache_item`.`shop_article_id` = `shop_article`.`id`
+         LEFT JOIN `shop_article_shop_category_mlt` ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
+             WHERE `shop_search_cache_item`.`shop_search_cache_id` = {$quotedCacheId}
+               AND `shop_article`.`shop_manufacturer_id` = {$quotedManufacturerId}
+        ";
+
             $sFilter = TdbShop::GetActiveFilterString(TdbShopManufacturer::FILTER_KEY_NAME);
             if (!empty($sFilter)) {
                 $query .= " AND {$sFilter}";
             }
 
             $query .= ' GROUP BY `shop_article`.`shop_manufacturer_id`';
-        //        echo "<pre>".$query."</pre><br>";
         } else {
-            $query = "SELECT COUNT(DISTINCT `shop_search_cache_item`.`id`) AS hits
-                    FROM `shop_search_cache_item`
-              INNER JOIN `shop_article` ON `shop_search_cache_item`.`shop_article_id` = `shop_article`.`id`
-                   WHERE `shop_search_cache_item`.`shop_search_cache_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iShopSearchCacheId)."'
-                     AND `shop_article`.`shop_manufacturer_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                GROUP BY `shop_article`.`shop_manufacturer_id`
-                 ";
+            $query = "
+            SELECT COUNT(DISTINCT `shop_search_cache_item`.`id`) AS hits
+              FROM `shop_search_cache_item`
+        INNER JOIN `shop_article` ON `shop_search_cache_item`.`shop_article_id` = `shop_article`.`id`
+             WHERE `shop_search_cache_item`.`shop_search_cache_id` = {$quotedCacheId}
+               AND `shop_article`.`shop_manufacturer_id` = {$quotedManufacturerId}
+          GROUP BY `shop_article`.`shop_manufacturer_id`
+        ";
         }
-        if ($row = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-            $iNumHits = $row['hits'];
+
+        if ($row = $connection->fetchAssociative($query)) {
+            $iNumHits = (int)$row['hits'];
         }
 
         return $iNumHits;
     }
-
     /**
      * return the icon for the manufacturer. returns false if none found.
      *

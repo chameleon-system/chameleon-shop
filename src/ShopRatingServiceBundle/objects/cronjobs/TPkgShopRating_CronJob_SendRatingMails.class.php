@@ -100,43 +100,53 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
      */
     protected function ProcessCompletedOrders()
     {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $iSendForShippingDateNewerThan = $this->GetShippingDateLowerBound();
         $iMaxNumberOfShopReviewMailsToSend = $this->GetMaxNumberOfShopReviewMailsToSend($iSendForShippingDateNewerThan);
 
+        $quotedShopId = $connection->quote($this->sShopID);
+        $quotedLanguageId = $connection->quote($this->sLanguageID);
+        $quotedDate = $connection->quote(date('Y-m-d H:i:s', $iSendForShippingDateNewerThan));
+        $quotedCountryId = $connection->quote($this->sUserCountryID);
+
         $query = "SELECT `shop_order`.*
-                  FROM `shop_order`
-             LEFT JOIN `pkg_shop_rating_service_history` ON `shop_order`.`id` = `pkg_shop_rating_service_history`.`shop_order_id`
-                 WHERE `pkg_shop_rating_service_history`.`id` IS NULL
-                   AND `shop_order`.`shop_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sShopID)."'
-                   AND `shop_order`.`cms_language_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sLanguageID)."'
-
-                   AND `shop_order`.`pkg_shop_rating_service_order_completely_shipped` > '0000-00-00 00:00:00'
-                   AND `shop_order`.`pkg_shop_rating_service_order_completely_shipped` <= '".MySqlLegacySupport::getInstance()->real_escape_string(date('Y-m-d H:i:s', $iSendForShippingDateNewerThan))."'
-                   AND `shop_order`.`pkg_shop_rating_service_rating_processed_on` = '0000-00-00 00:00:00'
-                   AND `shop_order`.`pkg_shop_rating_service_mail_processed` = '0'
-
-                   AND `shop_order`.`adr_billing_country_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sUserCountryID)."'
-
-              ORDER BY `shop_order`.`pkg_shop_rating_service_order_completely_shipped` ASC
-               ";
+              FROM `shop_order`
+         LEFT JOIN `pkg_shop_rating_service_history` ON `shop_order`.`id` = `pkg_shop_rating_service_history`.`shop_order_id`
+             WHERE `pkg_shop_rating_service_history`.`id` IS NULL
+               AND `shop_order`.`shop_id` = {$quotedShopId}
+               AND `shop_order`.`cms_language_id` = {$quotedLanguageId}
+               AND `shop_order`.`pkg_shop_rating_service_order_completely_shipped` > '0000-00-00 00:00:00'
+               AND `shop_order`.`pkg_shop_rating_service_order_completely_shipped` <= {$quotedDate}
+               AND `shop_order`.`pkg_shop_rating_service_rating_processed_on` = '0000-00-00 00:00:00'
+               AND `shop_order`.`pkg_shop_rating_service_mail_processed` = '0'
+               AND `shop_order`.`adr_billing_country_id` = {$quotedCountryId}
+          ORDER BY `shop_order`.`pkg_shop_rating_service_order_completely_shipped` ASC
+           ";
 
         if ($this->bDebug) {
             echo __LINE__.': '.$query."\n<br />\n";
         }
 
-        $rRes = MySqlLegacySupport::getInstance()->query($query);
+        $rRes = $connection->executeQuery($query);
         $iNumberOfMailsStillToBeSend = $iMaxNumberOfShopReviewMailsToSend;
-        while ($aOrder = MySqlLegacySupport::getInstance()->fetch_assoc($rRes)) {
+
+        while ($aOrder = $rRes->fetchAssociative()) {
             if ($iNumberOfMailsStillToBeSend > 0) {
                 if ($this->SendShopReviewMail($aOrder)) {
                     --$iNumberOfMailsStillToBeSend;
                 }
             }
-            $query = "UPDATE `shop_order` SET `pkg_shop_rating_service_mail_processed` = '1', `pkg_shop_rating_service_rating_processed_on` = '".date('Y-m-d H:i:s')."' WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($aOrder['id'])."'";
-            MySqlLegacySupport::getInstance()->query($query);
+
+            $connection->update('shop_order', [
+                'pkg_shop_rating_service_mail_processed' => '1',
+                'pkg_shop_rating_service_rating_processed_on' => date('Y-m-d H:i:s'),
+            ], [
+                'id' => $aOrder['id'],
+            ]);
 
             if ($this->bDebug) {
-                echo __LINE__.': '.$query."\n<br />\n".MySqlLegacySupport::getInstance()->error();
+                echo __LINE__.': UPDATE shop_order SET ... WHERE id = '.$aOrder['id']."\n<br />\n";
             }
         }
     }
@@ -182,6 +192,8 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
      */
     public function AllowSendingMailForOrder($oUser, $aOrder)
     {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $bAllowSendingMail = true;
 
         // make sure the order is a DE order
@@ -190,16 +202,18 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
         }
 
         if ($this->SendCustomersMailOnlyOnce()) {
+            $quotedUserId = $connection->quote($oUser->id);
+
             $query = "SELECT * FROM `pkg_shop_rating_service_history`
-                   WHERE `data_extranet_user_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oUser->id)."'
-                 ";
+               WHERE `data_extranet_user_id` = {$quotedUserId}
+             ";
 
             if ($this->bDebug) {
                 echo __LINE__.': '.$query."\n<br />\n";
             }
 
-            $tRes = MySqlLegacySupport::getInstance()->query($query);
-            if (MySqlLegacySupport::getInstance()->num_rows($tRes) > 0) {
+            $tRes = $connection->executeQuery($query);
+            if (false !== $tRes && $tRes->rowCount() > 0) {
                 $bAllowSendingMail = false;
             }
         }
@@ -226,6 +240,8 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
      */
     public function SendShopReviewMail($aOrder)
     {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $bMailWasSend = false;
 
         $oUser = TdbDataExtranetUser::GetNewInstance();
@@ -236,22 +252,33 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
             if (null !== $oRatingService) {
                 $bMailWasSend = $oRatingService->SendShopRatingEmail($oUser, $aOrder);
                 if ($bMailWasSend) {
-                    $query = "UPDATE `shop_order` SET `pkg_shop_rating_service_mail_sent` = '1', `pkg_shop_rating_service_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oRatingService->id)."' WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($aOrder['id'])."'";
-                    MySqlLegacySupport::getInstance()->query($query);
+                    $quotedRatingServiceId = $connection->quote($oRatingService->id);
+                    $quotedOrderId = $connection->quote($aOrder['id']);
+                    $query = "UPDATE `shop_order` 
+                             SET `pkg_shop_rating_service_mail_sent` = '1', 
+                                 `pkg_shop_rating_service_id` = {$quotedRatingServiceId} 
+                           WHERE `id` = {$quotedOrderId}";
+                    $connection->executeStatement($query);
+
                     if (false == $this->bDisableSentHistory) {
                         $sNewID = TTools::GetUUID();
                         $iSendDate = date('Y-m-d H:i:s');
+                        $quotedNewID = $connection->quote($sNewID);
+                        $quotedUserId = $connection->quote($oUser->id);
+                        $quotedSendDate = $connection->quote($iSendDate);
+                        $quotedRatingServiceIdList = $connection->quote($oRatingService->id);
+
                         $query = "INSERT INTO `pkg_shop_rating_service_history`
-                               SET `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sNewID)."',
-                                   `data_extranet_user_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oUser->id)."',
-                                   `shop_order_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($aOrder['id'])."',
-                                   `date` = '".MySqlLegacySupport::getInstance()->real_escape_string($iSendDate)."',
-                                   `pkg_shop_rating_service_id_list` = '".MySqlLegacySupport::getInstance()->real_escape_string($oRatingService->id)."'
+                               SET `id` = {$quotedNewID},
+                                   `data_extranet_user_id` = {$quotedUserId},
+                                   `shop_order_id` = {$quotedOrderId},
+                                   `date` = {$quotedSendDate},
+                                   `pkg_shop_rating_service_id_list` = {$quotedRatingServiceIdList}
                            ";
                         if ($this->bDebug) {
                             echo __LINE__.': '.$query."\n<br />\n";
                         }
-                        MySqlLegacySupport::getInstance()->query($query);
+                        $connection->executeStatement($query);
                     }
                 }
             }
@@ -358,43 +385,48 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
      */
     public function GetMaxNumberOfShopReviewMailsToSend($iSendForShippingDateNewerThan)
     {
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         if ($this->bDebug) {
             echo '<br><br>';
         }
 
+        $quotedShopId = $connection->quote($this->sShopID);
+        $quotedLanguageId = $connection->quote($this->sLanguageID);
+        $quotedShippingDate = $connection->quote(date('Y-m-d H:i:s', $iSendForShippingDateNewerThan));
+        $quotedCountryId = $connection->quote($this->sUserCountryID);
+
         $query = "SELECT *
-                  FROM `shop_order`
-                 WHERE `shop_order`.`pkg_shop_rating_service_order_completely_shipped` > '0000-00-00 00:00:00'
-                   AND `shop_order`.`shop_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sShopID)."'
-                   AND `shop_order`.`cms_language_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sLanguageID)."'
-                   AND `shop_order`.`pkg_shop_rating_service_order_completely_shipped` <= '".MySqlLegacySupport::getInstance()->real_escape_string(date('Y-m-d H:i:s', $iSendForShippingDateNewerThan))."'
-                   AND `shop_order`.`pkg_shop_rating_service_rating_processed_on` = '0000-00-00 00:00:00'
-                   AND `shop_order`.`pkg_shop_rating_service_mail_processed` = '0'
-                   AND `shop_order`.`adr_billing_country_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sUserCountryID)."'
-               ";
+              FROM `shop_order`
+             WHERE `shop_order`.`pkg_shop_rating_service_order_completely_shipped` > '0000-00-00 00:00:00'
+               AND `shop_order`.`shop_id` = {$quotedShopId}
+               AND `shop_order`.`cms_language_id` = {$quotedLanguageId}
+               AND `shop_order`.`pkg_shop_rating_service_order_completely_shipped` <= {$quotedShippingDate}
+               AND `shop_order`.`pkg_shop_rating_service_rating_processed_on` = '0000-00-00 00:00:00'
+               AND `shop_order`.`pkg_shop_rating_service_mail_processed` = '0'
+               AND `shop_order`.`adr_billing_country_id` = {$quotedCountryId}
+           ";
         if ($this->SendCustomersMailOnlyOnce()) {
-            $query .= 'GROUP BY `shop_order`.`customer_number`';
+            $query .= ' GROUP BY `shop_order`.`customer_number`';
         }
 
         if ($this->bDebug) {
             echo __LINE__.': '.$query."\n<br />\n";
         }
 
-        $rRow = MySqlLegacySupport::getInstance()->query($query);
-        $iNumberOfCompletedOrders = MySqlLegacySupport::getInstance()->num_rows($rRow);
+        $iNumberOfCompletedOrders = count($connection->fetchAllAssociative($query));
 
-        $query = ' SELECT * FROM `pkg_shop_rating_service_history` ';
+        $query = 'SELECT * FROM `pkg_shop_rating_service_history`';
         if ($this->SendCustomersMailOnlyOnce()) {
-            $query .= 'GROUP BY `pkg_shop_rating_service_history`.`data_extranet_user_id`';
+            $query .= ' GROUP BY `pkg_shop_rating_service_history`.`data_extranet_user_id`';
         }
 
         if ($this->bDebug) {
             echo __LINE__.': '.$query."\n<br />\n";
         }
 
-        $rRow = MySqlLegacySupport::getInstance()->query($query);
-        $iNumberOfReviewMailsSend = MySqlLegacySupport::getInstance()->num_rows($rRow);
-        $iPercentageToBeSend = $this->Shopreviewmail_PercentOfCustomers; //$this->GetConfigValue('shopreviewmail_percent_of_customers');;
+        $iNumberOfReviewMailsSend = count($connection->fetchAllAssociative($query));
+        $iPercentageToBeSend = $this->Shopreviewmail_PercentOfCustomers;
         $iPercentageMailSend = 100;
 
         if (0 == $iNumberOfCompletedOrders && 0 == $iNumberOfReviewMailsSend) {
@@ -407,11 +439,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
 
         if ($this->bDebug) {
             echo '<br />';
-        }
-        if ($this->bDebug) {
             echo __LINE__.'iPercentageToBeSend: '.$iPercentageToBeSend."\n<br />\n";
-        }
-        if ($this->bDebug) {
             echo __LINE__.'iNumberOfCompletedOrders: '.$iNumberOfCompletedOrders."\n<br />\n";
         }
 
@@ -420,14 +448,12 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
 
         if ($this->bDebug) {
             echo __LINE__.'iNumberOfReviewMailsToBeSend: '.$iNumberOfReviewMailsToBeSend."\n<br />\n";
-        }
-        if ($this->bDebug) {
             echo __LINE__.'iNumberOfReviewMailsSend: '.$iNumberOfReviewMailsSend."\n<br />\n";
+            echo '<br><br>';
         }
-        echo '<br><br>';
 
         // NOTE: the total possible mails covers all orders that have been send out
-        // (so it includes orders which had their expected order date passed - Frau sommer 25.11.08)
+        // (so it includes orders which had their expected order date passed - Frau Sommer 25.11.08)
         return $iNumberOfReviewMailsToBeSend;
     }
 

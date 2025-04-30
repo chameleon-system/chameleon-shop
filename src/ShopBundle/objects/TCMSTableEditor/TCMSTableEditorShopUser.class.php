@@ -33,8 +33,13 @@ class TCMSTableEditorShopUser extends TableEditorExtranetUser
      */
     protected function UpdateNewsletterInfo($oPostTable)
     {
-        $query = "SELECT * FROM `pkg_newsletter_user` WHERE `data_extranet_user_id` = '".\MySqlLegacySupport::getInstance()->real_escape_string($oPostTable->id)."'";
-        if ($aRow = \MySqlLegacySupport::getInstance()->fetch_assoc(\MySqlLegacySupport::getInstance()->query($query))) {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $quotedId = $connection->quote($oPostTable->id);
+
+        $query = "SELECT * FROM `pkg_newsletter_user` WHERE `data_extranet_user_id` = {$quotedId}";
+        if ($aRow = $connection->fetchAssociative($query)) {
             $oUser = TdbDataExtranetUser::GetNewInstance();
             /** @var $oUser TdbDataExtranetUser */
             if ($oUser->Load($oPostTable->id)) {
@@ -62,8 +67,13 @@ class TCMSTableEditorShopUser extends TableEditorExtranetUser
      */
     protected function DeleteNewsletterInfo($iUserId)
     {
-        $query = "SELECT * FROM `pkg_newsletter_user` WHERE `data_extranet_user_id` = '".\MySqlLegacySupport::getInstance()->real_escape_string($iUserId)."'";
-        if ($aRow = \MySqlLegacySupport::getInstance()->fetch_assoc(\MySqlLegacySupport::getInstance()->query($query))) {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+        $quotedId = $connection->quote($iUserId);
+
+        $query = "SELECT * FROM `pkg_newsletter_user` WHERE `data_extranet_user_id` = {$quotedId}";
+        if ($aRow = $connection->fetchAssociative($query)) {
             $oTableConf = new TCMSTableConf();
             /** @var $oTableConf TCMSTableConf */
             $oTableConf->LoadFromField('name', 'pkg_newsletter_user');

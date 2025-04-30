@@ -43,6 +43,9 @@ class TShopVoucherSeries extends TShopVoucherSeriesAutoParent implements IPkgSho
      */
     public function NumberOfTimesUsedByUser($iDataExtranetUserId = null, $aExcludeVouchers = array())
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $iNumberOfVouchersUsed = 0;
 
         if (is_null($iDataExtranetUserId)) {
@@ -50,22 +53,29 @@ class TShopVoucherSeries extends TShopVoucherSeriesAutoParent implements IPkgSho
             $iDataExtranetUserId = $oUser->id;
         }
 
+        $quotedUserId = $connection->quote($iDataExtranetUserId);
+        $quotedSeriesId = $connection->quote($this->id);
+
         $sRestriction = '';
         if (count($aExcludeVouchers) > 0) {
-            $aExcludeVouchers = TTools::MysqlRealEscapeArray($aExcludeVouchers);
-            $sRestriction = "AND `shop_voucher`.`id` NOT IN ('".implode("','", $aExcludeVouchers)."')";
+            $quotedExcludes = array_map([$connection, 'quote'], $aExcludeVouchers);
+            $sRestriction = "AND `shop_voucher`.`id` NOT IN (".implode(',', $quotedExcludes).")";
         }
-        $query = "SELECT COUNT(DISTINCT `shop_voucher`.`id`) AS number_of_vouchers
-                  FROM `shop_voucher_use`
-            INNER JOIN `shop_voucher` ON `shop_voucher_use`.`shop_voucher_id` = `shop_voucher`.`id`
-            INNER JOIN `shop_order` ON `shop_voucher_use`.`shop_order_id` = `shop_order`.`id`
-                 WHERE `shop_order`.`data_extranet_user_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iDataExtranetUserId)."'
-                   AND `shop_voucher`.`shop_voucher_series_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                   {$sRestriction}
-              GROUP BY `shop_voucher`.`shop_voucher_series_id`
-               ";
 
-        if ($aTmpRow = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+        $query = "
+        SELECT COUNT(DISTINCT `shop_voucher`.`id`) AS number_of_vouchers
+          FROM `shop_voucher_use`
+    INNER JOIN `shop_voucher` ON `shop_voucher_use`.`shop_voucher_id` = `shop_voucher`.`id`
+    INNER JOIN `shop_order` ON `shop_voucher_use`.`shop_order_id` = `shop_order`.`id`
+         WHERE `shop_order`.`data_extranet_user_id` = {$quotedUserId}
+           AND `shop_voucher`.`shop_voucher_series_id` = {$quotedSeriesId}
+           {$sRestriction}
+      GROUP BY `shop_voucher`.`shop_voucher_series_id`
+    ";
+
+        $aTmpRow = $connection->fetchAssociative($query);
+
+        if ($aTmpRow) {
             $iNumberOfVouchersUsed = $aTmpRow['number_of_vouchers'];
         }
 
@@ -81,6 +91,9 @@ class TShopVoucherSeries extends TShopVoucherSeriesAutoParent implements IPkgSho
      */
     public function CreateNewVoucher($sCode = null)
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         if (is_null($sCode)) {
             $bCodeUnique = false;
             $dMaxTry = 15;
@@ -88,14 +101,20 @@ class TShopVoucherSeries extends TShopVoucherSeriesAutoParent implements IPkgSho
             while (!$bCodeUnique && $dMaxTry > 0) {
                 --$dMaxTry;
                 $sCode = TdbShopVoucher::GenerateVoucherCode();
-                $query = "SELECT * FROM `shop_voucher` WHERE `code` = '".MySqlLegacySupport::getInstance()->real_escape_string($sCode)."'";
-                $tRes = MySqlLegacySupport::getInstance()->query($query);
-                if (0 == MySqlLegacySupport::getInstance()->num_rows($tRes)) {
+                $quotedCode = $connection->quote($sCode);
+                $query = "SELECT COUNT(*) FROM `shop_voucher` WHERE `code` = {$quotedCode}";
+                $count = $connection->fetchOne($query);
+                if (0 == (int)$count) {
                     $bCodeUnique = true;
                 }
             }
         }
-        $aData = array('shop_voucher_series_id' => $this->id, 'code' => $sCode, 'datecreated' => date('Y-m-d H:i:s'));
+
+        $aData = [
+            'shop_voucher_series_id' => $this->id,
+            'code' => $sCode,
+            'datecreated' => date('Y-m-d H:i:s'),
+        ];
         $oVoucher = TdbShopVoucher::GetNewInstance();
         $oVoucher->LoadFromRow($aData);
         $oVoucher->AllowEditByAll();

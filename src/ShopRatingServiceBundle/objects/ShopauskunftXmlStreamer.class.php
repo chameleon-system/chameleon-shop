@@ -35,16 +35,27 @@ class ShopauskunftXmlStreamer extends XmlStreamer
             $dateMysqlFormat = date('Y-m-d 00:00:00', $dateTimestamp);
 
             $uuid = TTools::GetUUID();
+            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
+            $quotedUuid = $connection->quote($uuid);
+            $quotedRatingServiceId = $connection->quote($this->ratingServiceId);
+            $quotedRatingId = $connection->quote($ratingId);
+            $quotedAverageScore = $connection->quote($averageScore);
+            $quotedXmlString = $connection->quote($xmlString);
+            $quotedUsername = $connection->quote((string) $rating->evaluator->username);
+            $quotedText = $connection->quote((string) $rating->text);
+            $quotedDate = $connection->quote($dateMysqlFormat);
+
             $query = "INSERT INTO pkg_shop_rating_service_rating
-						   SET id = '".$uuid."',
-							   pkg_shop_rating_service_id = '".MySqlLegacySupport::getInstance()->real_escape_string($this->ratingServiceId)."',
-							   remote_key = '".MySqlLegacySupport::getInstance()->real_escape_string($ratingId)."',
-							   score = '".MySqlLegacySupport::getInstance()->real_escape_string($averageScore)."',
-							   rawdata = '".MySqlLegacySupport::getInstance()->real_escape_string($xmlString)."',
-							   rating_user  = '".MySqlLegacySupport::getInstance()->real_escape_string($rating->evaluator->username)."',
-							   rating_text = '".MySqlLegacySupport::getInstance()->real_escape_string($rating->text)."',
-							   rating_date = '".MySqlLegacySupport::getInstance()->real_escape_string($dateMysqlFormat)."'";
-            MySqlLegacySupport::getInstance()->query($query);
+                       SET id = {$quotedUuid},
+                           pkg_shop_rating_service_id = {$quotedRatingServiceId},
+                           remote_key = {$quotedRatingId},
+                           score = {$quotedAverageScore},
+                           rawdata = {$quotedXmlString},
+                           rating_user = {$quotedUsername},
+                           rating_text = {$quotedText},
+                           rating_date = {$quotedDate}";
+            $connection->executeStatement($query);
         }
 
         return true;
@@ -59,15 +70,14 @@ class ShopauskunftXmlStreamer extends XmlStreamer
      */
     private function checkIfRatingExists($ratingId)
     {
-        $ratingId = MySqlLegacySupport::getInstance()->real_escape_string($ratingId);
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $quotedRatingId = $connection->quote($ratingId);
 
-        $sQuery = "SELECT COUNT(*) AS item_count FROM pkg_shop_rating_service_rating WHERE remote_key = '".$ratingId."' ";
-        $result = MySqlLegacySupport::getInstance()->query($sQuery);
-        if ($result) {
-            $row = MySqlLegacySupport::getInstance()->fetch_object($result);
-            if ($row->item_count < 1) {
-                return false;
-            }
+        $query = "SELECT COUNT(*) AS item_count FROM pkg_shop_rating_service_rating WHERE remote_key = {$quotedRatingId}";
+        $result = $connection->fetchAssociative($query);
+
+        if ($result && $result['item_count'] < 1) {
+            return false;
         }
 
         return true;

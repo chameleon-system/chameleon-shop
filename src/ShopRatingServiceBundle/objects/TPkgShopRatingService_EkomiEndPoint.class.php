@@ -76,20 +76,26 @@ class TPkgShopRatingService_EkomiEndPoint extends TdbPkgShopRatingService
              [3] => Ich bin 100% zufrieden, die Ware kam schnell und bruchsicher verpackt bei mir an. Leider hatte ich zuviele Teile bestellt, die ich sofort zurück geschickt habe. Es gab keine Probleme, habe mein Geld sofort zurück erhalten.
              [4] =>
          */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sRemoteKey = md5($aCSV[0].$aCSV[1]);
-        $sQuery = "SELECT COUNT(*) AS item_count FROM pkg_shop_rating_service_rating WHERE remote_key = '".MySqlLegacySupport::getInstance()->real_escape_string($sRemoteKey)."'";
-        $aCheck = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($sQuery));
-        if ($aCheck['item_count'] < 1) {
-            $sInsertSQL = "INSERT INTO `pkg_shop_rating_service_rating` SET
-                `id` = '".TTools::GetUUID()."',
-                `pkg_shop_rating_service_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."',
-                `remote_key` = '".MySqlLegacySupport::getInstance()->real_escape_string($sRemoteKey)."',
-                `score` = '".MySqlLegacySupport::getInstance()->real_escape_string($aCSV[2])."',
-                `rawdata` = '".MySqlLegacySupport::getInstance()->real_escape_string(TTools::mb_safe_serialize($aCSV))."',
-                `rating_text` = '".MySqlLegacySupport::getInstance()->real_escape_string(str_replace('\n', '<br />', $aCSV[3]))."',
-                `rating_date` = '".date('Y-m-d H:i:s', $aCSV[0])."'
-            ";
-            MySqlLegacySupport::getInstance()->query($sInsertSQL);
+        $quotedRemoteKey = $connection->quote($sRemoteKey);
+
+        $sQuery = "SELECT COUNT(*) AS item_count FROM pkg_shop_rating_service_rating WHERE remote_key = {$quotedRemoteKey}";
+        $aCheck = $connection->fetchAssociative($sQuery);
+
+        if ($aCheck && $aCheck['item_count'] < 1) {
+            $data = [
+                'id' => TTools::GetUUID(),
+                'pkg_shop_rating_service_id' => $this->id,
+                'remote_key' => $sRemoteKey,
+                'score' => $aCSV[2],
+                'rawdata' => TTools::mb_safe_serialize($aCSV),
+                'rating_text' => str_replace('\n', '<br />', $aCSV[3]),
+                'rating_date' => date('Y-m-d H:i:s', $aCSV[0]),
+            ];
+
+            $connection->insert('pkg_shop_rating_service_rating', $data);
         }
     }
 

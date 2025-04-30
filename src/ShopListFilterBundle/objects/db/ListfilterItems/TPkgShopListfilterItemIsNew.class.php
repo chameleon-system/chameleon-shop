@@ -28,8 +28,11 @@ class TPkgShopListfilterItemIsNew extends TPkgShopListfilterItemBoolean
     {
         $sQuery = '';
         $sValue = $this->GetActiveValue();
-        if ('1' == $sValue || '0' == $sValue) {
-            $sQuery = "`shop_article`.`{$this->sItemFieldName}` = '".MySqlLegacySupport::getInstance()->real_escape_string($sValue)."'";
+        if ('1' === $sValue || '0' === $sValue) {
+            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+            $quotedField = $connection->quoteIdentifier($this->sItemFieldName);
+            $quotedValue = $connection->quote($sValue);
+            $sQuery = "`shop_article`.$quotedField = $quotedValue";
         }
 
         return $sQuery;

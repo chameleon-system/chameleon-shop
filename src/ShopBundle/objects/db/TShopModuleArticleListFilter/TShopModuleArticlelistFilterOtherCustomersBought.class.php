@@ -26,49 +26,54 @@ class TShopModuleArticlelistFilterOtherCustomersBought extends TdbShopModuleArti
      */
     protected function GetListQueryBase($oListConfig)
     {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $sQuery = 'SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
-                   FROM `shop_article`
-              LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
-              LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
-                  WHERE 1=0
-                ';
+                FROM `shop_article`
+            LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
+            LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
+                WHERE 1=0
+            ';
 
         $sArticleRestriction = '';
         $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveArticle)) {
-            $sArticleRestriction = " (`shop_order_item`.`shop_article_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oActiveArticle->id)."')";
+            $quotedArticleId = $connection->quote($oActiveArticle->id);
+            $sArticleRestriction = " (`shop_order_item`.`shop_article_id` = {$quotedArticleId})";
         }
         if (!empty($sArticleRestriction)) {
             // now fetch all orders that bought this article except our own orders
 
             $sCounterQuery = "SELECT DISTINCT `shop_order`.`id`
-                     FROM `shop_order_item`
-               INNER JOIN `shop_order` ON `shop_order_item`.`shop_order_id` = `shop_order`.`id`
-                    WHERE {$sArticleRestriction}
-                  ";
+                    FROM `shop_order_item`
+            INNER JOIN `shop_order` ON `shop_order_item`.`shop_order_id` = `shop_order`.`id`
+                WHERE {$sArticleRestriction}
+                ";
 
             $oUser = $this->getExtranetUserProvider()->getActiveUser();
             if ($oUser->IsLoggedIn()) {
-                $sCounterQuery .= " AND `shop_order`.`data_extranet_user_id` != '".MySqlLegacySupport::getInstance()->real_escape_string($oUser->id)."'";
+                $quotedUserId = $connection->quote($oUser->id);
+                $sCounterQuery .= " AND `shop_order`.`data_extranet_user_id` != {$quotedUserId}";
             }
 
             // fetch at most 100 orders
-            $sCounterQuery .= 'LIMIT 0,100';
-            $aOrderIds = array();
-            $tres = MySqlLegacySupport::getInstance()->query($sCounterQuery);
-            while ($aRow = MySqlLegacySupport::getInstance()->fetch_row($tres)) {
-                $aOrderIds[] = MySqlLegacySupport::getInstance()->real_escape_string($aRow[0]);
+            $sCounterQuery .= ' LIMIT 0,100';
+            $aOrderIds = [];
+            $result = $connection->executeQuery($sCounterQuery);
+            while ($aRow = $result->fetchNumeric()) {
+                $aOrderIds[] = $connection->quote($aRow[0]);
             }
 
             if (count($aOrderIds) > 0) {
                 $sQuery = "SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*, SUM(`shop_order_item`.`order_amount`) AS shop_order_item_number_of_times_bought
-                       FROM `shop_article`
-                  LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
-                  LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
-                 INNER JOIN `shop_order_item` ON `shop_article`.`id` = `shop_order_item`.`shop_article_id`
-                      WHERE `shop_order_item`.`shop_order_id` IN ('".implode("', '", $aOrderIds)."')
-                        AND `shop_order_item`.`shop_article_id` != '".MySqlLegacySupport::getInstance()->real_escape_string($oActiveArticle->id)."'
-                    ";
+                    FROM `shop_article`
+                LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
+                LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
+                INNER JOIN `shop_order_item` ON `shop_article`.`id` = `shop_order_item`.`shop_article_id`
+                    WHERE `shop_order_item`.`shop_order_id` IN (".implode(', ', $aOrderIds).")
+                    AND `shop_order_item`.`shop_article_id` != {$quotedArticleId}
+                ";
             }
         }
 

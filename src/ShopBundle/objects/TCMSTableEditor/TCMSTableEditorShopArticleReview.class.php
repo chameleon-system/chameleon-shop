@@ -49,14 +49,21 @@ class TCMSTableEditorShopArticleReview extends TCMSTableEditor
 
             return;
         }
+
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         $iArticleId = null;
-        $query = "SELECT * FROM shop_article_review WHERE `id` = '".\MySqlLegacySupport::getInstance()->real_escape_string($sId)."'";
-        if ($aReview = \MySqlLegacySupport::getInstance()->fetch_assoc(\MySqlLegacySupport::getInstance()->query($query))) {
+        $quotedId = $connection->quote($sId);
+
+        $query = "SELECT * FROM `shop_article_review` WHERE `id` = {$quotedId}";
+        if ($aReview = $connection->fetchAssociative($query)) {
             $iArticleId = $aReview['shop_article_id'];
         }
+
         parent::Delete($sId);
+
         if (!is_null($iArticleId)) {
             $this->UpdateArticleReviewStats($iArticleId);
         }
-    }
-}
+    }}

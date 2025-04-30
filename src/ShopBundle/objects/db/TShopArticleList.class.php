@@ -72,6 +72,9 @@ class TShopArticleList extends TShopArticleListAutoParent
      */
     public static function LoadCategoryArticleListForCategoryList($aCategoryIdList, $sOrderString = null, $iLimit = -1, $aFilter = array(), $sCustomBaseQuery = null)
     {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         if (is_null($sOrderString)) {
             $sOrderString = '`shop_article`.`list_rank` DESC, `shop_article`.`name` ASC';
         }
@@ -91,15 +94,15 @@ class TShopArticleList extends TShopArticleListAutoParent
             $query = $sCustomBaseQuery;
         }
 
-        //            INNER JOIN `shop_article_shop_category_mlt` ON `shop_article`.`id` = `shop_article_shop_category_mlt`.`source_id`
-
         $sCatRestriction = '';
         if (is_array($aCategoryIdList)) {
-            $aCategoryIdList = TTools::MysqlRealEscapeArray($aCategoryIdList);
-            $sCatRestriction = " `shop_article_shop_category_mlt`.`target_id` IN ('".implode("','", $aCategoryIdList)."') ";
+            $quotedCategoryIds = array_map([$connection, 'quote'], $aCategoryIdList);
+            $sCatRestriction = " `shop_article_shop_category_mlt`.`target_id` IN (".implode(',', $quotedCategoryIds).") ";
         } else {
-            $sCatRestriction = " `shop_article_shop_category_mlt`.`target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($aCategoryIdList)."' ";
+            $quotedCategoryId = $connection->quote($aCategoryIdList);
+            $sCatRestriction = " `shop_article_shop_category_mlt`.`target_id` = {$quotedCategoryId} ";
         }
+
         if (!empty($sCatRestriction)) {
             //$query .= " `shop_article`.`id` IN (SELECT `shop_article_shop_category_mlt`.`source_id` FROM `shop_article_shop_category_mlt` WHERE {$sCatRestriction}) ";
             $query .= $sCatRestriction;
@@ -112,16 +115,16 @@ class TShopArticleList extends TShopArticleListAutoParent
         if (!empty($sActiveArticleSnippid)) {
             $query .= ' AND ('.$sActiveArticleSnippid.')';
         }
+
         if (count($aFilter) > 0) {
-            $aTmpFilter = array();
+            $aTmpFilter = [];
             foreach ($aFilter as $sKey => $sField) {
-                $aTmpFilter[] = MySqlLegacySupport::getInstance()->real_escape_string($sKey)."='".MySqlLegacySupport::getInstance()->real_escape_string($sField)."'";
+                $quotedKey = $connection->quoteIdentifier($sKey);
+                $quotedField = $connection->quote($sField);
+                $aTmpFilter[] = "{$quotedKey} = {$quotedField}";
             }
             $query .= ' AND ('.implode(' AND ', $aTmpFilter).')';
         }
-
-        //      die($query);
-        //
 
         $sRestrictions = '';
         if (!empty($sOrderString)) {
@@ -145,10 +148,10 @@ class TShopArticleList extends TShopArticleListAutoParent
         }
 
         /*      $sFullQuery = "SELECT `shop_article`.*
-        FROM `shop_article`
-       WHERE `shop_article`.`id` IN (
-        {$query}
-       ) {$sRestrictions}";*/
+            FROM `shop_article`
+           WHERE `shop_article`.`id` IN (
+            {$query}
+           ) {$sRestrictions}";*/
         $oList = TdbShopArticleList::GetList($sFullQuery, null, false);
 
         return $oList;
@@ -164,37 +167,45 @@ class TShopArticleList extends TShopArticleListAutoParent
      *
      * @return TdbShopArticleList
      */
-    public static function LoadArticleList($sOrderString = null, $iLimit = -1, $aFilter = array())
+    public static function LoadArticleList($sOrderString = null, $iLimit = -1, $aFilter = [])
     {
+        /* @var $connection \Doctrine\DBAL\Connection */
+        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+
         if (is_null($sOrderString)) {
             $sOrderString = '`shop_article`.`list_rank` DESC, `shop_article`.`name` ASC';
         }
-        $query = "SELECT `shop_article`.*
-                  FROM `shop_article`
-                 WHERE `shop_article`.`variant_parent_id` = ''
-               ";
+
+        $query = "
+        SELECT `shop_article`.*
+          FROM `shop_article`
+         WHERE `shop_article`.`variant_parent_id` = ''
+    ";
+
         $sActiveArticleSnippid = TdbShopArticleList::GetActiveArticleQueryRestriction();
         if (!empty($sActiveArticleSnippid)) {
-            $query .= ' AND ('.$sActiveArticleSnippid.')';
+            $query .= ' AND (' . $sActiveArticleSnippid . ')';
         }
-        if (count($aFilter) > 0) {
-            $aTmpFilter = array();
-            foreach ($aFilter as $sKey => $sField) {
-                $aTmpFilter[] = MySqlLegacySupport::getInstance()->real_escape_string($sKey)."='".MySqlLegacySupport::getInstance()->real_escape_string($sField)."'";
+
+        if (!empty($aFilter)) {
+            $aTmpFilter = [];
+            foreach ($aFilter as $key => $value) {
+                $escapedKey = $connection->quoteIdentifier($key);
+                $escapedValue = $connection->quote($value);
+                $aTmpFilter[] = "{$escapedKey} = {$escapedValue}";
             }
-            $query .= ' AND ('.implode(' AND ', $aTmpFilter).')';
+            $query .= ' AND (' . implode(' AND ', $aTmpFilter) . ')';
         }
+
         if (!empty($sOrderString)) {
-            $query .= ' ORDER BY '.$sOrderString;
+            $query .= ' ORDER BY ' . $sOrderString;
         }
 
         if ($iLimit > 0) {
-            $query .= ' LIMIT 0,'.$iLimit;
+            $query .= ' LIMIT 0,' . (int)$iLimit;
         }
 
-        $oList = TdbShopArticleList::GetList($query);
-
-        return $oList;
+        return TdbShopArticleList::GetList($query);
     }
 
     /**
