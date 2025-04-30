@@ -2,22 +2,18 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\ShopOrder;
 
-use ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrder;
-use DateTime;
-
 class ShopOrderExportLog
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopOrder|null - Belongs to order */
-        private ?ShopOrder $shopOrder = null
-        ,
+        private ?ShopOrder $shopOrder = null,
         // TCMSFieldDateTimeNow
-        /** @var DateTime|null - Created on */
-        private ?DateTime $datecreated = new DateTime(),
+        /** @var \DateTime|null - Created on */
+        private ?\DateTime $datecreated = new \DateTime(),
         // TCMSFieldVarchar
         /** @var string - IP */
         private string $ip = '',
@@ -67,20 +63,18 @@ class ShopOrderExportLog
         return $this;
     }
 
-
     // TCMSFieldDateTimeNow
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getIp(): string
@@ -95,7 +89,6 @@ class ShopOrderExportLog
         return $this;
     }
 
-
     // TCMSFieldText
     public function getData(): string
     {
@@ -109,7 +102,6 @@ class ShopOrderExportLog
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getUserSessionId(): string
     {
@@ -122,6 +114,4 @@ class ShopOrderExportLog
 
         return $this;
     }
-
-
 }

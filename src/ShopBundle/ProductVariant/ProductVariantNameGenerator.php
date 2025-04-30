@@ -26,9 +26,8 @@ class ProductVariantNameGenerator implements ProductVariantNameGeneratorInterfac
     }
 
     /**
-     * @param \TdbShopArticle $product
-     * @param string          $variantNameType
-     * @param string          $languageId
+     * @param string $variantNameType
+     * @param string $languageId
      *
      * @return string
      */

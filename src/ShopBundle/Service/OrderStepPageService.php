@@ -15,9 +15,6 @@ use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
 use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TShopOrderStep;
 
 class OrderStepPageService implements OrderStepPageServiceInterface
 {
@@ -36,11 +33,6 @@ class OrderStepPageService implements OrderStepPageServiceInterface
      */
     private $routingUtil;
 
-    /**
-     * @param PortalAndLanguageAwareRouterInterface $router
-     * @param UrlUtil                               $urlUtil
-     * @param RoutingUtilInterface                  $routingUtil
-     */
     public function __construct(PortalAndLanguageAwareRouterInterface $router, UrlUtil $urlUtil, RoutingUtilInterface $routingUtil)
     {
         $this->router = $router;
@@ -51,7 +43,7 @@ class OrderStepPageService implements OrderStepPageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkToOrderStepPageRelative(TShopOrderStep $orderStep, array $parameters = array(), TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    public function getLinkToOrderStepPageRelative(\TShopOrderStep $orderStep, array $parameters = [], ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
         $orderStep = $this->getOrderStepInCorrectLanguage($orderStep, $language);
         $parameters = $this->addBasketStepParameter($parameters, $orderStep);
@@ -60,12 +52,9 @@ class OrderStepPageService implements OrderStepPageServiceInterface
     }
 
     /**
-     * @param TShopOrderStep      $orderStep
-     * @param TdbCmsLanguage|null $language
-     *
-     * @return TShopOrderStep
+     * @return \TShopOrderStep
      */
-    private function getOrderStepInCorrectLanguage(TShopOrderStep $orderStep, TdbCmsLanguage $language = null)
+    private function getOrderStepInCorrectLanguage(\TShopOrderStep $orderStep, ?\TdbCmsLanguage $language = null)
     {
         /*
          * fieldUrlName needs to be given in the correct language. This requires a reload if another language is requested.
@@ -79,28 +68,21 @@ class OrderStepPageService implements OrderStepPageServiceInterface
         return $orderStep;
     }
 
-    /**
-     * @param array          $parameters
-     * @param TShopOrderStep $orderStep
-     *
-     * @return array
-     */
-    private function addBasketStepParameter(array $parameters, TShopOrderStep $orderStep): array
+    private function addBasketStepParameter(array $parameters, \TShopOrderStep $orderStep): array
     {
         if ('1' === $orderStep->fieldPosition) {
             $parameters['basketStep'] = '/';
         } else {
             $parameters['basketStep'] = '/'.$orderStep->fieldUrlName;
         }
+
         return $parameters;
     }
 
     /**
-     * @param TShopOrderStep $orderStep
-     *
      * @return string
      */
-    private function getBasketStepRouteName(TShopOrderStep $orderStep)
+    private function getBasketStepRouteName(\TShopOrderStep $orderStep)
     {
         return self::SHOP_CHECKOUT_ROUTE_PREFIX.$orderStep->fieldSystemname;
     }
@@ -108,7 +90,7 @@ class OrderStepPageService implements OrderStepPageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkToOrderStepPageAbsolute(TShopOrderStep $orderStep, array $parameters = array(), TdbCmsPortal $portal = null, TdbCmsLanguage $language = null, $forceSecure = false)
+    public function getLinkToOrderStepPageAbsolute(\TShopOrderStep $orderStep, array $parameters = [], ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $forceSecure = false)
     {
         $orderStep = $this->getOrderStepInCorrectLanguage($orderStep, $language);
         $parameters = $this->addBasketStepParameter($parameters, $orderStep);
@@ -126,13 +108,11 @@ class OrderStepPageService implements OrderStepPageServiceInterface
      * Symfony currently does not allow to enforce generation of secure URLs (a secure URL will only be generated if the
      * route requires HTTPS or if the current request is secure), therefore we turn the URL secure manually.
      *
-     * @param string              $url
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
+     * @param string $url
      *
      * @return string
      */
-    private function getSecureUrlIfNeeded($url, TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    private function getSecureUrlIfNeeded($url, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
         if (false === $this->urlUtil->isUrlSecure($url)) {
             $url = $this->urlUtil->getAbsoluteUrl($url, true, null, $portal, $language);
@@ -140,5 +120,4 @@ class OrderStepPageService implements OrderStepPageServiceInterface
 
         return $url;
     }
-
 }

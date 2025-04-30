@@ -17,7 +17,6 @@ use ChameleonSystem\ShopBundle\Payment\PaymentConfig\Interfaces\ShopPaymentConfi
 use ChameleonSystem\ShopBundle\Payment\PaymentConfig\Interfaces\ShopPaymentConfigLoaderInterface;
 use ChameleonSystem\ShopBundle\Payment\PaymentConfig\Interfaces\ShopPaymentConfigProviderInterface;
 use IPkgShopOrderPaymentConfig;
-use TPkgShopOrderPaymentConfig;
 
 /**
  * ShopPaymentConfigLoader loads the configuration for payment handlers.
@@ -39,8 +38,7 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
     private $configProviderList;
 
     /**
-     * @param ShopPaymentConfigLoaderDataAccessInterface $shopPaymentConfigLoaderDataAccess
-     * @param string                                     $defaultEnvironment                One of IPkgShopOrderPaymentConfig::ENVIRONMENT_*
+     * @param string $defaultEnvironment One of IPkgShopOrderPaymentConfig::ENVIRONMENT_*
      */
     public function __construct(
         ShopPaymentConfigLoaderDataAccessInterface $shopPaymentConfigLoaderDataAccess,
@@ -48,7 +46,7 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
     ) {
         $this->shopPaymentConfigLoaderDataAccess = $shopPaymentConfigLoaderDataAccess;
         $this->defaultEnvironment = $defaultEnvironment;
-        $this->configProviderList = array();
+        $this->configProviderList = [];
     }
 
     /**
@@ -123,8 +121,7 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
     }
 
     /**
-     * @param string                             $alias
-     * @param ShopPaymentConfigProviderInterface $shopPaymentConfigProvider
+     * @param string $alias
      *
      * @return void
      */
@@ -134,11 +131,11 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
     }
 
     /**
-     * @param string      $portalId
-     * @param string      $paymentHandlerGroupId
+     * @param string $portalId
+     * @param string $paymentHandlerGroupId
      * @param string|null $paymentHandlerId
      *
-     * @return IPkgShopOrderPaymentConfig
+     * @return \IPkgShopOrderPaymentConfig
      *
      * @throws ConfigurationException
      */
@@ -155,7 +152,7 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
                 $e
             );
         }
-        $paymentConfigList = array();
+        $paymentConfigList = [];
         if (null !== $paymentHandlerId) {
             try {
                 $paymentConfigList = $this->shopPaymentConfigLoaderDataAccess->loadPaymentHandlerConfig(
@@ -216,7 +213,7 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
      */
     private function getAdditionalConfig($paymentHandlerGroupId)
     {
-        $additionalConfig = array();
+        $additionalConfig = [];
         try {
             $systemName = $this->shopPaymentConfigLoaderDataAccess->getPaymentHandlerGroupSystemNameFromId(
                 $paymentHandlerGroupId
@@ -242,10 +239,10 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
      * @param ShopPaymentConfigRawValue[] $paymentHandlerGroupConfigList
      * @param ShopPaymentConfigRawValue[] $paymentConfigList
      * @param ShopPaymentConfigRawValue[] $additionalConfig
-     * @param string                      $environment                   one of IPkgShopOrderPaymentConfig::ENVIRONMENT_*
-     * @param string                      $portalId
+     * @param string $environment one of IPkgShopOrderPaymentConfig::ENVIRONMENT_*
+     * @param string $portalId
      *
-     * @return IPkgShopOrderPaymentConfig
+     * @return \IPkgShopOrderPaymentConfig
      */
     private function getFlattenedConfiguration(
         array $paymentHandlerGroupConfigList,
@@ -254,12 +251,12 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
         $environment,
         $portalId
     ) {
-        $config = array();
+        $config = [];
         $config = $this->getPrioritizedConfigValues($config, $paymentHandlerGroupConfigList, $environment, $portalId);
         $config = $this->getPrioritizedConfigValues($config, $additionalConfig, $environment, $portalId);
         $config = $this->getPrioritizedConfigValues($config, $paymentConfigList, $environment, $portalId);
 
-        $configObject = new TPkgShopOrderPaymentConfig($environment, $this->getMergedConfigValues($config));
+        $configObject = new \TPkgShopOrderPaymentConfig($environment, $this->getMergedConfigValues($config));
 
         return $configObject;
     }
@@ -267,8 +264,8 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
     /**
      * @param ShopPaymentConfigRawValue[] $config
      * @param ShopPaymentConfigRawValue[] $configToMerge
-     * @param string                      $environment   one of IPkgShopOrderPaymentConfig::ENVIRONMENT_*
-     * @param string                      $portalId
+     * @param string $environment one of IPkgShopOrderPaymentConfig::ENVIRONMENT_*
+     * @param string $portalId
      *
      * @return ShopPaymentConfigRawValue[]
      */
@@ -294,25 +291,22 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
     /**
      * Returns true if the given config value can be applied, i.e. the environment and portal do match.
      *
-     * @param ShopPaymentConfigRawValue $value
-     * @param string                    $environment one of IPkgShopOrderPaymentConfig::ENVIRONMENT_*
-     * @param string                    $portalId
+     * @param string $environment one of IPkgShopOrderPaymentConfig::ENVIRONMENT_*
+     * @param string $portalId
      *
      * @return bool
      */
     private function isApplicable(ShopPaymentConfigRawValue $value, $environment, $portalId)
     {
-        return (($environment === $value->getEnvironment()) || (IPkgShopOrderPaymentConfig::ENVIRONMENT_COMMON === $value->getEnvironment()))
+        return (($environment === $value->getEnvironment()) || (\IPkgShopOrderPaymentConfig::ENVIRONMENT_COMMON === $value->getEnvironment()))
             && (($portalId === $value->getPortalId()) || ('' === $value->getPortalId()));
     }
 
     /**
      * Returns true if value1 has a higher priority than value2.
      *
-     * @param ShopPaymentConfigRawValue $value1
-     * @param ShopPaymentConfigRawValue $value2
-     * @param string                    $environment one of IPkgShopOrderPaymentConfig::ENVIRONMENT_*
-     * @param string                    $portalId
+     * @param string $environment one of IPkgShopOrderPaymentConfig::ENVIRONMENT_*
+     * @param string $portalId
      *
      * @return bool
      */
@@ -336,9 +330,6 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
     }
 
     /**
-     * @param ShopPaymentConfigRawValue $value1
-     * @param ShopPaymentConfigRawValue $value2
-     *
      * @return bool
      */
     private function hasHigherSourcePriority(ShopPaymentConfigRawValue $value1, ShopPaymentConfigRawValue $value2)
@@ -347,9 +338,7 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
     }
 
     /**
-     * @param ShopPaymentConfigRawValue $value1
-     * @param ShopPaymentConfigRawValue $value2
-     * @param string                    $portalId
+     * @param string $portalId
      *
      * @return bool
      */
@@ -362,9 +351,7 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
     }
 
     /**
-     * @param ShopPaymentConfigRawValue $value1
-     * @param ShopPaymentConfigRawValue $value2
-     * @param string                    $environment one of IPkgShopOrderPaymentConfig::ENVIRONMENT_*
+     * @param string $environment one of IPkgShopOrderPaymentConfig::ENVIRONMENT_*
      *
      * @return bool
      */
@@ -376,9 +363,9 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
         if (($environment === $value1->getEnvironment()) && ($environment !== $value2->getEnvironment())) {
             return true;
         }
-        if ((IPkgShopOrderPaymentConfig::ENVIRONMENT_COMMON === $value1->getEnvironment())
+        if ((\IPkgShopOrderPaymentConfig::ENVIRONMENT_COMMON === $value1->getEnvironment())
             && ($environment !== $value2->getEnvironment())
-            && (IPkgShopOrderPaymentConfig::ENVIRONMENT_COMMON !== $value2->getEnvironment())
+            && (\IPkgShopOrderPaymentConfig::ENVIRONMENT_COMMON !== $value2->getEnvironment())
         ) {
             return true;
         }
@@ -393,7 +380,7 @@ class ShopPaymentConfigLoader implements ShopPaymentConfigLoaderInterface
      */
     private function getMergedConfigValues(array $config)
     {
-        $mergedConfig = array();
+        $mergedConfig = [];
 
         foreach ($config as $paymentConfig) {
             $mergedConfig[$paymentConfig->getName()] = $paymentConfig->getValue();

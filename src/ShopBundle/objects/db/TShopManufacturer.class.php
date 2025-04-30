@@ -13,8 +13,8 @@ use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
 class TShopManufacturer extends TShopManufacturerAutoParent
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopManufacturer';
-    const FILTER_KEY_NAME = 'shop_manufacturer_id';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopManufacturer';
+    public const FILTER_KEY_NAME = 'shop_manufacturer_id';
 
     /**
      * return link to the product pages for the manufacturer.
@@ -25,7 +25,7 @@ class TShopManufacturer extends TShopManufacturerAutoParent
      */
     public function GetLinkProducts($bUseAbsoluteURL = false)
     {
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $sLink = $oShop->GetLinkToSystemPage('manufacturer');
         if ('.html' == substr($sLink, -5)) {
             $sLink = substr($sLink, 0, -5).'/';
@@ -43,10 +43,11 @@ class TShopManufacturer extends TShopManufacturerAutoParent
     public function GetSearchRestrictionLink()
     {
         // get current search... then add filter
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oSearchCache = $oShop->GetActiveSearchObject();
-        //$oSearchCache->aFilter[TdbShopManufacturer::FILTER_KEY_NAME] = $this->id;
-        return $oSearchCache->GetSearchLink(array(TdbShopManufacturer::FILTER_KEY_NAME => $this->id));
+
+        // $oSearchCache->aFilter[TdbShopManufacturer::FILTER_KEY_NAME] = $this->id;
+        return $oSearchCache->GetSearchLink([TdbShopManufacturer::FILTER_KEY_NAME => $this->id]);
     }
 
     /**
@@ -76,13 +77,13 @@ class TShopManufacturer extends TShopManufacturerAutoParent
     /**
      * used to display the manufacturer.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oManufacturer', $this);
@@ -104,13 +105,13 @@ class TShopManufacturer extends TShopManufacturerAutoParent
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /**
      * returns the number of search hits for a manufacturer.
      *
-     * @param int  $iShopSearchCacheId
+     * @param int $iShopSearchCacheId
      * @param bool $bApplyActiveFilter - set to true if you want to count only hits that match the current filter
      *
      * @return int
@@ -118,7 +119,7 @@ class TShopManufacturer extends TShopManufacturerAutoParent
     public function GetNumberOfHitsForSearchCacheId($iShopSearchCacheId, $bApplyActiveFilter = false)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $iNumHits = 0;
 
@@ -153,15 +154,17 @@ class TShopManufacturer extends TShopManufacturerAutoParent
         }
 
         if ($row = $connection->fetchAssociative($query)) {
-            $iNumHits = (int)$row['hits'];
+            $iNumHits = (int) $row['hits'];
         }
 
         return $iNumHits;
     }
+
     /**
      * return the icon for the manufacturer. returns false if none found.
      *
      * @param bool $bReturnDefaultImageIfNoneSet
+     *
      * @return TCMSImage|false
      */
     public function GetIcon($bReturnDefaultImageIfNoneSet = false)
@@ -184,6 +187,7 @@ class TShopManufacturer extends TShopManufacturerAutoParent
      * if there is no icon either, it will return false.
      *
      * @param bool $bReturnDefaultImageIfNoneSet
+     *
      * @return TCMSImage|false
      */
     public function GetLogo($bReturnDefaultImageIfNoneSet = false)
@@ -225,6 +229,6 @@ class TShopManufacturer extends TShopManufacturerAutoParent
      */
     private function getUrlNormalizationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 }

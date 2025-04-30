@@ -6,7 +6,6 @@ use ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal;
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetGroup;
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
 use ChameleonSystem\ShopBundle\Entity\Payment\ShopPaymentMethod;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -14,15 +13,14 @@ class ShopShippingGroup
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
         // TCMSFieldLookup
         /** @var ShopShippingGroupHandler|null - Shipping group handler */
-        private ?ShopShippingGroupHandler $shopShippingGroupHandler = null
-        ,
+        private ?ShopShippingGroupHandler $shopShippingGroupHandler = null,
         // TCMSFieldPosition
         /** @var int - Position */
         private int $position = 0,
@@ -30,35 +28,29 @@ class ShopShippingGroup
         /** @var bool - Active */
         private bool $active = false,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Active from */
-        private ?DateTime $activeFrom = null,
+        /** @var \DateTime|null - Active from */
+        private ?\DateTime $activeFrom = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Active until */
-        private ?DateTime $activeTo = null,
+        /** @var \DateTime|null - Active until */
+        private ?\DateTime $activeTo = null,
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, DataExtranetUser> - Restrict to following customers */
-        private Collection $dataExtranetUserCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetUserCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, DataExtranetGroup> - Restrict to following customer groups */
-        private Collection $dataExtranetGroupCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetGroupCollection = new ArrayCollection(),
         // TCMSFieldLookup
         /** @var ShopVat|null - VAT group */
-        private ?ShopVat $shopVat = null
-        ,
+        private ?ShopVat $shopVat = null,
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopShippingType> - Shipping types */
-        private Collection $shopShippingTypeCollection = new ArrayCollection()
-        ,
+        private Collection $shopShippingTypeCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopPaymentMethod> - Payment methods */
-        private Collection $shopPaymentMethodCollection = new ArrayCollection()
-        ,
+        private Collection $shopPaymentMethodCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopShippingGroup> - Is displayed only if the following shipping groups are not available */
-        private Collection $shopShippingGroupCollection = new ArrayCollection()
-        ,
+        private Collection $shopShippingGroupCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsPortal> - Restrict to the following portals */
         private Collection $cmsPortalCollection = new ArrayCollection()
@@ -102,7 +94,6 @@ class ShopShippingGroup
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopShippingGroupHandler(): ?ShopShippingGroupHandler
     {
@@ -115,7 +106,6 @@ class ShopShippingGroup
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getPosition(): int
@@ -130,7 +120,6 @@ class ShopShippingGroup
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isActive(): bool
     {
@@ -144,35 +133,31 @@ class ShopShippingGroup
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getActiveFrom(): ?DateTime
+    public function getActiveFrom(): ?\DateTime
     {
         return $this->activeFrom;
     }
 
-    public function setActiveFrom(?DateTime $activeFrom): self
+    public function setActiveFrom(?\DateTime $activeFrom): self
     {
         $this->activeFrom = $activeFrom;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getActiveTo(): ?DateTime
+    public function getActiveTo(): ?\DateTime
     {
         return $this->activeTo;
     }
 
-    public function setActiveTo(?DateTime $activeTo): self
+    public function setActiveTo(?\DateTime $activeTo): self
     {
         $this->activeTo = $activeTo;
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -206,8 +191,6 @@ class ShopShippingGroup
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -240,7 +223,6 @@ class ShopShippingGroup
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopVat(): ?ShopVat
     {
@@ -253,8 +235,6 @@ class ShopShippingGroup
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -288,8 +268,6 @@ class ShopShippingGroup
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -321,8 +299,6 @@ class ShopShippingGroup
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -356,8 +332,6 @@ class ShopShippingGroup
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselectCheckboxes
 
     /**
@@ -389,6 +363,4 @@ class ShopShippingGroup
 
         return $this;
     }
-
-
 }

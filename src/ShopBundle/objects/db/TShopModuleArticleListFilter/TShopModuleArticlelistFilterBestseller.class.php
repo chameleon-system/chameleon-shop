@@ -25,7 +25,7 @@ class TShopModuleArticlelistFilterBestseller extends TShopModuleArticlelistFilte
     protected function GetListQueryBase($oListConfig)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sQuery = 'SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
                FROM `shop_article`
@@ -40,7 +40,7 @@ class TShopModuleArticlelistFilterBestseller extends TShopModuleArticlelistFilte
             $sQuery = parent::GetListBaseQueryRestrictedToCategories($oListConfig);
             if ($iNumRecs > 0) {
                 $aList = array_map(
-                    fn(array $row) => $connection->quote($row['id']),
+                    fn (array $row) => $connection->quote($row['id']),
                     $results
                 );
                 if (count($aList) > 0) {

@@ -16,18 +16,17 @@ class TPkgShopPaymentTransactionContextEndPoint
     /**
      * @var string
      */
-    private $context = null;
+    private $context;
 
     /**
      * @var TdbDataExtranetUser
      */
-    private $extranetUser = null;
+    private $extranetUser;
 
     /**
      * @var string|null
      */
-    private $ip = null;
-
+    private $ip;
 
     /**
      * @param string $sContext
@@ -49,7 +48,7 @@ class TPkgShopPaymentTransactionContextEndPoint
     }
 
     /**
-     * @return \TdbDataExtranetUser|null
+     * @return TdbDataExtranetUser|null
      */
     public function getExtranetUser()
     {
@@ -69,6 +68,6 @@ class TPkgShopPaymentTransactionContextEndPoint
      */
     private function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 }

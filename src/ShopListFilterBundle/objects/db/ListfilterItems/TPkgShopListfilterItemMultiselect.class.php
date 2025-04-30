@@ -69,7 +69,7 @@ class TPkgShopListfilterItemMultiselect extends TdbPkgShopListfilterItem
     {
         $aOptions = $this->GetFromInternalCache('aOptions');
         if (is_null($aOptions)) {
-            $aOptions = array();
+            $aOptions = [];
             $sIdSelect = $this->GetResultSetBaseQuery();
             $databaseConnection = $this->getDatabaseConnection();
             $quotedItemTableName = $databaseConnection->quoteIdentifier($this->sItemTableName);
@@ -162,14 +162,14 @@ class TPkgShopListfilterItemMultiselect extends TdbPkgShopListfilterItem
         $sQuery = $this->GetFromInternalCache('sQueryRestrictionForActiveFilter');
 
         if (is_null($sQuery)) {
-            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+            $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
             $aValues = $this->aActiveFilterData;
 
             if (is_array($aValues) && count($aValues) > 0) {
                 $quotedValues = array_map([$connection, 'quote'], $aValues);
                 $quotedTargetField = $connection->quoteIdentifier($this->GetTargetTableNameField());
                 $quotedTable = $connection->quoteIdentifier($this->sItemTableName);
-                $sItemListQuery = "SELECT * FROM {$quotedTable} WHERE {$quotedTargetField} IN (".implode(',', $quotedValues).")";
+                $sItemListQuery = "SELECT * FROM {$quotedTable} WHERE {$quotedTargetField} IN (".implode(',', $quotedValues).')';
 
                 $aIdList = [];
                 $result = $connection->executeQuery($sItemListQuery);
@@ -179,7 +179,7 @@ class TPkgShopListfilterItemMultiselect extends TdbPkgShopListfilterItem
 
                 if (count($aIdList) > 0) {
                     $quotedField = $connection->quoteIdentifier($this->sItemFieldName);
-                    $sQuery = "`shop_article`.{$quotedField} IN (".implode(',', $aIdList).")";
+                    $sQuery = "`shop_article`.{$quotedField} IN (".implode(',', $aIdList).')';
                 }
             }
             $this->SetInternalCache('sQueryRestrictionForActiveFilter', $sQuery);
@@ -219,11 +219,11 @@ class TPkgShopListfilterItemMultiselect extends TdbPkgShopListfilterItem
             return $targetTableFieldNameCache[$this->sItemTableName];
         }
         $oTargetTableConf = TdbCmsTblConf::GetNewInstance();
-        /** @var $oTargetTableConf TdbCmsTblConf */
+        /* @var $oTargetTableConf TdbCmsTblConf */
         $oTargetTableConf->LoadFromField('name', $this->sItemTableName);
         $targetTableFieldName = $oTargetTableConf->GetNameColumn();
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $oTargetTableConf->fieldName);
-        if (call_user_func(array($sClassName, 'CMSFieldIsTranslated'), $targetTableFieldName)) {
+        if (call_user_func([$sClassName, 'CMSFieldIsTranslated'], $targetTableFieldName)) {
             $sLanguagePrefix = TGlobal::GetLanguagePrefix();
             if (!empty($sLanguagePrefix)) {
                 $targetTableFieldName = $targetTableFieldName.'__'.$sLanguagePrefix;

@@ -13,7 +13,6 @@ namespace ChameleonSystem\ShopBundle\EventListener;
 
 use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
 use ChameleonSystem\ShopBundle\ProductStatistics\Interfaces\ProductStatisticsServiceInterface;
-use TdbShopArticle;
 
 class UpdateProductStatisticsListener
 {
@@ -22,23 +21,18 @@ class UpdateProductStatisticsListener
      */
     private $productStatisticsService;
 
-    /**
-     * @param ProductStatisticsServiceInterface $productStatisticsService
-     */
     public function __construct(ProductStatisticsServiceInterface $productStatisticsService)
     {
         $this->productStatisticsService = $productStatisticsService;
     }
 
     /**
-     * @param UpdateProductStockEvent $event
-     *
      * @return void
      */
     public function onUpdateProductStock(UpdateProductStockEvent $event)
     {
         $productId = $event->getProductId();
-        $product = TdbShopArticle::GetNewInstance($productId);
+        $product = \TdbShopArticle::GetNewInstance($productId);
         $isVariant = $product->IsVariant();
         if (!$isVariant && !$product->HasVariants()) {
             return;

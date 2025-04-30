@@ -22,11 +22,8 @@ class ShopPaymentConfigLoaderRequestLevelCacheDecorator implements ShopPaymentCo
     /**
      * @var array
      */
-    private $cache = array();
+    private $cache = [];
 
-    /**
-     * @param ShopPaymentConfigLoaderInterface $subject
-     */
     public function __construct(ShopPaymentConfigLoaderInterface $subject)
     {
         $this->subject = $subject;

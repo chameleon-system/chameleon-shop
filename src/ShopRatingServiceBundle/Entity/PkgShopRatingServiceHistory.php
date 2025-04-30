@@ -4,25 +4,22 @@ namespace ChameleonSystem\ShopRatingServiceBundle\Entity;
 
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
 use ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrder;
-use DateTime;
 
 class PkgShopRatingServiceHistory
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldExtendedLookup
         /** @var DataExtranetUser|null - User */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldLookup
         /** @var ShopOrder|null - Belongs to order */
-        private ?ShopOrder $shopOrder = null
-        ,
+        private ?ShopOrder $shopOrder = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Date */
-        private ?DateTime $date = null,
+        /** @var \DateTime|null - Date */
+        private ?\DateTime $date = null,
         // TCMSFieldVarchar
         /** @var string - List of rating services */
         private string $pkgShopRatingServiceIdList = ''
@@ -66,7 +63,6 @@ class PkgShopRatingServiceHistory
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopOrder(): ?ShopOrder
     {
@@ -80,20 +76,18 @@ class PkgShopRatingServiceHistory
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDate(): ?DateTime
+    public function getDate(): ?\DateTime
     {
         return $this->date;
     }
 
-    public function setDate(?DateTime $date): self
+    public function setDate(?\DateTime $date): self
     {
         $this->date = $date;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getPkgShopRatingServiceIdList(): string
@@ -107,6 +101,4 @@ class PkgShopRatingServiceHistory
 
         return $this;
     }
-
-
 }

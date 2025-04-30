@@ -18,6 +18,7 @@ class TShopBreadcrumbItemCategory extends TShopBreadcrumbItem
 {
     /**
      * @param bool $bForcePortal
+     *
      * @return string
      */
     public function GetLink($bForcePortal = false)

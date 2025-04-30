@@ -6,12 +6,11 @@ class ShopStockMessageTrigger
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopStockMessage|null - Stock message */
-        private ?ShopStockMessage $shopStockMessage = null
-        ,
+        private ?ShopStockMessage $shopStockMessage = null,
         // TCMSFieldNumber
         /** @var int - Amount */
         private int $amount = 0,
@@ -64,7 +63,6 @@ class ShopStockMessageTrigger
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getAmount(): int
     {
@@ -77,7 +75,6 @@ class ShopStockMessageTrigger
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getMessage(): string
@@ -92,7 +89,6 @@ class ShopStockMessageTrigger
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemName(): string
     {
@@ -106,7 +102,6 @@ class ShopStockMessageTrigger
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCssClass(): string
     {
@@ -119,6 +114,4 @@ class ShopStockMessageTrigger
 
         return $this;
     }
-
-
 }

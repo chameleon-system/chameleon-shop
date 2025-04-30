@@ -25,8 +25,8 @@ class TPkgShopPaymentHandlerMapper_IPaymentCreditCard extends AbstractPkgShopPay
         $oPaymentHandler = $oVisitor->GetSourceObject('oPaymentHandler');
         $cards = $oPaymentHandler->GetConfigParameter('cards');
 
-        //{'sValue':'AmexCard','sName':'AmericanExpress'},{'sValue':'Mastercard','sName':'Mastercard'},{'sValue':'VisaCard','sName':'Visa'}
-        $allCards = array(
+        // {'sValue':'AmexCard','sName':'AmericanExpress'},{'sValue':'Mastercard','sName':'Mastercard'},{'sValue':'VisaCard','sName':'Visa'}
+        $allCards = [
             'MasterCard' => 'MasterCard',
             'VisaCard' => 'Visa',
             'AmexCard' => 'Amex',
@@ -35,14 +35,14 @@ class TPkgShopPaymentHandlerMapper_IPaymentCreditCard extends AbstractPkgShopPay
             'SoloCard' => 'Solo Card',
             'DiscoverCard' => 'Discover Card',
             'MaestroCard' => 'Maestro Card',
-        );
-        $lookup = array();
+        ];
+        $lookup = [];
         foreach ($allCards as $card => $cardName) {
             $lookup[strtolower($card)] = $card;
         }
-        $cardList = array();
+        $cardList = [];
         if (false === $cards) {
-            $cardList = array('Mastercard', 'VisaCard');
+            $cardList = ['Mastercard', 'VisaCard'];
         } else {
             $tmpList = explode(',', $cards);
             foreach ($tmpList as $card) {
@@ -56,13 +56,13 @@ class TPkgShopPaymentHandlerMapper_IPaymentCreditCard extends AbstractPkgShopPay
 
         $oVisitor->SetMappedValue('amexEnabled', false);
 
-        $useCards = array();
+        $useCards = [];
         foreach ($cardList as $cardLookup) {
             $cardLookup = strtolower($cardLookup);
             if (false === isset($lookup[$cardLookup])) {
                 continue;
             }
-            $useCards[] = array('sValue' => $lookup[$cardLookup], 'sName' => $allCards[$lookup[$cardLookup]]);
+            $useCards[] = ['sValue' => $lookup[$cardLookup], 'sName' => $allCards[$lookup[$cardLookup]]];
             if ('amexcard' === $cardLookup) {
                 $oVisitor->SetMappedValue('amexEnabled', true);
             }

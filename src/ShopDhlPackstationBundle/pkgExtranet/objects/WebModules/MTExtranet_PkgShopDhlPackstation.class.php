@@ -27,8 +27,8 @@ class MTExtranet_PkgShopDhlPackstation extends MTExtranet_PkgShopDhlPackstationA
         $oUser = TdbDataExtranetUser::GetInstance();
         if ($oUser->DHLPackStationStatusChanged($aAddress)) {
             $aAddress = $oUser->fillPackStationFieldValue($aAddress);
-            if (true === $this->isAddressBillingAddress($aAddress, $oUser) &&
-                true === $this->isAddressPackstation($aAddress)
+            if (true === $this->isAddressBillingAddress($aAddress, $oUser)
+                && true === $this->isAddressPackstation($aAddress)
             ) {
                 $this->getFlashMessage()->addMessage(
                     TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING,
@@ -50,9 +50,6 @@ class MTExtranet_PkgShopDhlPackstation extends MTExtranet_PkgShopDhlPackstationA
     }
 
     /**
-     * @param array               $addressData
-     * @param TdbDataExtranetUser $user
-     *
      * @return bool
      */
     private function isAddressBillingAddress(array $addressData, TdbDataExtranetUser $user)
@@ -68,8 +65,6 @@ class MTExtranet_PkgShopDhlPackstation extends MTExtranet_PkgShopDhlPackstationA
     }
 
     /**
-     * @param array $addressData
-     *
      * @return bool
      */
     private function isAddressPackstation(array $addressData)
@@ -82,6 +77,6 @@ class MTExtranet_PkgShopDhlPackstation extends MTExtranet_PkgShopDhlPackstationA
      */
     private function getFlashMessage()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 }

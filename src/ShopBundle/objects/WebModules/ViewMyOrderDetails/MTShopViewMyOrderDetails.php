@@ -63,13 +63,13 @@ class MTShopViewMyOrderDetails extends MTPkgViewRendererAbstractModuleMapper
 
         $order = $this->getDbAdapter()->getOrder($orderIdRequested);
 
-        $viewData = array(
+        $viewData = [
             'error' => false,
             'errorCode' => null,
             'notMyOrderError' => false,
             'orderNotFoundError' => false,
             'order' => $order,
-        );
+        ];
 
         if (null === $order) {
             $viewData['error'] = true;
@@ -88,7 +88,7 @@ class MTShopViewMyOrderDetails extends MTPkgViewRendererAbstractModuleMapper
     private function getRequest()
     {
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
 
         return $request;
     }
@@ -108,7 +108,7 @@ class MTShopViewMyOrderDetails extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getDbAdapter()
     {
-        $dbAdapter = new TPkgShopViewMyOrderDetailsDbAdapter(\ChameleonSystem\CoreBundle\ServiceLocator::get(
+        $dbAdapter = new TPkgShopViewMyOrderDetailsDbAdapter(ChameleonSystem\CoreBundle\ServiceLocator::get(
             'database_connection'
         ));
 
@@ -120,6 +120,6 @@ class MTShopViewMyOrderDetails extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

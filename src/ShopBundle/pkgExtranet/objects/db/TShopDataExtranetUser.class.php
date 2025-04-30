@@ -11,11 +11,11 @@
 
 /**
  * shop specific extranet user extensions.
-/**/
+ * /**/
 class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
 {
-    const COOKIE_NAME_HISTORY = 'shopuserarticleviewhistory';
-    const COOKIE_NAME_NOTICELIST = 'shopuserarticlenoticelist';
+    public const COOKIE_NAME_HISTORY = 'shopuserarticleviewhistory';
+    public const COOKIE_NAME_NOTICELIST = 'shopuserarticlenoticelist';
     public const MAX_NOTICE_LIST_COOKIE_LENGTH = 17; // this should stay under the critical 4kb string size
 
     /**
@@ -25,7 +25,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
      *
      * @var array
      */
-    protected $aArticleViewHistory = null;
+    protected $aArticleViewHistory;
 
     /**
      * the notice list (merkzettel) of the user. Note: this list is stored in session and for logged in users
@@ -33,7 +33,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
      *
      * @var array
      */
-    protected $aNoticeList = null;
+    protected $aNoticeList;
 
     /**
      * we use the post insert hook to set the customer number.
@@ -45,12 +45,12 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
         // we need to add an customer number to the order... since generation of this number may differ
         // from shop to shop, we have added the method to fetch a new customer number to the shop class
         if (empty($this->sqlData['customer_number']) || empty($this->sqlData['shop_id'])) {
-            $aUpdateData = array();
+            $aUpdateData = [];
             if (empty($this->sqlData['customer_number'])) {
                 $aUpdateData['customer_number'] = $this->GetCustomerNumber();
             }
             if (empty($this->sqlData['shop_id'])) {
-                $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+                $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $aUpdateData['shop_id'] = $oShop->id;
             }
             if (count($aUpdateData) > 0) {
@@ -114,7 +114,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     {
         $sCustNr = parent::GetCustomerNumber();
         if (empty($sCustNr)) {
-            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+            $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             $sCustNr = $oShop->GetNextFreeCustomerNumber();
             $aData = $this->sqlData;
             $aData['customer_number'] = $sCustNr;
@@ -180,7 +180,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
                 // check if the user has such an item on the list... if he does, no change
                 $oItem = TdbShopUserNoticeList::GetNewInstance();
                 /** @var $oItem TdbShopUserNoticeList */
-                if (!$oItem->LoadFromFields(array('data_extranet_user_id' => $this->id, 'shop_article_id' => $iArticleId))) {
+                if (!$oItem->LoadFromFields(['data_extranet_user_id' => $this->id, 'shop_article_id' => $iArticleId])) {
                     $aData = $aTmpList[$iArticleId]->sqlData;
                     $aData['data_extranet_user_id'] = $this->id;
                     $aTmpList[$iArticleId]->LoadFromRow($aData);
@@ -265,7 +265,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
             array_unshift($this->aArticleViewHistory, $item);
         } else {
             $itemObject = TdbDataExtranetUserShopArticleHistory::GetNewInstance();
-            $aData = array('shop_article_id' => $iArticleId, 'datecreated' => date('Y-m-d H:i:s'), 'data_extranet_user_id' => $this->id);
+            $aData = ['shop_article_id' => $iArticleId, 'datecreated' => date('Y-m-d H:i:s'), 'data_extranet_user_id' => $this->id];
             $itemObject->LoadFromRow($aData);
             if (!is_null($this->id) && $this->IsLoggedIn()) {
                 $itemObject->Save();
@@ -289,7 +289,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
         if (SHOP_ALLOW_SAVING_ARTICLE_HISTORY_IN_COOKIE && !$this->IsLoggedIn()) {
             if (0 !== $shop->fieldDataExtranetUserShopArticleHistoryMaxCookieSize) {
                 reset($this->aArticleViewHistory);
-                $aHistory = array();
+                $aHistory = [];
                 foreach (array_keys($this->aArticleViewHistory) as $iHistKey) {
                     $aHistory[] = $this->aArticleViewHistory[$iHistKey];
                 }
@@ -312,7 +312,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
                     $dKByteLength = $dByteLength / 1024;
                 }
             }
-            $aHistory = array();
+            $aHistory = [];
             reset($this->aArticleViewHistory);
             foreach (array_keys($this->aArticleViewHistory) as $iHistKey) {
                 $aHistory[] = $this->aArticleViewHistory[$iHistKey];
@@ -341,7 +341,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     public function GetArticleViewHistory()
     {
         if (is_null($this->aArticleViewHistory)) {
-            $this->aArticleViewHistory = array();
+            $this->aArticleViewHistory = [];
             $iMaxQueueLength = 100;
             $shop = $this->getShopService()->getActiveShop();
             if ($shop->fieldDataExtranetUserShopArticleHistoryMaxArticleCount < $iMaxQueueLength && $shop->fieldDataExtranetUserShopArticleHistoryMaxArticleCount > 0) {
@@ -373,7 +373,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
             }
         }
 
-        $historyList = array();
+        $historyList = [];
         foreach ($this->aArticleViewHistory as $item) {
             $historyList[] = TdbDataExtranetUserShopArticleHistory::GetNewInstance($item);
         }
@@ -389,7 +389,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     public function GetNoticeListArticles()
     {
         if (is_null($this->aNoticeList)) {
-            $this->aNoticeList = array();
+            $this->aNoticeList = [];
             $iMaxQueueLength = 1000;
 
             if ($this->IsLoggedIn()) {
@@ -419,7 +419,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
             }
         }
 
-        $noticeList = array();
+        $noticeList = [];
         foreach ($this->aNoticeList as $item) {
             $item = TdbShopUserNoticeList::GetNewInstance($item);
             $noticeList[$item->fieldShopArticleId] = $item;
@@ -431,7 +431,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     /**
      * add an article to the notice list.
      *
-     * @param int   $iArticleId
+     * @param int $iArticleId
      * @param float $iAmount
      *
      * @return float|false - new amount on list
@@ -549,10 +549,10 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
             if ($this->IsLoggedIn()) {
                 $noticeListItemObject = TdbShopUserNoticeList::GetNewInstance();
                 if (true === $noticeListItemObject->LoadFromFields(
-                    array(
+                    [
                         'data_extranet_user_id' => $this->id,
                         'shop_article_id' => $sArticleId,
-                    )
+                    ]
                 )) {
                     $noticeListItemObject->Delete();
                 }
@@ -604,17 +604,17 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
      */
     public function GetTotalOrderValue($sStartDate = null, $sEndDate = null)
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
-        $query = "SELECT SUM(value_total) AS ordervalue
+        $query = 'SELECT SUM(value_total) AS ordervalue
               FROM `shop_order`
-             WHERE `data_extranet_user_id` = ".$connection->quote($this->id)."
+             WHERE `data_extranet_user_id` = '.$connection->quote($this->id)."
                AND (`shop_order`.`id` IS NULL OR `shop_order`.`canceled` = '0')";
         if (null !== $sStartDate) {
-            $query .= " AND `datecreated` >= ".$connection->quote($sStartDate)." ";
+            $query .= ' AND `datecreated` >= '.$connection->quote($sStartDate).' ';
         }
         if (null !== $sEndDate) {
-            $query .= " AND `datecreated` <= ".$connection->quote($sEndDate)." ";
+            $query .= ' AND `datecreated` <= '.$connection->quote($sEndDate).' ';
         }
         $query .= ' GROUP BY `data_extranet_user_id`';
 
@@ -804,9 +804,6 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
     /**
      * hook called when the user changes the shipping address.
      *
-     * @param TdbDataExtranetUserAddress $oOldAddress
-     * @param TdbDataExtranetUserAddress $oNewAddress
-     *
      * @return void
      */
     protected function hookChangedShippingAddress(
@@ -819,7 +816,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
                 $this,
                 TPkgShop_TPkgCmsEvent_ChangeShippingCountry::CONTEXT_PKG_SHOP,
                 TPkgShop_TPkgCmsEvent_ChangeShippingCountry::NAME_USER_CHANGED_SHIPPING_COUNTRY,
-                array('oOld' => $oOldAddress, 'oNew' => $oNewAddress)
+                ['oOld' => $oOldAddress, 'oNew' => $oNewAddress]
             );
             TPkgCmsEventManager::GetInstance()->NotifyObservers($oEvent);
         }
@@ -827,9 +824,6 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
 
     /**
      * hook called when the user changes the shipping address.
-     *
-     * @param TdbDataExtranetUserAddress $oOldAddress
-     * @param TdbDataExtranetUserAddress $oNewAddress
      *
      * @return void
      */
@@ -843,17 +837,17 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
                 $this,
                 TPkgShop_TPkgCmsEvent_ChangeBillingCountry::CONTEXT_PKG_SHOP,
                 TPkgShop_TPkgCmsEvent_ChangeBillingCountry::NAME_USER_CHANGED_SHIPPING_COUNTRY,
-                array('oOld' => $oOldAddress, 'oNew' => $oNewAddress)
+                ['oOld' => $oOldAddress, 'oNew' => $oNewAddress]
             );
             TPkgCmsEventManager::GetInstance()->NotifyObservers($oEvent);
         }
     }
 
     /**
-     * @return \ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface
+     * @return ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }

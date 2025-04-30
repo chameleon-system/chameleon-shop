@@ -26,10 +26,6 @@ class ShopPaymentHandlerFactory implements ShopPaymentHandlerFactoryInterface
      */
     private $shopPaymentHandlerDataAccess;
 
-    /**
-     * @param ShopPaymentConfigLoaderInterface      $shopPaymentConfigLoader
-     * @param ShopPaymentHandlerDataAccessInterface $shopPaymentHandlerDataAccess
-     */
     public function __construct(ShopPaymentConfigLoaderInterface $shopPaymentConfigLoader, ShopPaymentHandlerDataAccessInterface $shopPaymentHandlerDataAccess)
     {
         $this->shopPaymentConfigLoader = $shopPaymentConfigLoader;
@@ -39,7 +35,7 @@ class ShopPaymentHandlerFactory implements ShopPaymentHandlerFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createPaymentHandler($paymentHandlerId, $portalId, array $userParameterList = array())
+    public function createPaymentHandler($paymentHandlerId, $portalId, array $userParameterList = [])
     {
         $paymentHandler = $this->shopPaymentHandlerDataAccess->getBarePaymentHandler($paymentHandlerId);
         $configData = $this->shopPaymentConfigLoader->loadFromPaymentHandlerId($paymentHandlerId, $portalId);

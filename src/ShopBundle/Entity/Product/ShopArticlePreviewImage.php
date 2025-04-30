@@ -8,16 +8,14 @@ class ShopArticlePreviewImage
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopArticle|null - Belongs to article */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldLookup
         /** @var ShopArticleImageSize|null - Preview image size / type */
-        private ?ShopArticleImageSize $shopArticleImageSize = null
-        ,
+        private ?ShopArticleImageSize $shopArticleImageSize = null,
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Preview image */
         private ?CmsMedia $cmsMedia = null
@@ -61,7 +59,6 @@ class ShopArticlePreviewImage
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopArticleImageSize(): ?ShopArticleImageSize
     {
@@ -75,7 +72,6 @@ class ShopArticlePreviewImage
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
     {
@@ -88,6 +84,4 @@ class ShopArticlePreviewImage
 
         return $this;
     }
-
-
 }

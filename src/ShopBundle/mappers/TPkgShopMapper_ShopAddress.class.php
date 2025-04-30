@@ -29,7 +29,7 @@ class TPkgShopMapper_ShopAddress extends AbstractViewMapper
      */
     private $pageService;
 
-    public function __construct(PortalDomainServiceInterface $portalDomainService = null, ShopServiceInterface $shopService = null, PageServiceInterface $pageService = null)
+    public function __construct(?PortalDomainServiceInterface $portalDomainService = null, ?ShopServiceInterface $shopService = null, ?PageServiceInterface $pageService = null)
     {
         $this->portalDomainService = $portalDomainService ?? ServiceLocator::get('chameleon_system_core.portal_domain_service');
         $this->shopService = $shopService ?? ServiceLocator::get('chameleon_system_shop.shop_service');

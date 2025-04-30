@@ -24,11 +24,10 @@ interface ShopPaymentHandlerFactoryInterface
      *
      * @param string $paymentHandlerId
      * @param string $portalId
-     * @param array  $userParameterList
      *
      * @return \TdbShopPaymentHandler
      *
      * @throws ConfigurationException
      */
-    public function createPaymentHandler($paymentHandlerId, $portalId, array $userParameterList = array());
+    public function createPaymentHandler($paymentHandlerId, $portalId, array $userParameterList = []);
 }

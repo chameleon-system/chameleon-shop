@@ -13,10 +13,10 @@ namespace ChameleonSystem\ShopBundle\ProductStatistics\Interfaces;
 
 interface ProductStatisticsServiceInterface
 {
-    const TYPE_SALES = 1;
-    const TYPE_DETAIL_VIEWS = 2;
-    const TYPE_REVIEW_AVERAGE = 3;
-    const TYPE_REVIEW_COUNT = 4;
+    public const TYPE_SALES = 1;
+    public const TYPE_DETAIL_VIEWS = 2;
+    public const TYPE_REVIEW_AVERAGE = 3;
+    public const TYPE_REVIEW_COUNT = 4;
 
     /**
      * @param string $articleId
@@ -29,7 +29,9 @@ interface ProductStatisticsServiceInterface
      * @param string $articleId
      * @param int $type
      * @param float $amount
+     *
      * @psalm-param self::TYPE_* $type
+     *
      * @return void
      */
     public function add($articleId, $type, $amount);
@@ -38,13 +40,16 @@ interface ProductStatisticsServiceInterface
      * @param string $articleId
      * @param int $type
      * @param float $amount
+     *
      * @psalm-param self::TYPE_* $type
+     *
      * @return void
      */
     public function set($articleId, $type, $amount);
 
     /**
      * @param string $parentArticleId
+     *
      * @return void
      */
     public function updateAllBasedOnVariants($parentArticleId);

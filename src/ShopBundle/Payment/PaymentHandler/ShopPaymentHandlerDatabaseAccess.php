@@ -12,7 +12,6 @@
 namespace ChameleonSystem\ShopBundle\Payment\PaymentHandler;
 
 use ChameleonSystem\ShopBundle\Payment\PaymentHandler\Interfaces\ShopPaymentHandlerDataAccessInterface;
-use TdbShopPaymentHandler;
 
 class ShopPaymentHandlerDatabaseAccess implements ShopPaymentHandlerDataAccessInterface
 {
@@ -21,7 +20,7 @@ class ShopPaymentHandlerDatabaseAccess implements ShopPaymentHandlerDataAccessIn
      */
     public function getBarePaymentHandler($paymentHandlerId, $languageId = null)
     {
-        $paymentHandler = TdbShopPaymentHandler::GetInstance($paymentHandlerId);
+        $paymentHandler = \TdbShopPaymentHandler::GetInstance($paymentHandlerId);
         if (null === $paymentHandler || false === $paymentHandler->sqlData) {
             return null;
         }

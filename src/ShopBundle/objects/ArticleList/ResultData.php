@@ -19,7 +19,7 @@ class ResultData implements ResultDataInterface
     /**
      * @var \TdbShopArticle[]
      */
-    private $items = array();
+    private $items = [];
     /**
      * @var int
      */
@@ -92,6 +92,7 @@ class ResultData implements ResultDataInterface
 
     /**
      * @return int
+     *
      * @psalm-suppress InvalidReturnType, InvalidReturnStatement
      */
     public function getNumberOfPages()

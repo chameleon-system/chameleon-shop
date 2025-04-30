@@ -11,26 +11,26 @@
 
 class TPkgShopWishlist extends TAdbPkgShopWishlist
 {
-    const VIEW_PATH = 'pkgShopWishlist/views/db/TPkgShopWishlist';
-    const URL_PARAMETER_FILTER_DATA = 'aPkgShopWishlist';
-    const MSG_CONSUMER_BASE_NAME = 'TPkgShopWishlist';
+    public const VIEW_PATH = 'pkgShopWishlist/views/db/TPkgShopWishlist';
+    public const URL_PARAMETER_FILTER_DATA = 'aPkgShopWishlist';
+    public const MSG_CONSUMER_BASE_NAME = 'TPkgShopWishlist';
 
     /**
      * adds an article to the wishlist - returns the new amount of that article on the list.
      *
      * @param string $sArticleId
-     * @param float  $dAmount
-     * @param string $sComment   - optional comment
+     * @param float $dAmount
+     * @param string $sComment - optional comment
      *
      * @return float
      */
     public function AddArticle($sArticleId, $dAmount = 1, $sComment = null)
     {
         $dNewAmount = 0;
-        $aItemData = array();
+        $aItemData = [];
         $oItem = TdbPkgShopWishlistArticle::GetNewInstance();
         /** @var $oItem TdbPkgShopWishlistArticle */
-        if ($oItem->LoadFromFields(array('pkg_shop_wishlist_id' => $this->id, 'shop_article_id' => $sArticleId))) {
+        if ($oItem->LoadFromFields(['pkg_shop_wishlist_id' => $this->id, 'shop_article_id' => $sArticleId])) {
             $aItemData = $oItem->sqlData;
             $aItemData['amount'] += $dAmount;
         } else {
@@ -63,13 +63,13 @@ class TPkgShopWishlist extends TAdbPkgShopWishlist
     /**
      * render the filter.
      *
-     * @param string $sViewName     - name of the view
-     * @param string $sViewType     - where to look for the view
-     * @param array  $aCallTimeVars - optional parameters to pass to render method
+     * @param string $sViewName - name of the view
+     * @param string $sViewType - where to look for the view
+     * @param array $aCallTimeVars - optional parameters to pass to render method
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oMsgManager = TCMSMessageManager::GetInstance();
@@ -89,17 +89,17 @@ class TPkgShopWishlist extends TAdbPkgShopWishlist
     /**
      * return link to the private view of the wishlist.
      *
-     * @param string $sMode                - select a mode of the wishlist (such as SendForm)
-     * @param array  $aAdditionalParameter
+     * @param string $sMode - select a mode of the wishlist (such as SendForm)
+     * @param array $aAdditionalParameter
      *
      * @return string
      */
-    public function GetLink($sMode = '', $aAdditionalParameter = array())
+    public function GetLink($sMode = '', $aAdditionalParameter = [])
     {
         if (!empty($sMode)) {
             $aAdditionalParameter[MTPkgShopWishlistCore::URL_MODE_PARAMETER_NAME] = $sMode;
         }
-        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShopConfig = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
 
         return $oShopConfig->GetLinkToSystemPage('wishlist', $aAdditionalParameter, true);
     }
@@ -111,10 +111,10 @@ class TPkgShopWishlist extends TAdbPkgShopWishlist
      *
      * @return string
      */
-    public function GetPublicLink($aAdditionalParameter = array())
+    public function GetPublicLink($aAdditionalParameter = [])
     {
-        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
-        $aAdditionalParameter[MTPkgShopWishlistPublicCore::URL_PARAMETER_NAME] = array('id' => $this->id);
+        $oShopConfig = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $aAdditionalParameter[MTPkgShopWishlistPublicCore::URL_PARAMETER_NAME] = ['id' => $this->id];
 
         return $oShopConfig->GetLinkToSystemPage('wishlist-public', $aAdditionalParameter, true);
     }
@@ -177,7 +177,7 @@ class TPkgShopWishlist extends TAdbPkgShopWishlist
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -208,7 +208,7 @@ class TPkgShopWishlist extends TAdbPkgShopWishlist
         $bSendSuccess = false;
         $oOwner = $this->GetFieldDataExtranetUser();
         $oMail = TdbDataMailProfile::GetProfile('SendWishlist');
-        $aMailData = array('to_name' => $sToName, 'to_mail' => $sToMail, 'comment' => $sComment, 'sWishlistURL' => $this->GetPublicLink());
+        $aMailData = ['to_name' => $sToName, 'to_mail' => $sToMail, 'comment' => $sComment, 'sWishlistURL' => $this->GetPublicLink()];
         $oMail->AddDataArray($aMailData);
         $aUserData = $oOwner->GetObjectPropertiesAsArray();
         $oMail->AddDataArray($aUserData);
@@ -218,7 +218,7 @@ class TPkgShopWishlist extends TAdbPkgShopWishlist
             $bSendSuccess = true;
             $oHistory = TdbPkgShopWishlistMailHistory::GetNewInstance();
             /** @var $oHistory TdbPkgShopWishlistMailHistory */
-            $aData = array('to_name' => $sToName, 'to_email' => $sToMail, 'comment' => $sComment, 'datesend' => date('Y-m-d H:i:s'), 'pkg_shop_wishlist_id' => $this->id);
+            $aData = ['to_name' => $sToName, 'to_email' => $sToMail, 'comment' => $sComment, 'datesend' => date('Y-m-d H:i:s'), 'pkg_shop_wishlist_id' => $this->id];
             $oHistory->LoadFromRow($aData);
             $oHistory->AllowEditByAll(true);
             $oHistory->Save();

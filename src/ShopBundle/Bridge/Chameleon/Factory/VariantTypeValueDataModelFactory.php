@@ -17,6 +17,7 @@ use ChameleonSystem\ShopBundle\Library\DataModels\VariantTypeValueDataModelInter
 
 /**
  * You may overwrite this class with your own and set a custom dataModelClass via config parameters.
+ *
  * @example chameleon_system_shop.shop_variant_type_value.data_model: "Esono\\CustomerBundle\\DataModel\\VariantTypeValueDataModel"
  */
 class VariantTypeValueDataModelFactory implements VariantTypeValueDataModelFactoryInterface
@@ -28,18 +29,18 @@ class VariantTypeValueDataModelFactory implements VariantTypeValueDataModelFacto
 
     public function __construct(
         UrlUtil $urlUtil,
-        string $dataModelClass) 
+        string $dataModelClass)
     {
         $this->dataModelClass = $dataModelClass;
         $this->urlUtil = $urlUtil;
 
         $this->validateDataModelClass($dataModelClass);
-    }    
-    
+    }
+
     public function createFromVariantTypeValueRecord(
         \TdbShopVariantType $variantTypeRecord,
         \TdbShopVariantTypeValue $shopVariantTypeValue,
-        bool $loadInactiveItems, 
+        bool $loadInactiveItems,
         array $currentSelectedParameters,
         bool $variantIsActive,
         \TdbShopArticle $shopArticle): VariantTypeValueDataModelInterface
@@ -57,37 +58,37 @@ class VariantTypeValueDataModelFactory implements VariantTypeValueDataModelFacto
     private function validateDataModelClass(string $dataModelClass): void
     {
         if (!is_a($dataModelClass, VariantTypeValueDataModelInterface::class, true)) {
-            throw new \InvalidArgumentException('dataModelClass must implement ' . VariantTypeValueDataModelInterface::class);
-        }        
+            throw new \InvalidArgumentException('dataModelClass must implement '.VariantTypeValueDataModelInterface::class);
+        }
     }
-    
+
     private function getImageId(\TdbShopVariantTypeValue $shopVariantTypeValue): string
     {
         $imageId = $shopVariantTypeValue->fieldCmsMediaId;
         if (is_numeric($imageId) && $imageId < self::MAX_TEMPLATE_IMAGE_ID) { // dummy image
             $imageId = '';
         }
-        
+
         return $imageId;
     }
 
     private function isProductVariantSelectable(\TdbShopVariantTypeValue $variantTypeValueRecord, bool $loadInactiveItems): bool
     {
-        /**
+        /*
          * @note "articleactive" is only set if the variants are loaded via TShopArticle::GetVariantValuesAvailableForTypeIncludingInActive
          */
-        
+
         if (!isset($variantTypeValueRecord->sqlData['articleactive'])) {
             return true;
         }
-        
+
         $isProductActive = '1' === $variantTypeValueRecord->sqlData['articleactive'];
-        
+
         if (true === $isProductActive) {
             return true;
         }
-        
-        return (true === $loadInactiveItems && false === $isProductActive);
+
+        return true === $loadInactiveItems && false === $isProductActive;
     }
 
     private function getVariantSelectionUrlParameters(array $currentSelectedParameters, \TdbShopVariantType $variantTypeRecord, \TdbShopVariantTypeValue $variantTypeValueRecord): string

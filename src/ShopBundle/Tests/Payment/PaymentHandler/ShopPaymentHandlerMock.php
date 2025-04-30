@@ -26,9 +26,6 @@ class ShopPaymentHandlerMock
         return $this->paymentUserData;
     }
 
-    /**
-     * @param array $paymentUserData
-     */
     public function SetPaymentUserData(array $paymentUserData)
     {
         $this->paymentUserData = $paymentUserData;

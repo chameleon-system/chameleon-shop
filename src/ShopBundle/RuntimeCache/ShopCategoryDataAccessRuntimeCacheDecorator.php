@@ -18,7 +18,7 @@ class ShopCategoryDataAccessRuntimeCacheDecorator implements ShopCategoryDataAcc
     /**
      * root categories do not have a parent id - so we force a key to use in the parentChildMapping.
      */
-    const PARENT_CHILD_MAPPING_LOOKUP_FOR_ROOT_NODES = '__root';
+    public const PARENT_CHILD_MAPPING_LOOKUP_FOR_ROOT_NODES = '__root';
     /**
      * @var ShopCategoryDataAccessInterface
      */
@@ -32,9 +32,6 @@ class ShopCategoryDataAccessRuntimeCacheDecorator implements ShopCategoryDataAcc
      */
     private $parentChildMapping;
 
-    /**
-     * @param ShopCategoryDataAccessInterface $subject
-     */
     public function __construct(ShopCategoryDataAccessInterface $subject)
     {
         $this->subject = $subject;
@@ -60,7 +57,7 @@ class ShopCategoryDataAccessRuntimeCacheDecorator implements ShopCategoryDataAcc
     public function getActiveChildren($categoryId)
     {
         $childIds = $this->getChildrenIds($categoryId);
-        $children = array();
+        $children = [];
         foreach ($childIds as $childId) {
             $children[] = $this->getCategory($childId);
         }
@@ -93,7 +90,7 @@ class ShopCategoryDataAccessRuntimeCacheDecorator implements ShopCategoryDataAcc
             $categoryId = self::PARENT_CHILD_MAPPING_LOOKUP_FOR_ROOT_NODES;
         }
         if (!isset($parentChildMapping[$categoryId])) {
-            return array();
+            return [];
         }
 
         return $parentChildMapping[$categoryId];
@@ -108,7 +105,7 @@ class ShopCategoryDataAccessRuntimeCacheDecorator implements ShopCategoryDataAcc
             return $this->parentChildMapping;
         }
 
-        $this->parentChildMapping = array();
+        $this->parentChildMapping = [];
         $categoryCache = $this->getAllActive();
         foreach (array_keys($categoryCache) as $categoryId) {
             $parent = $categoryCache[$categoryId]['shop_category_id'];
@@ -116,7 +113,7 @@ class ShopCategoryDataAccessRuntimeCacheDecorator implements ShopCategoryDataAcc
                 $parent = self::PARENT_CHILD_MAPPING_LOOKUP_FOR_ROOT_NODES;
             }
             if (!isset($this->parentChildMapping[$parent])) {
-                $this->parentChildMapping[$parent] = array();
+                $this->parentChildMapping[$parent] = [];
             }
             $this->parentChildMapping[$parent][] = $categoryId;
         }

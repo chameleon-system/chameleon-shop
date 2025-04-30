@@ -25,11 +25,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class ResultFactoryCache implements ResultFactoryInterface
 {
     /**
-     * @var Interfaces\ResultFactoryInterface
+     * @var ResultFactoryInterface
      */
     private $resultFactory;
     /**
-     * @var \esono\pkgCmsCache\CacheInterface
+     * @var CacheInterface
      */
     private $cache;
     /**
@@ -45,13 +45,6 @@ class ResultFactoryCache implements ResultFactoryInterface
      */
     private $dbAdapter;
 
-    /**
-     * @param ResultFactoryInterface   $resultFactory
-     * @param CacheInterface           $cache
-     * @param FilterFactoryInterface   $filterFactory
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param DbAdapterInterface       $dbAdapter
-     */
     public function __construct(
         ResultFactoryInterface $resultFactory,
         CacheInterface $cache,
@@ -68,9 +61,6 @@ class ResultFactoryCache implements ResultFactoryInterface
 
     /**
      * Note: If an invalid page is requested via state, then the first page will be returned instead.
-     *
-     * @param ConfigurationInterface $moduleConfiguration
-     * @param StateInterface         $state
      *
      * @return ResultDataInterface
      */
@@ -99,9 +89,9 @@ class ResultFactoryCache implements ResultFactoryInterface
      */
     private function getKey(ConfigurationInterface $moduleConfiguration, StateInterface $state)
     {
-        $keyData = array(
+        $keyData = [
             'class' => 'ChameleonSystem\ShopBundle\objects\ArticleList\ResultFactoryCache',
-        );
+        ];
         $filterParameter = $this->_GetCacheParameters($moduleConfiguration, $state);
         $keyData = array_merge_recursive($keyData, $filterParameter);
 
@@ -138,7 +128,7 @@ class ResultFactoryCache implements ResultFactoryInterface
 
     public function moduleInitHook(ConfigurationInterface $moduleConfiguration)
     {
-        /**
+        /*
          * @psalm-suppress InvalidReturnStatement
          * @FIXME Returning `void` result
          */
@@ -146,10 +136,6 @@ class ResultFactoryCache implements ResultFactoryInterface
     }
 
     /**
-     * @param ResultDataInterface    $resultData
-     * @param ConfigurationInterface $moduleConfiguration
-     * @param StateInterface         $state
-     *
      * @return void
      */
     private function dispatchCachedFilterExecutedEvent(ResultDataInterface $resultData, ConfigurationInterface $moduleConfiguration, StateInterface $state)

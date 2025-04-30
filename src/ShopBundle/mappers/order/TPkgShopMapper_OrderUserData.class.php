@@ -11,9 +11,9 @@
 
 class TPkgShopMapper_OrderUserData extends AbstractViewMapper
 {
-    const ADDRESS_TYPE_BILLING = 1;
+    public const ADDRESS_TYPE_BILLING = 1;
 
-    const ADDRESS_TYPE_SHIPPING = 2;
+    public const ADDRESS_TYPE_SHIPPING = 2;
 
     /**
      * {@inheritdoc}
@@ -44,15 +44,14 @@ class TPkgShopMapper_OrderUserData extends AbstractViewMapper
     /**
      * get the value map for one address type can be defined by using the class constants.
      *
-     * @param TdbShopOrder $oOrder
-     * @param int          $iAddressType use constants of the class to define the type to be fetched from
+     * @param int $iAddressType use constants of the class to define the type to be fetched from
      * @param bool $bCachingEnabled
      *
      * @return array
      */
     protected function getAddress(TdbShopOrder $oOrder, $iAddressType, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aAddress = array();
+        $aAddress = [];
 
         if (self::ADDRESS_TYPE_BILLING === $iAddressType) {
             $oSalutation = $oOrder->GetFieldAdrBillingSalutation();
@@ -62,7 +61,7 @@ class TPkgShopMapper_OrderUserData extends AbstractViewMapper
             $aAddress['sSalutation'] = (null !== $oSalutation) ? ($oSalutation->GetName()) : ('');
 
             $aAddress['sCompany'] = '';
-            if (property_exists($oOrder,'fieldAdrBillingCompany')) {
+            if (property_exists($oOrder, 'fieldAdrBillingCompany')) {
                 $aAddress['sCompany'] = $oOrder->fieldAdrBillingCompany;
             }
             $aAddress['sFirstName'] = $oOrder->fieldAdrBillingFirstname;
@@ -90,7 +89,7 @@ class TPkgShopMapper_OrderUserData extends AbstractViewMapper
             $aAddress['sSalutation'] = (null !== $oSalutation) ? ($oSalutation->GetName()) : ('');
 
             $aAddress['sCompany'] = '';
-            if (property_exists($oOrder,'fieldAdrShippingCompany')) {
+            if (property_exists($oOrder, 'fieldAdrShippingCompany')) {
                 $aAddress['sCompany'] = $oOrder->fieldAdrShippingCompany;
             }
             $aAddress['sFirstName'] = $oOrder->fieldAdrShippingFirstname;

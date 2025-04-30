@@ -6,12 +6,11 @@ class PkgImageHotspotItemSpot
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var PkgImageHotspotItem|null - Belongs to hotspot image */
-        private ?PkgImageHotspotItem $pkgImageHotspotItem = null
-        ,
+        private ?PkgImageHotspotItem $pkgImageHotspotItem = null,
         // TCMSFieldNumber
         /** @var int - Distance top */
         private int $top = 0,
@@ -24,7 +23,7 @@ class PkgImageHotspotItemSpot
         // TCMSFieldExtendedLookupMultiTable
         /** @var string - Linked CMS object */
         private string $linkedRecord = '',
-// TCMSFieldExtendedLookupMultiTable
+        // TCMSFieldExtendedLookupMultiTable
         /** @var string - Linked CMS object */
         private string $linkedRecordTableName = '',
         // TCMSFieldURL
@@ -76,7 +75,6 @@ class PkgImageHotspotItemSpot
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getTop(): int
     {
@@ -89,7 +87,6 @@ class PkgImageHotspotItemSpot
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getLeft(): int
@@ -104,7 +101,6 @@ class PkgImageHotspotItemSpot
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getHotspotType(): string
     {
@@ -117,7 +113,6 @@ class PkgImageHotspotItemSpot
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookupMultiTable
     public function getLinkedRecord(): string
@@ -132,7 +127,7 @@ class PkgImageHotspotItemSpot
         return $this;
     }
 
-// TCMSFieldExtendedLookupMultiTable
+    // TCMSFieldExtendedLookupMultiTable
     public function getLinkedRecordTableName(): string
     {
         return $this->linkedRecordTableName;
@@ -144,7 +139,6 @@ class PkgImageHotspotItemSpot
 
         return $this;
     }
-
 
     // TCMSFieldURL
     public function getExternalUrl(): string
@@ -159,7 +153,6 @@ class PkgImageHotspotItemSpot
         return $this;
     }
 
-
     // TCMSFieldText
     public function getPolygonArea(): string
     {
@@ -173,7 +166,6 @@ class PkgImageHotspotItemSpot
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowSpot(): bool
     {
@@ -186,6 +178,4 @@ class PkgImageHotspotItemSpot
 
         return $this;
     }
-
-
 }

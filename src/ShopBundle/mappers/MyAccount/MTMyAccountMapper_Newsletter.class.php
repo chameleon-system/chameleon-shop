@@ -40,7 +40,7 @@ class MTMyAccountMapper_Newsletter extends AbstractViewMapper
         if ($oMyAccountModuleConfig && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oMyAccountModuleConfig->table, $oMyAccountModuleConfig->id);
         }
-        $aTextData = array();
+        $aTextData = [];
         $aTextData['sTitle'] = $oMyAccountModuleConfig->fieldHeadline;
         $aTextData['sText'] = $oMyAccountModuleConfig->GetTextField('intro');
         $oVisitor->SetMappedValue('sActionLink', $oVisitor->GetSourceObject('sActionLink'));

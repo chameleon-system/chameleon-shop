@@ -14,22 +14,22 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
 {
-    const VIEW_PATH = 'pkgImageHotspot/views/db/TPkgImageHotspotItem';
+    public const VIEW_PATH = 'pkgImageHotspot/views/db/TPkgImageHotspotItem';
     /**
      * the URL parameter to fetch an item.
      */
-    const URL_NAME_ITEM_ID = 'pkgImageHotspotItemId';
+    public const URL_NAME_ITEM_ID = 'pkgImageHotspotItemId';
 
     /**
      * render the hotspot image.
      *
-     * @param string $sViewName     - name of the view
-     * @param string $sViewType     - where to look for the view
-     * @param array  $aCallTimeVars - optional parameters to pass to render method
+     * @param string $sViewName - name of the view
+     * @param string $sViewType - where to look for the view
+     * @param array $aCallTimeVars - optional parameters to pass to render method
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 
@@ -52,7 +52,7 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -97,7 +97,7 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
      * if the current item is the first in line, the method will return the last item. returns false if
      * no previous item exists.
      *
-     * @return TdbPkgImageHotspotItem|null|false
+     * @return TdbPkgImageHotspotItem|false|null
      */
     public function GetPreviousItem()
     {
@@ -149,9 +149,9 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
      */
     public function GetLink()
     {
-        return $this->getActivePageService()->getLinkToActivePageRelative(array(
-            TdbPkgImageHotspotItem::GetURLParameterBaseForActiveSpot() => array('id' => $this->id),
-        ));
+        return $this->getActivePageService()->getLinkToActivePageRelative([
+            TdbPkgImageHotspotItem::GetURLParameterBaseForActiveSpot() => ['id' => $this->id],
+        ]);
     }
 
     /**
@@ -163,18 +163,18 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
      *
      * @return string
      */
-    public function GetAjaxLink($sViewName = 'standard', $sType = 'Core', $aParameter = array())
+    public function GetAjaxLink($sViewName = 'standard', $sType = 'Core', $aParameter = [])
     {
         $oGlobal = TGlobal::instance();
         $oRunningModule = $oGlobal->GetExecutingModulePointer();
         $aParameter['id'] = $this->id;
         $aParameter['sViewName'] = $sViewName;
         $aParameter['sType'] = $sType;
-        $aData = array(
+        $aData = [
             TdbPkgImageHotspotItem::GetURLParameterBaseForActiveSpot() => $aParameter,
-            'module_fnc' => array($oRunningModule->sModuleSpotName => 'ExecuteAjaxCall'),
+            'module_fnc' => [$oRunningModule->sModuleSpotName => 'ExecuteAjaxCall'],
             '_fnc' => 'AjaxRenderHotspotImage',
-        );
+        ];
 
         return $this->getActivePageService()->getLinkToActivePageRelative($aData);
     }
@@ -184,6 +184,6 @@ class TPkgImageHotspotItem extends TAdbPkgImageHotspotItem
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

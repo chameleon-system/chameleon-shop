@@ -19,7 +19,6 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateElementInterf
 class StateElementSort implements StateElementInterface
 {
     /**
-     * @var mixed
      * @FIXME This property is private and is never used.
      */
     private $validOptions;

@@ -10,12 +10,11 @@ class ShopVariantType
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopVariantSet|null - Belongs to variant set */
-        private ?ShopVariantSet $shopVariantSet = null
-        ,
+        private ?ShopVariantSet $shopVariantSet = null,
         // TCMSFieldSEOURLTitle
         /** @var string - URL name */
         private string $urlName = '',
@@ -24,8 +23,7 @@ class ShopVariantType
         private int $position = 0,
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Image or icon for variant type (optional) */
-        private ?CmsMedia $cmsMedia = null
-        ,
+        private ?CmsMedia $cmsMedia = null,
         // TCMSFieldOption
         /** @var string - Input type of variant values in the CMS */
         private string $valueSelectType = 'SelectBox',
@@ -34,8 +32,7 @@ class ShopVariantType
         private string $shopVariantTypeValueCmsfieldname = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopVariantTypeValue> - Available variant values */
-        private Collection $shopVariantTypeValueCollection = new ArrayCollection()
-        ,
+        private Collection $shopVariantTypeValueCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -82,7 +79,6 @@ class ShopVariantType
         return $this;
     }
 
-
     // TCMSFieldSEOURLTitle
     public function getUrlName(): string
     {
@@ -95,7 +91,6 @@ class ShopVariantType
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getPosition(): int
@@ -110,7 +105,6 @@ class ShopVariantType
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
     {
@@ -123,7 +117,6 @@ class ShopVariantType
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getValueSelectType(): string
@@ -138,7 +131,6 @@ class ShopVariantType
         return $this;
     }
 
-
     // TCMSFieldTablefieldname
     public function getShopVariantTypeValueCmsfieldname(): string
     {
@@ -151,8 +143,6 @@ class ShopVariantType
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -186,7 +176,6 @@ class ShopVariantType
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -200,7 +189,6 @@ class ShopVariantType
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIdentifier(): string
     {
@@ -213,6 +201,4 @@ class ShopVariantType
 
         return $this;
     }
-
-
 }

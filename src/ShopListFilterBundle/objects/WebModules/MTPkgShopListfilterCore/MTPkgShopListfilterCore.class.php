@@ -23,13 +23,13 @@ class MTPkgShopListfilterCore extends TUserCustomModelBase
     public function __construct()
     {
         parent::__construct();
-        $this->filterApi = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_list_filter.filter_api');
+        $this->filterApi = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_list_filter.filter_api');
     }
 
     public function Init()
     {
         parent::Init();
-        //we need to call this here because function could be load static filter (configured in module config) data to post data
+        // we need to call this here because function could be load static filter (configured in module config) data to post data
         TdbPkgShopListfilter::GetActiveInstance();
     }
 
@@ -81,9 +81,9 @@ class MTPkgShopListfilterCore extends TUserCustomModelBase
         $aTrigger = parent::_GetCacheTableInfos();
 
         if (!is_array($aTrigger)) {
-            $aTrigger = array();
+            $aTrigger = [];
         }
-        $aTrigger[] = array('table' => 'pkg_shop_listfilter', 'id' => null);
+        $aTrigger[] = ['table' => 'pkg_shop_listfilter', 'id' => null];
         $listTrigger = $this->filterApi->getCacheTrigger();
 
         return array_merge($aTrigger, $listTrigger);

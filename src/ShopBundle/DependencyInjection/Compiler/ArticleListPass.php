@@ -19,8 +19,6 @@ class ArticleListPass implements CompilerPassInterface
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
-     * @param ContainerBuilder $container
-     *
      * @api
      *
      * @return void
@@ -40,7 +38,7 @@ class ArticleListPass implements CompilerPassInterface
         $extractorCollection = $container->getDefinition('chameleon_system_shop.state_request_extractor_collection');
         $extractorIds = $container->findTaggedServiceIds('chameleon_system_shop.article_list_module.state_extractor');
         foreach (array_keys($extractorIds) as $extractorId) {
-            $extractorCollection->addMethodCall('registerExtractor', array($container->getDefinition($extractorId)));
+            $extractorCollection->addMethodCall('registerExtractor', [$container->getDefinition($extractorId)]);
         }
     }
 
@@ -52,7 +50,7 @@ class ArticleListPass implements CompilerPassInterface
         $modifierCollection = $container->getDefinition('chameleon_system_shop.result_modifier');
         $modifierIds = $container->findTaggedServiceIds('chameleon_system_shop.article_list_module.result_modification');
         foreach (array_keys($modifierIds) as $modifierId) {
-            $modifierCollection->addMethodCall('addModification', array($container->getDefinition($modifierId)));
+            $modifierCollection->addMethodCall('addModification', [$container->getDefinition($modifierId)]);
         }
     }
 
@@ -64,7 +62,7 @@ class ArticleListPass implements CompilerPassInterface
         $stateFactory = $container->getDefinition('chameleon_system_shop.state_factory.state_factory');
         $stateElementIds = $container->findTaggedServiceIds('chameleon_system_shop.article_list_module.state_element');
         foreach (array_keys($stateElementIds) as $stateElementId) {
-            $stateFactory->addMethodCall('registerStateElement', array($container->getDefinition($stateElementId)));
+            $stateFactory->addMethodCall('registerStateElement', [$container->getDefinition($stateElementId)]);
         }
     }
 }

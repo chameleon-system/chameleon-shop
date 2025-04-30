@@ -6,7 +6,6 @@ use ChameleonSystem\DataAccessBundle\Entity\Core\DataCountry;
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetGroup;
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
 use ChameleonSystem\ShopBundle\Entity\Product\ShopArticle;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -14,7 +13,7 @@ class ShopDiscount
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -32,11 +31,11 @@ class ShopDiscount
         /** @var bool - Active */
         private bool $active = false,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Valid from */
-        private ?DateTime $activeFrom = null,
+        /** @var \DateTime|null - Valid from */
+        private ?\DateTime $activeFrom = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Active until */
-        private ?DateTime $activeTo = null,
+        /** @var \DateTime|null - Active until */
+        private ?\DateTime $activeTo = null,
         // TCMSFieldPosition
         /** @var int - Sorting */
         private int $position = 0,
@@ -54,42 +53,37 @@ class ShopDiscount
         private string $restrictToValueTo = '',
         // TCMSFieldLookupMultiSelectRestriction
         /** @var Collection<int, ShopCategory> - Restrict to following product categories */
-        private Collection $shopCategoryCollection = new ArrayCollection()
-        ,
-// TCMSFieldLookupMultiSelectRestriction
+        private Collection $shopCategoryCollection = new ArrayCollection(),
+        // TCMSFieldLookupMultiSelectRestriction
         /** @var bool - Restrict to following product categories */
         private bool $shopCategoryMltInverseEmpty = false,
         // TCMSFieldLookupMultiSelectRestriction
         /** @var Collection<int, ShopArticle> - Restrict to following products */
-        private Collection $shopArticleCollection = new ArrayCollection()
-        ,
-// TCMSFieldLookupMultiSelectRestriction
+        private Collection $shopArticleCollection = new ArrayCollection(),
+        // TCMSFieldLookupMultiSelectRestriction
         /** @var bool - Restrict to following products */
         private bool $shopArticleMltInverseEmpty = false,
         // TCMSFieldLookupMultiSelectRestriction
         /** @var Collection<int, DataExtranetGroup> - Restrict to following customer groups */
-        private Collection $dataExtranetGroupCollection = new ArrayCollection()
-        ,
-// TCMSFieldLookupMultiSelectRestriction
+        private Collection $dataExtranetGroupCollection = new ArrayCollection(),
+        // TCMSFieldLookupMultiSelectRestriction
         /** @var bool - Restrict to following customer groups */
         private bool $dataExtranetGroupMltInverseEmpty = false,
         // TCMSFieldLookupMultiSelectRestriction
         /** @var Collection<int, DataExtranetUser> - Restrict to following customers */
-        private Collection $dataExtranetUserCollection = new ArrayCollection()
-        ,
-// TCMSFieldLookupMultiSelectRestriction
+        private Collection $dataExtranetUserCollection = new ArrayCollection(),
+        // TCMSFieldLookupMultiSelectRestriction
         /** @var bool - Restrict to following customers */
         private bool $dataExtranetUserMltInverseEmpty = false,
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, DataCountry> - Restrict to following shipping countries */
-        private Collection $dataCountryCollection = new ArrayCollection()
-        ,
+        private Collection $dataCountryCollection = new ArrayCollection(),
         // TCMSFieldWYSIWYG
         /** @var string - Description */
         private string $description = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - When has the cache of the affected products been cleared the last time? */
-        private ?DateTime $cacheClearLastExecuted = null
+        /** @var \DateTime|null - When has the cache of the affected products been cleared the last time? */
+        private ?\DateTime $cacheClearLastExecuted = null
     ) {
     }
 
@@ -130,7 +124,6 @@ class ShopDiscount
         return $this;
     }
 
-
     // TCMSFieldPrice
     public function getValue(): string
     {
@@ -143,7 +136,6 @@ class ShopDiscount
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getValueType(): string
@@ -158,7 +150,6 @@ class ShopDiscount
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowDiscountOnArticleDetailpage(): bool
     {
@@ -171,7 +162,6 @@ class ShopDiscount
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isActive(): bool
@@ -186,34 +176,31 @@ class ShopDiscount
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getActiveFrom(): ?DateTime
+    public function getActiveFrom(): ?\DateTime
     {
         return $this->activeFrom;
     }
 
-    public function setActiveFrom(?DateTime $activeFrom): self
+    public function setActiveFrom(?\DateTime $activeFrom): self
     {
         $this->activeFrom = $activeFrom;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getActiveTo(): ?DateTime
+    public function getActiveTo(): ?\DateTime
     {
         return $this->activeTo;
     }
 
-    public function setActiveTo(?DateTime $activeTo): self
+    public function setActiveTo(?\DateTime $activeTo): self
     {
         $this->activeTo = $activeTo;
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getPosition(): int
@@ -228,7 +215,6 @@ class ShopDiscount
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getRestrictToArticlesFrom(): int
     {
@@ -241,7 +227,6 @@ class ShopDiscount
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getRestrictToArticlesTo(): int
@@ -256,7 +241,6 @@ class ShopDiscount
         return $this;
     }
 
-
     // TCMSFieldPrice
     public function getRestrictToValueFrom(): string
     {
@@ -270,7 +254,6 @@ class ShopDiscount
         return $this;
     }
 
-
     // TCMSFieldPrice
     public function getRestrictToValueTo(): string
     {
@@ -283,8 +266,6 @@ class ShopDiscount
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiSelectRestriction
 
@@ -318,7 +299,7 @@ class ShopDiscount
         return $this;
     }
 
-// TCMSFieldLookupMultiSelectRestriction
+    // TCMSFieldLookupMultiSelectRestriction
     public function isShopCategoryMltInverseEmpty(): bool
     {
         return $this->shopCategoryMltInverseEmpty;
@@ -330,8 +311,6 @@ class ShopDiscount
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiSelectRestriction
 
@@ -365,7 +344,7 @@ class ShopDiscount
         return $this;
     }
 
-// TCMSFieldLookupMultiSelectRestriction
+    // TCMSFieldLookupMultiSelectRestriction
     public function isShopArticleMltInverseEmpty(): bool
     {
         return $this->shopArticleMltInverseEmpty;
@@ -377,8 +356,6 @@ class ShopDiscount
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiSelectRestriction
 
@@ -412,7 +389,7 @@ class ShopDiscount
         return $this;
     }
 
-// TCMSFieldLookupMultiSelectRestriction
+    // TCMSFieldLookupMultiSelectRestriction
     public function isDataExtranetGroupMltInverseEmpty(): bool
     {
         return $this->dataExtranetGroupMltInverseEmpty;
@@ -424,8 +401,6 @@ class ShopDiscount
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiSelectRestriction
 
@@ -459,7 +434,7 @@ class ShopDiscount
         return $this;
     }
 
-// TCMSFieldLookupMultiSelectRestriction
+    // TCMSFieldLookupMultiSelectRestriction
     public function isDataExtranetUserMltInverseEmpty(): bool
     {
         return $this->dataExtranetUserMltInverseEmpty;
@@ -471,8 +446,6 @@ class ShopDiscount
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -506,7 +479,6 @@ class ShopDiscount
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -520,19 +492,16 @@ class ShopDiscount
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getCacheClearLastExecuted(): ?DateTime
+    public function getCacheClearLastExecuted(): ?\DateTime
     {
         return $this->cacheClearLastExecuted;
     }
 
-    public function setCacheClearLastExecuted(?DateTime $cacheClearLastExecuted): self
+    public function setCacheClearLastExecuted(?\DateTime $cacheClearLastExecuted): self
     {
         $this->cacheClearLastExecuted = $cacheClearLastExecuted;
 
         return $this;
     }
-
-
 }

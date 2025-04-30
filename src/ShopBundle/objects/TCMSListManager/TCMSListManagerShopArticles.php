@@ -13,10 +13,8 @@ namespace ChameleonSystem\ShopBundle\objects\TCMSListManager;
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use Doctrine\DBAL\Connection;
-use TCMSListManagerFullGroupTable;
-use ViewRenderer;
 
-class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
+class TCMSListManagerShopArticles extends \TCMSListManagerFullGroupTable
 {
     /**
      * {@inheritdoc}
@@ -63,7 +61,7 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
      */
     private function getFilterFieldArticleType($filterArticleType)
     {
-        $oViewRenderer = new ViewRenderer();
+        $oViewRenderer = new \ViewRenderer();
         $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm submitOnSelect');
         $oViewRenderer->AddSourceObject('sName', 'filterArticleType');
         $oViewRenderer->AddSourceObject('sValue', '0');
@@ -71,10 +69,10 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
         $oViewRenderer->AddSourceObject('sValue', '1');
         $oViewRenderer->AddSourceObject('autoWidth', true);
 
-        $aValueList = array();
-        $aValueList[] = array('sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_type_all'), 'sValue' => 'all');
-        $aValueList[] = array('sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_type_main'), 'sValue' => 'parents');
-        $aValueList[] = array('sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_type_variants'), 'sValue' => 'variants');
+        $aValueList = [];
+        $aValueList[] = ['sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_type_all'), 'sValue' => 'all'];
+        $aValueList[] = ['sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_type_main'), 'sValue' => 'parents'];
+        $aValueList[] = ['sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_type_variants'), 'sValue' => 'variants'];
 
         $oViewRenderer->AddSourceObject('aValueList', $aValueList);
         $oViewRenderer->AddSourceObject('sValue', $filterArticleType);
@@ -89,17 +87,17 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
      */
     private function getFilterFieldActive($isActive)
     {
-        $oViewRenderer = new ViewRenderer();
+        $oViewRenderer = new \ViewRenderer();
         $oViewRenderer->AddSourceObject('sInputClass', 'form-control input-sm submitOnSelect');
         $oViewRenderer->AddSourceObject('sName', 'is_active');
         $oViewRenderer->AddSourceObject('sLabelText', $this->getTranslation('chameleon_system_shop.list_manager_article.filter_active_label'));
         $oViewRenderer->AddSourceObject('sValue', $isActive);
         $oViewRenderer->AddSourceObject('autoWidth', true);
 
-        $aValueList = array();
-        $aValueList[] = array('sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_active_all'), 'sValue' => 'all');
-        $aValueList[] = array('sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_active_only_active'), 'sValue' => '1');
-        $aValueList[] = array('sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_active_only_inactive'), 'sValue' => '0');
+        $aValueList = [];
+        $aValueList[] = ['sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_active_all'), 'sValue' => 'all'];
+        $aValueList[] = ['sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_active_only_active'), 'sValue' => '1'];
+        $aValueList[] = ['sName' => $this->getTranslation('chameleon_system_shop.list_manager_article.filter_active_only_inactive'), 'sValue' => '0'];
 
         $oViewRenderer->AddSourceObject('aValueList', $aValueList);
 
@@ -149,9 +147,10 @@ class TCMSListManagerShopArticles extends TCMSListManagerFullGroupTable
     /**
      * @param string $id
      * @param array<string, string> $data
+     *
      * @return \Symfony\Component\Translation\IdentityTranslator
      */
-    protected function getTranslation($id, $data = array())
+    protected function getTranslation($id, $data = [])
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans($id, $data, TranslationConstants::DOMAIN_BACKEND);
     }

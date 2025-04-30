@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\ShopPaymentTransactionBundle\Entity;
 
-
 class PkgShopPaymentTransactionType
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -55,7 +54,6 @@ class PkgShopPaymentTransactionType
         return $this;
     }
 
-
     // TCMSFieldVarcharUnique
     public function getSystemName(): string
     {
@@ -68,6 +66,4 @@ class PkgShopPaymentTransactionType
 
         return $this;
     }
-
-
 }

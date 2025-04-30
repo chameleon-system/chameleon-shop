@@ -37,10 +37,10 @@ class TPkgShopMapper_ArticleAddedToBasket extends AbstractPkgShopMapper_Article
             $oCacheTriggerManager->addTrigger($oShop->table, $oShop->id);
         }
 
-        $aArticle = array();
+        $aArticle = [];
         $aArticle['sArticleDetailURL'] = $oArticle->getLink();
 
-        //basket-rightbox
+        // basket-rightbox
         $oImage = $oArticle->GetImagePreviewObject('basket');
         if (null !== $oImage) {
             $aArticle['sImageId'] = $oImage->fieldCmsMediaId;
@@ -72,7 +72,7 @@ class TPkgShopMapper_ArticleAddedToBasket extends AbstractPkgShopMapper_Article
             $aArticle['sRetailPrice'] = $oLocal->FormatNumber($oArticle->fieldPriceReference, 2);
         }
 
-        $aArticle['sShippingLink'] = $oShop->GetLinkToSystemPageAsPopUp(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.link.shipping_link'), 'shipping');
+        $aArticle['sShippingLink'] = $oShop->GetLinkToSystemPageAsPopUp(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.link.shipping_link'), 'shipping');
 
         $oVisitor->SetMappedValue('aArticle', $aArticle);
 

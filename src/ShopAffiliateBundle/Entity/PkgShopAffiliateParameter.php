@@ -6,12 +6,11 @@ class PkgShopAffiliateParameter
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var PkgShopAffiliate|null - Belongs to affiliate program */
-        private ?PkgShopAffiliate $pkgShopAffiliate = null
-        ,
+        private ?PkgShopAffiliate $pkgShopAffiliate = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -58,7 +57,6 @@ class PkgShopAffiliateParameter
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -72,7 +70,6 @@ class PkgShopAffiliateParameter
         return $this;
     }
 
-
     // TCMSFieldText
     public function getValue(): string
     {
@@ -85,6 +82,4 @@ class PkgShopAffiliateParameter
 
         return $this;
     }
-
-
 }

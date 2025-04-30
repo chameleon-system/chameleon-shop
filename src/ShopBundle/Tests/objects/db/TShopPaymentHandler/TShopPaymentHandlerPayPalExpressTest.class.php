@@ -18,50 +18,50 @@ class TShopPaymentHandlerPayPalExpressTest extends TestCase
     /**
      * @test
      */
-    public function it_switches_zip_and_city_when_city_is_numeric_and_zip_is_not()
+    public function itSwitchesZipAndCityWhenCityIsNumericAndZipIsNot()
     {
-        $testCases = array(
-            array(
-                'adr' => array(
+        $testCases = [
+            [
+                'adr' => [
                     'postalcode' => 'Freiburg',
                     'city' => '79098',
-                ),
-                'expectedAdr' => array(
+                ],
+                'expectedAdr' => [
                     'postalcode' => '79098',
                     'city' => 'Freiburg',
-                ),
-            ),
-            array(
-                'adr' => array(
+                ],
+            ],
+            [
+                'adr' => [
                     'postalcode' => 'Freiburg',
                     'city' => ' 79098',
-                ),
-                'expectedAdr' => array(
+                ],
+                'expectedAdr' => [
                     'postalcode' => '79098',
                     'city' => 'Freiburg',
-                ),
-            ),
-            array(
-                'adr' => array(
+                ],
+            ],
+            [
+                'adr' => [
                     'postalcode' => 'Freiburg',
                     'city' => '079098',
-                ),
-                'expectedAdr' => array(
+                ],
+                'expectedAdr' => [
                     'postalcode' => '079098',
                     'city' => 'Freiburg',
-                ),
-            ),
-            array(
-                'adr' => array(
+                ],
+            ],
+            [
+                'adr' => [
                     'postalcode' => '123 Freiburg',
                     'city' => '79098',
-                ),
-                'expectedAdr' => array(
+                ],
+                'expectedAdr' => [
                     'postalcode' => '79098',
                     'city' => '123 Freiburg',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $reflectionMethod = new \ReflectionMethod('TShopPaymentHandlerPayPalExpress', 'postProcessBillingAndShippingAddress');
         $reflectionMethod->setAccessible(true);
@@ -70,7 +70,7 @@ class TShopPaymentHandlerPayPalExpressTest extends TestCase
         foreach ($testCases as $testCase) {
             $adrBilling = $testCase['adr'];
             $adrShipping = $testCase['adr'];
-            $reflectionMethod->invokeArgs($object, array($adrBilling, $adrShipping));
+            $reflectionMethod->invokeArgs($object, [$adrBilling, $adrShipping]);
             $this->assertEquals($testCase['expectedAdr'], $adrBilling, 'billing does not match');
             $this->assertEquals($testCase['expectedAdr'], $adrShipping, 'shipping does not match');
         }
@@ -79,50 +79,50 @@ class TShopPaymentHandlerPayPalExpressTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_switches_zip_and_city_when_zip_is_numeric_and_city_is_not()
+    public function itDoesNotSwitchesZipAndCityWhenZipIsNumericAndCityIsNot()
     {
-        $testCases = array(
-            array(
-                'adr' => array(
+        $testCases = [
+            [
+                'adr' => [
                     'postalcode' => '79098',
                     'city' => 'Freiburg',
-                ),
-                'expectedAdr' => array(
+                ],
+                'expectedAdr' => [
                     'postalcode' => '79098',
                     'city' => 'Freiburg',
-                ),
-            ),
-            array(
-                'adr' => array(
+                ],
+            ],
+            [
+                'adr' => [
                     'postalcode' => ' 79098',
                     'city' => 'Freiburg',
-                ),
-                'expectedAdr' => array(
+                ],
+                'expectedAdr' => [
                     'postalcode' => '79098',
                     'city' => 'Freiburg',
-                ),
-            ),
-            array(
-                'adr' => array(
+                ],
+            ],
+            [
+                'adr' => [
                     'postalcode' => '079098',
                     'city' => 'Freiburg',
-                ),
-                'expectedAdr' => array(
+                ],
+                'expectedAdr' => [
                     'postalcode' => '079098',
                     'city' => 'Freiburg',
-                ),
-            ),
-            array(
-                'adr' => array(
+                ],
+            ],
+            [
+                'adr' => [
                     'postalcode' => '79098',
                     'city' => '123 Freiburg',
-                ),
-                'expectedAdr' => array(
+                ],
+                'expectedAdr' => [
                     'postalcode' => '79098',
                     'city' => '123 Freiburg',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $reflectionMethod = new \ReflectionMethod('TShopPaymentHandlerPayPalExpress', 'postProcessBillingAndShippingAddress');
         $reflectionMethod->setAccessible(true);
@@ -131,7 +131,7 @@ class TShopPaymentHandlerPayPalExpressTest extends TestCase
         foreach ($testCases as $testCase) {
             $adrBilling = $testCase['adr'];
             $adrShipping = $testCase['adr'];
-            $reflectionMethod->invokeArgs($object, array($adrBilling, $adrShipping));
+            $reflectionMethod->invokeArgs($object, [$adrBilling, $adrShipping]);
             $this->assertEquals($testCase['expectedAdr'], $adrBilling, 'billing does not match');
             $this->assertEquals($testCase['expectedAdr'], $adrShipping, 'shipping does not match');
         }
@@ -140,20 +140,20 @@ class TShopPaymentHandlerPayPalExpressTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_switch_zip_and_city_when_both_are_numeric()
+    public function itDoesNotSwitchZipAndCityWhenBothAreNumeric()
     {
-        $testCases = array(
-            array(
-                'adr' => array(
+        $testCases = [
+            [
+                'adr' => [
                     'postalcode' => '79098',
                     'city' => '24234345',
-                ),
-                'expectedAdr' => array(
+                ],
+                'expectedAdr' => [
                     'postalcode' => '79098',
                     'city' => '24234345',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $reflectionMethod = new \ReflectionMethod('TShopPaymentHandlerPayPalExpress', 'postProcessBillingAndShippingAddress');
         $reflectionMethod->setAccessible(true);
@@ -162,7 +162,7 @@ class TShopPaymentHandlerPayPalExpressTest extends TestCase
         foreach ($testCases as $testCase) {
             $adrBilling = $testCase['adr'];
             $adrShipping = $testCase['adr'];
-            $reflectionMethod->invokeArgs($object, array($adrBilling, $adrShipping));
+            $reflectionMethod->invokeArgs($object, [$adrBilling, $adrShipping]);
             $this->assertEquals($testCase['expectedAdr'], $adrBilling, 'billing does not match');
             $this->assertEquals($testCase['expectedAdr'], $adrShipping, 'shipping does not match');
         }

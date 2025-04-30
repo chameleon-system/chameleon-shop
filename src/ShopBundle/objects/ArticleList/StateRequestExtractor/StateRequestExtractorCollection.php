@@ -11,8 +11,7 @@
 
 namespace ChameleonSystem\ShopBundle\objects\ArticleList\StateRequestExtractor;
 
-use
-    ChameleonSystem\ShopBundle\objects\ArticleList\StateRequestExtractor\Interfaces\StateRequestExtractorCollectionInterface;
+use ChameleonSystem\ShopBundle\objects\ArticleList\StateRequestExtractor\Interfaces\StateRequestExtractorCollectionInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\StateRequestExtractor\Interfaces\StateRequestExtractorInterface;
 
 class StateRequestExtractorCollection implements StateRequestExtractorCollectionInterface
@@ -20,18 +19,16 @@ class StateRequestExtractorCollection implements StateRequestExtractorCollection
     /**
      * @var StateRequestExtractorInterface[]
      */
-    private $extractorList = array();
+    private $extractorList = [];
 
     /**
-     * @param array $configuration
-     * @param array $requestData
      * @param string $listSpotName
      *
      * @return array
      */
     public function extract(array $configuration, array $requestData, $listSpotName)
     {
-        $data = isset($requestData[$listSpotName]) ? $requestData[$listSpotName] : array();
+        $data = isset($requestData[$listSpotName]) ? $requestData[$listSpotName] : [];
         foreach ($this->extractorList as $extractor) {
             $data = array_merge_recursive($data, $extractor->extract($configuration, $requestData, $listSpotName));
         }

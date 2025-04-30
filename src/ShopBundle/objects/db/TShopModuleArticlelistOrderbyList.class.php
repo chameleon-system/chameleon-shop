@@ -13,13 +13,13 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 class TShopModuleArticlelistOrderbyList extends TShopModuleArticlelistOrderbyListAutoParent
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopModuleArticlelistOrderbyList';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopModuleArticlelistOrderbyList';
 
     /**
      * return list for a set of ids.
      *
      * @param array $aIdList
-     * @param int   $iLanguageId
+     * @param int $iLanguageId
      *
      * @return TdbShopModuleArticlelistOrderbyList
      */
@@ -37,14 +37,14 @@ class TShopModuleArticlelistOrderbyList extends TShopModuleArticlelistOrderbyLis
      * @param string $iActiveId
      * @param string $sFormName
      * @param string $sFieldName
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      * @param bool $bAllowCache
      *
      * @return string
      */
-    public function Render($iActiveId, $sFormName, $sFieldName, $sViewName = 'changeorder', $sViewType = 'Core', $aCallTimeVars = array(), $bAllowCache = true)
+    public function Render($iActiveId, $sFormName, $sFieldName, $sViewName = 'changeorder', $sViewType = 'Core', $aCallTimeVars = [], $bAllowCache = true)
     {
         $oView = new TViewParser();
         $oView->AddVar('oList', $this);
@@ -57,7 +57,7 @@ class TShopModuleArticlelistOrderbyList extends TShopModuleArticlelistOrderbyLis
         $oView->AddVarArray($aOtherParameters);
         $sHTML = $oView->RenderObjectPackageView($sViewName, self::VIEW_PATH, $sViewType);
 
-        $sActivePageUrl = $this->getActivePageService()->getLinkToActivePageRelative(array(), array('module_fnc', 'listkey', 'listrequest', 'listpage'));
+        $sActivePageUrl = $this->getActivePageService()->getLinkToActivePageRelative([], ['module_fnc', 'listkey', 'listrequest', 'listpage']);
         $stringReplacer = new TPkgCmsStringUtilities_VariableInjection();
 
         return $stringReplacer->replace($sHTML, ['sActivePageUrl' => $sActivePageUrl]);
@@ -74,7 +74,7 @@ class TShopModuleArticlelistOrderbyList extends TShopModuleArticlelistOrderbyLis
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -82,6 +82,6 @@ class TShopModuleArticlelistOrderbyList extends TShopModuleArticlelistOrderbyLis
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

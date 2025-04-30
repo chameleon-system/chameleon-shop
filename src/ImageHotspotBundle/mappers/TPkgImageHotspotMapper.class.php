@@ -20,8 +20,6 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
      * $oRequirements->NeedsSourceObject("foo",'stdClass','default-value');
      * $oRequirements->NeedsSourceObject("bar");
      * $oRequirements->NeedsMappedValue("baz");
-     *
-     * @param IMapperRequirementsRestricted $oRequirements
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
@@ -46,9 +44,7 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
@@ -96,7 +92,7 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
             }
         }
         $oItemList = $oPkgImageHotspot->GetFieldPkgImageHotspotItemList();
-        $aNavi = array();
+        $aNavi = [];
         while ($oItem = $oItemList->Next()) {
             if (true === $oItem->fieldActive) {
                 if ($bCachingEnabled) {
@@ -109,7 +105,7 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
 
         // get overlay images
         $oLayoverList = $oActiveItem->GetFieldPkgImageHotspotItemMarkerList();
-        $aImageLayoverList = array();
+        $aImageLayoverList = [];
         /**
          * @var $oLayover TdbPkgImageHotspotItemMarker
          */
@@ -147,7 +143,7 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
                         $sLayoverContent = $this->renderObject($oTargetObject, $aRenderObjectConfig);
                     }
 
-                    $aImageLayoverList[] = array(
+                    $aImageLayoverList[] = [
                         'id' => $oLayover->id,
                         'iLeft' => $oLayover->fieldLeft,
                         'iTop' => $oLayover->fieldTop,
@@ -157,14 +153,14 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
                         'sTitle' => $oLayover->fieldName,
                         'sImageURL' => $sImageURL,
                         'sHoverImageURL' => $sHoverImageURL,
-                    );
+                    ];
                 }
             }
         }
         $oVisitor->SetMappedValue('aImageLayoverList', $aImageLayoverList);
 
         // now get spots
-        $aMarkerList = array();
+        $aMarkerList = [];
         $oMarkerList = $oActiveItem->GetFieldPkgImageHotspotItemSpotList();
         while ($oMarker = $oMarkerList->Next()) {
             if ($bCachingEnabled) {
@@ -197,7 +193,7 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
                 if ($oLinkedRecord) {
                     $sMarkerName = $oLinkedRecord->GetName();
                 } else {
-                    $sMarkerName = str_replace(array('http://', 'https://'), '', $sTargetURL);
+                    $sMarkerName = str_replace(['http://', 'https://'], '', $sTargetURL);
                 }
 
                 $sLayoverContent = '';
@@ -205,7 +201,7 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
                     $sLayoverContent = $this->renderObject($oTargetObject, $aRenderObjectConfig);
                 }
 
-                $aMarkerList[] = array(
+                $aMarkerList[] = [
                     'id' => $oMarker->id,
                     'iLeft' => $oMarker->fieldLeft,
                     'iTop' => $oMarker->fieldTop,
@@ -214,7 +210,7 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
                     'sDirection' => $sMarkerDirection,
                     'sLinkText' => $sMarkerName,
                     'imageMap' => $oMarker->fieldPolygonArea,
-                );
+                ];
             }
         }
         $oVisitor->SetMappedValue('aMarkerList', $aMarkerList);
@@ -237,7 +233,7 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
 
         $aMapper = $aRenderObjectConfig[$sClassName]['mapper'];
         if (false === is_array($aMapper)) {
-            $aMapper = array($aMapper);
+            $aMapper = [$aMapper];
         }
         $sSnippet = $aRenderObjectConfig[$sClassName]['snippet'];
         $oViewRenderer = new ViewRenderer();
@@ -253,20 +249,19 @@ class TPkgImageHotspotMapper extends AbstractViewMapper
     }
 
     /**
-     * @param TdbPkgImageHotspotItem $oItem
-     * @param string                 $sMapperConfig
-     * @param bool                   $bIsActive
+     * @param string $sMapperConfig
+     * @param bool $bIsActive
      *
      * @return array
      */
     protected function getNaviFromItem(TdbPkgImageHotspotItem $oItem, $sMapperConfig, $bIsActive = false)
     {
-        return array(
+        return [
             'sTitle' => $oItem->fieldName,
             'sLink' => $oItem->GetLink(),
-            'sLinkJS' => $oItem->GetAjaxLink(null, null, array('sMapperConfig' => $sMapperConfig)),
+            'sLinkJS' => $oItem->GetAjaxLink(null, null, ['sMapperConfig' => $sMapperConfig]),
             'bIsActive' => $bIsActive,
             'sItemId' => $oItem->id,
-        );
+        ];
     }
 }

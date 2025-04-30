@@ -19,14 +19,14 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
     /**
      * @var float|null
      */
-    protected $dPrice = null;
+    protected $dPrice;
 
     /**
      * @return ShopShippingTypeDataAccessInterface
      */
     private static function getShippingTypeDataAccess()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_shipping_type_data_access');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_shipping_type_data_access');
     }
 
     /**
@@ -34,7 +34,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
      */
     private static function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 
     /**
@@ -42,7 +42,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
      */
     private static function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 
     /**
@@ -73,7 +73,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
         }
         $rows = $shippingTypeDataAccess->getAvailableShippingTypes($iGroupId, $sActiveShippingCountryId, $shopService->getActiveBasket());
 
-        $idList = array();
+        $idList = [];
         $oBasket = TShopBasket::GetInstance();
         $oBasket->ResetAllShippingMarkers(); // once we are done, we want to clear the marker again
         foreach ($rows as $row) {
@@ -85,7 +85,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
 
         $query = 'SELECT * FROM `shop_shipping_type` WHERE `id` IN (:idList) ORDER BY `position`';
         $oList = new TdbShopShippingTypeList();
-        $oList->Load($query, array('idList' => $idList), array('idList' => Connection::PARAM_STR_ARRAY));
+        $oList->Load($query, ['idList' => $idList], ['idList' => Connection::PARAM_STR_ARRAY]);
         $oList->bAllowItemCache = true;
 
         $oList->RemoveInvalidItems();
@@ -103,7 +103,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
     public static function GetPublicShippingTypes($iGroupId)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedGroupId = $connection->quote($iGroupId);
         $query = "
@@ -128,7 +128,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
     public function RemoveInvalidItems()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
         $allIds = [];
@@ -144,6 +144,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
 
         if (count($allIds) === count($validIds)) {
             $this->GoToStart();
+
             return;
         }
 
@@ -152,7 +153,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
              WHERE ';
 
         if (count($validIds) > 0) {
-            $query .= ' `shop_shipping_type`.`id` IN (' . implode(',', $validIds) . ') ';
+            $query .= ' `shop_shipping_type`.`id` IN ('.implode(',', $validIds).') ';
         } else {
             $query .= ' 1 = 0 ';
         }
@@ -169,7 +170,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
     public function RemoveRestrictedItems()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
         $validIds = [];
@@ -185,7 +186,7 @@ class TShopShippingTypeList extends TShopShippingTypeListAutoParent
              WHERE ';
 
         if (count($validIds) > 0) {
-            $query .= ' `shop_shipping_type`.`id` IN (' . implode(',', $validIds) . ') ';
+            $query .= ' `shop_shipping_type`.`id` IN ('.implode(',', $validIds).') ';
         } else {
             $query .= ' 1 = 0 ';
         }

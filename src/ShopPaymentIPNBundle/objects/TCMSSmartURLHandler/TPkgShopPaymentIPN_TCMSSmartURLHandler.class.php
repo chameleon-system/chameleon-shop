@@ -28,7 +28,7 @@ class TPkgShopPaymentIPN_TCMSSmartURLHandler extends TCMSSmartURLHandler
 
         $clientIp = $this->getCurrentRequest()->getClientIp();
 
-        $aData = array(
+        $aData = [
             'datecreated' => date('Y-m-d H:i:s'),
             'payload' => $aRawData,
             'success' => '0',
@@ -36,7 +36,7 @@ class TPkgShopPaymentIPN_TCMSSmartURLHandler extends TCMSSmartURLHandler
             'ip' => $clientIp,
             'request_url' => $oURLData->sOriginalURL,
             'cms_portal_id' => $oURLData->iPortalId,
-        );
+        ];
         $oMessage = TdbPkgShopPaymentIpnMessage::GetNewInstance($aData);
         $oMessage->Save();
 
@@ -51,27 +51,27 @@ class TPkgShopPaymentIPN_TCMSSmartURLHandler extends TCMSSmartURLHandler
                 throw new TPkgShopPaymentIPNException_InvalidStatus($oRequest, 'IPN Request has no status or the status passed is not understood by the payment handler');
             }
 
-            $oMessage->SaveFieldsFast(array('pkg_shop_payment_ipn_status_id' => $oStatus->id));
+            $oMessage->SaveFieldsFast(['pkg_shop_payment_ipn_status_id' => $oStatus->id]);
 
             $oRequest->getPaymentHandlerGroup()->validateIPNRequestData($oRequest);
 
             $oRequest->getPaymentHandlerGroup()->handleIPN($oRequest);
 
-            $oMessage->SaveFieldsFast(array('success' => '1', 'completed' => '1'));
+            $oMessage->SaveFieldsFast(['success' => '1', 'completed' => '1']);
         } catch (TPkgShopPaymentIPNException_RequestError $e) {
             // something went wrong - add to message
 
-            $aData = array(
+            $aData = [
                 'success' => '0',
                 'completed' => '1',
                 'errors' => (string) $e,
                 'error_type' => $e->getErrorType(),
-            );
+            ];
             $oMessage->SaveFieldsFast($aData);
             header($e->getResponseHeader());
         }
 
-        exit();
+        exit;
     }
 
     /**
@@ -79,6 +79,6 @@ class TPkgShopPaymentIPN_TCMSSmartURLHandler extends TCMSSmartURLHandler
      */
     private function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 }

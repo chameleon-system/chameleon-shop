@@ -66,15 +66,13 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
     }
 
     /**
-     * @param TdbShopOrder                   $oOrder
-     * @param \IMapperCacheTriggerRestricted $oCacheTriggerManager
      * @param bool $bCachingEnabled
      *
      * @return array{sName: string, dValue: int, sValue: string}[]
      */
     protected function getDiscounts(TdbShopOrder $oOrder, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aDiscountList = array();
+        $aDiscountList = [];
 
         $oDiscountList = $oOrder->GetFieldShopOrderDiscountList();
         $oDiscountList->GoToStart();
@@ -83,7 +81,7 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
                 if ($bCachingEnabled) {
                     $oCacheTriggerManager->addTrigger($oDiscount->table, $oDiscount->id);
                 }
-                $aDiscount = array('sName' => $oDiscount->fieldName, 'dValue' => $oDiscount->fieldTotal, 'sValue' => TCMSLocal::GetActive()->FormatNumber($oDiscount->fieldTotal, 2));
+                $aDiscount = ['sName' => $oDiscount->fieldName, 'dValue' => $oDiscount->fieldTotal, 'sValue' => TCMSLocal::GetActive()->FormatNumber($oDiscount->fieldTotal, 2)];
                 $aDiscountList[] = $aDiscount;
             }
             $oDiscountList->GoToStart();
@@ -93,15 +91,13 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
     }
 
     /**
-     * @param TdbShopOrder                  $oOrder
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
      * @param bool $bCachingEnabled
      *
      * @return array{sName: string, iPercent: int, sPercent: string, dValue: float, sValue: string}[]
      */
     protected function getVatList(TdbShopOrder $oOrder, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aVat = array();
+        $aVat = [];
 
         $oVatList = $oOrder->GetFieldShopOrderVatList();
         $oVatList->GoToStart();
@@ -114,7 +110,7 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
                 if ($bCachingEnabled) {
                     $oCacheTriggerManager->addTrigger($oVat->table, $oVat->id);
                 }
-                $aVatTmp = array('sName' => $oVat->fieldName, 'iPercent' => $oVat->fieldVatPercent, 'sPercent' => $oVat->fieldVatPercentFormated, 'dValue' => $dVatValue, 'sValue' => TCMSLocal::GetActive()->FormatNumber($dVatValue, 2));
+                $aVatTmp = ['sName' => $oVat->fieldName, 'iPercent' => $oVat->fieldVatPercent, 'sPercent' => $oVat->fieldVatPercentFormated, 'dValue' => $dVatValue, 'sValue' => TCMSLocal::GetActive()->FormatNumber($dVatValue, 2)];
                 $aVat[] = $aVatTmp;
             }
             $oVatList->GoToStart();
@@ -124,16 +120,14 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
     }
 
     /**
-     * @param TdbShopOrder $oOrder
      * @param bool $bSponsored
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
      * @param bool $bCachingEnabled
      *
      * @return array[]
      */
     protected function getVoucherList(TdbShopOrder $oOrder, $bSponsored, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aVoucherList = array();
+        $aVoucherList = [];
 
         // get vouchers
         $oVoucherUseList = $oOrder->GetFieldShopVoucherUseList();
@@ -158,6 +152,7 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
                 } else {
                     /**
                      * @psalm-suppress TooFewArguments
+                     *
                      * @FIXME `$bCachingEnabled` should be passed as a parameter here
                      */
                     $aVoucher = $this->getDataFromVoucher($oVoucherUse, null, $oCacheTriggerManager);
@@ -171,23 +166,20 @@ class TPkgShopMapper_OrderArticleListSummary extends AbstractViewMapper
     }
 
     /**
-     * @param TdbShopVoucherUse             $oVoucherUse
-     * @param TdbShopVoucher|null           $oVoucher
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
      * @param bool $bCachingEnabled
      *
      * @return array<string, mixed>
      */
     protected function getDataFromVoucher(TdbShopVoucherUse $oVoucherUse, ?TdbShopVoucher $oVoucher, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aVoucher = array(
+        $aVoucher = [
             'sCode' => '',
             'sName' => '',
             'dValue' => $oVoucherUse->fieldValueUsed,
             'dValueInOrderCurrency' => $oVoucherUse->fieldValueUsedInOrderCurrency,
             'sValue' => TCMSLocal::GetActive()->FormatNumber($oVoucherUse->fieldValueUsed, 2),
             'sValueInOrderCurrency' => TCMSLocal::GetActive()->FormatNumber($oVoucherUse->fieldValueUsedInOrderCurrency, 2),
-            'sRemoveFromBasketLink' => '#', );
+            'sRemoveFromBasketLink' => '#', ];
 
         if (null !== $oVoucher) {
             $aVoucher['sCode'] = $oVoucher->fieldCode;

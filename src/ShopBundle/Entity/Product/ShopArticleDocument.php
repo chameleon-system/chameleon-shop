@@ -8,20 +8,17 @@ class ShopArticleDocument
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopArticle|null - Belongs to article */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldLookup
         /** @var ShopArticleDocumentType|null - Article document type */
-        private ?ShopArticleDocumentType $shopArticleDocumentType = null
-        ,
+        private ?ShopArticleDocumentType $shopArticleDocumentType = null,
         // TCMSFieldExtendedLookup
         /** @var CmsDocument|null - Document */
-        private ?CmsDocument $cmsDocument = null
-        ,
+        private ?CmsDocument $cmsDocument = null,
         // TCMSFieldPosition
         /** @var int - Position */
         private int $position = 0
@@ -65,7 +62,6 @@ class ShopArticleDocument
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopArticleDocumentType(): ?ShopArticleDocumentType
     {
@@ -78,7 +74,6 @@ class ShopArticleDocument
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getCmsDocument(): ?CmsDocument
@@ -93,7 +88,6 @@ class ShopArticleDocument
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -106,6 +100,4 @@ class ShopArticleDocument
 
         return $this;
     }
-
-
 }

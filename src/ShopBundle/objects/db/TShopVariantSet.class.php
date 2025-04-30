@@ -20,7 +20,7 @@ class TShopVariantSet extends TAdbShopVariantSet
     {
         $aFieldNames = $this->GetFromInternalCache('aChangableFieldNames');
         if (is_null($aFieldNames)) {
-            $aFieldNames = array();
+            $aFieldNames = [];
             $oFields = $this->GetFieldCmsFieldConfList();
             while ($oField = $oFields->Next()) {
                 $aFieldNames[] = $oField->fieldName;
@@ -79,7 +79,7 @@ class TShopVariantSet extends TAdbShopVariantSet
 
         if (is_null($oType)) {
             $oType = TdbShopVariantType::GetNewInstance();
-            if (!$oType->Loadfromfields(array('shop_variant_set_id' => $this->id, 'identifier' => $sVariantTypeIdentifier))) {
+            if (!$oType->Loadfromfields(['shop_variant_set_id' => $this->id, 'identifier' => $sVariantTypeIdentifier])) {
                 $oType = null;
             }
             $this->SetInternalCache('VariantTypeForIdentifier'.$sVariantTypeIdentifier, $oType);

@@ -14,12 +14,12 @@ class TPkgShopOrderStatusException_OrderStatusCodeNotFound extends TPkgCmsExcept
     /**
      * @var string|null
      */
-    private $statusCode = null;
+    private $statusCode;
 
     /**
      * @var string|null
      */
-    private $shopId = null;
+    private $shopId;
 
     /**
      * @param string|null $shopId
@@ -61,9 +61,6 @@ class TPkgShopOrderStatusException_OrderStatusCodeNotFound extends TPkgCmsExcept
         return $this->statusCode;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         $sString = parent::__toString();

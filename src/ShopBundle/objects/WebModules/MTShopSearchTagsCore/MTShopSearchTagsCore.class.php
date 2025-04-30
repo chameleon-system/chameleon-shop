@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
  * module shows a tag cloud.
-/**/
+ * /**/
 class MTShopSearchTagsCore extends TShopUserCustomModelBase
 {
     protected $bAllowHTMLDivWrapping = true;
@@ -35,10 +35,10 @@ class MTShopSearchTagsCore extends TShopUserCustomModelBase
      */
     protected function GetSearchKeywordCloud()
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $iSize = 13;
-        $aCustomWords = array();
+        $aCustomWords = [];
         $oCustomList = TdbShopSearchCloudWordList::GetList();
         while ($oWord = $oCustomList->Next()) {
             $aCustomWords[$oWord->fieldName] = $oWord->fieldWeight;
@@ -49,10 +49,10 @@ class MTShopSearchTagsCore extends TShopUserCustomModelBase
         }
         $activeLanguage = $this->getLanguageService()->getActiveLanguageId();
         $query = 'SELECT COUNT(`shop_search_log`.`id`) AS '.TCMSTagCloud::QUERY_ITEM_COUNT_NAME.',
-                   `shop_search_log`.`name` AS '.TCMSTagCloud::QUERY_ITEM_KEY_NAME.",
+                   `shop_search_log`.`name` AS '.TCMSTagCloud::QUERY_ITEM_KEY_NAME.',
                    `shop_search_log`.*
               FROM `shop_search_log`
-             WHERE `cms_language_id` = ".$connection->quote($activeLanguage)." OR `cms_language_id` =  ''
+             WHERE `cms_language_id` = '.$connection->quote($activeLanguage)." OR `cms_language_id` =  ''
           GROUP BY `shop_search_log`.`name`
             HAVING ".TCMSTagCloud::QUERY_ITEM_COUNT_NAME.' > 0
           ORDER BY '.TCMSTagCloud::QUERY_ITEM_COUNT_NAME." DESC

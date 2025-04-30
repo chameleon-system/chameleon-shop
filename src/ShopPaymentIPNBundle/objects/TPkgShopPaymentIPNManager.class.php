@@ -14,15 +14,12 @@ use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 
 class TPkgShopPaymentIPNManager
 {
-    const URL_IPN_IDENTIFIER = '_api_pkgshopipn_';
+    public const URL_IPN_IDENTIFIER = '_api_pkgshopipn_';
 
     /**
-     * @param TdbCmsPortal $portal
-     * @param TdbShopOrder $order
+     * @return string
      *
      * @throws TPkgShopPaymentIPNException_OrderHasNoPaymentGroup
-     *
-     * @return string
      */
     public function getIPNURL(TdbCmsPortal $portal, TdbShopOrder $order)
     {
@@ -35,7 +32,7 @@ class TPkgShopPaymentIPNManager
         if (property_exists($order, 'fieldCmsLanguageId')) {
             $language = $this->getLanguageService()->getLanguage($order->fieldCmsLanguageId);
         }
-        $url = $this->getPageService()->getLinkToPortalHomePageAbsolute(array(), $portal, $language, true);
+        $url = $this->getPageService()->getLinkToPortalHomePageAbsolute([], $portal, $language, true);
 
         if (array_key_exists('cmsident', $order->sqlData)) {
             $url .= '/'.self::URL_IPN_IDENTIFIER.$identifier.'__'.$order->sqlData['cmsident'];
@@ -46,8 +43,6 @@ class TPkgShopPaymentIPNManager
 
     /**
      * return the IPNIdentifier for an order passed.
-     *
-     * @param TdbShopOrder $oOrder
      *
      * @return string|null
      */
@@ -80,7 +75,7 @@ class TPkgShopPaymentIPNManager
      */
     private function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     /**
@@ -88,6 +83,6 @@ class TPkgShopPaymentIPNManager
      */
     private function getPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
     }
 }

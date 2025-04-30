@@ -29,7 +29,7 @@ class BasketProductAmountValidatorTest extends TestCase
      * @dataProvider getIsAmountValidData
      *
      * @param string|int|float $requestedAmount
-     * @param bool$expectedResult
+     * @param bool $expectedResult
      */
     public function testIsAmountValid($requestedAmount, $expectedResult)
     {
@@ -64,55 +64,55 @@ class BasketProductAmountValidatorTest extends TestCase
      */
     public function getIsAmountValidData()
     {
-        return array(
-            array(
+        return [
+            [
                 0,
                 true,
-            ),
-            array(
+            ],
+            [
                 1,
                 true,
-            ),
-            array(
+            ],
+            [
                 2,
                 true,
-            ),
-            array(
+            ],
+            [
                 -7,
                 true,
-            ),
-            array(
+            ],
+            [
                 '0',
                 true,
-            ),
-            array(
+            ],
+            [
                 '2',
                 true,
-            ),
-            array(
+            ],
+            [
                 '-23',
                 true,
-            ),
-            array(
+            ],
+            [
                 3.14,
                 false,
-            ),
-            array(
+            ],
+            [
                 2.00000000001,
                 false,
-            ),
-            array(
+            ],
+            [
                 '3.14',
                 false,
-            ),
-            array(
+            ],
+            [
                 'a1',
                 false,
-            ),
-            array(
+            ],
+            [
                 '1a',
                 false,
-            ),
-        );
+            ],
+        ];
     }
 }

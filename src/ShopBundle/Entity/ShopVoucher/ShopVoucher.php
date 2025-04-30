@@ -2,7 +2,6 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\ShopVoucher;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -10,21 +9,20 @@ class ShopVoucher
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopVoucherSeries|null - Belongs to voucher series */
-        private ?ShopVoucherSeries $shopVoucherSeries = null
-        ,
+        private ?ShopVoucherSeries $shopVoucherSeries = null,
         // TCMSFieldVarchar
         /** @var string - Code */
         private string $code = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Created on */
-        private ?DateTime $datecreated = null,
+        /** @var \DateTime|null - Created on */
+        private ?\DateTime $datecreated = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Used up on */
-        private ?DateTime $dateUsedUp = null,
+        /** @var \DateTime|null - Used up on */
+        private ?\DateTime $dateUsedUp = null,
         // TCMSFieldBoolean
         /** @var bool - Is used up */
         private bool $isUsedUp = false,
@@ -71,7 +69,6 @@ class ShopVoucher
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCode(): string
     {
@@ -85,34 +82,31 @@ class ShopVoucher
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDateUsedUp(): ?DateTime
+    public function getDateUsedUp(): ?\DateTime
     {
         return $this->dateUsedUp;
     }
 
-    public function setDateUsedUp(?DateTime $dateUsedUp): self
+    public function setDateUsedUp(?\DateTime $dateUsedUp): self
     {
         $this->dateUsedUp = $dateUsedUp;
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isIsUsedUp(): bool
@@ -126,8 +120,6 @@ class ShopVoucher
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -160,6 +152,4 @@ class ShopVoucher
 
         return $this;
     }
-
-
 }

@@ -25,7 +25,7 @@ class TShopModuleArticlelistFilterAccessories extends TdbShopModuleArticleListFi
     protected function GetListQueryBase($oListConfig)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sQuery = 'SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
                FROM `shop_article`
@@ -35,7 +35,7 @@ class TShopModuleArticlelistFilterAccessories extends TdbShopModuleArticleListFi
             ';
 
         $sArticleRestriction = '';
-        $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
+        $oActiveArticle = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveArticle)) {
             $sRelationKey = $oActiveArticle->id;
             if ($oActiveArticle->IsVariant()) {
@@ -63,7 +63,7 @@ class TShopModuleArticlelistFilterAccessories extends TdbShopModuleArticleListFi
     public function _GetCacheParameters()
     {
         $aParams = parent::_GetCacheParameters();
-        $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
+        $oActiveArticle = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveArticle)) {
             $aParams['articleId'] = $oActiveArticle->id;
         }

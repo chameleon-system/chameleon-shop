@@ -90,7 +90,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
             if ($bRedirectToPreviousPermittedStep) {
                 $oMsgManager = $this->getFlashMessages();
                 if (false == $oMsgManager->consumerHasMessages(TCMSMessageManager::GLOBAL_CONSUMER_NAME)) {
-                    $oMsgManager->addMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.error.generic_payment_shipping_error')));
+                    $oMsgManager->addMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', ['errorMsg' => ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.error.generic_payment_shipping_error')]);
                 }
                 $oUserStep = TdbShopOrderStep::GetStep('shipping');
                 $this->JumpToStep($oUserStep);
@@ -109,7 +109,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
     {
         $externalFunctions = parent::AllowedMethods();
         if (!is_array($externalFunctions)) {
-            $externalFunctions = array();
+            $externalFunctions = [];
         }
         $externalFunctions[] = 'ConfirmRemotePayment';
 
@@ -126,13 +126,13 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         $sErrorCode = $oGlobal->GetUserData('ERRORCODE');
         $this->SaveInExportLog();
         if (empty($sErrorCode)) {
-            $sUrl = $oActivePage->GetRealURLPlain(array('module_fnc' => array('spota' => 'ExecuteStep'), 'aInput' => array('agb' => 'true')), true);
+            $sUrl = $oActivePage->GetRealURLPlain(['module_fnc' => ['spota' => 'ExecuteStep'], 'aInput' => ['agb' => 'true']], true);
         } else {
-            $sUrl = $oActivePage->GetRealURLPlain(array(), true);
+            $sUrl = $oActivePage->GetRealURLPlain([], true);
             $sErrorMessage = $oGlobal->GetUserData('ERRORMESSAGE');
             $sErrorReason = $oGlobal->GetUserData('ERRORREASON');
             $oMessageMessenger = $this->getFlashMessages();
-            $oMessageMessenger->addMessage(MTShopBasketCore::MSG_CONSUMER_NAME.'-remotepayment', 'ERROR-CONFIRM-PAYMENT', array('errorcode' => $sErrorCode, 'errormessage' => $sErrorMessage, 'errorreason' => $sErrorReason));
+            $oMessageMessenger->addMessage(MTShopBasketCore::MSG_CONSUMER_NAME.'-remotepayment', 'ERROR-CONFIRM-PAYMENT', ['errorcode' => $sErrorCode, 'errormessage' => $sErrorMessage, 'errorreason' => $sErrorReason]);
         }
         $this->getRedirect()->redirect($sUrl);
     }
@@ -143,7 +143,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
     protected function SaveInExportLog()
     {
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
 
         $oExportLog = TdbShopOrderExportLog::GetNewInstance();
         $oExportLog->sqlData['datecreated'] = date('Y-m-d H:i:s');
@@ -196,7 +196,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         $continue = parent::ProcessStep();
 
         $basket = $this->getShopService()->getActiveBasket();
-        /**
+        /*
          * If the user managed to submit the confirmation form twice, we need to avoid handling the second submit.
          * The parent's ProcessStep() method will have delayed the second click until the first request is processed
          * completely by locking the session, so that we can check if the order has already been completed.
@@ -210,7 +210,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         /** @var array|null $input */
         $input = $this->getInputFilterUtil()->getFilteredPostInput('aInput');
         if (false === is_array($input)) {
-            $input = array();
+            $input = [];
         }
         $agb = 'false';
         if (array_key_exists('agb', $input)) {
@@ -255,7 +255,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -263,7 +263,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
      */
     private function getFlashMessages()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
     /**
@@ -271,7 +271,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 
     /**
@@ -279,6 +279,6 @@ class TShopStepConfirmCore extends TdbShopOrderStep
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

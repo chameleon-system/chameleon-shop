@@ -6,16 +6,14 @@ class ShopBundleArticle
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopArticle|null - Belongs to bundle article */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldExtendedLookup
         /** @var ShopArticle|null - Article */
-        private ?ShopArticle $bundleArticle = null
-        ,
+        private ?ShopArticle $bundleArticle = null,
         // TCMSFieldNumber
         /** @var int - Units */
         private int $amount = 1,
@@ -62,7 +60,6 @@ class ShopBundleArticle
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getBundleArticle(): ?ShopArticle
     {
@@ -75,7 +72,6 @@ class ShopBundleArticle
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getAmount(): int
@@ -90,7 +86,6 @@ class ShopBundleArticle
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -103,6 +98,4 @@ class ShopBundleArticle
 
         return $this;
     }
-
-
 }

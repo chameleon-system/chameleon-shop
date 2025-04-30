@@ -12,7 +12,6 @@
 namespace ChameleonSystem\ShopBundle\RuntimeCache;
 
 use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopStockMessageDataAccessInterface;
-use TdbShopStockMessage;
 
 class ShopStockMessageDataAccessRuntimeCacheDecorator implements ShopStockMessageDataAccessInterface
 {
@@ -23,11 +22,8 @@ class ShopStockMessageDataAccessRuntimeCacheDecorator implements ShopStockMessag
     /**
      * @var array
      */
-    private $cache = array();
+    private $cache = [];
 
-    /**
-     * @param ShopStockMessageDataAccessInterface $subject
-     */
     public function __construct(ShopStockMessageDataAccessInterface $subject)
     {
         $this->subject = $subject;
@@ -40,7 +36,7 @@ class ShopStockMessageDataAccessRuntimeCacheDecorator implements ShopStockMessag
     {
         $cache = $this->getAll();
         if (isset($cache[$id])) {
-            return TdbShopStockMessage::GetNewInstance($cache[$id], $languageId);
+            return \TdbShopStockMessage::GetNewInstance($cache[$id], $languageId);
         }
 
         return null;

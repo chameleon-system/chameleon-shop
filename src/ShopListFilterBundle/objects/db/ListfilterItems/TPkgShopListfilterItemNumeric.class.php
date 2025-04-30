@@ -11,9 +11,9 @@
 
 class TPkgShopListfilterItemNumeric extends TdbPkgShopListfilterItem
 {
-    const URL_PARAMETER_FILTER_START_VALUE = 'dStartValue';
+    public const URL_PARAMETER_FILTER_START_VALUE = 'dStartValue';
 
-    const URL_PARAMETER_FILTER_END_VALUE = 'dEndValue';
+    public const URL_PARAMETER_FILTER_END_VALUE = 'dEndValue';
 
     /**
      * return active start value.
@@ -83,7 +83,7 @@ class TPkgShopListfilterItemNumeric extends TdbPkgShopListfilterItem
      */
     public function GetQueryRestrictionForActiveFilter()
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sQuery = '';
         $dStartValue = $this->GetActiveStartValue();

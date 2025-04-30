@@ -59,7 +59,7 @@ class TShopInterfaceExportOrderItems extends TCMSInterfaceManagerBaseExportCSV
 
     protected function GetFieldMapping()
     {
-        $aFields = array(
+        $aFields = [
             'orderdate' => 'DATETIME NOT NULL',
             'ordernumber' => 'VARCHAR( 255 ) NOT NULL',
             'customer_number' => 'VARCHAR( 255 ) NOT NULL',
@@ -85,7 +85,7 @@ class TShopInterfaceExportOrderItems extends TCMSInterfaceManagerBaseExportCSV
             'order_total_volume' => 'VARCHAR( 255 ) NOT NULL',
             'order_price' => 'VARCHAR( 255 ) NOT NULL',
             'is_bundle' => 'VARCHAR( 255 ) NOT NULL',
-        );
+        ];
 
         return $aFields;
     }

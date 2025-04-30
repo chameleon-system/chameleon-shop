@@ -21,14 +21,14 @@ use ChameleonSystem\ShopProductExportBundle\Interfaces\ShopProductExportHandlerI
 class ShopProductExporter implements ShopProductExporterInterface
 {
     /**
-     * @var \ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultFactoryInterface
+     * @var ResultFactoryInterface
      */
     private $resultFactory;
 
     /**
      * @var ShopProductExportHandlerInterface[]
      */
-    private $exportHandler = array();
+    private $exportHandler = [];
 
     /**
      * @var string
@@ -40,11 +40,6 @@ class ShopProductExporter implements ShopProductExporterInterface
      */
     private $stateFactory;
 
-    /**
-     * @param ResultFactoryInterface $resultFactory
-     * @param ShopServiceInterface   $activeShopService
-     * @param StateFactoryInterface  $stateFactory
-     */
     public function __construct(
         ResultFactoryInterface $resultFactory,
         ShopServiceInterface $activeShopService,
@@ -110,8 +105,6 @@ class ShopProductExporter implements ShopProductExporterInterface
     }
 
     /**
-     * @param ConfigurationInterface $moduleConfiguration
-     *
      * @return \TIterator
      */
     private function getResultList(ConfigurationInterface $moduleConfiguration)

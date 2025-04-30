@@ -18,22 +18,22 @@ class TShopStepShippingCore extends TdbShopOrderStep
      *
      * @var TdbShopShippingGroup
      */
-    protected $oActiveShippingGroup = null;
+    protected $oActiveShippingGroup;
 
     /**
      * selected payment group.
      *
      * @var TdbShopPaymentMethod
      */
-    protected $oActivePaymentMethod = null;
+    protected $oActivePaymentMethod;
 
     /**
      * @var array
      */
-    protected $aRequestData = array();
+    protected $aRequestData = [];
 
-    const MSG_SHIPPING_GROUP = 'shippinggroupmessage';
-    const MSG_PAYMENT_METHOD = 'paymentmessage';
+    public const MSG_SHIPPING_GROUP = 'shippinggroupmessage';
+    public const MSG_PAYMENT_METHOD = 'paymentmessage';
 
     /**
      * method is called from the init method of the calling module. here you can check
@@ -49,7 +49,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
         if (null !== $shippingData) {
             $this->aRequestData = $shippingData;
             if (!is_array($this->aRequestData)) {
-                $this->aRequestData = array();
+                $this->aRequestData = [];
             }
         }
         $this->ChangeShippingGroup();
@@ -176,7 +176,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
     protected function postSelectPaymentHook()
     {
         return $this->oActivePaymentMethod->postSelectPaymentHook(
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop(),
+            ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop(),
             TShopBasket::GetInstance(),
             TdbDataExtranetUser::GetInstance(),
             self::MSG_PAYMENT_METHOD
@@ -237,9 +237,9 @@ class TShopStepShippingCore extends TdbShopOrderStep
             $this->oActiveShippingGroup = $oBasket->GetActiveShippingGroup();
         }
         $iShippingGroupId = null;
-        if (array_key_exists('shop_shipping_group_id', $this->aRequestData)) { //shop_payment_methode_id?
+        if (array_key_exists('shop_shipping_group_id', $this->aRequestData)) { // shop_payment_methode_id?
             $iShippingGroupId = $this->aRequestData['shop_shipping_group_id'];
-            /** @var $oShippingGroup TdbShopShippingGroup */
+            /* @var $oShippingGroup TdbShopShippingGroup */
             $this->oActiveShippingGroup = TdbShopShippingGroup::GetNewInstance();
             if (!$this->oActiveShippingGroup->Load($iShippingGroupId)) {
                 // if the requested group was not found, fetch default from basket again
@@ -314,7 +314,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
     {
         $aExternalFunctions = parent::AllowedMethods();
         if (!is_array($aExternalFunctions)) {
-            $aExternalFunctions = array();
+            $aExternalFunctions = [];
         }
 
         $aExternalFunctions[] = 'ChangeShippingGroup';
@@ -356,6 +356,6 @@ class TShopStepShippingCore extends TdbShopOrderStep
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 }

@@ -30,17 +30,16 @@ class TPkgShopMapper_ArticleRatingOverview extends AbstractPkgShopMapper_Article
      * Get array for each rating count holding the count of rated reviews.
      *
      * @param TdbPkgShopArticleReviewModuleShopArticleReviewConfiguration $oReviewModuleConfiguration
-     * @param TdbShopArticle                                              $oArticle
-     * @param \IMapperCacheTriggerRestricted                              $oCacheTriggerManager
+     * @param TdbShopArticle $oArticle
      * @param bool $bCachingEnabled
      *
      * @return array
      */
     protected function GetRatingOverview($oReviewModuleConfiguration, $oArticle, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aRatingOverview = array();
+        $aRatingOverview = [];
         for ($i = $oReviewModuleConfiguration->fieldRatingCount; $i > 0; --$i) {
-            $aRatingOverview['r_'.$i] = array();
+            $aRatingOverview['r_'.$i] = [];
             $aRatingOverview['r_'.$i]['dRating'] = $i;
             $aRatingOverview['r_'.$i]['iRatingCount'] = 0;
         }

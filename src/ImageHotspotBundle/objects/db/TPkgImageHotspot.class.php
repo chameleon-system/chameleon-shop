@@ -17,7 +17,7 @@ class TPkgImageHotspot extends TAdbPkgImageHotspot
     public function GetFieldPkgImageHotspotItemList()
     {
         $oList = TdbPkgImageHotspotItemList::GetListForPkgImageHotspotId($this->id, $this->iLanguageId);
-        $oList->ChangeOrderBy(array('position' => 'ASC'));
+        $oList->ChangeOrderBy(['position' => 'ASC']);
         $oList->bAllowItemCache = true;
         $i = 0;
         $oList->GoToStart();

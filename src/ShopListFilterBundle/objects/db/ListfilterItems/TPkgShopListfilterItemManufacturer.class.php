@@ -56,11 +56,11 @@ class TPkgShopListfilterItemManufacturer extends TPkgShopListfilterItemMultisele
     {
         $aOptions = $this->GetFromInternalCache('aOptions');
         if (is_null($aOptions)) {
-            $aOptions = array();
-            //select shop_manufacturer_id, that has available(searchable, invirtual, active, etc) articles of filtered categories
+            $aOptions = [];
+            // select shop_manufacturer_id, that has available(searchable, invirtual, active, etc) articles of filtered categories
             $sIdSelect = $this->GetResultSetBaseQuery();
 
-            //select id of available(searchable, invirtual, active, etc) articles of filtered categories
+            // select id of available(searchable, invirtual, active, etc) articles of filtered categories
             $sArticleIdsQuery = $this->GetResultSetBaseQuery('id');
             $databaseConnection = $this->getDatabaseConnection();
             $quotedItemTableName = $databaseConnection->quoteIdentifier($this->sItemTableName);

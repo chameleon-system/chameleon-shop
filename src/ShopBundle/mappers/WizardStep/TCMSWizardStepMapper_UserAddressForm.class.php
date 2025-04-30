@@ -25,7 +25,7 @@ class TCMSWizardStepMapper_UserAddressForm extends AbstractTCMSWizardStepMapper
         if ($oWizardStep && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oWizardStep->table, $oWizardStep->id);
         }
-        $aTextData = array();
+        $aTextData = [];
         $aTextData['sTitle'] = $oWizardStep->fieldName;
         $aTextData['sText'] = $oWizardStep->GetTextField('description');
         $sUrl = $oWizardStep->GetStepURL();

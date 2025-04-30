@@ -16,17 +16,15 @@ class TPkgShopPaymentIPNException_OrderNotFound extends TPkgShopPaymentIPNExcept
 
     /**
      * @param string|null $iOrderCmsIdent
-     * @param TPkgShopPaymentIPNRequest $oRequest
      * @param string $message
      * @param int $code
-     * @param Exception|null $previous
      */
     public function __construct(
         $iOrderCmsIdent,
         TPkgShopPaymentIPNRequest $oRequest,
         $message = '',
         $code = 0,
-        Exception $previous = null
+        ?Exception $previous = null
     ) {
         $this->orderCmsIdent = $iOrderCmsIdent;
         parent::__construct($oRequest, $message, $code, $previous);

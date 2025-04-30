@@ -11,14 +11,14 @@
 
 class TShopArticleReviewList extends TAdbShopArticleReviewList
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopArticleReviewList';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopArticleReviewList';
 
     /**
      * set to the owning article id, if list is generated via GetPublishedReviews.
      *
      * @var string
      */
-    protected $iArticleId = null;
+    protected $iArticleId;
 
     /**
      * return the average score for the review list.
@@ -54,7 +54,7 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
     public static function GetPublishedReviews($iArticle, $iLanguage = null)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedArticleId = $connection->quote($iArticle);
 
@@ -79,7 +79,7 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
     public static function GetPublishedReviewsForUser($iUserId, $iLanguage = null)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedUserId = $connection->quote($iUserId);
 
@@ -107,14 +107,14 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
     /**
      * used to display an article.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      * @param bool $bAllowCache
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array(), $bAllowCache = true)
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [], $bAllowCache = true)
     {
         $oView = new TViewParser();
         $oView->AddVar('oReviewList', $this);
@@ -137,6 +137,6 @@ class TShopArticleReviewList extends TAdbShopArticleReviewList
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 }

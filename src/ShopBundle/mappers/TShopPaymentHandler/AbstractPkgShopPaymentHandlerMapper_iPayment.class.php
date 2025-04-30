@@ -30,6 +30,6 @@ abstract class AbstractPkgShopPaymentHandlerMapper_iPayment extends AbstractPkgS
         $aControlParameter['shop_payment_method_id'] = $sPaymentMethodId;
 
         $oVisitor->SetMappedValue('sHiddenControlFields', TTools::GetArrayAsFormInput($aControlParameter));
-        $oVisitor->SetMappedValue('aUserInput', array());
+        $oVisitor->SetMappedValue('aUserInput', []);
     }
 }

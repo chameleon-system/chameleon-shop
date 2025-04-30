@@ -16,6 +16,7 @@ class TPkgShopCurrency_PkgCmsActionPlugin extends AbstractPkgActionPlugin
     /**
      * @param array<string, mixed> $aData
      * @param bool $bRedirect
+     *
      * @return void
      */
     public function ChangeCurrency($aData, $bRedirect = true)
@@ -40,7 +41,7 @@ class TPkgShopCurrency_PkgCmsActionPlugin extends AbstractPkgActionPlugin
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -48,6 +49,6 @@ class TPkgShopCurrency_PkgCmsActionPlugin extends AbstractPkgActionPlugin
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

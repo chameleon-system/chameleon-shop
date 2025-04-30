@@ -62,7 +62,7 @@ class TPkgShopListfilterItemLevelTree extends TPkgShopListfilterItemMultiselectM
         if (is_array($values) && count($values) > 0) {
             $values = array_merge($values, $this->GetChildCategoryIdList($values[0]));
         }
-        $quotedValues = implode(',', array_map(array($databaseConnection, 'quote'), $values));
+        $quotedValues = implode(',', array_map([$databaseConnection, 'quote'], $values));
         $quotedTargetTable = $databaseConnection->quoteIdentifier($this->sItemTableName);
         $quotedTargetMltTable = $databaseConnection->quoteIdentifier('shop_article_'.$this->sItemTableName.'_mlt');
         $quotedTargetTableNameField = $databaseConnection->quoteIdentifier($this->GetTargetTableNameField());

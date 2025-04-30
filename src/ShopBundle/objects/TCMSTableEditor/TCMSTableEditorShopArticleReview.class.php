@@ -14,7 +14,7 @@ class TCMSTableEditorShopArticleReview extends TCMSTableEditor
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
     protected function PostSaveHook($oFields, $oPostTable)
@@ -27,6 +27,7 @@ class TCMSTableEditorShopArticleReview extends TCMSTableEditor
      * updates the review stats for the article connected to the review item.
      *
      * @param string $iArticleId
+     *
      * @return void
      */
     protected function UpdateArticleReviewStats($iArticleId)
@@ -50,8 +51,8 @@ class TCMSTableEditorShopArticleReview extends TCMSTableEditor
             return;
         }
 
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $iArticleId = null;
         $quotedId = $connection->quote($sId);
@@ -66,4 +67,5 @@ class TCMSTableEditorShopArticleReview extends TCMSTableEditor
         if (!is_null($iArticleId)) {
             $this->UpdateArticleReviewStats($iArticleId);
         }
-    }}
+    }
+}

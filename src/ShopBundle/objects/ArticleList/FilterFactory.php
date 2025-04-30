@@ -23,8 +23,6 @@ class FilterFactory implements FilterFactoryInterface
      *
      * @psalm-suppress InvalidReturnType, InvalidReturnStatement
      *
-     * @param FilterDefinitionInterface $filterDefinition
-     *
      * @return FilterInterface
      */
     public function createFilter(FilterDefinitionInterface $filterDefinition)
@@ -33,8 +31,6 @@ class FilterFactory implements FilterFactoryInterface
     }
 
     /**
-     * @param FilterInterface $filter
-     *
      * @return FilterInterface|null
      */
     public function createFallbackFilter(FilterInterface $filter)

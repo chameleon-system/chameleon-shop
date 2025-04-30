@@ -9,19 +9,17 @@ class ShopManufacturerModuleConf
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Title / headline */
         private string $name = '',
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Icon */
-        private ?CmsMedia $cmsMedia = null
-        ,
+        private ?CmsMedia $cmsMedia = null,
         // TCMSFieldWYSIWYG
         /** @var string - Introduction text */
         private string $intro = ''
@@ -65,7 +63,6 @@ class ShopManufacturerModuleConf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -78,7 +75,6 @@ class ShopManufacturerModuleConf
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
@@ -93,7 +89,6 @@ class ShopManufacturerModuleConf
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getIntro(): string
     {
@@ -106,6 +101,4 @@ class ShopManufacturerModuleConf
 
         return $this;
     }
-
-
 }

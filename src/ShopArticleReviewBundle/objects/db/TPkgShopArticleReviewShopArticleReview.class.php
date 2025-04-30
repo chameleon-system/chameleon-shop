@@ -11,11 +11,11 @@
 
 class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopArticleReviewAutoParent
 {
-    const URL_PARAM_REVIEW_ID = 'sReviewId';
+    public const URL_PARAM_REVIEW_ID = 'sReviewId';
 
-    const URL_PARAM_ACTION_ID = 'sAction';
+    public const URL_PARAM_ACTION_ID = 'sAction';
 
-    const URL_PARAM_REVIEW_ITEM_JUMPER = 'Review';
+    public const URL_PARAM_REVIEW_ITEM_JUMPER = 'Review';
 
     /**
      * Returns URL to rate a comment.
@@ -32,7 +32,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
         } else {
             $bPositiveLink = '0';
         }
-        $aParameter = array('bRate' => $bPositiveLink, TdbShopArticleReview::URL_PARAM_REVIEW_ID => $this->id);
+        $aParameter = ['bRate' => $bPositiveLink, TdbShopArticleReview::URL_PARAM_REVIEW_ID => $this->id];
         $sRatePositiveLink = TTools::GetExecuteMethodOnCurrentModuleURL('RateReview', $aParameter, $bUseFullUrl);
 
         return $sRatePositiveLink;
@@ -58,7 +58,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
     public function RateReview($bRateUp = true)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         if (false === $this->ReviewRatedByActiveUser()) {
             $sRateString = 'helpful_count';
@@ -112,7 +112,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
      */
     public function GetReportURL($bUseFullUrl = false)
     {
-        $aParameter = array(TdbShopArticleReview::URL_PARAM_REVIEW_ID => $this->id);
+        $aParameter = [TdbShopArticleReview::URL_PARAM_REVIEW_ID => $this->id];
         $sReportLink = TTools::GetExecuteMethodOnCurrentModuleURL('ReportReview', $aParameter, $bUseFullUrl);
 
         return $sReportLink;
@@ -127,7 +127,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
      */
     public function GetChangeReviewReportNotificationStateURL($bUseFullUrl = false)
     {
-        $aParameter = array(TdbShopArticleReview::URL_PARAM_REVIEW_ID => $this->id);
+        $aParameter = [TdbShopArticleReview::URL_PARAM_REVIEW_ID => $this->id];
         $sReportLink = TTools::GetExecuteMethodOnCurrentModuleURL('ChangeReviewReportNotificationState', $aParameter, $bUseFullUrl);
 
         return $sReportLink;
@@ -142,7 +142,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
      */
     public function GetDeleteURL($bUseFullUrl = false)
     {
-        $aParameter = array(TdbShopArticleReview::URL_PARAM_REVIEW_ID => $this->id);
+        $aParameter = [TdbShopArticleReview::URL_PARAM_REVIEW_ID => $this->id];
         $sReportLink = TTools::GetExecuteMethodOnCurrentModuleURL('DeleteReview', $aParameter, $bUseFullUrl);
 
         return $sReportLink;
@@ -157,16 +157,16 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
     {
         $this->SaveActionIdToComment();
         $oMail = TDataMailProfile::GetProfile('report-review');
-        $aData = array();
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $aData = [];
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oArticle = $this->GetFieldShopArticle();
         $aData['sArticleName'] = $oArticle->GetName();
         $aData['sReviewId'] = $this->id;
         $aData['sReviewTitle'] = $this->fieldTitle;
         $aData['sReviewText'] = $this->fieldComment;
         $aData['sReviewAuthor'] = $this->fieldAuthorName;
-        $aData['sUnlockReviewLink'] = "<a href='".$this->GetUnlockURL(true)."'>".TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.publish_comment')).'</a> ';
-        $aData['sDeleteReviewLink'] = "<a href='".$this->GetDeleteWithActionIdURL(true)."'>".TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.delete_comment')).'</a> ';
+        $aData['sUnlockReviewLink'] = "<a href='".$this->GetUnlockURL(true)."'>".TGlobal::OutHtml(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.publish_comment')).'</a> ';
+        $aData['sDeleteReviewLink'] = "<a href='".$this->GetDeleteWithActionIdURL(true)."'>".TGlobal::OutHtml(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.delete_comment')).'</a> ';
         $aData['shopname'] = $oShop->GetName();
         $oMail->AddDataArray($aData);
         $oMail->SendUsingObjectView('emails', 'Customer');
@@ -186,7 +186,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
             $sAuthorEmail = $this->GetSendReviewCommentNotificationEmail();
             if (TTools::IsValidEMail($sAuthorEmail)) {
                 $oMail = TDataMailProfile::GetProfile('review-comment');
-                $aData = array();
+                $aData = [];
                 $oArticle = $this->GetFieldShopArticle();
                 $aData['sArticleName'] = $oArticle->GetName();
                 $aData['sReviewTitle'] = $this->fieldTitle;
@@ -262,7 +262,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
     {
         $sDeleteURL = '';
         if (!empty($this->sqlData['action_id'])) {
-            $aParameter = array(TdbShopArticleReview::URL_PARAM_ACTION_ID => $this->sqlData['action_id']);
+            $aParameter = [TdbShopArticleReview::URL_PARAM_ACTION_ID => $this->sqlData['action_id']];
             $sDeleteURL = TTools::GetExecuteMethodOnCurrentModuleURL('DeleteReview', $aParameter, $bUseFullUrl);
         }
 
@@ -280,7 +280,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
     {
         $sUnlockURL = '';
         if (!empty($this->sqlData['action_id'])) {
-            $aParameter = array(TdbShopArticleReview::URL_PARAM_ACTION_ID => $this->sqlData['action_id']);
+            $aParameter = [TdbShopArticleReview::URL_PARAM_ACTION_ID => $this->sqlData['action_id']];
             $sUnlockURL = TTools::GetExecuteMethodOnCurrentModuleURL('UnlockReview', $aParameter, $bUseFullUrl);
         }
 
@@ -295,7 +295,7 @@ class TPkgShopArticleReviewShopArticleReview extends TPkgShopArticleReviewShopAr
      *
      * @return array
      */
-    protected function GetCacheTrigger($id, $aCallTimeVars = array())
+    protected function GetCacheTrigger($id, $aCallTimeVars = [])
     {
         $aCacheTrigger = parent::GetCacheTrigger($id, $aCallTimeVars);
         if (array_key_exists('oPkgCommentModuleConfig', $aCallTimeVars) && !is_null($aCallTimeVars['oPkgCommentModuleConfig'])) {

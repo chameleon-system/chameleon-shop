@@ -50,7 +50,7 @@ use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
  *
  * • Es ist möglich den Gutschein als einen „gesponserten“ Gutschein zu Markieren. Zusätzlich kann der Name des Sponsors, ein Bild, und ein Logo hinterlegt werden. „Gesponserte“ Gutscheine ignorieren die Buchpreisbindungseinstellungen der Warenkorbartikel im Warenkorb.
  * Die für Gutscheine relevanten Berechnungsregeln werden im Detail unter 3.a.i beschrieben.
-/**/
+ * /**/
 class TShopVoucher extends TShopVoucherAutoParent
 {
     /**
@@ -61,66 +61,66 @@ class TShopVoucher extends TShopVoucherAutoParent
     /**
      * voucher may be used.
      */
-    const ALLOW_USE = 0;
+    public const ALLOW_USE = 0;
 
     /**
      * the voucher series to which this voucher belongs is currently inactive (or the active date is out of range).
      */
-    const USE_ERROR_SERIES_INACTIVE = 1;
+    public const USE_ERROR_SERIES_INACTIVE = 1;
 
     /**
      * the basket value is below the minimum value specified for the voucher series.
      */
-    const USE_ERROR_BASKET_VALUE_TO_LOW = 2;
+    public const USE_ERROR_BASKET_VALUE_TO_LOW = 2;
 
     /**
      * another voucher of the same series is already used within the basket even though
      * the voucher series has been defined as "only one of the same series per basket".
      */
-    const USE_ERROR_VOUCHER_WITH_SAME_SERIES_USED = 4;
+    public const USE_ERROR_VOUCHER_WITH_SAME_SERIES_USED = 4;
 
     /**
      * another voucher is already being used within the basket even though
      * the voucher series has been defined as "may not be used with any other voucher".
      */
-    const USE_ERROR_OTHER_VOUCHER_USED = 8;
+    public const USE_ERROR_OTHER_VOUCHER_USED = 8;
 
     /**
      * the customer used a voucher of this series before for a previous order even though
      * the series has been marked as "only one voucher per customer".
      */
-    const USE_ERROR_CUSTOMER_USED_VOUCHER_SERIES_BEFORE = 16;
+    public const USE_ERROR_CUSTOMER_USED_VOUCHER_SERIES_BEFORE = 16;
 
     /**
      * this is not the first order from the customer, but the voucher series has been defined
      * as "use only on first order".
      */
-    const USE_ERROR_NOT_FIRST_ORDER = 32;
+    public const USE_ERROR_NOT_FIRST_ORDER = 32;
 
     /**
      * the voucher has been restricted to a set of customers, and the current customer is not in that list.
      */
-    const USE_ERROR_NOT_VALID_FOR_CUSTOMER = 64;
+    public const USE_ERROR_NOT_VALID_FOR_CUSTOMER = 64;
 
     /**
      * the voucher has been restricted to a set of customer groups, none of which the current customer is in.
      */
-    const USE_ERROR_NOT_VALID_FOR_CUSTOMER_GROUP = 128;
+    public const USE_ERROR_NOT_VALID_FOR_CUSTOMER_GROUP = 128;
 
     /**
      * the voucher may not be used for the current basket.
      */
-    const USE_ERROR_NOT_VALID_FOR_CURRENT_BASKET = 256;
+    public const USE_ERROR_NOT_VALID_FOR_CURRENT_BASKET = 256;
 
     /**
      * the voucher has been restricted to a set of customers, and the current customer is not logged in.
      */
-    const USE_ERROR_NOT_VALID_FOR_CUSTOMER_MISSING_LOGIN = 512;
+    public const USE_ERROR_NOT_VALID_FOR_CUSTOMER_MISSING_LOGIN = 512;
 
     /**
      * the voucher has been restricted to a set of customer groups, and the current customer is in not logged in.
      */
-    const USE_ERROR_NOT_VALID_FOR_CUSTOMER_GROUP_MISSING_LOGIN = 1024;
+    public const USE_ERROR_NOT_VALID_FOR_CUSTOMER_GROUP_MISSING_LOGIN = 1024;
 
     /**
      * each voucher added to the basket gets a unique voucher key used to identify the
@@ -129,7 +129,7 @@ class TShopVoucher extends TShopVoucherAutoParent
      *
      * @var string
      */
-    public $sBasketVoucherKey = null;
+    public $sBasketVoucherKey;
 
     /**
      * holds the result of GetValue - the value of the voucher within the context of the current basket.
@@ -153,15 +153,15 @@ class TShopVoucher extends TShopVoucherAutoParent
         }
         $oShopConfig = $this->getShopService()->getActiveShop();
 
-        return $this->getActivePageService()->getLinkToActivePageRelative(array(
-            'module_fnc' => array(
+        return $this->getActivePageService()->getLinkToActivePageRelative([
+            'module_fnc' => [
                 $oShopConfig->GetBasketModuleSpotName() => 'RemoveVoucher',
-            ),
-            MTShopBasketCore::URL_REQUEST_PARAMETER => array(
+            ],
+            MTShopBasketCore::URL_REQUEST_PARAMETER => [
                 MTShopBasketCore::URL_MESSAGE_CONSUMER_NAME => $sMessageHandler,
                 MTShopBasketCore::URL_VOUCHER_BASKET_KEY => $this->sBasketVoucherKey,
-            ),
-        ));
+            ],
+        ]);
     }
 
     /**
@@ -267,7 +267,7 @@ class TShopVoucher extends TShopVoucherAutoParent
         if (TdbShopVoucher::ALLOW_USE == $bAllowUse && $oSeries->fieldRestrictToOnePerUser) {
             // check if the user has used a voucher of this series before
             if (!is_null($oUser->id) && !empty($oUser->id)) {
-                $iNumberOfTimesUsed = $oSeries->NumberOfTimesUsedByUser($oUser->id, array($this->id));
+                $iNumberOfTimesUsed = $oSeries->NumberOfTimesUsedByUser($oUser->id, [$this->id]);
                 if ($iNumberOfTimesUsed > 0) {
                     $bAllowUse = TdbShopVoucher::USE_ERROR_CUSTOMER_USED_VOUCHER_SERIES_BEFORE;
                 }
@@ -317,12 +317,13 @@ class TShopVoucher extends TShopVoucherAutoParent
     /**
      * Returns the value of the voucher - takes the current basket and user into consideration.
      *
-     * @param bool  $bCalculateVoucher - set to true when we calculate the voucher value for the basket
-     *                                 this should only be set to true when calling the method through the TShopBasketVoucherList::GetVoucherValue
-     * @param float $dMaxValueAllowed  - if a value is passed, then the voucher will never exceed the value passed
+     * @param bool $bCalculateVoucher - set to true when we calculate the voucher value for the basket
+     *                                this should only be set to true when calling the method through the TShopBasketVoucherList::GetVoucherValue
+     * @param float $dMaxValueAllowed - if a value is passed, then the voucher will never exceed the value passed
      * @param bool $bSponsoredVouchers
      *
      * @return float|null
+     *
      * @psalm-return ($bCalculateVoucher is true ? float : float|null)
      */
     public function GetValue($bCalculateVoucher = false, $dMaxValueAllowed = null, $bSponsoredVouchers = false)
@@ -375,7 +376,7 @@ class TShopVoucher extends TShopVoucherAutoParent
     public function GetValuePreviouslyUsed()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         // we have to make sure that is value is accurate... so we will fetch it from database every time
         // performance should not be a big issue, since it only affects users that include a voucher in their basket
@@ -412,7 +413,7 @@ class TShopVoucher extends TShopVoucherAutoParent
     {
         $oShopVoucherUse = TdbShopVoucherUse::GetNewInstance();
         /** @var $oShopvoucherUse TdbShopVoucherUse */
-        $aData = array('shop_voucher_id' => $this->id, 'date_used' => date('Y-m-d H:i:s'), 'value_used' => $this->GetValue(), 'shop_order_id' => $iShopOrderId);
+        $aData = ['shop_voucher_id' => $this->id, 'date_used' => date('Y-m-d H:i:s'), 'value_used' => $this->GetValue(), 'shop_order_id' => $iShopOrderId];
         // hook to post-convert value (as may be required when dealing with currency)
         $this->CommitVoucherUseForCurrentUserPreSaveHook($aData);
         $oShopVoucherUse->LoadFromRow($aData);
@@ -493,8 +494,6 @@ class TShopVoucher extends TShopVoucherAutoParent
 
     /**
      * return true if the voucher may be used for the article.
-     *
-     * @param TShopBasketArticle $oArticle
      *
      * @return bool
      */
@@ -593,7 +592,8 @@ class TShopVoucher extends TShopVoucherAutoParent
     }
 
     /**
-     * return true if the voucher is sponsored - else return false
+     * return true if the voucher is sponsored - else return false.
+     *
      * @return bool
      */
     public function IsSponsored()
@@ -616,7 +616,7 @@ class TShopVoucher extends TShopVoucherAutoParent
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -624,6 +624,6 @@ class TShopVoucher extends TShopVoucherAutoParent
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }

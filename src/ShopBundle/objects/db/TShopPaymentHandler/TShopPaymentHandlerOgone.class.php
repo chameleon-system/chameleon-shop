@@ -21,8 +21,7 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
      *
      * Redirect to ogone payment service
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -43,8 +42,6 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
     /**
      * return url to ogone payment service with all needed parameter.
      *
-     * @param TdbShopOrder $oOrder
-     *
      * @return string
      */
     protected function GetExternalPaymentHandlerURL(TdbShopOrder $oOrder)
@@ -52,7 +49,7 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
         $oUser = TdbDataExtranetUser::GetInstance();
         $oCountry = $oUser->GetCountry();
         $sActiveFrontEndLanguageCode = self::getLanguageService()->getLanguageIsoCode();
-        $aParameter = array(
+        $aParameter = [
             'PSPID' => $this->GetPSPID(),
             'ORDERID' => $oOrder->fieldOrdernumber,
             'AMOUNT' => $oOrder->fieldValueTotal * 100,
@@ -64,7 +61,7 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
             'OWNERCTY' => $oCountry->fieldName,
             'OWNERTOWN' => $oUser->fieldCity,
             'OWNERZIP' => $oUser->fieldPostalcode,
-            'PARAMPLUS' => 'PAYCALL='.self::URL_IDENTIFIER.'&PAYHAID='.$this->sqlData['cmsident'], 'PARAMVAR' => self::URL_IDENTIFIER_NOTIFY, );
+            'PARAMPLUS' => 'PAYCALL='.self::URL_IDENTIFIER.'&PAYHAID='.$this->sqlData['cmsident'], 'PARAMVAR' => self::URL_IDENTIFIER_NOTIFY, ];
         $this->AddCustomParameter($aParameter);
         $sOgonePaymentLayoutPageURL = $this->GetOgonePaymentLayoutPage();
         if ($sOgonePaymentLayoutPageURL) {
@@ -114,7 +111,7 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
         $sOgonePaymentLayoutSystemPage = trim($this->GetConfigParameter('layout_system_page'));
         $sOgonePaymentLayoutPageURL = false;
         if (!empty($sOgonePaymentLayoutSystemPage)) {
-            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+            $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             $sOgonePaymentLayoutPageURL = $oShop->GetLinkToSystemPage($sOgonePaymentLayoutSystemPage, null, true);
             $sOgonePaymentLayoutPageURL = str_replace('https://', '', $sOgonePaymentLayoutPageURL);
             $sOgonePaymentLayoutPageURL = str_replace('http://', '', $sOgonePaymentLayoutPageURL);
@@ -138,8 +135,7 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
      * b) the payment was a success
      * c) there was an error in the payment.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -187,9 +183,8 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
      * return true if the get/post response data is valid (order exits, amount matches, hash is valid, etc)
      * For Ogone we have only to check the security hash.
      *
-     * @param array        $aResponseData
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer
+     * @param array $aResponseData
+     * @param string $sMessageConsumer
      *
      * @return bool
      */
@@ -205,6 +200,6 @@ class TShopPaymentHandlerOgone extends TShopPaymentHandlerOgoneBase
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

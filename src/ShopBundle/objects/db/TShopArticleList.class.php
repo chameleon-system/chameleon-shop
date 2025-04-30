@@ -13,18 +13,18 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 class TShopArticleList extends TShopArticleListAutoParent
 {
-    const VIEW_PATH = '/pkgShop/views/db/TShopArticleList';
-    const SESSIN_DUMP_NAME = 'esshoparticlelists';
-    const URL_LIST_KEY_NAME = 'listkey';
-    const URL_LIST_REQUEST = 'listrequest';
-    const URL_LIST_CURRENT_PAGE = 'listpage';
+    public const VIEW_PATH = '/pkgShop/views/db/TShopArticleList';
+    public const SESSIN_DUMP_NAME = 'esshoparticlelists';
+    public const URL_LIST_KEY_NAME = 'listkey';
+    public const URL_LIST_REQUEST = 'listrequest';
+    public const URL_LIST_CURRENT_PAGE = 'listpage';
 
     /**
      * identifies the list object with a module spot.
      *
      * @var string
      */
-    protected $sListIdentKey = null;
+    protected $sListIdentKey;
 
     /**
      * returns a subquery that can be used to reduce a query set to only active articles.
@@ -47,33 +47,33 @@ class TShopArticleList extends TShopArticleListAutoParent
     /**
      * return active article list for the given category id.
      *
-     * @param int    $iCategoryId                        - this may alos be an ARRAY! in that case all articles from any of the listed categories IDs will be returned
+     * @param int $iCategoryId - this may alos be an ARRAY! in that case all articles from any of the listed categories IDs will be returned
      * @param string $sOrderString
-     * @param int    $iLimit
-     * @param array  $aFilter                            - any filters you want to add to the list
+     * @param int $iLimit
+     * @param array $aFilter - any filters you want to add to the list
      *
      * @return TdbShopArticleList
      */
-    public static function LoadCategoryArticleList($iCategoryId, $sOrderString = null, $iLimit = -1, $aFilter = array())
+    public static function LoadCategoryArticleList($iCategoryId, $sOrderString = null, $iLimit = -1, $aFilter = [])
     {
-        return TdbShopArticleList::LoadCategoryArticleListForCategoryList(array($iCategoryId), $sOrderString, $iLimit, $aFilter);
+        return TdbShopArticleList::LoadCategoryArticleListForCategoryList([$iCategoryId], $sOrderString, $iLimit, $aFilter);
     }
 
     /**
      * return active article list for the given category id.
      *
-     * @param array  $aCategoryIdList                    - an array of categories
+     * @param array $aCategoryIdList - an array of categories
      * @param string $sOrderString
-     * @param int    $iLimit
-     * @param array  $aFilter                            - any filters you want to add to the list
+     * @param int $iLimit
+     * @param array $aFilter - any filters you want to add to the list
      * @param string $sCustomBaseQuery
      *
      * @return TdbShopArticleList
      */
-    public static function LoadCategoryArticleListForCategoryList($aCategoryIdList, $sOrderString = null, $iLimit = -1, $aFilter = array(), $sCustomBaseQuery = null)
+    public static function LoadCategoryArticleListForCategoryList($aCategoryIdList, $sOrderString = null, $iLimit = -1, $aFilter = [], $sCustomBaseQuery = null)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         if (is_null($sOrderString)) {
             $sOrderString = '`shop_article`.`list_rank` DESC, `shop_article`.`name` ASC';
@@ -97,14 +97,14 @@ class TShopArticleList extends TShopArticleListAutoParent
         $sCatRestriction = '';
         if (is_array($aCategoryIdList)) {
             $quotedCategoryIds = array_map([$connection, 'quote'], $aCategoryIdList);
-            $sCatRestriction = " `shop_article_shop_category_mlt`.`target_id` IN (".implode(',', $quotedCategoryIds).") ";
+            $sCatRestriction = ' `shop_article_shop_category_mlt`.`target_id` IN ('.implode(',', $quotedCategoryIds).') ';
         } else {
             $quotedCategoryId = $connection->quote($aCategoryIdList);
             $sCatRestriction = " `shop_article_shop_category_mlt`.`target_id` = {$quotedCategoryId} ";
         }
 
         if (!empty($sCatRestriction)) {
-            //$query .= " `shop_article`.`id` IN (SELECT `shop_article_shop_category_mlt`.`source_id` FROM `shop_article_shop_category_mlt` WHERE {$sCatRestriction}) ";
+            // $query .= " `shop_article`.`id` IN (SELECT `shop_article_shop_category_mlt`.`source_id` FROM `shop_article_shop_category_mlt` WHERE {$sCatRestriction}) ";
             $query .= $sCatRestriction;
         } else {
             $query .= ' 1 ';
@@ -137,7 +137,7 @@ class TShopArticleList extends TShopArticleListAutoParent
 
         $sFullQuery = $query.$sRestrictions;
 
-        /**
+        /*
          * for some reason, ordering the subquery with a select on only id and then joining that with the full article table is a) super fast and b) results in the correct order
          * while select all records right away on the order query is extremely slow (factor 10).
          */
@@ -160,17 +160,16 @@ class TShopArticleList extends TShopArticleListAutoParent
     /**
      * return active article list.
      *
-     * @param int    $iCategoryId
      * @param string $sOrderString
-     * @param int    $iLimit
-     * @param array  $aFilter      - any filters you want to add to the list
+     * @param int $iLimit
+     * @param array $aFilter - any filters you want to add to the list
      *
      * @return TdbShopArticleList
      */
     public static function LoadArticleList($sOrderString = null, $iLimit = -1, $aFilter = [])
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         if (is_null($sOrderString)) {
             $sOrderString = '`shop_article`.`list_rank` DESC, `shop_article`.`name` ASC';
@@ -184,7 +183,7 @@ class TShopArticleList extends TShopArticleListAutoParent
 
         $sActiveArticleSnippid = TdbShopArticleList::GetActiveArticleQueryRestriction();
         if (!empty($sActiveArticleSnippid)) {
-            $query .= ' AND (' . $sActiveArticleSnippid . ')';
+            $query .= ' AND ('.$sActiveArticleSnippid.')';
         }
 
         if (!empty($aFilter)) {
@@ -194,15 +193,15 @@ class TShopArticleList extends TShopArticleListAutoParent
                 $escapedValue = $connection->quote($value);
                 $aTmpFilter[] = "{$escapedKey} = {$escapedValue}";
             }
-            $query .= ' AND (' . implode(' AND ', $aTmpFilter) . ')';
+            $query .= ' AND ('.implode(' AND ', $aTmpFilter).')';
         }
 
         if (!empty($sOrderString)) {
-            $query .= ' ORDER BY ' . $sOrderString;
+            $query .= ' ORDER BY '.$sOrderString;
         }
 
         if ($iLimit > 0) {
-            $query .= ' LIMIT 0,' . (int)$iLimit;
+            $query .= ' LIMIT 0,'.(int) $iLimit;
         }
 
         return TdbShopArticleList::GetList($query);
@@ -211,13 +210,13 @@ class TShopArticleList extends TShopArticleListAutoParent
     /**
      * used to display the article list.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $sViewIdentKey = $this->StoreListObjectInSession($sViewName, $sViewType, $aCallTimeVars);
@@ -251,11 +250,11 @@ class TShopArticleList extends TShopArticleListAutoParent
      * restore serialized dump in session. returns id key for item. also calls
      * session cleanup method.
      *
-     * @return string
-     *
-     * @param null|string $sViewName
-     * @param null|string $sViewType
+     * @param string|null $sViewName
+     * @param string|null $sViewType
      * @param array|null $aCallTimeVars
+     *
+     * @return string
      */
     public function StoreListObjectInSession($sViewName = null, $sViewType = null, $aCallTimeVars = null)
     {
@@ -264,10 +263,10 @@ class TShopArticleList extends TShopArticleListAutoParent
         $oExecutingModule = $oGlobal->GetExecutingModulePointer();
 
         if (!array_key_exists(TdbShopArticleList::SESSIN_DUMP_NAME, $_SESSION)) {
-            $_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME] = array();
+            $_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME] = [];
         }
         if (!array_key_exists($sItemKey, $_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME])) {
-            $_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME][$sItemKey] = array();
+            $_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME][$sItemKey] = [];
         }
         $aOldData = $_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME][$sItemKey];
         if (is_null($sViewName) && array_key_exists('sViewName', $aOldData)) {
@@ -283,8 +282,8 @@ class TShopArticleList extends TShopArticleListAutoParent
         if (0 === $this->GetPageSize()) {
             unset($_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME][$sItemKey]);
         } else {
-            $_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME][$sItemKey] = array( //        'oExecutingModule'=>$oExecutingModule,
-                'lastchanged' => time(), 'sObjectDump' => base64_encode(serialize($this)), 'iStartRecord' => $this->GetStartRecordNumber(), 'iPageSize' => $this->GetPageSize(), 'sViewName' => $sViewName, 'sViewType' => $sViewType, 'aCallTimeVars' => $aCallTimeVars, );
+            $_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME][$sItemKey] = [ //        'oExecutingModule'=>$oExecutingModule,
+                'lastchanged' => time(), 'sObjectDump' => base64_encode(serialize($this)), 'iStartRecord' => $this->GetStartRecordNumber(), 'iPageSize' => $this->GetPageSize(), 'sViewName' => $sViewName, 'sViewType' => $sViewType, 'aCallTimeVars' => $aCallTimeVars, ];
         }
 
         return $sItemKey;
@@ -301,7 +300,7 @@ class TShopArticleList extends TShopArticleListAutoParent
     public static function GetInstanceDataFromSession($sListSessionKey)
     {
         if (!array_key_exists(TdbShopArticleList::SESSIN_DUMP_NAME, $_SESSION)) {
-            $_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME] = array();
+            $_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME] = [];
         }
         $aList = null;
         if (array_key_exists($sListSessionKey, $_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME])) {
@@ -344,12 +343,13 @@ class TShopArticleList extends TShopArticleListAutoParent
      * remove serialized dump from session.
      *
      * @param string $sListSessionKey
+     *
      * @return void
      */
     public static function removeInstanceFromSession($sListSessionKey)
     {
-        if (isset($_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME]) &&
-            isset($_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME][$sListSessionKey])) {
+        if (isset($_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME])
+            && isset($_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME][$sListSessionKey])) {
             unset($_SESSION[TdbShopArticleList::SESSIN_DUMP_NAME][$sListSessionKey]);
         }
     }
@@ -365,7 +365,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }
@@ -419,7 +419,7 @@ class TShopArticleList extends TShopArticleListAutoParent
         if ($this->HasNextPage()) {
             $oGlobal = TGlobal::instance();
             $oExecutingModule = $oGlobal->GetExecutingModulePointer();
-            $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ChangePage', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'NextPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => $this->GetCurrentPageNumber());
+            $aAdditionalParameters = ['module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ChangePage', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'NextPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => $this->GetCurrentPageNumber()];
             $sLink = $this->getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, TdbShopArticleList::GetParametersToIgnoreInPageLinks());
         }
 
@@ -439,8 +439,8 @@ class TShopArticleList extends TShopArticleListAutoParent
         if ($this->HasNextPage()) {
             $oGlobal = TGlobal::instance();
             $oExecutingModule = $oGlobal->GetExecutingModulePointer();
-            $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ExecuteAjaxCall', '_fnc' => 'ChangePageAjax', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'NextPage',
-            );
+            $aAdditionalParameters = ['module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ExecuteAjaxCall', '_fnc' => 'ChangePageAjax', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'NextPage',
+            ];
             $sLink = $this->getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, TdbShopArticleList::GetParametersToIgnoreInPageLinks());
             if ($bGetAsJSFunction) {
                 $sLink = "GetAjaxCall('{$sLink}', ShowListItems)";
@@ -463,8 +463,8 @@ class TShopArticleList extends TShopArticleListAutoParent
         if ($this->HasPreviousPage()) {
             $oGlobal = TGlobal::instance();
             $oExecutingModule = $oGlobal->GetExecutingModulePointer();
-            $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ExecuteAjaxCall', '_fnc' => 'ChangePageAjax', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'PreviousPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => $this->GetCurrentPageNumber() - 2,
-            );
+            $aAdditionalParameters = ['module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ExecuteAjaxCall', '_fnc' => 'ChangePageAjax', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'PreviousPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => $this->GetCurrentPageNumber() - 2,
+            ];
             $sLink = $this->getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, TdbShopArticleList::GetParametersToIgnoreInPageLinks());
             if ($bGetAsJSFunction) {
                 $sLink = "GetAjaxCall('{$sLink}', ShowListItems)";
@@ -485,7 +485,7 @@ class TShopArticleList extends TShopArticleListAutoParent
         if ($this->HasPreviousPage()) {
             $oGlobal = TGlobal::instance();
             $oExecutingModule = $oGlobal->GetExecutingModulePointer();
-            $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ChangePage', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'PreviousPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => ($this->GetCurrentPageNumber() - 2));
+            $aAdditionalParameters = ['module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ChangePage', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'PreviousPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => ($this->GetCurrentPageNumber() - 2)];
             $sLink = $this->getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, TdbShopArticleList::GetParametersToIgnoreInPageLinks());
         }
 
@@ -495,7 +495,7 @@ class TShopArticleList extends TShopArticleListAutoParent
     /**
      * return javascript call that allows you to jump to the specified page (NOTE: pages start at zero).
      *
-     * @param int  $iPageNumber
+     * @param int $iPageNumber
      * @param bool $bGetAsJSFunction
      *
      * @return string|false
@@ -506,8 +506,8 @@ class TShopArticleList extends TShopArticleListAutoParent
         if ($iPageNumber < $this->GetTotalPageCount()) {
             $oGlobal = TGlobal::instance();
             $oExecutingModule = $oGlobal->GetExecutingModulePointer();
-            $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ExecuteAjaxCall', '_fnc' => 'ChangePageAjax', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'GoToPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => $iPageNumber,
-            );
+            $aAdditionalParameters = ['module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ExecuteAjaxCall', '_fnc' => 'ChangePageAjax', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'GoToPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => $iPageNumber,
+            ];
             $sLink = $this->getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, TdbShopArticleList::GetParametersToIgnoreInPageLinks());
             if ($bGetAsJSFunction) {
                 $sLink = "GetAjaxCall('{$sLink}', ShowListItems)";
@@ -530,7 +530,7 @@ class TShopArticleList extends TShopArticleListAutoParent
         if ($iPageNumber < $this->GetTotalPageCount()) {
             $oGlobal = TGlobal::instance();
             $oExecutingModule = $oGlobal->GetExecutingModulePointer();
-            $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ChangePage', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'GoToPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => $iPageNumber);
+            $aAdditionalParameters = ['module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ChangePage', TdbShopArticleList::URL_LIST_KEY_NAME => $this->GetListIdentKey(), TdbShopArticleList::URL_LIST_REQUEST => 'GoToPage', TdbShopArticleList::URL_LIST_CURRENT_PAGE => $iPageNumber];
             $sLink = $this->getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, TdbShopArticleList::GetParametersToIgnoreInPageLinks());
         }
 
@@ -550,7 +550,8 @@ class TShopArticleList extends TShopArticleListAutoParent
      * process any request made for this item.
      *
      * @param string $sRequest
-     * @param bool   $bCheckIdentKey
+     * @param bool $bCheckIdentKey
+     *
      * @return void
      */
     public function HandleURLRequest($sRequest, $bCheckIdentKey = false)
@@ -593,7 +594,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      */
     public static function GetParametersToIgnoreInPageLinks()
     {
-        $aParameters = array('module_fnc', TdbShopArticleList::URL_LIST_KEY_NAME, TdbShopArticleList::URL_LIST_REQUEST, TdbShopArticleList::URL_LIST_CURRENT_PAGE);
+        $aParameters = ['module_fnc', TdbShopArticleList::URL_LIST_KEY_NAME, TdbShopArticleList::URL_LIST_REQUEST, TdbShopArticleList::URL_LIST_CURRENT_PAGE];
 
         return $aParameters;
     }
@@ -607,7 +608,7 @@ class TShopArticleList extends TShopArticleListAutoParent
      */
     public static function GetGlobalArticleListCacheKeyParameters()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -615,6 +616,6 @@ class TShopArticleList extends TShopArticleListAutoParent
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

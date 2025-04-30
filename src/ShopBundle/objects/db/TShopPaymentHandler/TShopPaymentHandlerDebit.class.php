@@ -18,10 +18,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * the paymenthandlers are used to handle the different payment methods. They ensure that the right
  * information is collected from the user, and that the payment is executed (as may be the case for online payment)
  * Note that the default handler has no functionality. it must be extended in order to do anything usefull.
-/**/
+ * /**/
 class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
 {
-    const MSG_MANAGER_NAME = 'TShopPaymentHandlerDebitMSG';
+    public const MSG_MANAGER_NAME = 'TShopPaymentHandlerDebitMSG';
 
     protected function GetViewPath()
     {
@@ -48,7 +48,7 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
     protected function GetUserPaymentData()
     {
         $aData = parent::GetUserPaymentData();
-        $process = array('iban', 'bic');
+        $process = ['iban', 'bic'];
         foreach ($process as $field) {
             if (false === isset($aData[$field])) {
                 continue;
@@ -65,8 +65,6 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
      * return true if the user data is valid
      * data will be passed as an array.
      *
-     * @param array $aUserData - the user data
-     *
      * @return bool
      */
     public function ValidateUserInput()
@@ -75,7 +73,7 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
 
         if ($bIsValid) {
             $oMsgManager = TCMSMessageManager::GetInstance();
-            $required = array('iban');
+            $required = ['iban'];
             if (!self::isGermanIBAN($this->aPaymentUserData['iban'])) {
                 $required[] = 'bic';
             }
@@ -97,8 +95,7 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
     /**
      * executes payment for order.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -124,8 +121,8 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
     {
         $aPaymentData = parent::PreSaveUserPaymentDataToOrderHook($aPaymentData);
 
-        $fields = array('accountOwner', 'accountNr', 'bankNr', 'iban', 'bic');
-        $aFilteredData = array();
+        $fields = ['accountOwner', 'accountNr', 'bankNr', 'iban', 'bic'];
+        $aFilteredData = [];
         foreach ($fields as $field) {
             if (isset($aPaymentData[$field])) {
                 $aFilteredData[$field] = $aPaymentData[$field];
@@ -137,6 +134,7 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
 
     /**
      * @param string $iban
+     *
      * @return bool
      */
     private function isGermanIBAN($iban)
@@ -146,6 +144,7 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
 
     /**
      * @param string $iban
+     *
      * @return bool
      */
     private function validateIBAN($iban)
@@ -154,7 +153,7 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
         $result = $this->getValidator()->validate($iban, new Iban());
 
         if ($result->count() > 0) {
-            $oMsgManager->AddMessage(self::MSG_MANAGER_NAME.'-iban', 'VALIDATOR_CONSTRAINT_FINANCE_IBAN', array('value' => $iban));
+            $oMsgManager->AddMessage(self::MSG_MANAGER_NAME.'-iban', 'VALIDATOR_CONSTRAINT_FINANCE_IBAN', ['value' => $iban]);
 
             return false;
         }
@@ -164,6 +163,7 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
 
     /**
      * @param string $bic
+     *
      * @return bool
      */
     private function validateBIC($bic)
@@ -176,7 +176,7 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
         $result = $this->getValidator()->validate($bic, new Bic());
 
         if ($result->count() > 0) {
-            $oMsgManager->AddMessage(self::MSG_MANAGER_NAME.'-bic', $result->get(0)->getMessageTemplate(), array('value' => $bic));
+            $oMsgManager->AddMessage(self::MSG_MANAGER_NAME.'-bic', $result->get(0)->getMessageTemplate(), ['value' => $bic]);
 
             return false;
         }

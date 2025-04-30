@@ -16,16 +16,16 @@ class TPkgShopViewMyOrderDetailsSessionAdapter implements IPkgShopViewMyOrderDet
      */
     private $session;
 
-    const SESSIONNAME = 'pkgshop/myOrderList';
+    public const SESSIONNAME = 'pkgshop/myOrderList';
 
-    public function __construct(\Symfony\Component\HttpFoundation\Session\SessionInterface $session)
+    public function __construct(Symfony\Component\HttpFoundation\Session\SessionInterface $session)
     {
         $this->session = $session;
     }
 
     public function addOrderId($orderId)
     {
-        $orderIdList = $this->session->get(self::SESSIONNAME, array());
+        $orderIdList = $this->session->get(self::SESSIONNAME, []);
         $orderIdList[] = $orderId;
         $this->session->set(self::SESSIONNAME, $orderIdList);
     }
@@ -37,7 +37,7 @@ class TPkgShopViewMyOrderDetailsSessionAdapter implements IPkgShopViewMyOrderDet
      */
     public function hasOrder($orderId)
     {
-        $orderIdList = $this->session->get(self::SESSIONNAME, array());
+        $orderIdList = $this->session->get(self::SESSIONNAME, []);
 
         return true === in_array($orderId, $orderIdList);
     }

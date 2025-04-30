@@ -11,7 +11,7 @@
 
 /**
  * assumes the path in the TCMSSmartURLData is a simple tree path.
-/**/
+ * /**/
 class TCMSSmartURLHandler_ShopBasketSteps extends TCMSSmartURLHandler
 {
     public function GetPageDef()
@@ -19,13 +19,13 @@ class TCMSSmartURLHandler_ShopBasketSteps extends TCMSSmartURLHandler
         $iPageId = false;
         $oURLData = TCMSSmartURLData::GetActive();
 
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
         $oStep = $this->GetActiveStep($oURLData);
         if (!is_null($oStep)) {
             $this->aCustomURLParameters[MTShopOrderWizardCore::URL_PARAM_STEP_SYSTEM_NAME] = $oStep->fieldSystemname;
             $iNode = $oShop->GetSystemPageNodeId('checkout');
             $oNode = new TCMSTreeNode();
-            /** @var $oNode TCMSTreeNode */
+            /* @var $oNode TCMSTreeNode */
             $oNode->Load($iNode);
             $iPageId = $oNode->GetLinkedPage();
         }
@@ -41,7 +41,7 @@ class TCMSSmartURLHandler_ShopBasketSteps extends TCMSSmartURLHandler
     protected function GetActiveStep($oURLData)
     {
         $oStep = null;
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
         $sCheckoutPath = $oShop->GetLinkToSystemPage('checkout');
         if ('.html' == substr($sCheckoutPath, -5)) {
             $sCheckoutPath = substr($sCheckoutPath, 0, -5);
@@ -62,7 +62,7 @@ class TCMSSmartURLHandler_ShopBasketSteps extends TCMSSmartURLHandler
             }
 
             $oStep = TdbShopOrderStep::GetNewInstance();
-            /** @var $oStep TdbShopOrderStep */
+            /* @var $oStep TdbShopOrderStep */
             if (!is_null($oURLData->sLanguageId)) {
                 $oStep->SetLanguage($oURLData->sLanguageId);
             }

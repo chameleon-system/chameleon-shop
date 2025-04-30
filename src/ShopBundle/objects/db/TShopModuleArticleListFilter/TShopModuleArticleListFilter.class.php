@@ -33,10 +33,9 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
     /**
      * factory creates a new instance and returns it.
      *
-     * @param string|array $sData     - either the id of the object to load, or the row with which the instance should be initialized
-     * @param string       $sLanguage - init with the language passed
-     *
-     * @return TdbShopModuleArticleListFilter     */
+     * @param string|array $sData - either the id of the object to load, or the row with which the instance should be initialized
+     * @param string $sLanguage - init with the language passed
+     */
     public static function GetNewInstance($sData = null, $sLanguage = null): TdbShopModuleArticleListFilter
     {
         $canBeCached = false;
@@ -48,14 +47,14 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
                 return clone self::$cache[$cacheKey];
             }
         }
-        $oObject = parent:: GetNewInstance($sData, $sLanguage);
+        $oObject = parent::GetNewInstance($sData, $sLanguage);
         if ($oObject && false !== $oObject->sqlData && isset($oObject->sqlData['class']) && !empty($oObject->sqlData['class'])) {
             $sClassName = $oObject->sqlData['class'];
             $oNewObject = new $sClassName();
             $oNewObject->LoadFromRow($oObject->sqlData);
 
             if ($canBeCached) {
-                /**
+                /*
                  * @psalm-suppress InvalidPropertyAssignmentValue - through `$canBeCached` we know that at this place, `$cacheKey` is not `null`
                  */
                 self::$cache[$cacheKey] = $oNewObject;
@@ -132,7 +131,8 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
             $sQuery .= ' ORDER BY '.$sOrderBy;
         }
         $sQuery .= ' '.$this->GetListQueryLimit($oListConfig);
-        //echo '[ '.$sQuery.' ]';
+
+        // echo '[ '.$sQuery.' ]';
         return $sQuery;
     }
 
@@ -145,7 +145,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      */
     protected function GetGlobalQueryRestrictions($oListConfig)
     {
-        $aRestrictions = array();
+        $aRestrictions = [];
         $bRestrictToParentArticles = (false == $this->AllowArticleVariants());
         $aRestrictions[] = TdbShopArticleList::GetActiveArticleQueryRestriction($bRestrictToParentArticles);
 
@@ -186,20 +186,20 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      * return a query for all manually assigned articles. this list can be restricted to a list of categories.
      *
      * @param TdbShopModuleArticleList $oListConfig
-     * @param array                    $aCategoryList
+     * @param array $aCategoryList
      *
      * @return string
      */
     protected function GetListBaseQueryRestrictedToCategories($oListConfig, $aCategoryList = null)
     {
-        $aCustRestriction = array();
+        $aCustRestriction = [];
 
         // get category products
         $categories = $oListConfig->GetMLTIdList('shop_category_mlt');
 
         $databaseConnection = $this->getDatabaseConnection();
         $quotedListConfigId = $databaseConnection->quote($oListConfig->id);
-        $quotedCategories = implode(',', array_map(array($databaseConnection, 'quote'), $categories));
+        $quotedCategories = implode(',', array_map([$databaseConnection, 'quote'], $categories));
 
         $sQuery = "SELECT DISTINCT `shop_module_article_list_article`.`name` AS conf_alternativ_header, (-1*`shop_module_article_list_article`.`position`) AS cms_search_weight, `shop_article`.*
                  FROM `shop_article`
@@ -221,7 +221,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
         $productGroupRestriction = $oListConfig->GetMLTIdList('shop_article_group_mlt');
         if (count($productGroupRestriction) > 0) {
             $sQuery .= ' LEFT JOIN `shop_article_shop_article_group_mlt` ON `shop_article`.`id` = `shop_article_shop_article_group_mlt`.`source_id` ';
-            $productGroupRestriction = implode(',', array_map(array($databaseConnection, 'quote'), $productGroupRestriction));
+            $productGroupRestriction = implode(',', array_map([$databaseConnection, 'quote'], $productGroupRestriction));
             $aCustRestriction[] = "`shop_article_shop_article_group_mlt`.`target_id` IN ($productGroupRestriction)";
         }
 
@@ -230,7 +230,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
             $sCustQuery = 'WHERE ('.implode("\nOR ", $aCustRestriction).')';
         }
         if (null !== $aCategoryList) {
-            $escapedCategoryList = implode(',', array_map(array($databaseConnection, 'quote'), $aCategoryList));
+            $escapedCategoryList = implode(',', array_map([$databaseConnection, 'quote'], $aCategoryList));
             $sCustQuery .= " AND (`shop_article_shop_category_mlt`.`target_id` IN ($escapedCategoryList))";
         }
         $sQuery .= $sCustQuery;
@@ -312,8 +312,8 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      */
     public function _GetCacheParameters()
     {
-        $aParams = array();
-        $oActiveCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+        $aParams = [];
+        $oActiveCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
         if (!is_null($oActiveCategory)) {
             $aParams['activecategoryid'] = $oActiveCategory->id;
         }
@@ -335,7 +335,7 @@ class TShopModuleArticleListFilter extends TShopModuleArticleListFilterAutoParen
      */
     public function _GetCacheTableInfos()
     {
-        $aClearCacheInfo = array();
+        $aClearCacheInfo = [];
 
         return $aClearCacheInfo;
     }

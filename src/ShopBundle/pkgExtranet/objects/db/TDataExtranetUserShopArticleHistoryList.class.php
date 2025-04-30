@@ -16,6 +16,7 @@ class TDataExtranetUserShopArticleHistoryList extends TAdbDataExtranetUserShopAr
      *
      * @param int $iNumberOfRecords
      * @param string $sExtranetUserId
+     *
      * @return void
      *
      * @psalm-param positive-int $iNumberOfRecords
@@ -23,7 +24,7 @@ class TDataExtranetUserShopArticleHistoryList extends TAdbDataExtranetUserShopAr
     public static function ReducedListForUser($iNumberOfRecords, $sExtranetUserId)
     {
         $oList = TdbDataExtranetUserShopArticleHistoryList::GetListForDataExtranetUserId($sExtranetUserId);
-        $oList->ChangeOrderBy(array('`data_extranet_user_shop_article_history`.`datecreated`' => 'DESC', '`data_extranet_user_shop_article_history`.`cmsident`' => 'DESC'));
+        $oList->ChangeOrderBy(['`data_extranet_user_shop_article_history`.`datecreated`' => 'DESC', '`data_extranet_user_shop_article_history`.`cmsident`' => 'DESC']);
         $iRows = $oList->Length();
 
         $iRemove = $iRows - $iNumberOfRecords;

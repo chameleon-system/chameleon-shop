@@ -15,13 +15,14 @@ class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMappe
 {
     /**
      * @var array<string, array{bRequired: bool, sFilter: string}>
+     *
      * @psalm-var array<string, array{bRequired: bool, sFilter: TCMSUserInput::FILTER_*}>
      */
-    protected $aInputDefinition = array(
-                'name' => array('bRequired' => true, 'sFilter' => TCMSUserInput::FILTER_SAFE_TEXT),
-                'email' => array('bRequired' => true, 'sFilter' => TCMSUserInput::FILTER_DEFAULT),
-                'question' => array('bRequired' => true, 'sFilter' => TCMSUserInput::FILTER_SAFE_TEXTBLOCK),
-            );
+    protected $aInputDefinition = [
+                'name' => ['bRequired' => true, 'sFilter' => TCMSUserInput::FILTER_SAFE_TEXT],
+                'email' => ['bRequired' => true, 'sFilter' => TCMSUserInput::FILTER_DEFAULT],
+                'question' => ['bRequired' => true, 'sFilter' => TCMSUserInput::FILTER_SAFE_TEXTBLOCK],
+            ];
 
     protected function DefineInterface()
     {
@@ -44,9 +45,7 @@ class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMappe
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
@@ -54,7 +53,7 @@ class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMappe
 
         $oVisitor->SetMappedValue('sFormMessages', $oMsgManager->RenderMessages($this->sModuleSpotName));
         reset($this->aInputDefinition);
-        $aErrors = array();
+        $aErrors = [];
         foreach ($this->aInputDefinition as $sField => $aFieldDef) {
             $sError = $oMsgManager->RenderMessages($this->sModuleSpotName.'-'.$sField);
             if (!empty($sError)) {
@@ -73,9 +72,9 @@ class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMappe
      */
     protected function getHiddenFields()
     {
-        $aParameter = array(
-            'module_fnc' => array($this->sModuleSpotName => 'askQuestion'),
-        );
+        $aParameter = [
+            'module_fnc' => [$this->sModuleSpotName => 'askQuestion'],
+        ];
 
         $sHiddenFields = TTools::GetArrayAsFormInput($aParameter);
         $sHiddenFields .= "\n".$this->getHiddenAntiSpamField();
@@ -117,7 +116,7 @@ class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMappe
      */
     protected function askQuestion()
     {
-        $aFilteredInput = array();
+        $aFilteredInput = [];
 
         $bHasErrors = false;
         $oMsgManager = TCMSMessageManager::GetInstance();
@@ -166,12 +165,12 @@ class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMappe
         $oMailProfile->AddDataArray($aData);
         // now add product info as well
         /** @var $oActiveProduct TdbShopArticle */
-        $oActiveProduct = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
+        $oActiveProduct = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         $aArticleData = $oActiveProduct->GetObjectPropertiesAsArray();
         $oMailProfile->AddDataArray($aArticleData);
         // add link to article
 
-        $sLink = $oActiveProduct->getLink(true, null, array(TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => null));
+        $sLink = $oActiveProduct->getLink(true, null, [TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => null]);
         $oMailProfile->AddData('sLink', $sLink);
         $oMailProfile->ChangeFromAddress($aData['email'], $aData['name']);
         $oMailProfile->SendUsingObjectView('emails', 'Customer');
@@ -187,7 +186,7 @@ class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMappe
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -195,6 +194,6 @@ class MTShopArticleQuestionEndPoint extends MTPkgViewRendererAbstractModuleMappe
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

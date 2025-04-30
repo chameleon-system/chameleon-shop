@@ -4,25 +4,22 @@ namespace ChameleonSystem\ShopBundle\Entity\ShopCore;
 
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
 use ChameleonSystem\ShopBundle\Entity\Product\ShopArticle;
-use DateTime;
 
 class ShopUserNoticeList
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var DataExtranetUser|null - Belongs to customer */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Added */
-        private ?DateTime $dateAdded = null,
+        /** @var \DateTime|null - Added */
+        private ?\DateTime $dateAdded = null,
         // TCMSFieldExtendedLookup
         /** @var ShopArticle|null - Article */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldDecimal
         /** @var string - Units */
         private string $amount = '1'
@@ -66,20 +63,18 @@ class ShopUserNoticeList
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDateAdded(): ?DateTime
+    public function getDateAdded(): ?\DateTime
     {
         return $this->dateAdded;
     }
 
-    public function setDateAdded(?DateTime $dateAdded): self
+    public function setDateAdded(?\DateTime $dateAdded): self
     {
         $this->dateAdded = $dateAdded;
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getShopArticle(): ?ShopArticle
@@ -94,7 +89,6 @@ class ShopUserNoticeList
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getAmount(): string
     {
@@ -107,6 +101,4 @@ class ShopUserNoticeList
 
         return $this;
     }
-
-
 }

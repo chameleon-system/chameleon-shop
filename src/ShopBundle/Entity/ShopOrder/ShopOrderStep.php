@@ -8,7 +8,7 @@ class ShopOrderStep
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Internal name */
@@ -92,7 +92,6 @@ class ShopOrderStep
         return $this;
     }
 
-
     // TCMSFieldSEOURLTitle
     public function getUrlName(): string
     {
@@ -105,7 +104,6 @@ class ShopOrderStep
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -120,7 +118,6 @@ class ShopOrderStep
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowInNavigation(): bool
     {
@@ -133,7 +130,6 @@ class ShopOrderStep
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getDescription(): string
@@ -148,7 +144,6 @@ class ShopOrderStep
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -161,7 +156,6 @@ class ShopOrderStep
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getClass(): string
@@ -176,7 +170,6 @@ class ShopOrderStep
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getClassType(): string
     {
@@ -189,7 +182,6 @@ class ShopOrderStep
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClassSubtype(): string
@@ -204,7 +196,6 @@ class ShopOrderStep
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getRenderViewName(): string
     {
@@ -217,7 +208,6 @@ class ShopOrderStep
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getRenderViewType(): string
@@ -232,7 +222,6 @@ class ShopOrderStep
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCssIconClassInactive(): string
     {
@@ -245,7 +234,6 @@ class ShopOrderStep
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getCssIconClassActive(): string
@@ -260,7 +248,6 @@ class ShopOrderStep
         return $this;
     }
 
-
     // TCMSFieldTreeNode
     public function getTemplateNodeCmsTree(): ?CmsTree
     {
@@ -273,6 +260,4 @@ class ShopOrderStep
 
         return $this;
     }
-
-
 }

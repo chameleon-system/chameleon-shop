@@ -8,16 +8,14 @@ class PkgShopListfilterItem
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var PkgShopListfilter|null - Belongs to list filter configuration */
-        private ?PkgShopListfilter $pkgShopListfilter = null
-        ,
+        private ?PkgShopListfilter $pkgShopListfilter = null,
         // TCMSFieldLookup
         /** @var PkgShopListfilterItemType|null - Filter type */
-        private ?PkgShopListfilterItemType $pkgShopListfilterItemType = null
-        ,
+        private ?PkgShopListfilterItemType $pkgShopListfilterItemType = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -26,8 +24,7 @@ class PkgShopListfilterItem
         private string $systemname = '',
         // TCMSFieldExtendedLookup
         /** @var ShopAttribute|null - Belonging product attribute */
-        private ?ShopAttribute $shopAttribute = null
-        ,
+        private ?ShopAttribute $shopAttribute = null,
         // TCMSFieldBoolean
         /** @var bool - Multiple selections */
         private bool $allowMultiSelection = false,
@@ -101,7 +98,6 @@ class PkgShopListfilterItem
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getPkgShopListfilterItemType(): ?PkgShopListfilterItemType
     {
@@ -114,7 +110,6 @@ class PkgShopListfilterItem
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -129,7 +124,6 @@ class PkgShopListfilterItem
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemname(): string
     {
@@ -142,7 +136,6 @@ class PkgShopListfilterItem
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getShopAttribute(): ?ShopAttribute
@@ -157,7 +150,6 @@ class PkgShopListfilterItem
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isAllowMultiSelection(): bool
     {
@@ -170,7 +162,6 @@ class PkgShopListfilterItem
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isShowAllOnPageLoad(): bool
@@ -185,7 +176,6 @@ class PkgShopListfilterItem
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getPreviewSize(): int
     {
@@ -198,7 +188,6 @@ class PkgShopListfilterItem
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isShowScrollbars(): bool
@@ -213,7 +202,6 @@ class PkgShopListfilterItem
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getMinValue(): int
     {
@@ -226,7 +214,6 @@ class PkgShopListfilterItem
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getMaxValue(): int
@@ -241,7 +228,6 @@ class PkgShopListfilterItem
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getMysqlFieldName(): string
     {
@@ -254,7 +240,6 @@ class PkgShopListfilterItem
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getView(): string
@@ -269,7 +254,6 @@ class PkgShopListfilterItem
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getViewClassType(): string
     {
@@ -282,7 +266,6 @@ class PkgShopListfilterItem
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getPosition(): int
@@ -297,7 +280,6 @@ class PkgShopListfilterItem
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getVariantIdentifier(): string
     {
@@ -310,6 +292,4 @@ class PkgShopListfilterItem
 
         return $this;
     }
-
-
 }

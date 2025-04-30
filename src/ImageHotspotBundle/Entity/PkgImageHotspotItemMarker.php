@@ -8,12 +8,11 @@ class PkgImageHotspotItemMarker
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var PkgImageHotspotItem|null - Belongs to hotspot image */
-        private ?PkgImageHotspotItem $pkgImageHotspotItem = null
-        ,
+        private ?PkgImageHotspotItem $pkgImageHotspotItem = null,
         // TCMSFieldVarchar
         /** @var string - Alt or link text of the image */
         private string $name = '',
@@ -26,7 +25,7 @@ class PkgImageHotspotItemMarker
         // TCMSFieldExtendedLookupMultiTable
         /** @var string - Link to object */
         private string $linkedRecord = '',
-// TCMSFieldExtendedLookupMultiTable
+        // TCMSFieldExtendedLookupMultiTable
         /** @var string - Link to object */
         private string $linkedRecordTableName = '',
         // TCMSFieldURL
@@ -37,8 +36,7 @@ class PkgImageHotspotItemMarker
         private bool $showObjectLayover = false,
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Image */
-        private ?CmsMedia $cmsMedia = null
-        ,
+        private ?CmsMedia $cmsMedia = null,
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Hover image */
         private ?CmsMedia $cmsMediaHover = null
@@ -82,7 +80,6 @@ class PkgImageHotspotItemMarker
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -95,7 +92,6 @@ class PkgImageHotspotItemMarker
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getTop(): int
@@ -110,7 +106,6 @@ class PkgImageHotspotItemMarker
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getLeft(): int
     {
@@ -123,7 +118,6 @@ class PkgImageHotspotItemMarker
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookupMultiTable
     public function getLinkedRecord(): string
@@ -138,7 +132,7 @@ class PkgImageHotspotItemMarker
         return $this;
     }
 
-// TCMSFieldExtendedLookupMultiTable
+    // TCMSFieldExtendedLookupMultiTable
     public function getLinkedRecordTableName(): string
     {
         return $this->linkedRecordTableName;
@@ -150,7 +144,6 @@ class PkgImageHotspotItemMarker
 
         return $this;
     }
-
 
     // TCMSFieldURL
     public function getUrl(): string
@@ -165,7 +158,6 @@ class PkgImageHotspotItemMarker
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowObjectLayover(): bool
     {
@@ -178,7 +170,6 @@ class PkgImageHotspotItemMarker
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
@@ -193,7 +184,6 @@ class PkgImageHotspotItemMarker
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getCmsMediaHover(): ?CmsMedia
     {
@@ -206,6 +196,4 @@ class PkgImageHotspotItemMarker
 
         return $this;
     }
-
-
 }

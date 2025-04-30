@@ -12,20 +12,18 @@
 class TShopStockMessage extends TAdbShopStockMessage
 {
     /**
-     * @var null|array{amount: int, range: float, oTrigger: TdbShopStockMessageTrigger}[]
+     * @var array{amount: int, range: float, oTrigger: TdbShopStockMessageTrigger}[]|null
      */
-    protected $aMessagesForQuantity = null;
+    protected $aMessagesForQuantity;
 
     /**
      * @var string|null
      */
-    private $sArticleKey = null;
+    private $sArticleKey;
 
     /**
      * @param null $sData
      * @param null $sLanguage
-     *
-     * @return TdbShopStockMessage
      */
     public static function GetNewInstance($sData = null, $sLanguage = null): TdbShopStockMessage
     {
@@ -52,14 +50,14 @@ class TShopStockMessage extends TAdbShopStockMessage
         $oShopStockMessageTrigger = null;
         $sMessage = $this->RenderStockMessage();
         if (is_object($this->GetArticle()) && property_exists($this->GetArticle(), 'dAmount') && is_null($this->aMessagesForQuantity)) {
-            /**
+            /*
              * @psalm-suppress UndefinedPropertyFetch - We are explicitly checking if the property exists above
              */
             $this->aMessagesForQuantity = $this->GetMessagesFromTriggerForQuantity($this->GetArticle()->dAmount);
         }
         if (is_array($this->aMessagesForQuantity)) {
             reset($this->aMessagesForQuantity);
-            $aOther = array();
+            $aOther = [];
             foreach (array_keys($this->aMessagesForQuantity) as $iMessageIndex) {
                 $aMessage = $this->aMessagesForQuantity[$iMessageIndex];
                 $iAmount = $this->aMessagesForQuantity[$iMessageIndex]['amount'];
@@ -113,16 +111,16 @@ class TShopStockMessage extends TAdbShopStockMessage
      *
      * @return string
      */
-    protected function RenderShippingMessageFromTriggerForQuantity($aMessage = array())
+    protected function RenderShippingMessageFromTriggerForQuantity($aMessage = [])
     {
         $sTriggerMessage = $aMessage['oTrigger']->fieldMessage;
         $sString = '<span class="'.$this->getCssClassForMessageForQuantity($aMessage).'">'.
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
+            ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
                 'chameleon_system_shop.stock_message.different_shipping_time_applies',
-                array(
+                [
                     '%amount%' => $aMessage['amount'],
                     '%shippingMessage%' => $sTriggerMessage,
-                )
+                ]
             ).'</span>';
 
         return $sString;
@@ -140,7 +138,7 @@ class TShopStockMessage extends TAdbShopStockMessage
         if (is_object($this->GetArticle())) {
             return $this->GetArticle()->GetSQLWithTablePrefix();
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -195,8 +193,8 @@ class TShopStockMessage extends TAdbShopStockMessage
         $oShopStockMessageTrigger = $this->GetFromInternalCache('oActive_shop_stock_message_trigger_id');
 
         if (is_null($oShopStockMessageTrigger)) {
-            /** @var \Doctrine\DBAL\Connection $connection */
-            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+            /** @var Doctrine\DBAL\Connection $connection */
+            $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
             $quotedShopStockMessageId = $connection->quote($this->id);
             $quotedAvailableStock = $connection->quote($this->GetArticle()->getAvailableStock());
@@ -213,9 +211,9 @@ class TShopStockMessage extends TAdbShopStockMessage
             $row = $result->fetchAssociative();
 
             $oShopStockMessageTrigger = TdbShopStockMessageTrigger::GetNewInstance();
-            /** @var $oShopStockMessageTrigger TdbShopStockMessageTrigger */
+            /* @var $oShopStockMessageTrigger TdbShopStockMessageTrigger */
 
-            //if (!$oShopStockMessageTrigger->LoadFromRow(MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($sQuery)))) $oShopStockMessageTrigger = null;
+            // if (!$oShopStockMessageTrigger->LoadFromRow(MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($sQuery)))) $oShopStockMessageTrigger = null;
             if (false !== $row) {
                 $oTmp = (object) $row;
                 if (!$oShopStockMessageTrigger->LoadFromField('id', $oTmp->id)) {
@@ -243,15 +241,15 @@ class TShopStockMessage extends TAdbShopStockMessage
     protected function GetMessagesFromTriggerForQuantity($dQuantityRequested)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         // need to find range for every stock type first
-        $aStock = array();
+        $aStock = [];
         $iTotalStock = $this->GetArticle()->getAvailableStock();
-        $oTriggerList = $this->GetFieldShopStockMessageTriggerListOrdered(array('amount' => 'ASC'));
+        $oTriggerList = $this->GetFieldShopStockMessageTriggerListOrdered(['amount' => 'ASC']);
         $oActiveTrigger = $this->GetFieldShopStockMessageTrigger();
         if ($oActiveTrigger) {
-            $oTriggerList->AddFilterString("`shop_stock_message_trigger`.`id` != ".$connection->quote($oActiveTrigger->id));
+            $oTriggerList->AddFilterString('`shop_stock_message_trigger`.`id` != '.$connection->quote($oActiveTrigger->id));
         }
         if ($oTriggerList->Length() > 0) {
             $oPrevious = null;
@@ -264,7 +262,7 @@ class TShopStockMessage extends TAdbShopStockMessage
                     } else {
                         $dRange = -1;
                     }
-                    $aStock[$iPos] = array('oTrigger' => $oTrigger, 'dRange' => $dRange, 'amount' => 0);
+                    $aStock[$iPos] = ['oTrigger' => $oTrigger, 'dRange' => $dRange, 'amount' => 0];
                     $oPrevious = $oTrigger;
                     ++$iPos;
                 }
@@ -302,10 +300,12 @@ class TShopStockMessage extends TAdbShopStockMessage
 
     /**
      * @param array<string, string>|null $aOrderBy
+     *
      * @psalm-param array<string, 'ASC'|'DESC'>|null $aOrderBy
+     *
      * @return TdbShopStockMessageTriggerList
      */
-    public function GetFieldShopStockMessageTriggerListOrdered(array $aOrderBy = null)
+    public function GetFieldShopStockMessageTriggerListOrdered(?array $aOrderBy = null)
     {
         $oTriggerList = $this->GetFromInternalCache('oShopStockMessageTriggerList');
         if (is_null($oTriggerList)) {

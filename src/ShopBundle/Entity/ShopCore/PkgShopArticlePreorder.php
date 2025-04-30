@@ -4,24 +4,22 @@ namespace ChameleonSystem\ShopBundle\Entity\ShopCore;
 
 use ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal;
 use ChameleonSystem\ShopBundle\Entity\Product\ShopArticle;
-use DateTime;
 
 class PkgShopArticlePreorder
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldExtendedLookup
         /** @var ShopArticle|null - Preordered product */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldEmail
         /** @var string - Email address */
         private string $preorderUserEmail = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Date */
-        private ?DateTime $preorderDate = null,
+        /** @var \DateTime|null - Date */
+        private ?\DateTime $preorderDate = null,
         // TCMSFieldLookup
         /** @var CmsPortal|null - Belongs to portal */
         private ?CmsPortal $cmsPortal = null
@@ -65,7 +63,6 @@ class PkgShopArticlePreorder
         return $this;
     }
 
-
     // TCMSFieldEmail
     public function getPreorderUserEmail(): string
     {
@@ -79,20 +76,18 @@ class PkgShopArticlePreorder
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getPreorderDate(): ?DateTime
+    public function getPreorderDate(): ?\DateTime
     {
         return $this->preorderDate;
     }
 
-    public function setPreorderDate(?DateTime $preorderDate): self
+    public function setPreorderDate(?\DateTime $preorderDate): self
     {
         $this->preorderDate = $preorderDate;
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
@@ -106,6 +101,4 @@ class PkgShopArticlePreorder
 
         return $this;
     }
-
-
 }

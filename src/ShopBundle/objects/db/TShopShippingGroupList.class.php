@@ -51,7 +51,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
             $oShippingGroup = false;
         }
 
-        /** @var TdbShopShippingGroup|false $oShippingGroup */
+        /* @var TdbShopShippingGroup|false $oShippingGroup */
 
         return $oShippingGroup;
     }
@@ -78,7 +78,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
     public function RemoveInvalidItems()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $oBasket = TShopBasket::GetInstance();
         if (null === $oBasket) {
@@ -95,7 +95,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
 
             if ($oItem->isAvailableIgnoreGroupRestriction()) {
                 $aValidIds[] = $oItem->id;
-                $aValidShippingGroupItems['x' . $oItem->id] = $oItem;
+                $aValidShippingGroupItems['x'.$oItem->id] = $oItem;
             }
         }
 
@@ -104,7 +104,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
         $aRealValidIds = [];
         foreach ($aValidIds as $sShippingGroupId) {
             /** @var $oItem TdbShopShippingGroup */
-            $oItem = $aValidShippingGroupItems['x' . $sShippingGroupId];
+            $oItem = $aValidShippingGroupItems['x'.$sShippingGroupId];
             if ($oItem->allowedForShippingGroupList($aValidIds)) {
                 $aRealValidIds[] = $sShippingGroupId;
             }
@@ -118,7 +118,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
 
         if (count($aValidIds) > 0) {
             $quotedIds = array_map([$connection, 'quote'], $aValidIds);
-            $query .= '`shop_shipping_group`.`id` IN (' . implode(',', $quotedIds) . ') ';
+            $query .= '`shop_shipping_group`.`id` IN ('.implode(',', $quotedIds).') ';
         } else {
             $query .= '1 = 0 ';
         }
@@ -135,7 +135,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
     public function RemoveRestrictedItems()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         // since this is a tcmsrecord list, we need to collect all valid ids, and the reload the list with them
         $aValidIds = [];
@@ -152,7 +152,7 @@ class TShopShippingGroupList extends TShopShippingGroupListAutoParent
 
         if (count($aValidIds) > 0) {
             $quotedIds = array_map([$connection, 'quote'], $aValidIds);
-            $query .= '`shop_shipping_group`.`id` IN (' . implode(',', $quotedIds) . ') ';
+            $query .= '`shop_shipping_group`.`id` IN ('.implode(',', $quotedIds).') ';
         } else {
             $query .= '1 = 0 ';
         }

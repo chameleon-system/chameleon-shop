@@ -14,22 +14,22 @@ use ChameleonSystem\ShopArticleReviewBundle\AuthorDisplayConstants;
 
 /**
  * used to show and write article reviews.
-/**/
+ * /**/
 class MTPkgShopArticleReviewCore extends TUserCustomModelBase
 {
     /** @var TdbPkgShopArticleReviewModuleShopArticleReviewConfiguration */
-    protected $oModuleConfiguration = null;
+    protected $oModuleConfiguration;
 
     /** @var string|false */
     protected $sPkgCommentTypeId = false;
 
-    const MSG_CONSUMER_NAME = 'MTPkgShopArticleReview';
+    public const MSG_CONSUMER_NAME = 'MTPkgShopArticleReview';
 
-    const SESSION_CAPTCHA = 'MTPkgShopArticleReviewCaptcha';
+    public const SESSION_CAPTCHA = 'MTPkgShopArticleReviewCaptcha';
 
-    const URL_PARAM_REVIEW_JUMPER = 'ReviewStart';
+    public const URL_PARAM_REVIEW_JUMPER = 'ReviewStart';
 
-    const URL_PARAM_REVIEW_WRITE_JUMPER = 'WriteReview';
+    public const URL_PARAM_REVIEW_WRITE_JUMPER = 'WriteReview';
 
     /**
      * called before any external functions get called, but after the constructor.
@@ -51,7 +51,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
         if ($this->global->UserDataExists(TdbShopArticleReview::INPUT_BASE_NAME)) {
             $aPostUserData = $this->global->GetuserData(TdbShopArticleReview::INPUT_BASE_NAME);
         }
-        $aDefaultFieldDataList = array('comment' => '', 'author_email' => '', 'author_name' => '', 'title' => '', 'send_comment_notification' => '0', 'rating' => 1);
+        $aDefaultFieldDataList = ['comment' => '', 'author_email' => '', 'author_name' => '', 'title' => '', 'send_comment_notification' => '0', 'rating' => 1];
         if (isset($aPostUserData) && is_array($aPostUserData)) {
             foreach ($aDefaultFieldDataList as $sDefaultFieldDataKey => $aDefaultFieldDataValue) {
                 if (!array_key_exists($sDefaultFieldDataKey, $aPostUserData)) {
@@ -103,25 +103,25 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
             $oPkgCommentModuleConfig->fieldGuestCommentAllowed = !$oModuleConfiguration->fieldAllowWriteReviewLoggedinUsersOnly;
             $oPkgCommentModuleConfig->fieldPkgCommentTypeId = $this->GetCommentTypeId();
 
-            /**
+            /*
              * @psalm-suppress InvalidPropertyAssignmentValue
              * @FIXME field is `bool` but assigned `int` - This could yield unwanted behaviour, especially with strict checks
              */
             $oPkgCommentModuleConfig->fieldUseSimpleReporting = 1;
 
-            /**
+            /*
              * @psalm-suppress InvalidPropertyAssignmentValue
              * @FIXME field is `bool` but assigned `int` - This could yield unwanted behaviour, especially with strict checks
              */
             $oPkgCommentModuleConfig->fieldShowReportedComments = 0;
 
-            /**
+            /*
              * @psalm-suppress UndefinedPropertyAssignment
              * @FIXME Does `fieldCountShowReviews` exist?
              */
             $oPkgCommentModuleConfig->fieldCountShowReviews = $oModuleConfiguration->fieldCountShowReviews;
 
-            /**
+            /*
              * @psalm-suppress UndefinedPropertyAssignment
              * @FIXME Does `fieldAllowReportComments` exist?
              */
@@ -299,14 +299,14 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * {@inheritdoc}
      */
-    public function _CallMethod($sMethodName, $aMethodParameter = array())
+    public function _CallMethod($sMethodName, $aMethodParameter = [])
     {
         $functionResult = null;
         if (true === \method_exists($this, $sMethodName)) {
             $functionResult = parent::_CallMethod($sMethodName);
         } else {
             if ($this->AllowToCommentReview()) {
-                $oModule = TTools::GetModuleObject('MTPkgComment', 'standard', array(), $this->sModuleSpotName);
+                $oModule = TTools::GetModuleObject('MTPkgComment', 'standard', [], $this->sModuleSpotName);
                 $oModuleCommentConfiguration = $this->GetPkgCommentModuleConfiguration();
                 $oModule->SetModuleConfig($oModuleCommentConfiguration);
                 if ('WriteComment' == $sMethodName) {
@@ -375,7 +375,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      *
      * @return never
      */
-    protected function RedirectToItemPage($oReviewItem = null, $aAddParameter = array(), $bGoToWriteReviewFrom = false)
+    protected function RedirectToItemPage($oReviewItem = null, $aAddParameter = [], $bGoToWriteReviewFrom = false)
     {
         $oActivePage = $this->getActivePageService()->getActivePage();
         $sRedirectURL = $oActivePage->GetRealURLPlain($aAddParameter);
@@ -400,7 +400,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      */
     protected function GetReviews()
     {
-        $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
+        $oActiveArticle = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         $oReviewList = null;
         if ($oActiveArticle) {
             $oReviewList = $this->GetReviewsForArticle($oActiveArticle);
@@ -440,7 +440,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
         if ($oActiveArticle->IsVariant()) {
             $oActiveArticle = $oActiveArticle->GetFieldVariantParent();
         }
-        $oActiveCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+        $oActiveCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
 
         $this->data['oActiveCategory'] = $oActiveCategory;
         $this->data['oActiveArticle'] = $oActiveArticle;
@@ -471,7 +471,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
                     $oReviewItem->sqlData['publish'] = true;
                     $oReviewItem->sqlData['action_id'] = '';
                     $oReviewItem->Save();
-                    $oArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
+                    $oArticle = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
                     if ($oArticle->IsVariant()) {
                         $oArticle = $oArticle->GetFieldVariantParent();
                     }
@@ -595,7 +595,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     protected function DeleteConnectedComments($oReviewItem)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         if ($this->AllowToCommentReview()) {
             $quotedTableName = $connection->quote($oReviewItem->table);
@@ -639,7 +639,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
                     $oReviewItem->AllowEditByAll(true);
                     $oReviewItem->Save();
                     $oReviewItem->SendReviewReportNotification();
-                    $oArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
+                    $oArticle = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
                     if ($oArticle->IsVariant()) {
                         $oArticle = $oArticle->GetFieldVariantParent();
                     }
@@ -761,9 +761,9 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      */
     public function WriteReview()
     {
-        //validate user input...
+        // validate user input...
         $oGlobal = TGlobal::instance();
-        $aUserData = array();
+        $aUserData = [];
         if ($this->AllowWriteReview()) {
             $aUserData = $this->GetReviewWriteData();
             $oGlobal->GetuserData(TdbShopArticleReview::INPUT_BASE_NAME);
@@ -777,7 +777,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
                 $this->RedirectToItemPage();
             }
         }
-        $this->RedirectToItemPage(null, array(TdbShopArticleReview::INPUT_BASE_NAME => $aUserData), true);
+        $this->RedirectToItemPage(null, [TdbShopArticleReview::INPUT_BASE_NAME => $aUserData], true);
     }
 
     /**
@@ -785,7 +785,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      */
     protected function GetArticleToReview()
     {
-        $oArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
+        $oArticle = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if ($oArticle->IsVariant()) {
             $oArticle = $oArticle->GetFieldVariantParent();
         }
@@ -817,7 +817,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     /**
      * Create a new review for given article with given data.
      *
-     * @param array          $aUserData
+     * @param array $aUserData
      * @param TdbShopArticle $oArticle
      *
      * @return TdbShopArticleReview
@@ -825,7 +825,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     protected function CreateReview($aUserData, $oArticle)
     {
         $oModuleConfiguration = $this->GetModuleConfiguration();
-        $oReviewItem = TdbShopArticleReview::GetNewInstance(); /*@var $oReviewItem TdbShopArticleReview*/
+        $oReviewItem = TdbShopArticleReview::GetNewInstance(); /* @var $oReviewItem TdbShopArticleReview */
         $aUserData['shop_article_id'] = $oArticle->id;
         $oReviewItem->LoadFromRowProtected($aUserData);
         if ($oModuleConfiguration->fieldManageReviews) {
@@ -848,9 +848,9 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     {
         $oModuleConfiguration = $this->GetModuleConfiguration();
         if ($oModuleConfiguration->fieldAllowWriteReviewLoggedinUsersOnly) {
-            $aRequiredFieldList = array('rating', 'author_name', 'data_extranet_user_id', 'comment');
+            $aRequiredFieldList = ['rating', 'author_name', 'data_extranet_user_id', 'comment'];
         } else {
-            $aRequiredFieldList = array('rating', 'author_name', 'comment');
+            $aRequiredFieldList = ['rating', 'author_name', 'comment'];
         }
 
         return $aRequiredFieldList;
@@ -906,16 +906,16 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     protected function InsertOfReviewLocked()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $bReviewLocked = false;
 
         $oArticle = $this->GetArticleToReview();
 
         if (
-            isset($_SESSION[TdbShopArticleReview::SESSION_REVIEWED_KEY_NAME]) &&
-            is_array($_SESSION[TdbShopArticleReview::SESSION_REVIEWED_KEY_NAME]) &&
-            in_array($oArticle->id, $_SESSION[TdbShopArticleReview::SESSION_REVIEWED_KEY_NAME], true)
+            isset($_SESSION[TdbShopArticleReview::SESSION_REVIEWED_KEY_NAME])
+            && is_array($_SESSION[TdbShopArticleReview::SESSION_REVIEWED_KEY_NAME])
+            && in_array($oArticle->id, $_SESSION[TdbShopArticleReview::SESSION_REVIEWED_KEY_NAME], true)
         ) {
             $bReviewLocked = true;
         }
@@ -1006,17 +1006,17 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
                         $sAuthor = $sUserPostName;
                     }
                     if (0 !== strcmp($sUserPostName, $oAuthor->fieldAliasName) && $oAuthor->IsLoggedIn() && $oAuthor->validateUserAlias($sUserPostName)) {
-                        $oAuthor->SaveFieldsFast(array('alias_name' => $sUserPostName));
+                        $oAuthor->SaveFieldsFast(['alias_name' => $sUserPostName]);
                     }
                     break;
                 case AuthorDisplayConstants::AUTHOR_DISPLAY_TYPE_ANONYMOUS:
                 default:
-                    $sAuthor = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.anonymous');
+                    $sAuthor = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.anonymous');
                     break;
             }
         }
         if (empty($sAuthor)) {
-            $sAuthor = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.anonymous');
+            $sAuthor = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.anonymous');
         }
 
         return $sAuthor;
@@ -1085,7 +1085,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -1093,6 +1093,6 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

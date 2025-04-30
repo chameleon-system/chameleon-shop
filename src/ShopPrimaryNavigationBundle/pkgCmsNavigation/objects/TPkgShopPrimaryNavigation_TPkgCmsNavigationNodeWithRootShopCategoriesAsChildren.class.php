@@ -21,7 +21,7 @@ class TPkgShopPrimaryNavigation_TPkgCmsNavigationNodeWithRootShopCategoriesAsChi
         }
 
         if (null === $this->aChildren) {
-            $this->aChildren = array();
+            $this->aChildren = [];
             $oRootCategories = TdbShopCategoryList::GetRootCategoryList();
             $oRootCategories->GoToStart();
             while ($oRootCategory = $oRootCategories->Next()) {

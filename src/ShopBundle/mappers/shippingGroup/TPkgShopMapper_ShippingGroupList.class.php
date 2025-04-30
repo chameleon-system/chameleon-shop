@@ -33,27 +33,27 @@ class TPkgShopMapper_ShippingGroupList extends AbstractViewMapper
         /** @var $oLocal TCMSLocal */
         $oLocal = $oVisitor->GetSourceObject('oLocal');
 
-        $aFormControlParameter = array(
-            'module_fnc' => array('[{sModuleSpotName}]' => 'ExecuteStep'),
+        $aFormControlParameter = [
+            'module_fnc' => ['[{sModuleSpotName}]' => 'ExecuteStep'],
             'orderstepmethod' => 'ChangeShippingGroup',
-        );
+        ];
 
-        $aShippingGroups = array();
+        $aShippingGroups = [];
         $oShippingGroupList->GoToStart();
         while ($oShippingGroup = $oShippingGroupList->Next()) {
             $dCost = $oShippingGroup->GetShippingCostsForBasket();
-            $aShippingGroups[] = array(
+            $aShippingGroups[] = [
                 'bIsActive' => ($oActiveShippingGroup && $oShippingGroup->id == $oActiveShippingGroup->id),
                 'id' => $oShippingGroup->id,
                 'sTitle' => $oShippingGroup->fieldName,
                 'sCost' => (0 != $dCost) ? ($oLocal->FormatNumber($dCost, 2)) : (''),
-            );
+            ];
         }
 
-        $aData = array(
+        $aData = [
             'sFormControlParameter' => TTools::GetArrayAsFormInput($aFormControlParameter),
             'aShippingGroups' => $aShippingGroups,
-        );
+        ];
 
         $oVisitor->SetMappedValueFromArray($aData);
     }

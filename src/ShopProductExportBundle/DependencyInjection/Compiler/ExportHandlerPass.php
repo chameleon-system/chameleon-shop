@@ -19,8 +19,6 @@ class ExportHandlerPass implements CompilerPassInterface
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
-     * @param ContainerBuilder $container
-     *
      * @api
      *
      * @return void
@@ -29,7 +27,7 @@ class ExportHandlerPass implements CompilerPassInterface
     {
         $exporter = $container->getDefinition('chameleon_system_shop_product_export.exporter');
         $exportHandlerIds = $container->findTaggedServiceIds('chameleon_system_shop_product_export.export_handler');
-        $aliasRegistered = array();
+        $aliasRegistered = [];
         foreach ($exportHandlerIds as $exportHandlerId => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
                 $alias = (isset($attributes['alias'])) ? $attributes['alias'] : null;
@@ -41,7 +39,7 @@ class ExportHandlerPass implements CompilerPassInterface
                     throw new \ErrorException("unable to register the export handler {$exportHandlerId} because there is already a handler registered with the alias {$alias}", 0, E_USER_ERROR, __FILE__, __LINE__);
                 }
                 $aliasRegistered[] = $alias;
-                $exporter->addMethodCall('registerHandler', array($alias, $container->getDefinition($exportHandlerId)));
+                $exporter->addMethodCall('registerHandler', [$alias, $container->getDefinition($exportHandlerId)]);
             }
         }
 

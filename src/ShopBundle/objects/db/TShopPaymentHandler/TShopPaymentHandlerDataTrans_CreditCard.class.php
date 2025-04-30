@@ -16,17 +16,17 @@ class TShopPaymentHandlerDataTrans_CreditCard extends TShopPaymentHandlerDataTra
     /**
      * constant for class specific error messages.
      */
-    const MSG_MANAGER_NAME = 'TShopDatatransHandlerCreditCarddMSG';
+    public const MSG_MANAGER_NAME = 'TShopDatatransHandlerCreditCarddMSG';
 
     /**
      * constant for class specific payment type.
      */
-    const PAYMENT_TYPE = 'ceditcard';
+    public const PAYMENT_TYPE = 'ceditcard';
 
     /**
      * constant for class specific payment reference id.
      */
-    const PAYMENT_REF_NO_ID = 'cc';
+    public const PAYMENT_REF_NO_ID = 'cc';
 
     /**
      * Get array with all possible payment identifier.

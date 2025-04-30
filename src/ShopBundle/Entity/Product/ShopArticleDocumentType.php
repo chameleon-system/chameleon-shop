@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\Product;
 
-
 class ShopArticleDocumentType
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Title / Headline */
@@ -55,7 +54,6 @@ class ShopArticleDocumentType
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemname(): string
     {
@@ -68,6 +66,4 @@ class ShopArticleDocumentType
 
         return $this;
     }
-
-
 }

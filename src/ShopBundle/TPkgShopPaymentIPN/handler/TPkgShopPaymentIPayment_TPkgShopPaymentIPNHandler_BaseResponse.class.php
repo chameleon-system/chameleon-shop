@@ -19,7 +19,6 @@ class TPkgShopPaymentIPayment_TPkgShopPaymentIPNHandler_BaseResponse implements 
      * the call should return true if processing should continue, false if it is to stop. On Error it should throw an error
      * extending AbstractPkgShopPaymentIPNHandlerException.
      *
-     * @param TPkgShopPaymentIPNRequest $oRequest
      * @trows AbstractPkgShopPaymentIPNHandlerException
      *
      * @return bool
@@ -40,7 +39,7 @@ class TPkgShopPaymentIPayment_TPkgShopPaymentIPNHandler_BaseResponse implements 
                 $oPaymentHandler->SaveUserPaymentDataToOrder($oOrder->id);
             }
             if ($oOrder && false === $oOrder->fieldSystemOrderSaveCompleted) {
-                $aInfo = array();
+                $aInfo = [];
                 if ($oOrder->fieldSystemOrderExportedDate <= '0000-00-00 00:00:00') {
                     $aInfo[] = 'wawi export called';
                     if ($oOrder->ExportOrderForWaWiHook($oOrder->GetPaymentHandler())) {
@@ -79,8 +78,6 @@ class TPkgShopPaymentIPayment_TPkgShopPaymentIPNHandler_BaseResponse implements 
     /**
      * return an instance of TPkgShopPaymentIPN_TransactionDetails if your IPN should trigger a transaction for the order
      * (ie payment or refunds etc). if you return null, then no transaction will be triggered.
-     *
-     * @param TPkgShopPaymentIPNRequest $oRequest
      *
      * @return TPkgShopPaymentIPN_TransactionDetails|null
      */

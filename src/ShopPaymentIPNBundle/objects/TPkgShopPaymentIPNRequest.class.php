@@ -11,34 +11,34 @@
 
 class TPkgShopPaymentIPNRequest
 {
-    const URL_IPN_IDENTIFIER = '_api_pkgshopipn_';
+    public const URL_IPN_IDENTIFIER = '_api_pkgshopipn_';
 
     /**
      * @var string
      */
-    private $requestURL = null;
+    private $requestURL;
     /**
      * @var array
      */
-    private $requestPayload = null;
+    private $requestPayload;
     /**
      * @var TdbShopPaymentHandlerGroup|null
      */
-    private $paymentHandlerGroup = null;
+    private $paymentHandlerGroup;
     /**
      * @var TdbShopOrder|null
      */
-    private $order = null;
+    private $order;
 
     /**
      * @var TdbShopPaymentHandler|IPkgShopPaymentIPNHandler
      */
-    private $paymentHandler = null;
+    private $paymentHandler;
 
     /**
      * @var TdbPkgShopPaymentIpnStatus
      */
-    private $oStatus = null;
+    private $oStatus;
 
     /**
      * @param string $sURL
@@ -52,7 +52,7 @@ class TPkgShopPaymentIPNRequest
 
     /**
      * @param array<string, mixed> $aRequestPayload
-     * @param null|string $sSourceCharset
+     * @param string|null $sSourceCharset
      *
      * @return array<string, mixed>
      */
@@ -90,13 +90,11 @@ class TPkgShopPaymentIPNRequest
     }
 
     /**
-     * @param TdbPkgShopPaymentIpnMessage $oMessage
+     * @return void
      *
      * @throws TPkgShopPaymentIPNException_InvalidPaymentHandlerGroupInRequest
      * @throws TPkgShopPaymentIPNException_OrderNotFound
      * @throws TPkgShopPaymentIPNException_RequestError
-     *
-     * @return void
      */
     public function parseRequest(TdbPkgShopPaymentIpnMessage $oMessage)
     {
@@ -150,7 +148,7 @@ class TPkgShopPaymentIPNRequest
         }
 
         // we have a payment group - we may need to transform the raw data using it (because the encoding may be non utf8 for exampel)
-        $oMessage->SaveFieldsFast(array('shop_payment_handler_group_id' => $this->paymentHandlerGroup->id));
+        $oMessage->SaveFieldsFast(['shop_payment_handler_group_id' => $this->paymentHandlerGroup->id]);
 
         // once we have the group we may need to convert the request data
         if ('UTF-8' !== strtoupper($this->getPaymentHandlerGroup()->fieldIpnPayloadCharacterCharset)) {
@@ -163,7 +161,7 @@ class TPkgShopPaymentIPNRequest
         $this->requestPayload = $this->paymentHandlerGroup->processRawRequestData($this->requestPayload);
 
         $oMessage->SaveFieldsFast(
-            array('payload' => serialize($this->requestPayload))
+            ['payload' => serialize($this->requestPayload)]
         ); // note: we need to serialize the data since savefieldsfast does NO data transformation before saving
 
         if (null !== $sOrderCmsIdent) {
@@ -185,7 +183,7 @@ class TPkgShopPaymentIPNRequest
             }
         }
 
-        $oMessage->SaveFieldsFast(array('shop_order_id' => $this->getOrder()->id));
+        $oMessage->SaveFieldsFast(['shop_order_id' => $this->getOrder()->id]);
 
         $oPaymentHandler = $this->getOrder()->GetPaymentHandler();
 
@@ -201,8 +199,6 @@ class TPkgShopPaymentIPNRequest
     }
 
     /**
-     * @param TdbPkgShopPaymentIpnMessage $oMessage
-     *
      * @return void
      */
     private function addTrigger(TdbPkgShopPaymentIpnMessage $oMessage)
@@ -242,7 +238,7 @@ class TPkgShopPaymentIPNRequest
     }
 
     /**
-     * @param null|string $sRequestIP
+     * @param string|null $sRequestIP
      *
      * @return bool
      */

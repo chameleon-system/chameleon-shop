@@ -39,11 +39,10 @@ class LegacyMockArticleListWrapper extends \TdbShopArticleList
     private $sModuleSpotName;
 
     /**
-     * @param ResultDataInterface $result
-     * @param int                 $currentPage
-     * @param int                 $pageSize
-     * @param string              $listPagerUrl
-     * @param string              $sModuleSpotName
+     * @param int $currentPage
+     * @param int $pageSize
+     * @param string $listPagerUrl
+     * @param string $sModuleSpotName
      */
     public function __construct(ResultDataInterface $result, $currentPage, $pageSize, $listPagerUrl, $sModuleSpotName)
     {
@@ -81,7 +80,7 @@ class LegacyMockArticleListWrapper extends \TdbShopArticleList
     }
 
     /**
-     * @param int  $iPageNumber
+     * @param int $iPageNumber
      * @param bool $bGetAsJSFunction
      *
      * @return string
@@ -89,10 +88,10 @@ class LegacyMockArticleListWrapper extends \TdbShopArticleList
     public function GetPageJumpLinkAsAJAXCall($iPageNumber, $bGetAsJSFunction = true)
     {
         $listPageUrl = $this->GetPageJumpLink($iPageNumber);
-        $listPageUrl .= \TTools::GetArrayAsURL(array(
-                'module_fnc' => array($this->sModuleSpotName => 'ExecuteAjaxCall'),
+        $listPageUrl .= \TTools::GetArrayAsURL([
+                'module_fnc' => [$this->sModuleSpotName => 'ExecuteAjaxCall'],
                 '_fnc' => 'getRenderedList',
-            ), '&');
+            ], '&');
 
         return $listPageUrl;
     }

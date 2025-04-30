@@ -54,8 +54,6 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
      * the call should return true if processing should continue, false if it is to stop. On Error it should throw an error
      * extending AbstractPkgShopPaymentIPNHandlerException.
      *
-     * @param TPkgShopPaymentIPNRequest $oRequest
-     *
      * @trows AbstractPkgShopPaymentIPNHandlerException
      *
      * @return void
@@ -91,8 +89,6 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
     /**
      * extend this method if you want to do things for incoming ipn.
      *
-     * @param TPkgShopPaymentIPNRequest $oRequest
-     *
      * @return void
      */
     protected function handleIPNHook(TPkgShopPaymentIPNRequest $oRequest)
@@ -101,9 +97,6 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
 
     /**
      * trigger transaction for the order based on the IPN.
-     *
-     * @param IPkgShopPaymentIPNHandler $oHandler
-     * @param TPkgShopPaymentIPNRequest $oRequest
      *
      * @return void
      */
@@ -137,9 +130,9 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
         }
 
         if (null === $oTransaction) {
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_payment_ipn')->warning(
+            ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order_payment_ipn')->warning(
                 "IPN had transaction data but no matching transaction was found. order-id: {$oOrder->id}, ordernumber: {$oOrder->fieldOrdernumber}",
-                array('request' => $oRequest->getRequestPayload())
+                ['request' => $oRequest->getRequestPayload()]
             );
         }
     }
@@ -151,13 +144,11 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
      */
     protected function getIPNHandlerChain()
     {
-        return array();
+        return [];
     }
 
     /**
      * returns true if the data is valid - throws an exception extending the PkgShopPaymentIPNException_RequestError exception.
-     *
-     * @param TPkgShopPaymentIPNRequest $oRequest
      *
      * @return bool
      */
@@ -193,8 +184,6 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
     }
 
     /**
-     * @param TPkgShopPaymentIPNRequest $oRequest
-     *
      * @return TdbPkgShopPaymentIpnStatus|null
      */
     public function getIPNStatus(TPkgShopPaymentIPNRequest $oRequest)
@@ -205,8 +194,6 @@ class TPkgShopPaymentIPN_TPkgShopPaymentHandlerGroup extends TPkgShopPaymentIPN_
     /**
      * @param string|array $sData - either the id of the object to load, or the row with which the instance should be initialized
      * @param string $sLanguage - init with the language passed
-     *
-     * @return TdbShopPaymentHandlerGroup
      */
     public static function GetNewInstance($sData = null, $sLanguage = null): TdbShopPaymentHandlerGroup
     {

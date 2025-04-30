@@ -2,7 +2,6 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\ShopOrder;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -10,19 +9,17 @@ class ShopOrderStatus
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopOrder|null - Belongs to order */
-        private ?ShopOrder $shopOrder = null
-        ,
+        private ?ShopOrder $shopOrder = null,
         // TCMSFieldDateTimeNow
-        /** @var DateTime|null - Date */
-        private ?DateTime $statusDate = new DateTime(),
+        /** @var \DateTime|null - Date */
+        private ?\DateTime $statusDate = new \DateTime(),
         // TCMSFieldLookup
         /** @var ShopOrderStatusCode|null - Status code */
-        private ?ShopOrderStatusCode $shopOrderStatusCode = null
-        ,
+        private ?ShopOrderStatusCode $shopOrderStatusCode = null,
         // TCMSFieldBlob
         /** @var object|null - Data */
         private ?object $data = null,
@@ -72,20 +69,18 @@ class ShopOrderStatus
         return $this;
     }
 
-
     // TCMSFieldDateTimeNow
-    public function getStatusDate(): ?DateTime
+    public function getStatusDate(): ?\DateTime
     {
         return $this->statusDate;
     }
 
-    public function setStatusDate(?DateTime $statusDate): self
+    public function setStatusDate(?\DateTime $statusDate): self
     {
         $this->statusDate = $statusDate;
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getShopOrderStatusCode(): ?ShopOrderStatusCode
@@ -100,7 +95,6 @@ class ShopOrderStatus
         return $this;
     }
 
-
     // TCMSFieldBlob
     public function getData(): ?object
     {
@@ -114,7 +108,6 @@ class ShopOrderStatus
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getInfo(): string
     {
@@ -127,8 +120,6 @@ class ShopOrderStatus
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -161,6 +152,4 @@ class ShopOrderStatus
 
         return $this;
     }
-
-
 }

@@ -18,34 +18,34 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
  * (eine Art Blätterfunktion). Die Hotspots sind mit kleinen Kreuzen auf dem Bild markiert. Fährt
  * ein Kunde mit der Maus über einen Hotspot, erscheinen der Artikelname und der Preis. Klickt der
  * Kunde auf den Hotspot, dann gelangt er zur Detailseite des Artikels.
-/**/
+ * /**/
 class MTPkgImageHotspotCore extends TUserCustomModelBase
 {
     /**
      * @var string|null
      */
-    protected $sActiveItemId = null;
+    protected $sActiveItemId;
     /**
      * @var TdbPkgImageHotspotItem|null
      */
-    private $oActiveItem = null;
+    private $oActiveItem;
 
     /**
      * @var TdbPkgImageHotspotItem|null
      */
-    private $oNextItem = null;
+    private $oNextItem;
 
     /**
      * @var TdbPkgImageHotspot|null
      */
-    private $oHotspotConfig = null;
+    private $oHotspotConfig;
 
     /**
      * any request data send to the module.
      *
      * @var array
      */
-    protected $aUserRequestData = array();
+    protected $aUserRequestData = [];
 
     /**
      * @var bool
@@ -67,7 +67,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
      * @param string $sViewName
      * @param string $sType
      *
-     * @return \stdClass
+     * @return stdClass
      */
     protected function AjaxRenderHotspotImage($sViewName = 'standard', $sType = 'Core')
     {
@@ -101,7 +101,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
      */
     protected function RenderUsingMapperConfig($sMapperConfig)
     {
-        return TTools::CallModule('MTPkgImageHotspot', $sMapperConfig, array('instanceID' => $this->instanceID), $this->sModuleSpotName);
+        return TTools::CallModule('MTPkgImageHotspot', $sMapperConfig, ['instanceID' => $this->instanceID], $this->sModuleSpotName);
     }
 
     /**
@@ -115,7 +115,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
         if ($global->UserDataExists(TdbPkgImageHotspotItem::GetURLParameterBaseForActiveSpot())) {
             $this->aUserRequestData = $global->GetUserData(TdbPkgImageHotspotItem::GetURLParameterBaseForActiveSpot());
             if (!is_array($this->aUserRequestData)) {
-                $this->aUserRequestData = array();
+                $this->aUserRequestData = [];
             }
             if (array_key_exists('id', $this->aUserRequestData)) {
                 $this->sActiveItemId = $this->aUserRequestData['id'];
@@ -143,7 +143,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
      * return the hotspot following the current active spot. if the active spot is the
      * last spot, then we will return the first step.
      *
-     * @return TdbPkgImageHotspotItem|null|false
+     * @return TdbPkgImageHotspotItem|false|null
      */
     protected function GetNextItem()
     {
@@ -152,6 +152,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
             $oItemList = $this->GetHotspotConfig()->GetFieldPkgImageHotspotItemList();
             if ($oItemList->Length() < 2) {
                 $retValue = null; // write to variable to satisfy strict mode
+
                 return $retValue;
             }
             $oItemList->GoToStart();
@@ -253,18 +254,18 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
     {
         $aTriggers = parent::_GetCacheTableInfos();
         if (!is_array($aTriggers)) {
-            $aTriggers = array();
+            $aTriggers = [];
         }
         $oHotspotConfig = $this->GetHotspotConfig();
         if (!is_null($oHotspotConfig)) {
-            $aTriggers[] = array('table' => 'pkg_image_hotspot', 'id' => $oHotspotConfig->id);
+            $aTriggers[] = ['table' => 'pkg_image_hotspot', 'id' => $oHotspotConfig->id];
         }
-        $aTriggers[] = array('table' => 'pkg_image_hotspot_item', 'id' => $this->sActiveItemId);
-        $aTriggers[] = array('table' => 'pkg_image_hotspot_item_spot', 'id' => '');
+        $aTriggers[] = ['table' => 'pkg_image_hotspot_item', 'id' => $this->sActiveItemId];
+        $aTriggers[] = ['table' => 'pkg_image_hotspot_item_spot', 'id' => ''];
 
         $oActiveItem = $this->GetActiveItem();
         if (!empty($oActiveItem)) {
-            $aTriggers[] = array('table' => 'cms_media', 'id' => $oActiveItem->fieldCmsMediaId);
+            $aTriggers[] = ['table' => 'cms_media', 'id' => $oActiveItem->fieldCmsMediaId];
         }
 
         return $aTriggers;
@@ -277,7 +278,7 @@ class MTPkgImageHotspotCore extends TUserCustomModelBase
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         if (!is_array($aIncludes)) {
-            $aIncludes = array();
+            $aIncludes = [];
         }
         $aIncludes[] = '<link href="'.TGlobal::GetStaticURL(URL_USER_CMS_PUBLIC.'/blackbox/pkgImageHotspot/MTPkgImageHotspot.css').'"  rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/chameleon/jquery.chameleonImageSlider.js').'" type="text/javascript"></script>';

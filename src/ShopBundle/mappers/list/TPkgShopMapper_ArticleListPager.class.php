@@ -28,13 +28,13 @@ class TPkgShopMapper_ArticleListPager extends AbstractViewMapper
         /** @var $oArticleList TdbShopArticleList */
         $oArticleList = $oVisitor->GetSourceObject('oList');
 
-        $aListPaging = array(
+        $aListPaging = [
             'iActivePage' => $oArticleList->GetCurrentPageNumber(),
             'iLastPage' => $oArticleList->GetTotalPageCount(),
             'sURL' => str_replace(TdbShopArticleList::URL_LIST_CURRENT_PAGE.'=0', TdbShopArticleList::URL_LIST_CURRENT_PAGE.'={[pageNumber0]}', $oArticleList->GetPageJumpLink(0)),
             'sURLAjax' => str_replace(TdbShopArticleList::URL_LIST_CURRENT_PAGE.'=0', TdbShopArticleList::URL_LIST_CURRENT_PAGE.'={[pageNumber0]}', $oArticleList->GetPageJumpLinkAsAJAXCall(0)),
             'sURLAjaxPlain' => str_replace(TdbShopArticleList::URL_LIST_CURRENT_PAGE.'=0', TdbShopArticleList::URL_LIST_CURRENT_PAGE.'={[pageNumber0]}', $oArticleList->GetPageJumpLinkAsAJAXCall(0, false)),
-        );
+        ];
 
         $oVisitor->SetMappedValue('aListPaging', $aListPaging);
         $oVisitor->SetMappedValue('listIdent', $oVisitor->GetSourceObject('listIdent'));

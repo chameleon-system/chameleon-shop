@@ -11,7 +11,7 @@
 
 /**
  * module displays the contents of shop_system_info for one or more shop info items.
-/**/
+ * /**/
 class MTShopInfoCore extends TShopUserCustomModelBase
 {
     /**
@@ -19,7 +19,7 @@ class MTShopInfoCore extends TShopUserCustomModelBase
      *
      * @var TdbShopSystemInfoModuleConfig
      */
-    protected $oModuleConfig = null;
+    protected $oModuleConfig;
 
     protected $bAllowHTMLDivWrapping = true;
 
@@ -89,10 +89,10 @@ class MTShopInfoCore extends TShopUserCustomModelBase
         $aClearCacheInfo = parent::_GetCacheTableInfos();
         $oConf = $this->GetModuleConfig();
         if (!is_null($oConf)) {
-            $aClearCacheInfo[] = array('table' => $oConf->table, 'id' => $oConf->id);
+            $aClearCacheInfo[] = ['table' => $oConf->table, 'id' => $oConf->id];
             $aIDList = $oConf->GetMLTIdList('shop_system_info');
             foreach ($aIDList as $infoPageId) {
-                $aClearCacheInfo[] = array('table' => 'shop_system_info', 'id' => $infoPageId);
+                $aClearCacheInfo[] = ['table' => 'shop_system_info', 'id' => $infoPageId];
             }
         }
 

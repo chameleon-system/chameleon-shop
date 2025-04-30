@@ -17,7 +17,7 @@ class TPkgShopBasketMapper_ToMiniBasket extends AbstractViewMapper
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oBasket', 'TShopBasket', TShopBasket::GetInstance());
-        $oRequirements->NeedsSourceObject('oShop', 'TdbShop', \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop());
+        $oRequirements->NeedsSourceObject('oShop', 'TdbShop', ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop());
     }
 
     /**
@@ -32,6 +32,6 @@ class TPkgShopBasketMapper_ToMiniBasket extends AbstractViewMapper
         }
         $oVisitor->SetMappedValue('sBasketURL', $oShop->GetBasketLink(false, true));
         $oVisitor->SetMappedValue('sCheckoutURL', $oShop->GetBasketLink(true, true));
-        $oVisitor->SetMappedValue('sShippingInfoURL', $oShop->GetLinkToSystemPageAsPopUp(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.link.shipping_link'), 'shipping'));
+        $oVisitor->SetMappedValue('sShippingInfoURL', $oShop->GetLinkToSystemPageAsPopUp(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.link.shipping_link'), 'shipping'));
     }
 }

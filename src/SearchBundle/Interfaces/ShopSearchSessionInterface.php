@@ -13,16 +13,18 @@ namespace ChameleonSystem\SearchBundle\Interfaces;
 
 interface ShopSearchSessionInterface
 {
-    const SESSION_KEY = 'shop/searches';
+    public const SESSION_KEY = 'shop/searches';
 
     /**
      * @param array<string, mixed> $searchRequest
+     *
      * @return void
      */
     public function addSearch(array $searchRequest);
 
     /**
      * @param array<string, mixed> $searchRequest
+     *
      * @return bool
      */
     public function hasSearchedFor(array $searchRequest);

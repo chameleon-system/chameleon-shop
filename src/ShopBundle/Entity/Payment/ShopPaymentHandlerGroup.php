@@ -12,15 +12,14 @@ class ShopPaymentHandlerGroup
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Overwrite Tdb with this class */
         private string $classname = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopPaymentHandlerGroupConfig> - Configuration */
-        private Collection $shopPaymentHandlerGroupConfigCollection = new ArrayCollection()
-        ,
+        private Collection $shopPaymentHandlerGroupConfigCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - IPN Identifier */
         private string $ipnGroupIdentifier = '',
@@ -29,8 +28,7 @@ class ShopPaymentHandlerGroup
         private string $ipnPayloadCharacterCharset = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopPaymentIpnStatus> - IPN status codes */
-        private Collection $pkgShopPaymentIpnStatusCollection = new ArrayCollection()
-        ,
+        private Collection $pkgShopPaymentIpnStatusCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -42,23 +40,19 @@ class ShopPaymentHandlerGroup
         private string $description = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopPaymentHandler> - Payment handler */
-        private Collection $shopPaymentHandlerCollection = new ArrayCollection()
-        ,
+        private Collection $shopPaymentHandlerCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopPaymentMethod> - Payment methods */
-        private Collection $shopPaymentMethodCollection = new ArrayCollection()
-        ,
+        private Collection $shopPaymentMethodCollection = new ArrayCollection(),
         // TCMSFieldText
         /** @var string - IPN may come from the following IP */
         private string $ipnAllowedIps = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopPaymentIpnTrigger> - Redirections */
-        private Collection $pkgShopPaymentIpnTriggerCollection = new ArrayCollection()
-        ,
+        private Collection $pkgShopPaymentIpnTriggerCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopPaymentIpnMessage> - IPN messages */
-        private Collection $pkgShopPaymentIpnMessageCollection = new ArrayCollection()
-        ,
+        private Collection $pkgShopPaymentIpnMessageCollection = new ArrayCollection(),
         // TCMSFieldOption
         /** @var string - Environment */
         private string $environment = 'default'
@@ -102,8 +96,6 @@ class ShopPaymentHandlerGroup
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -138,7 +130,6 @@ class ShopPaymentHandlerGroup
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIpnGroupIdentifier(): string
     {
@@ -152,7 +143,6 @@ class ShopPaymentHandlerGroup
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIpnPayloadCharacterCharset(): string
     {
@@ -165,8 +155,6 @@ class ShopPaymentHandlerGroup
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -200,7 +188,6 @@ class ShopPaymentHandlerGroup
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -213,7 +200,6 @@ class ShopPaymentHandlerGroup
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSystemName(): string
@@ -228,7 +214,6 @@ class ShopPaymentHandlerGroup
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -241,8 +226,6 @@ class ShopPaymentHandlerGroup
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -276,8 +259,6 @@ class ShopPaymentHandlerGroup
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -310,7 +291,6 @@ class ShopPaymentHandlerGroup
         return $this;
     }
 
-
     // TCMSFieldText
     public function getIpnAllowedIps(): string
     {
@@ -323,8 +303,6 @@ class ShopPaymentHandlerGroup
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -358,8 +336,6 @@ class ShopPaymentHandlerGroup
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -392,7 +368,6 @@ class ShopPaymentHandlerGroup
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getEnvironment(): string
     {
@@ -405,6 +380,4 @@ class ShopPaymentHandlerGroup
 
         return $this;
     }
-
-
 }

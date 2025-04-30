@@ -18,9 +18,9 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternItem, IPkgShopVatable, ICmsLinkableObject
 {
-    const VIEW_PATH = '/pkgShop/views/db/TShopCategory';
-    const FILTER_KEY_NAME = 'cattreeid';
-    const PRODUCTS_PAGE_SYSTEM_NAME = 'products';
+    public const VIEW_PATH = '/pkgShop/views/db/TShopCategory';
+    public const FILTER_KEY_NAME = 'cattreeid';
+    public const PRODUCTS_PAGE_SYSTEM_NAME = 'products';
 
     /**
      * return the vat group of the category.
@@ -42,8 +42,9 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
         // get current search... then add filter
         $oShop = $this->getShopService()->getActiveShop();
         $oSearchCache = $oShop->GetActiveSearchObject();
-        //$oSearchCache->aFilter[TdbShopCategory::FILTER_KEY_NAME] = $this->id;
-        return $oSearchCache->GetSearchLink(array(TdbShopCategory::FILTER_KEY_NAME => $this->id));
+
+        // $oSearchCache->aFilter[TdbShopCategory::FILTER_KEY_NAME] = $this->id;
+        return $oSearchCache->GetSearchLink([TdbShopCategory::FILTER_KEY_NAME => $this->id]);
     }
 
     /**
@@ -54,12 +55,10 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      * @param bool $bAbsolute - set to true if you want to include the domain in the link (absolute link)
      * @param string $sAnchor - Anchor to add to the link (Part after #)
      * @param array<string, mixed> $aOptionalParameters
-     * @param TdbCmsPortal $portal
-     * @param TdbCmsLanguage $language
      *
      * @return string
      */
-    public function GetLink($bAbsolute = false, $sAnchor = null, $aOptionalParameters = array(), TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    public function GetLink($bAbsolute = false, $sAnchor = null, $aOptionalParameters = [], ?TdbCmsPortal $portal = null, ?TdbCmsLanguage $language = null)
     {
         $sInternalCacheKey = 'sLinkToCategory';
         if ($bAbsolute) {
@@ -69,9 +68,9 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
         if (is_null($sLink)) {
             try {
                 if ($bAbsolute) {
-                    $sPageLink = $this->getSystemPageService()->getLinkToSystemPageAbsolute(self::PRODUCTS_PAGE_SYSTEM_NAME, array(), $portal, $language);
+                    $sPageLink = $this->getSystemPageService()->getLinkToSystemPageAbsolute(self::PRODUCTS_PAGE_SYSTEM_NAME, [], $portal, $language);
                 } else {
-                    $sPageLink = $this->getSystemPageService()->getLinkToSystemPageRelative(self::PRODUCTS_PAGE_SYSTEM_NAME, array(), $portal, $language);
+                    $sPageLink = $this->getSystemPageService()->getLinkToSystemPageRelative(self::PRODUCTS_PAGE_SYSTEM_NAME, [], $portal, $language);
                 }
                 if ('.html' === substr($sPageLink, -5)) {
                     $sPageLink = substr($sPageLink, 0, -5).'/';
@@ -133,7 +132,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
         if (null !== $aChildIdList) {
             return $aChildIdList;
         }
-        $aChildIdList = array();
+        $aChildIdList = [];
         $oChildren = $this->GetChildren();
         while ($oChild = $oChildren->Next()) {
             $aChildIdList[] = $oChild->id;
@@ -179,11 +178,11 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      * note: the result ist cached in the class instance...
      *
      * @param string $sOrderBy
-     * @param array  $aFilter  - any filter restrictions you want to add (must be filds within the shop table)
+     * @param array $aFilter - any filter restrictions you want to add (must be filds within the shop table)
      *
      * @return TdbShopArticleList
      */
-    public function GetArticleList($sOrderBy = null, $aFilter = array())
+    public function GetArticleList($sOrderBy = null, $aFilter = [])
     {
         $oCategoryArticles = $this->GetFromInternalCache('oArticleList');
         if (is_null($oCategoryArticles)) {
@@ -199,11 +198,11 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      * note: the result ist cached in the class instance...
      *
      * @param string $sOrderBy
-     * @param array  $aFilter  - any filter restrictions you want to add (must be filds within the shop table)
+     * @param array $aFilter - any filter restrictions you want to add (must be filds within the shop table)
      *
      * @return TdbShopArticleList
      */
-    public function GetArticleListIncludingSubcategories($sOrderBy = null, $aFilter = array())
+    public function GetArticleListIncludingSubcategories($sOrderBy = null, $aFilter = [])
     {
         $sCacheKey = $this->getCacheKeyForArticleList($sOrderBy, $aFilter);
         $oCategoryArticles = $this->GetFromInternalCache($sCacheKey);
@@ -218,7 +217,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
     }
 
     /**
-     * @param null|string $sOrderBy
+     * @param string|null $sOrderBy
      * @param array $aFilter
      *
      * @return string
@@ -357,13 +356,13 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
     /**
      * used to display an article.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oCategory', $this);
@@ -385,7 +384,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /* SECTION: CACHE RELEVANT METHODS FOR THE RENDER METHOD */
@@ -400,7 +399,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     public static function GetCacheRelevantTables($sViewName = null, $sViewType = null)
     {
-        $aTables = array();
+        $aTables = [];
         $aTables[] = 'shop_category';
 
         return $aTables;
@@ -471,7 +470,8 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
 
     private function shouldShowEmptyCategories(): bool
     {
-        $shop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $shop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+
         return null !== $shop && true === $shop->fieldShowEmptyCategories;
     }
 
@@ -489,14 +489,14 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     public function GetSeoPattern(&$sPaternIn)
     {
-        //$sPaternIn = "[{PORTAL_NAME}] - [{CATEGORY_NAME}]"; //default
+        // $sPaternIn = "[{PORTAL_NAME}] - [{CATEGORY_NAME}]"; //default
         $aPatRepl = null;
 
         if (!empty($this->sqlData['seo_pattern'])) {
             $sPaternIn = $this->sqlData['seo_pattern'];
         }
 
-        $aPatRepl = array();
+        $aPatRepl = [];
         $activePage = $this->getActivePageService()->getActivePage();
         $aPatRepl['PORTAL_NAME'] = $activePage->GetPortal()->GetTitle();
         $aPatRepl['PAGE_NAME'] = $activePage->GetName();
@@ -633,7 +633,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -641,7 +641,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 
     /**
@@ -649,7 +649,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     private function getSystemPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 
     /**
@@ -657,7 +657,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -665,6 +665,6 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     private function getUrlUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

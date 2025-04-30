@@ -24,7 +24,7 @@ class TPkgShopListfilterItemMultiselectPropertyTable extends TPkgShopListfilterI
                 $this->sItemTableName = $this->fieldMysqlFieldName;
             }
 
-            $aOptions = array();
+            $aOptions = [];
             $sIdSelect = $this->GetResultSetBaseQuery();
             $databaseConnection = $this->getDatabaseConnection();
             $quotedItemTableName = $databaseConnection->quoteIdentifier($this->sItemTableName);

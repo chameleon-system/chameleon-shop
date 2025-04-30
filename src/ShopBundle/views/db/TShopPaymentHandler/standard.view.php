@@ -1,5 +1,5 @@
 <?php
 
-/** @var $oShop TdbShop */
-/** @var $oPaymentHandler TdbShopPaymentHandler */
-/** @var $aCallTimeVars array */
+/* @var $oShop TdbShop */
+/* @var $oPaymentHandler TdbShopPaymentHandler */
+/* @var $aCallTimeVars array */

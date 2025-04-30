@@ -10,8 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use ChameleonSystem\ShopBundle\ProductVariant\ProductVariantNameGeneratorInterface;
@@ -36,7 +36,7 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
      */
     public function GetHTML()
     {
-        $aData = array();
+        $aData = [];
         $aData['sFieldName'] = $this->name;
         $aData['sAjaxURL'] = $this->GenerateAjaxURL();
         $oParent = null;
@@ -65,11 +65,9 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
     }
 
     /**
-     * @param TdbShopVariantSet|null $variantSet
-     *
      * @return string
      */
-    protected function renderPrimaryArticleField(TdbShopVariantSet $variantSet = null)
+    protected function renderPrimaryArticleField(?TdbShopVariantSet $variantSet = null)
     {
         $viewRenderer = $this->getViewRenderer();
 
@@ -81,17 +79,17 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
 
         if (true === $hasVariantSet) {
             $variantTypes = $variantSet->GetFieldShopVariantTypeList();
-            $variantTypeParameters = array();
+            $variantTypeParameters = [];
             while ($variantType = $variantTypes->Next()) {
                 $variantValueList = $variantType->GetFieldShopVariantTypeValueList();
 
-                $typeVariants = array();
+                $typeVariants = [];
                 while ($variantValue = $variantValueList->Next()) {
                     $typeVariants[$variantValue->id] = $variantValue->GetName();
                 }
 
                 asort($typeVariants);
-                $variantTypeParameters[$variantType->GetName()] = array('variantTypeName' => $variantType->GetName(), 'variantTypeId' => $variantType->id, 'typeVariants' => $typeVariants);
+                $variantTypeParameters[$variantType->GetName()] = ['variantTypeName' => $variantType->GetName(), 'variantTypeId' => $variantType->id, 'typeVariants' => $typeVariants];
                 ksort($variantTypeParameters);
             }
 
@@ -105,11 +103,11 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
      * render field details.
      *
      * @param string $sViewName
-     * @param array  $aCallTimeVars
+     * @param array $aCallTimeVars
      *
      * @return string
      */
-    protected function RenderVariantDetails($sViewName, $aCallTimeVars = array())
+    protected function RenderVariantDetails($sViewName, $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $aActivatedIds = $this->oTableRow->GetMLTIdList('shop_variant_type_value', 'shop_variant_type_value_mlt');
@@ -128,7 +126,7 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
      */
     public function GetEditLink($sTableName, $iTargetRecord)
     {
-        static $aTableEditorConfs = array();
+        static $aTableEditorConfs = [];
         if (!in_array($sTableName, $aTableEditorConfs)) {
             $oTableConf = TdbCmsTblConf::GetNewInstance();
             $oTableConf->LoadFromField('name', $sTableName);
@@ -141,11 +139,11 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
             return '';
         }
 
-        $sLinkParams = array(
+        $sLinkParams = [
             'pagedef' => 'tableeditor',
             'tableid' => $aTableEditorConfs[$sTableName],
             'id' => urlencode($iTargetRecord),
-        );
+        ];
         $sLink = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($sLinkParams);
 
         return $sLink;
@@ -172,7 +170,7 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
         $aNewValues = $this->getInputFilterUtil()->getFilteredInput($this->name.'_new');
 
         if (!is_array($this->data)) {
-            $this->data = array();
+            $this->data = [];
         } elseif (array_key_exists('x', $this->data)) {
             unset($this->data['x']);
         }
@@ -190,17 +188,17 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
                 // first make sure the value does not exist already
                 $oValue = TdbShopVariantTypeValue::GetNewInstance();
                 if ($oValue->LoadFromFields(
-                    array('name' => $sNewValueName, 'shop_variant_type_id' => $sShopVariantTypeId)
+                    ['name' => $sNewValueName, 'shop_variant_type_id' => $sShopVariantTypeId]
                 )
                 ) {
                     $this->data[$sShopVariantTypeId] = $oValue->id;
                 } else {
                     // need to create entry
-                    $aNewItemData = array(
+                    $aNewItemData = [
                         'shop_variant_type_id' => $sShopVariantTypeId,
                         'name' => $sNewValueName,
                         'url_name' => $this->getUrlNormalizationUtil()->normalizeUrl($sNewValueName),
-                    );
+                    ];
                     $oTableManager = new TCMSTableEditorManager();
                     $oTableManager->Init($oEditorObjectConf->id);
                     $oTableManager->Save($aNewItemData);
@@ -251,19 +249,17 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
             $oTableEditorManager->oTableEditor->oTableConf->SetLanguage($originalLanguageId);
         }
 
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.field_shop_variant_details.msg_created_variants', array('%generatedVariantsCount%' => count($aVariantParameters)));
+        return ServiceLocator::get('translator')->trans('chameleon_system_shop.field_shop_variant_details.msg_created_variants', ['%generatedVariantsCount%' => count($aVariantParameters)]);
     }
 
     /**
-     * @param array $variantData
-     *
      * @return array
      */
     protected function mapVariantArticleData(array $variantData)
     {
-        return array(
+        return [
             'price' => $variantData['variantPrice'],
-        );
+        ];
     }
 
     /**
@@ -274,14 +270,14 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
      */
     public function getPossibleVariantCombinations()
     {
-        $aData = array();
+        $aData = [];
         /** @var TdbShopVariantSet $variantSet */
-        $aVariantTypeNames = array();
-        $aExistingVariantCombinations = array();
+        $aVariantTypeNames = [];
+        $aExistingVariantCombinations = [];
 
         $variantSet = $this->oTableRow->GetFieldShopVariantSet();
-        $aVariantSurcharge = array();
-        $aVariantParameter = array();
+        $aVariantSurcharge = [];
+        $aVariantParameter = [];
 
         $possibleVariantsCount = 1;
         if (null === $variantSet) {
@@ -300,7 +296,7 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
                 return false;
             }
 
-            $aTypeVariants = array();
+            $aTypeVariants = [];
             while ($oValue = $variantValueList->Next()) {
                 $aTypeVariants[] = $oValue->id.'|'.$oValue->GetName();
                 $dSurCharge = $oValue->sqlData['surcharge'];
@@ -316,14 +312,14 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
         $aVariantMatrix = $this->generateVariantCombinations($aVariantParameter);
 
         // get all existing variants
-        $oVariantList = $this->oTableRow->GetFieldShopArticleVariantsList(array(), false);
+        $oVariantList = $this->oTableRow->GetFieldShopArticleVariantsList([], false);
 
         /**
          * @var TdbShopArticle $oVariant
          */
         while ($oVariant = $oVariantList->Next()) {
             $oVariantTypeValueList = $oVariant->GetFieldShopVariantTypeValueList();
-            $aVariantValues = array();
+            $aVariantValues = [];
             while ($oVariantTypeValue = $oVariantTypeValueList->Next()) {
                 $aVariantValues[] = $oVariantTypeValue->id;
             }
@@ -347,8 +343,6 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
     }
 
     /**
-     * @param TdbShopVariantType $variantType
-     *
      * @return TdbShopVariantTypeValueList
      */
     private function getVariantValueList(TdbShopVariantType $variantType)
@@ -372,7 +366,7 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
                         ORDER BY %s ASC 
                             ';
 
-        $escapedSelectedVariantValues = implode(',', array_map(array($dbConnection, 'quote'), $selectedVariantValues));
+        $escapedSelectedVariantValues = implode(',', array_map([$dbConnection, 'quote'], $selectedVariantValues));
         $escapedFieldName = $dbConnection->quoteIdentifier($variantType->fieldShopVariantTypeValueCmsfieldname);
         $query = sprintf($query, $escapedSelectedVariantValues, $escapedFieldName);
 
@@ -389,11 +383,11 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
      */
     protected function generateVariantCombinations($aVariantParameter)
     {
-        $out = array();
+        $out = [];
         if (1 === count($aVariantParameter)) {
             $x = array_shift($aVariantParameter);
             foreach ($x as $v) {
-                $out[] = array($v);
+                $out[] = [$v];
             }
 
             return $out;
@@ -404,7 +398,7 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
             $x = $this->generateVariantCombinations($b);
             foreach ($v as $v1) {
                 foreach ($x as $v2) {
-                    $out[] = array_merge(array($v1), $v2);
+                    $out[] = array_merge([$v1], $v2);
                 }
             }
             break;
@@ -421,7 +415,7 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('generateVariants', 'getPossibleVariantCombinations');
+        $externalFunctions = ['generateVariants', 'getPossibleVariantCombinations'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -430,7 +424,7 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
      */
     private function getUrlNormalizationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 
     /**
@@ -438,7 +432,7 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     /**
@@ -454,6 +448,6 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
      */
     private function getViewRenderer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

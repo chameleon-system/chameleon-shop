@@ -100,7 +100,7 @@ class TShopPaymentHandlerOgoneDirectLinkWithAliasGateway extends TShopPaymentHan
             $s3DSecurePage = $this->GetConfigParameter('3dsecure-shop-system-page-name');
             if (!empty($s3DSecurePage)) {
                 $this->Set3DSecureFormToSession($this->aXMLResponseData['HTML_ANSWER']);
-                $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+                $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $sTargetURL = $oShop->GetLinkToSystemPage($s3DSecurePage, null, true);
                 $this->getRedirectService()->redirect($sTargetURL);
             }

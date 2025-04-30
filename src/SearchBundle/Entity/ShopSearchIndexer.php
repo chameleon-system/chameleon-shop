@@ -2,21 +2,18 @@
 
 namespace ChameleonSystem\SearchBundle\Entity;
 
-
-use DateTime;
-
 class ShopSearchIndexer
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldDateTime
-        /** @var DateTime|null - Started on */
-        private ?DateTime $started = null,
+        /** @var \DateTime|null - Started on */
+        private ?\DateTime $started = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Completed */
-        private ?DateTime $completed = null,
+        /** @var \DateTime|null - Completed */
+        private ?\DateTime $completed = null,
         // TCMSFieldNumber
         /** @var int - Number of lines to process */
         private int $totalRowsToProcess = 0,
@@ -51,32 +48,30 @@ class ShopSearchIndexer
     }
 
     // TCMSFieldDateTime
-    public function getStarted(): ?DateTime
+    public function getStarted(): ?\DateTime
     {
         return $this->started;
     }
 
-    public function setStarted(?DateTime $started): self
+    public function setStarted(?\DateTime $started): self
     {
         $this->started = $started;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getCompleted(): ?DateTime
+    public function getCompleted(): ?\DateTime
     {
         return $this->completed;
     }
 
-    public function setCompleted(?DateTime $completed): self
+    public function setCompleted(?\DateTime $completed): self
     {
         $this->completed = $completed;
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getTotalRowsToProcess(): int
@@ -91,7 +86,6 @@ class ShopSearchIndexer
         return $this;
     }
 
-
     // TCMSFieldText
     public function getProcessdata(): string
     {
@@ -104,6 +98,4 @@ class ShopSearchIndexer
 
         return $this;
     }
-
-
 }

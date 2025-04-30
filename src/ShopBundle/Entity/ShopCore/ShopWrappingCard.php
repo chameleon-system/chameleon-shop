@@ -8,7 +8,7 @@ class ShopWrappingCard
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -18,8 +18,7 @@ class ShopWrappingCard
         private int $position = 0,
         // TCMSFieldExtendedLookup
         /** @var ShopArticle|null - Greeting card item */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldText
         /** @var string - Suggested text */
         private string $suggestedText = ''
@@ -63,7 +62,6 @@ class ShopWrappingCard
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -76,7 +74,6 @@ class ShopWrappingCard
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getShopArticle(): ?ShopArticle
@@ -91,7 +88,6 @@ class ShopWrappingCard
         return $this;
     }
 
-
     // TCMSFieldText
     public function getSuggestedText(): string
     {
@@ -104,6 +100,4 @@ class ShopWrappingCard
 
         return $this;
     }
-
-
 }

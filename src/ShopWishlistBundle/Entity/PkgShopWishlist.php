@@ -10,12 +10,11 @@ class PkgShopWishlist
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var DataExtranetUser|null - Belongs to user */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldText
         /** @var string - Description stored by the user */
         private string $description = '',
@@ -24,8 +23,7 @@ class PkgShopWishlist
         private bool $isPublic = false,
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopWishlistArticle> - Wishlist articles */
-        private Collection $pkgShopWishlistArticleCollection = new ArrayCollection()
-        ,
+        private Collection $pkgShopWishlistArticleCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopWishlistMailHistory> - Wishlist mail history */
         private Collection $pkgShopWishlistMailHistoryCollection = new ArrayCollection()
@@ -69,7 +67,6 @@ class PkgShopWishlist
         return $this;
     }
 
-
     // TCMSFieldText
     public function getDescription(): string
     {
@@ -83,7 +80,6 @@ class PkgShopWishlist
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIsPublic(): bool
     {
@@ -96,8 +92,6 @@ class PkgShopWishlist
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -131,8 +125,6 @@ class PkgShopWishlist
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -164,6 +156,4 @@ class PkgShopWishlist
 
         return $this;
     }
-
-
 }

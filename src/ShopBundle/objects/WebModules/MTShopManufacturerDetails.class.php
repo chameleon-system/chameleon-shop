@@ -17,7 +17,7 @@ class MTShopManufacturerDetails extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @var TdbShopManufacturer
      */
-    private $oActiveManufacturer = null;
+    private $oActiveManufacturer;
 
     /**
      * {@inheritdoc}
@@ -83,6 +83,6 @@ class MTShopManufacturerDetails extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

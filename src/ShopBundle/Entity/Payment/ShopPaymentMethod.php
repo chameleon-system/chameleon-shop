@@ -18,12 +18,11 @@ class ShopPaymentMethod
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopPaymentHandlerGroup|null - Belongs to payment provider */
-        private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
-        ,
+        private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -32,8 +31,7 @@ class ShopPaymentMethod
         private string $nameInternal = '',
         // TCMSFieldLookup
         /** @var ShopPaymentHandler|null - Payment handler */
-        private ?ShopPaymentHandler $shopPaymentHandler = null
-        ,
+        private ?ShopPaymentHandler $shopPaymentHandler = null,
         // TCMSFieldBoolean
         /** @var bool - Active */
         private bool $active = false,
@@ -45,8 +43,7 @@ class ShopPaymentMethod
         private int $position = 0,
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsPortal> - Restrict to the following portals */
-        private Collection $cmsPortalCollection = new ArrayCollection()
-        ,
+        private Collection $cmsPortalCollection = new ArrayCollection(),
         // TCMSFieldPrice
         /** @var string - Available from merchandise value */
         private string $restrictToValueFrom = '',
@@ -67,54 +64,43 @@ class ShopPaymentMethod
         private string $valueType = 'absolut',
         // TCMSFieldLookup
         /** @var ShopVat|null - VAT group */
-        private ?ShopVat $shopVat = null
-        ,
+        private ?ShopVat $shopVat = null,
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Icon */
-        private ?CmsMedia $cmsMedia = null
-        ,
+        private ?CmsMedia $cmsMedia = null,
         // TCMSFieldWYSIWYG
         /** @var string - Description */
         private string $description = '',
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, DataExtranetUser> - Restrict to following customers */
-        private Collection $dataExtranetUserCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetUserCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, DataExtranetGroup> - Restrict to following customer groups */
-        private Collection $dataExtranetGroupCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetGroupCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, DataCountry> - Restrict to following shipping countries */
-        private Collection $dataCountryCollection = new ArrayCollection()
-        ,
+        private Collection $dataCountryCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, DataCountry> - Restrict to following billing countries */
-        private Collection $dataCountryBillingCollection = new ArrayCollection()
-        ,
+        private Collection $dataCountryBillingCollection = new ArrayCollection(),
         // TCMSFieldBoolean
         /** @var bool - Use not fixed positive list match */
         private bool $positivListLooseMatch = false,
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopArticleGroup> - Restrict to following product groups */
-        private Collection $shopArticleGroupCollection = new ArrayCollection()
-        ,
+        private Collection $shopArticleGroupCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopCategory> - Restrict to following product categories */
-        private Collection $shopCategoryCollection = new ArrayCollection()
-        ,
+        private Collection $shopCategoryCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopArticle> - Restrict to following items */
-        private Collection $shopArticleCollection = new ArrayCollection()
-        ,
+        private Collection $shopArticleCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopArticleGroup> - Do not allow for following product groups */
-        private Collection $shopArticleGroup1Collection = new ArrayCollection()
-        ,
+        private Collection $shopArticleGroup1Collection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopCategory> - Do not allow for following product categories */
-        private Collection $shopCategory1Collection = new ArrayCollection()
-        ,
+        private Collection $shopCategory1Collection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopArticle> - Do not allow for following products */
         private Collection $shopArticle1Collection = new ArrayCollection()
@@ -158,7 +144,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -171,7 +156,6 @@ class ShopPaymentMethod
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getNameInternal(): string
@@ -186,7 +170,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopPaymentHandler(): ?ShopPaymentHandler
     {
@@ -199,7 +182,6 @@ class ShopPaymentMethod
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isActive(): bool
@@ -214,7 +196,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isPkgDhlPackstationAllowForPackstation(): bool
     {
@@ -228,7 +209,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -241,8 +221,6 @@ class ShopPaymentMethod
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -276,7 +254,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
     // TCMSFieldPrice
     public function getRestrictToValueFrom(): string
     {
@@ -289,7 +266,6 @@ class ShopPaymentMethod
 
         return $this;
     }
-
 
     // TCMSFieldPrice
     public function getRestrictToValueTo(): string
@@ -304,7 +280,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getRestrictToBasketValueFrom(): string
     {
@@ -317,7 +292,6 @@ class ShopPaymentMethod
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getRestrictToBasketValueTo(): string
@@ -332,7 +306,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
     // TCMSFieldPrice
     public function getValue(): string
     {
@@ -345,7 +318,6 @@ class ShopPaymentMethod
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getValueType(): string
@@ -360,7 +332,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopVat(): ?ShopVat
     {
@@ -373,7 +344,6 @@ class ShopPaymentMethod
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
@@ -388,7 +358,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -401,8 +370,6 @@ class ShopPaymentMethod
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -436,8 +403,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -469,8 +434,6 @@ class ShopPaymentMethod
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -504,8 +467,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -538,7 +499,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isPositivListLooseMatch(): bool
     {
@@ -551,8 +511,6 @@ class ShopPaymentMethod
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -586,8 +544,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -619,8 +575,6 @@ class ShopPaymentMethod
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -654,8 +608,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -687,8 +639,6 @@ class ShopPaymentMethod
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -722,8 +672,6 @@ class ShopPaymentMethod
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -755,6 +703,4 @@ class ShopPaymentMethod
 
         return $this;
     }
-
-
 }

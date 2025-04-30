@@ -30,7 +30,7 @@ class SortString implements SortStringInterface
 
     public function getAsArray()
     {
-        $sort = array();
+        $sort = [];
         $parts = explode(',', $this->sqlOrderByString);
         foreach ($parts as $part) {
             $part = trim($part);
@@ -55,13 +55,15 @@ class SortString implements SortStringInterface
 
     /**
      * @param string $sortDirection
+     *
      * @return string
+     *
      * @psalm-return 'ASC'|'DESC'
      */
     private function getSanitizedSortDirection($sortDirection)
     {
         $direction = strtoupper(trim($sortDirection));
-        if (false === in_array($direction, array('ASC', 'DESC'))) {
+        if (false === in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'ASC';
 
             return $direction;

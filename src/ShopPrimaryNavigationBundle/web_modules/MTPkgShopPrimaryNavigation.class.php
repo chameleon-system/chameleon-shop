@@ -46,7 +46,7 @@ class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getActivePageId()
     {
@@ -64,14 +64,14 @@ class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
     {
         $user = $this->getExtranetUserProvider()->getActiveUser();
         if (null === $user) {
-            return array();
+            return [];
         }
 
         return $user->GetUserGroupIds();
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getActiveCategoryId()
     {

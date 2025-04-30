@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\Product;
 
-
 class ShopManufacturer
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -76,7 +75,6 @@ class ShopManufacturer
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isActive(): bool
     {
@@ -89,7 +87,6 @@ class ShopManufacturer
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getPosition(): int
@@ -104,7 +101,6 @@ class ShopManufacturer
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getDescriptionShort(): string
     {
@@ -117,7 +113,6 @@ class ShopManufacturer
 
         return $this;
     }
-
 
     // TCMSFieldMedia
     public function getCmsMediaId(): array
@@ -132,7 +127,6 @@ class ShopManufacturer
         return $this;
     }
 
-
     // TCMSFieldColorpicker
     public function getColor(): string
     {
@@ -145,7 +139,6 @@ class ShopManufacturer
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getCss(): string
@@ -160,7 +153,6 @@ class ShopManufacturer
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -174,7 +166,6 @@ class ShopManufacturer
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getSizetable(): string
     {
@@ -187,6 +178,4 @@ class ShopManufacturer
 
         return $this;
     }
-
-
 }

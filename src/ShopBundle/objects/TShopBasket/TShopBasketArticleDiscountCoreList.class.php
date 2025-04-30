@@ -11,13 +11,11 @@
 
 /**
  * class holds a list of discounts acting on a basket article.
-/**/
+ * /**/
 class TShopBasketArticleDiscountCoreList extends TIterator
 {
     /**
      * return next itme.
-     *
-     * @return TdbShopDiscount|bool
      */
     public function next(): TdbShopDiscount|bool
     {
@@ -39,7 +37,7 @@ class TShopBasketArticleDiscountCoreList extends TIterator
      *
      * @return TdbShopDiscount
      */
-    public function current():TdbShopDiscount|bool
+    public function current(): TdbShopDiscount|bool
     {
         return parent::Current();
     }

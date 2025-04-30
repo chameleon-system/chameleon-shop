@@ -179,7 +179,7 @@ class MTExtranetRegistrationGuestCore extends MTExtranetRegistrationGuestCoreAut
     {
         $bActivePageIsRegisterAfterShopping = false;
         $oURLData = TCMSSmartURLData::GetActive();
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
+        $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
         $sNodeId = $oShop->GetSystemPageNodeId('register-after-shopping');
         $oActivePage = $this->getActivePageService()->getActivePage();
         if ($oActivePage && $sNodeId == $oActivePage->GetMainTreeId()) {

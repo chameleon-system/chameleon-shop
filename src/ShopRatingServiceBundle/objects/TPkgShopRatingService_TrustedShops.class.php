@@ -14,11 +14,11 @@ use ChameleonSystem\ShopRatingService\Util\CacheUtil;
 
 class TPkgShopRatingService_TrustedShops extends TdbPkgShopRatingService
 {
-    const PATH_IMAGE_CACHE = '/TPkgShopRatingService_TrustedShops.gif';
+    public const PATH_IMAGE_CACHE = '/TPkgShopRatingService_TrustedShops.gif';
     /**
      * @var SimplePie
      */
-    protected $data = null;
+    protected $data;
     /**
      * @var bool
      */
@@ -49,7 +49,7 @@ class TPkgShopRatingService_TrustedShops extends TdbPkgShopRatingService
                     if ($iScoreValue < 0) {
                         $iScoreValue = '';
                     }
-                    $dataAccess->insertItem(array(
+                    $dataAccess->insertItem([
                         'insertId' => TTools::GetUUID(),
                         'pkgShopRatingServiceId' => $this->id,
                         'remoteKey' => $item->get_id(),
@@ -58,18 +58,17 @@ class TPkgShopRatingService_TrustedShops extends TdbPkgShopRatingService
                         'ratingUser' => '',
                         'ratingText' => $content,
                         'ratingDate' => $item->get_date('Y-m-d H:i:s'),
-                    ));
+                    ]);
                 }
             }
         }
 
-        //Update main score value
+        // Update main score value
         return $this->UpdateMainScroeValue();
     }
 
     /**
-     * @param SimplePie_Item $item
-     * @param string         $content
+     * @param string $content
      *
      * @return string
      */
@@ -158,7 +157,7 @@ class TPkgShopRatingService_TrustedShops extends TdbPkgShopRatingService
         $feedURL = $this->fieldRatingUrl;
 
         if (!empty($feedURL) && (stristr($feedURL, 'http://') || stristr($feedURL, 'https://'))) {
-            $feed = new \SimplePie\SimplePie();
+            $feed = new SimplePie\SimplePie();
             $feed->set_feed_url($feedURL);
 
             $cachePath = $this->getCacheUtil()->getCacheDirectory();
@@ -188,7 +187,7 @@ class TPkgShopRatingService_TrustedShops extends TdbPkgShopRatingService
      * Return FALSE if cache no more valid!
      *
      * @param string $filename_cache
-     * @param int    $timeout
+     * @param int $timeout
      *
      * @return bool
      */
@@ -244,13 +243,13 @@ class TPkgShopRatingService_TrustedShops extends TdbPkgShopRatingService
         $sViewSubType = 'pkgShopRatingService/views',
         $sViewType = 'Customer',
         $sSpotName = null,
-        $aCallTimeVars = array()
+        $aCallTimeVars = []
     ) {
         $aCallTimeVars['oRatingServiceImage'] = $this->GetImage(0, 'icon_cms_media_id');
         $aCallTimeVars['sWidgetImageURL'] = $this->GetUserRatingWidgetImage();
         $aCallTimeVars['sRatingApiId'] = $this->fieldRatingApiId;
 
-        //please call parent here to render!
+        // please call parent here to render!
         return parent::Render($sViewName, $sViewSubType, $sViewType, $sSpotName, $aCallTimeVars);
     }
 
@@ -259,7 +258,7 @@ class TPkgShopRatingService_TrustedShops extends TdbPkgShopRatingService
      */
     private function getDataAccess()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_rating_service.data_access.trusted_shops');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_rating_service.data_access.trusted_shops');
     }
 
     /**
@@ -267,6 +266,6 @@ class TPkgShopRatingService_TrustedShops extends TdbPkgShopRatingService
      */
     private function getCacheUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_rating_service.util.cache');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_rating_service.util.cache');
     }
 }

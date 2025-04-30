@@ -85,9 +85,9 @@ class TShopInterfaceExportCustomers extends TCMSInterfaceManagerBaseExportCSV
 
     protected function GetFieldMapping()
     {
-        $aFields = array('UserId' => 'int(11) NOT NULL', 'EMail' => 'VARCHAR( 255 ) NOT NULL', 'KundenNr' => 'int(11) NOT NULL', 'datecreated' => 'DATETIME NOT NULL', 'NewsletterAnmeldedatum' => 'DATETIME NOT NULL',
+        $aFields = ['UserId' => 'int(11) NOT NULL', 'EMail' => 'VARCHAR( 255 ) NOT NULL', 'KundenNr' => 'int(11) NOT NULL', 'datecreated' => 'DATETIME NOT NULL', 'NewsletterAnmeldedatum' => 'DATETIME NOT NULL',
             'RechAdr_Firma' => 'VARCHAR( 255 ) NOT NULL', 'RechAdr_Anrede' => 'VARCHAR( 255 ) NOT NULL', 'RechAdr_Vorname' => 'VARCHAR( 255 ) NOT NULL', 'RechAdr_Nachname' => 'VARCHAR( 255 ) NOT NULL', 'RechAdr_Strasse' => 'VARCHAR( 255 ) NOT NULL', 'RechAdr_Hausnummer' => 'VARCHAR( 255 ) NOT NULL', 'RechAdr_Stadt' => 'VARCHAR( 255 ) NOT NULL', 'RechAdr_PLZ' => 'VARCHAR( 255 ) NOT NULL', 'RechAdr_Telefon' => 'VARCHAR( 255 ) NOT NULL', 'RechAdr_Fax' => 'VARCHAR( 255 ) NOT NULL', 'RechAdr_Land' => 'VARCHAR( 255 ) NOT NULL',
-            'LiefAdr_Firma' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Anrede' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Vorname' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Nachname' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Strasse' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Hausnummer' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Stadt' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_PLZ' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Telefon' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Fax' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Land' => 'VARCHAR( 255 ) NOT NULL', );
+            'LiefAdr_Firma' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Anrede' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Vorname' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Nachname' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Strasse' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Hausnummer' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Stadt' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_PLZ' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Telefon' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Fax' => 'VARCHAR( 255 ) NOT NULL', 'LiefAdr_Land' => 'VARCHAR( 255 ) NOT NULL', ];
 
         return $aFields;
     }

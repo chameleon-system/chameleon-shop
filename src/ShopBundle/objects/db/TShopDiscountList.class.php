@@ -22,7 +22,7 @@ class TShopDiscountList extends TShopDiscountListAutoParent
     public static function GetActiveDiscountList($sFilter = null, $sOrder = '`shop_discount`.`position`')
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         static $aActiveDiscountList = [];
         $aKey = ['sFilter' => $sFilter, 'sOrder' => $sOrder];
@@ -61,7 +61,8 @@ class TShopDiscountList extends TShopDiscountListAutoParent
     }
 
     /**
-     * return all discounts matching the article
+     * return all discounts matching the article.
+     *
      * @param TdbShopArticle $oArticle
      * @param bool $bIncludeUserRestrictedDiscounts - set to true, if you want to include discounts restricted to the current user
      *

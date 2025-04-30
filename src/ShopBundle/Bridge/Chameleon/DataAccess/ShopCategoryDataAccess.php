@@ -13,7 +13,6 @@ namespace ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess;
 
 use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopCategoryDataAccessInterface;
 use Doctrine\DBAL\Connection;
-use TdbShopCategoryList;
 
 class ShopCategoryDataAccess implements ShopCategoryDataAccessInterface
 {
@@ -22,9 +21,6 @@ class ShopCategoryDataAccess implements ShopCategoryDataAccessInterface
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -60,7 +56,7 @@ class ShopCategoryDataAccess implements ShopCategoryDataAccessInterface
         }
         $query = sprintf($query, $activeRestriction);
 
-        return $this->connection->fetchAllAssociative($query, array('parentId' => $categoryId));
+        return $this->connection->fetchAllAssociative($query, ['parentId' => $categoryId]);
     }
 
     /**
@@ -69,7 +65,7 @@ class ShopCategoryDataAccess implements ShopCategoryDataAccessInterface
     public function getCategory($categoryId)
     {
         $query = 'SELECT * FROM `shop_category` WHERE `shop_category_id` = :categoryId';
-        $row = $this->connection->fetchAllAssociative($query, array('categoryId' => $categoryId));
+        $row = $this->connection->fetchAllAssociative($query, ['categoryId' => $categoryId]);
         if (false === $row) {
             return null;
         }
@@ -82,6 +78,6 @@ class ShopCategoryDataAccess implements ShopCategoryDataAccessInterface
      */
     private function getActiveRestriction()
     {
-        return TdbShopCategoryList::GetActiveCategoryQueryRestriction();
+        return \TdbShopCategoryList::GetActiveCategoryQueryRestriction();
     }
 }

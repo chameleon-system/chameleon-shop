@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\ShopBundle\Interfaces\DataAccess;
 
-use TShopBasket;
-
 /**
  * access shipping type configuration.
  */
@@ -84,11 +82,10 @@ interface ShopShippingTypeDataAccessInterface
     /**
      * Returns a list of active shipping types that may use the shipping type.
      *
-     * @param string      $shippingGroupId
-     * @param string      $shippingCountryId
-     * @param TShopBasket $basket
+     * @param string $shippingGroupId
+     * @param string $shippingCountryId
      *
      * @return array
      */
-    public function getAvailableShippingTypes($shippingGroupId, $shippingCountryId, TShopBasket $basket);
+    public function getAvailableShippingTypes($shippingGroupId, $shippingCountryId, \TShopBasket $basket);
 }

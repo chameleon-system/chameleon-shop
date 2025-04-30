@@ -11,19 +11,17 @@ class ShopArticleCatalogConfDefaultOrder
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopArticleCatalogConf|null - Belongs to configuration */
-        private ?ShopArticleCatalogConf $shopArticleCatalogConf = null
-        ,
+        private ?ShopArticleCatalogConf $shopArticleCatalogConf = null,
         // TCMSFieldVarchar
         /** @var string - Name (description) */
         private string $name = '',
         // TCMSFieldLookup
         /** @var ShopModuleArticlelistOrderby|null - Sorting */
-        private ?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby = null
-        ,
+        private ?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby = null,
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopCategory> - Category */
         private Collection $shopCategoryCollection = new ArrayCollection()
@@ -67,7 +65,6 @@ class ShopArticleCatalogConfDefaultOrder
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -81,7 +78,6 @@ class ShopArticleCatalogConfDefaultOrder
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopModuleArticlelistOrderby(): ?ShopModuleArticlelistOrderby
     {
@@ -94,8 +90,6 @@ class ShopArticleCatalogConfDefaultOrder
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -128,6 +122,4 @@ class ShopArticleCatalogConfDefaultOrder
 
         return $this;
     }
-
-
 }

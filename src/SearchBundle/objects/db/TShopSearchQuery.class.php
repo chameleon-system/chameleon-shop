@@ -37,10 +37,10 @@ class TShopSearchQuery extends TAdbShopSearchQuery
     public function StartIndex($bRegenerateCompleteIndex = true)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         if (!$this->IndexIsRunning()) {
-            $query = $this->fieldQuery . ' LIMIT 0,1';
+            $query = $this->fieldQuery.' LIMIT 0,1';
             // we do not care about the type contents of the fields... just how many there are
             $statement = $connection->executeQuery($query);
 
@@ -84,8 +84,8 @@ class TShopSearchQuery extends TAdbShopSearchQuery
 
                 // now copy data...
                 $query = "
-                INSERT INTO {$quotedTableName} (" . implode(',', $aFields) . ") 
-                " . $this->fieldQuery;
+                INSERT INTO {$quotedTableName} (".implode(',', $aFields).') 
+                '.$this->fieldQuery;
                 $connection->executeStatement($query);
 
                 // Add index
@@ -157,7 +157,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
     public function CreateIndexTick($iNumberOfRowsToProcess)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $iRealNumberProcessed = 0;
 
@@ -195,8 +195,8 @@ class TShopSearchQuery extends TAdbShopSearchQuery
 
                 ++$iRealNumberProcessed;
             }
-        } catch (\Exception $e) {
-            trigger_error('SQL Error: ' . $e->getMessage(), E_USER_WARNING);
+        } catch (Exception $e) {
+            trigger_error('SQL Error: '.$e->getMessage(), E_USER_WARNING);
         }
 
         if (($iRealNumberProcessed < $iNumberOfRowsToProcess) || ($iNumberOfRowsToProcess < 0)) {
@@ -216,7 +216,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
     public function NumberOfRecordsLeftToIndex()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $iCount = 0;
 
@@ -258,7 +258,7 @@ class TShopSearchQuery extends TAdbShopSearchQuery
     public function StopIndex()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sIndexTableName = $this->GetIndexRawTableName();
 

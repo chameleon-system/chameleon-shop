@@ -18,16 +18,16 @@ use PHPUnit\Framework\TestCase;
 
 class StateTest extends TestCase
 {
-    private $stateString = null;
+    private $stateString;
     /**
-     * @var \ChameleonSystem\ShopBundle\objects\ArticleList\State
+     * @var State
      */
-    private $state = null;
+    private $state;
     /**
-     * @var \ChameleonSystem\ShopBundle\objects\ArticleList\Exceptions\StateParameterException
+     * @var StateParameterException
      */
-    private $stateException = null;
-    private $varyingParameters = null;
+    private $stateException;
+    private $varyingParameters;
     private $queryParameter;
 
     protected function tearDown(): void
@@ -42,9 +42,10 @@ class StateTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dataProviderStateString
      */
-    public function it_should_construct_from_state_string($stateString, $expectedStateString)
+    public function itShouldConstructFromStateString($stateString, $expectedStateString)
     {
         $this->givenAStateString($stateString);
         $this->whenIConstructTheStateWithTheStateStringAndQueryParameter();
@@ -53,20 +54,20 @@ class StateTest extends TestCase
 
     public function dataProviderStateString()
     {
-        return array(
-            array(null, '', null),
-            array('', '', null),
-            array('p:1,s:sortid,ps:10', 'p:1,s:sortid,ps:10'),
-            array('p:0,s:sortid,ps:10', 's:sortid,ps:10'),
-            array('p:-1', ''),
-            array('p:', ''),
-            array('p:invalid', ''),
-            array('ps:-1', 'ps:-1'),
-            array('ps:', ''),
-            array('ps:0', ''),
-            array('ps:invalid', ''),
-            array('sortid:', ''),
-        );
+        return [
+            [null, '', null],
+            ['', '', null],
+            ['p:1,s:sortid,ps:10', 'p:1,s:sortid,ps:10'],
+            ['p:0,s:sortid,ps:10', 's:sortid,ps:10'],
+            ['p:-1', ''],
+            ['p:', ''],
+            ['p:invalid', ''],
+            ['ps:-1', 'ps:-1'],
+            ['ps:', ''],
+            ['ps:0', ''],
+            ['ps:invalid', ''],
+            ['sortid:', ''],
+        ];
     }
 
     private function givenAStateString($stateString)
@@ -94,9 +95,10 @@ class StateTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dataProviderStateString
      */
-    public function it_should_set_state_from_string($stateString, $expectedStateString)
+    public function itShouldSetStateFromString($stateString, $expectedStateString)
     {
         $this->givenAStateString($stateString);
         $this->givenANewStateInstance();
@@ -107,10 +109,10 @@ class StateTest extends TestCase
     private function givenANewStateInstance()
     {
         $this->state = new State();
-        $this->state->registerStateElement(new \ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementCurrentPage());
-        $this->state->registerStateElement(new \ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementSort());
-        $this->state->registerStateElement(new \ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementPageSize(array(null, 5, 10, 15, 20)));
-        $this->state->registerStateElement(new \ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementQuery());
+        $this->state->registerStateElement(new State\StateElementCurrentPage());
+        $this->state->registerStateElement(new State\StateElementSort());
+        $this->state->registerStateElement(new State\StateElementPageSize([null, 5, 10, 15, 20]));
+        $this->state->registerStateElement(new State\StateElementQuery());
     }
 
     private function whenISetTheStateFromString($stateString)
@@ -120,9 +122,10 @@ class StateTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dataProviderStateKeyAndValue
      */
-    public function it_should_set_a_state($stateKey, $stateValue, $resultValue, $exception = null)
+    public function itShouldSetAState($stateKey, $stateValue, $resultValue, $exception = null)
     {
         $this->givenANewStateInstance();
         $this->whenISetTheStateKeyWithTheStateValue($stateKey, $stateValue);
@@ -138,26 +141,26 @@ class StateTest extends TestCase
     {
         $invalidValueException = new StateParameterException('', StateInterface::ERROR_CODE_INVALID_STATE_VALUE);
 
-        return array(
-            array(StateInterface::SORT, '1234', '1234', null),
-            array(StateInterface::SORT, '', null, null),
-            array(StateInterface::PAGE, '-1', null, $invalidValueException),
-            array(StateInterface::PAGE, '0', null, null),
-            array(StateInterface::PAGE, '5', '5', null),
-            array(StateInterface::PAGE, 'invalid', null, $invalidValueException),
-            array(StateInterface::PAGE_SIZE, '-1', '-1', null),
-            array(StateInterface::PAGE_SIZE, '0', null, $invalidValueException),
-            array(StateInterface::PAGE_SIZE, '5', '5', null),
-            array(StateInterface::PAGE_SIZE, 'invalid', null, $invalidValueException),
-            array(StateInterface::QUERY, array('fo' => 'bar'), array('fo' => 'bar'), null),
-        );
+        return [
+            [StateInterface::SORT, '1234', '1234', null],
+            [StateInterface::SORT, '', null, null],
+            [StateInterface::PAGE, '-1', null, $invalidValueException],
+            [StateInterface::PAGE, '0', null, null],
+            [StateInterface::PAGE, '5', '5', null],
+            [StateInterface::PAGE, 'invalid', null, $invalidValueException],
+            [StateInterface::PAGE_SIZE, '-1', '-1', null],
+            [StateInterface::PAGE_SIZE, '0', null, $invalidValueException],
+            [StateInterface::PAGE_SIZE, '5', '5', null],
+            [StateInterface::PAGE_SIZE, 'invalid', null, $invalidValueException],
+            [StateInterface::QUERY, ['fo' => 'bar'], ['fo' => 'bar'], null],
+        ];
     }
 
     private function whenISetTheStateKeyWithTheStateValue($stateKey, $stateValue)
     {
         try {
             $this->state->setState($stateKey, $stateValue);
-        } catch (\ChameleonSystem\ShopBundle\objects\ArticleList\Exceptions\StateParameterException $e) {
+        } catch (StateParameterException $e) {
             $this->stateException = $e;
         }
     }
@@ -179,9 +182,10 @@ class StateTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dataProviderStateArray
      */
-    public function it_should_return_a_state_as_array($stateString, $queryParameter, $expectedOutput)
+    public function itShouldReturnAStateAsArray($stateString, $queryParameter, $expectedOutput)
     {
         $this->givenAStateString($stateString);
         $this->givenAQueryParameter($queryParameter);
@@ -191,18 +195,19 @@ class StateTest extends TestCase
 
     public function dataProviderStateArray()
     {
-        return array(
-            array('p:1,s:sortid,ps:10', null, array(StateInterface::PAGE => 1, StateInterface::SORT => 'sortid', StateInterface::PAGE_SIZE => 10)),
-            array('p:0,s:sortid,ps:10', null, array(StateInterface::SORT => 'sortid', StateInterface::PAGE_SIZE => 10)),
-            array('p:1,s:sortid,ps:10', array('some' => 'data', 'and' => 'somemore'), array(StateInterface::PAGE => 1, StateInterface::SORT => 'sortid', StateInterface::PAGE_SIZE => 10, StateInterface::QUERY => array('some' => 'data', 'and' => 'somemore'))),
-        );
+        return [
+            ['p:1,s:sortid,ps:10', null, [StateInterface::PAGE => 1, StateInterface::SORT => 'sortid', StateInterface::PAGE_SIZE => 10]],
+            ['p:0,s:sortid,ps:10', null, [StateInterface::SORT => 'sortid', StateInterface::PAGE_SIZE => 10]],
+            ['p:1,s:sortid,ps:10', ['some' => 'data', 'and' => 'somemore'], [StateInterface::PAGE => 1, StateInterface::SORT => 'sortid', StateInterface::PAGE_SIZE => 10, StateInterface::QUERY => ['some' => 'data', 'and' => 'somemore']]],
+        ];
     }
 
     /**
      * @test
+     *
      * @dataProvider dataProviderStateArrayWithoutQueryParameter
      */
-    public function it_should_return_a_state_as_array_without_query_parameter($stateString, $queryParameter, $expectedOutput)
+    public function itShouldReturnAStateAsArrayWithoutQueryParameter($stateString, $queryParameter, $expectedOutput)
     {
         $this->givenAStateString($stateString);
         $this->givenAQueryParameter($queryParameter);
@@ -212,11 +217,11 @@ class StateTest extends TestCase
 
     public function dataProviderStateArrayWithoutQueryParameter()
     {
-        return array(
-            array('p:1,s:sortid,ps:10', null, array(StateInterface::PAGE => 1, StateInterface::SORT => 'sortid', StateInterface::PAGE_SIZE => 10)),
-            array('p:0,s:sortid,ps:10', null, array(StateInterface::SORT => 'sortid', StateInterface::PAGE_SIZE => 10)),
-            array('p:1,s:sortid,ps:10', array('some' => 'data', 'and' => 'somemore'), array(StateInterface::PAGE => 1, StateInterface::SORT => 'sortid', StateInterface::PAGE_SIZE => 10)),
-        );
+        return [
+            ['p:1,s:sortid,ps:10', null, [StateInterface::PAGE => 1, StateInterface::SORT => 'sortid', StateInterface::PAGE_SIZE => 10]],
+            ['p:0,s:sortid,ps:10', null, [StateInterface::SORT => 'sortid', StateInterface::PAGE_SIZE => 10]],
+            ['p:1,s:sortid,ps:10', ['some' => 'data', 'and' => 'somemore'], [StateInterface::PAGE => 1, StateInterface::SORT => 'sortid', StateInterface::PAGE_SIZE => 10]],
+        ];
     }
 
     private function givenAQueryParameter($queryParameter)
@@ -236,14 +241,10 @@ class StateTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderInputOutputStateString
      *
-     * @param $inputStateString
-     * @param $queryParameter
-     * @param $outputStateString
-     * @param array $varyingParameters
+     * @dataProvider dataProviderInputOutputStateString
      */
-    public function it_should_return_the_state_as_string($inputStateString, $queryParameter, $outputStateString, array $varyingParameters = null)
+    public function itShouldReturnTheStateAsString($inputStateString, $queryParameter, $outputStateString, ?array $varyingParameters = null)
     {
         $this->givenAStateString($inputStateString);
         $this->givenAQueryParameter($queryParameter);
@@ -254,12 +255,12 @@ class StateTest extends TestCase
 
     public function dataProviderInputOutputStateString()
     {
-        return array(
-            array('p:1,s:sortid,ps:10', null, 'p:1,s:sortid,ps:10', null),
-            array('p:1,s:sortid,ps:10', null, 's:sortid,ps:10', array(StateInterface::PAGE)),
-            array('p:1,s:sortid,ps:10', null, 's:sortid', array(StateInterface::PAGE, StateInterface::PAGE_SIZE)),
-            array('p:1,s:sortid,ps:10', array('some' => 'value'), 'p:1,s:sortid,ps:10', null),
-        );
+        return [
+            ['p:1,s:sortid,ps:10', null, 'p:1,s:sortid,ps:10', null],
+            ['p:1,s:sortid,ps:10', null, 's:sortid,ps:10', [StateInterface::PAGE]],
+            ['p:1,s:sortid,ps:10', null, 's:sortid', [StateInterface::PAGE, StateInterface::PAGE_SIZE]],
+            ['p:1,s:sortid,ps:10', ['some' => 'value'], 'p:1,s:sortid,ps:10', null],
+        ];
     }
 
     private function whenIAmVaryingTheParameter($varyingParameters)
@@ -269,9 +270,10 @@ class StateTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dataProviderQueryParameter
      */
-    public function it_should_be_able_to_return_the_query_parameter($queryParamSet, $expectedQueryParam)
+    public function itShouldBeAbleToReturnTheQueryParameter($queryParamSet, $expectedQueryParam)
     {
         $this->givenAQueryParameter($queryParamSet);
         $this->whenIConstructTheStateWithTheStateStringAndQueryParameter();
@@ -280,10 +282,10 @@ class StateTest extends TestCase
 
     public function dataProviderQueryParameter()
     {
-        return array(
-            array(array('some' => 'value'), array('some' => 'value')),
-            array(null, array()),
-        );
+        return [
+            [['some' => 'value'], ['some' => 'value']],
+            [null, []],
+        ];
     }
 
     private function thenIShouldGetAStateWithThisQueryParameter($expectedQueryParameter)
@@ -293,14 +295,10 @@ class StateTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderUrlQueryOutputTester
      *
-     * @param $parameterIdentifier
-     * @param $stateString
-     * @param $queryData
-     * @param $expectedOutput
+     * @dataProvider dataProviderUrlQueryOutputTester
      */
-    public function it_should_generate_an_url_query_ready_parameter_array($parameterIdentifier, $stateString, $queryData, $varyingParameter, $expectedOutput)
+    public function itShouldGenerateAnUrlQueryReadyParameterArray($parameterIdentifier, $stateString, $queryData, $varyingParameter, $expectedOutput)
     {
         $this->givenAQueryParameter($queryData);
         $this->givenAStateString($stateString);
@@ -310,13 +308,13 @@ class StateTest extends TestCase
 
     public function dataProviderUrlQueryOutputTester()
     {
-        return array(
-            array('spota', 'p:1,ps:5,s:sortit', array('some' => 'data'), null, array('spota' => array('str' => 'p:1,ps:5,s:sortit'), 'some' => 'data')),
-            array('spota', 'p:1,ps:5,s:sortit', array('some' => array('foo' => 'bar')), null, array('spota' => array('str' => 'p:1,ps:5,s:sortit'), 'some' => array('foo' => 'bar'))),
-            array('spota', 'p:1,ps:5,s:sortit', null, null, array('spota' => array('str' => 'p:1,ps:5,s:sortit'))),
-            array('spota', 'p:1,ps:5,s:sortit', null, null, array('spota' => array('str' => 'p:1,ps:5,s:sortit'))),
-            array('spota', 'p:1,ps:5,s:sortit', array('some' => array('foo' => 'bar')), array('s'), array('spota' => array('str' => 'p:1,ps:5'), 'some' => array('foo' => 'bar'))),
-        );
+        return [
+            ['spota', 'p:1,ps:5,s:sortit', ['some' => 'data'], null, ['spota' => ['str' => 'p:1,ps:5,s:sortit'], 'some' => 'data']],
+            ['spota', 'p:1,ps:5,s:sortit', ['some' => ['foo' => 'bar']], null, ['spota' => ['str' => 'p:1,ps:5,s:sortit'], 'some' => ['foo' => 'bar']]],
+            ['spota', 'p:1,ps:5,s:sortit', null, null, ['spota' => ['str' => 'p:1,ps:5,s:sortit']]],
+            ['spota', 'p:1,ps:5,s:sortit', null, null, ['spota' => ['str' => 'p:1,ps:5,s:sortit']]],
+            ['spota', 'p:1,ps:5,s:sortit', ['some' => ['foo' => 'bar']], ['s'], ['spota' => ['str' => 'p:1,ps:5'], 'some' => ['foo' => 'bar']]],
+        ];
     }
 
     private function thenIShouldGetAStateWithUrlQueryParametersMatching($parameterIdentifier, $varyingParameter, $expectedOutput)
@@ -335,13 +333,10 @@ class StateTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderSetUnsetStates
      *
-     * @param $inputStateString
-     * @param $valuesSet
-     * @param $expectedStateValues
+     * @dataProvider dataProviderSetUnsetStates
      */
-    public function it_should_set_values_that_have_no_value($inputStateString, $valuesSet, $expectedStateValues)
+    public function itShouldSetValuesThatHaveNoValue($inputStateString, $valuesSet, $expectedStateValues)
     {
         $this->givenANewStateInstance();
         $this->whenISetTheStateFromString($inputStateString);
@@ -351,39 +346,39 @@ class StateTest extends TestCase
 
     public function dataProviderSetUnsetStates()
     {
-        return array(
-            array(
+        return [
+            [
                 'p:1,ps:5,s:sortit', // state string
-                array('p' => '5'), // default values to set
-                array('p' => 1, 'ps' => 5, 's' => 'sortit'), // expected output
-            ),
-            array(
+                ['p' => '5'], // default values to set
+                ['p' => 1, 'ps' => 5, 's' => 'sortit'], // expected output
+            ],
+            [
                 'p:1,ps:5,s:sortit', // state string
-                array('ps' => '5'), // default values to set
-                array('p' => 1, 'ps' => 5, 's' => 'sortit'), // expected output
-            ),
-            array(
+                ['ps' => '5'], // default values to set
+                ['p' => 1, 'ps' => 5, 's' => 'sortit'], // expected output
+            ],
+            [
                 'p:1,ps:5,s:sortit', // state string
-                array('s' => 'newsort'), // default values to set
-                array('p' => 1, 'ps' => 5, 's' => 'sortit'), // expected output
-            ),
+                ['s' => 'newsort'], // default values to set
+                ['p' => 1, 'ps' => 5, 's' => 'sortit'], // expected output
+            ],
 
-            array(
+            [
                 'ps:5,s:sortit', // state string
-                array('p' => '5'), // default values to set
-                array('p' => 5, 'ps' => 5, 's' => 'sortit'), // expected output
-            ),
-            array(
+                ['p' => '5'], // default values to set
+                ['p' => 5, 'ps' => 5, 's' => 'sortit'], // expected output
+            ],
+            [
                 'p:1,s:sortit', // state string
-                array('ps' => '10'), // default values to set
-                array('p' => 1, 'ps' => 10, 's' => 'sortit'), // expected output
-            ),
-            array(
+                ['ps' => '10'], // default values to set
+                ['p' => 1, 'ps' => 10, 's' => 'sortit'], // expected output
+            ],
+            [
                 'p:1,ps:5', // state string
-                array('s' => 'newsort'), // default values to set
-                array('p' => 1, 'ps' => 5, 's' => 'newsort'), // expected output
-            ),
-        );
+                ['s' => 'newsort'], // default values to set
+                ['p' => 1, 'ps' => 5, 's' => 'newsort'], // expected output
+            ],
+        ];
     }
 
     private function when_I_call_setUnsetStatesOnly_with($valuesSet)

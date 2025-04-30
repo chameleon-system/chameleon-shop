@@ -21,14 +21,14 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      *
      * @var TIterator|null
      */
-    protected $oArticleList = null;
+    protected $oArticleList;
 
     /**
      * absolute path to the cache file.
      *
      * @var string|null
      */
-    protected $sCacheFile = null;
+    protected $sCacheFile;
 
     /**
      * false if the export is in cache so load the cache file and pass it to the output
@@ -57,7 +57,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      *
      * @var array
      */
-    protected $aAttributes = array();
+    protected $aAttributes = [];
 
     /**
      * hook is called before an article is exported.
@@ -85,6 +85,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * this method should not be overwritten in child classes.
      *
      * @return bool
+     *
      * @final
      */
     public function Run()
@@ -204,14 +205,14 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * returns false if requested payment not exists or not active.
      *
      * @param TdbShopArticle $oArticle
-     * @param array          $aAdditionalData
+     * @param array $aAdditionalData
      *
      * @return string|false
      */
-    protected function GetDeliveryCosts($oArticle, $aAdditionalData = array())
+    protected function GetDeliveryCosts($oArticle, $aAdditionalData = [])
     {
         $sDeliveryCosts = 0.00;
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $sLanguage = 'DE';
         if (array_key_exists('langauge_iso_name', $aAdditionalData)) {
             $sLanguage = $aAdditionalData['langauge_iso_name'];
@@ -278,8 +279,8 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * returns an array with a nested array of values for each requested attribute.
      *
      * @param TdbShopArticle $oArticle
-     * @param array          $aAttributeNames
-     * @param string         $sFieldName
+     * @param array $aAttributeNames
+     * @param string $sFieldName
      *
      * @return array|null
      */
@@ -288,7 +289,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
         $aAttributeNames,
         $sFieldName = 'system_name'
     ) {
-        $aList = array();
+        $aList = [];
         foreach ($aAttributeNames as $sAttributeName) {
             $aList[$sAttributeName] = $this->GetArticleAttributeValueForAttributeName(
                 $oArticle,
@@ -307,9 +308,9 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      * returns array of values for requested attribute if $bReturnFirstOccurrence is false.
      *
      * @param TdbShopArticle $oArticle
-     * @param string         $sAttributeName
-     * @param string         $sFieldName
-     * @param bool           $bReturnFirstOccurrence
+     * @param string $sAttributeName
+     * @param string $sFieldName
+     * @param bool $bReturnFirstOccurrence
      *
      * @return string|array|null
      */
@@ -339,7 +340,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
             array_walk(
                 $aArticleAttributes,
                 function ($val, $key) {
-                    $val = array();
+                    $val = [];
                 }
             );
 
@@ -393,14 +394,14 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
      */
     protected function FilterArticleAttributeValueList()
     {
-        return array();
+        return [];
     }
 
     /**
      * returns the link to the article image
      * you can set iWidth to get thumbnail links.
      *
-     * @param int|null       $iWidth
+     * @param int|null $iWidth
      * @param TdbShopArticle $oArticle
      *
      * @return string
@@ -579,7 +580,7 @@ class TPkgShopProductExportBaseEndPoint implements ShopProductExportHandlerInter
         static $aAttributes = null;
 
         if (null === $aAttributes) {
-            $aAttributes = array();
+            $aAttributes = [];
             $oAttributeList = TdbShopAttributeList::GetList();
             $oAttributeList->GoToStart();
             while ($oAttribute = $oAttributeList->Next()) {

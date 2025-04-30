@@ -6,7 +6,7 @@ class ShopOrderBasket
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarcharUnique
         /** @var string - Basket cart ID (will also be included in the order) */
@@ -31,8 +31,7 @@ class ShopOrderBasket
         private string $rawdataSession = '',
         // TCMSFieldLookup
         /** @var ShopOrder|null - Order */
-        private ?ShopOrder $shopOrder = null
-        ,
+        private ?ShopOrder $shopOrder = null,
         // TCMSFieldVarchar
         /** @var string - Last update in step */
         private string $updateStepname = '',
@@ -79,7 +78,6 @@ class ShopOrderBasket
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSessionId(): string
     {
@@ -92,7 +90,6 @@ class ShopOrderBasket
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getDatecreated(): int
@@ -107,7 +104,6 @@ class ShopOrderBasket
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getLastmodified(): int
     {
@@ -120,7 +116,6 @@ class ShopOrderBasket
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getRawdataBasket(): string
@@ -135,7 +130,6 @@ class ShopOrderBasket
         return $this;
     }
 
-
     // TCMSFieldText
     public function getRawdataUser(): string
     {
@@ -148,7 +142,6 @@ class ShopOrderBasket
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getRawdataSession(): string
@@ -163,7 +156,6 @@ class ShopOrderBasket
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopOrder(): ?ShopOrder
     {
@@ -176,7 +168,6 @@ class ShopOrderBasket
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getUpdateStepname(): string
@@ -191,7 +182,6 @@ class ShopOrderBasket
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isProcessed(): bool
     {
@@ -204,6 +194,4 @@ class ShopOrderBasket
 
         return $this;
     }
-
-
 }

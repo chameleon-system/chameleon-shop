@@ -20,7 +20,7 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
         parent::Execute();
 
         $oActiveCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
-        $oActiveItem = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();;
+        $oActiveItem = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
 
         // if we have an active category... generate path there
         if (!is_null($oActiveCategory) || !is_null($oActiveItem)) {
@@ -90,7 +90,7 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
     {
         $aParameters = parent::_GetCacheParameters();
         $oActiveCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
-        $oActiveItem = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();;
+        $oActiveItem = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveCategory)) {
             $aParameters['iactivecategoryid'] = $oActiveCategory->id;
         }
@@ -114,7 +114,7 @@ class MTShopBreadcrumbCore extends MTBreadcrumbCore
         $aTables = parent::_GetCacheTableInfos();
 
         $oActiveCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
-        $oActiveItem = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
+        $oActiveItem = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveCategory)) {
             $aTables[] = ['table' => 'shop_category', 'id' => ''];
         }

@@ -17,6 +17,6 @@ liste
 {{ listPagerUrl }}
 <ul>
     {% for page in 1..numberOfPages%}
-        <li {% if state.p == page %}class="active"{% endif %}><a href="{{ listPagerUrl | replace({"_pageNumber_": page-1}) | raw }}">{{ page }}</a></li>
+        <li {% if state.p == page %}class="active"{% endif %}><a href="{{ listPagerUrl | replace({_pageNumber_: page - 1}) | raw }}">{{ page }}</a></li>
     {% endfor %}
 </ul>

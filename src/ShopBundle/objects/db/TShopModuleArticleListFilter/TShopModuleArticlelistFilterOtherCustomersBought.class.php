@@ -26,8 +26,8 @@ class TShopModuleArticlelistFilterOtherCustomersBought extends TdbShopModuleArti
      */
     protected function GetListQueryBase($oListConfig)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sQuery = 'SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
                 FROM `shop_article`
@@ -37,7 +37,7 @@ class TShopModuleArticlelistFilterOtherCustomersBought extends TdbShopModuleArti
             ';
 
         $sArticleRestriction = '';
-        $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
+        $oActiveArticle = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveArticle)) {
             $quotedArticleId = $connection->quote($oActiveArticle->id);
             $sArticleRestriction = " (`shop_order_item`.`shop_article_id` = {$quotedArticleId})";
@@ -66,12 +66,12 @@ class TShopModuleArticlelistFilterOtherCustomersBought extends TdbShopModuleArti
             }
 
             if (count($aOrderIds) > 0) {
-                $sQuery = "SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*, SUM(`shop_order_item`.`order_amount`) AS shop_order_item_number_of_times_bought
+                $sQuery = 'SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*, SUM(`shop_order_item`.`order_amount`) AS shop_order_item_number_of_times_bought
                     FROM `shop_article`
                 LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
                 LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
                 INNER JOIN `shop_order_item` ON `shop_article`.`id` = `shop_order_item`.`shop_article_id`
-                    WHERE `shop_order_item`.`shop_order_id` IN (".implode(', ', $aOrderIds).")
+                    WHERE `shop_order_item`.`shop_order_id` IN ('.implode(', ', $aOrderIds).")
                     AND `shop_order_item`.`shop_article_id` != {$quotedArticleId}
                 ";
             }
@@ -99,6 +99,6 @@ class TShopModuleArticlelistFilterOtherCustomersBought extends TdbShopModuleArti
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 }

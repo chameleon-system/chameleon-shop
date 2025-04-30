@@ -21,7 +21,7 @@ class TPkgShopArticleReviewShopArticleReviewList extends TPkgShopArticleReviewSh
     public static function GetReviewsForArticleSortedByRate($iShopArticleId)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedArticleId = $connection->quote($iShopArticleId);
 

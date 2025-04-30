@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\ShopBundle\Interfaces\DataAccess;
 
-use TdbShopStockMessage;
-
 /**
  * access the stock message configuration.
  */
@@ -24,7 +22,7 @@ interface ShopStockMessageDataAccessInterface
      * @param string $id
      * @param string $languageId
      *
-     * @return TdbShopStockMessage|null
+     * @return \TdbShopStockMessage|null
      */
     public function getStockMessage($id, $languageId);
 

@@ -6,12 +6,11 @@ class ShopOrderVat
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopOrder|null - Belongs to order */
-        private ?ShopOrder $shopOrder = null
-        ,
+        private ?ShopOrder $shopOrder = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -61,7 +60,6 @@ class ShopOrderVat
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -74,7 +72,6 @@ class ShopOrderVat
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getVatPercent(): string
@@ -89,7 +86,6 @@ class ShopOrderVat
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getValue(): string
     {
@@ -102,6 +98,4 @@ class ShopOrderVat
 
         return $this;
     }
-
-
 }

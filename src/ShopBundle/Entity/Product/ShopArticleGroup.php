@@ -8,7 +8,7 @@ class ShopArticleGroup
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -56,7 +56,6 @@ class ShopArticleGroup
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopVat(): ?ShopVat
     {
@@ -69,6 +68,4 @@ class ShopArticleGroup
 
         return $this;
     }
-
-
 }

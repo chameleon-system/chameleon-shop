@@ -36,7 +36,7 @@ class TPkgShopMapper_PaymentList extends AbstractViewMapper
         /** @var $oLocal TCMSLocal */
         $oLocal = $oVisitor->GetSourceObject('oLocal');
 
-        $aPaymentList = array();
+        $aPaymentList = [];
         if (null !== $oPaymentMethodList) {
             $hasActivePaymentMethod = false;
             $oPaymentMethodList->GoToStart();
@@ -54,16 +54,16 @@ class TPkgShopMapper_PaymentList extends AbstractViewMapper
                     $oCacheTriggerManager->addTrigger($oPaymentHandler->table, $oPaymentHandler->id);
                 }
                 $dPrice = $oPaymentMethod->GetPrice();
-                $aPayment = array(
+                $aPayment = [
                     'bIsActive' => $bIsActive,
                     'sCost' => (0 != $dPrice) ? ($oLocal->FormatNumber($dPrice, 2)) : (''),
                     'sTitle' => $oPaymentMethod->fieldName,
                     'id' => $oPaymentMethod->id,
                     'cmsMediaId' => $oPaymentMethod->fieldCmsMediaId,
                     'sDescription' => $oPaymentMethod->GetTextField('description'),
-                    'sDetails' => trim($oPaymentHandler->Render('standard', 'Customer', array('iPaymentMethodId' => $oPaymentMethod->id, 'bInputIsActive' => $bIsActive))),
+                    'sDetails' => trim($oPaymentHandler->Render('standard', 'Customer', ['iPaymentMethodId' => $oPaymentMethod->id, 'bInputIsActive' => $bIsActive])),
                     'sTargetURL' => $oPaymentHandler->GetUserInputTargetURL(),
-                );
+                ];
                 $aPaymentList[] = $aPayment;
             }
             if (false === $hasActivePaymentMethod && count($aPaymentList) > 0) {

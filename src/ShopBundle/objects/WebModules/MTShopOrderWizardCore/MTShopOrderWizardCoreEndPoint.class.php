@@ -28,11 +28,11 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
 
     protected $bAllowHTMLDivWrapping = true;
 
-    const URL_PARAM_STEP_SYSTEM_NAME = 'stpsysname';
-    const URL_PARAM_STEP_METHOD = 'orderstepmethod';
-    const URL_PARAM_MODULE_SPOT = 'spot';
+    public const URL_PARAM_STEP_SYSTEM_NAME = 'stpsysname';
+    public const URL_PARAM_STEP_METHOD = 'orderstepmethod';
+    public const URL_PARAM_MODULE_SPOT = 'spot';
 
-    const SESSION_PARAM_NAME = 'MTShopOrderWizardCoreSession';
+    public const SESSION_PARAM_NAME = 'MTShopOrderWizardCoreSession';
 
     public function Init()
     {
@@ -58,7 +58,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
         if (is_null($this->oActiveOrderStep)) {
             // order step not found... go back to the calling step, but write a message
             $oMsgManager = TCMSMessageManager::GetInstance();
-            $oMsgManager->AddMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'SYSTEM-ERROR-SHOP-ORDER-STEP-NOT-DEFINED', array('target' => $sStepName, 'calling' => TdbShopOrderStep::GetCallingStepName()));
+            $oMsgManager->AddMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'SYSTEM-ERROR-SHOP-ORDER-STEP-NOT-DEFINED', ['target' => $sStepName, 'calling' => TdbShopOrderStep::GetCallingStepName()]);
             $sStepName = TdbShopOrderStep::GetCallingStepName();
             $this->oActiveOrderStep = TdbShopOrderStep::GetStep($sStepName);
         }
@@ -67,7 +67,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
             $this->oActiveOrderStep->Init();
         }
 
-        //TdbShopPaymentHandler::SetExecutePaymentInterrupt(true);
+        // TdbShopPaymentHandler::SetExecutePaymentInterrupt(true);
         if (TdbShopPaymentHandler::ExecutePaymentInterrupted()) {
             TTools::WriteLogEntry('Return from ExecutePaymentInterrupted()', 4, __FILE__, __LINE__);
             TdbShopPaymentHandler::SetExecutePaymentInterrupt(false);
@@ -77,7 +77,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
             // continue payment...
             $oOrder = TShopBasket::GetLastCreatedOrder();
             $oBasket = TShopBasket::GetInstance();
-            //$oPaymentHandler
+            // $oPaymentHandler
             $oActivePaymentMethod = $oBasket->GetActivePaymentMethod();
             if ($oActivePaymentMethod) {
                 $oPaymentHandler = $oActivePaymentMethod->GetFieldShopPaymentHandler();
@@ -189,7 +189,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
         } else {
             // error - method not allowed
             $oMsgManager = TCMSMessageManager::GetInstance();
-            $oMsgManager->AddMessage($this->sModuleSpotName, 'SYSTEM-ERROR-SHOP-ORDER-STEP-CALLED-METHOD-NOT-ALLOWED', array('methodName' => $sStepMethod));
+            $oMsgManager->AddMessage($this->sModuleSpotName, 'SYSTEM-ERROR-SHOP-ORDER-STEP-CALLED-METHOD-NOT-ALLOWED', ['methodName' => $sStepMethod]);
         }
     }
 
@@ -202,7 +202,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         if (!is_array($aIncludes)) {
-            $aIncludes = array();
+            $aIncludes = [];
         }
         if (!is_null($this->oActiveOrderStep)) {
             $aStepIncludes = $this->oActiveOrderStep->GetHtmlHeadIncludes();
@@ -229,7 +229,7 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
     {
         $aIncludes = parent::GetHtmlFooterIncludes();
         if (!is_array($aIncludes)) {
-            $aIncludes = array();
+            $aIncludes = [];
         }
         if (!is_null($this->oActiveOrderStep)) {
             $aStepIncludes = $this->oActiveOrderStep->GetHtmlFooterIncludes();

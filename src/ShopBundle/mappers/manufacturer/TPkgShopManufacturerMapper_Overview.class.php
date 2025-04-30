@@ -18,13 +18,10 @@ class TPkgShopManufacturerMapper_Overview extends AbstractViewMapper
      */
     private $translator;
 
-    /**
-     * @param TranslatorInterface|null $translator
-     */
-    public function __construct(TranslatorInterface $translator = null)
+    public function __construct(?TranslatorInterface $translator = null)
     {
         if (null === $translator) {
-            $this->translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+            $this->translator = ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
         } else {
             $this->translator = $translator;
         }
@@ -66,7 +63,7 @@ class TPkgShopManufacturerMapper_Overview extends AbstractViewMapper
      */
     protected function getSearchInput()
     {
-        $aSearchInput = array();
+        $aSearchInput = [];
 
         $aSearchInput['sInputName'] = 'search';
         $aSearchInput['sIconClass'] = '';
@@ -78,17 +75,16 @@ class TPkgShopManufacturerMapper_Overview extends AbstractViewMapper
     }
 
     /**
-     * @param TdbShopManufacturerList $oManufacturerList
      * @param bool $bCachingEnabled
      *
      * @return array
      */
     protected function getManufacturerList(TdbShopManufacturerList $oManufacturerList, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aManufacturerList = array();
+        $aManufacturerList = [];
 
         while ($oManufacturer = $oManufacturerList->Next()) {
-            $aItem = array();
+            $aItem = [];
             $aItem['sTitle'] = $oManufacturer->GetName();
             $sText = $oManufacturer->GetTextField('description_short');
             if (empty($sText)) {

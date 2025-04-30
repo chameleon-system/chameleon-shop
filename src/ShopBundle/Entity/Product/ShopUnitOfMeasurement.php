@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\Product;
 
-
 class ShopUnitOfMeasurement
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -61,7 +60,6 @@ class ShopUnitOfMeasurement
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSymbol(): string
     {
@@ -74,7 +72,6 @@ class ShopUnitOfMeasurement
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getFactor(): string
@@ -89,7 +86,6 @@ class ShopUnitOfMeasurement
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopUnitOfMeasurement(): ?ShopUnitOfMeasurement
     {
@@ -102,6 +98,4 @@ class ShopUnitOfMeasurement
 
         return $this;
     }
-
-
 }

@@ -10,7 +10,6 @@
  */
 
 use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ProductVariantServiceInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopRouteArticleFactoryInterface;
@@ -20,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteController
+class TPkgShopRouteControllerArticle extends esono\pkgCmsRouting\AbstractRouteController
 {
     /**
      * @var ChameleonControllerInterface
@@ -46,9 +45,8 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
     private $inputFilterUtil;
 
     /**
-     * @param Request $request
-     * @param string  $identifier
-     * @param string  $pagedef
+     * @param string $identifier
+     * @param string $pagedef
      *
      * @return Response
      */
@@ -60,7 +58,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             $queryParameter = null;
         }
 
-        $aResponse = array(
+        $aResponse = [
             'activeShopArticle' => null,
             'activeShopCategory' => null,
             'redirectURL' => null,
@@ -68,7 +66,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             'noMatch' => false,
             'pagedef' => $pagedef,
             'queryParameter' => $queryParameter,
-        );
+        ];
 
         $article = $this->createArticleFromIdentificationToken($cmsident);
 
@@ -84,7 +82,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             return $this->processArticleResponse($aResponse, null);
         }
 
-        $variantSelection = $this->inputFilterUtil->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
+        $variantSelection = $this->inputFilterUtil->getFilteredGetInput(TShopVariantType::URL_PARAMETER, []);
         $article = $this->productVariantService->getProductBasedOnSelection($article, $variantSelection);
         $aResponse['activeShopArticle'] = $article;
 
@@ -105,9 +103,8 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
     }
 
     /**
-     * @param Request     $request
-     * @param string      $identifier
-     * @param string      $pagedef
+     * @param string $identifier
+     * @param string $pagedef
      * @param string|null $catid
      *
      * @return Response
@@ -122,8 +119,8 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             $queryParameter = null;
         }
 
-        $variantSelection = $this->inputFilterUtil->getFilteredGetInput(\TShopVariantType::URL_PARAMETER, []);
-        $aKey = array('class' => __CLASS__, 'fnc' => 'shopArticle', 'catid' => $catid, 'cmsident' => $identifier, 'variantSelection' => $variantSelection);
+        $variantSelection = $this->inputFilterUtil->getFilteredGetInput(TShopVariantType::URL_PARAMETER, []);
+        $aKey = ['class' => __CLASS__, 'fnc' => 'shopArticle', 'catid' => $catid, 'cmsident' => $identifier, 'variantSelection' => $variantSelection];
         $cache = $this->getCache();
         $key = $cache->getKey($aKey);
 
@@ -145,7 +142,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             return $this->processArticleResponse($aResponse, $request);
         }
 
-        $aResponse = array(
+        $aResponse = [
             'activeShopArticle' => null,
             'activeShopCategory' => null,
             'redirectURL' => null,
@@ -154,7 +151,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
             'noMatch' => false,
             'pagedef' => $pagedef,
             'queryParameter' => $queryParameter,
-        );
+        ];
 
         $article = $this->createArticleFromIdentificationToken($identifier);
         if (null === $article) {
@@ -213,12 +210,9 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
     /**
      * A redirect is necessary in multiple cases. E. g. to a variant or to the parent product or because the category has changed.
      *
-     * @param TdbShopArticle $article
-     * @param string         $articleUrl
-     * @param string         $requestedUrl
      * @return string|null - null if no redirect is necessary
      */
-    private function getRedirectUrl(\TdbShopArticle $article, string $articleUrl, string $requestedUrl): ?string
+    private function getRedirectUrl(TdbShopArticle $article, string $articleUrl, string $requestedUrl): ?string
     {
         if ($articleUrl === $requestedUrl) {
             return null;
@@ -232,9 +226,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
     }
 
     /**
-     * @param array          $articleResponse
-     * @param TdbShopArticle $article
-     * @param string         $categoryId
+     * @param string $categoryId
      *
      * @return array
      */
@@ -246,7 +238,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
                 $articleResponse['redirectURL'] = $oActiveItemParent->getLink(
                     true,
                     null,
-                    array(TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $categoryId)
+                    [TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $categoryId]
                 );
                 $articleResponse['fullURL'] = $articleResponse['redirectURL'];
             }
@@ -257,7 +249,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
     }
 
     /**
-     * @param array        $aResponse
+     * @param array $aResponse
      * @param Request|null $request
      *
      * @return Response
@@ -306,9 +298,9 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
     }
 
     /**
-     * @param array        $aResponse
+     * @param array $aResponse
      * @param Request|null $request
-     * @param string|null  $cacheKey
+     * @param string|null $cacheKey
      *
      * @return Response
      */
@@ -316,10 +308,10 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
     {
         $isRedirect = (is_array($aResponse) && isset($aResponse['redirectURL']) && '' != $aResponse['redirectURL']);
         if (null !== $cacheKey && false === $isRedirect) {
-            $trigger = array(
-                array('table' => 'shop_article', 'id' => null),
-                array('table' => 'shop_category', 'id' => null),
-            );
+            $trigger = [
+                ['table' => 'shop_article', 'id' => null],
+                ['table' => 'shop_category', 'id' => null],
+            ];
             $cacheResponse = $aResponse;
             $cacheResponse['queryParameter'] = null;
             $this->getCache()->set($cacheKey, $cacheResponse, $trigger);
@@ -329,18 +321,18 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
     }
 
     /**
-     * @param array        $aResponse
+     * @param array $aResponse
      * @param Request|null $request
-     * @param string|null  $cacheKey
+     * @param string|null $cacheKey
      *
      * @return Response
      */
     private function processCategoryResponse($aResponse, $request, $cacheKey = null)
     {
         if (null !== $cacheKey) {
-            $trigger = array(
-                array('table' => 'shop_category', 'id' => null),
-            );
+            $trigger = [
+                ['table' => 'shop_category', 'id' => null],
+            ];
             $cacheResponse = $aResponse;
             $cacheResponse['queryParameter'] = null;
             $this->getCache()->set($cacheKey, $cacheResponse, $trigger);
@@ -350,10 +342,9 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
     }
 
     /**
-     * @param Request $request
-     * @param string  $category
-     * @param string  $categoryPath
-     * @param string  $pagedef
+     * @param string $category
+     * @param string $categoryPath
+     * @param string $pagedef
      *
      * @return Response
      */
@@ -368,11 +359,11 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
         $cacheKey = null;
 
         if (null !== $oPathCat && true === $oPathCat->AllowDisplayInShop()) {
-            $aKey = array(
+            $aKey = [
                 'class' => __CLASS__,
                 'method' => 'shopCategory',
                 'path' => $category,
-            );
+            ];
             $cache = $this->getCache();
             $cacheKey = $cache->getKey($aKey);
             $aResponse = $cache->get($cacheKey);
@@ -385,7 +376,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
                 $queryParameter = null;
             }
 
-            $aResponse = array(
+            $aResponse = [
                 'activeShopArticle' => null,
                 'activeShopCategory' => null,
                 'redirectURL' => null,
@@ -393,13 +384,13 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
                 'noMatch' => false,
                 'pagedef' => $pagedef,
                 'queryParameter' => $queryParameter,
-            );
+            ];
 
             // does the URL match?
             $url = $oPathCat->GetLink(false);
 
             $catPrefix = $categoryPath;
-            $tmp = array();
+            $tmp = [];
             if ('' !== $catPrefix) {
                 $tmp[] = $catPrefix;
             }
@@ -433,23 +424,21 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
 
     /**
      * @param TdbShopCategory $cat
-     * @param TdbShopArticle  $article
+     * @param TdbShopArticle $article
      *
      * @return string
      */
     private function getArticleFullUrlForRequest($cat, $article)
     {
-        $catParameter = array();
+        $catParameter = [];
         if (null !== $cat) {
-            $catParameter = array(TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $cat->id);
+            $catParameter = [TdbShopArticle::CMS_LINKABLE_OBJECT_PARAM_CATEGORY => $cat->id];
         }
 
         return $article->getLink(false, null, $catParameter);
     }
 
     /**
-     * @param ShopRouteArticleFactoryInterface $shopRouteArticleFactory
-     *
      * @return void
      */
     public function setShopRouteArticleFactory(ShopRouteArticleFactoryInterface $shopRouteArticleFactory)
@@ -458,8 +447,6 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
     }
 
     /**
-     * @param ChameleonControllerInterface $mainController
-     *
      * @return void
      */
     public function setMainController(ChameleonControllerInterface $mainController)
@@ -483,7 +470,7 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
     private function getCache()
     {
         if (null === $this->cache) {
-            $this->cache = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_cache.cache');
+            $this->cache = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_cache.cache');
         }
 
         return $this->cache;

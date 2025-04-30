@@ -14,8 +14,6 @@ namespace esono\pkgshoppaymenttransaction;
 interface PaymentTransactionHandlerInterface
 {
     /**
-     * @param \IPkgShopOrderPaymentConfig $config
-     *
      * @throws \InvalidArgumentException
      */
     public function __construct(\IPkgShopOrderPaymentConfig $config);
@@ -23,9 +21,6 @@ interface PaymentTransactionHandlerInterface
     /**
      * if the request results in a payment (capture) and not just in an authorization for a later capture, then the method
      * must create a transaction and return it.
-     *
-     * @param \TPkgShopPaymentTransactionManager $transactionManager
-     * @param \TdbShopOrder                      $order
      *
      * @return \TdbPkgShopPaymentTransaction|null
      *
@@ -36,11 +31,9 @@ interface PaymentTransactionHandlerInterface
     /**
      * on success a transaction is created and returned by the method.
      *
-     * @param \TPkgShopPaymentTransactionManager $transactionManager
-     * @param \TdbShopOrder                      $order
-     * @param float                              $value              - the value to capture (should be >0)
-     * @param array                              $orderItemList      - assoc array [shop_order_item_id] = [quantity]
-     * @param string                             $invoiceNumber      - 16 char id shown on the payment statement of the buy (usually the order number or the bill number). will be passed to AmazonPaymentGroupConfig::getSellerAuthorizationNote
+     * @param float $value - the value to capture (should be >0)
+     * @param array $orderItemList - assoc array [shop_order_item_id] = [quantity]
+     * @param string $invoiceNumber - 16 char id shown on the payment statement of the buy (usually the order number or the bill number). will be passed to AmazonPaymentGroupConfig::getSellerAuthorizationNote
      *
      * @return \TdbPkgShopPaymentTransaction
      *
@@ -51,18 +44,16 @@ interface PaymentTransactionHandlerInterface
         \TdbShopOrder $order,
         $value,
         $invoiceNumber = null,
-        array $orderItemList = null
+        ?array $orderItemList = null
     );
 
     /**
      * on success a transaction is created and returned by the method.
      *
-     * @param \TPkgShopPaymentTransactionManager $transactionManager
-     * @param \TdbShopOrder                      $order
-     * @param float                              $value              - the value to refund (should be >0)
-     * @param string                             $invoiceNumber      - 16 char id shown on the payment statement of the buy (usually the order number or the bill number). will be passed to AmazonPaymentGroupConfig::getSellerAuthorizationNote
-     * @param string                             $sellerRefundNote   - a reason for the refund
-     * @param array                              $orderItemList      - assoc array [shop_order_item_id] = [quantity]
+     * @param float $value - the value to refund (should be >0)
+     * @param string $invoiceNumber - 16 char id shown on the payment statement of the buy (usually the order number or the bill number). will be passed to AmazonPaymentGroupConfig::getSellerAuthorizationNote
+     * @param string $sellerRefundNote - a reason for the refund
+     * @param array $orderItemList - assoc array [shop_order_item_id] = [quantity]
      *
      * @return \TdbPkgShopPaymentTransaction[]
      *
@@ -74,19 +65,17 @@ interface PaymentTransactionHandlerInterface
         $value,
         $invoiceNumber = null,
         $sellerRefundNote = null,
-        array $orderItemList = null
+        ?array $orderItemList = null
     );
 
     /**
      * cancel any pending transactions with the payment provider (if the api of the payment provider allows for that) (will NOT cancel the order in the shop itself).
      *
-     * @param \TPkgShopPaymentTransactionManager $transactionManager
-     * @param \TdbShopOrder                      $order
-     * @param string                             $cancellationReason
-     *
-     * @throws \TPkgCmsException_LogAndMessage
+     * @param string $cancellationReason
      *
      * @return void
+     *
+     * @throws \TPkgCmsException_LogAndMessage
      */
     public function cancelOrder(
         \TPkgShopPaymentTransactionManager $transactionManager,

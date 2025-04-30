@@ -58,7 +58,7 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
         $selectToPrice = new Select();
 
         if (0 == $articleCount) {
-            /**
+            /*
              * no articles
              * $lowestArticlePrice = $highestArticlePrice = 0.
              */
@@ -94,7 +94,7 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
                 ->setStep(0);
 
             if (false != $userDataValueLow) {
-                /** @psalm-suppress InvalidCast */
+                /* @psalm-suppress InvalidCast */
                 $selectFromPrice
                     ->addOption((int) $userDataValueLow)
                     ->setSelectedOption($userDataValueLow);
@@ -106,7 +106,7 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
             }
 
             if (false != $userDataValueHigh) {
-                /** @psalm-suppress InvalidCast */
+                /* @psalm-suppress InvalidCast */
                 $selectToPrice
                     ->addOption((int) $userDataValueHigh)
                     ->setSelectedOption($userDataValueHigh);
@@ -129,19 +129,19 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
             $stepSize = \floor($delta / $stepCount);
             if ($stepSize < 1) {
                 $stepSize = 1;
-                //$stepCount = round($delta); // delta is nearly an integer: avoid floating rounding errors here
+                // $stepCount = round($delta); // delta is nearly an integer: avoid floating rounding errors here
             }
             $stepCount = \ceil($delta / $stepSize); // consider now a slightly different step count due to rounded step size
 
             for ($i = 0; $i <= $stepCount; ++$i) {
                 $priceOption = round($lowestArticlePrice + $i * $stepSize);
                 if (false != $userDataValueLow && $userDataValueLow < $priceOption) {
-                    /** @psalm-suppress InvalidCast */
+                    /* @psalm-suppress InvalidCast */
                     $selectFromPrice->addOption((int) $userDataValueLow);
                 }
-                /** @psalm-suppress InvalidCast */
-                if (false != $userDataValueHigh &&
-                    ($userDataValueHigh < $priceOption || $i == $stepCount)
+                /* @psalm-suppress InvalidCast */
+                if (false != $userDataValueHigh
+                    && ($userDataValueHigh < $priceOption || $i == $stepCount)
                 ) {
                     $selectToPrice->addOption((int) $userDataValueHigh);
                 }
@@ -220,21 +220,23 @@ class TPkgShopListfilterMapper_FilterNumericSlider extends AbstractPkgShopListfi
 class Slider
 {
     /**
-     * String representation of the boolean
+     * String representation of the boolean.
+     *
      * @var string
+     *
      * @psalm-var 'true'|'false'
      */
     private $disabled = 'false';
     /** @var int */
-    private $valueLow = null;
+    private $valueLow;
     /** @var int */
-    private $valueHigh = null;
+    private $valueHigh;
     /** @var int */
-    private $min = null;
+    private $min;
     /** @var int */
-    private $max = null;
+    private $max;
     /** @var int */
-    private $step = null;
+    private $step;
 
     /**
      * @param bool $disabled
@@ -251,6 +253,7 @@ class Slider
 
     /**
      * @return string
+     *
      * @psalm-return 'true'|'false'
      */
     public function getDisabled()
@@ -365,10 +368,10 @@ class Select
     private $disabled = true;
 
     /** @var int[] */
-    private $options = array();
+    private $options = [];
 
     /** @var int */
-    private $selectedOption = null;
+    private $selectedOption;
 
     /**
      * @param bool $disabled

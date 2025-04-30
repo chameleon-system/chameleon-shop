@@ -27,12 +27,12 @@ abstract class AbstractPkgShopListfilterMapper_Filter extends AbstractViewMapper
     {
         /** @var $oFilterItem TdbPkgShopListfilterItem */
         $oFilterItem = $oVisitor->GetSourceObject('oFilterItem');
-        $aFilterData = array(
+        $aFilterData = [
             'sTitle' => $oFilterItem->fieldName,
             'sInputURLName' => $oFilterItem->GetURLInputName(),
             'sResetURL' => $oFilterItem->GetAddFilterURL(''),
             'bActive' => $oFilterItem->IsActive(),
-        );
+        ];
         $oVisitor->SetMappedValueFromArray($aFilterData);
     }
 }

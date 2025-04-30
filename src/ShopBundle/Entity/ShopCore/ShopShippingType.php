@@ -8,7 +8,6 @@ use ChameleonSystem\ExtranetBundle\Entity\DataExtranetGroup;
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
 use ChameleonSystem\ShopBundle\Entity\Product\ShopArticle;
 use ChameleonSystem\ShopBundle\Entity\Product\ShopArticleGroup;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -16,7 +15,7 @@ class ShopShippingType
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -58,11 +57,11 @@ class ShopShippingType
         /** @var bool - Active */
         private bool $active = false,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Active as of */
-        private ?DateTime $activeFrom = null,
+        /** @var \DateTime|null - Active as of */
+        private ?\DateTime $activeFrom = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Active until */
-        private ?DateTime $activeTo = null,
+        /** @var \DateTime|null - Active until */
+        private ?\DateTime $activeTo = null,
         // TCMSFieldPrice
         /** @var string - Minimum value of affected items (Euro) */
         private string $restrictToValueFrom = '',
@@ -89,28 +88,22 @@ class ShopShippingType
         private string $restrictToVolumeTo = '',
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopArticleGroup> - Restrict to following product groups */
-        private Collection $shopArticleGroupCollection = new ArrayCollection()
-        ,
+        private Collection $shopArticleGroupCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopCategory> - Restrict to following product categories */
-        private Collection $shopCategoryCollection = new ArrayCollection()
-        ,
+        private Collection $shopCategoryCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopArticle> - Restrict to following items */
-        private Collection $shopArticleCollection = new ArrayCollection()
-        ,
+        private Collection $shopArticleCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, DataCountry> - Restrict to following shipping countries */
-        private Collection $dataCountryCollection = new ArrayCollection()
-        ,
+        private Collection $dataCountryCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, DataExtranetUser> - Restrict to following users */
-        private Collection $dataExtranetUserCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetUserCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, DataExtranetGroup> - Restrict to following customer groups */
-        private Collection $dataExtranetGroupCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetGroupCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsPortal> - Restrict to following portals */
         private Collection $cmsPortalCollection = new ArrayCollection()
@@ -154,7 +147,6 @@ class ShopShippingType
         return $this;
     }
 
-
     // TCMSFieldPrice
     public function getValue(): string
     {
@@ -167,7 +159,6 @@ class ShopShippingType
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getValueType(): string
@@ -182,7 +173,6 @@ class ShopShippingType
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isValueBasedOnEntireBasket(): bool
     {
@@ -195,7 +185,6 @@ class ShopShippingType
 
         return $this;
     }
-
 
     // TCMSFieldPrice
     public function getValueAdditional(): string
@@ -210,7 +199,6 @@ class ShopShippingType
         return $this;
     }
 
-
     // TCMSFieldPrice
     public function getValueMax(): string
     {
@@ -223,7 +211,6 @@ class ShopShippingType
 
         return $this;
     }
-
 
     // TCMSFieldPrice
     public function getValueMin(): string
@@ -238,7 +225,6 @@ class ShopShippingType
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isAddValueForEachArticle(): bool
     {
@@ -251,7 +237,6 @@ class ShopShippingType
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isRestrictToSignedInUsers(): bool
@@ -266,7 +251,6 @@ class ShopShippingType
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isApplyToAllProducts(): bool
     {
@@ -279,7 +263,6 @@ class ShopShippingType
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isEndShippingTypeChain(): bool
@@ -294,7 +277,6 @@ class ShopShippingType
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -307,7 +289,6 @@ class ShopShippingType
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isActive(): bool
@@ -322,34 +303,31 @@ class ShopShippingType
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getActiveFrom(): ?DateTime
+    public function getActiveFrom(): ?\DateTime
     {
         return $this->activeFrom;
     }
 
-    public function setActiveFrom(?DateTime $activeFrom): self
+    public function setActiveFrom(?\DateTime $activeFrom): self
     {
         $this->activeFrom = $activeFrom;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getActiveTo(): ?DateTime
+    public function getActiveTo(): ?\DateTime
     {
         return $this->activeTo;
     }
 
-    public function setActiveTo(?DateTime $activeTo): self
+    public function setActiveTo(?\DateTime $activeTo): self
     {
         $this->activeTo = $activeTo;
 
         return $this;
     }
-
 
     // TCMSFieldPrice
     public function getRestrictToValueFrom(): string
@@ -364,7 +342,6 @@ class ShopShippingType
         return $this;
     }
 
-
     // TCMSFieldPrice
     public function getRestrictToValueTo(): string
     {
@@ -377,7 +354,6 @@ class ShopShippingType
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getRestrictToArticlesFrom(): int
@@ -392,7 +368,6 @@ class ShopShippingType
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getRestrictToArticlesTo(): int
     {
@@ -405,7 +380,6 @@ class ShopShippingType
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getRestrictToWeightFrom(): int
@@ -420,7 +394,6 @@ class ShopShippingType
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getRestrictToWeightTo(): int
     {
@@ -433,7 +406,6 @@ class ShopShippingType
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getRestrictToVolumeFrom(): string
@@ -448,7 +420,6 @@ class ShopShippingType
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getRestrictToVolumeTo(): string
     {
@@ -461,8 +432,6 @@ class ShopShippingType
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -496,8 +465,6 @@ class ShopShippingType
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -529,8 +496,6 @@ class ShopShippingType
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -564,8 +529,6 @@ class ShopShippingType
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -597,8 +560,6 @@ class ShopShippingType
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -632,8 +593,6 @@ class ShopShippingType
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -666,8 +625,6 @@ class ShopShippingType
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselectCheckboxes
 
     /**
@@ -699,6 +656,4 @@ class ShopShippingType
 
         return $this;
     }
-
-
 }

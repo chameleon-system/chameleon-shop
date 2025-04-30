@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\ShopCore;
 
-
 class PkgShopStatisticGroup
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Field with date */
@@ -67,7 +66,6 @@ class PkgShopStatisticGroup
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getGroups(): string
     {
@@ -80,7 +78,6 @@ class PkgShopStatisticGroup
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getQuery(): string
@@ -95,7 +92,6 @@ class PkgShopStatisticGroup
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getPortalRestrictionField(): string
     {
@@ -108,7 +104,6 @@ class PkgShopStatisticGroup
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -123,7 +118,6 @@ class PkgShopStatisticGroup
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -136,6 +130,4 @@ class PkgShopStatisticGroup
 
         return $this;
     }
-
-
 }

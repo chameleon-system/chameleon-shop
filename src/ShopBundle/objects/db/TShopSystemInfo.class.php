@@ -11,18 +11,18 @@
 
 class TShopSystemInfo extends TAdbShopSystemInfo
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopSystemInfo';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopSystemInfo';
 
     /**
      * used to display the info page.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oInfo', $this);
@@ -44,6 +44,6 @@ class TShopSystemInfo extends TAdbShopSystemInfo
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 }

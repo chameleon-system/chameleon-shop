@@ -13,7 +13,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 /**
  * base class used to select from a specific variant type.
-/**/
+ * /**/
 class TPkgShopListfilterItemVariantDynamic extends TPkgShopListfilterItemVariant
 {
     protected $sVariantTypeIdentifier = '';
@@ -50,11 +50,11 @@ class TPkgShopListfilterItemVariantDynamic extends TPkgShopListfilterItemVariant
                 $aURLData[TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA][$this->id] = $sValue;
             }
         } else {
-            if (is_array($aURLData) && count($aURLData) > 0 &&
-               true == isset($aURLData[TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA][$this->id]) &&
-               false === is_array($aURLData[TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA][$this->id])) {
+            if (is_array($aURLData) && count($aURLData) > 0
+               && true == isset($aURLData[TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA][$this->id])
+               && false === is_array($aURLData[TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA][$this->id])) {
                 $sTmpValue = $aURLData[TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA][$this->id];
-                $aURLData[TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA][$this->id] = array();
+                $aURLData[TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA][$this->id] = [];
                 $aURLData[TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA][$this->id][] = $sTmpValue;
             }
             if ($this->IsSelected($sValue)) {
@@ -77,6 +77,6 @@ class TPkgShopListfilterItemVariantDynamic extends TPkgShopListfilterItemVariant
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

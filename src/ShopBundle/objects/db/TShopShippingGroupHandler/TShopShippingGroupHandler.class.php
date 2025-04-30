@@ -20,8 +20,8 @@ class TShopShippingGroupHandler extends TAdbShopShippingGroupHandler
      */
     public static function GetInstance($id)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $oInstance = null;
         $quotedId = $connection->quote($id);
@@ -32,7 +32,7 @@ class TShopShippingGroupHandler extends TAdbShopShippingGroupHandler
         if ($row) {
             $sClassName = $row['class'];
             $oInstance = new $sClassName();
-            /** @var $oInstance TdbShopShippingGroupHandler */
+            /* @var $oInstance TdbShopShippingGroupHandler */
             $oInstance->LoadFromRow($row);
         }
 

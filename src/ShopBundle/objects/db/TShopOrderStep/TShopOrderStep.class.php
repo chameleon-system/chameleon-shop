@@ -17,12 +17,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * definiert einen Bestellschritt.
-/**/
+ * /**/
 class TShopOrderStep extends TShopOrderStepAutoParent
 {
-    const SESSION_KEY_NAME = 'TShopOrderStepdata';
-    const SESSION_KEY_NAME_ORDER_SUCCESS = 'TShopOrderStepdataOrderSuccess';
-    const VIEW_PATH = 'pkgShop/views/db/TShopOrderStep';
+    public const SESSION_KEY_NAME = 'TShopOrderStepdata';
+    public const SESSION_KEY_NAME_ORDER_SUCCESS = 'TShopOrderStepdataOrderSuccess';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopOrderStep';
 
     /**
      * is used to mark the current active step within step lists.
@@ -134,7 +134,6 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * @param string|array|null $sData - either the id of the object to load, or the row with which the instance should be initialized
      * @param string|null $sLanguage - init with the language passed
-     * @return TdbShopOrderStep
      */
     public static function GetNewInstance($sData = null, $sLanguage = null): TdbShopOrderStep
     {
@@ -160,8 +159,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     }
 
     /**
-     * @param TShopBasket $basket
-     * @param string      $classList comma seperated list of class names
+     * @param string $classList comma seperated list of class names
      *
      * @return TdbShopOrderStep|null
      */
@@ -182,8 +180,6 @@ class TShopOrderStep extends TShopOrderStepAutoParent
 
     /**
      * Defines that this class may be used to handle basket calls if multiple classes can apply for a single order step.
-     *
-     * @param TShopBasket $basket
      *
      * @return bool
      */
@@ -234,13 +230,13 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Returns the URL to this step.
      *
-     * @param bool  $bDisableAccessCheck  If false, there will be an access check for the step. If this access check fails, the returned URL will be empty.
-     * @param bool  $bForcePortalLink     - set to true if you want to include the domain
+     * @param bool $bDisableAccessCheck If false, there will be an access check for the step. If this access check fails, the returned URL will be empty.
+     * @param bool $bForcePortalLink - set to true if you want to include the domain
      * @param array $aAdditionalParameter
      *
      * @return string
      */
-    public function GetStepURL($bDisableAccessCheck = true, $bForcePortalLink = false, $aAdditionalParameter = array())
+    public function GetStepURL($bDisableAccessCheck = true, $bForcePortalLink = false, $aAdditionalParameter = [])
     {
         $sOrderPage = '';
         if ($bDisableAccessCheck || $this->AllowAccessToStep()) {
@@ -263,10 +259,10 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      *
      * @return string
      */
-    public function GetStepURLReturnStepViaAjax($bDisableAccessCheck = true, $bForcePortalLink = false, $aAdditionalParameter = array())
+    public function GetStepURLReturnStepViaAjax($bDisableAccessCheck = true, $bForcePortalLink = false, $aAdditionalParameter = [])
     {
         $oGlobal = TGlobal::instance();
-        $aAdditionalParameter['module_fnc'] = array($oGlobal->GetExecutingModulePointer()->sModuleSpotName => 'ExecuteAjaxCall');
+        $aAdditionalParameter['module_fnc'] = [$oGlobal->GetExecutingModulePointer()->sModuleSpotName => 'ExecuteAjaxCall'];
         $aAdditionalParameter['_fnc'] = 'GetStepAsAjax';
         $aAdditionalParameter['sStepName'] = $this->fieldSystemname;
 
@@ -387,7 +383,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      */
     public function AllowedMethods()
     {
-        return array('ExecuteStep');
+        return ['ExecuteStep'];
     }
 
     /**
@@ -397,7 +393,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      */
     public function GetHtmlHeadIncludes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -405,7 +401,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      */
     public function GetHtmlFooterIncludes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -437,7 +433,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      */
     protected function GetDescriptionVariables()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -454,11 +450,11 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      * Renders the requested step.
      *
      * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
-     * @param null|string $sSpotName
+     * @param string|null $sSpotName
      *
      * @return string
      */
-    public function Render($sSpotName = null, $aCallTimeVars = array())
+    public function Render($sSpotName = null, $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 
@@ -551,8 +547,6 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     /**
      * Adds custom data to the basket after getting instance from session.
      *
-     * @param TShopBasket $oBasket
-     *
      * @return void
      */
     protected function addDataToBasket(TShopBasket $oBasket)
@@ -564,7 +558,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      */
     protected function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 
     /**
@@ -572,7 +566,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      */
     private function getOrderStepPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.order_step_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.order_step_page_service');
     }
 
     /**
@@ -580,7 +574,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 
     /**
@@ -588,7 +582,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      */
     protected function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     /**
@@ -596,6 +590,6 @@ class TShopOrderStep extends TShopOrderStepAutoParent
      */
     private function getRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 }

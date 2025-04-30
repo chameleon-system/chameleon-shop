@@ -12,7 +12,6 @@
 namespace ChameleonSystem\ShopBundle\Payment\PaymentHandler;
 
 use ChameleonSystem\ShopBundle\Payment\PaymentHandler\Interfaces\ShopPaymentHandlerDataAccessInterface;
-use TdbShopPaymentHandler;
 
 class ShopPaymentHandlerDataAccessRequestLevelCacheDecorator implements ShopPaymentHandlerDataAccessInterface
 {
@@ -25,9 +24,6 @@ class ShopPaymentHandlerDataAccessRequestLevelCacheDecorator implements ShopPaym
      */
     private $cache;
 
-    /**
-     * @param ShopPaymentHandlerDataAccessInterface $subject
-     */
     public function __construct(ShopPaymentHandlerDataAccessInterface $subject)
     {
         $this->subject = $subject;
@@ -52,6 +48,6 @@ class ShopPaymentHandlerDataAccessRequestLevelCacheDecorator implements ShopPaym
             return $paymentHandler;
         }
 
-        return TdbShopPaymentHandler::getInstanceFromDataRow($this->cache[$cacheKey], $languageId);
+        return \TdbShopPaymentHandler::getInstanceFromDataRow($this->cache[$cacheKey], $languageId);
     }
 }

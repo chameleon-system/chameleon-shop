@@ -16,17 +16,17 @@ class TShopPaymentHandlerDataTrans_SwissPostFinance extends TShopPaymentHandlerD
     /**
      * constant for class specific error messages.
      */
-    const MSG_MANAGER_NAME = 'TShopDatatransPostFinanceHandlerdMSG';
+    public const MSG_MANAGER_NAME = 'TShopDatatransPostFinanceHandlerdMSG';
 
     /**
      * constant for class specific payment type.
      */
-    const PAYMENT_TYPE = 'swisspostfinance';
+    public const PAYMENT_TYPE = 'swisspostfinance';
 
     /**
      * constant for class specific payment reference id.
      */
-    const PAYMENT_REF_NO_ID = 'pf';
+    public const PAYMENT_REF_NO_ID = 'pf';
 
     protected function GetPaymentTypeSpecificParameter()
     {
@@ -134,8 +134,6 @@ class TShopPaymentHandlerDataTrans_SwissPostFinance extends TShopPaymentHandlerD
      * you can use this hook to disable payment methods based on basket contents, payment method, user data, ...
      *
      * Don't show payment PostFinance if user browser is Chrome or Opera. because PostFinance wont work with them.
-     *
-     * @param TdbShopPaymentMethod $oPaymentMethod
      *
      * @return bool
      */

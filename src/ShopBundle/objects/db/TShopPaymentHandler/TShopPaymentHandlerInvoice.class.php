@@ -13,10 +13,10 @@
  * the paymenthandlers are used to handle the different payment methods. They ensure that the right
  * information is collected from the user, and that the payment is executed (as may be the case for online payment)
  * Note that the default handler has no functionality. it must be extended in order to do anything usefull.
-/**/
+ * /**/
 class TShopPaymentHandlerInvoice extends TdbShopPaymentHandler
 {
-    const MSG_MANAGER_NAME = 'TShopPaymentHandlerInvoiceMSG';
+    public const MSG_MANAGER_NAME = 'TShopPaymentHandlerInvoiceMSG';
 
     protected function GetViewPath()
     {
@@ -32,7 +32,7 @@ class TShopPaymentHandlerInvoice extends TdbShopPaymentHandler
      */
     public function SaveUserPaymentDataToOrder($iOrderId)
     {
-        $this->aPaymentUserData = array();
+        $this->aPaymentUserData = [];
         parent::SaveUserPaymentDataToOrder($iOrderId);
     }
 }

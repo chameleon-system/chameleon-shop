@@ -8,12 +8,11 @@ class ShopSearchCacheItem
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopSearchCache|null - Belongs to search cache */
-        private ?ShopSearchCache $shopSearchCache = null
-        ,
+        private ?ShopSearchCache $shopSearchCache = null,
         // TCMSFieldDecimal
         /** @var string - Weight */
         private string $weight = '',
@@ -60,7 +59,6 @@ class ShopSearchCacheItem
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getWeight(): string
     {
@@ -74,7 +72,6 @@ class ShopSearchCacheItem
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getShopArticle(): ?ShopArticle
     {
@@ -87,6 +84,4 @@ class ShopSearchCacheItem
 
         return $this;
     }
-
-
 }

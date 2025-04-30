@@ -11,7 +11,6 @@
 
 class TCMSCronJob_CleanWishlist extends TdbCmsCronjobs
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -22,7 +21,7 @@ class TCMSCronJob_CleanWishlist extends TdbCmsCronjobs
      */
     protected function _ExecuteCron()
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $Select = 'SELECT * FROM `pkg_shop_wishlist_article` WHERE 1=1';
         $res = $connection->executeQuery($Select);

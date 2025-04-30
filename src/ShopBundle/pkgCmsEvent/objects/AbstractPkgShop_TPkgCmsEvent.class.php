@@ -14,7 +14,7 @@
  */
 abstract class AbstractPkgShop_TPkgCmsEvent extends TPkgCmsEvent
 {
-    const CONTEXT_PKG_SHOP = 'pkgShop';
-    const NAME_USER_CHANGED_SHIPPING_COUNTRY = 'usrChangedShippingCountry';
-    const NAME_USER_CHANGED_BILLING_COUNTRY = 'usrChangedBillingCountry';
+    public const CONTEXT_PKG_SHOP = 'pkgShop';
+    public const NAME_USER_CHANGED_SHIPPING_COUNTRY = 'usrChangedShippingCountry';
+    public const NAME_USER_CHANGED_BILLING_COUNTRY = 'usrChangedBillingCountry';
 }

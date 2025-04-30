@@ -21,7 +21,7 @@ class TShopBreadcrumbItemManufacturer extends TShopBreadcrumbItem
 
     /**
      * @param bool $bForcePortal
-     * {@inheritDoc}
+     *                           {@inheritDoc}
      */
     public function GetLink($bForcePortal = false)
     {

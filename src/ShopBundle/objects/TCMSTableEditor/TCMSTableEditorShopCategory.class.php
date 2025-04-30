@@ -16,7 +16,7 @@ class TCMSTableEditorShopCategory extends TCMSTableEditor
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
     protected function PostSaveHook($oFields, $oPostTable)
@@ -95,7 +95,7 @@ class TCMSTableEditorShopCategory extends TCMSTableEditor
             $oChildren = $oCategory->GetChildren();
             while ($oChild = $oChildren->Next()) {
                 $oEditor = new TCMSTableEditorManager();
-                /** @var $oEditor TCMSTableEditorManager */
+                /* @var $oEditor TCMSTableEditorManager */
                 $oEditor->Init($this->oTableConf->id, $oChild->id, $sEditLanguage);
                 $oEditor->AllowEditByAll($this->bAllowEditByAll);
                 $oEditor->SaveField('name', $oChild->fieldName, true);
@@ -106,7 +106,7 @@ class TCMSTableEditorShopCategory extends TCMSTableEditor
     /**
      * returns the breadcrumb navigation as plaintext.
      *
-     * @param string $id          - id of the page to update
+     * @param string $id - id of the page to update
      * @param string $sLanguageID
      *
      * @return string
@@ -138,6 +138,6 @@ class TCMSTableEditorShopCategory extends TCMSTableEditor
      */
     private static function getUrlNormalizationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 }

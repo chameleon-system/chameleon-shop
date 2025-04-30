@@ -16,19 +16,19 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
  */
 class MTShopManufacturerArticleCatalogCore extends MTShopArticleCatalogCore
 {
-    const URL_MANUFACTURER_ID = 'manufacturerid';
+    public const URL_MANUFACTURER_ID = 'manufacturerid';
 
     /**
      * @var string|null
      */
-    protected $iActiveManufacturerId = null;
+    protected $iActiveManufacturerId;
 
     /**
      * current active manufacturer.
      *
      * @var TdbShopManufacturer|null
      */
-    protected $oActiveManufacturer = null;
+    protected $oActiveManufacturer;
 
     protected $bAllowHTMLDivWrapping = true;
 
@@ -102,7 +102,7 @@ class MTShopManufacturerArticleCatalogCore extends MTShopArticleCatalogCore
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         if (!is_array($aIncludes)) {
-            $aIncludes = array();
+            $aIncludes = [];
         }
 
         $this->LoadManufacturer();
@@ -116,6 +116,7 @@ class MTShopManufacturerArticleCatalogCore extends MTShopArticleCatalogCore
     /**
      * @param string $sOrderListBy
      * @param array $filter
+     *
      * @return TdbShopArticleList
      */
     protected function getListWhenNoCategoryDefined($sOrderListBy, $filter)
@@ -128,7 +129,7 @@ class MTShopManufacturerArticleCatalogCore extends MTShopArticleCatalogCore
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -136,6 +137,6 @@ class MTShopManufacturerArticleCatalogCore extends MTShopArticleCatalogCore
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

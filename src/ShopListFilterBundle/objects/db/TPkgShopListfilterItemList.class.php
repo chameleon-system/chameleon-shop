@@ -27,15 +27,16 @@ class TPkgShopListfilterItemList extends TAdbPkgShopListfilterItemList
      * return sql condition for the current filter list. optionaly excluding the element passed.
      *
      * @param TdbPkgShopListfilterItem $oExcludeItem
-     * @param bool                     $bReturnAsArray - set to true if you want an array with the query parts instead of a string
+     * @param bool $bReturnAsArray - set to true if you want an array with the query parts instead of a string
      *
      * @return string|string[]
+     *
      * @psalm-return ($bReturnAsArray is true ? string[] : string)
      */
     public function GetQueryRestriction($oExcludeItem = null, $bReturnAsArray = false)
     {
         $sQuery = '';
-        $aQueryItems = array();
+        $aQueryItems = [];
         $iPointer = $this->getItemPointer();
         $this->GoToStart();
         while ($oItem = $this->Next()) {
@@ -66,7 +67,7 @@ class TPkgShopListfilterItemList extends TAdbPkgShopListfilterItemList
     public function GetListSettingAsInputFields()
     {
         $sInput = '';
-        $aInputItems = array();
+        $aInputItems = [];
         $iPointer = $this->getItemPointer();
         $this->GoToStart();
         while ($oItem = $this->Next()) {
@@ -90,7 +91,7 @@ class TPkgShopListfilterItemList extends TAdbPkgShopListfilterItemList
      */
     public function GetListSettingAsArray()
     {
-        $aSettings = array();
+        $aSettings = [];
         $iPointer = $this->getItemPointer();
         $this->GoToStart();
         while ($oItem = $this->Next()) {
@@ -106,8 +107,6 @@ class TPkgShopListfilterItemList extends TAdbPkgShopListfilterItemList
      * factory returning an element for the list.
      *
      * @param array $aData
-     *
-     * @return TdbPkgShopListfilterItem
      */
     protected function _NewElement($aData): TdbPkgShopListfilterItem
     {
@@ -120,7 +119,7 @@ class TPkgShopListfilterItemList extends TAdbPkgShopListfilterItemList
             $sTableObject = $oListfilterItemType->fieldClass;
         }
 
-        /**
+        /*
          * @FIXME Empty if-statement?
          */
         if (!class_exists($sTableObject, false)) {
@@ -132,7 +131,7 @@ class TPkgShopListfilterItemList extends TAdbPkgShopListfilterItemList
         } else {
             $oElement = new $sTableObject();
         }
-        /** @var $oElement TCMSRecord */
+        /* @var $oElement TCMSRecord */
         $oElement->SetLanguage($this->iLanguageId);
         $oElement->LoadFromRow($aData);
 

@@ -18,13 +18,10 @@ class TPkgShopManufacturerMapper_OverviewNavigation extends AbstractViewMapper
      */
     private $urlNormalizationUtil;
 
-    /**
-     * @param UrlNormalizationUtil|null $urlNormalizationUtil
-     */
-    public function __construct(UrlNormalizationUtil $urlNormalizationUtil = null)
+    public function __construct(?UrlNormalizationUtil $urlNormalizationUtil = null)
     {
         if (null === $urlNormalizationUtil) {
-            $this->urlNormalizationUtil = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+            $this->urlNormalizationUtil = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
         } else {
             $this->urlNormalizationUtil = $urlNormalizationUtil;
         }
@@ -58,11 +55,11 @@ class TPkgShopManufacturerMapper_OverviewNavigation extends AbstractViewMapper
      */
     private function getNavigation()
     {
-        $aTree = array();
+        $aTree = [];
 
-        $aNavigation = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0-9');
+        $aNavigation = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0-9'];
         foreach ($aNavigation as $sNavigationItem) {
-            $aItem = array();
+            $aItem = [];
             $aItem['bIsActive'] = false;
             $aItem['bIsExpanded'] = false;
             $aItem['sLink'] = '#'.$sNavigationItem;
@@ -76,21 +73,19 @@ class TPkgShopManufacturerMapper_OverviewNavigation extends AbstractViewMapper
     }
 
     /**
-     * @param TdbShopManufacturerList $oManufacturerList
-     *
      * @return array
      */
     private function getManufacturerList(TdbShopManufacturerList $oManufacturerList)
     {
-        $navigationKeyList = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0-9');
-        $manufacturerList = array();
+        $navigationKeyList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0-9'];
+        $manufacturerList = [];
 
         foreach ($navigationKeyList as $sNavigationItem) {
-            $manufacturerList[$sNavigationItem] = array(
+            $manufacturerList[$sNavigationItem] = [
                 'sTitle' => $sNavigationItem,
                 'bShowMinimizer' => true,
-                'aItemList' => array(),
-            );
+                'aItemList' => [],
+            ];
         }
 
         while ($manufacturer = $oManufacturerList->Next()) {
@@ -98,7 +93,7 @@ class TPkgShopManufacturerMapper_OverviewNavigation extends AbstractViewMapper
             $normalizedManufacturerName = $this->urlNormalizationUtil->normalizeUrl($manufacturerName);
             $firstLetter = strtoupper(mb_substr($normalizedManufacturerName, 0, 1));
 
-            $aItem = array();
+            $aItem = [];
             $aItem['sLink'] = $manufacturer->GetLinkProducts();
             $aItem['sTitle'] = $manufacturerName;
 

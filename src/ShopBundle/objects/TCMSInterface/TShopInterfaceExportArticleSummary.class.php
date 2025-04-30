@@ -50,14 +50,14 @@ class TShopInterfaceExportArticleSummary extends TCMSInterfaceManagerBaseExportC
 
     protected function GetFieldMapping()
     {
-        $aFields = array(
+        $aFields = [
             'articlenumber' => 'VARCHAR( 255 ) NOT NULL',
             'name' => 'VARCHAR( 255 ) NOT NULL',
             'stats_sales' => 'VARCHAR( 255 ) NOT NULL',
             'stats_detail_views' => 'VARCHAR( 255 ) NOT NULL',
             'stats_review_count' => 'VARCHAR( 255 ) NOT NULL',
             'stats_review_average' => 'VARCHAR( 255 ) NOT NULL',
-        );
+        ];
 
         return $aFields;
     }

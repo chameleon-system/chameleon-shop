@@ -10,14 +10,14 @@
  */
 
 /**
-https://github.com/prewk/XmlStreamer
-
-Licensed under MIT:
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * https://github.com/prewk/XmlStreamer.
+ *
+ * Licensed under MIT:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 abstract class XmlStreamer
 {
@@ -50,7 +50,7 @@ abstract class XmlStreamer
         } elseif (is_resource($mixed)) {
             $this->handle = $mixed;
             if (!isset($totalBytes)) {
-                throw new \Exception('totalBytes parameter required when supplying a file handle.');
+                throw new Exception('totalBytes parameter required when supplying a file handle.');
             }
             $this->totalBytes = $totalBytes;
         }
@@ -78,9 +78,9 @@ abstract class XmlStreamer
     /**
      * Gets called for every XML node that is found as a child to the root node.
      *
-     * @param string $xmlString     Complete XML tree of the node as a string
-     * @param string $elementName   Name of the node for easy access
-     * @param int $nodeIndex     Zero-based index that increments for every node
+     * @param string $xmlString Complete XML tree of the node as a string
+     * @param string $elementName Name of the node for easy access
+     * @param int $nodeIndex Zero-based index that increments for every node
      *
      * @return bool - If false is returned, the streaming will stop
      */
@@ -179,15 +179,15 @@ abstract class XmlStreamer
                     $tabPos = strpos($element, "\t");
 
                     // find min. (exclude false, as it would convert to int 0)
-                    $aPositionsIn = array($spacePos, $crPos, $lfPos, $tabPos);
-                    $aPositions = array();
+                    $aPositionsIn = [$spacePos, $crPos, $lfPos, $tabPos];
+                    $aPositions = [];
                     foreach ($aPositionsIn as $iPos) {
                         if (false !== $iPos) {
                             $aPositions[] = $iPos;
                         }
                     }
 
-                    $minPos = $aPositions === array() ? false : min($aPositions);
+                    $minPos = [] === $aPositions ? false : min($aPositions);
 
                     if (false !== $minPos && 0 != $minPos) {
                         $sElementName = substr($element, 0, $minPos);

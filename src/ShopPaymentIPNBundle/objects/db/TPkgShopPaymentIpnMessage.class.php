@@ -21,7 +21,7 @@ class TPkgShopPaymentIpnMessage extends TPkgShopPaymentIpnMessageAutoParent
         $oRequest = new TPkgShopPaymentIPNRequest($this->fieldRequestUrl, $this->fieldPayload);
         $currentRequest = $this->getCurrentRequest();
 
-        $aData = array(
+        $aData = [
             'datecreated' => date('Y-m-d H:i:s'),
             'payload' => $this->fieldPayload,
             'success' => '0',
@@ -30,7 +30,7 @@ class TPkgShopPaymentIpnMessage extends TPkgShopPaymentIpnMessageAutoParent
             'request_url' => $this->fieldRequestUrl,
             'cms_portal_id' => $this->fieldCmsPortalId,
             'shop_order_id',
-        );
+        ];
         $oMessage = TdbPkgShopPaymentIpnMessage::GetNewInstance($aData);
         $oMessage->Save();
 
@@ -41,27 +41,27 @@ class TPkgShopPaymentIpnMessage extends TPkgShopPaymentIpnMessageAutoParent
                 throw new TPkgShopPaymentIPNException_InvalidStatus($oRequest, 'IPN Request has no status or the status passed is not understood by the payment handler');
             }
 
-            $oMessage->SaveFieldsFast(array('pkg_shop_payment_ipn_status_id' => $oStatus->id));
+            $oMessage->SaveFieldsFast(['pkg_shop_payment_ipn_status_id' => $oStatus->id]);
 
             $oRequest->getPaymentHandlerGroup()->validateIPNRequestData($oRequest);
 
             $oRequest->getPaymentHandlerGroup()->handleIPN($oRequest);
 
-            $oMessage->SaveFieldsFast(array('success' => '1', 'completed' => '1'));
+            $oMessage->SaveFieldsFast(['success' => '1', 'completed' => '1']);
         } catch (TPkgShopPaymentIPNException_RequestError $e) {
             // something went wrong - add to message
 
-            $aData = array(
+            $aData = [
                 'success' => '0',
                 'completed' => '1',
                 'errors' => (string) $e,
                 'error_type' => $e->getErrorType(),
-            );
+            ];
             $oMessage->SaveFieldsFast($aData);
             header($e->getResponseHeader());
         }
 
-        /**
+        /*
          * @psalm-suppress UndefinedVariable
          * @FIXME `$responseString` does not exist?
          */
@@ -71,8 +71,7 @@ class TPkgShopPaymentIpnMessage extends TPkgShopPaymentIpnMessageAutoParent
     /**
      * returns the status object with a specific code for an order.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sStatusCode
+     * @param string $sStatusCode
      *
      * @return TdbPkgShopPaymentIpnMessage|null
      */
@@ -80,7 +79,7 @@ class TPkgShopPaymentIpnMessage extends TPkgShopPaymentIpnMessageAutoParent
     {
         $oStatus = null;
         $oPaymentHandler = $oOrder->GetPaymentHandler();
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
         $quotedOrderId = $connection->quote($oOrder->id);
         $quotedHandlerGroupId = $connection->quote($oPaymentHandler->fieldShopPaymentHandlerGroupId);
         $quotedStatusCode = $connection->quote($sStatusCode);
@@ -110,6 +109,6 @@ class TPkgShopPaymentIpnMessage extends TPkgShopPaymentIpnMessageAutoParent
      */
     private function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 }

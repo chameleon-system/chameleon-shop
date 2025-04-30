@@ -90,7 +90,7 @@ class TShopStepWrappingCore extends TdbShopOrderStep
         if ($bContinue) {
             $aInput = TGlobal::instance()->GetUserData('aInput');
             if (!is_array($aInput)) {
-                $aInput = array();
+                $aInput = [];
             }
             $sCardId = false;
             $sWrappId = false;
@@ -105,20 +105,20 @@ class TShopStepWrappingCore extends TdbShopOrderStep
                 if (is_array($aInput['shop_article_id'])) {
                     $aArticleIds = $aInput['shop_article_id'];
                 } elseif (!empty($aInput['shop_article_id'])) {
-                    $aArticleIds = array($aInput['shop_article_id']);
+                    $aArticleIds = [$aInput['shop_article_id']];
                 }
             }
 
             $oBasket = TShopBasket::GetInstance();
             if ($sWrappId) {
-                /**
+                /*
                  * @psalm-suppress UndefinedMethod
                  * @FIXME Method `AddWrapping` does not exist?
                  */
                 $oBasket->AddWrapping($sWrappId, $aArticleIds);
             }
             if ($sCardId) {
-                /**
+                /*
                  * @psalm-suppress UndefinedMethod
                  * @FIXME Method `AddWrappingCard` does not exist?
                  */

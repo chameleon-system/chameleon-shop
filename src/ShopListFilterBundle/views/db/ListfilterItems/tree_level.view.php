@@ -1,9 +1,9 @@
 <?php
-/*@var $oListItem TdbPkgShopListfilterItem */
+/* @var $oListItem TdbPkgShopListfilterItem */
 $oLocal = TCMSLocal::GetActive();
 ?>
-<div class="TPkgShopListfilterItem <?=get_class($oListItem); ?> <?=$aCallTimeVars['CountClass']; ?>">
+<div class="TPkgShopListfilterItem <?php echo get_class($oListItem); ?> <?php echo $aCallTimeVars['CountClass']; ?>">
     <div class="tree">
-        <?=$oListItem->GetRenderedCategoryTree(); ?>
+        <?php echo $oListItem->GetRenderedCategoryTree(); ?>
     </div>
 </div>

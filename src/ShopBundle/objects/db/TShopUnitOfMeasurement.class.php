@@ -11,7 +11,7 @@
 
 /**
  * manages the content quantity for products (needed for base price calculations).
-/**/
+ * /**/
 class TShopUnitOfMeasurement extends TShopUnitOfMeasurementAutoParent
 {
     /**

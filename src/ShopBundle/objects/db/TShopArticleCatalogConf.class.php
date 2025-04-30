@@ -16,14 +16,12 @@ class TShopArticleCatalogConf extends TShopArticleCatalogConfAutoParent
     /**
      * Returns the active order by for the given category.
      *
-     * @param TdbShopCategory $oActiveCategory
-     *
      * @return string
      */
     public function GetDefaultOrderBy(TdbShopCategory $oActiveCategory)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sDefaultOrderBy = $this->fieldShopModuleArticlelistOrderbyId;
 
@@ -32,7 +30,7 @@ class TShopArticleCatalogConf extends TShopArticleCatalogConfAutoParent
 
         do {
             // is there another order by set for this category or any of its parents
-            $query = "
+            $query = '
             SELECT `shop_category`.`id`,
                    `shop_category`.`url_path`,
                    `shop_category`.`shop_category_id`,
@@ -44,7 +42,7 @@ class TShopArticleCatalogConf extends TShopArticleCatalogConfAutoParent
                 ON (`shop_article_catalog_conf_default_order_shop_category_mlt`.`source_id` = `shop_article_catalog_conf_default_order`.`id`
                     AND `shop_article_catalog_conf_default_order`.`shop_article_catalog_conf_id` = :confId)
              WHERE `shop_category`.`id` = :catId
-        ";
+        ';
 
             $aCategoryDetails = $connection->fetchAssociative($query, [
                 'confId' => $this->id,

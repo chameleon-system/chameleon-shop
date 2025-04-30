@@ -14,20 +14,17 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 class TPkgShopPaymentTransactionManagerEndPoint
 {
-    const LOG = '/logs/pkgShopPaymentTransaction.log';
-    const MESSAGE_CREDIT_EXECUTED = 'TPkgShopPaymentTransaction-CREDIT-EXECUTED';
-    const MESSAGE_PAYMENT_EXECUTED = 'TPkgShopPaymentTransaction-PAYMENT-EXECUTED';
+    public const LOG = '/logs/pkgShopPaymentTransaction.log';
+    public const MESSAGE_CREDIT_EXECUTED = 'TPkgShopPaymentTransaction-CREDIT-EXECUTED';
+    public const MESSAGE_PAYMENT_EXECUTED = 'TPkgShopPaymentTransaction-PAYMENT-EXECUTED';
 
-    const MESSAGE_ERROR = 'TPkgShopPaymentTransaction-ERROR';
-    const MESSAGE_INVALID_AMOUNT = 'TPkgShopPaymentTransaction-ERROR-INVALID-VALUE';
-    const TRANSACTION_TYPE_PAYMENT = 'payment';
-    const TRANSACTION_TYPE_CREDIT = 'credit';
-    const TRANSACTION_TYPE_PAYMENT_REVERSAL = 'payment-reversal';
-    private $order = null;
+    public const MESSAGE_ERROR = 'TPkgShopPaymentTransaction-ERROR';
+    public const MESSAGE_INVALID_AMOUNT = 'TPkgShopPaymentTransaction-ERROR-INVALID-VALUE';
+    public const TRANSACTION_TYPE_PAYMENT = 'payment';
+    public const TRANSACTION_TYPE_CREDIT = 'credit';
+    public const TRANSACTION_TYPE_PAYMENT_REVERSAL = 'payment-reversal';
+    private $order;
 
-    /**
-     * @param TdbShopOrder $oOrder
-     */
     public function __construct(TdbShopOrder $oOrder)
     {
         $this->order = $oOrder;
@@ -36,8 +33,6 @@ class TPkgShopPaymentTransactionManagerEndPoint
     /**
      * important: the transaction will go through no matter what - make sure you validate the amount using getMaxAllowedValueFor
      * before calling this method.
-     *
-     * @param TPkgShopPaymentTransactionData $transactionData
      *
      * @return TdbPkgShopPaymentTransaction
      */
@@ -65,7 +60,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
             $userId = '';
         }
 
-        $aData = array(
+        $aData = [
             'shop_order_id' => $this->order->id,
             'data_extranet_user_id' => (null !== $oContext->getExtranetUser()) ? ($oContext->getExtranetUser(
             )->id) : (''),
@@ -77,7 +72,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
             'pkg_shop_payment_transaction_type_id' => $oTransactionType->id,
             'sequence_number' => $iSequenceNumber,
             'confirmed' => '0',
-        );
+        ];
 
         $oTransaction = TdbPkgShopPaymentTransaction::GetNewInstance($aData);
 
@@ -94,13 +89,13 @@ class TPkgShopPaymentTransactionManagerEndPoint
         }
 
         foreach ($aItems as $oItem) {
-            $aData = array(
+            $aData = [
                 'pkg_shop_payment_transaction_id' => $oTransaction->id,
                 'amount' => ($itemAmountMultiplier * $oItem->getAmount()),
                 'value' => $oItem->getValue(),
                 'shop_order_item_id' => $oItem->getOrderItemId(),
                 'type' => $oItem->getType(),
-            );
+            ];
             $oTransactionPosition = TdbPkgShopPaymentTransactionPosition::GetNewInstance($aData);
             $oTransactionPosition->AllowEditByAll(true);
             $oTransactionPosition->SaveFieldsFast($aData);
@@ -146,14 +141,14 @@ class TPkgShopPaymentTransactionManagerEndPoint
      * searches for a transaction with matching sequence number and confirms it. returns the transaction if found, null if not.
      *
      * @param int $iSequenceNumber
-     * @param int $iConfirmedDate  - unix timestamp
+     * @param int $iConfirmedDate - unix timestamp
      *
-     * @return \TdbPkgShopPaymentTransaction|null
+     * @return TdbPkgShopPaymentTransaction|null
      */
     public function confirmTransaction($iSequenceNumber, $iConfirmedDate)
     {
         $oTransaction = TdbPkgShopPaymentTransaction::GetNewInstance();
-        $loadData = array('shop_order_id' => $this->order->id, 'sequence_number' => $iSequenceNumber);
+        $loadData = ['shop_order_id' => $this->order->id, 'sequence_number' => $iSequenceNumber];
         if (true === $oTransaction->LoadFromFields($loadData)) {
             $oTransaction = $this->confirmTransactionObject($oTransaction, $iConfirmedDate);
         } else {
@@ -166,7 +161,6 @@ class TPkgShopPaymentTransactionManagerEndPoint
     /**
      * confirm given transaction object.
      *
-     * @param TdbPkgShopPaymentTransaction $transaction
      * @param int $iConfirmedDate
      *
      * @return TdbPkgShopPaymentTransaction
@@ -176,7 +170,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
         if (false === $transaction->fieldConfirmed) {
             $transaction->AllowEditByAll(true);
             $transaction->SaveFieldsFast(
-                array('confirmed' => '1', 'confirmed_date' => date('Y-m-d H:i:s', $iConfirmedDate))
+                ['confirmed' => '1', 'confirmed_date' => date('Y-m-d H:i:s', $iConfirmedDate)]
             );
             $transaction->AllowEditByAll(false);
             // mark order as paid/unpaid depending on the remaining balance
@@ -197,19 +191,19 @@ class TPkgShopPaymentTransactionManagerEndPoint
     private function getTransactionTypeObject($sTransactionType)
     {
         /** @var array<string, TdbPkgShopPaymentTransactionType>  $aTypeCache */
-        static $aTypeCache = array();
+        static $aTypeCache = [];
 
         if (false === isset($aTypeCache[$sTransactionType])) {
             $oTransactionType = TdbPkgShopPaymentTransactionType::GetNewInstance();
             if (false === $oTransactionType->LoadFromField('system_name', $sTransactionType)) {
                 $sMessage = "transaction type {$sTransactionType} does not exists in DB";
                 throw new TPkgShopPaymentTransactionException_InvalidTransactionType(
-                    self::MESSAGE_ERROR, array('sMessage' => $sMessage),
+                    self::MESSAGE_ERROR, ['sMessage' => $sMessage],
                     $sMessage,
-                    array(
+                    [
                         'order' => $this->order->sqlData,
                         'type' => $sTransactionType,
-                    ),
+                    ],
                     1,
                     self::LOG
                 );
@@ -254,9 +248,9 @@ class TPkgShopPaymentTransactionManagerEndPoint
         }
 
         $realVoucherValueUsed = $this->getTransactionPositionTotalForType(
-                TPkgShopPaymentTransactionItemData::TYPE_VOUCHER,
-                true
-            ) * -1;
+            TPkgShopPaymentTransactionItemData::TYPE_VOUCHER,
+            true
+        ) * -1;
         $shopOrder = $transaction->GetFieldShopOrder();
         if (null === $shopOrder) {
             return;
@@ -318,7 +312,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
     public function getTransactionBalance($bIncludeUnconfirmedTransactions = false)
     {
         $dTotal = 0.00;
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
         $quotedOrderId = $connection->quote($this->order->id);
 
         $sRestriction = '';
@@ -347,7 +341,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
      */
     protected function getNextTransactionSequenceNumber()
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
         $quotedOrderId = $connection->quote($this->order->id);
 
         $query = "SELECT MAX(sequence_number) AS max_sequence_number
@@ -394,14 +388,15 @@ class TPkgShopPaymentTransactionManagerEndPoint
     /**
      * returns true if there are transactions for the order (pending or not).
      *
-     * @param null|string $sTransactionType - must be one of self::TRANSACTION_TYPE_*
+     * @param string|null $sTransactionType - must be one of self::TRANSACTION_TYPE_*
+     *
      * @psalm-param null|self::TRANSACTION_TYPE_* $sTransactionType
      *
      * @return bool
      */
     public function hasTransactions($sTransactionType = null)
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $iNumberOfTransactions = 0;
         $sTransactionTypeRestriction = '';
@@ -435,7 +430,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
      */
     public function getBillableProducts($bIncludeUnconfirmedTransactions = true)
     {
-        $aProductList = array();
+        $aProductList = [];
         $oOrderItemList = $this->order->GetFieldShopOrderItemList();
         $oOrderItemList->GoToStart();
         while ($oOrderItem = $oOrderItemList->Next()) {
@@ -463,7 +458,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
      */
     public function getRefundableProducts($bIncludeUnconfirmedTransactions = true)
     {
-        $aProductList = array();
+        $aProductList = [];
         $oOrderItemList = $this->order->GetFieldShopOrderItemList();
         $oOrderItemList->GoToStart();
         while ($oOrderItem = $oOrderItemList->Next()) {
@@ -527,7 +522,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
         $sTransactionTypeSystemName,
         $bIncludeUnconfirmedTransactions = true
     ) {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $sTransactionTypeId = $this->getTransactionTypeObject($sTransactionTypeSystemName)->id;
         $quotedOrderItemId = $connection->quote($sOrderItemId);
@@ -561,7 +556,6 @@ class TPkgShopPaymentTransactionManagerEndPoint
      * return the sum for the non-product entry in the positions with position type $sTransactionPositionType.
      *
      * @param true $bIncludeUnconfirmedTransactions
-     * @param null $sShopOrderItemId
      * @param string $sTransactionPositionType - must be one of TPkgShopPaymentTransactionItemData::TYPE_
      *
      * @psalm-param TPkgShopPaymentTransactionItemData::TYPE_* $sTransactionPositionType
@@ -573,8 +567,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
         $bIncludeUnconfirmedTransactions = true
     ) {
         $iTotal = 0;
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ServiceLocator::get('database_connection');
 
         $quotedOrderId = $connection->quote($this->order->id);
         $quotedTransactionPositionType = $connection->quote($sTransactionPositionType);
@@ -604,8 +598,8 @@ class TPkgShopPaymentTransactionManagerEndPoint
     /**
      * return the transaction details for a completed order.
      *
-     * @param string $sTransactionType          - must be one of TPkgShopPaymentTransactionData::TYPE_*
-     * @param null|array<string, int> $aProductAmountRestriction
+     * @param string $sTransactionType - must be one of TPkgShopPaymentTransactionData::TYPE_*
+     * @param array<string, int>|null $aProductAmountRestriction
      * @param bool $bUseConfirmedTransactionsOnly
      *
      * @psalm-param TPkgShopPaymentTransactionData::TYPE_* $sTransactionType
@@ -645,9 +639,9 @@ class TPkgShopPaymentTransactionManagerEndPoint
                     $sMsg = "trying to use {$iAmountForTransaction} from item {$sShopOrderItemId} when only {$iAmountAllowedForUse} are available";
                     throw new TPkgCmsException_LogAndMessage(
                         TPkgShopPaymentTransactionManager::MESSAGE_ERROR,
-                        array('sMessage' => $sMsg),
+                        ['sMessage' => $sMsg],
                         $sMsg,
-                        array('order' => $this->order->sqlData)
+                        ['order' => $this->order->sqlData]
                     );
                 }
             }
@@ -656,13 +650,13 @@ class TPkgShopPaymentTransactionManagerEndPoint
                 $sMsg = "unable to load the shop_order_item [{$this->order->id}] in order [{$sShopOrderItemId}]";
                 throw new TPkgCmsException_LogAndMessage(
                     TPkgShopPaymentTransactionManager::MESSAGE_ERROR,
-                    array('sMessage' => $sMsg),
+                    ['sMessage' => $sMsg],
                     $sMsg,
-                    array('order' => $this->order->sqlData)
+                    ['order' => $this->order->sqlData]
                 );
             }
 
-            //$totalQuantityForTransaction = $this->gettot
+            // $totalQuantityForTransaction = $this->gettot
             $oItem = new TPkgShopPaymentTransactionItemData();
             $oItem
                 ->setType(TPkgShopPaymentTransactionItemData::TYPE_PRODUCT)
@@ -674,9 +668,9 @@ class TPkgShopPaymentTransactionManagerEndPoint
                 $dOrderTotal += $oItem->getAmount() * $oItem->getValue();
                 $dProductValue += $oItem->getAmount() * $oItem->getValue();
                 $dDiscount += round(
-                        (($oOrderItem->fieldOrderPriceAfterDiscounts / $oOrderItem->fieldOrderAmount) * $iAmountForTransaction),
-                        2
-                    ) - ($dSignMultiplier * $oItem->getAmount() * $oItem->getValue());
+                    ($oOrderItem->fieldOrderPriceAfterDiscounts / $oOrderItem->fieldOrderAmount) * $iAmountForTransaction,
+                    2
+                ) - ($dSignMultiplier * $oItem->getAmount() * $oItem->getValue());
             }
             $bAllRemainingItemsSelected = $bAllRemainingItemsSelected && ($iAmountForTransaction == $iAmountAllowedForUse);
         }
@@ -693,9 +687,9 @@ class TPkgShopPaymentTransactionManagerEndPoint
 
         // shipping, payment, vouchers and "other" should always be used as quickly as possible
         $dShippingPrice = $this->order->fieldShopShippingGroupPrice - $this->getTransactionPositionTotalForType(
-                TPkgShopPaymentTransactionItemData::TYPE_SHIPPING,
-                true
-            );
+            TPkgShopPaymentTransactionItemData::TYPE_SHIPPING,
+            true
+        );
         if ($dShippingPrice > 0 || $dShippingPrice < 0) {
             $oItem = new TPkgShopPaymentTransactionItemData();
             $oItem
@@ -707,9 +701,9 @@ class TPkgShopPaymentTransactionManagerEndPoint
         }
 
         $dPaymentMethodPrice = $this->order->fieldShopPaymentMethodPrice - $this->getTransactionPositionTotalForType(
-                TPkgShopPaymentTransactionItemData::TYPE_PAYMENT,
-                true
-            );
+            TPkgShopPaymentTransactionItemData::TYPE_PAYMENT,
+            true
+        );
         if ($dPaymentMethodPrice > 0 || $dPaymentMethodPrice < 0) {
             $oItem = new TPkgShopPaymentTransactionItemData();
             $oItem
@@ -735,9 +729,9 @@ class TPkgShopPaymentTransactionManagerEndPoint
         $dExpectedTotal = $dSignMultiplier * $this->getOrderTotalOtherValue();
 
         $dOther = $dExpectedTotal - $this->getTransactionPositionTotalForType(
-                TPkgShopPaymentTransactionItemData::TYPE_OTHER,
-                true
-            );
+            TPkgShopPaymentTransactionItemData::TYPE_OTHER,
+            true
+        );
 
         if ($dOther > 0 || $dOther < 0) {
             $oItem = new TPkgShopPaymentTransactionItemData();

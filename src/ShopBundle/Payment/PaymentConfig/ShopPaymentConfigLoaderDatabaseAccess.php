@@ -16,10 +16,6 @@ use ChameleonSystem\ShopBundle\Payment\DataModel\OrderPaymentInfo;
 use ChameleonSystem\ShopBundle\Payment\PaymentConfig\Interfaces\ShopPaymentConfigLoaderDataAccessInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use TdbShopOrder;
-use TdbShopPaymentHandler;
-use TdbShopPaymentHandlerGroup;
-use TdbShopPaymentMethod;
 
 class ShopPaymentConfigLoaderDatabaseAccess implements ShopPaymentConfigLoaderDataAccessInterface
 {
@@ -38,11 +34,11 @@ class ShopPaymentConfigLoaderDatabaseAccess implements ShopPaymentConfigLoaderDa
      */
     public function getDataFromOrderId($orderId)
     {
-        $order = TdbShopOrder::GetNewInstance();
+        $order = \TdbShopOrder::GetNewInstance();
         if (!$order->Load($orderId)) {
             throw new DataAccessException('Error while loading order with ID '.$orderId);
         }
-        $paymentMethod = TdbShopPaymentMethod::GetNewInstance();
+        $paymentMethod = \TdbShopPaymentMethod::GetNewInstance();
         if (!$paymentMethod->Load($order->fieldShopPaymentMethodId)) {
             throw new DataAccessException(
                 'Error while loading payment method with ID '.$order->fieldShopPaymentMethodId.' for order with ID '.$orderId
@@ -57,7 +53,7 @@ class ShopPaymentConfigLoaderDatabaseAccess implements ShopPaymentConfigLoaderDa
      */
     public function getPaymentHandlerGroupIdFromPaymentHandlerId($paymentHandlerId)
     {
-        $handler = TdbShopPaymentHandler::GetNewInstance();
+        $handler = \TdbShopPaymentHandler::GetNewInstance();
         if (!$handler->Load($paymentHandlerId)) {
             throw new DataAccessException('Error while loading payment handler with ID '.$paymentHandlerId);
         }
@@ -70,7 +66,7 @@ class ShopPaymentConfigLoaderDatabaseAccess implements ShopPaymentConfigLoaderDa
      */
     public function getPaymentHandlerGroupIdFromSystemName($systemName)
     {
-        $handlerGroup = TdbShopPaymentHandlerGroup::GetNewInstance();
+        $handlerGroup = \TdbShopPaymentHandlerGroup::GetNewInstance();
         if (!$handlerGroup->LoadFromField('system_name', $systemName)) {
             throw new DataAccessException('Error while loading payment handler group ID for systemName '.$systemName);
         }
@@ -83,7 +79,7 @@ class ShopPaymentConfigLoaderDatabaseAccess implements ShopPaymentConfigLoaderDa
      */
     public function getPaymentHandlerGroupSystemNameFromId($paymentHandlerGroupId)
     {
-        $handlerGroup = TdbShopPaymentHandlerGroup::GetNewInstance();
+        $handlerGroup = \TdbShopPaymentHandlerGroup::GetNewInstance();
         if (!$handlerGroup->Load($paymentHandlerGroupId)) {
             throw new DataAccessException(
                 'Error while loading payment handler group systemName for ID '.$paymentHandlerGroupId
@@ -98,7 +94,7 @@ class ShopPaymentConfigLoaderDatabaseAccess implements ShopPaymentConfigLoaderDa
      */
     public function getEnvironment($paymentHandlerGroupId)
     {
-        $paymentHandlerGroup = TdbShopPaymentHandlerGroup::GetNewInstance();
+        $paymentHandlerGroup = \TdbShopPaymentHandlerGroup::GetNewInstance();
         if (!$paymentHandlerGroup->Load($paymentHandlerGroupId)) {
             throw new DataAccessException(
                 'Error while loading environment for payment handler group with ID '.$paymentHandlerGroupId
@@ -119,7 +115,7 @@ class ShopPaymentConfigLoaderDatabaseAccess implements ShopPaymentConfigLoaderDa
         try {
             $configDataRaw = $this->databaseConnection->fetchAllAssociative(
                 $query,
-                array('shopPaymentHandlerGroupId' => $shopPaymentHandlerGroupId)
+                ['shopPaymentHandlerGroupId' => $shopPaymentHandlerGroupId]
             );
         } catch (DBALException $e) {
             throw new DataAccessException(
@@ -128,7 +124,7 @@ class ShopPaymentConfigLoaderDatabaseAccess implements ShopPaymentConfigLoaderDa
                 $e
             );
         }
-        $configData = array();
+        $configData = [];
         foreach ($configDataRaw as $row) {
             $configData[] = new ShopPaymentConfigRawValue(
                 $row['name'],
@@ -153,7 +149,7 @@ class ShopPaymentConfigLoaderDatabaseAccess implements ShopPaymentConfigLoaderDa
         try {
             $configDataRaw = $this->databaseConnection->fetchAllAssociative(
                 $query,
-                array('shopPaymentHandlerId' => $shopPaymentHandlerId)
+                ['shopPaymentHandlerId' => $shopPaymentHandlerId]
             );
         } catch (DBALException $e) {
             throw new DataAccessException(
@@ -162,7 +158,7 @@ class ShopPaymentConfigLoaderDatabaseAccess implements ShopPaymentConfigLoaderDa
                 $e
             );
         }
-        $configData = array();
+        $configData = [];
         foreach ($configDataRaw as $row) {
             $configData[] = new ShopPaymentConfigRawValue(
                 $row['systemname'],

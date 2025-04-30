@@ -36,7 +36,7 @@ class TShopInterfaceExportNewsletterSubscribers extends TCMSInterfaceManagerBase
                   WHERE `pkg_newsletter_user`.`optin` = '1';
                ";
         $oTCMSRecordList = new TCMSRecordList();
-        /** @var $oTCMSRecordList TCMSRecordList */
+        /* @var $oTCMSRecordList TCMSRecordList */
         $oTCMSRecordList->sTableName = 'data_extranet_user';
         $oTCMSRecordList->Load($query);
 
@@ -59,7 +59,7 @@ class TShopInterfaceExportNewsletterSubscribers extends TCMSInterfaceManagerBase
 
     protected function GetFieldMapping()
     {
-        $aFields = array('NewsletterId' => 'int(11) NOT NULL', 'Anrede' => 'VARCHAR( 255 ) NOT NULL', 'EMail' => 'VARCHAR( 255 ) NOT NULL', 'Vorname' => 'VARCHAR( 255 ) NOT NULL', 'Nachname' => 'VARCHAR( 255 ) NOT NULL', 'KundenNr' => 'int(11) NOT NULL', 'NewsletterAnmeldedatum' => 'DATETIME NOT NULL', 'Code' => 'VARCHAR( 255 ) NOT NULL');
+        $aFields = ['NewsletterId' => 'int(11) NOT NULL', 'Anrede' => 'VARCHAR( 255 ) NOT NULL', 'EMail' => 'VARCHAR( 255 ) NOT NULL', 'Vorname' => 'VARCHAR( 255 ) NOT NULL', 'Nachname' => 'VARCHAR( 255 ) NOT NULL', 'KundenNr' => 'int(11) NOT NULL', 'NewsletterAnmeldedatum' => 'DATETIME NOT NULL', 'Code' => 'VARCHAR( 255 ) NOT NULL'];
 
         return $aFields;
     }

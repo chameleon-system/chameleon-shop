@@ -14,6 +14,7 @@
  * TShopBasket.
  *
  * @psalm-suppress InvalidReturnType
+ *
  * @FIXME This class is not implemented
  */
 class TShopBasketDiscountCore extends TdbShopDiscount
@@ -21,7 +22,7 @@ class TShopBasketDiscountCore extends TdbShopDiscount
     /**
      * @var array
      */
-    protected $aShopBasketArticles = array();
+    protected $aShopBasketArticles = [];
 
     /**
      * @return bool

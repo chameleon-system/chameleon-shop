@@ -13,12 +13,14 @@ interface IPkgShopViewMyOrderDetailsSessionAdapter
 {
     /**
      * @param string $orderId
+     *
      * @return void
      */
     public function addOrderId($orderId);
 
     /**
      * @param string $orderId
+     *
      * @return bool
      */
     public function hasOrder($orderId);

@@ -6,12 +6,11 @@ class ShopArticleStock
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopArticle|null - Belongs to */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldNumber
         /** @var int - Amount */
         private int $amount = 0
@@ -55,7 +54,6 @@ class ShopArticleStock
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getAmount(): int
     {
@@ -68,6 +66,4 @@ class ShopArticleStock
 
         return $this;
     }
-
-
 }

@@ -15,13 +15,10 @@ class TPkgShopMapper_SystemPageLinks extends AbstractViewMapper
 {
     private ShopServiceInterface $shopService;
 
-    /**
-     * @param ShopServiceInterface|null $shopService
-     */
-    public function __construct(ShopServiceInterface $shopService = null)
+    public function __construct(?ShopServiceInterface $shopService = null)
     {
         if (null === $shopService) {
-            $this->shopService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+            $this->shopService = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
         } else {
             $this->shopService = $shopService;
         }
@@ -46,7 +43,7 @@ class TPkgShopMapper_SystemPageLinks extends AbstractViewMapper
             $oCacheTriggerManager->addTrigger($oShop->table, $oShop->id);
         }
         $aSystemPages = $oShop->GetSystemPageNames();
-        $aSystemPageLinks = array();
+        $aSystemPageLinks = [];
         foreach ($aSystemPages as $sSystemPage) {
             $aSystemPageLinks[$sSystemPage] = $oShop->GetLinkToSystemPage($sSystemPage);
         }

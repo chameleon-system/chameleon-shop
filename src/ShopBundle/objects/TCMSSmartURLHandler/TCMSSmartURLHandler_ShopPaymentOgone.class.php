@@ -26,6 +26,7 @@ class TCMSSmartURLHandler_ShopPaymentOgone extends TCMSSmartURLHandler_ShopBaske
      * @return bool|string
      *
      * @psalm-suppress UndefinedPropertyAssignment
+     *
      * @FIXME Writing data into `$OURLData` when there is no magic `__set` method for them defined.
      */
     public function GetPageDef()
@@ -116,7 +117,7 @@ class TCMSSmartURLHandler_ShopPaymentOgone extends TCMSSmartURLHandler_ShopBaske
      */
     private function getShopPaymentHandlerFactory()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
     }
 
     /**
@@ -124,11 +125,11 @@ class TCMSSmartURLHandler_ShopPaymentOgone extends TCMSSmartURLHandler_ShopBaske
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
     }
 }

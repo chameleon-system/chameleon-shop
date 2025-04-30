@@ -22,25 +22,20 @@ class SearchSuggestController
      */
     private $shopSearchSuggest;
 
-    /**
-     * @param ShopSearchSuggestInterface $shopSearchSuggest
-     */
     public function __construct(ShopSearchSuggestInterface $shopSearchSuggest)
     {
         $this->shopSearchSuggest = $shopSearchSuggest;
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function __invoke(Request $request)
     {
         $suggestions = $this->shopSearchSuggest->getSearchSuggestions($request->query->get('query'));
-        $retValue = array(
+        $retValue = [
             'options' => $suggestions,
-        );
+        ];
 
         $response = new Response(json_encode($retValue));
         $response->headers->set('Content-Type', 'application/json');

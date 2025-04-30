@@ -26,6 +26,7 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
 
     /**
      * @param array<string, mixed> $searchRequest
+     *
      * @return void
      */
     public function addSearch(array $searchRequest)
@@ -35,7 +36,7 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
         if (null === $session) {
             return;
         }
-                
+
         $searchKey = md5($this->getArrayAsString($searchRequest));
         $searches = $session->get(ShopSearchSessionInterface::SESSION_KEY, []);
         $searches[] = $searchKey;
@@ -44,16 +45,17 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
 
     /**
      * @param array<string, mixed> $searchRequest
+     *
      * @return bool
      */
     public function hasSearchedFor(array $searchRequest)
     {
         $session = $this->getSession();
-        
+
         if (null === $session) {
             return false;
         }
-        
+
         $searchKey = md5($this->getArrayAsString($searchRequest));
 
         $searches = $session->get(ShopSearchSessionInterface::SESSION_KEY, []);
@@ -61,12 +63,9 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
         return in_array($searchKey, $searches);
     }
 
-    /**
-     * @param array $data
-     */
     private function getArrayAsString(array $data): string
     {
-        $parts = array();
+        $parts = [];
         ksort($data);
         foreach ($data as $key => $value) {
             if (is_array($value)) {
@@ -84,7 +83,7 @@ class ShopSearchSessionChameleonBridge implements ShopSearchSessionInterface
         if (null === $request) {
             return null;
         }
-        
+
         if (false === $request->hasSession()) {
             return null;
         }

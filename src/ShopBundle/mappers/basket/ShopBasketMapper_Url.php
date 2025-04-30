@@ -32,7 +32,7 @@ class ShopBasketMapper_Url extends AbstractViewMapper
     ): void {
         $useRedirect = $visitor->GetSourceObject('useRedirect');
         /** @var ShopServiceInterface $shopService */
-        $shopService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        $shopService = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
         $url = $shopService->getBasketLink($useRedirect);
 
         $removeModuleMethodCalls = $visitor->GetSourceObject('removeModuleMethodCalls');
@@ -55,7 +55,7 @@ class ShopBasketMapper_Url extends AbstractViewMapper
             return $url;
         }
         $parameterList = explode('&', $url_params[1]);
-        $newParameterList = array();
+        $newParameterList = [];
         $hasModuleFnc = false;
         foreach ($parameterList as $parameter) {
             if (0 === strpos($parameter, 'module_fnc')) {

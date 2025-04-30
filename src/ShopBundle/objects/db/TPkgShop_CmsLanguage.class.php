@@ -24,10 +24,10 @@ class TPkgShop_CmsLanguage extends TPkgShop_CmsLanguageAutoParent
         $this->TargetLanguageSimulation(true);
 
         // product page
-        $oActiveProduct = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
+        $oActiveProduct = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (null !== $oActiveProduct) {
             $oNewProduct = TdbShopArticle::GetNewInstance($oActiveProduct->id, $this->id);
-            $oActiveProductCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+            $oActiveProductCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
 
             $sCatId = null;
             if (null !== $oActiveProductCategory) {
@@ -38,7 +38,7 @@ class TPkgShop_CmsLanguage extends TPkgShop_CmsLanguageAutoParent
 
         // category page?
         if (empty($sTranslatesPageURL)) {
-            $oActiveProductCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+            $oActiveProductCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
             if (is_object($oActiveProductCategory)) {
                 $oNewProductCategory = TdbShopCategory::GetNewInstance($oActiveProductCategory->id, $this->id);
                 $sTranslatesPageURL = $oNewProductCategory->GetLink(true);

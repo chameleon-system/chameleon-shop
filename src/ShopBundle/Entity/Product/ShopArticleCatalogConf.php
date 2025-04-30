@@ -11,19 +11,17 @@ class ShopArticleCatalogConf
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Title / headline */
         private string $name = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopArticleCatalogConfDefaultOrder> - Alternative default sorting */
-        private Collection $shopArticleCatalogConfDefaultOrderCollection = new ArrayCollection()
-        ,
+        private Collection $shopArticleCatalogConfDefaultOrderCollection = new ArrayCollection(),
         // TCMSFieldBoolean
         /** @var bool - Offer Reserving at 0 stock */
         private bool $showSubcategoryProducts = false,
@@ -32,12 +30,10 @@ class ShopArticleCatalogConf
         private int $pageSize = 20,
         // TCMSFieldLookup
         /** @var ShopModuleArticlelistOrderby|null - Default sorting */
-        private ?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby = null
-        ,
+        private ?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby = null,
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, ShopModuleArticlelistOrderby> - Available sortings */
-        private Collection $shopModuleArticlelistOrderbyCollection = new ArrayCollection()
-        ,
+        private Collection $shopModuleArticlelistOrderbyCollection = new ArrayCollection(),
         // TCMSFieldWYSIWYG
         /** @var string - Introduction text */
         private string $intro = ''
@@ -81,7 +77,6 @@ class ShopArticleCatalogConf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -94,8 +89,6 @@ class ShopArticleCatalogConf
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -131,7 +124,6 @@ class ShopArticleCatalogConf
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowSubcategoryProducts(): bool
     {
@@ -144,7 +136,6 @@ class ShopArticleCatalogConf
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getPageSize(): int
@@ -159,7 +150,6 @@ class ShopArticleCatalogConf
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopModuleArticlelistOrderby(): ?ShopModuleArticlelistOrderby
     {
@@ -172,8 +162,6 @@ class ShopArticleCatalogConf
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -209,7 +197,6 @@ class ShopArticleCatalogConf
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getIntro(): string
     {
@@ -222,6 +209,4 @@ class ShopArticleCatalogConf
 
         return $this;
     }
-
-
 }

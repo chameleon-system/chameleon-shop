@@ -13,7 +13,6 @@ namespace ChameleonSystem\ShopBundle\EventListener;
 
 use ChameleonSystem\ShopBundle\Event\UpdateProductStockEvent;
 use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
-use TdbShopArticle;
 
 class UpdateVariantParentStockListener
 {
@@ -22,23 +21,18 @@ class UpdateVariantParentStockListener
      */
     private $productInventoryService;
 
-    /**
-     * @param ProductInventoryServiceInterface $productInventoryService
-     */
     public function __construct(ProductInventoryServiceInterface $productInventoryService)
     {
         $this->productInventoryService = $productInventoryService;
     }
 
     /**
-     * @param UpdateProductStockEvent $event
-     *
      * @return void
      */
     public function onUpdateProductStock(UpdateProductStockEvent $event)
     {
         $productId = $event->getProductId();
-        $product = TdbShopArticle::GetNewInstance($productId);
+        $product = \TdbShopArticle::GetNewInstance($productId);
         $isVariant = $product->IsVariant();
         if (!$isVariant && !$product->HasVariants()) {
             return;
@@ -60,11 +54,9 @@ class UpdateVariantParentStockListener
     }
 
     /**
-     * @param TdbShopArticle $product
-     *
      * @return void
      */
-    private function setVariantParentActive(TdbShopArticle $product)
+    private function setVariantParentActive(\TdbShopArticle $product)
     {
         $parentProduct = $product->GetFieldVariantParent();
         $parentStock = $parentProduct->getAvailableStock();

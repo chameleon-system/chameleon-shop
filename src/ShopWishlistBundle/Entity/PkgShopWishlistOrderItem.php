@@ -9,20 +9,17 @@ class PkgShopWishlistOrderItem
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldExtendedLookup
         /** @var PkgShopWishlist|null - Wishlist */
-        private ?PkgShopWishlist $pkgShopWishlist = null
-        ,
+        private ?PkgShopWishlist $pkgShopWishlist = null,
         // TCMSFieldExtendedLookup
         /** @var ShopOrderItem|null - Order item */
-        private ?ShopOrderItem $shopOrderItem = null
-        ,
+        private ?ShopOrderItem $shopOrderItem = null,
         // TCMSFieldExtendedLookup
         /** @var DataExtranetUser|null - Wishlist owner */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldVarchar
         /** @var string - Email of the wishlist owner */
         private string $dataExtranetUserEmail = ''
@@ -66,7 +63,6 @@ class PkgShopWishlistOrderItem
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getShopOrderItem(): ?ShopOrderItem
     {
@@ -79,7 +75,6 @@ class PkgShopWishlistOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getDataExtranetUser(): ?DataExtranetUser
@@ -94,7 +89,6 @@ class PkgShopWishlistOrderItem
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getDataExtranetUserEmail(): string
     {
@@ -107,6 +101,4 @@ class PkgShopWishlistOrderItem
 
         return $this;
     }
-
-
 }

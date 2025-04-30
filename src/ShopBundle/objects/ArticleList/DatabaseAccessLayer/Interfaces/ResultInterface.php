@@ -23,9 +23,9 @@ interface ResultInterface
     /**
      * @param int $pageSize
      *
-     * @throws \ChameleonSystem\ShopBundle\objects\ArticleList\Exceptions\InvalidPageNumberException
-     *
      * @return void
+     *
+     * @throws InvalidPageNumberException
      */
     public function setPageSize($pageSize);
 
@@ -37,9 +37,9 @@ interface ResultInterface
     /**
      * @param int $page
      *
-     * @throws InvalidPageNumberException
-     *
      * @return void
+     *
+     * @throws InvalidPageNumberException
      */
     public function setPage($page);
 
@@ -50,6 +50,7 @@ interface ResultInterface
 
     /**
      * @psalm-param array<string, 'ASC'|'DESC'> $sort
+     *
      * @return void
      */
     public function setSort(array $sort);
@@ -66,6 +67,7 @@ interface ResultInterface
 
     /**
      * @param string|null $filterQueryString
+     *
      * @return void
      */
     public function addFilterQueryString($filterQueryString);
@@ -74,6 +76,7 @@ interface ResultInterface
      * limit result to this. pass null to remove limit.
      *
      * @param int $maxAllowedResults
+     *
      * @return void
      */
     public function setMaxAllowedResults($maxAllowedResults);

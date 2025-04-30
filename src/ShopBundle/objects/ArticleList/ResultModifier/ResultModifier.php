@@ -21,7 +21,7 @@ class ResultModifier implements ResultModifierInterface
     /**
      * @var ResultModificationInterface[]
      */
-    private $modifications = array();
+    private $modifications = [];
 
     public function addModification(ResultModificationInterface $resultModification)
     {
@@ -29,9 +29,7 @@ class ResultModifier implements ResultModifierInterface
     }
 
     /**
-     * @param ResultInterface $result
-     * @param array           $configuration
-     * @param int             $filterDepth
+     * @param int $filterDepth
      *
      * @return ResultInterface
      */
@@ -47,9 +45,6 @@ class ResultModifier implements ResultModifierInterface
     }
 
     /**
-     * @param ResultInterface $result
-     * @param array $configuration
-     * @param StateInterface $state
      * @return ResultInterface
      */
     public function applyState(ResultInterface $result, array $configuration, StateInterface $state)

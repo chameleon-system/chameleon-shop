@@ -18,7 +18,7 @@ class MTShopCategoryDetails extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @var TdbShopCategory
      */
-    private $oActiveCategory = null;
+    private $oActiveCategory;
 
     /**
      * {@inheritdoc}
@@ -84,7 +84,7 @@ class MTShopCategoryDetails extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 
     /**
@@ -92,7 +92,7 @@ class MTShopCategoryDetails extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
     }
 
     /**
@@ -100,6 +100,6 @@ class MTShopCategoryDetails extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getRedirectService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

@@ -4,22 +4,22 @@ $oLocal = TCMSLocal::GetActive();
 $iCount = 0;
 ?>
 <div class="moduleheader">
-    <a name="<?=MTPkgShopArticleReviewCore::URL_PARAM_REVIEW_JUMPER; ?>"></a>
-    <?=TGlobal::OutHTML($oModuleConfiguration->fieldTitle); ?>
+    <a name="<?php echo MTPkgShopArticleReviewCore::URL_PARAM_REVIEW_JUMPER; ?>"></a>
+    <?php echo TGlobal::OutHTML($oModuleConfiguration->fieldTitle); ?>
     <?php
     $sIntroText = $oModuleConfiguration->GetTextField('intro_text');
-    if (!empty($sIntroText)) {
-        echo $sIntroText;
-    }
-    ?>
-    <span class="reviewnumber"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.review_count', array('%count%' => $oReviewList->Length()))); ?></span>
+if (!empty($sIntroText)) {
+    echo $sIntroText;
+}
+?>
+    <span class="reviewnumber"><?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.review_count', ['%count%' => $oReviewList->Length()])); ?></span>
 </div>
 <div class="modulecontent">
     <?php
-    if ($oMsgManager->ConsumerHasMessages(MTPkgShopArticleReview::MSG_CONSUMER_NAME)) {
-        echo $oMsgManager->RenderMessages(MTPkgShopArticleReview::MSG_CONSUMER_NAME);
-    }
-    ?>
+if ($oMsgManager->ConsumerHasMessages(MTPkgShopArticleReview::MSG_CONSUMER_NAME)) {
+    echo $oMsgManager->RenderMessages(MTPkgShopArticleReview::MSG_CONSUMER_NAME);
+}
+?>
     <?php if ($bAllowReadReview) {
         ?>
     <div class="reviewlist">
@@ -33,7 +33,7 @@ $iCount = 0;
                 if ($iCount >= $iShowReviewsOnStart) {
                     $sReviewHTML .= '<div class="jshide">';
                 }
-                $sReviewHTML .= $oReview->Render('extended_owner', 'Customer', array('bAllowRateReviews' => $bAllowRateReviews, 'bAllowReportReviews' => $bAllowReportReviews, 'oPkgCommentModuleConfig' => $oPkgCommentModuleConfig, 'iRatingStars' => $iRatingStars));
+                $sReviewHTML .= $oReview->Render('extended_owner', 'Customer', ['bAllowRateReviews' => $bAllowRateReviews, 'bAllowReportReviews' => $bAllowReportReviews, 'oPkgCommentModuleConfig' => $oPkgCommentModuleConfig, 'iRatingStars' => $iRatingStars]);
                 if ($iCount >= $iShowReviewsOnStart) {
                     $sReviewHTML .= '</div>';
                 }
@@ -43,8 +43,8 @@ $iCount = 0;
             if ($iCount > $iShowReviewsOnStart) {
                 ?>
                 <script type="text/javascript">
-                    document.write("<" + 'a href="" class="showall" onclick="$(\'.reviewlist .jshide\').toggle(); $(this).toggle();$(\'.showstart\').toggle();return false;"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.show_all_reviews')); ?></a' + ">");
-                    document.write("<" + 'a href="" class="showstart" onclick="$(\'.reviewlist .showall\').toggle();$(this).toggle();$(\'.reviewlist .jshide\').toggle();return false;"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.show_fewer_reviews')); ?></a' + ">");
+                    document.write("<" + 'a href="" class="showall" onclick="$(\'.reviewlist .jshide\').toggle(); $(this).toggle();$(\'.showstart\').toggle();return false;"><?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.show_all_reviews')); ?></a' + ">");
+                    document.write("<" + 'a href="" class="showstart" onclick="$(\'.reviewlist .showall\').toggle();$(this).toggle();$(\'.reviewlist .jshide\').toggle();return false;"><?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.action.show_fewer_reviews')); ?></a' + ">");
                     $(document).ready(function () {
                         $('.reviewlist .jshide').hide();
                         $('.reviewlist .showstart').hide()
@@ -53,20 +53,20 @@ $iCount = 0;
                 <?php
             }
         } else {
-            echo '<div class="no-reviews">'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.you_have_no_reviews')).'</div>';
+            echo '<div class="no-reviews">'.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.you_have_no_reviews')).'</div>';
         } ?>
     </div>
     <?php
     } else {
         ?>
     <div
-        class="please-login-message"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.login_required_to_read_reviews')); ?></div>
+        class="please-login-message"><?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_article_review.text.login_required_to_read_reviews')); ?></div>
     <?php
     } ?>
     <?php
     $sOutroText = $oModuleConfiguration->GetTextField('outro_text');
-    if (!empty($sOutroText)) {
-        echo $sOutroText;
-    }
-    ?>
+if (!empty($sOutroText)) {
+    echo $sOutroText;
+}
+?>
 </div>

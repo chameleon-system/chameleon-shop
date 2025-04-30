@@ -11,19 +11,12 @@
 
 namespace ChameleonSystem\ShopBundle\objects\ArticleList\Mapper;
 
-use AbstractViewMapper;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
-use MapperException;
-use TdbShopArticle;
-
-class ItemMapperStandard extends AbstractViewMapper
+class ItemMapperStandard extends \AbstractViewMapper
 {
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('itemMapperBaseData', 'array');
         $oRequirements->NeedsSourceObject('items', 'array');
@@ -37,38 +30,36 @@ class ItemMapperStandard extends AbstractViewMapper
      * {@inheritdoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
-        /** @var TdbShopArticle[] $items */
+        /** @var \TdbShopArticle[] $items */
         $items = $oVisitor->GetSourceObject('items');
 
         $itemMapperBaseData = $oVisitor->GetSourceObject('itemMapperBaseData');
 
-        $additionalParameter = array(
+        $additionalParameter = [
             'oShop' => $oVisitor->GetSourceObject('shop'),
             'oLocal' => $oVisitor->GetSourceObject('local'),
             'oCurrency' => $oVisitor->GetSourceObject('currency'),
-        );
+        ];
         $additionalParameter = array_merge($itemMapperBaseData, $additionalParameter);
         $oVisitor->SetMappedValue('itemsMappedData', $this->mapItems($oVisitor, $items, $additionalParameter));
         $oVisitor->SetMappedValue('legacyItemView', '/common/teaser/standard-with-hover.html.twig');
     }
 
     /**
-     * @param IMapperVisitorRestricted $visitor
-     * @param TdbShopArticle[]         $itemList
-     * @param array                    $input
+     * @param \TdbShopArticle[] $itemList
      *
      * @return array
      *
-     * @throws MapperException
+     * @throws \MapperException
      */
-    private function mapItems(IMapperVisitorRestricted $visitor, array $itemList, array $input)
+    private function mapItems(\IMapperVisitorRestricted $visitor, array $itemList, array $input)
     {
         $input['oObject'] = null;
-        $newItemList = array();
+        $newItemList = [];
         foreach ($itemList as $item) {
             $input['oObject'] = $item;
             $newItemList[] = $visitor->runMapperChainOn('item.standard', $input);

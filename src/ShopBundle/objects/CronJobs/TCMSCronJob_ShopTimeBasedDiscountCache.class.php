@@ -14,7 +14,7 @@
  * note: in order to be able to note the change, we need to know the discounts "real" active state - or rather,
  * we need to know, if the discount has been processed for the current time window so we avoid clearing the cache on each call.
  *
-/**/
+ * /**/
 class TCMSCronJob_ShopTimeBasedDiscountCache extends TdbCmsCronjobs
 {
     /**
@@ -23,7 +23,7 @@ class TCMSCronJob_ShopTimeBasedDiscountCache extends TdbCmsCronjobs
     protected function _ExecuteCron()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedToday = $connection->quote(date('Y-m-d H:i:s'));
 

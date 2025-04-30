@@ -3,13 +3,12 @@
 namespace ChameleonSystem\ShopRatingServiceBundle\Entity;
 
 use ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia;
-use DateTime;
 
 class PkgShopRatingService
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldBoolean
         /** @var bool - Active */
@@ -25,8 +24,7 @@ class PkgShopRatingService
         private bool $ratingsContainHtml = false,
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Icon */
-        private ?CmsMedia $iconCmsMedia = null
-        ,
+        private ?CmsMedia $iconCmsMedia = null,
         // TCMSFieldVarchar
         /** @var string - Shop URL */
         private string $shopUrl = '',
@@ -67,8 +65,8 @@ class PkgShopRatingService
         /** @var string - Email provider */
         private string $serviceEmail = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Current date of rating */
-        private ?DateTime $currentRatingDate = null,
+        /** @var \DateTime|null - Current date of rating */
+        private ?\DateTime $currentRatingDate = null,
         // TCMSFieldVarchar
         /** @var string - Class */
         private string $class = '',
@@ -118,7 +116,6 @@ class PkgShopRatingService
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -131,7 +128,6 @@ class PkgShopRatingService
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSystemName(): string
@@ -146,7 +142,6 @@ class PkgShopRatingService
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isRatingsContainHtml(): bool
     {
@@ -159,7 +154,6 @@ class PkgShopRatingService
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookupMedia
     public function getIconCmsMedia(): ?CmsMedia
@@ -174,7 +168,6 @@ class PkgShopRatingService
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getShopUrl(): string
     {
@@ -187,7 +180,6 @@ class PkgShopRatingService
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getRatingUrl(): string
@@ -202,7 +194,6 @@ class PkgShopRatingService
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getRatingApiId(): string
     {
@@ -215,7 +206,6 @@ class PkgShopRatingService
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAffiliateValue(): string
@@ -230,7 +220,6 @@ class PkgShopRatingService
         return $this;
     }
 
-
     // TCMSFieldText
     public function getEmailText(): string
     {
@@ -243,7 +232,6 @@ class PkgShopRatingService
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getPosition(): int
@@ -258,7 +246,6 @@ class PkgShopRatingService
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getWeight(): string
     {
@@ -271,7 +258,6 @@ class PkgShopRatingService
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getNumberOfTimesUsed(): int
@@ -286,7 +272,6 @@ class PkgShopRatingService
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getLastUsedYearWeek(): int
     {
@@ -299,7 +284,6 @@ class PkgShopRatingService
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isAllowImport(): bool
@@ -314,7 +298,6 @@ class PkgShopRatingService
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isAllowSendingEmails(): bool
     {
@@ -327,7 +310,6 @@ class PkgShopRatingService
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getCurrentRating(): string
@@ -342,7 +324,6 @@ class PkgShopRatingService
         return $this;
     }
 
-
     // TCMSFieldEmail
     public function getServiceEmail(): string
     {
@@ -356,20 +337,18 @@ class PkgShopRatingService
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getCurrentRatingDate(): ?DateTime
+    public function getCurrentRatingDate(): ?\DateTime
     {
         return $this->currentRatingDate;
     }
 
-    public function setCurrentRatingDate(?DateTime $currentRatingDate): self
+    public function setCurrentRatingDate(?\DateTime $currentRatingDate): self
     {
         $this->currentRatingDate = $currentRatingDate;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClass(): string
@@ -384,7 +363,6 @@ class PkgShopRatingService
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassSubtype(): string
     {
@@ -398,7 +376,6 @@ class PkgShopRatingService
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getClassType(): string
     {
@@ -411,6 +388,4 @@ class PkgShopRatingService
 
         return $this;
     }
-
-
 }

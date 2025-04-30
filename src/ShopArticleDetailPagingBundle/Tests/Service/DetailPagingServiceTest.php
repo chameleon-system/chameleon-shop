@@ -52,11 +52,11 @@ class DetailPagingServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->listResults = array(
+        $this->listResults = [
             'firstPageUrl' => $this->dataProviderListResult(0, 'secondPageUrl', null),
             'secondPageUrl' => $this->dataProviderListResult(1, 'thirdPageUrl', 'firstPageUrl'),
             'thirdPageUrl' => $this->dataProviderListResult(2, null, 'secondPageUrl'),
-        );
+        ];
     }
 
     protected function tearDown(): void
@@ -75,12 +75,12 @@ class DetailPagingServiceTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dataProviderListResultForNextItem
      *
-     * @param string            $currentItemId
-     * @param ListItemInterface $expectedItem
+     * @param string $currentItemId
      */
-    public function it_should_return_the_next_item($currentListPageURL, $currentItemId, $expectedListPageUrl, $expectedItemId)
+    public function itShouldReturnTheNextItem($currentListPageURL, $currentItemId, $expectedListPageUrl, $expectedItemId)
     {
         $this->given_that_the_pager_is_in_spot('pagerSpotName');
         $this->given_that_the_list_is_in_spot('spotname');
@@ -96,12 +96,12 @@ class DetailPagingServiceTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dataProviderListResultForPreviousItem
      *
-     * @param string            $currentItemId
-     * @param ListItemInterface $expectedItem
+     * @param string $currentItemId
      */
-    public function it_should_return_the_previous_item($currentListPageURL, $currentItemId, $expectedListPageUrl, $expectedItemId)
+    public function itShouldReturnThePreviousItem($currentListPageURL, $currentItemId, $expectedListPageUrl, $expectedItemId)
     {
         $this->given_that_the_pager_is_in_spot('pagerSpotName');
         $this->given_that_the_list_is_in_spot('spotname');
@@ -118,7 +118,7 @@ class DetailPagingServiceTest extends TestCase
     /**
      * @test
      */
-    public function it_should_return_the_back_to_list_link()
+    public function itShouldReturnTheBackToListLink()
     {
         $this->given_that_the_pager_is_in_spot('pagerSpotName');
         $this->given_that_the_list_is_in_spot('spotname');
@@ -166,10 +166,10 @@ class DetailPagingServiceTest extends TestCase
         $requestToListUrlConverter->getListUrl()->willReturn($this->currentListPageUrl);
         $listSpotName = $this->listSpotName;
         $requestToListUrlConverter->getPagerParameter($this->listSpotName, Argument::any())->will(function ($args, $requestToListUrlConverter) use ($listSpotName) {
-            return array(
+            return [
                     RequestToListUrlConverterInterface::URL_PARAMETER_SPOT_NAME => $listSpotName,
                     RequestToListUrlConverterInterface::URL_PARAMETER_LIST_URL => $args[1],
-                );
+                ];
         }
         );
 
@@ -208,126 +208,126 @@ class DetailPagingServiceTest extends TestCase
 
     public function dataProviderListResultForNextItem()
     {
-        return array(
-            array(
+        return [
+            [
                 'firstPageUrl',
                 'page0-FIRST-ITEM',
                 'firstPageUrl',
                 'page0-SECOND-ITEM',
-            ),
-            array(
+            ],
+            [
                 'firstPageUrl',
                 'page0-INNER-ITEM',
                 'firstPageUrl',
                 'page0-INNER-ITEM-RIGHT',
-            ),
-            array(
+            ],
+            [
                 'firstPageUrl',
                 'page0-LAST-ITEM',
                 'secondPageUrl',
                 'page1-FIRST-ITEM',
-            ),
+            ],
 
-            array(
+            [
                 'secondPageUrl',
                 'page1-FIRST-ITEM',
                 'secondPageUrl',
                 'page1-SECOND-ITEM',
-            ),
-            array(
+            ],
+            [
                 'secondPageUrl',
                 'page1-INNER-ITEM',
                 'secondPageUrl',
                 'page1-INNER-ITEM-RIGHT',
-            ),
-            array(
+            ],
+            [
                 'secondPageUrl',
                 'page1-LAST-ITEM',
                 'thirdPageUrl',
                 'page2-FIRST-ITEM',
-            ),
+            ],
 
-            array(
+            [
                 'thirdPageUrl',
                 'page2-FIRST-ITEM',
                 'thirdPageUrl',
                 'page2-SECOND-ITEM',
-            ),
-            array(
+            ],
+            [
                 'thirdPageUrl',
                 'page2-INNER-ITEM',
                 'thirdPageUrl',
                 'page2-INNER-ITEM-RIGHT',
-            ),
-            array(
+            ],
+            [
                 'thirdPageUrl',
                 'page2-LAST-ITEM',
                 null,
                 null,
-            ),
-        );
+            ],
+        ];
     }
 
     public function dataProviderListResultForPreviousItem()
     {
-        return array(
-            array(
+        return [
+            [
                 'firstPageUrl',
                 'page0-FIRST-ITEM',
                 null,
                 null,
-            ),
-            array(
+            ],
+            [
                 'firstPageUrl',
                 'page0-INNER-ITEM',
                 'firstPageUrl',
                 'page0-INNER-ITEM-LEFT',
-            ),
-            array(
+            ],
+            [
                 'firstPageUrl',
                 'page0-LAST-ITEM',
                 'firstPageUrl',
                 'page0-SECOND-LAST-ITEM',
-            ),
+            ],
 
-            array(
+            [
                 'secondPageUrl',
                 'page1-FIRST-ITEM',
                 'firstPageUrl',
                 'page0-LAST-ITEM',
-            ),
-            array(
+            ],
+            [
                 'secondPageUrl',
                 'page1-INNER-ITEM',
                 'secondPageUrl',
                 'page1-INNER-ITEM-LEFT',
-            ),
-            array(
+            ],
+            [
                 'secondPageUrl',
                 'page1-LAST-ITEM',
                 'secondPageUrl',
                 'page1-SECOND-LAST-ITEM',
-            ),
+            ],
 
-            array(
+            [
                 'thirdPageUrl',
                 'page2-FIRST-ITEM',
                 'secondPageUrl',
                 'page1-LAST-ITEM',
-            ),
-            array(
+            ],
+            [
                 'thirdPageUrl',
                 'page2-INNER-ITEM',
                 'thirdPageUrl',
                 'page2-INNER-ITEM-LEFT',
-            ),
-            array(
+            ],
+            [
                 'thirdPageUrl',
                 'page2-LAST-ITEM',
                 'thirdPageUrl',
                 'page2-SECOND-LAST-ITEM',
-            ),
-        );
+            ],
+        ];
     }
 
     private function dataProviderListResult($page, $nextPageUrl, $previousPageUrl)
@@ -337,8 +337,8 @@ class DetailPagingServiceTest extends TestCase
         $listResult->getNextPageUrl()->willReturn($nextPageUrl);
         $listResult->getPreviousPageUrl()->willReturn($previousPageUrl);
 
-        $input = array('FIRST-ITEM', 'SECOND-ITEM', 'INNER-ITEM-LEFT', 'INNER-ITEM', 'INNER-ITEM-RIGHT', 'SECOND-LAST-ITEM', 'LAST-ITEM');
-        $items = array();
+        $input = ['FIRST-ITEM', 'SECOND-ITEM', 'INNER-ITEM-LEFT', 'INNER-ITEM', 'INNER-ITEM-RIGHT', 'SECOND-LAST-ITEM', 'LAST-ITEM'];
+        $items = [];
         foreach ($input as $itemId) {
             $id = 'page'.$page.'-'.$itemId;
             $items[$id] = $this->dataProviderHelperCreateItem($id);
@@ -376,7 +376,7 @@ class DetailPagingServiceTest extends TestCase
     private function the_returned_items_url_should_contain_the_paging_module_relevant_parameters($expectedListUrl)
     {
         $parsedUrl = parse_url($this->itemFound->getUrl(), PHP_URL_QUERY);
-        $urlParameters = array();
+        $urlParameters = [];
         parse_str($parsedUrl, $urlParameters);
 
         $this->assertTrue(isset($urlParameters[RequestToListUrlConverterInterface::URL_PARAMETER_LIST_URL]), 'item links missing list url');

@@ -6,15 +6,14 @@ class PkgShopFooterCategory
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Main category / heading */
         private string $name = '',
         // TCMSFieldExtendedLookup
         /** @var ShopCategory|null - Product category */
-        private ?ShopCategory $shopCategory = null
-        ,
+        private ?ShopCategory $shopCategory = null,
         // TCMSFieldPosition
         /** @var int - Sorting */
         private int $sortOrder = 0,
@@ -61,7 +60,6 @@ class PkgShopFooterCategory
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getShopCategory(): ?ShopCategory
     {
@@ -74,7 +72,6 @@ class PkgShopFooterCategory
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getSortOrder(): int
@@ -89,7 +86,6 @@ class PkgShopFooterCategory
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getShop(): ?Shop
     {
@@ -102,6 +98,4 @@ class PkgShopFooterCategory
 
         return $this;
     }
-
-
 }

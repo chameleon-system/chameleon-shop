@@ -30,12 +30,10 @@ class StateRequestExtractorTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderRequestData
      *
-     * @param $requestData
-     * @param $expectedReturnData
+     * @dataProvider dataProviderRequestData
      */
-    public function it_should_extract_the_active_search_query($requestData, $expectedReturnData)
+    public function itShouldExtractTheActiveSearchQuery($requestData, $expectedReturnData)
     {
         $this->given_a_state_request_extractor();
         $this->given_request_data($requestData);
@@ -55,7 +53,7 @@ class StateRequestExtractorTest extends TestCase
 
     private function when_we_call_extract()
     {
-        $this->returnData = $this->extractor->extract(array(), $this->requestData, 'spotname');
+        $this->returnData = $this->extractor->extract([], $this->requestData, 'spotname');
     }
 
     private function then_we_expect_return_data_matching($expectedReturnData)
@@ -65,23 +63,23 @@ class StateRequestExtractorTest extends TestCase
 
     public function dataProviderRequestData()
     {
-        return array(
-            array(
-                array('foo' => 'bar'),
-                array(),
-            ),
-            array(
-                array(\TShopModuleArticlelistFilterSearch::PARAM_QUERY => 'somequery'),
-                array(StateInterface::QUERY => array(\TShopModuleArticlelistFilterSearch::PARAM_QUERY => 'somequery')),
-            ),
-            array(
-                array(\TShopModuleArticlelistFilterSearch::URL_FILTER => array('some' => 'filter')),
-                array(StateInterface::QUERY => array(\TShopModuleArticlelistFilterSearch::URL_FILTER => array('some' => 'filter'))),
-            ),
-            array(
-                array(\TShopModuleArticlelistFilterSearch::PARAM_QUERY => 'somequery', \TShopModuleArticlelistFilterSearch::URL_FILTER => array('some' => 'filter')),
-                array(StateInterface::QUERY => array(\TShopModuleArticlelistFilterSearch::PARAM_QUERY => 'somequery', \TShopModuleArticlelistFilterSearch::URL_FILTER => array('some' => 'filter'))),
-            ),
-        );
+        return [
+            [
+                ['foo' => 'bar'],
+                [],
+            ],
+            [
+                [\TShopModuleArticlelistFilterSearch::PARAM_QUERY => 'somequery'],
+                [StateInterface::QUERY => [\TShopModuleArticlelistFilterSearch::PARAM_QUERY => 'somequery']],
+            ],
+            [
+                [\TShopModuleArticlelistFilterSearch::URL_FILTER => ['some' => 'filter']],
+                [StateInterface::QUERY => [\TShopModuleArticlelistFilterSearch::URL_FILTER => ['some' => 'filter']]],
+            ],
+            [
+                [\TShopModuleArticlelistFilterSearch::PARAM_QUERY => 'somequery', \TShopModuleArticlelistFilterSearch::URL_FILTER => ['some' => 'filter']],
+                [StateInterface::QUERY => [\TShopModuleArticlelistFilterSearch::PARAM_QUERY => 'somequery', \TShopModuleArticlelistFilterSearch::URL_FILTER => ['some' => 'filter']]],
+            ],
+        ];
     }
 }

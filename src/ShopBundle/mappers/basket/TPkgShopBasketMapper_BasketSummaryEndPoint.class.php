@@ -12,7 +12,7 @@
 /**
  * collects all sum-values for the basket (tax, vouchers, discounts, shipping, etc)
  * note: always use the class WITHOUT the EndPoint (ie. use TPkgShopBasketMapper_BasketSummary).
-/**/
+ * /**/
 class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
 {
     /**
@@ -31,23 +31,23 @@ class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
         /** @var $oBasket TShopBasket */
         $oBasket = $oVisitor->GetSourceObject('oBasket');
 
-        $aData = array(
+        $aData = [
             'dSumProducts' => $oBasket->dCostArticlesTotal,
             'dSumDiscounts' => -1 * $oBasket->dCostDiscounts,
-            'aDiscountList' => array(),
+            'aDiscountList' => [],
             'dSumDiscountVouchers' => -1 * $oBasket->dCostNoneSponsoredVouchers,
-            'aDiscountVoucherList' => array(),
+            'aDiscountVoucherList' => [],
             'dSumProductsAfterDiscountsAndDiscountVouchers' => $oBasket->dCostArticlesTotalAfterDiscounts, // after discounts and sponsored vouchers
 
             'dSumShipping' => $oBasket->dCostShipping,
             'dSumPaymentSurcharge' => $oBasket->dCostPaymentMethodSurcharge,
 
             'dSumVat' => $oBasket->dCostVAT,
-            'aVatList' => array(),
+            'aVatList' => [],
             'dSumVatWithoutShipping' => $oBasket->dCostVATWithoutShipping,
 
             'dSumSponsoredVouchers' => -1 * $oBasket->dCostVouchers,
-            'aSponsoredVoucherList' => array(),
+            'aSponsoredVoucherList' => [],
             'dSumGrandTotal' => $oBasket->dCostTotal,
             'dBasketTotalWithoutSponsoredVouchers' => $oBasket->dCostTotal + $oBasket->dCostVouchers,
 
@@ -55,7 +55,7 @@ class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
             'iNumberOfProducts' => $oBasket->dTotalNumberOfArticles,
             'shippingCountryKnown' => false,
             'oDefaultCountry' => $this->getShop()->GetFieldDataCountry(),
-        );
+        ];
 
         $user = $this->getActiveUser();
         $shippingAddress = $user->GetShippingAddress();
@@ -68,10 +68,10 @@ class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
         if (null !== $oDiscountList) {
             $oDiscountList->GoToStart();
             while ($oDiscount = $oDiscountList->Next()) {
-                $aDiscount = array(
+                $aDiscount = [
                     'sName' => $oDiscount->fieldName,
                     'dValue' => -1 * $oDiscount->GetValue(),
-                );
+                ];
                 $aData['aDiscountList'][] = $aDiscount;
             }
             $oDiscountList->GoToStart();
@@ -100,11 +100,11 @@ class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
                 if (0 == $dVatValue) {
                     continue;
                 }
-                $aVat = array(
+                $aVat = [
                     'sName' => $oVat->fieldName,
                     'iPercent' => $oVat->fieldVatPercent,
                     'dValue' => $dVatValue,
-                );
+                ];
                 $aData['aVatList'][] = $aVat;
             }
             $oVatList->GoToStart();
@@ -122,8 +122,8 @@ class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
      */
     protected function getActiveUser()
     {
-        /** @var \ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface $userProvider */
-        $userProvider = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        /** @var ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface $userProvider */
+        $userProvider = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
 
         return $userProvider->getActiveUser();
     }
@@ -133,8 +133,8 @@ class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
      */
     protected function getShop()
     {
-        /** @var \ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface $shopProvider */
-        $shopProvider = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        /** @var ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface $shopProvider */
+        $shopProvider = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
 
         return $shopProvider->getActiveShop();
     }
@@ -175,13 +175,13 @@ class TPkgShopBasketMapper_BasketSummaryEndPoint extends AbstractViewMapper
     {
         $oVoucherSeries = $oVoucher->GetFieldShopVoucherSeries();
         $voucherValue = -1 * $oVoucher->GetValue();
-        $aVoucher = array(
+        $aVoucher = [
             'sCode' => $oVoucher->fieldCode,
             'sName' => $oVoucherSeries->fieldName,
             'dValue' => $voucherValue,
             'dValueInOrderCurrency' => $voucherValue,
             'sRemoveFromBasketLink' => $oVoucher->GetRemoveFromBasketLink(),
-        );
+        ];
 
         return $aVoucher;
     }

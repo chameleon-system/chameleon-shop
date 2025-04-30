@@ -49,7 +49,7 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
         $oUser = TdbDataExtranetUser::GetInstance();
         if (!empty($sShippingAdrId)) {
             $oAdr = TdbDataExtranetUserAddress::GetNewInstance();
-            if ($oAdr->LoadFromFields(array('data_extranet_user_id' => $oUser->id, 'id' => $sShippingAdrId))) {
+            if ($oAdr->LoadFromFields(['data_extranet_user_id' => $oUser->id, 'id' => $sShippingAdrId])) {
                 $oAdr->SetIsDhlPackstation($bIsDhlPackstation);
                 $this->SetShippingAddressData($oAdr->sqlData);
                 $oUser->GetShippingAddress(true);
@@ -76,7 +76,7 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
             }
             if (!empty($sBillingAdrId) && !empty($aShipping) && 0 == strcmp($sBillingAdrId, $sShippingAdrId)) {
                 $bChangedBillingAddress = true;
-                $aNewBilling = array('selectedAddressId' => $this->GetAnotherAddressFromUser($sBillingAdrId, TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING));
+                $aNewBilling = ['selectedAddressId' => $this->GetAnotherAddressFromUser($sBillingAdrId, TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING)];
                 $this->SetBillingAddressData($aNewBilling);
             }
 
@@ -123,7 +123,7 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
      */
     protected function GetAnotherAddressFromUser($sReferenceAddressId, $sForAddressForm = TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING)
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sAlternativeAddressId = 'new';
         if (TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING == $sForAddressForm) {
@@ -177,7 +177,7 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
      */
     protected function GetShippingAddressCheckboxFields()
     {
-        return array('is_dhl_packstation');
+        return ['is_dhl_packstation'];
     }
 
     /**
@@ -196,8 +196,8 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
             if ('new' !== $newShippingAddressId) {
                 $this->updateStepAddressDataForAddressId($newShippingAddressId, $newBillingAddressId);
 
-                if ($newShippingAddressId === $newBillingAddressId &&
-                    true === $this->isShipToBillingAddressAndBillingAddressIsPackstation()
+                if ($newShippingAddressId === $newBillingAddressId
+                    && true === $this->isShipToBillingAddressAndBillingAddressIsPackstation()
                 ) {
                     $this->SetShipToBillingAddress('0');
                     $newBillingAddress = $oUser->GetBillingAddress();
@@ -217,8 +217,8 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
      */
     private function isShipToBillingAddressAndBillingAddressIsPackstation()
     {
-        return '1' === $this->GetBillingAddressData('is_dhl_packstation') &&
-                1 === (int) $this->GetShipToBillingAddress();
+        return '1' === $this->GetBillingAddressData('is_dhl_packstation')
+                && 1 === (int) $this->GetShipToBillingAddress();
     }
 
     /**
@@ -251,6 +251,6 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
      */
     private function getFlashMessageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 }

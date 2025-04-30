@@ -14,39 +14,38 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
     /**
      * @var TdbShopOrder
      */
-    private $order = null;
+    private $order;
     /**
      * @var string
      */
-    private $shopOrderStatusCode = null;
+    private $shopOrderStatusCode;
 
     /**
      * @var TdbShopOrderStatusCode
      */
-    private $shopOrderStatusCodeObject = null;
+    private $shopOrderStatusCodeObject;
 
     /**
      * @var int
      */
-    private $statusTimestamp = null;
+    private $statusTimestamp;
     /**
      * @var string|null
      */
-    private $info = null;
+    private $info;
 
     /**
      * @var TPkgShopOrderStatusItemData[]
      */
-    private $items = array();
+    private $items = [];
 
-    /** @var null | \Symfony\Component\HttpFoundation\ParameterBag */
-    private $statusData = null;
+    /** @var Symfony\Component\HttpFoundation\ParameterBag|null */
+    private $statusData;
 
     /**
-     * @param TdbShopOrder $order
-     * @param string       $shopOrderStatusCode - system_name of shop_order_status_code
-     * @param int          $iStatusTimestamp
-     * @param string|null  $info
+     * @param string $shopOrderStatusCode - system_name of shop_order_status_code
+     * @param int $iStatusTimestamp
+     * @param string|null $info
      */
     public function __construct(TdbShopOrder $order, $shopOrderStatusCode, $iStatusTimestamp, $info = null)
     {
@@ -70,7 +69,7 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
     }
 
     /**
-     * @param \TdbShopOrder $shopOrder
+     * @param TdbShopOrder $shopOrder
      *
      * @return $this
      */
@@ -106,8 +105,6 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
     }
 
     /**
-     * @param TPkgShopOrderStatusItemData $item
-     *
      * @return $this
      */
     public function addItem(TPkgShopOrderStatusItemData $item)
@@ -126,7 +123,7 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
     }
 
     /**
-     * @return \TdbShopOrder
+     * @return TdbShopOrder
      */
     public function getOrder()
     {
@@ -160,9 +157,9 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
     /**
      * @param bool $bRefresh
      *
-     * @throws TPkgShopOrderStatusException_OrderStatusCodeNotFound
-     *
      * @return TdbShopOrderStatusCode
+     *
+     * @throws TPkgShopOrderStatusException_OrderStatusCodeNotFound
      */
     public function getShopOrderStatusCodeObject($bRefresh = false)
     {
@@ -171,15 +168,15 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
         }
         if (null === $this->shopOrderStatusCodeObject) {
             $this->shopOrderStatusCodeObject = TdbShopOrderStatusCode::GetNewInstance();
-            $aFilter = array(
+            $aFilter = [
                 'shop_id' => $this->getOrder()->fieldShopId,
                 'system_name' => $this->getShopOrderStatusCode(),
-            );
+            ];
             if (false === $this->shopOrderStatusCodeObject->LoadFromFields($aFilter)) {
                 $shopId = $this->getOrder()->fieldShopId;
                 $e = new TPkgShopOrderStatusException_OrderStatusCodeNotFound(
                     "no order status code in shop [{$shopId}] with system_name [{$this->getShopOrderStatusCode()}]",
-                    array('orderStatus' => $this)
+                    ['orderStatus' => $this]
                 );
                 $e->setStatusCode($this->getShopOrderStatusCode())
                     ->setShopId($this->getOrder()->fieldShopId);
@@ -191,7 +188,7 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\ParameterBag|null
+     * @return Symfony\Component\HttpFoundation\ParameterBag|null
      */
     public function getStatusData()
     {
@@ -199,7 +196,7 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\ParameterBag $statusData
+     * @param Symfony\Component\HttpFoundation\ParameterBag $statusData
      *
      * @return $this
      */
@@ -228,15 +225,15 @@ class TPkgShopOrderStatusDataEndPoint extends AbstractPkgCmsCoreParameterContain
      */
     public function getDataAsTdbArray()
     {
-        $data = (null === $this->getStatusData()) ? array() : $this->getStatusData()->all();
+        $data = (null === $this->getStatusData()) ? [] : $this->getStatusData()->all();
         $data = serialize($data);
 
-        return array(
+        return [
             'shop_order_id' => $this->getOrder()->id,
             'shop_order_status_code_id' => $this->getShopOrderStatusCodeObject()->id,
             'status_date' => date('Y-m-d H:i:s', $this->getStatusTimestamp()),
             'info' => $this->getInfo(),
             'data' => $data,
-        );
+        ];
     }
 }

@@ -8,12 +8,11 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookup
         /** @var CmsTplModuleInstance|null - Belongs to module */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldBoolean
         /** @var bool - Only signed in users are allowed to write reviews */
         private bool $allowWriteReviewLoggedinUsersOnly = true,
@@ -90,7 +89,6 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isAllowWriteReviewLoggedinUsersOnly(): bool
     {
@@ -103,7 +101,6 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isAllowShowReviewLoggedinUsersOnly(): bool
@@ -118,7 +115,6 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isManageReviews(): bool
     {
@@ -131,7 +127,6 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isAllowRateReview(): bool
@@ -146,7 +141,6 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isAllowReportReviews(): bool
     {
@@ -159,7 +153,6 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isAllowCommentReviews(): bool
@@ -174,7 +167,6 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getRatingCount(): int
     {
@@ -187,7 +179,6 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getCountShowReviews(): int
@@ -202,7 +193,6 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getOptionShowAuthorName(): string
     {
@@ -215,7 +205,6 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTitle(): string
@@ -230,7 +219,6 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getIntroText(): string
     {
@@ -244,7 +232,6 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getOutroText(): string
     {
@@ -257,6 +244,4 @@ class PkgShopArticleReviewModuleShopArticleReviewConfiguration
 
         return $this;
     }
-
-
 }

@@ -42,14 +42,13 @@ class TPkgShopMapper_OrderArticleList extends AbstractViewMapper
     /**
      * get the value map for the whole article list (order items) of the order.
      *
-     * @param TdbShopOrder $oOrder
      * @param bool $bCachingEnabled
      *
      * @return array
      */
     protected function getArticleList(TdbShopOrder $oOrder, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aArticleList = array();
+        $aArticleList = [];
         $oOrderItemList = $oOrder->GetFieldShopOrderItemList();
         while ($oOrderItem = $oOrderItemList->Next()) {
             if ($bCachingEnabled) {
@@ -64,14 +63,13 @@ class TPkgShopMapper_OrderArticleList extends AbstractViewMapper
     /**
      * the the value map for one article (order item).
      *
-     * @param TdbShopOrderItem $oOrderItem
      * @param bool $bCachingEnabled
      *
      * @return array
      */
     protected function getArticle(TdbShopOrderItem $oOrderItem, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aArticle = array();
+        $aArticle = [];
         $oArticle = $oOrderItem->GetFieldShopArticle();
 
         $aArticle['iAmount'] = $oOrderItem->fieldOrderAmountFormated;
@@ -102,10 +100,8 @@ class TPkgShopMapper_OrderArticleList extends AbstractViewMapper
     /**
      * get the image id of connected article for given order item in the dimensions defined by the given image size identifier.
      *
-     * @param TdbShopArticle                $oArticle
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     * @param bool                          $bCachingEnabled
-     * @param string                        $sImageSizeName
+     * @param bool $bCachingEnabled
+     * @param string $sImageSizeName
      *
      * @return string empty string or image id
      */
@@ -141,16 +137,15 @@ class TPkgShopMapper_OrderArticleList extends AbstractViewMapper
     /**
      * Get variant data if article is variant.
      *
-     * @param TdbShopArticle                $oArticle
-     * @param array                         $aData
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     * @param bool                          $bCachingEnabled
+     * @param TdbShopArticle $oArticle
+     * @param array $aData
+     * @param bool $bCachingEnabled
      *
      * @return array
      */
     protected function GetVariantInfo($oArticle, $aData, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aVariantTypeList = array();
+        $aVariantTypeList = [];
         if ($oArticle) {
             if ($oArticle->IsVariant()) {
                 $oVariantSet = $oArticle->GetFieldShopVariantSet();
@@ -166,20 +161,20 @@ class TPkgShopMapper_OrderArticleList extends AbstractViewMapper
                     if ($oValue && $bCachingEnabled) {
                         $oCacheTriggerManager->addTrigger($oValue->table, $oValue->id);
                     }
-                    $aType = array(
+                    $aType = [
                         'sTitle' => $oVariantType->fieldName,
                         'sSystemName' => $oVariantType->fieldIdentifier,
                         'cms_media_id' => $oVariantType->fieldCmsMediaId,
-                        'aItems' => array(),
-                    );
-                    $aItems = array();
-                    $aItem = array(
+                        'aItems' => [],
+                    ];
+                    $aItems = [];
+                    $aItem = [
                         'sTitle' => $oValue->fieldName,
                         'sColor' => $oValue->fieldColorCode,
                         'cms_media_id' => $oValue->fieldCmsMediaId,
                         'bIsActive' => false,
                         'sSelectLink' => '',
-                    );
+                    ];
                     $aItems[] = $aItem;
                     $aType['aItems'] = $aItems;
                     $aVariantTypeList[] = $aType;

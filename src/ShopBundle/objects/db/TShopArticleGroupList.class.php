@@ -21,7 +21,7 @@ class TShopArticleGroupList extends TAdbShopArticleGroupList
     public static function GetArticleGroups($iArticleId)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedArticleId = $connection->quote($iArticleId);
 
@@ -36,6 +36,7 @@ class TShopArticleGroupList extends TAdbShopArticleGroupList
 
         return TdbShopArticleGroupList::GetList($query);
     }
+
     /**
      * returns the max vat from the group list.
      *

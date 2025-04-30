@@ -13,16 +13,16 @@ namespace ChameleonSystem\ShopArticleDetailPagingBundle\Interfaces;
 
 interface RequestToListUrlConverterInterface
 {
-    const URL_PARAMETER_SPOT_NAME = '_ref';
-    const URL_PARAMETER_LIST_URL = 'url';
+    public const URL_PARAMETER_SPOT_NAME = '_ref';
+    public const URL_PARAMETER_LIST_URL = 'url';
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getListUrl();
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getListSpotName();
 

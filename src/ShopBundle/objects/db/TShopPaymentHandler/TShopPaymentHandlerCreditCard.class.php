@@ -13,10 +13,10 @@
  * the paymenthandlers are used to handle the different payment methods. They ensure that the right
  * information is collected from the user, and that the payment is executed (as may be the case for online payment)
  * Note that the default handler has no functionality. it must be extended in order to do anything usefull.
-/**/
+ * /**/
 class TShopPaymentHandlerCreditCard extends TdbShopPaymentHandler
 {
-    const MSG_MANAGER_NAME = 'TShopPaymentHandlerCreditCardMSG';
+    public const MSG_MANAGER_NAME = 'TShopPaymentHandlerCreditCardMSG';
 
     protected function GetViewPath()
     {
@@ -45,8 +45,6 @@ class TShopPaymentHandlerCreditCard extends TdbShopPaymentHandler
      * return true if the user data is valid
      * data will be passed as an array.
      *
-     * @param array $aUserData - the user data
-     *
      * @return bool
      */
     public function ValidateUserInput()
@@ -72,8 +70,7 @@ class TShopPaymentHandlerCreditCard extends TdbShopPaymentHandler
     /**
      * executes payment for order.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -95,7 +92,7 @@ class TShopPaymentHandlerCreditCard extends TdbShopPaymentHandler
     public function SaveUserPaymentDataToOrder($iOrderId)
     {
         $aPayment = $this->aPaymentUserData;
-        $this->aPaymentUserData = array();
+        $this->aPaymentUserData = [];
 
         $this->aPaymentUserData['creditCardType'] = $aPayment['creditCardType'];
         $this->aPaymentUserData['creditCardNumber'] = str_pad(substr($aPayment['creditCardNumber'], 0, 4), 10, '*');

@@ -29,7 +29,7 @@ class TShopModuleArticlelistFilterAllArticlesOfActiveNonLeafCategory extends Tdb
                 LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
                     where 1=0';
 
-        $oActiveCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+        $oActiveCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
         if (!$oActiveCategory) {
             return $sQuery;
         }
@@ -42,7 +42,7 @@ class TShopModuleArticlelistFilterAllArticlesOfActiveNonLeafCategory extends Tdb
         return parent::GetListQueryBase($oListConfig);
     }
 
-//    return parent::PreventUseOfParentObjectWhenNoRecordsAreFound();
+    //    return parent::PreventUseOfParentObjectWhenNoRecordsAreFound();
     public function PreventUseOfParentObjectWhenNoRecordsAreFound()
     {
         return true;

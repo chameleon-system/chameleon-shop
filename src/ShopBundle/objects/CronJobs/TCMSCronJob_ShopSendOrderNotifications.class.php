@@ -13,12 +13,12 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 
 /**
  * resend unsent order emails flagged by TShopOrder (try n times).
-/**/
+ * /**/
 class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
 {
-    const MAX_AGE_DAYS = 5; //only fetch orders newer than n-days
-    const MAX_TRIES = 3; //try to resend notification n-times
-    const MAIL_SEND_FAIL = 'shop-confirm-order-failed';
+    public const MAX_AGE_DAYS = 5; // only fetch orders newer than n-days
+    public const MAX_TRIES = 3; // try to resend notification n-times
+    public const MAIL_SEND_FAIL = 'shop-confirm-order-failed';
     /**
      * @var string
      */
@@ -41,7 +41,7 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
     protected function _ExecuteCron()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sMinDate = date('Y-m-d H:i:s', time() - (self::MAX_AGE_DAYS * 24 * 3600));
 
@@ -79,13 +79,12 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
                      WHERE `id` = {$quotedOrderId}
                 ";
                     $connection->executeStatement($updateQuery);
-
                 } else {
                     $iAttemps = $oMail->GetData('iAttemptsToSend');
                     if ($iAttemps > self::MAX_TRIES) {
-                        //give up, send notification
+                        // give up, send notification
                         $sSendToMail = $oMail->GetData('sSendToMail');
-                        $sText = date('Y-m-d H:i:s') . ' - ' . $sSendToMail . ' - Send E-Mail Error';
+                        $sText = date('Y-m-d H:i:s').' - '.$sSendToMail.' - Send E-Mail Error';
                         TTools::WriteLogEntrySimple($sText, 1, __FILE__, __LINE__);
 
                         $sNewTargetMail = $this->developmentEmailAddress;
@@ -98,7 +97,7 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
 
                         $oMail->ChangeToAddress($sNewTargetMail, 'SendToName');
                         $oMail->SetSubject(
-                            \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
+                            ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
                                 'chameleon_system_shop.cron_resend_order_mail.subject',
                                 [
                                     '%mail%' => $sSendToMail,
@@ -117,9 +116,8 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
                          WHERE `id` = {$quotedOrderId}
                     ";
                         $connection->executeStatement($updateQuery);
-
                     } else {
-                        $iAttemps++;
+                        ++$iAttemps;
                         $oMail->AddData('iAttemptsToSend', $iAttemps);
 
                         $quotedOrderId = $connection->quote($oShopOrder->id);
@@ -135,7 +133,7 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
                 }
             } else {
                 $bOrderSend = false;
-                //we don't have a mail object, most likely system crashed before calling SendOrderNotifaction => try sending without the mail object
+                // we don't have a mail object, most likely system crashed before calling SendOrderNotifaction => try sending without the mail object
 
                 $oOrderItems = $oShopOrder->GetFieldShopOrderItemList();
                 if (0 == $oOrderItems->Length() || $oOrderItems->FindItemWithProperty('fieldShopArticleId', '') || $oOrderItems->FindItemWithProperty('fieldShopArticleId', '0')) {
@@ -150,10 +148,10 @@ class TCMSCronJob_ShopSendOrderNotifications extends TdbCmsCronjobs
                     $oMail = TDataMailProfile::GetProfile(self::MAIL_SEND_FAIL);
 
                     $aMailData = [
-                        'ordernumber'    => $oShopOrder->fieldOrdernumber,
-                        'customer_name'  => $oShopOrder->fieldAdrBillingFirstname . ' ' . $oShopOrder->fieldAdrBillingLastname,
+                        'ordernumber' => $oShopOrder->fieldOrdernumber,
+                        'customer_name' => $oShopOrder->fieldAdrBillingFirstname.' '.$oShopOrder->fieldAdrBillingLastname,
                         'customer_email' => $oShopOrder->fieldUserEmail,
-                        'orderid'        => $oShopOrder->id,
+                        'orderid' => $oShopOrder->id,
                     ];
 
                     $oMail->AddDataArray($aMailData);

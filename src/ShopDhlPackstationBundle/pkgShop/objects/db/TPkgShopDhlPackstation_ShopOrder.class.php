@@ -15,7 +15,7 @@ class TPkgShopDhlPackstation_ShopOrder extends TPkgShopDhlPackstation_ShopOrderA
      * method can be used to modify the data saved to order before the save is executed.
      *
      * @param TShopBasket $oBasket
-     * @param array       $aOrderData
+     * @param array $aOrderData
      *
      * @return void
      */

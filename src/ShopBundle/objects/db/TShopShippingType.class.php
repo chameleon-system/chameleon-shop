@@ -17,14 +17,14 @@ class TShopShippingType extends TShopShippingTypeAutoParent
     /**
      * @var float|null
      */
-    protected $dPrice = null;
+    protected $dPrice;
 
     /**
      * holds a pointer to every entry in the basket that is affected by the shipping type.
      *
      * @var TShopBasketArticleList
      */
-    protected $oAffectedBasketArticles = null;
+    protected $oAffectedBasketArticles;
 
     /**
      * return true if this shipping type is valid for the current user / basket.
@@ -99,9 +99,9 @@ class TShopShippingType extends TShopShippingTypeAutoParent
     /**
      * return true if the shipping group is allowed for the current user.
      *
-     * @return bool
-     *
      * @param bool $bCheckShippingCountry
+     *
+     * @return bool
      */
     public function IsValidForCurrentUser($bCheckShippingCountry = true)
     {
@@ -158,7 +158,7 @@ class TShopShippingType extends TShopShippingTypeAutoParent
     }
 
     /**
-     * @param null|string $sDataCountryId
+     * @param string|null $sDataCountryId
      *
      * @return bool
      */
@@ -237,14 +237,12 @@ class TShopShippingType extends TShopShippingTypeAutoParent
      */
     protected function getShopShippingTypeDataAccess()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_shipping_type_data_access');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_shipping_type_data_access');
     }
 
     /**
      * checks if a basket article should be affected by this shipping type
      * this can only happen if the article is not affected by any other shipping type.
-     *
-     * @param TShopBasketArticle $oArticle
      *
      * @return bool
      */
@@ -301,8 +299,6 @@ class TShopShippingType extends TShopShippingTypeAutoParent
      * returns true if the list of articles is valid for the current shipping type (i.e. the number
      * of articles, weight, volume, etc).
      *
-     * @param TShopBasketArticleList $oArticleList
-     *
      * @return bool
      */
     public function ArticleListValidForShippingType(TShopBasketArticleList $oArticleList)
@@ -316,7 +312,7 @@ class TShopShippingType extends TShopShippingTypeAutoParent
             $dArticleValue = $oBasket->dCostArticlesTotalAfterDiscounts;
         } else {
             $dArticleValue = 0;
-            while($tmpItem = $oArticleList->next()) {
+            while ($tmpItem = $oArticleList->next()) {
                 $dArticleValue += $tmpItem->dPriceTotalAfterDiscount;
             }
         }
@@ -368,9 +364,9 @@ class TShopShippingType extends TShopShippingTypeAutoParent
 
                 if ('absolut' == $this->fieldValueType) {
                     $this->dPrice = $this->fieldValue;
-                    if ($this->fieldAddValueForEachArticle ||
-                        ($iTotalNumberOfArticlesInBasketThatAreExcludedFromShippingCostCalculation > 0 &&
-                         $oBasket->dTotalNumberOfArticles == $iTotalNumberOfArticlesInBasketThatAreExcludedFromShippingCostCalculation
+                    if ($this->fieldAddValueForEachArticle
+                        || ($iTotalNumberOfArticlesInBasketThatAreExcludedFromShippingCostCalculation > 0
+                         && $oBasket->dTotalNumberOfArticles == $iTotalNumberOfArticlesInBasketThatAreExcludedFromShippingCostCalculation
                         )
                     ) {
                         $this->dPrice = ($oBasket->dTotalNumberOfArticles - $iTotalNumberOfArticlesInBasketThatAreExcludedFromShippingCostCalculation) * $this->dPrice;
@@ -396,9 +392,9 @@ class TShopShippingType extends TShopShippingTypeAutoParent
 
                     if ('absolut' == $this->fieldValueType) {
                         $this->dPrice = $this->fieldValue;
-                        if ($this->fieldAddValueForEachArticle ||
-                            ($iTotalNumberOfArticlesInListThatAreExcludedFromShippingCostCalculation > 0 &&
-                             $oArticleList->dNumberOfItems == $iTotalNumberOfArticlesInListThatAreExcludedFromShippingCostCalculation
+                        if ($this->fieldAddValueForEachArticle
+                            || ($iTotalNumberOfArticlesInListThatAreExcludedFromShippingCostCalculation > 0
+                             && $oArticleList->dNumberOfItems == $iTotalNumberOfArticlesInListThatAreExcludedFromShippingCostCalculation
                             )
                         ) {
                             $this->dPrice = ($oArticleList->dNumberOfItems - $iTotalNumberOfArticlesInListThatAreExcludedFromShippingCostCalculation) * $this->dPrice;
@@ -426,13 +422,13 @@ class TShopShippingType extends TShopShippingTypeAutoParent
             $dTotalNumberOfArticles = 0;
             $oBasketArticleList->GoToStart();
             while ($oBasketArticle = $oBasketArticleList->Next()) {
-                /** @var $oBasketArticle TShopBasketArticle* */
+                /* @var $oBasketArticle TShopBasketArticle* */
                 $dTotalNumberOfArticles += $oBasketArticle->dAmount;
             }
             $dCostArticlesTotal = 0;
             $oBasketArticleList->GoToStart();
             while ($oBasketArticle = $oBasketArticleList->Next()) {
-                /** @var $oBasketArticle TShopBasketArticle* */
+                /* @var $oBasketArticle TShopBasketArticle* */
                 $dCostArticlesTotal += $oBasketArticle->dPriceTotal;
             }
 
@@ -492,6 +488,6 @@ class TShopShippingType extends TShopShippingTypeAutoParent
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

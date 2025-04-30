@@ -12,16 +12,14 @@ class ShopSearchKeywordArticle
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldExtendedLookup
         /** @var CmsLanguage|null - Language */
-        private ?CmsLanguage $cmsLanguage = null
-        ,
+        private ?CmsLanguage $cmsLanguage = null,
         // TCMSFieldVarchar
         /** @var string - Keyword */
         private string $name = '',
@@ -68,7 +66,6 @@ class ShopSearchKeywordArticle
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getCmsLanguage(): ?CmsLanguage
     {
@@ -82,7 +79,6 @@ class ShopSearchKeywordArticle
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -95,8 +91,6 @@ class ShopSearchKeywordArticle
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -129,6 +123,4 @@ class ShopSearchKeywordArticle
 
         return $this;
     }
-
-
 }

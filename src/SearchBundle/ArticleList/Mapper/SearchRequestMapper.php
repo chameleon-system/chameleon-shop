@@ -12,16 +12,13 @@
 namespace ChameleonSystem\SearchBundle\ArticleList\Mapper;
 
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
 
 class SearchRequestMapper extends \AbstractViewMapper
 {
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('shop', 'TdbShop');
         $oRequirements->NeedsSourceObject('stateObject', '\ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface');
@@ -31,9 +28,9 @@ class SearchRequestMapper extends \AbstractViewMapper
      * {@inheritdoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /** @var $shop \TdbShop */
         $shop = $oVisitor->GetSourceObject('shop');
@@ -46,13 +43,13 @@ class SearchRequestMapper extends \AbstractViewMapper
 
         $searchWasAltered = ($query !== $oSearchCache->sSearchTerm);
 
-        $aData = array(
+        $aData = [
             'searchWasAltered' => $searchWasAltered,
             'searchQueryOriginal' => $query,
             'searchQuery' => $oSearchCache->sSearchTerm,
             'spellCheckLink' => false,
             'spellCheckSuggestion' => false,
-        );
+        ];
         if (null !== $oSearchCache->sSearchTermSpellChecked) {
             $aData['spellCheckLink'] = $oSearchCache->GetSearchLinkForTerm($oSearchCache->sSearchTermSpellChecked);
             $aData['spellCheckSuggestion'] = $oSearchCache->sSearchTermSpellCheckedFormated;

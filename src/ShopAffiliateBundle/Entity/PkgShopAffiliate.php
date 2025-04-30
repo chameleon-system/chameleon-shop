@@ -10,12 +10,11 @@ class PkgShopAffiliate
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -80,7 +79,6 @@ class PkgShopAffiliate
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -93,7 +91,6 @@ class PkgShopAffiliate
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getUrlParameterName(): string
@@ -108,7 +105,6 @@ class PkgShopAffiliate
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getNumberOfSecondsValid(): int
     {
@@ -121,7 +117,6 @@ class PkgShopAffiliate
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClass(): string
@@ -136,7 +131,6 @@ class PkgShopAffiliate
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassSubtype(): string
     {
@@ -149,7 +143,6 @@ class PkgShopAffiliate
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getClassType(): string
@@ -164,7 +157,6 @@ class PkgShopAffiliate
         return $this;
     }
 
-
     // TCMSFieldText
     public function getOrderSuccessCode(): string
     {
@@ -177,8 +169,6 @@ class PkgShopAffiliate
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -211,6 +201,4 @@ class PkgShopAffiliate
 
         return $this;
     }
-
-
 }

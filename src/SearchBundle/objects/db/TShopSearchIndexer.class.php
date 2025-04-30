@@ -12,7 +12,6 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
-use Psr\Log\LoggerInterface;
 
 if (!defined('PKG_SEARCH_USE_SEARCH_QUEUE')) {
     define('PKG_SEARCH_USE_SEARCH_QUEUE', true);
@@ -330,12 +329,12 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     public function CreateIndexTables()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $aIndexTableNames = TdbShopSearchIndexer::GetAllIndexTableNames();
         $aTmpIndex = [];
         foreach ($aIndexTableNames as $sTableName => $length) {
-            $aTmpIndex['_tmp' . $sTableName] = $length;
+            $aTmpIndex['_tmp'.$sTableName] = $length;
         }
         $aIndexTableNames = $aTmpIndex;
 
@@ -363,8 +362,8 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         }
 
         // drop index fields not needed
-        $sBaseName = '_tmp' . self::INDEX_TBL_PREFIX;
-        $quotedLike = $connection->quote($sBaseName . '%');
+        $sBaseName = '_tmp'.self::INDEX_TBL_PREFIX;
+        $quotedLike = $connection->quote($sBaseName.'%');
         $query = "SHOW TABLES LIKE {$quotedLike}";
         $statement = $connection->executeQuery($query);
 
@@ -383,15 +382,15 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     protected function CopyIndexTables()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
         /* @var $logger \Psr\Log\LoggerInterface */
         $logger = ServiceLocator::get('monolog.logger.search_indexer');
 
         $logger->info('copy index tables start');
         $aIndexTableNames = TdbShopSearchIndexer::GetAllIndexTableNames();
         foreach ($aIndexTableNames as $sTableName => $iLength) {
-            $logger->info('Load data for table ' . $sTableName);
-            $sTmpTableName = '_tmp' . $sTableName;
+            $logger->info('Load data for table '.$sTableName);
+            $sTmpTableName = '_tmp'.$sTableName;
             $quotedTmpTable = $connection->quoteIdentifier($sTmpTableName);
 
             if (CMS_SEARCH_INDEX_USE_LOAD_FILE) {
@@ -403,10 +402,10 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
                     unlink($sFile);
                 }
             }
-            $logger->info('Load data for table ' . $sTableName . ' DONE');
+            $logger->info('Load data for table '.$sTableName.' DONE');
 
             if ($this->bRegenerateCompleteIndex) {
-                $logger->info('recreate index for table ' . $sTableName);
+                $logger->info('recreate index for table '.$sTableName);
 
                 $queries = [
                     "ALTER TABLE {$quotedTmpTable} ADD INDEX (`substring`, `cms_language_id`, `shop_search_field_weight_id`)",
@@ -417,7 +416,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
                     $connection->executeStatement($query);
                 }
 
-                $logger->info('recreate index for table ' . $sTableName . ' DONE');
+                $logger->info('recreate index for table '.$sTableName.' DONE');
             } else {
                 $quotedTable = $connection->quoteIdentifier($sTableName);
                 $query = "
@@ -438,7 +437,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
             $bAllowIndexRename = false;
             foreach ($aIndexTableNames as $sTableName => $iLength) {
-                $sTmpTableName = '_tmp' . $sTableName;
+                $sTmpTableName = '_tmp'.$sTableName;
                 $quotedTmpTable = $connection->quoteIdentifier($sTmpTableName);
                 $query = "SELECT COUNT(*) AS matches FROM {$quotedTmpTable}";
                 $statement = $connection->executeQuery($query);
@@ -452,17 +451,18 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
             if (false === $bAllowIndexRename) {
                 $logger->info('NO data in tmp index tables - keeping old index!');
+
                 return false;
             }
 
             foreach ($aIndexTableNames as $sTableName => $iLength) {
-                $logger->info('rename ' . $sTableName);
-                $sTmpTableName = '_tmp' . $sTableName;
+                $logger->info('rename '.$sTableName);
+                $sTmpTableName = '_tmp'.$sTableName;
                 $quotedTmpTable = $connection->quoteIdentifier($sTmpTableName);
                 $quotedTable = $connection->quoteIdentifier($sTableName);
 
                 if (TGlobal::TableExists($sTableName)) {
-                    $tmpOldTable = $connection->quoteIdentifier($sTableName . '_tmp');
+                    $tmpOldTable = $connection->quoteIdentifier($sTableName.'_tmp');
                     $query = "
                     RENAME TABLE {$quotedTable} TO {$tmpOldTable},
                                  {$quotedTmpTable} TO {$quotedTable}
@@ -475,7 +475,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
                     $query = "RENAME TABLE {$quotedTmpTable} TO {$quotedTable}";
                     $connection->executeStatement($query);
                 }
-                $logger->info('rename ' . $sTableName . ' DONE');
+                $logger->info('rename '.$sTableName.' DONE');
             }
         }
 
@@ -484,7 +484,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
         $sBaseName = self::INDEX_TBL_PREFIX;
 
         foreach (['', '_tmp'] as $prefix) {
-            $likePattern = $prefix . $sBaseName . '%';
+            $likePattern = $prefix.$sBaseName.'%';
             $quotedPattern = $connection->quote($likePattern);
             $query = "SHOW TABLES LIKE {$quotedPattern}";
             $statement = $connection->executeQuery($query);
@@ -546,7 +546,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     public static function GetSearchQuery($sSearchTerm, $aSearchTerms = null, $aFilter = [], $sLanguageId = null)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $sLanguageId = self::getLanguageService()->getActiveLanguageId();
 
@@ -617,7 +617,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
                 }
 
                 // fetch manually selected articles for search words
-                $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+                $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $oManuelArticleSelections = TdbShopSearchKeywordArticleList::GetListForShopKeywords($oShop->id, $aTerms, $sLanguageId);
                 while ($oManuelArticleSelection = $oManuelArticleSelections->Next()) {
                     $aTmpArticleList = $oManuelArticleSelection->GetMLTIdList('shop_article');
@@ -707,7 +707,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     protected static function GetWordListQuery($aTerms, $sLanguageId, $aFieldRestrictions = null, $sTypeOfFieldRestriction = 'OR')
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $aTableQueries = [];
 
@@ -734,7 +734,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
                 $quotedRestrictions = array_map(function ($value) use ($connection) {
                     return $connection->quote($value);
                 }, $aFieldRestrictions);
-                $aFieldRestrictionQueries[$sTableName] = '(' . implode(',', $quotedRestrictions) . ')';
+                $aFieldRestrictionQueries[$sTableName] = '('.implode(',', $quotedRestrictions).')';
             }
         }
 
@@ -863,7 +863,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     protected static function IsIgnoreWord($sWord)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         static $aIgnoreWordCache;
         static $bCompleteLoad = null;
@@ -948,7 +948,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     public static function UpdateIndex($sTable, $sId, $sType)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         if (false === PKG_SEARCH_USE_SEARCH_QUEUE) {
             return false;
@@ -993,7 +993,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
             // Add restriction
             $oRecordList = new TCMSRecordList();
             $oRecordList->Load($sQuery);
-            $oRecordList->AddFilterString('`' . $sTable . "`.`id` = " . $connection->quote($sId));
+            $oRecordList->AddFilterString('`'.$sTable.'`.`id` = '.$connection->quote($sId));
             $sNewQuery = $oRecordList->GetActiveQuery();
 
             $quotedType = $connection->quote($sType);
@@ -1006,7 +1006,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
             try {
                 $connection->executeStatement($sTmpQuery);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Fallback in case of alias name problems
                 $sTmpQuery = "
                 SELECT CMSQUERY.shop_article_id AS shop_article_id, {$currentDateTime}, {$quotedType}, '0'
@@ -1031,7 +1031,7 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
     public static function searchWithAND()
     {
         $bUseAnd = false;
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         if ($oShop && array_key_exists('shop_search_use_boolean_and', $oShop->sqlData)) {
             $bUseAnd = ('1' == $oShop->sqlData['shop_search_use_boolean_and']);
         }

@@ -26,13 +26,13 @@ class TCMSPageBreadcrumbMapper extends AbstractViewMapper
     {
         /** @var $oBreadCrumb TCMSPageBreadcrumb */
         $oBreadCrumb = $oVisitor->GetSourceObject('oBreadCrumb');
-        $aTree = array();
+        $aTree = [];
         $oBreadCrumb->GoToStart();
-        while ($oNode = $oBreadCrumb->Next()) { /*@var $oNode TCMSTreeNode */
-            $aTree[] = array('bIsActive' => false,
+        while ($oNode = $oBreadCrumb->Next()) { /* @var $oNode TCMSTreeNode */
+            $aTree[] = ['bIsActive' => false,
                              'bIsExpanded' => true,
                              'sLink' => $oNode->GetLink(),
-                             'sTitle' => $oNode->GetName(), );
+                             'sTitle' => $oNode->GetName(), ];
         }
         $oVisitor->SetMappedValue('aTree', $aTree);
     }

@@ -23,13 +23,13 @@ class RequestToListUrlConverterTest extends TestCase
 {
     use ProphecyTrait;
 
-    private $referrer = null;
+    private $referrer;
     /**
      * @var InputFilterUtilInterface
      */
     private $inputFilterUtil;
     /**
-     * @var \ChameleonSystem\ShopArticleDetailPagingBundle\Bridge\Service\RequestToListUrlConverter
+     * @var RequestToListUrlConverter
      */
     private $converter;
     private $listUrl;
@@ -65,10 +65,10 @@ class RequestToListUrlConverterTest extends TestCase
     /**
      * @test
      */
-    public function it_should_return_the_list_url_from_parameter()
+    public function itShouldReturnTheListUrlFromParameter()
     {
         $this->given_the_referrer('myreferer');
-        $this->given_the_request_parameters(array('url' => 'listurl'));
+        $this->given_the_request_parameters(['url' => 'listurl']);
         $this->given_an_input_filter_util();
         $this->given_an_instance_of_the_converter_with_the_current_request_stack();
         $this->when_we_call_getListUrl();
@@ -78,10 +78,10 @@ class RequestToListUrlConverterTest extends TestCase
     /**
      * @test
      */
-    public function it_should_return_the_list_spot_name()
+    public function itShouldReturnTheListSpotName()
     {
         $this->given_the_referrer('myreferer');
-        $this->given_the_request_parameters(array('_ref' => 'myspotname'));
+        $this->given_the_request_parameters(['_ref' => 'myspotname']);
         $this->given_an_input_filter_util();
         $this->given_an_instance_of_the_converter_with_the_current_request_stack();
         $this->when_we_call_getListSpotName();
@@ -90,16 +90,13 @@ class RequestToListUrlConverterTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderGetPagerQueryParameter
      *
-     * @param $pagerSpotName
-     * @param $listPageUrl
-     * @param $expectedPagerParameter
+     * @dataProvider dataProviderGetPagerQueryParameter
      */
-    public function it_should_return_the_pager_relevant_query_parameter($listSpotName, $listPageUrl, $expectedPagerParameter)
+    public function itShouldReturnThePagerRelevantQueryParameter($listSpotName, $listPageUrl, $expectedPagerParameter)
     {
         $this->given_the_list_spot($listSpotName);
-        $this->given_the_request_parameters(array('_ref' => $listSpotName));
+        $this->given_the_request_parameters(['_ref' => $listSpotName]);
         $this->given_an_input_filter_util();
         $this->given_an_instance_of_the_converter_with_the_current_request_stack();
         $this->when_we_call_getPagerParameter_with($listPageUrl);
@@ -162,16 +159,16 @@ class RequestToListUrlConverterTest extends TestCase
 
     public function dataProviderGetPagerQueryParameter()
     {
-        return array(
-            array(
+        return [
+            [
                 'listSpotName',
-                'http://mydomain.tld/my/path?some=query#marker', //$listPageUrl
-                array(
+                'http://mydomain.tld/my/path?some=query#marker', // $listPageUrl
+                [
                     RequestToListUrlConverterInterface::URL_PARAMETER_SPOT_NAME => 'listSpotName',
                     RequestToListUrlConverterInterface::URL_PARAMETER_LIST_URL => 'http://mydomain.tld/my/path?some=query#marker',
-                ), //$expectedPagerParameter
-            ),
-        );
+                ], // $expectedPagerParameter
+            ],
+        ];
     }
 
     private function when_we_call_getPagerParameter_with($listPageUrl)

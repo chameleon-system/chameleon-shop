@@ -14,8 +14,6 @@ namespace ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Int
 interface FilterInterface
 {
     /**
-     * @param ConfigurationInterface $moduleConfiguration
-     *
      * @return string
      */
     public function getFilterQuery(ConfigurationInterface $moduleConfiguration);

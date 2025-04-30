@@ -10,7 +10,7 @@ class PkgShopListfilterItemType
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -73,7 +73,6 @@ class PkgShopListfilterItemType
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClass(): string
     {
@@ -86,7 +85,6 @@ class PkgShopListfilterItemType
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClassSubtype(): string
@@ -101,7 +99,6 @@ class PkgShopListfilterItemType
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getClassType(): string
     {
@@ -114,7 +111,6 @@ class PkgShopListfilterItemType
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getView(): string
@@ -129,7 +125,6 @@ class PkgShopListfilterItemType
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getViewClassType(): string
     {
@@ -142,8 +137,6 @@ class PkgShopListfilterItemType
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxesSelectFieldsFromTable
 
@@ -176,6 +169,4 @@ class PkgShopListfilterItemType
 
         return $this;
     }
-
-
 }

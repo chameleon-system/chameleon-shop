@@ -23,12 +23,12 @@ class TCMSWizardStepMapper_UserProfile extends AbstractTCMSWizardStepMapper
         /** @var $oWizardStep TCMSWizardStep */
         $oWizardStep = $oVisitor->GetSourceObject('oObject');
 
-        $aFieldBirthdate = array();
+        $aFieldBirthdate = [];
         $aFieldBirthdate['sError'] = $this->GetMessageForField('birthdate', $aFieldMessages);
         $aFieldBirthdate['sValue'] = $this->GetValueForField('birthdate', $aUserData);
         $oVisitor->SetMappedValue('aFieldBirthdate', $aFieldBirthdate);
 
-        $aTextData = array();
+        $aTextData = [];
         $aTextData['sTitle'] = $oWizardStep->fieldName;
         $aTextData['sText'] = $oWizardStep->GetTextField('description');
 
@@ -45,7 +45,7 @@ class TCMSWizardStepMapper_UserProfile extends AbstractTCMSWizardStepMapper
      * Get field message for given field in given array.
      *
      * @param string $sFieldName
-     * @param array  $aFieldMessages
+     * @param array $aFieldMessages
      *
      * @return string
      */
@@ -63,8 +63,10 @@ class TCMSWizardStepMapper_UserProfile extends AbstractTCMSWizardStepMapper
      * Get user input value for given field name from given array.
      *
      * @template T
+     *
      * @param array<string, T> $aUserData
      * @param string $sFieldName
+     *
      * @return T|'' - empty string if field does not exist
      */
     protected function GetValueForField($sFieldName, $aUserData)

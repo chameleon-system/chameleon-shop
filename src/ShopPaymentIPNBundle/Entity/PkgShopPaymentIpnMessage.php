@@ -5,7 +5,6 @@ namespace ChameleonSystem\ShopPaymentIPNBundle\Entity;
 use ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal;
 use ChameleonSystem\ShopBundle\Entity\Payment\ShopPaymentHandlerGroup;
 use ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrder;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -13,31 +12,26 @@ class PkgShopPaymentIpnMessage
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopPaymentIpnMessageTrigger> - Forwarding logs */
-        private Collection $pkgShopPaymentIpnMessageTriggerCollection = new ArrayCollection()
-        ,
+        private Collection $pkgShopPaymentIpnMessageTriggerCollection = new ArrayCollection(),
         // TCMSFieldExtendedLookup
         /** @var CmsPortal|null - Activated via this portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldLookupParentID
         /** @var ShopOrder|null - Belongs to order (ID) */
-        private ?ShopOrder $shopOrder = null
-        ,
+        private ?ShopOrder $shopOrder = null,
         // TCMSFieldLookupParentID
         /** @var ShopPaymentHandlerGroup|null - Payment provider */
-        private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
-        ,
+        private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null,
         // TCMSFieldCreatedTimestamp
-        /** @var DateTime|null - Date */
-        private ?DateTime $datecreated = null,
+        /** @var \DateTime|null - Date */
+        private ?\DateTime $datecreated = null,
         // TCMSFieldExtendedLookup
         /** @var PkgShopPaymentIpnStatus|null - Status */
-        private ?PkgShopPaymentIpnStatus $pkgShopPaymentIpnStatus = null
-        ,
+        private ?PkgShopPaymentIpnStatus $pkgShopPaymentIpnStatus = null,
         // TCMSFieldBoolean
         /** @var bool - Processed successfully */
         private bool $success = false,
@@ -119,7 +113,6 @@ class PkgShopPaymentIpnMessage
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getCmsPortal(): ?CmsPortal
     {
@@ -132,7 +125,6 @@ class PkgShopPaymentIpnMessage
 
         return $this;
     }
-
 
     // TCMSFieldLookupParentID
     public function getShopOrder(): ?ShopOrder
@@ -147,7 +139,6 @@ class PkgShopPaymentIpnMessage
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getShopPaymentHandlerGroup(): ?ShopPaymentHandlerGroup
     {
@@ -161,20 +152,18 @@ class PkgShopPaymentIpnMessage
         return $this;
     }
 
-
     // TCMSFieldCreatedTimestamp
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getPkgShopPaymentIpnStatus(): ?PkgShopPaymentIpnStatus
@@ -189,7 +178,6 @@ class PkgShopPaymentIpnMessage
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isSuccess(): bool
     {
@@ -202,7 +190,6 @@ class PkgShopPaymentIpnMessage
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isCompleted(): bool
@@ -217,7 +204,6 @@ class PkgShopPaymentIpnMessage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getErrorType(): string
     {
@@ -230,7 +216,6 @@ class PkgShopPaymentIpnMessage
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getIp(): string
@@ -245,7 +230,6 @@ class PkgShopPaymentIpnMessage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getRequestUrl(): string
     {
@@ -258,7 +242,6 @@ class PkgShopPaymentIpnMessage
 
         return $this;
     }
-
 
     // TCMSFieldBlob
     public function getPayload(): ?object
@@ -273,7 +256,6 @@ class PkgShopPaymentIpnMessage
         return $this;
     }
 
-
     // TCMSFieldText
     public function getErrors(): string
     {
@@ -286,6 +268,4 @@ class PkgShopPaymentIpnMessage
 
         return $this;
     }
-
-
 }

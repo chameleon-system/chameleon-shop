@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\Product;
 
-
 class ShopContributor
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -51,6 +50,4 @@ class ShopContributor
 
         return $this;
     }
-
-
 }

@@ -18,14 +18,14 @@ class TShopCategoryTree
      *
      * @var TIterator
      */
-    protected $oChildCategoryTreeList = null;
+    protected $oChildCategoryTreeList;
 
     /**
      * Contains the real category for the tree.
      *
      * @var TdbShopCategory
      */
-    protected $oRealCategory = null;
+    protected $oRealCategory;
 
     /**
      * @var bool
@@ -59,7 +59,7 @@ class TShopCategoryTree
      *
      * @var array
      */
-    public $aContainingChildCategories = array();
+    public $aContainingChildCategories = [];
 
     /**
      * Returns Category tree from given master category id.
@@ -120,13 +120,13 @@ class TShopCategoryTree
      */
     protected function GetQuery($sChildCategoryId)
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
-        $sSelect = "SELECT `shop_category`.*
+        $sSelect = 'SELECT `shop_category`.*
                 FROM `shop_category`
-               WHERE `shop_category`.`shop_category_id` = ".$connection->quote($sChildCategoryId)."
-                  OR `shop_category`.`id` = ".$connection->quote($sChildCategoryId)."
-            ORDER BY `shop_category`.`position`";
+               WHERE `shop_category`.`shop_category_id` = '.$connection->quote($sChildCategoryId).'
+                  OR `shop_category`.`id` = '.$connection->quote($sChildCategoryId).'
+            ORDER BY `shop_category`.`position`';
 
         return $sSelect;
     }
@@ -156,7 +156,7 @@ class TShopCategoryTree
      * @param string|false $sListFilterItemId
      * @param bool $bHideEmptyCategories
      * @param bool $bShowArticleCount
-     * @param int  $iLevelCount
+     * @param int $iLevelCount
      *
      * @return string
      */
@@ -172,7 +172,7 @@ class TShopCategoryTree
             $sHtml = '';
         } else {
             if (!is_null($this->oRealCategory)) {
-                $aClass = array('CategoryLevel_'.$iLevelCount);
+                $aClass = ['CategoryLevel_'.$iLevelCount];
                 if (!empty($sChildCategoriesHtml)) {
                     $aClass[] = 'hasChildren';
                 } else {
@@ -200,7 +200,7 @@ class TShopCategoryTree
      * @param string|false $sListFilterItemId
      * @param bool $bHideEmptyCategories
      * @param bool $bShowArticleCount
-     * @param int  $iLevelCount
+     * @param int $iLevelCount
      *
      * @return string
      */
@@ -222,13 +222,13 @@ class TShopCategoryTree
      *
      * @param string|false $sListFilterItemId
      * @param bool $bShowArticleCount
-     * @param int  $iLevelCount
+     * @param int $iLevelCount
      *
      * @return string
      */
     protected function RenderCategoryName($sListFilterItemId = false, $bShowArticleCount = false, $iLevelCount = 1)
     {
-        $aClass = array('CategoryName');
+        $aClass = ['CategoryName'];
         if ($this->bIsActive) {
             $aClass[] = 'active';
             $aClass[] = 'expanded';
@@ -374,6 +374,6 @@ class TShopCategoryTree
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

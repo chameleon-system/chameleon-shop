@@ -16,23 +16,16 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interface
 interface StateFactoryInterface
 {
     /**
-     * @param StateElementInterface $stateElement
-     *
      * @return void
      */
     public function registerStateElement(StateElementInterface $stateElement);
 
     /**
-     * @param array|null $userData
-     *
      * @return StateInterface
      */
-    public function createState(array $userData = null);
+    public function createState(?array $userData = null);
 
     /**
-     * @param StateInterface         $state
-     * @param ConfigurationInterface $configuration
-     *
      * @return StateInterface
      */
     public function createStateEnrichedWithDefaults(StateInterface $state, ConfigurationInterface $configuration);

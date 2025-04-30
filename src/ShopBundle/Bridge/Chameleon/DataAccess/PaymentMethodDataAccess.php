@@ -21,9 +21,6 @@ class PaymentMethodDataAccess implements PaymentMethodDataAccessInterface
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -124,7 +121,7 @@ class PaymentMethodDataAccess implements PaymentMethodDataAccessInterface
                     ',
             $this->connection->quoteIdentifier($mltName)
         );
-        $idRows = $this->connection->fetchAllAssociative($query, array('paymentMethodId' => $paymentMethodId));
+        $idRows = $this->connection->fetchAllAssociative($query, ['paymentMethodId' => $paymentMethodId]);
 
         return array_map(
             function (array $row) {

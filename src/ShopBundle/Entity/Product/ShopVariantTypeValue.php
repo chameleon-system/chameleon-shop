@@ -8,12 +8,11 @@ class ShopVariantTypeValue
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopVariantType|null - Belongs to variant type */
-        private ?ShopVariantType $shopVariantType = null
-        ,
+        private ?ShopVariantType $shopVariantType = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -28,8 +27,7 @@ class ShopVariantTypeValue
         private string $colorCode = '',
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Optional image or icon */
-        private ?CmsMedia $cmsMedia = null
-        ,
+        private ?CmsMedia $cmsMedia = null,
         // TCMSFieldVarchar
         /** @var string - Alternative name (grouping) */
         private string $nameGrouped = '',
@@ -76,7 +74,6 @@ class ShopVariantTypeValue
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -89,7 +86,6 @@ class ShopVariantTypeValue
 
         return $this;
     }
-
 
     // TCMSFieldSEOURLTitle
     public function getUrlName(): string
@@ -104,7 +100,6 @@ class ShopVariantTypeValue
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -117,7 +112,6 @@ class ShopVariantTypeValue
 
         return $this;
     }
-
 
     // TCMSFieldColorpicker
     public function getColorCode(): string
@@ -132,7 +126,6 @@ class ShopVariantTypeValue
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
     {
@@ -145,7 +138,6 @@ class ShopVariantTypeValue
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getNameGrouped(): string
@@ -160,7 +152,6 @@ class ShopVariantTypeValue
         return $this;
     }
 
-
     // TCMSFieldPrice
     public function getSurcharge(): string
     {
@@ -173,6 +164,4 @@ class ShopVariantTypeValue
 
         return $this;
     }
-
-
 }

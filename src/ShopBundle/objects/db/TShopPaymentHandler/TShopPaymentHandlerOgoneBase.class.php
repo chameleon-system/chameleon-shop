@@ -14,11 +14,11 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 /**
  * !!!ATTENTION: This never worked as expected, so if you want to use PayPal with OGONE, you have to work on this.
  *
-/**/
+ * /**/
 class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
 {
-    const URL_IDENTIFIER = 'ogone_cms_call';
-    const URL_IDENTIFIER_NOTIFY = 'ogonenotifycmscall';
+    public const URL_IDENTIFIER = 'ogone_cms_call';
+    public const URL_IDENTIFIER_NOTIFY = 'ogonenotifycmscall';
 
     /**
      * Get the active currency.
@@ -40,7 +40,7 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
     protected function GetResponseURL($sResponse)
     {
         $oActivePage = $this->getActivePageService()->getActivePage();
-        $sReturnURLBase = $oActivePage->GetRealURLPlain(array(), true);
+        $sReturnURLBase = $oActivePage->GetRealURLPlain([], true);
         if ('.html' === substr($sReturnURLBase, -5)) {
             $sReturnURLBase = substr($sReturnURLBase, 0, -5);
         }
@@ -138,7 +138,7 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
      */
     protected function GetIncomingPaymentParameter()
     {
-        return array('AAVADDRESS', 'AAVCHECK', 'AAVZIP', 'ACCEPTANCE', 'ALIAS', 'AMOUNT', 'BIN', 'BRAND', 'CARDNO', 'CCCTY', 'CN', 'COMPLUS', 'CREATION_STATUS', 'CURRENCY', 'CVCCHECK', 'DCC_COMMPERCENTAGE', 'DCC_CONVAMOUNT', 'DCC_CONVCCY', 'DCC_EXCHRATE', 'DCC_EXCHRATESOURCE', 'DCC_EXCHRATETS', 'DCC_INDICATOR', 'DCC_MARGINPERCENTAGE', 'DCC_VALIDHOURS', 'DIGESTCARDNO', 'ECI', 'ED', 'ENCCARDNO', 'IP', 'IPCTY', 'NBREMAILUSAGE', 'NBRIPUSAGE', 'NBRIPUSAGE_ALLTX', 'NBRUSAGE', 'NCERROR', 'ORDERID', 'PAYID', 'PM', 'SCO_CATEGORY', 'SCORING', 'STATUS', 'SUBSCRIPTION_ID', 'TRXDATE', 'VC');
+        return ['AAVADDRESS', 'AAVCHECK', 'AAVZIP', 'ACCEPTANCE', 'ALIAS', 'AMOUNT', 'BIN', 'BRAND', 'CARDNO', 'CCCTY', 'CN', 'COMPLUS', 'CREATION_STATUS', 'CURRENCY', 'CVCCHECK', 'DCC_COMMPERCENTAGE', 'DCC_CONVAMOUNT', 'DCC_CONVCCY', 'DCC_EXCHRATE', 'DCC_EXCHRATESOURCE', 'DCC_EXCHRATETS', 'DCC_INDICATOR', 'DCC_MARGINPERCENTAGE', 'DCC_VALIDHOURS', 'DIGESTCARDNO', 'ECI', 'ED', 'ENCCARDNO', 'IP', 'IPCTY', 'NBREMAILUSAGE', 'NBRIPUSAGE', 'NBRIPUSAGE_ALLTX', 'NBRUSAGE', 'NCERROR', 'ORDERID', 'PAYID', 'PM', 'SCO_CATEGORY', 'SCORING', 'STATUS', 'SUBSCRIPTION_ID', 'TRXDATE', 'VC'];
     }
 
     /**
@@ -171,8 +171,8 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
     /**
      * Handles Ogone notify and update order state depending on notify state.
      *
-     * @param string       $sPaymentState state of the notified transaction
-     * @param array        $aParameter
+     * @param string $sPaymentState state of the notified transaction
+     * @param array $aParameter
      * @param TdbShopOrder $oOrder
      *
      * @return void
@@ -209,9 +209,9 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
      * If Ogone notify transaction state change the order then complete the order(save Payment data to order, Wawi Export,notification Email etc.).
      *
      * @param TdbShopOrder $oOrder
-     * @param bool         $bAllowExportWawi
-     * @param bool         $bAllowSendNotificationEmail
-     * @param bool         $bAllowSaveNewPaymentData
+     * @param bool $bAllowExportWawi
+     * @param bool $bAllowSendNotificationEmail
+     * @param bool $bAllowSaveNewPaymentData
      *
      * @return void
      */
@@ -267,6 +267,6 @@ class TShopPaymentHandlerOgoneBase extends TdbShopPaymentHandler
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

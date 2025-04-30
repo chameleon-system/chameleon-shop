@@ -16,28 +16,29 @@
 class TPkgShopPaymentIPN_TransactionDetails
 {
     /** @var float */
-    private $amount = null;
+    private $amount;
 
     /**
      * @var string
+     *
      * @psalm-var TPkgShopPaymentTransactionManager::TRANSACTION_TYPE_*
      */
-    private $transactionType = null;
+    private $transactionType;
 
     /** @var string */
-    private $context = null;
+    private $context;
 
     /** @var string */
-    private $sequenceNumber = null;
+    private $sequenceNumber;
 
     /** @var int */
-    private $transactionTimestamp = null;
+    private $transactionTimestamp;
 
     /** @var float|null */
-    private $resultingBalance = null;
+    private $resultingBalance;
 
     /** @var array<string, mixed> */
-    private $additionalData = array();
+    private $additionalData = [];
 
     /**
      * @param float $amount
@@ -77,6 +78,7 @@ class TPkgShopPaymentIPN_TransactionDetails
 
     /**
      * @return string
+     *
      * @psalm-return TPkgShopPaymentTransactionManager::TRANSACTION_TYPE_*
      */
     public function getTransactionType()
@@ -126,7 +128,6 @@ class TPkgShopPaymentIPN_TransactionDetails
      * here you can set additional data like the transaction id to the transaction details.
      *
      * @param string $key
-     * @param mixed $value
      *
      * @return void
      */

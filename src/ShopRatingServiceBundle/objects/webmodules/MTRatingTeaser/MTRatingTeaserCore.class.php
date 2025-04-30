@@ -12,13 +12,13 @@
 /**
  *  Module class for RatingTeaser-Module.
  *
-/**/
+ * /**/
 class MTRatingTeaserCore extends TUserCustomModelBase
 {
     /**
      * @var TdbPkgShopRatingServiceTeaserCnf|null
      */
-    protected $oModuleConfig = null;
+    protected $oModuleConfig;
 
     public function Execute()
     {
@@ -41,17 +41,17 @@ class MTRatingTeaserCore extends TUserCustomModelBase
      */
     protected function GetRatingItem()
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $iMaxItems = null;
         $iSelectLimit = 0;
-        $aItemCache = array();
+        $aItemCache = [];
         $oRatingItem = null;
         if (is_numeric($this->oModuleConfig->fieldNumberOfRatingsToSelectFrom)) {
             $iSelectLimit = $this->oModuleConfig->fieldNumberOfRatingsToSelectFrom;
         }
         $sQueryRatings = '';
-        $oRatingServiceList = $this->oModuleConfig->GetMLT('pkg_shop_rating_service_mlt'); //TdbPkgShopRatingServiceList::GetList();
+        $oRatingServiceList = $this->oModuleConfig->GetMLT('pkg_shop_rating_service_mlt'); // TdbPkgShopRatingServiceList::GetList();
 
         $oRatingServiceList->AddFilterString("`active` = '1'");
         while ($oServiceItem = $oRatingServiceList->Next()) {
@@ -128,10 +128,10 @@ class MTRatingTeaserCore extends TUserCustomModelBase
     {
         $aTrigger = parent::_GetCacheTableInfos();
         if (!is_array($aTrigger)) {
-            $aTrigger = array();
+            $aTrigger = [];
         }
 
-        $aTrigger[] = array('table' => 'pkg_shop_rating_service_teaser_config', 'id' => $this->oModuleConfig->id);
+        $aTrigger[] = ['table' => 'pkg_shop_rating_service_teaser_config', 'id' => $this->oModuleConfig->id];
 
         return $aTrigger;
     }

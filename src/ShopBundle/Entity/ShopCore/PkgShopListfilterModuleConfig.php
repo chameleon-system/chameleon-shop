@@ -8,16 +8,14 @@ class PkgShopListfilterModuleConfig
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldExtendedLookup
         /** @var PkgShopListfilter|null - */
-        private ?PkgShopListfilter $pkgShopListfilter = null
-        ,
+        private ?PkgShopListfilter $pkgShopListfilter = null,
         // TCMSFieldText
         /** @var string - Filter parameters */
         private string $filterParameter = ''
@@ -61,7 +59,6 @@ class PkgShopListfilterModuleConfig
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getPkgShopListfilter(): ?PkgShopListfilter
     {
@@ -75,7 +72,6 @@ class PkgShopListfilterModuleConfig
         return $this;
     }
 
-
     // TCMSFieldText
     public function getFilterParameter(): string
     {
@@ -88,6 +84,4 @@ class PkgShopListfilterModuleConfig
 
         return $this;
     }
-
-
 }

@@ -29,12 +29,12 @@ class MTRatingListCore extends TUserCustomModelBase
     /**
      * @var int[]
      */
-    protected $aPageSizes = array(20, 40, 60); //array(3,6,9,-1); -1=All
+    protected $aPageSizes = [20, 40, 60]; // array(3,6,9,-1); -1=All
 
     /**
      * @var array{name: string, id: string}[]
      */
-    protected $aPageSort = array(array('name' => 'Neueste zuerst', 'id' => 'new_first'), array('name' => 'Beste zuerst', 'id' => 'best_first'), array('name' => 'Schlechteste zuerst', 'id' => 'bad_first'));
+    protected $aPageSort = [['name' => 'Neueste zuerst', 'id' => 'new_first'], ['name' => 'Beste zuerst', 'id' => 'best_first'], ['name' => 'Schlechteste zuerst', 'id' => 'bad_first']];
 
     /**
      * @var string
@@ -48,10 +48,10 @@ class MTRatingListCore extends TUserCustomModelBase
         // get page size from session
         $this->iPageSize = intval($this->GetModuleSessionParameter('pagesize', $this->iPageSize));
 
-        /** @psalm-suppress InvalidPropertyAssignmentValue */
+        /* @psalm-suppress InvalidPropertyAssignmentValue */
         $this->iActivePage = $this->GetUserInput('page', $this->iActivePage, TCMSUserInput::FILTER_INT);
 
-        /** @psalm-suppress InvalidPropertyAssignmentValue */
+        /* @psalm-suppress InvalidPropertyAssignmentValue */
         $this->iPageSize = $this->GetUserInput('pagesize', $this->iPageSize, TCMSUserInput::FILTER_INT);
 
         if (!in_array($this->iPageSize, $this->aPageSizes)) {
@@ -70,8 +70,8 @@ class MTRatingListCore extends TUserCustomModelBase
     {
         $this->sActivePageSort = $this->GetUserInput('pagesort');
         if (empty($this->sActivePageSort)) {
-            //load default
-            $this->sActivePageSort = $this->GetPageSortDefaultValue(); //default
+            // load default
+            $this->sActivePageSort = $this->GetPageSortDefaultValue(); // default
             $this->SetModuleSessionParameter('pagesort', $this->sActivePageSort);
         } else {
             $bFound = false;
@@ -81,11 +81,11 @@ class MTRatingListCore extends TUserCustomModelBase
                 }
             }
             if (!$bFound) {
-                //try to load from session
+                // try to load from session
                 $this->sActivePageSort = strtolower(trim($this->GetModuleSessionParameter('pagesort', false)));
                 if (!$this->sActivePageSort) {
                     $this->sActivePageSort = $this->aPageSort[1]['id'];
-                } //default
+                } // default
                 $this->SetModuleSessionParameter('pagesort', $this->sActivePageSort);
             }
         }
@@ -101,9 +101,6 @@ class MTRatingListCore extends TUserCustomModelBase
 
     /**
      * @param string $sName
-     * @param mixed $vDefault
-     *
-     * @return mixed
      */
     protected function GetModuleSessionParameter($sName, $vDefault = null)
     {
@@ -117,14 +114,13 @@ class MTRatingListCore extends TUserCustomModelBase
 
     /**
      * @param string $sName
-     * @param mixed $sValue
      *
      * @return void
      */
     protected function SetModuleSessionParameter($sName, $sValue)
     {
         if (!array_key_exists('cmsMTRatingListCore', $_SESSION)) {
-            $_SESSION['cmsMTRatingListCore'] = array();
+            $_SESSION['cmsMTRatingListCore'] = [];
         }
         $_SESSION['cmsMTRatingListCore'][$sName] = $sValue;
     }
@@ -155,7 +151,7 @@ class MTRatingListCore extends TUserCustomModelBase
         }
         $this->data['oRatingItemList'] = $oRatingItemList;
 
-        $aArrowButtons = array();
+        $aArrowButtons = [];
         $aArrowButtons['fw'] = new stdClass();
         $aArrowButtons['fw']->bIsActive = true;
         $aArrowButtons['bw'] = new stdClass();
@@ -164,7 +160,7 @@ class MTRatingListCore extends TUserCustomModelBase
         $oActivePage = $this->getActivePageService()->getActivePage();
 
         foreach ($this->aPageSort as $iPsKey => $aPsVal) {
-            $aPageParam = array($this->sModuleSpotName => array('pagesort' => $aPsVal['id']));
+            $aPageParam = [$this->sModuleSpotName => ['pagesort' => $aPsVal['id']]];
             $oPageLink = new stdClass();
             $oPageLink->sSortName = $aPsVal['name'];
             $oPageLink->sSortId = $aPsVal['id'];
@@ -173,12 +169,12 @@ class MTRatingListCore extends TUserCustomModelBase
             $aPageSort[] = $oPageLink;
         }
 
-        $aPageNavi = array();
+        $aPageNavi = [];
         if ($oRatingItemList->GetTotalPageCount() > 1) {
             $iActivePage = $oRatingItemList->GetCurrentPageNumber();
             $iMax = $oRatingItemList->GetTotalPageCount();
             for ($i = 0; $i < $iMax; ++$i) {
-                $aPageParam = array($this->sModuleSpotName => array('page' => $i));
+                $aPageParam = [$this->sModuleSpotName => ['page' => $i]];
                 $oPageLink = new stdClass();
                 $oPageLink->iPageNumber = $i;
                 $oPageLink->bIsActive = ($i == $iActivePage - 1);
@@ -188,21 +184,21 @@ class MTRatingListCore extends TUserCustomModelBase
                 if ($oPageLink->bIsActive && (0 == $i)) {
                     $aArrowButtons['bw']->bIsActive = false;
                 } else {
-                    $aPageParam = array($this->sModuleSpotName => array('page' => $i - 1));
+                    $aPageParam = [$this->sModuleSpotName => ['page' => $i - 1]];
                     $aArrowButtons['bw']->sLink = $oActivePage->GetRealURLPlain($aPageParam);
                 }
                 if ($oPageLink->bIsActive && ($i == $iMax - 1)) {
                     $aArrowButtons['fw']->bIsActive = false;
                 } else {
-                    $aPageParam = array($this->sModuleSpotName => array('page' => $i));
+                    $aPageParam = [$this->sModuleSpotName => ['page' => $i]];
                     $aArrowButtons['fw']->sLink = $oActivePage->GetRealURLPlain($aPageParam);
                 }
             }
         }
 
-        $aPageSizeNavi = array();
+        $aPageSizeNavi = [];
         foreach ($this->aPageSizes as $iPageSize) {
-            $aPageSizeParam = array($this->sModuleSpotName => array('pagesize' => $iPageSize));
+            $aPageSizeParam = [$this->sModuleSpotName => ['pagesize' => $iPageSize]];
             $oPageSizeLink = new stdClass();
             $oPageSizeLink->iPageSize = $iPageSize;
             $oPageSizeLink->bIsActive = ($iPageSize == $oRatingItemList->GetPageSize());
@@ -223,6 +219,6 @@ class MTRatingListCore extends TUserCustomModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

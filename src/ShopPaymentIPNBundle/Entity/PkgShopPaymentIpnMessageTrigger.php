@@ -2,31 +2,27 @@
 
 namespace ChameleonSystem\ShopPaymentIPNBundle\Entity;
 
-use DateTime;
-
 class PkgShopPaymentIpnMessageTrigger
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var PkgShopPaymentIpnTrigger|null - Trigger */
-        private ?PkgShopPaymentIpnTrigger $pkgShopPaymentIpnTrigger = null
-        ,
+        private ?PkgShopPaymentIpnTrigger $pkgShopPaymentIpnTrigger = null,
         // TCMSFieldLookupParentID
         /** @var PkgShopPaymentIpnMessage|null - IPN Message */
-        private ?PkgShopPaymentIpnMessage $pkgShopPaymentIpnMessage = null
-        ,
+        private ?PkgShopPaymentIpnMessage $pkgShopPaymentIpnMessage = null,
         // TCMSFieldCreatedTimestamp
-        /** @var DateTime|null - Created on */
-        private ?DateTime $datecreated = null,
+        /** @var \DateTime|null - Created on */
+        private ?\DateTime $datecreated = null,
         // TCMSFieldBoolean
         /** @var bool - Processed */
         private bool $done = false,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Processed on */
-        private ?DateTime $doneDate = null,
+        /** @var \DateTime|null - Processed on */
+        private ?\DateTime $doneDate = null,
         // TCMSFieldBoolean
         /** @var bool - Successful */
         private bool $success = false,
@@ -34,8 +30,8 @@ class PkgShopPaymentIpnMessageTrigger
         /** @var int - Number of attempts */
         private int $attemptCount = 0,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Next attempt on */
-        private ?DateTime $nextAttempt = null,
+        /** @var \DateTime|null - Next attempt on */
+        private ?\DateTime $nextAttempt = null,
         // TCMSFieldText
         /** @var string - Log */
         private string $log = ''
@@ -79,7 +75,6 @@ class PkgShopPaymentIpnMessageTrigger
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getPkgShopPaymentIpnMessage(): ?PkgShopPaymentIpnMessage
     {
@@ -93,20 +88,18 @@ class PkgShopPaymentIpnMessageTrigger
         return $this;
     }
 
-
     // TCMSFieldCreatedTimestamp
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isDone(): bool
@@ -121,20 +114,18 @@ class PkgShopPaymentIpnMessageTrigger
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDoneDate(): ?DateTime
+    public function getDoneDate(): ?\DateTime
     {
         return $this->doneDate;
     }
 
-    public function setDoneDate(?DateTime $doneDate): self
+    public function setDoneDate(?\DateTime $doneDate): self
     {
         $this->doneDate = $doneDate;
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isSuccess(): bool
@@ -149,7 +140,6 @@ class PkgShopPaymentIpnMessageTrigger
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getAttemptCount(): int
     {
@@ -163,20 +153,18 @@ class PkgShopPaymentIpnMessageTrigger
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getNextAttempt(): ?DateTime
+    public function getNextAttempt(): ?\DateTime
     {
         return $this->nextAttempt;
     }
 
-    public function setNextAttempt(?DateTime $nextAttempt): self
+    public function setNextAttempt(?\DateTime $nextAttempt): self
     {
         $this->nextAttempt = $nextAttempt;
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getLog(): string
@@ -190,6 +178,4 @@ class PkgShopPaymentIpnMessageTrigger
 
         return $this;
     }
-
-
 }

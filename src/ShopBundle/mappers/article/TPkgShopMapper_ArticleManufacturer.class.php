@@ -33,13 +33,13 @@ class TPkgShopMapper_ArticleManufacturer extends AbstractPkgShopMapper_Article
 
         $sSizeTable = $oManufacturer->GetTextField('sizetable');
 
-        $aManufacturerData = array(
+        $aManufacturerData = [
             'sManufacturerLogoId' => '',
             'sManufacturerIconId' => '',
             'sManufacturerName' => $oManufacturer->GetName(),
             'sManufacturerLink' => $oManufacturer->GetLinkProducts(),
             'sManufacturerSizeTable' => $sSizeTable,
-        );
+        ];
 
         $oLogo = $oManufacturer->GetLogo();
         $oIcon = $oManufacturer->GetIcon();

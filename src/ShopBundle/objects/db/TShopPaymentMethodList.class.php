@@ -16,7 +16,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
     /**
      * @var float|null
      */
-    protected $dPrice = null;
+    protected $dPrice;
 
     /**
      * return list of shipping types that match the given group, the current basket,
@@ -74,7 +74,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
     protected static function getPortalQueryRestriction($portalId)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
         $quotedPortalId = $connection->quote($portalId);
 
         return "\nLEFT JOIN `shop_payment_method_cms_portal_mlt` ON `shop_payment_method`.`id` = `shop_payment_method_cms_portal_mlt`.`source_id`
@@ -89,7 +89,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
     protected static function getPaymentGroupQueryRestriction($paymentGroupId)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
         $quotedGroupId = $connection->quote($paymentGroupId);
 
         return " `shop_shipping_group_shop_payment_method_mlt`.`source_id` = {$quotedGroupId}";
@@ -119,7 +119,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
     public function RemoveInvalidItems()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         // since this is a tcmsrecord list, we need to collect all valid ids, and then reload the list with them
         $aValidIds = [];
@@ -135,7 +135,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
              WHERE ';
 
         if (count($aValidIds) > 0) {
-            $query .= ' `shop_payment_method`.`id` IN (' . implode(',', $aValidIds) . ') ';
+            $query .= ' `shop_payment_method`.`id` IN ('.implode(',', $aValidIds).') ';
         } else {
             $query .= ' 1 = 0 ';
         }
@@ -152,7 +152,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
     public function RemoveRestrictedItems()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $aValidIds = [];
         $this->GoToStart();
@@ -167,7 +167,7 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
              WHERE ';
 
         if (count($aValidIds) > 0) {
-            $query .= ' `shop_payment_method`.`id` IN (' . implode(',', $aValidIds) . ') ';
+            $query .= ' `shop_payment_method`.`id` IN ('.implode(',', $aValidIds).') ';
         } else {
             $query .= ' 1 = 0 ';
         }
@@ -201,6 +201,6 @@ class TShopPaymentMethodList extends TShopPaymentMethodListAutoParent
      */
     private static function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

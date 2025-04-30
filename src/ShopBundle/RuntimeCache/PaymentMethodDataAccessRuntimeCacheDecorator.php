@@ -23,11 +23,8 @@ class PaymentMethodDataAccessRuntimeCacheDecorator implements PaymentMethodDataA
     /**
      * @var array
      */
-    private $cache = array();
+    private $cache = [];
 
-    /**
-     * @param PaymentMethodDataAccessInterface $subject
-     */
     public function __construct(PaymentMethodDataAccessInterface $subject)
     {
         $this->subject = $subject;

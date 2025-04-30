@@ -38,7 +38,7 @@ class CMSShopArticleIndex extends TCMSModelBase
         $oIndex = null;
         if ($oIndexers->Length() < 1) {
             $oIndex = TdbShopSearchIndexer::GetNewInstance();
-            /** @var $oIndex TdbShopSearchIndexer */
+            /* @var $oIndex TdbShopSearchIndexer */
             //        $oIndex->bRegenerateCompleteIndex = $bRegenerateCompleteIndex;
             $oIndex->InitializeIndexer();
         } else {
@@ -74,9 +74,9 @@ class CMSShopArticleIndex extends TCMSModelBase
     public function ClearSearchCacheTables()
     {
         $sQuery = 'TRUNCATE TABLE `shop_search_cache_item`';
-        \MySqlLegacySupport::getInstance()->query($sQuery);
+        MySqlLegacySupport::getInstance()->query($sQuery);
         $sQuery = 'TRUNCATE TABLE `shop_search_cache`';
-        \MySqlLegacySupport::getInstance()->query($sQuery);
+        MySqlLegacySupport::getInstance()->query($sQuery);
     }
 
     public function Execute()

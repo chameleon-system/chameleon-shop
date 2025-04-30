@@ -13,22 +13,20 @@ class ShopOrderItem
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Variant */
         private string $nameVariantInfo = '',
         // TCMSFieldLookupParentID
         /** @var ShopOrder|null - Belongs to order */
-        private ?ShopOrder $shopOrder = null
-        ,
+        private ?ShopOrder $shopOrder = null,
         // TCMSFieldVarchar
         /** @var string - sBasketItemKey is the key for the position in the consumer basket */
         private string $basketItemKey = '',
         // TCMSFieldExtendedLookup
         /** @var ShopArticle|null - Original article from shop */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -43,8 +41,7 @@ class ShopOrderItem
         private string $description = '',
         // TCMSFieldExtendedLookup
         /** @var ShopManufacturer|null - Manufacturer/ brand */
-        private ?ShopManufacturer $shopManufacturer = null
-        ,
+        private ?ShopManufacturer $shopManufacturer = null,
         // TCMSFieldVarchar
         /** @var string - Manufacturer / brand name */
         private string $shopManufacturerName = '',
@@ -80,8 +77,7 @@ class ShopOrderItem
         private string $quantityInUnits = '',
         // TCMSFieldExtendedLookup
         /** @var ShopUnitOfMeasurement|null - Unit of measurement of content */
-        private ?ShopUnitOfMeasurement $shopUnitOfMeasurement = null
-        ,
+        private ?ShopUnitOfMeasurement $shopUnitOfMeasurement = null,
         // TCMSFieldBoolean
         /** @var bool - Virtual article */
         private bool $virtualArticle = false,
@@ -129,8 +125,7 @@ class ShopOrderItem
         private bool $isBundle = false,
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopOrderBundleArticle> - Articles in order that belong to this bundle */
-        private Collection $shopOrderBundleArticleCollection = new ArrayCollection()
-        ,
+        private Collection $shopOrderBundleArticleCollection = new ArrayCollection(),
         // TCMSFieldDownloads
         /** @var Collection<int, CmsDocument> - Download file */
         private Collection $downloadCollection = new ArrayCollection()
@@ -174,7 +169,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getShopOrder(): ?ShopOrder
     {
@@ -187,7 +181,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getBasketItemKey(): string
@@ -202,7 +195,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getShopArticle(): ?ShopArticle
     {
@@ -215,7 +207,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -230,7 +221,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getArticlenumber(): string
     {
@@ -243,7 +233,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getDescriptionShort(): string
@@ -258,7 +247,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -271,7 +259,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getShopManufacturer(): ?ShopManufacturer
@@ -286,7 +273,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getShopManufacturerName(): string
     {
@@ -299,7 +285,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getPrice(): string
@@ -314,7 +299,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getPriceReference(): string
     {
@@ -327,7 +311,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getPriceDiscounted(): string
@@ -342,7 +325,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getVatPercent(): string
     {
@@ -355,7 +337,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getSizeWeight(): string
@@ -370,7 +351,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getSizeWidth(): string
     {
@@ -383,7 +363,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getSizeHeight(): string
@@ -398,7 +377,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getSizeLength(): string
     {
@@ -411,7 +389,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getStock(): int
@@ -426,7 +403,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getQuantityInUnits(): string
     {
@@ -439,7 +415,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getShopUnitOfMeasurement(): ?ShopUnitOfMeasurement
@@ -454,7 +429,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isVirtualArticle(): bool
     {
@@ -467,7 +441,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isExcludeFromVouchers(): bool
@@ -482,7 +455,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isExcludeFromDiscounts(): bool
     {
@@ -495,7 +467,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSubtitle(): string
@@ -510,7 +481,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIsNew(): bool
     {
@@ -523,7 +493,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getPages(): int
@@ -538,7 +507,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getUsp(): string
     {
@@ -551,7 +519,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldBlob
     public function getCustomData(): ?object
@@ -566,7 +533,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getOrderAmount(): string
     {
@@ -579,7 +545,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getOrderPriceTotal(): string
@@ -594,7 +559,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getOrderPriceAfterDiscounts(): string
     {
@@ -607,7 +571,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getOrderTotalWeight(): string
@@ -622,7 +585,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getOrderTotalVolume(): string
     {
@@ -635,7 +597,6 @@ class ShopOrderItem
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getOrderPrice(): string
@@ -650,7 +611,6 @@ class ShopOrderItem
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIsBundle(): bool
     {
@@ -663,8 +623,6 @@ class ShopOrderItem
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -698,8 +656,6 @@ class ShopOrderItem
         return $this;
     }
 
-
-
     // TCMSFieldDownloads
 
     /**
@@ -731,6 +687,4 @@ class ShopOrderItem
 
         return $this;
     }
-
-
 }

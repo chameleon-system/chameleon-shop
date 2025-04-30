@@ -11,14 +11,14 @@
 
 /**
  * get the path to the product catalog.
-/**/
+ * /**/
 class TCMSSmartURLHandler_ShopProductExport extends TCMSSmartURLHandler
 {
     public function GetPageDef()
     {
         $iPageId = false;
         $oURLData = TCMSSmartURLData::GetActive();
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
 
         $sProductPath = $oShop->GetLinkToSystemPage('productexport');
         if ('.html' == substr($sProductPath, -5)) {
@@ -39,7 +39,7 @@ class TCMSSmartURLHandler_ShopProductExport extends TCMSSmartURLHandler
             if (count($aParts) >= 6) {
                 $iNode = $oShop->GetSystemPageNodeId('productexport');
                 $oNode = new TCMSTreeNode();
-                /** @var $oNode TCMSTreeNode */
+                /* @var $oNode TCMSTreeNode */
                 $oNode->Load($iNode);
 
                 if (7 == count($aParts)) {
@@ -62,7 +62,7 @@ class TCMSSmartURLHandler_ShopProductExport extends TCMSSmartURLHandler
                     $sView = $aParts[3];
                     $sKey = $aParts[5];
                     // clean key...
-                    $aEndings = array('.csv', '.txt', '.xml');
+                    $aEndings = ['.csv', '.txt', '.xml'];
                     foreach ($aEndings as $sEnding) {
                         if (substr($sKey, -strlen($sEnding)) == $sEnding) {
                             $sKey = substr($sKey, 0, strlen($sKey) - strlen($sEnding));

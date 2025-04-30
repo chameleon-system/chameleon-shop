@@ -42,7 +42,7 @@ class TPkgShopMapper_ArticleBundleContent extends AbstractPkgShopMapper_Article
             return;
         }
 
-        $aBundleArticleList = array();
+        $aBundleArticleList = [];
 
         $oBundleItems = $oArticle->GetFieldShopBundleArticleList();
         while ($oBundleItem = $oBundleItems->Next()) {
@@ -52,12 +52,12 @@ class TPkgShopMapper_ArticleBundleContent extends AbstractPkgShopMapper_Article
                 if ($bCachingEnabled) {
                     $oCacheTriggerManager->addTrigger($oBundleArticle->table, $oBundleArticle->id);
                 }
-                $aItem = array(
+                $aItem = [
                     'sAmount' => $oLocal->FormatNumber($oBundleItem->fieldAmount, 0),
                     'sTitle' => $oBundleArticle->GetName(),
                     'sLink' => $oBundleArticle->getLink(),
                     'sPrice' => $oLocal->FormatNumber($oBundleArticle->dPrice, 2),
-                );
+                ];
                 $aBundleArticleList[] = $aItem;
             }
         }

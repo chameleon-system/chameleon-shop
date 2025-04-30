@@ -16,7 +16,7 @@ use ChameleonSystem\CmsStringUtilitiesBundle\Interfaces\UrlUtilityServiceInterfa
 class AddParametersToUrlService
 {
     /**
-     * @var \ChameleonSystem\CmsStringUtilitiesBundle\Interfaces\UrlUtilityServiceInterface
+     * @var UrlUtilityServiceInterface
      */
     private $urlUtility;
 

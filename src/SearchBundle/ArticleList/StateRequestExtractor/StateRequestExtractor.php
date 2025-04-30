@@ -17,7 +17,6 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\StateRequestExtractor\Interfa
 class StateRequestExtractor implements StateRequestExtractorInterface
 {
     /**
-     * @param array $configuration
      * @param array<string, mixed> $requestData
      * @param string $listSpotName
      *
@@ -28,12 +27,12 @@ class StateRequestExtractor implements StateRequestExtractorInterface
         $searchQuery = $this->getSearchQuery($requestData);
         $searchFilter = $this->getSearchFilter($requestData);
         if (null === $searchQuery && null === $searchFilter) {
-            return array();
+            return [];
         }
 
-        $returnData = array(
-            StateInterface::QUERY => array(),
-        );
+        $returnData = [
+            StateInterface::QUERY => [],
+        ];
         if (null !== $searchQuery) {
             $returnData[StateInterface::QUERY][\TShopModuleArticlelistFilterSearch::PARAM_QUERY] = $searchQuery;
         }
@@ -46,6 +45,7 @@ class StateRequestExtractor implements StateRequestExtractorInterface
 
     /**
      * @param array<string, mixed> $requestData
+     *
      * @return string|null
      */
     private function getSearchQuery($requestData)
@@ -55,6 +55,7 @@ class StateRequestExtractor implements StateRequestExtractorInterface
 
     /**
      * @param array<string, mixed> $requestData
+     *
      * @return array|null
      */
     private function getSearchFilter($requestData)

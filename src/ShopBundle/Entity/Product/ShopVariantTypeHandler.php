@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\Product;
 
-
 class ShopVariantTypeHandler
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -64,7 +63,6 @@ class ShopVariantTypeHandler
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -77,7 +75,6 @@ class ShopVariantTypeHandler
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClass(): string
@@ -92,7 +89,6 @@ class ShopVariantTypeHandler
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassSubtype(): string
     {
@@ -106,7 +102,6 @@ class ShopVariantTypeHandler
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getClassType(): string
     {
@@ -119,6 +114,4 @@ class ShopVariantTypeHandler
 
         return $this;
     }
-
-
 }

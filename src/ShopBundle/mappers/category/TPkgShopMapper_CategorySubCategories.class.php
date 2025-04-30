@@ -23,19 +23,19 @@ class TPkgShopMapper_CategorySubCategories extends AbstractPkgShopMapper_Categor
         }
 
         $oVisitor->SetMappedValue('sCategoryName', $oCategory->GetName());
-        $aSubCategories = array();
+        $aSubCategories = [];
         $oSubCategories = $oCategory->GetChildren();
         // todo - we should generate the data here using a config like ViewRenderer::generateSourceObjectForObjectList -> but without having the view be fixed in this mapper
         while ($oSubCategory = $oSubCategories->Next()) {
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oSubCategory->table, $oSubCategory->id);
             }
-            $aData = array(
+            $aData = [
                 'sImageId' => $oSubCategory->fieldImage,
                 'sHeadline' => $oSubCategory->GetName(),
                 'sLink' => $oSubCategory->GetLink(),
                 'sTeaserText' => $oSubCategory->GetTextField('description_short'),
-            );
+            ];
             $aSubCategories[] = $aData;
         }
         $oVisitor->SetMappedValue('aTeaserList', $aSubCategories);

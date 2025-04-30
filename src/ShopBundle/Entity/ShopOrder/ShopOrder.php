@@ -16,7 +16,6 @@ use ChameleonSystem\ShopBundle\Entity\ShopVoucher\ShopVoucherUse;
 use ChameleonSystem\ShopPaymentIPNBundle\Entity\PkgShopPaymentIpnMessage;
 use ChameleonSystem\ShopPaymentTransactionBundle\Entity\PkgShopPaymentTransaction;
 use ChameleonSystem\ShopRatingServiceBundle\Entity\PkgShopRatingService;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -24,30 +23,26 @@ class ShopOrder
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldBoolean
         /** @var bool - Shop rating email - was processed */
         private bool $pkgShopRatingServiceMailProcessed = false,
         // TCMSFieldLookup
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldBoolean
         /** @var bool - User has also subscribed to the newsletter */
         private bool $newsletterSignup = false,
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopPaymentIpnMessage> - */
-        private Collection $pkgShopPaymentIpnMessageCollection = new ArrayCollection()
-        ,
+        private Collection $pkgShopPaymentIpnMessageCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopPaymentTransaction> - Transactions */
-        private Collection $pkgShopPaymentTransactionCollection = new ArrayCollection()
-        ,
+        private Collection $pkgShopPaymentTransactionCollection = new ArrayCollection(),
         // TCMSFieldLookup
         /** @var CmsPortal|null - Placed by portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldNumber
         /** @var int - Order number */
         private int $ordernumber = 0,
@@ -56,22 +51,19 @@ class ShopOrder
         private bool $pkgShopRatingServiceMailSent = false,
         // TCMSFieldLookup
         /** @var PkgShopRatingService|null - Used rating service */
-        private ?PkgShopRatingService $pkgShopRatingService = null
-        ,
+        private ?PkgShopRatingService $pkgShopRatingService = null,
         // TCMSFieldVarcharUnique
         /** @var string - Basket ID (unique ID that is already assigned in the order process) */
         private string $orderIdent = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Created on */
-        private ?DateTime $datecreated = null,
+        /** @var \DateTime|null - Created on */
+        private ?\DateTime $datecreated = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopOrderItem> - Items */
-        private Collection $shopOrderItemCollection = new ArrayCollection()
-        ,
+        private Collection $shopOrderItemCollection = new ArrayCollection(),
         // TCMSFieldLookupParentID
         /** @var DataExtranetUser|null - Shop customer */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldNumber
         /** @var int - Customer number */
         private int $customerNumber = 0,
@@ -83,8 +75,7 @@ class ShopOrder
         private string $adrBillingCompany = '',
         // TCMSFieldExtendedLookup
         /** @var DataExtranetSalutation|null - Salutation */
-        private ?DataExtranetSalutation $adrBillingSalutation = null
-        ,
+        private ?DataExtranetSalutation $adrBillingSalutation = null,
         // TCMSFieldVarchar
         /** @var string - First name */
         private string $adrBillingFirstname = '',
@@ -108,8 +99,7 @@ class ShopOrder
         private string $adrBillingPostalcode = '',
         // TCMSFieldExtendedLookup
         /** @var DataCountry|null - Country */
-        private ?DataCountry $adrBillingCountry = null
-        ,
+        private ?DataCountry $adrBillingCountry = null,
         // TCMSFieldVarchar
         /** @var string - Telephone */
         private string $adrBillingTelefon = '',
@@ -118,8 +108,7 @@ class ShopOrder
         private string $adrBillingFax = '',
         // TCMSFieldExtendedLookup
         /** @var CmsLanguage|null - Language */
-        private ?CmsLanguage $cmsLanguage = null
-        ,
+        private ?CmsLanguage $cmsLanguage = null,
         // TCMSFieldVarchar
         /** @var string - User IP */
         private string $userIp = '',
@@ -134,8 +123,7 @@ class ShopOrder
         private string $adrShippingCompany = '',
         // TCMSFieldExtendedLookup
         /** @var DataExtranetSalutation|null - Salutation */
-        private ?DataExtranetSalutation $adrShippingSalutation = null
-        ,
+        private ?DataExtranetSalutation $adrShippingSalutation = null,
         // TCMSFieldVarchar
         /** @var string - First name */
         private string $adrShippingFirstname = '',
@@ -159,8 +147,7 @@ class ShopOrder
         private string $adrShippingPostalcode = '',
         // TCMSFieldExtendedLookup
         /** @var DataCountry|null - Country */
-        private ?DataCountry $adrShippingCountry = null
-        ,
+        private ?DataCountry $adrShippingCountry = null,
         // TCMSFieldVarchar
         /** @var string - Telephone */
         private string $adrShippingTelefon = '',
@@ -169,8 +156,7 @@ class ShopOrder
         private string $adrShippingFax = '',
         // TCMSFieldLookup
         /** @var ShopShippingGroup|null - Shipping cost group */
-        private ?ShopShippingGroup $shopShippingGroup = null
-        ,
+        private ?ShopShippingGroup $shopShippingGroup = null,
         // TCMSFieldVarchar
         /** @var string - Shipping cost group – name */
         private string $shopShippingGroupName = '',
@@ -182,12 +168,10 @@ class ShopOrder
         private string $shopShippingGroupVatPercent = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopOrderShippingGroupParameter> - Shipping cost group – parameter/user data */
-        private Collection $shopOrderShippingGroupParameterCollection = new ArrayCollection()
-        ,
+        private Collection $shopOrderShippingGroupParameterCollection = new ArrayCollection(),
         // TCMSFieldLookup
         /** @var ShopPaymentMethod|null - Payment method */
-        private ?ShopPaymentMethod $shopPaymentMethod = null
-        ,
+        private ?ShopPaymentMethod $shopPaymentMethod = null,
         // TCMSFieldVarchar
         /** @var string - Payment method – name */
         private string $shopPaymentMethodName = '',
@@ -199,12 +183,10 @@ class ShopOrder
         private string $shopPaymentMethodVatPercent = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopOrderPaymentMethodParameter> - Payment method – parameter/user data */
-        private Collection $shopOrderPaymentMethodParameterCollection = new ArrayCollection()
-        ,
+        private Collection $shopOrderPaymentMethodParameterCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopOrderVat> - Order VAT (by tax rate) */
-        private Collection $shopOrderVatCollection = new ArrayCollection()
-        ,
+        private Collection $shopOrderVatCollection = new ArrayCollection(),
         // TCMSFieldDecimal
         /** @var string - Items value */
         private string $valueArticle = '',
@@ -213,8 +195,7 @@ class ShopOrder
         private string $valueTotal = '',
         // TCMSFieldExtendedLookup
         /** @var PkgShopCurrency|null - Currency */
-        private ?PkgShopCurrency $pkgShopCurrency = null
-        ,
+        private ?PkgShopCurrency $pkgShopCurrency = null,
         // TCMSFieldDecimal
         /** @var string - Wrapping costs */
         private string $valueWrapping = '',
@@ -255,48 +236,44 @@ class ShopOrder
         /** @var bool - Payment method executed successfully */
         private bool $systemOrderPaymentMethodExecuted = false,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Payment method executed on */
-        private ?DateTime $systemOrderPaymentMethodExecutedDate = null,
+        /** @var \DateTime|null - Payment method executed on */
+        private ?\DateTime $systemOrderPaymentMethodExecutedDate = null,
         // TCMSFieldBoolean
         /** @var bool - Paid */
         private bool $orderIsPaid = false,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Marked as paid on */
-        private ?DateTime $orderIsPaidDate = null,
+        /** @var \DateTime|null - Marked as paid on */
+        private ?\DateTime $orderIsPaidDate = null,
         // TCMSFieldBoolean
         /** @var bool - Order was cancelled */
         private bool $canceled = false,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Date the order was marked as cancelled */
-        private ?DateTime $canceledDate = null,
+        /** @var \DateTime|null - Date the order was marked as cancelled */
+        private ?\DateTime $canceledDate = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Was exported for ERP on */
-        private ?DateTime $systemOrderExportedDate = null,
+        /** @var \DateTime|null - Was exported for ERP on */
+        private ?\DateTime $systemOrderExportedDate = null,
         // TCMSFieldVarchar
         /** @var string - Affiliate code */
         private string $affiliateCode = '',
         // TCMSFieldLookup
         /** @var PkgShopAffiliate|null - Order created via affiliate program */
-        private ?PkgShopAffiliate $pkgShopAffiliate = null
-        ,
+        private ?PkgShopAffiliate $pkgShopAffiliate = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopVoucherUse> - Used vouchers */
-        private Collection $shopVoucherUseCollection = new ArrayCollection()
-        ,
+        private Collection $shopVoucherUseCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopOrderDiscount> - Discount */
-        private Collection $shopOrderDiscountCollection = new ArrayCollection()
-        ,
+        private Collection $shopOrderDiscountCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopOrderStatus> - Order status */
-        private Collection $shopOrderStatusCollection = new ArrayCollection()
-        ,
+        private Collection $shopOrderStatusCollection = new ArrayCollection(),
         // TCMSFieldText
         /** @var string - Mail object */
         private string $objectMail = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Rating request sent on */
-        private ?DateTime $pkgShopRatingServiceRatingProcessedOn = null,
+        /** @var \DateTime|null - Rating request sent on */
+        private ?\DateTime $pkgShopRatingServiceRatingProcessedOn = null,
         // TCMSFieldVarchar
         /** @var string - VAT ID */
         private string $vatId = '',
@@ -304,8 +281,8 @@ class ShopOrder
         /** @var string - Internal comment */
         private string $internalComment = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Date of shipment of all products */
-        private ?DateTime $pkgShopRatingServiceOrderCompletelyShipped = null
+        /** @var \DateTime|null - Date of shipment of all products */
+        private ?\DateTime $pkgShopRatingServiceOrderCompletelyShipped = null
     ) {
     }
 
@@ -346,7 +323,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShop(): ?Shop
     {
@@ -360,7 +336,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isNewsletterSignup(): bool
     {
@@ -373,8 +348,6 @@ class ShopOrder
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -440,7 +413,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
     {
@@ -453,7 +425,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getOrdernumber(): int
@@ -468,7 +439,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isPkgShopRatingServiceMailSent(): bool
     {
@@ -481,7 +451,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getPkgShopRatingService(): ?PkgShopRatingService
@@ -496,7 +465,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldVarcharUnique
     public function getOrderIdent(): string
     {
@@ -510,21 +478,18 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -558,7 +523,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getDataExtranetUser(): ?DataExtranetUser
     {
@@ -571,7 +535,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getCustomerNumber(): int
@@ -586,7 +549,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldEmail
     public function getUserEmail(): string
     {
@@ -599,7 +561,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrBillingCompany(): string
@@ -614,7 +575,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getAdrBillingSalutation(): ?DataExtranetSalutation
     {
@@ -627,7 +587,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrBillingFirstname(): string
@@ -642,7 +601,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAdrBillingLastname(): string
     {
@@ -655,7 +613,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrBillingAdditionalInfo(): string
@@ -670,7 +627,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAdrBillingStreet(): string
     {
@@ -683,7 +639,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrBillingStreetnr(): string
@@ -698,7 +653,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAdrBillingCity(): string
     {
@@ -711,7 +665,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrBillingPostalcode(): string
@@ -726,7 +679,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getAdrBillingCountry(): ?DataCountry
     {
@@ -739,7 +691,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrBillingTelefon(): string
@@ -754,7 +705,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAdrBillingFax(): string
     {
@@ -767,7 +717,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getCmsLanguage(): ?CmsLanguage
@@ -782,7 +731,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getUserIp(): string
     {
@@ -795,7 +743,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isAdrShippingUseBilling(): bool
@@ -810,7 +757,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isAdrShippingIsDhlPackstation(): bool
     {
@@ -823,7 +769,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrShippingCompany(): string
@@ -838,7 +783,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getAdrShippingSalutation(): ?DataExtranetSalutation
     {
@@ -851,7 +795,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrShippingFirstname(): string
@@ -866,7 +809,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAdrShippingLastname(): string
     {
@@ -879,7 +821,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrShippingAdditionalInfo(): string
@@ -894,7 +835,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAdrShippingStreet(): string
     {
@@ -907,7 +847,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrShippingStreetnr(): string
@@ -922,7 +861,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAdrShippingCity(): string
     {
@@ -935,7 +873,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrShippingPostalcode(): string
@@ -950,7 +887,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getAdrShippingCountry(): ?DataCountry
     {
@@ -963,7 +899,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrShippingTelefon(): string
@@ -978,7 +913,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAdrShippingFax(): string
     {
@@ -991,7 +925,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getShopShippingGroup(): ?ShopShippingGroup
@@ -1006,7 +939,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getShopShippingGroupName(): string
     {
@@ -1019,7 +951,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getShopShippingGroupPrice(): string
@@ -1034,7 +965,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getShopShippingGroupVatPercent(): string
     {
@@ -1047,8 +977,6 @@ class ShopOrder
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -1084,7 +1012,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopPaymentMethod(): ?ShopPaymentMethod
     {
@@ -1097,7 +1024,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getShopPaymentMethodName(): string
@@ -1112,7 +1038,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getShopPaymentMethodPrice(): string
     {
@@ -1126,7 +1051,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getShopPaymentMethodVatPercent(): string
     {
@@ -1139,8 +1063,6 @@ class ShopOrder
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -1176,8 +1098,6 @@ class ShopOrder
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -1210,7 +1130,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getValueArticle(): string
     {
@@ -1223,7 +1142,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getValueTotal(): string
@@ -1238,7 +1156,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getPkgShopCurrency(): ?PkgShopCurrency
     {
@@ -1251,7 +1168,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getValueWrapping(): string
@@ -1266,7 +1182,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getValueWrappingCard(): string
     {
@@ -1279,7 +1194,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getValueVouchers(): string
@@ -1294,7 +1208,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getValueVouchersNotSponsored(): string
     {
@@ -1307,7 +1220,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getValueDiscounts(): string
@@ -1322,7 +1234,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getValueVatTotal(): string
     {
@@ -1335,7 +1246,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getCountArticles(): string
@@ -1350,7 +1260,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getCountUniqueArticles(): int
     {
@@ -1363,7 +1272,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getTotalweight(): string
@@ -1378,7 +1286,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getTotalvolume(): string
     {
@@ -1391,7 +1298,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isSystemOrderSaveCompleted(): bool
@@ -1406,7 +1312,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isSystemOrderNotificationSend(): bool
     {
@@ -1419,7 +1324,6 @@ class ShopOrder
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isSystemOrderPaymentMethodExecuted(): bool
@@ -1434,20 +1338,18 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getSystemOrderPaymentMethodExecutedDate(): ?DateTime
+    public function getSystemOrderPaymentMethodExecutedDate(): ?\DateTime
     {
         return $this->systemOrderPaymentMethodExecutedDate;
     }
 
-    public function setSystemOrderPaymentMethodExecutedDate(?DateTime $systemOrderPaymentMethodExecutedDate): self
+    public function setSystemOrderPaymentMethodExecutedDate(?\DateTime $systemOrderPaymentMethodExecutedDate): self
     {
         $this->systemOrderPaymentMethodExecutedDate = $systemOrderPaymentMethodExecutedDate;
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isOrderIsPaid(): bool
@@ -1462,20 +1364,18 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getOrderIsPaidDate(): ?DateTime
+    public function getOrderIsPaidDate(): ?\DateTime
     {
         return $this->orderIsPaidDate;
     }
 
-    public function setOrderIsPaidDate(?DateTime $orderIsPaidDate): self
+    public function setOrderIsPaidDate(?\DateTime $orderIsPaidDate): self
     {
         $this->orderIsPaidDate = $orderIsPaidDate;
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isCanceled(): bool
@@ -1490,34 +1390,31 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getCanceledDate(): ?DateTime
+    public function getCanceledDate(): ?\DateTime
     {
         return $this->canceledDate;
     }
 
-    public function setCanceledDate(?DateTime $canceledDate): self
+    public function setCanceledDate(?\DateTime $canceledDate): self
     {
         $this->canceledDate = $canceledDate;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getSystemOrderExportedDate(): ?DateTime
+    public function getSystemOrderExportedDate(): ?\DateTime
     {
         return $this->systemOrderExportedDate;
     }
 
-    public function setSystemOrderExportedDate(?DateTime $systemOrderExportedDate): self
+    public function setSystemOrderExportedDate(?\DateTime $systemOrderExportedDate): self
     {
         $this->systemOrderExportedDate = $systemOrderExportedDate;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAffiliateCode(): string
@@ -1532,7 +1429,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getPkgShopAffiliate(): ?PkgShopAffiliate
     {
@@ -1545,8 +1441,6 @@ class ShopOrder
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -1580,8 +1474,6 @@ class ShopOrder
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -1613,8 +1505,6 @@ class ShopOrder
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -1648,7 +1538,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldText
     public function getObjectMail(): string
     {
@@ -1662,20 +1551,18 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getPkgShopRatingServiceRatingProcessedOn(): ?DateTime
+    public function getPkgShopRatingServiceRatingProcessedOn(): ?\DateTime
     {
         return $this->pkgShopRatingServiceRatingProcessedOn;
     }
 
-    public function setPkgShopRatingServiceRatingProcessedOn(?DateTime $pkgShopRatingServiceRatingProcessedOn): self
+    public function setPkgShopRatingServiceRatingProcessedOn(?\DateTime $pkgShopRatingServiceRatingProcessedOn): self
     {
         $this->pkgShopRatingServiceRatingProcessedOn = $pkgShopRatingServiceRatingProcessedOn;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getVatId(): string
@@ -1690,7 +1577,6 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldText
     public function getInternalComment(): string
     {
@@ -1704,19 +1590,16 @@ class ShopOrder
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getPkgShopRatingServiceOrderCompletelyShipped(): ?DateTime
+    public function getPkgShopRatingServiceOrderCompletelyShipped(): ?\DateTime
     {
         return $this->pkgShopRatingServiceOrderCompletelyShipped;
     }
 
-    public function setPkgShopRatingServiceOrderCompletelyShipped(?DateTime $pkgShopRatingServiceOrderCompletelyShipped
+    public function setPkgShopRatingServiceOrderCompletelyShipped(?\DateTime $pkgShopRatingServiceOrderCompletelyShipped
     ): self {
         $this->pkgShopRatingServiceOrderCompletelyShipped = $pkgShopRatingServiceOrderCompletelyShipped;
 
         return $this;
     }
-
-
 }

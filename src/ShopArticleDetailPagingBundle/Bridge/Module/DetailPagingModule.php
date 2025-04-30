@@ -14,18 +14,16 @@ namespace ChameleonSystem\ShopArticleDetailPagingBundle\Bridge\Module;
 use ChameleonSystem\ShopArticleDetailPagingBundle\Exception\ArticleListException;
 use ChameleonSystem\ShopArticleDetailPagingBundle\Interfaces\DetailPagingServiceInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
-use IMapperCacheTriggerRestricted;
-use IMapperVisitorRestricted;
 
 class DetailPagingModule extends \MTPkgViewRendererAbstractModuleMapper
 {
     /**
-     * @var \ChameleonSystem\ShopArticleDetailPagingBundle\Interfaces\DetailPagingServiceInterface
+     * @var DetailPagingServiceInterface
      */
-    private $detailPagingService = null;
+    private $detailPagingService;
 
     /** @var string|null */
-    private $activeProductId = null;
+    private $activeProductId;
 
     public function __construct(ShopServiceInterface $shop, DetailPagingServiceInterface $detailPagingService)
     {
@@ -50,16 +48,16 @@ class DetailPagingModule extends \MTPkgViewRendererAbstractModuleMapper
      * {@inheritdoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
         try {
-            $data = array(
+            $data = [
                 'backToListUrl' => $this->detailPagingService->getBackToListUrl($this->sModuleSpotName),
                 'nextItem' => $this->detailPagingService->getNextItem($this->activeProductId, $this->sModuleSpotName),
                 'previousItem' => $this->detailPagingService->getPreviousItem($this->activeProductId, $this->sModuleSpotName),
-            );
+            ];
 
             $oVisitor->SetMappedValueFromArray($data);
         } catch (ArticleListException $e) {

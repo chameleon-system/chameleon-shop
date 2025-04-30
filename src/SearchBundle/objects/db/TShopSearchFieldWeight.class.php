@@ -42,7 +42,7 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
     public static function GetTmpFileNameForTableImport($sTableName)
     {
         /** @var array<string, string> $aFileNames */
-        static $aFileNames = array();
+        static $aFileNames = [];
 
         if (!isset($aFileNames[$sTableName])) {
             $aFileNames[$sTableName] = CMS_TMP_DIR.'/cms_pkg_search_index_'.$sTableName;
@@ -53,27 +53,27 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
 
     /**
      * @param string $sTableName
-     * @param null|string $sMode
+     * @param string|null $sMode
      *
      * @psalm-param 'close'|null $sMode
      *
-     * @return false|null|resource
+     * @return false|resource|null
      */
     public static function GetFilePointer($sTableName, $sMode = null)
     {
         /**
          * Uses the table name as a string and the opened resource as a value.
+         *
          * @var array<string, resource|false> $aPointer
          */
-        static $aPointer = array();
+        static $aPointer = [];
 
         $pPointer = null;
         switch ($sMode) {
             case 'close':
                 reset($aPointer);
                 foreach (array_keys($aPointer) as $pointer) {
-
-                    /**
+                    /*
                      * @psalm-suppress InvalidArgument
                      * @FIXME This passes the table name to `fclose` - we probably want to iterate over `array_values` here.
                      */
@@ -105,17 +105,17 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
      * process index for field value and a given substring length.
      *
      * @param string $sFieldValue
-     * @param int    $iArticleId
+     * @param int $iArticleId
      * @param string $sTableName
-     * @param int    $iSubstringLength
+     * @param int $iSubstringLength
      *
      * @return void
      */
     protected function ProcessIndex($sFieldValue, $iArticleId, $sTableName, $iSubstringLength)
     {
         $oShop = $this->GetFieldShop();
-        $aInserts = array();
-        $aInsertsCompleteWords = array();
+        $aInserts = [];
+        $aInsertsCompleteWords = [];
 
         $aWords = TdbShopSearchIndexer::PrepareSearchWords($sFieldValue);
         foreach ($aWords as $sWord) {
@@ -134,9 +134,9 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
                 if (false === $done) {
                     $sSubStr = mb_substr($sWord, $iPos, $iSubstringLength);
                     if (!array_key_exists($sSubStr, $aInserts)) {
-                        $aInserts[$sSubStr] = array('count' => 0, 'weight' => 0);
+                        $aInserts[$sSubStr] = ['count' => 0, 'weight' => 0];
                     }
-                    $dWeight = ($iSubstringLength / $oShop->fieldShopSearchMaxIndexLength) * $oShop->fieldShopSearchWordLengthFactor * ($this->fieldWeight);
+                    $dWeight = ($iSubstringLength / $oShop->fieldShopSearchMaxIndexLength) * $oShop->fieldShopSearchWordLengthFactor * $this->fieldWeight;
                     // is this a complete word?
                     $bIsCompleteWord = (mb_strlen($sSubStr) == $iCurrentWordLength);
 
@@ -161,7 +161,7 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
                             // insert soundex
 
                             if (!array_key_exists($sSubStr, $aInsertsCompleteWords)) {
-                                $aInsertsCompleteWords[$sSubStr] = array('count' => 0, 'weight' => 0);
+                                $aInsertsCompleteWords[$sSubStr] = ['count' => 0, 'weight' => 0];
                             }
                             $aInsertsCompleteWords[$sSubStr]['count'] = $aInsertsCompleteWords[$sSubStr]['count'] + 1;
                             $aInsertsCompleteWords[$sSubStr]['weight'] = $aInsertsCompleteWords[$sSubStr]['weight'] + ($dWeight / (1 + $oShop->fieldShopSearchWordBonus));
@@ -196,7 +196,7 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
         $sSubString = trim($sSubString);
         $sTableName = '_tmp'.$sTableName;
         if ($iCount > 0 && $dWeight > 0 && !empty($sSubString)) {
-            $aTmpData = array();
+            $aTmpData = [];
             $aTmpData['shop_article_id'] = $iArticleId;
             $aTmpData['substring'] = $sSubString;
             $aTmpData['occurrences'] = $iCount;
@@ -216,7 +216,7 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
 
     /**
      * @param bool $bCollect
-     * @param null|string $sTableName
+     * @param string|null $sTableName
      * @param array<string, mixed>|null $aData
      *
      * @return void
@@ -224,7 +224,7 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
     public static function AddQueryBlock($bCollect, $sTableName, $aData)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         static $aQueries = [];
         static $aQSize = [];
@@ -263,7 +263,7 @@ class TShopSearchFieldWeight extends TAdbShopSearchFieldWeight
      * insert soundex for word.
      *
      * @param string $sOriginalWord
-     * @param float  $dOriginalWeight
+     * @param float $dOriginalWeight
      * @param int $iArticleId
      * @param int $iCount
      *

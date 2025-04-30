@@ -24,7 +24,7 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
         \TdbShopOrder &$order,
         $value,
         $invoiceNumber = null,
-        array $orderItemList = null
+        ?array $orderItemList = null
     ) {
         throw new \Exception('paypal payment on shipment is currently not implemented');
     }
@@ -35,7 +35,7 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
         $value,
         $invoiceNumber = null,
         $sellerRefundNote = null,
-        array $orderItemList = null
+        ?array $orderItemList = null
     ) {
         $paymentHandler = $order->GetPaymentHandler();
         if (null === $paymentHandler) {
@@ -53,7 +53,7 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
         }
         $isSandbox = 'sandbox' === $this->config->getEnvironment();
         $refundType = 'Partial';
-        if ((int)round($value * 100, 0) === (int)round($order->fieldValueTotal * 100, 2)) {
+        if ((int) round($value * 100, 0) === (int) round($order->fieldValueTotal * 100, 2)) {
             $refundType = 'Full';
         }
         $payload = [
@@ -102,7 +102,7 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
         $responseData = [];
         parse_str($response, $responseData);
 
-        if ($responseData['ACK'] !== 'Success') {
+        if ('Success' !== $responseData['ACK']) {
             throw new \TPkgCmsException(
                 sprintf(
                     'Refund request rejected %s. Error %d: %s',
@@ -123,14 +123,14 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
         $transactionData->setContext(
             new \TPkgShopPaymentTransactionContext(
                 sprintf(
-                    ($sellerRefundNote === null ? '[%s] refund' : '[%s] refund with note '.$sellerRefundNote),
+                    null === $sellerRefundNote ? '[%s] refund' : '[%s] refund with note '.$sellerRefundNote,
                     $responseData['REFUNDTRANSACTIONID'] ?? '?'
                 )
             )
         );
         $transaction = $transactionManager->addTransaction($transactionData);
 
-        return array($transaction);
+        return [$transaction];
     }
 
     public function cancelOrder(

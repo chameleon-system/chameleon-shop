@@ -28,15 +28,13 @@ class MTFooterCategory extends MTPkgViewRendererAbstractModuleMapper
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
         $oCacheTriggerManager->addTrigger('pkg_shop_footer_category');
         $oFooterList = TdbPkgShopFooterCategoryList::GetListForShopId($this->getShopService()->getId());
-        $aTree = array();
+        $aTree = [];
         while ($oFooter = $oFooterList->Next()) {
             $aTree[] = $this->getSubNavi($oFooter);
         }
@@ -45,33 +43,31 @@ class MTFooterCategory extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @param TdbPkgShopFooterCategory $oFooter
-     *
      * @return array
      */
     private function getSubNavi(TdbPkgShopFooterCategory $oFooter)
     {
-        $aTree = array(
+        $aTree = [
             'bIsActive' => '',
             'bIsExpanded' => '',
             'sLink' => '',
             'sTitle' => $oFooter->fieldName,
             'sSeoTitle' => '',
-            'aChildren' => array(),
-        );
+            'aChildren' => [],
+        ];
         $oCat = $oFooter->GetFieldShopCategory();
         if (null !== $oCat) {
             $aTree['sLink'] = $oCat->GetLink();
             $oCatList = $oCat->GetFieldShopCategoryList();
             while ($oSubCat = $oCatList->Next()) {
-                $aTree['aChildren'][] = array(
+                $aTree['aChildren'][] = [
                     'bIsActive' => '',
                     'bIsExpanded' => '',
                     'sLinkURL' => $oSubCat->GetLink(),
                     'sTitle' => $oSubCat->fieldName,
                     'sSeoTitle' => '',
-                    'aChildren' => array(),
-                );
+                    'aChildren' => [],
+                ];
             }
         }
 
@@ -85,7 +81,7 @@ class MTFooterCategory extends MTPkgViewRendererAbstractModuleMapper
     {
         $parameters = parent::_GetCacheParameters();
         if (!is_array($parameters)) {
-            $parameters = array();
+            $parameters = [];
         }
         $parameters['shop'] = $this->getShopService()->getId();
 
@@ -105,6 +101,6 @@ class MTFooterCategory extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }

@@ -19,11 +19,11 @@ use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 class ShopSearchLoggerBridge implements ShopSearchLoggerInterface
 {
     /**
-     * @var \ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface
+     * @var ShopServiceInterface
      */
     private $shop;
     /**
-     * @var \ChameleonSystem\CoreBundle\Service\LanguageServiceInterface
+     * @var LanguageServiceInterface
      */
     private $languageService;
 
@@ -35,12 +35,13 @@ class ShopSearchLoggerBridge implements ShopSearchLoggerInterface
         $this->languageService = $languageService;
     }
 
-
     /**
      * @param string $searchString
      * @param array<string, string> $searchFilter
      * @param int $numberOfMatches
+     *
      * @return void
+     *
      * @throws \ErrorException
      */
     public function logSearch($searchString, array $searchFilter, $numberOfMatches)
@@ -48,13 +49,13 @@ class ShopSearchLoggerBridge implements ShopSearchLoggerInterface
         $searchString = $this->convertSearchToString($searchString, $searchFilter);
         $oLog = \TdbShopSearchLog::GetNewInstance();
         /** @var $oLog \TdbShopSearchLog */
-        $aData = array(
+        $aData = [
             'name' => $searchString,
             'shop_id' => $this->shop->getId(),
             'number_of_results' => $numberOfMatches,
             'search_date' => date('Y-m-d H:i:s'),
             'cms_language_id' => $this->languageService->getActiveLanguageId(),
-        );
+        ];
         $oUser = $this->getExtranetUserProvider()->getActiveUser();
         if (null !== $oUser && null !== $oUser->id) {
             $aData['data_extranet_user_id'] = $oUser->id;
@@ -67,11 +68,12 @@ class ShopSearchLoggerBridge implements ShopSearchLoggerInterface
     /**
      * @param string $searchString
      * @param array<string, string> $searchFilter
+     *
      * @return string
      */
     private function convertSearchToString($searchString, array $searchFilter)
     {
-        $parts = array();
+        $parts = [];
         foreach ($searchFilter as $key => $value) {
             $parts[] = $key.'=>('.$value.')';
         }

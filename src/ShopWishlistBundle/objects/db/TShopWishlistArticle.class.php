@@ -23,9 +23,9 @@ class TShopWishlistArticle extends TShopWishlistArticleAutoParent
      */
     public function GetToWishlistLink($bIncludePortalLink = false, $bRedirectToLoginPage = true)
     {
-        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShopConfig = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
 
-        $aParameters = array('module_fnc['.$oShopConfig->GetBasketModuleSpotName().']' => 'AddToWishlist', MTShopBasketCore::URL_ITEM_ID => $this->id, MTShopBasketCore::URL_ITEM_AMOUNT => 1, MTShopBasketCore::URL_MESSAGE_CONSUMER => $this->GetMessageConsumerName());
+        $aParameters = ['module_fnc['.$oShopConfig->GetBasketModuleSpotName().']' => 'AddToWishlist', MTShopBasketCore::URL_ITEM_ID => $this->id, MTShopBasketCore::URL_ITEM_AMOUNT => 1, MTShopBasketCore::URL_MESSAGE_CONSUMER => $this->GetMessageConsumerName()];
 
         $aIncludeParams = TdbShop::GetURLPageStateParameters();
         $oGlobal = TGlobal::instance();
@@ -53,6 +53,6 @@ class TShopWishlistArticle extends TShopWishlistArticleAutoParent
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

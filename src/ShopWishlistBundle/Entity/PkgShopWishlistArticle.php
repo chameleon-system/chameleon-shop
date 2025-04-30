@@ -3,28 +3,25 @@
 namespace ChameleonSystem\ShopWishlistBundle\Entity;
 
 use ChameleonSystem\ShopBundle\Entity\Product\ShopArticle;
-use DateTime;
 
 class PkgShopWishlistArticle
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var PkgShopWishlist|null - Belongs to wishlist */
-        private ?PkgShopWishlist $pkgShopWishlist = null
-        ,
+        private ?PkgShopWishlist $pkgShopWishlist = null,
         // TCMSFieldDateTimeNow
-        /** @var DateTime|null - Created on */
-        private ?DateTime $datecreated = new DateTime(),
+        /** @var \DateTime|null - Created on */
+        private ?\DateTime $datecreated = new \DateTime(),
         // TCMSFieldNumber
         /** @var int - Amount */
         private int $amount = 0,
         // TCMSFieldExtendedLookup
         /** @var ShopArticle|null - Article */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldText
         /** @var string - Comment */
         private string $comment = ''
@@ -68,20 +65,18 @@ class PkgShopWishlistArticle
         return $this;
     }
 
-
     // TCMSFieldDateTimeNow
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getAmount(): int
@@ -96,7 +91,6 @@ class PkgShopWishlistArticle
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getShopArticle(): ?ShopArticle
     {
@@ -110,7 +104,6 @@ class PkgShopWishlistArticle
         return $this;
     }
 
-
     // TCMSFieldText
     public function getComment(): string
     {
@@ -123,6 +116,4 @@ class PkgShopWishlistArticle
 
         return $this;
     }
-
-
 }

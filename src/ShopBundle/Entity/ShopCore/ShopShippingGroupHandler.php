@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\ShopCore;
 
-
 class ShopShippingGroupHandler
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -61,7 +60,6 @@ class ShopShippingGroupHandler
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClass(): string
     {
@@ -74,7 +72,6 @@ class ShopShippingGroupHandler
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getClassType(): string
@@ -89,7 +86,6 @@ class ShopShippingGroupHandler
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassSubtype(): string
     {
@@ -102,6 +98,4 @@ class ShopShippingGroupHandler
 
         return $this;
     }
-
-
 }

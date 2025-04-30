@@ -11,9 +11,6 @@
 
 class TShopBasketDiscountCoreList extends TIterator
 {
-    /**
-     * @return TdbShopDiscount|bool
-     */
     public function next(): TdbShopDiscount|bool
     {
         return parent::Next();

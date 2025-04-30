@@ -11,27 +11,27 @@
 
 class TPkgShopPaymentTransactionDataEndPoint extends AbstractPkgCmsCoreParameterContainer
 {
-    const TYPE_PAYMENT = 'payment';
-    const TYPE_CREDIT = 'credit';
-    const TYPE_PAYMENT_REVERSAL = 'payment-reversal';
+    public const TYPE_PAYMENT = 'payment';
+    public const TYPE_CREDIT = 'credit';
+    public const TYPE_PAYMENT_REVERSAL = 'payment-reversal';
 
     /**
      * @var TdbShopOrder
      */
-    private $order = null;
+    private $order;
 
     /**
      * @var float
      */
-    private $totalValue = null;
+    private $totalValue;
     /**
      * @var string - one of self::TYPE_*
      */
-    private $type = null;
+    private $type;
     /**
      * @var TPkgShopPaymentTransactionContext
      */
-    private $context = null;
+    private $context;
     /**
      * @var bool
      */
@@ -39,20 +39,18 @@ class TPkgShopPaymentTransactionDataEndPoint extends AbstractPkgCmsCoreParameter
     /**
      * @var int
      */
-    private $confirmedTimestamp = null;
+    private $confirmedTimestamp;
     /**
      * @var int
      */
-    private $sequenceNumber = null;
+    private $sequenceNumber;
     /**
      * @var array of TPkgShopPaymentTransactionItemData
      */
-    private $items = array();
+    private $items = [];
 
     /**
      * use $this->addRequirement to add the requirements of the container.
-     *
-     * @return
      */
     protected function defineRequirements()
     {
@@ -64,8 +62,7 @@ class TPkgShopPaymentTransactionDataEndPoint extends AbstractPkgCmsCoreParameter
     }
 
     /**
-     * @param TdbShopOrder $oOrder
-     * @param string       $type   - must be one of self::TYPE_*
+     * @param string $type - must be one of self::TYPE_*
      */
     public function __construct(TdbShopOrder $oOrder, $type)
     {
@@ -74,7 +71,7 @@ class TPkgShopPaymentTransactionDataEndPoint extends AbstractPkgCmsCoreParameter
     }
 
     /**
-     * @param \TdbShopOrder $order
+     * @param TdbShopOrder $order
      *
      * @return $this
      */
@@ -110,8 +107,6 @@ class TPkgShopPaymentTransactionDataEndPoint extends AbstractPkgCmsCoreParameter
     }
 
     /**
-     * @param \TPkgShopPaymentTransactionContext $context
-     *
      * @return $this
      */
     public function setContext(TPkgShopPaymentTransactionContext $context)
@@ -122,8 +117,6 @@ class TPkgShopPaymentTransactionDataEndPoint extends AbstractPkgCmsCoreParameter
     }
 
     /**
-     * @param TPkgShopPaymentTransactionItemData $item
-     *
      * @return $this
      */
     public function addItem(TPkgShopPaymentTransactionItemData $item)
@@ -186,7 +179,7 @@ class TPkgShopPaymentTransactionDataEndPoint extends AbstractPkgCmsCoreParameter
     }
 
     /**
-     * @return \TPkgShopPaymentTransactionContext
+     * @return TPkgShopPaymentTransactionContext
      */
     public function getContext()
     {
@@ -226,7 +219,7 @@ class TPkgShopPaymentTransactionDataEndPoint extends AbstractPkgCmsCoreParameter
     }
 
     /**
-     * @return \TdbShopOrder
+     * @return TdbShopOrder
      */
     public function getOrder()
     {
@@ -237,6 +230,7 @@ class TPkgShopPaymentTransactionDataEndPoint extends AbstractPkgCmsCoreParameter
      * return the total value of all items with the given item type.
      *
      * @param string $sType - must be one of TPkgShopPaymentTransactionItemData::TYPE_*
+     *
      * @psalm-param TPkgShopPaymentTransactionItemData::TYPE_* $sType
      *
      * @return float

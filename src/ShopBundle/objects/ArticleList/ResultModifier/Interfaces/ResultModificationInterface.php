@@ -16,11 +16,9 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 
 interface ResultModificationInterface
 {
-    const CONFIG_MODULE_INSTANCE_ID = 'cms_tpl_module_instance_id';
+    public const CONFIG_MODULE_INSTANCE_ID = 'cms_tpl_module_instance_id';
 
     /**
-     * @param ResultInterface $result
-     * @param array           $configuration
      * @param int $filterDepth
      *
      * @return ResultInterface
@@ -28,10 +26,6 @@ interface ResultModificationInterface
     public function apply(ResultInterface $result, array $configuration, $filterDepth);
 
     /**
-     * @param ResultInterface $result
-     * @param array           $configuration
-     * @param StateInterface  $state
-     *
      * @return ResultInterface
      */
     public function applyState(ResultInterface $result, array $configuration, StateInterface $state);

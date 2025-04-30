@@ -14,7 +14,6 @@ namespace ChameleonSystem\ShopBundle\objects\ArticleList\StateRequestExtractor\I
 interface StateRequestExtractorInterface
 {
     /**
-     * @param array $configuration
      * @param array<string, mixed> $requestData
      * @param string $listSpotName
      *

@@ -31,7 +31,7 @@ class TCMSWizardStepListMapper_Basket extends AbstractViewMapper
             $oCacheTriggerManager->addTrigger($oActiveStep->table, $oActiveStep->id);
         }
         /**
-        - aSteps: array of items (object or assoc array). each item has the following properties:
+         * - aSteps: array of items (object or assoc array). each item has the following properties:
          ** bIsActive
          ** sLink
          ** sTitle
@@ -45,14 +45,14 @@ class TCMSWizardStepListMapper_Basket extends AbstractViewMapper
         $iActive = $oStepList->GetActiveStepPosition();
 
         $oStep = null;
-        $aSteps = array();
+        $aSteps = [];
         $counter = 1;
         while (false !== ($oStep = $oStepList->Next())) {
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oStep->table, $oStep->id);
             }
             $bStepIsActive = ($counter++ <= $iActive);
-            $aSteps[] = array(
+            $aSteps[] = [
                 'isCurrentStep' => ($oStep->id === $oActiveStep->id),
                 'bIsActive' => $bStepIsActive,
                 'sLink' => ('thankyou' != $oActiveStep->fieldSystemname) ? ($oStep->GetStepURL(false)) : (''),
@@ -60,9 +60,9 @@ class TCMSWizardStepListMapper_Basket extends AbstractViewMapper
                 'sSeoTitle' => $oStep->GetName(),
                 'sIconUrl' => '',
                 'sIconClass' => $bStepIsActive ? $oStep->fieldCssIconClassActive : $oStep->fieldCssIconClassInactive,
-            );
+            ];
         }
-        $oVisitor->SetMappedValue('bOrderCompleted', ('thankyou' == $oActiveStep->fieldSystemname));
+        $oVisitor->SetMappedValue('bOrderCompleted', 'thankyou' == $oActiveStep->fieldSystemname);
         $oVisitor->SetMappedValue('aSteps', $aSteps);
     }
 }

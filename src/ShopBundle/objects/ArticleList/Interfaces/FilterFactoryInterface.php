@@ -17,15 +17,11 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interface
 interface FilterFactoryInterface
 {
     /**
-     * @param FilterDefinitionInterface $filterDefinition
-     *
      * @return FilterInterface
      */
     public function createFilter(FilterDefinitionInterface $filterDefinition);
 
     /**
-     * @param FilterInterface $filter
-     *
      * @return FilterInterface|null
      */
     public function createFallbackFilter(FilterInterface $filter);

@@ -81,7 +81,6 @@ final class BreadcrumbShopArticleDetailGenerator extends AbstractBreadcrumbGener
     protected function getFromCache(): ?BreadcrumbDataModel
     {
         return $this->cache->get($this->generateCacheKey());
-
     }
 
     protected function generateCacheKey(): string

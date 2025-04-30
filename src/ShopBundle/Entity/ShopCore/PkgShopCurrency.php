@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\ShopCore;
 
-
 class PkgShopCurrency
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -64,7 +63,6 @@ class PkgShopCurrency
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSymbol(): string
     {
@@ -77,7 +75,6 @@ class PkgShopCurrency
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getFactor(): string
@@ -92,7 +89,6 @@ class PkgShopCurrency
         return $this;
     }
 
-
     // TCMSFieldUniqueMarker
     public function isIsBaseCurrency(): bool
     {
@@ -106,7 +102,6 @@ class PkgShopCurrency
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIso4217(): string
     {
@@ -119,6 +114,4 @@ class PkgShopCurrency
 
         return $this;
     }
-
-
 }

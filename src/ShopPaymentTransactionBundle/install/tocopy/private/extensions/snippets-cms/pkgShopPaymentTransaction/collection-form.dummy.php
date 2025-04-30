@@ -2,9 +2,9 @@
 
 $oDummy = new TPkgViewRendererSnippetDummyData();
 
-$aData = array(
-    'items' => array(
-        array(
+$aData = [
+    'items' => [
+        [
             'id' => '1',
             'articlenumber' => '1',
             'name' => 'test',
@@ -14,8 +14,8 @@ $aData = array(
             'totalQuantityForTransaction' => 5,
             'price' => 10.99,
             'itemTotal' => 54.95,
-        ),
-        array(
+        ],
+        [
             'id' => '2',
             'articlenumber' => '2',
             'name' => 'test 2',
@@ -25,8 +25,8 @@ $aData = array(
             'totalQuantityForTransaction' => 2,
             'price' => 5,
             'itemTotal' => 10,
-        ),
-        array(
+        ],
+        [
             'id' => '3',
             'articlenumber' => '3',
             'name' => 'test 3',
@@ -36,8 +36,8 @@ $aData = array(
             'totalQuantityForTransaction' => 0,
             'price' => 5,
             'itemTotal' => 10,
-        ),
-        array(
+        ],
+        [
             'id' => '4',
             'articlenumber' => '4',
             'name' => 'test 4',
@@ -47,8 +47,8 @@ $aData = array(
             'totalQuantityForTransaction' => 1,
             'price' => 3,
             'itemTotal' => 3,
-        ),
-    ),
+        ],
+    ],
     'valueProducts' => 0,
     'valueDiscount' => -5,
     'valueDiscountVouchers' => -10.54,
@@ -58,7 +58,7 @@ $aData = array(
     'valueVoucher' => -20,
     'valueGrandTotal' => '',
     'bHasSponsoredVouchers' => true,
-);
+];
 
 $dPriceTotal = 0;
 foreach ($aData['items'] as $item) {

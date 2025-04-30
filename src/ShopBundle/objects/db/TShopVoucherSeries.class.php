@@ -36,15 +36,15 @@ class TShopVoucherSeries extends TShopVoucherSeriesAutoParent implements IPkgSho
      * returns the number of vouchers from that series that have been used by the user (note, we count
      * also the vouchers that have been used in part only.
      *
-     * @param int   $iDataExtranetUserId (if null, use the current user)
-     * @param array $aExcludeVouchers    - the voucher ids to exclude from the count
+     * @param int $iDataExtranetUserId (if null, use the current user)
+     * @param array $aExcludeVouchers - the voucher ids to exclude from the count
      *
      * @return int
      */
-    public function NumberOfTimesUsedByUser($iDataExtranetUserId = null, $aExcludeVouchers = array())
+    public function NumberOfTimesUsedByUser($iDataExtranetUserId = null, $aExcludeVouchers = [])
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $iNumberOfVouchersUsed = 0;
 
@@ -59,7 +59,7 @@ class TShopVoucherSeries extends TShopVoucherSeriesAutoParent implements IPkgSho
         $sRestriction = '';
         if (count($aExcludeVouchers) > 0) {
             $quotedExcludes = array_map([$connection, 'quote'], $aExcludeVouchers);
-            $sRestriction = "AND `shop_voucher`.`id` NOT IN (".implode(',', $quotedExcludes).")";
+            $sRestriction = 'AND `shop_voucher`.`id` NOT IN ('.implode(',', $quotedExcludes).')';
         }
 
         $query = "
@@ -92,7 +92,7 @@ class TShopVoucherSeries extends TShopVoucherSeriesAutoParent implements IPkgSho
     public function CreateNewVoucher($sCode = null)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         if (is_null($sCode)) {
             $bCodeUnique = false;
@@ -104,7 +104,7 @@ class TShopVoucherSeries extends TShopVoucherSeriesAutoParent implements IPkgSho
                 $quotedCode = $connection->quote($sCode);
                 $query = "SELECT COUNT(*) FROM `shop_voucher` WHERE `code` = {$quotedCode}";
                 $count = $connection->fetchOne($query);
-                if (0 == (int)$count) {
+                if (0 == (int) $count) {
                     $bCodeUnique = true;
                 }
             }

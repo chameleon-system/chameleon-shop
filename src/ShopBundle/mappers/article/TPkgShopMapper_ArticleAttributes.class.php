@@ -22,9 +22,9 @@ class TPkgShopMapper_ArticleAttributes extends AbstractPkgShopMapper_Article
             $oCacheTriggerManager->addTrigger($oArticle->table, $oArticle->id);
         }
 
-        $aAttributeList = array();
+        $aAttributeList = [];
         $oAttributeList = $oArticle->GetFieldShopAttributeValueList($this->getAttributeOrderBy());
-        $aAttributeTypes = array();
+        $aAttributeTypes = [];
         while ($oAttributeValue = $oAttributeList->Next()) {
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oAttributeValue->table, $oAttributeValue->id);
@@ -40,10 +40,10 @@ class TPkgShopMapper_ArticleAttributes extends AbstractPkgShopMapper_Article
                     }
                 }
                 if (false === $aAttributeTypes[$oAttributeValue->fieldShopAttributeId]->fieldIsSystemAttribute) {
-                    $aAttributeList[] = array(
+                    $aAttributeList[] = [
                         'sName' => (is_object($aAttributeTypes[$oAttributeValue->fieldShopAttributeId])) ? ($aAttributeTypes[$oAttributeValue->fieldShopAttributeId]->fieldName) : (''),
                         'sValue' => $oAttributeValue->fieldName,
-                    );
+                    ];
                 }
             }
         }

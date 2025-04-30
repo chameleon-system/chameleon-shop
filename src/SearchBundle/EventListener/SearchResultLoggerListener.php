@@ -32,11 +32,6 @@ class SearchResultLoggerListener
      */
     private $shopService;
 
-    /**
-     * @param ShopSearchSessionInterface $session
-     * @param ShopSearchLoggerInterface  $searchLogger
-     * @param ShopServiceInterface       $shopService
-     */
     public function __construct(ShopSearchSessionInterface $session, ShopSearchLoggerInterface $searchLogger, ShopServiceInterface $shopService)
     {
         $this->session = $session;
@@ -105,12 +100,12 @@ class SearchResultLoggerListener
      */
     private function getSearchParameters(ArticleListFilterExecutedEvent $event)
     {
-        $stateQuery = $event->getState()->getState(StateInterface::QUERY, array());
+        $stateQuery = $event->getState()->getState(StateInterface::QUERY, []);
 
-        $searchParameter = array(
+        $searchParameter = [
             \TShopModuleArticlelistFilterSearch::PARAM_QUERY => isset($stateQuery[\TShopModuleArticlelistFilterSearch::PARAM_QUERY]) ? $stateQuery[\TShopModuleArticlelistFilterSearch::PARAM_QUERY] : '',
-            \TShopModuleArticlelistFilterSearch::URL_FILTER => isset($stateQuery[\TShopModuleArticlelistFilterSearch::URL_FILTER]) ? $stateQuery[\TShopModuleArticlelistFilterSearch::URL_FILTER] : array(),
-        );
+            \TShopModuleArticlelistFilterSearch::URL_FILTER => isset($stateQuery[\TShopModuleArticlelistFilterSearch::URL_FILTER]) ? $stateQuery[\TShopModuleArticlelistFilterSearch::URL_FILTER] : [],
+        ];
 
         return $searchParameter;
     }
@@ -119,6 +114,7 @@ class SearchResultLoggerListener
      * @param string $searchString
      * @param array<string, string> $searchFilter
      * @param int $numberOfMatches
+     *
      * @return void
      */
     private function logSearch($searchString, array $searchFilter, $numberOfMatches)
@@ -128,6 +124,7 @@ class SearchResultLoggerListener
 
     /**
      * @param array<string, mixed> $searchParameter
+     *
      * @return void
      */
     private function addSearch(array $searchParameter)

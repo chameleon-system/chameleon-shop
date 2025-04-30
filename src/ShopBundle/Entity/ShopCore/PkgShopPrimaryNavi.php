@@ -8,12 +8,11 @@ class PkgShopPrimaryNavi
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsPortal|null - Belongs to portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -26,7 +25,7 @@ class PkgShopPrimaryNavi
         // TCMSFieldExtendedLookupMultiTable
         /** @var string - Select navigation */
         private string $target = '',
-// TCMSFieldExtendedLookupMultiTable
+        // TCMSFieldExtendedLookupMultiTable
         /** @var string - Select navigation */
         private string $targetTableName = '',
         // TCMSFieldBoolean
@@ -75,7 +74,6 @@ class PkgShopPrimaryNavi
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -88,7 +86,6 @@ class PkgShopPrimaryNavi
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isActive(): bool
@@ -103,7 +100,6 @@ class PkgShopPrimaryNavi
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -116,7 +112,6 @@ class PkgShopPrimaryNavi
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookupMultiTable
     public function getTarget(): string
@@ -131,7 +126,7 @@ class PkgShopPrimaryNavi
         return $this;
     }
 
-// TCMSFieldExtendedLookupMultiTable
+    // TCMSFieldExtendedLookupMultiTable
     public function getTargetTableName(): string
     {
         return $this->targetTableName;
@@ -143,7 +138,6 @@ class PkgShopPrimaryNavi
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isShowRootCategoryTree(): bool
@@ -158,7 +152,6 @@ class PkgShopPrimaryNavi
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCssClass(): string
     {
@@ -171,6 +164,4 @@ class PkgShopPrimaryNavi
 
         return $this;
     }
-
-
 }

@@ -56,8 +56,7 @@ final class BasketVariableReplacer
         Environment $twigEnvironment,
         RequestStack $requestStack,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->twigEnvironment = $twigEnvironment;
         $this->logger = $logger;
         $this->requestStack = $requestStack;
@@ -66,8 +65,6 @@ final class BasketVariableReplacer
     /**
      * filterResponse will be invoked on chameleon_system_core.filter_content and add the hidden fields to the basket form.
      * On error it will log to the request channel and move on. It will not halt execution.
-     *
-     * @param FilterContentEvent $event
      */
     public function filterResponse(FilterContentEvent $event): void
     {
@@ -88,20 +85,19 @@ final class BasketVariableReplacer
         }
 
         if (null === $this->paramsRuntimeCache) {
-
             $queryParameters = $request->query->all();
             $this->paramsRuntimeCache = $this->filterKeys($queryParameters, [\MTShopBasketCoreEndpoint::URL_REQUEST_PARAMETER]);
             $this->paramsRuntimeCache = $this->flattenQueryParameters($this->paramsRuntimeCache);
         }
 
         $hiddenFieldsHtml = [];
-        foreach ($this->paramsRuntimeCache as $name => $value ) {
+        foreach ($this->paramsRuntimeCache as $name => $value) {
             try {
                 $hiddenFieldsHtml[] = $this->twigEnvironment->render(
                     self::HIDDEN_FIELDS_SNIPPET,
                     ['name' => $name, 'value' => $value]
                 );
-            } catch(Error $error) {
+            } catch (Error $error) {
                 $this->logger->error(
                     sprintf('Error rendering hidden field for basket forms. %s => %s, Error: %s', $name, $value, $error->getMessage()),
                     ['exception' => $error]
@@ -127,9 +123,6 @@ final class BasketVariableReplacer
      * ]
      *
      * It will work recursively for deeper nested structures.
-     *
-     * @param array $queryParameters
-     * @return array
      */
     private function flattenQueryParameters(array $queryParameters): array
     {
@@ -157,10 +150,6 @@ final class BasketVariableReplacer
     /**
      * filterKeys will filter all the keys given.
      * Use this method before flattening the list with flattenQueryParameters.
-     *
-     * @param array $input
-     * @param array $filter
-     * @return array
      */
     private function filterKeys(array $input, array $filter): array
     {
@@ -168,7 +157,7 @@ final class BasketVariableReplacer
             $input,
             static function (string $key) use ($filter): bool {
                 return !in_array($key, $filter, true);
-                },
+            },
             ARRAY_FILTER_USE_KEY
         );
     }

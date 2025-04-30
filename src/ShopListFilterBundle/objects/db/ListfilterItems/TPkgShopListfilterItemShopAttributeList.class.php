@@ -46,7 +46,7 @@ class TPkgShopListfilterItemShopAttributeList extends TPkgShopListfilterItemMult
     {
         $aOptions = $this->GetFromInternalCache('aOptions');
         if (is_null($aOptions)) {
-            $aOptions = array();
+            $aOptions = [];
             $oShopAttribute = $this->GetFieldShopAttribute();
             if (is_object($oShopAttribute)) {
                 $sIdSelect = $this->GetResultSetBaseQuery();
@@ -71,8 +71,8 @@ class TPkgShopListfilterItemShopAttributeList extends TPkgShopListfilterItemMult
                     $sMatchCountString = "DISTINCT itemtable.$quotedTargetTableNameField AS attribute, 1 AS matches";
                 }
                 if (defined(
-                        'PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS'
-                    ) && PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS
+                    'PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS'
+                ) && PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS
                 ) {
                     $sItemQuery = "
                          SELECT {$sMatchCountString}
@@ -93,8 +93,8 @@ class TPkgShopListfilterItemShopAttributeList extends TPkgShopListfilterItemMult
                 }
                 if (PKG_SHOP_LISTFILTER_ENABLE_COUNT_PER_FILTER_ITEM) {
                     if (defined(
-                            'PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS_PARENTS'
-                        ) && PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS_PARENTS
+                        'PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS_PARENTS'
+                    ) && PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS_PARENTS
                     ) {
                         $sItemQuery .= "GROUP BY `shop_article`.`variant_parent_id` , itemtable.$quotedTargetTableNameField";
                     } else {
@@ -105,8 +105,8 @@ class TPkgShopListfilterItemShopAttributeList extends TPkgShopListfilterItemMult
                 $tRes = MySqlLegacySupport::getInstance()->query($sItemQuery);
                 while ($aOption = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
                     if (defined(
-                            'PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS_PARENTS'
-                        ) && PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS_PARENTS
+                        'PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS_PARENTS'
+                    ) && PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS_PARENTS
                     ) {
                         if (isset($aOptions[$aOption['attribute']])) {
                             ++$aOptions[$aOption['attribute']];
@@ -143,10 +143,10 @@ class TPkgShopListfilterItemShopAttributeList extends TPkgShopListfilterItemMult
             $aValues = $this->aActiveFilterData;
             if (is_array($aValues) && count($aValues) > 0) {
                 $sItemListQuery = $this->GetSQLQueryForQueryRestrictionForActiveFilter();
-                $aIdList = array();
+                $aIdList = [];
                 if (!empty($sItemListQuery)) {
                     $tRes = MySqlLegacySupport::getInstance()->query($sItemListQuery);
-                    $aIdList = array();
+                    $aIdList = [];
                     while ($aItemRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
                         $aIdList[] = $databaseConnection->quote($aItemRow['source_id']);
                     }
@@ -154,16 +154,16 @@ class TPkgShopListfilterItemShopAttributeList extends TPkgShopListfilterItemMult
 
                 if (count($aIdList) > 0) {
                     if (defined(
-                            'PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS'
-                        ) && PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS
+                        'PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS'
+                    ) && PKG_SHOP_LISTFILTER_ATTRIBUTE_FILTER_SELECT_VARIANTS
                     ) {
-                        //now we have a list of variant article ids but we need parent ids so we fetch the parent id for each variant id without duplicates
+                        // now we have a list of variant article ids but we need parent ids so we fetch the parent id for each variant id without duplicates
                         $sParentQuery = 'SELECT `shop_article`.`variant_parent_id`
                                  FROM `shop_article`
                                 WHERE `shop_article`.`id` IN ('.implode(',', $aIdList).")
                                 AND `shop_article`.`variant_parent_id` != '' ";
                         $rResult = MySqlLegacySupport::getInstance()->query($sParentQuery);
-                        $aIdList = array();
+                        $aIdList = [];
 
                         while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($rResult)) {
                             if (!in_array($aRow['variant_parent_id'], $aIdList)) {

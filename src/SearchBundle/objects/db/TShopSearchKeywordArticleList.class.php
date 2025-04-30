@@ -14,16 +14,16 @@ class TShopSearchKeywordArticleList extends TAdbShopSearchKeywordArticleList
     /**
      * return list for a set of keywords.
      *
-     * @param int   $iShopId
+     * @param int $iShopId
      * @param array $aKeywordList
-     * @param int   $iLanguageId
+     * @param int $iLanguageId
      *
      * @return TdbShopSearchKeywordArticleList
      */
     public static function GetListForShopKeywords($iShopId, $aKeywordList, $iLanguageId = null)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         if (null === $iLanguageId) {
             $iLanguageId = self::getMyLanguageService()->getActiveLanguageId();
@@ -38,7 +38,7 @@ class TShopSearchKeywordArticleList extends TAdbShopSearchKeywordArticleList
 
         $queryFilter = "
         `shop_search_keyword_article`.`shop_id` = {$quotedShopId}
-        AND `shop_search_keyword_article`.`name` IN (" . implode(',', $quotedKeywordList) . ")
+        AND `shop_search_keyword_article`.`name` IN (".implode(',', $quotedKeywordList).")
         AND (`shop_search_keyword_article`.`cms_language_id` = {$quotedLanguageId} OR `shop_search_keyword_article`.`cms_language_id` = '')
     ";
 

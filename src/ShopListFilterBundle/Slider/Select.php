@@ -17,10 +17,10 @@ class Select
     private $disabled = true;
 
     /** @var int[] */
-    private $options = array();
+    private $options = [];
 
     /** @var int */
-    private $selectedOption = null;
+    private $selectedOption;
 
     /**
      * @param bool $disabled

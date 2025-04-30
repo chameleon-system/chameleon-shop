@@ -15,21 +15,21 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 /**
  * exposes methods that should be callable from all shop modules (via ajax or via get/post)
  * IMPORTANT: do not extend this class. instead extend from MTShopCentralHandlerCore.
-/**/
+ * /**/
 class MTShopCentralHandlerCoreEndPoint extends TUserModelBase
 {
-    const URL_DATA = 'aShopCentralHandlerData';
-    const URL_CALLING_SPOT_NAME = 'sCallingSpotName';
+    public const URL_DATA = 'aShopCentralHandlerData';
+    public const URL_CALLING_SPOT_NAME = 'sCallingSpotName';
 
     /**
      * @var string|null
      */
-    protected $sCallingSpotName = null;
+    protected $sCallingSpotName;
 
     /**
      * @var array
      */
-    protected $aUserData = array();
+    protected $aUserData = [];
 
     public function Init()
     {
@@ -37,7 +37,7 @@ class MTShopCentralHandlerCoreEndPoint extends TUserModelBase
         $inputFilterUtil = $this->getInputFilterUtil();
         $this->aUserData = $inputFilterUtil->getFilteredInput(self::URL_DATA);
         if (!is_array($this->aUserData)) {
-            $this->aUserData = array();
+            $this->aUserData = [];
         }
         if (array_key_exists(self::URL_CALLING_SPOT_NAME, $this->aUserData)) {
             $this->sCallingSpotName = $this->aUserData[self::URL_CALLING_SPOT_NAME];
@@ -50,11 +50,11 @@ class MTShopCentralHandlerCoreEndPoint extends TUserModelBase
      * @param string $sShopArticleId
      * @param string $sViewName
      * @param string $sViewType
-     * @param array  $aCallTimeVars
+     * @param array $aCallTimeVars
      *
      * @return stdClass
      */
-    protected function GetArticleView($sShopArticleId = null, $sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
+    protected function GetArticleView($sShopArticleId = null, $sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = [])
     {
         $oReturnObject = new stdClass();
 

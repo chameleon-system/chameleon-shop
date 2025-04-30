@@ -17,12 +17,12 @@ class TPkgShopRatingServiceRating extends TPkgShopRatingServiceRatingAutoParent
      * @param string $sViewName
      * @param string $sViewSubType
      * @param string $sViewType
-     * @param null   $sSpotName
-     * @param array  $aCallTimeVars
+     * @param null $sSpotName
+     * @param array $aCallTimeVars
      *
      * @return string
      */
-    public function Render($sViewName = 'RatingServiceRating_standard', $sViewSubType = 'pkgShopRatingService/views', $sViewType = 'Customer', $sSpotName = null, $aCallTimeVars = array())
+    public function Render($sViewName = 'RatingServiceRating_standard', $sViewSubType = 'pkgShopRatingService/views', $sViewType = 'Customer', $sSpotName = null, $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 

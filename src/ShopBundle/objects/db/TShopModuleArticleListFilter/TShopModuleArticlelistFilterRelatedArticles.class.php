@@ -24,8 +24,8 @@ class TShopModuleArticlelistFilterRelatedArticles extends TdbShopModuleArticleLi
      */
     protected function GetListQueryBase($oListConfig)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sQuery = 'SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
                FROM `shop_article`
@@ -34,7 +34,7 @@ class TShopModuleArticlelistFilterRelatedArticles extends TdbShopModuleArticleLi
          INNER JOIN `shop_article_shop_article_mlt` ON `shop_article`.`id` = `shop_article_shop_article_mlt`.`target_id`
             ';
 
-        $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
+        $oActiveArticle = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (null !== $oActiveArticle) {
             // check if the article has related articles - if it does not and it is a variant, try the parent
             $sRelationKey = $oActiveArticle->id;
@@ -63,7 +63,7 @@ class TShopModuleArticlelistFilterRelatedArticles extends TdbShopModuleArticleLi
     public function _GetCacheParameters()
     {
         $aParams = parent::_GetCacheParameters();
-        $oActiveArticle = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();;
+        $oActiveArticle = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct();
         if (!is_null($oActiveArticle)) {
             $aParams['articleId'] = $oActiveArticle->id;
         }

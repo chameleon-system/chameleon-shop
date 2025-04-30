@@ -15,20 +15,21 @@ class Slider
 {
     /**
      * @var string
+     *
      * @psalm-var 'true'|'false'
      * String representation of the disabled state.
      */
     private $disabled = 'false';
     /** @var int */
-    private $valueLow = null;
+    private $valueLow;
     /** @var int */
-    private $valueHigh = null;
+    private $valueHigh;
     /** @var int */
-    private $min = null;
+    private $min;
     /** @var int */
-    private $max = null;
+    private $max;
     /** @var int */
-    private $step = null;
+    private $step;
 
     /**
      * @param bool $disabled
@@ -45,6 +46,7 @@ class Slider
 
     /**
      * @return string
+     *
      * @psalm-return 'true'|'false'
      */
     public function getDisabled()

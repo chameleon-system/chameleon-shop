@@ -22,11 +22,8 @@ class ShopShippingGroupDataAccessRuntimeCacheDecorator implements ShopShippingGr
     /**
      * @var array
      */
-    private $cache = array();
+    private $cache = [];
 
-    /**
-     * @param ShopShippingGroupDataAccessInterface $subject
-     */
     public function __construct(ShopShippingGroupDataAccessInterface $subject)
     {
         $this->subject = $subject;

@@ -14,7 +14,7 @@ use esono\pkgCmsCache\CacheInterface;
 
 /**
  * generate shop product search word index.
-/**/
+ * /**/
 class TCMSCronJob_ShopSearchIndex extends TdbCmsCronjobs
 {
     /**

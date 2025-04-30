@@ -12,7 +12,7 @@
 /**
  * this is the list version of the shop_user_notice_list table... sorry for the double List in the name,
  * but we decided to stick with convention even if it occasionally results in silly names.
-/**/
+ * /**/
 class TShopUserNoticeListList extends TAdbShopUserNoticeListList
 {
 }

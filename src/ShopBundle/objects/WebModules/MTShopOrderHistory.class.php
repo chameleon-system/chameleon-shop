@@ -37,15 +37,13 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
     /**
      * get the value list for the whole order list.
      *
-     * @param TdbShopOrderList              $oOrderList
-     * @param bool                          $bCachingEnabled
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
+     * @param bool $bCachingEnabled
      *
      * @return array
      */
     protected function getOrderList(TdbShopOrderList $oOrderList, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        $aOrderList = array();
+        $aOrderList = [];
         while ($oOrder = $oOrderList->Next()) {
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oOrder->table, $oOrder->id);
@@ -69,8 +67,6 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
     /**
      * get the active order (if present).
      *
-     * @param TdbShopOrderList $oOrderList
-     *
      * @return TdbShopOrder|null
      */
     protected function getActiveOrder(TdbShopOrderList $oOrderList)
@@ -81,7 +77,7 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
             $oOrderList->GoToStart();
 
             if (0 < $oOrderList->Length()) {
-                /**
+                /*
                  * @psalm-suppress FalsableReturnStatement - We checked the length of the list here.
                  */
                 return $oOrderList->Current();
@@ -110,8 +106,6 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
     /**
      * returns true if order number of given order is equal to the parameter in the url.
      *
-     * @param TdbShopOrder $oOrder
-     *
      * @return bool
      */
     protected function showDetail(TdbShopOrder $oOrder)
@@ -124,15 +118,13 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
     /**
      * value map for one order.
      *
-     * @param TdbShopOrder                  $oOrder
-     * @param bool                          $bCachingEnabled
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
+     * @param bool $bCachingEnabled
      *
      * @return array
      */
     private function getOrder(TdbShopOrder $oOrder, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
-        $aOrder = array();
+        $aOrder = [];
 
         $oLocal = TCMSLocal::GetActive();
 
@@ -152,9 +144,7 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @param TdbShopOrder                  $order
-     * @param bool                          $cachingEnabled
-     * @param IMapperCacheTriggerRestricted $cacheTriggerManager
+     * @param bool $cachingEnabled
      *
      * @return string
      */
@@ -165,7 +155,7 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
             $cacheTriggerManager->addTrigger($salutation->table, $salutation->id);
         }
         $address = '';
-        if (property_exists($order,'fieldAdrBillingCompany')) {
+        if (property_exists($order, 'fieldAdrBillingCompany')) {
             $address .= $this->getValueOrDefault($order->fieldAdrBillingCompany, ', ');
         }
         $address .= (null !== $salutation) ? $salutation->GetName().' ' : '';
@@ -181,9 +171,7 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @param TdbShopOrder                  $order
-     * @param bool                          $cachingEnabled
-     * @param IMapperCacheTriggerRestricted $cacheTriggerManager
+     * @param bool $cachingEnabled
      *
      * @return string
      */
@@ -197,7 +185,7 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
             $cacheTriggerManager->addTrigger($salutation->table, $salutation->id);
         }
         $address = '';
-        if (property_exists($order,'fieldAdrShippingCompany')) {
+        if (property_exists($order, 'fieldAdrShippingCompany')) {
             $address .= $this->getValueOrDefault($order->fieldAdrShippingCompany, ' ');
         }
         $address .= (null !== $salutation) ? $salutation->GetName().' ' : '';
@@ -227,15 +215,13 @@ class MTShopOrderHistory extends MTPkgViewRendererAbstractModuleMapper
      * get the detail link for the given order
      * takes active page as base url and adds only the parameter for the active order.
      *
-     * @param TdbShopOrder $oOrder
-     *
      * @return string
      */
     protected function getDetailLink(TdbShopOrder $oOrder)
     {
-        $aParameters = array(
+        $aParameters = [
             $this->getActiveOrderParameter() => $oOrder->fieldOrdernumber,
-        );
+        ];
 
         return '?'.TTools::GetArrayAsURL($aParameters);
     }

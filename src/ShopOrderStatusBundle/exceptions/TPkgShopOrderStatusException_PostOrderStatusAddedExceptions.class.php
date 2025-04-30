@@ -14,12 +14,12 @@ class TPkgShopOrderStatusException_PostOrderStatusAddedExceptions extends TPkgCm
     /**
      * @var TPkgCmsException[]
      */
-    private $exceptionList = array();
+    private $exceptionList = [];
 
     /**
      * @var TdbShopOrderStatus
      */
-    private $orderStatus = null;
+    private $orderStatus;
 
     /**
      * @param TdbShopOrderStatus $orderStatus

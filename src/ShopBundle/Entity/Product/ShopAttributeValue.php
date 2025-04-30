@@ -6,12 +6,11 @@ class ShopAttributeValue
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopAttribute|null - Belongs to the attribute */
-        private ?ShopAttribute $shopAttribute = null
-        ,
+        private ?ShopAttribute $shopAttribute = null,
         // TCMSFieldVarchar
         /** @var string - Value */
         private string $name = '',
@@ -58,7 +57,6 @@ class ShopAttributeValue
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -72,7 +70,6 @@ class ShopAttributeValue
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -85,6 +82,4 @@ class ShopAttributeValue
 
         return $this;
     }
-
-
 }

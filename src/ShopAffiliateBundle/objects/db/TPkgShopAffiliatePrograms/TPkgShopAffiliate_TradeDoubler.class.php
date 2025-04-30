@@ -15,7 +15,7 @@ class TPkgShopAffiliate_TradeDoubler extends TdbPkgShopAffiliate
      * add custom vars to the view.
      *
      * @param TdbShopOrder $oOrder
-     * @param array        $aParameter
+     * @param array $aParameter
      *
      * @return void
      */
@@ -38,7 +38,7 @@ class TPkgShopAffiliate_TradeDoubler extends TdbPkgShopAffiliate
         $oItems = $oOrder->GetFieldShopOrderItemList();
         /** @var TdbShopOrderItemList $oItems */
         while ($oItem = $oItems->Next()) {
-            /** @var TdbShopOrderItem $oItem */
+            /* @var TdbShopOrderItem $oItem */
             $aParameter['reportInfo'] .= 'f1='.$oItem->fieldArticlenumber.'&amp;f2='.$oItem->GetName().'&amp;f3='.$oItem->fieldPrice.'&amp;f4='.$oItem->fieldOrderAmount.'|';
         }
 
@@ -48,7 +48,7 @@ class TPkgShopAffiliate_TradeDoubler extends TdbPkgShopAffiliate
         if (!empty($_SESSION['TdbPkgShopAffiliate-data']['sCode'])) {
             $aParameter['tduid'] = $_SESSION['TdbPkgShopAffiliate-data']['sCode'];
         }
-        //if (!empty($_COOKIE["tduid"]))  $aParameter['tduid'] = $_COOKIE["TdbPkgShopAffiliate-data"]["sCode"];
+        // if (!empty($_COOKIE["tduid"]))  $aParameter['tduid'] = $_COOKIE["TdbPkgShopAffiliate-data"]["sCode"];
 
         if ($isSale) {
             $aParameter['domain'] = 'tbs.tradedoubler.com';
@@ -76,8 +76,10 @@ class TPkgShopAffiliate_TradeDoubler extends TdbPkgShopAffiliate
 
     /**
      * @template T
+     *
      * @param array<string, T> $aData
      * @param string $sKey
+     *
      * @return T|''
      */
     protected function GetValueFromArray($aData, $sKey)
