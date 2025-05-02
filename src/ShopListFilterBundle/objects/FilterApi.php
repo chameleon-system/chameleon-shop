@@ -132,6 +132,12 @@ class FilterApi implements FilterApiInterface
         $request = $this->requestStack->getCurrentRequest();
         $data = array_merge_recursive($request->query->all(), $request->request->all());
 
+        $listConfiguration = $this->getListConfiguration()->getAsArray();
+
+        if (false === $listConfiguration) {
+            return [];
+        }
+        
         $stateData = $this->stateRequestExtractorCollection->extract(
             $this->getListConfiguration()->getAsArray(),
             $data,
