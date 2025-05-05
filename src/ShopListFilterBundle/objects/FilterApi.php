@@ -25,62 +25,18 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class FilterApi implements FilterApiInterface
 {
-    /**
-     * @var DbAdapter
-     */
-    private $dbAdapter;
-    /**
-     * @var DbAdapterInterface
-     */
-    private $listDbAdapter;
-    /**
-     * @var StateFactoryInterface
-     */
-    private $stateFactory;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
-     * @var ResultFactoryInterface
-     */
-    private $resultFactory;
-    /**
-     * @var ConfigurationInterface
-     */
-    private $listModuleConfig;
-    /**
-     * @var ActivePageServiceInterface
-     */
-    private $activePageService;
-    /**
-     * @var string|null
-     */
-    private $articleListSpotName;
-    /**
-     * @var StateInterface
-     */
-    private $articleListState;
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
+    private DbAdapter $dbAdapter;
+    private DbAdapterInterface $listDbAdapter;
+    private StateFactoryInterface $stateFactory;
+    private RequestStack $requestStack;
+    private ResultFactoryInterface $resultFactory;
+    private ConfigurationInterface $listModuleConfig;
+    private ActivePageServiceInterface $activePageService;
+    private ?string $articleListSpotName;
+    private StateInterface $articleListState;
+    private CacheInterface $cache;
+    private StateRequestExtractorCollectionInterface $stateRequestExtractorCollection;
 
-    /**
-     * @var StateRequestExtractorCollectionInterface
-     */
-    private $stateRequestExtractorCollection;
-
-    /**
-     * @param RequestStack                             $requestStack
-     * @param DbAdapter                                $dbAdapter
-     * @param DbAdapterInterface                       $listDbAdapter
-     * @param StateFactoryInterface                    $stateFactory
-     * @param ResultFactoryInterface                   $resultFactory
-     * @param ActivePageServiceInterface               $activePageService
-     * @param CacheInterface                           $cache
-     * @param StateRequestExtractorCollectionInterface $stateRequestExtractorCollection
-     */
     public function __construct(
         RequestStack $requestStack,
         DbAdapter $dbAdapter,
@@ -120,25 +76,31 @@ class FilterApi implements FilterApiInterface
 
         $parameterIdentifier = $this->getArticleListSpotName();
 
-        return $state->getStateAsUrlQueryArray($parameterIdentifier, array(StateInterface::PAGE));
+        return $state->getStateAsUrlQueryArray($parameterIdentifier, [StateInterface::PAGE]);
     }
 
-    /**
-     * @return array
-     */
-    private function getArticleListStateData()
+    private function getArticleListStateData(): array
     {
         $parameterIdentifier = $this->getArticleListSpotName();
         $request = $this->requestStack->getCurrentRequest();
+
+        if (null === $request) {
+            return [];
+        }
+
         $data = array_merge_recursive($request->query->all(), $request->request->all());
 
-        $stateData = $this->stateRequestExtractorCollection->extract(
+        $listConfiguration = $this->getListConfiguration()->getAsArray();
+
+        if (false === $listConfiguration) {
+            return [];
+        }
+
+        return $this->stateRequestExtractorCollection->extract(
             $this->getListConfiguration()->getAsArray(),
             $data,
             $parameterIdentifier
         );
-
-        return $stateData;
     }
 
     /**
@@ -151,20 +113,20 @@ class FilterApi implements FilterApiInterface
         }
 
         $activePageId = $this->getActivePageId();
-        $cacheKey = $this->cache->getKey(array(
+        $cacheKey = $this->cache->getKey([
             'class' => __CLASS__,
             'method' => 'getListConfiguration',
             'page' => $activePageId,
-        ), false);
+        ], false);
         $instance = $this->cache->get($cacheKey);
         if (null === $instance) {
             $listInstanceId = $this->dbAdapter->getFilterableListInstanceIdOnPage($activePageId);
             $this->listModuleConfig = $this->listDbAdapter->getConfigurationFromInstanceId($listInstanceId);
 
-            $this->cache->set($cacheKey, $this->listModuleConfig, array(
-                    array('table' => 'shop_module_article_list', 'id' => null),
-                    array('table' => 'cms_tpl_page_cms_master_pagedef_spot', 'id' => null),
-                )
+            $this->cache->set($cacheKey, $this->listModuleConfig, [
+                    ['table' => 'shop_module_article_list', 'id' => null],
+                    ['table' => 'cms_tpl_page_cms_master_pagedef_spot', 'id' => null],
+                ]
             );
         } else {
             $this->listModuleConfig = $instance;
@@ -197,14 +159,9 @@ class FilterApi implements FilterApiInterface
         return $this->resultFactory->_GetCacheTableInfos($this->getListConfiguration());
     }
 
-    /**
-     * @return string|null
-     *
-     * @FIXME The result of `->getActivePage()` can be null, which means the property fetch on it may be null as well (currently yielding a warning, but may be a fatal error in future PHP Version?)
-     */
-    private function getActivePageId()
+    private function getActivePageId(): ?string
     {
-        return $this->activePageService->getActivePage()->id;
+        return $this->activePageService->getActivePage()?->id;
     }
 
     /**
@@ -222,10 +179,7 @@ class FilterApi implements FilterApiInterface
         return $this->articleListState;
     }
 
-    /**
-     * @return string|null
-     */
-    private function getArticleListSpotName()
+    private function getArticleListSpotName(): ?string
     {
         if (null !== $this->articleListSpotName) {
             return $this->articleListSpotName;
@@ -235,10 +189,7 @@ class FilterApi implements FilterApiInterface
         return $this->articleListSpotName;
     }
 
-    /**
-     * @return ResultFactoryInterface
-     */
-    public function getResultFactory()
+    public function getResultFactory(): ResultFactoryInterface
     {
         return $this->resultFactory;
     }
