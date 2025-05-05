@@ -15,12 +15,12 @@ use ChameleonSystem\ShopBundle\Exception\ConfigurationException;
  * the paymenthandlers are used to handle the different payment methods. They ensure that the right
  * information is collected from the user, and that the payment is executed (as may be the case for online payment)
  * Note that the default handler has no functionality. it must be extended in order to do anything useful.
-/**/
+ * /**/
 class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopPaymentHandler';
-    const URL_PAYMENT_USER_INPUT = 'aPayment';
-    const CONTINUE_PAYMENT_EXECUTION_FLAG = '__cmspaymentcontinue';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopPaymentHandler';
+    public const URL_PAYMENT_USER_INPUT = 'aPayment';
+    public const CONTINUE_PAYMENT_EXECUTION_FLAG = '__cmspaymentcontinue';
 
     /**
      * @var IPkgShopOrderPaymentConfig
@@ -88,8 +88,8 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      */
     public static function GetInstance($id)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $oInstance = null;
         $quotedId = $connection->quote($id);
@@ -105,7 +105,6 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
     }
 
     /**
-     * @param array       $row
      * @param string|null $languageId
      *
      * @return TdbShopPaymentHandler
@@ -145,7 +144,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      */
     public function GetHtmlHeadIncludes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -165,8 +164,6 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
     }
 
     /**
-     * @param IPkgShopOrderPaymentConfig $configData
-     *
      * @return void
      */
     public function setConfigData(IPkgShopOrderPaymentConfig $configData)
@@ -206,7 +203,8 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
     public function GetFieldShopPaymentHandlerParameterList()
     {
         $oList = TdbShopPaymentHandlerParameterList::GetListForShopPaymentHandlerId($this->id, $this->iLanguageId);
-        $oList->ChangeOrderBy(array('cms_portal_id' => 'ASC')); //make sure parameters without portal come first
+        $oList->ChangeOrderBy(['cms_portal_id' => 'ASC']); // make sure parameters without portal come first
+
         return $oList;
     }
 
@@ -217,8 +215,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      * as soon as control is passed back to it. (Chameleon will call $this->PostExecutePaymentHook() as soon as control
      * is returned  - this is where you should check if the returned data is valid/invalid.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool true if the payment was executed successfully, else false
      */
@@ -267,8 +264,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      *
      * Note: system_order_payment_method_executed will be set to true either way
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -289,12 +285,11 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      * method is called only if the user returns from an execute payment call that was interrupted. this is called before
      * PostExecutePaymentHook. If the method returns false, or if an exception is thrown, then the order is canceled.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer
-     *
-     * @throws TPkgCmsException_LogAndMessage
+     * @param string $sMessageConsumer
      *
      * @return bool
+     *
+     * @throws TPkgCmsException_LogAndMessage
      */
     public function postExecutePaymentInterruptedHook(TdbShopOrder $oOrder, $sMessageConsumer)
     {
@@ -324,8 +319,8 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      */
     public function SaveUserPaymentDataToOrder($iOrderId)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $aUserPaymentData = $this->GetUserPaymentData();
         $aUserPaymentData = $this->PreSaveUserPaymentDataToOrderHook($aUserPaymentData);
@@ -374,7 +369,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
         if ($oGlobal->UserDataExists(TdbShopPaymentHandler::URL_PAYMENT_USER_INPUT)) {
             $this->aPaymentUserData = $oGlobal->GetUserData(TdbShopPaymentHandler::URL_PAYMENT_USER_INPUT);
             if (!is_array($this->aPaymentUserData)) {
-                $this->aPaymentUserData = array();
+                $this->aPaymentUserData = [];
             }
         } elseif (is_null($this->aPaymentUserData)) {
             $this->aPaymentUserData = $this->GetDefaultUserPaymentData();
@@ -419,23 +414,23 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      */
     protected function GetDefaultUserPaymentData()
     {
-        return array();
+        return [];
     }
 
     /**
      * used to display the basket article list.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oView->AddVar('oShop', $oShop);
         $oView->AddVar('oPaymentHandler', $this);
 
@@ -467,7 +462,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -509,8 +504,6 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
     /**
      * return true if the the payment handler may be used by the payment method passed.
      * you can use this hook to disable payment methods based on basket contents, payment method, user data, ...
-     *
-     * @param TdbShopPaymentMethod $oPaymentMethod
      *
      * @return bool
      */
@@ -580,7 +573,7 @@ class TShopPaymentHandler extends TShopPaymentHandlerAutoParent
      */
     protected function GetCurrencyIdentifier($oPkgShopCurrency = null)
     {
-        $sCurrencyCode = 'EUR'; //default
+        $sCurrencyCode = 'EUR'; // default
         if (!is_null($oPkgShopCurrency)) {
             $sCurrencyCode = $oPkgShopCurrency->fieldName;
         }

@@ -31,7 +31,7 @@ class TShopOrderItem extends TAdbShopOrderItem
             $oOwningOrderItem = false;
             if (!is_null($this->id)) {
                 /* @var $connection \Doctrine\DBAL\Connection */
-                $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+                $connection = ServiceLocator::get('database_connection');
 
                 $escapedId = $connection->quote($this->id);
 

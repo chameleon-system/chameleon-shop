@@ -27,7 +27,7 @@ class RequestToListUrlConverter implements RequestToListUrlConverterInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getListUrl()
     {
@@ -35,7 +35,7 @@ class RequestToListUrlConverter implements RequestToListUrlConverterInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getListSpotName()
     {
@@ -43,7 +43,7 @@ class RequestToListUrlConverter implements RequestToListUrlConverterInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getListUrlFromParameters()
     {
@@ -58,9 +58,9 @@ class RequestToListUrlConverter implements RequestToListUrlConverterInterface
      */
     public function getPagerParameter($listSpotName, $listPageUrl)
     {
-        return array(
+        return [
             RequestToListUrlConverterInterface::URL_PARAMETER_SPOT_NAME => $listSpotName,
             RequestToListUrlConverterInterface::URL_PARAMETER_LIST_URL => $listPageUrl,
-        );
+        ];
     }
 }

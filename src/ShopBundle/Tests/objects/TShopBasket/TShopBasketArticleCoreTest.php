@@ -34,9 +34,9 @@ class TShopBasketArticleCoreTest extends TestCase
     /**
      * @test
      */
-    public function it_should_keep_custom_data_even_when_serializing_and_unserializing()
+    public function itShouldKeepCustomDataEvenWhenSerializingAndUnserializing()
     {
-        $testCustomData = array('custom' => 'data');
+        $testCustomData = ['custom' => 'data'];
         $basketArticle = new TShopBasketArticleCore();
 
         $basketArticle->setCustomData($testCustomData);

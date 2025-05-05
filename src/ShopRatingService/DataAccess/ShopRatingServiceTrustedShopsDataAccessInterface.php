@@ -15,12 +15,14 @@ interface ShopRatingServiceTrustedShopsDataAccessInterface
 {
     /**
      * @param string $remoteKey
+     *
      * @return int
      */
     public function getItemCountForRemoteKey($remoteKey);
 
     /**
      * @param array<string, mixed> $data
+     *
      * @psalm-param array{
      *     insertId: string,
      *     pkgShopRatingServiceId: string,

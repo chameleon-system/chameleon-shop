@@ -681,8 +681,8 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      */
     protected function GetAnotherAddressFromUser($sReferenceAddressId, $sForAddressForm = TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sAlternativeAddressId = 'new';
         $oUser = self::getExtranetUserProvider()->getActiveUser();
@@ -698,6 +698,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
 
         return $sAlternativeAddressId;
     }
+
     /**
      * return 1 if the user wants to ship to the billing address, else 0.
      *

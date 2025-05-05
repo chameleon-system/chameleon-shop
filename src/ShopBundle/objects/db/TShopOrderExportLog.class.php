@@ -16,7 +16,7 @@ class TShopOrderExportLog extends TShopOrderExportLogAutoParent
     /**
      * write a Log Entry.
      *
-     * @param int    $iOrderId
+     * @param int $iOrderId
      * @param string $sData
      *
      * @return void
@@ -26,9 +26,9 @@ class TShopOrderExportLog extends TShopOrderExportLogAutoParent
         /** @var $oItem TdbShopOrderExportLog */
         $oItem = TdbShopOrderExportLog::GetNewInstance();
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         $ip = $request->getClientIp();
-        $aData = array('shop_order_id' => $iOrderId, 'datecreated' => date('Y-m-d H:i:s'), 'ip' => $ip, 'data' => $sData, 'user_session_id' => session_id());
+        $aData = ['shop_order_id' => $iOrderId, 'datecreated' => date('Y-m-d H:i:s'), 'ip' => $ip, 'data' => $sData, 'user_session_id' => session_id()];
         $oItem->LoadFromRow($aData);
         $oItem->AllowEditByAll(true);
         $oItem->Save();

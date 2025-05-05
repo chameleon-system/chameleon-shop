@@ -15,7 +15,7 @@ class TPkgShopCurrency_ShopOrder extends TPkgShopCurrency_ShopOrderAutoParent
      * method can be used to modify the data saved to order before the save is executed.
      *
      * @param TShopBasket $oBasket
-     * @param array       $aOrderData
+     * @param array $aOrderData
      *
      * @return void
      */

@@ -17,24 +17,18 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 interface ResultModifierInterface
 {
     /**
-     * @param ResultModificationInterface $resultModification
      * @return void
      */
     public function addModification(ResultModificationInterface $resultModification);
 
     /**
-     * @param ResultInterface $result
-     * @param array           $configuration
-     * @param int             $filterDepth
+     * @param int $filterDepth
      *
      * @return ResultInterface
      */
     public function apply(ResultInterface $result, array $configuration, $filterDepth);
 
     /**
-     * @param ResultInterface $result
-     * @param array $configuration
-     * @param StateInterface $state
      * @return ResultInterface
      */
     public function applyState(ResultInterface $result, array $configuration, StateInterface $state);

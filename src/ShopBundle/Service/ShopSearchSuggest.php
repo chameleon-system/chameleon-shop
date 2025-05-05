@@ -21,9 +21,6 @@ class ShopSearchSuggest implements ShopSearchSuggestInterface
      */
     private $databaseConnection;
 
-    /**
-     * @param Connection $databaseConnection
-     */
     public function __construct(Connection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
@@ -35,7 +32,7 @@ class ShopSearchSuggest implements ShopSearchSuggestInterface
     public function getSearchSuggestions($searchTerm)
     {
         if ('' === trim($searchTerm)) {
-            return array();
+            return [];
         }
         // simple filter to avoid XSS attacks - only works with German/English
         /** @var string $searchTerm */
@@ -47,7 +44,7 @@ class ShopSearchSuggest implements ShopSearchSuggestInterface
         $aQueries[] = "SELECT `articlenumber` AS name FROM `shop_article` WHERE `articlenumber` LIKE $searchTerm2";
 
         /** @var string[] $aSuggestions */
-        $aSuggestions = array();
+        $aSuggestions = [];
         $finalQuery = '';
         $isFirst = true;
         foreach ($aQueries as $sQuery) {
@@ -66,7 +63,7 @@ class ShopSearchSuggest implements ShopSearchSuggestInterface
         $aSuggestions = array_unique($aSuggestions);
 
         /** @var string[] $suggestions */
-        $suggestions = array();
+        $suggestions = [];
         $suggestions[] = $searchTerm;
         $suggestions = array_merge($suggestions, $aSuggestions);
 

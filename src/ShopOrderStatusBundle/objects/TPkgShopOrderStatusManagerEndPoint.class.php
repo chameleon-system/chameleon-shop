@@ -22,11 +22,9 @@ class TPkgShopOrderStatusManagerEndPoint
      *
      * @deprecated since 6.3.0
      */
-    private $logger = null;
+    private $logger;
 
     /**
-     * @param IPkgCmsCoreLog $logger
-     *
      * @deprecated since 6.3.0 - is not supported anymore; use only getShopLogger() or do your own logging
      *
      * @return void
@@ -65,23 +63,21 @@ class TPkgShopOrderStatusManagerEndPoint
     protected function getPostOrderStatusAddedHookList()
     {
         if (false === PKG_SHOP_ORDER_STATUS_SEND_STATUS_NOTIFICATION_MAIL) {
-            return array();
+            return [];
         } else {
-            return array('sendStatusMailToCustomer');
+            return ['sendStatusMailToCustomer'];
         }
     }
 
     /**
-     * @param TPkgShopOrderStatusData $oData
+     * @return TdbShopOrderStatus
      *
      * @throws TPkgCmsException_Log
      * @throws TPkgShopOrderStatusException_PostOrderStatusAddedExceptions
-     *
-     * @return \TdbShopOrderStatus
      */
     final public function addStatus(TPkgShopOrderStatusData $oData)
     {
-        $this->getShopLogger()->info('add status', array('oData' => $oData));
+        $this->getShopLogger()->info('add status', ['oData' => $oData]);
         $this->validateStatusData($oData);
         $this->getShopLogger()->info('status validated ok');
         $aData = $oData->getDataAsTdbArray();
@@ -112,7 +108,7 @@ class TPkgShopOrderStatusManagerEndPoint
             $orderId = $oData->getOrder()->id;
             $e = new TPkgShopOrderStatusException_PostOrderStatusAddedExceptions(
                 "post order status added hook throw multiple exceptions for order {$orderId} with status {$oStatus->id}",
-                array('oData' => $oData, 'status' => $oStatus->sqlData)
+                ['oData' => $oData, 'status' => $oStatus->sqlData]
             );
             $e->setExceptionList($aExceptionList)->setOrderStatus($oStatus);
             throw $e;
@@ -124,18 +120,16 @@ class TPkgShopOrderStatusManagerEndPoint
     /**
      * validates the input.
      *
-     * @param TPkgShopOrderStatusData $oData
+     * @return void
      *
      * @throws TPkgCmsException_Log
-     *
-     * @return void
      */
     protected function validateStatusData(TPkgShopOrderStatusData $oData)
     {
         // does the order exists?
         $order = $oData->getOrder();
         if (!$order) {
-            throw new TPkgCmsException_Log('order status update: missing order object', array('statusdata' => $oData));
+            throw new TPkgCmsException_Log('order status update: missing order object', ['statusdata' => $oData]);
         }
         // do the items exists and belong to the order? and is the amount shippable?
         $aItems = $oData->getItems();
@@ -143,12 +137,12 @@ class TPkgShopOrderStatusManagerEndPoint
             /** @var TPkgShopOrderStatusItemData $oItem */
             $oOrderItem = TdbShopOrderItem::GetNewInstance();
             if (false === $oOrderItem->LoadFromFields(
-                    array('shop_order_id' => $order->id, 'id' => $oItem->getShopOrderItemId())
-                )
+                ['shop_order_id' => $order->id, 'id' => $oItem->getShopOrderItemId()]
+            )
             ) {
                 throw new TPkgCmsException_Log(
                     'order status update: order item invalid',
-                    array('statusdata' => $oData, 'item' => $oItem)
+                    ['statusdata' => $oData, 'item' => $oItem]
                 );
             }
         }
@@ -159,12 +153,12 @@ class TPkgShopOrderStatusManagerEndPoint
      */
     private function orderStatusAddedHook(TdbShopOrderStatus $oStatus)
     {
-        $aExceptionList = array();
+        $aExceptionList = [];
         $this->getShopLogger()->info('orderStatusAddedHook');
         foreach ($this->getPostOrderStatusAddedHookList() as $sMethodName) {
             try {
                 $this->getShopLogger()->info("calling \$this->{$sMethodName} on status");
-                call_user_func(array($this, $sMethodName), $oStatus);
+                call_user_func([$this, $sMethodName], $oStatus);
                 $this->getShopLogger()->info("called \$this->{$sMethodName} on status");
             } catch (TPkgCmsException $e) {
                 $aExceptionList[] = $e;
@@ -175,8 +169,6 @@ class TPkgShopOrderStatusManagerEndPoint
     }
 
     /**
-     * @param TdbShopOrderStatus $oStatus
-     *
      * @return bool
      *
      * @throws TPkgCmsException_Log
@@ -209,7 +201,7 @@ class TPkgShopOrderStatusManagerEndPoint
             if (null === $oMailProfile) {
                 throw new TPkgCmsException_Log(
                     'unable to send update mail because matching profile does not exists: '.TdbShopOrder::MAIL_STATUS_UPDATE,
-                    array('oStatus' => $oStatus)
+                    ['oStatus' => $oStatus]
                 );
             }
             $oOrder = $oStatus->GetFieldShopOrder();
@@ -238,8 +230,6 @@ class TPkgShopOrderStatusManagerEndPoint
     /**
      * send status mail simulating a front end action to use twig templates from customer.
      *
-     * @param TdbShopOrderStatus $oStatus
-     *
      * @return bool
      */
     protected function sendStatusMailToCustomerWithFrontEndAction(TdbShopOrderStatus $oStatus)
@@ -253,7 +243,7 @@ class TPkgShopOrderStatusManagerEndPoint
         $oAction = TdbPkgRunFrontendAction::CreateAction(
             'TPkgRunFrontendAction_SendOrderStatusEMail',
             $sPortalId,
-            array('order_status_id' => $oStatus->id, 'order_id' => $oStatus->fieldShopOrderId)
+            ['order_status_id' => $oStatus->id, 'order_id' => $oStatus->fieldShopOrderId]
         );
         $sURL = $oAction->getUrlToRunAction();
         $sURL = str_replace('&amp;', '&', $sURL); // remove encoding
@@ -262,7 +252,7 @@ class TPkgShopOrderStatusManagerEndPoint
         $this->getShopLogger()->info(sprintf('sending mail via frontend action using URL: %s', $sURL));
         $executeRequestResponse = $oToHostHandler->executeRequest();
         if (preg_match('#{.*}#', $executeRequestResponse, $aMatches)) {
-            $this->getShopLogger()->info('done sending mail via frontend action. got response ', array('response' => $aMatches[0]));
+            $this->getShopLogger()->info('done sending mail via frontend action. got response ', ['response' => $aMatches[0]]);
             $aResponse = json_decode($aMatches[0], true);
             if (is_array($aResponse) && count(
                 $aResponse
@@ -271,7 +261,7 @@ class TPkgShopOrderStatusManagerEndPoint
                 $bSuccess = true;
             }
         } else {
-            $this->getShopLogger()->error('failed sending mail via frontend action. got response', array('response' => $executeRequestResponse));
+            $this->getShopLogger()->error('failed sending mail via frontend action. got response', ['response' => $executeRequestResponse]);
         }
 
         return $bSuccess;

@@ -8,16 +8,14 @@ class ShopModuleArticleListArticle
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopModuleArticleList|null - Belongs to article list */
-        private ?ShopModuleArticleList $shopModuleArticleList = null
-        ,
+        private ?ShopModuleArticleList $shopModuleArticleList = null,
         // TCMSFieldExtendedLookup
         /** @var ShopArticle|null - Article */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldPosition
         /** @var int - Position */
         private int $position = 0,
@@ -64,7 +62,6 @@ class ShopModuleArticleListArticle
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getShopArticle(): ?ShopArticle
     {
@@ -77,7 +74,6 @@ class ShopModuleArticleListArticle
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getPosition(): int
@@ -92,7 +88,6 @@ class ShopModuleArticleListArticle
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -105,6 +100,4 @@ class ShopModuleArticleListArticle
 
         return $this;
     }
-
-
 }

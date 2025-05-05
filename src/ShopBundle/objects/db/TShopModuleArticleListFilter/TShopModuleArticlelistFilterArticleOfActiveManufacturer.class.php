@@ -28,7 +28,7 @@ class TShopModuleArticlelistFilterArticleOfActiveManufacturer extends TdbShopMod
     protected function GetListQueryBase($oListConfig)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $oActiveManufacturer = TdbShop::GetActiveManufacturer();
         if (!is_null($oActiveManufacturer)) {

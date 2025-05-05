@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  * assumes the path in the TCMSSmartURLData is a simple tree path.
  *
  * @psalm-suppress UndefinedPropertyAssignment
+ *
  * @FIXME Writing data into `$OURLData` when there is no magic `__set` method for them defined.
  */
 class TCMSSmartURLHandler_ShopIPayment extends TCMSSmartURLHandler_ShopBasketSteps
@@ -28,7 +29,7 @@ class TCMSSmartURLHandler_ShopIPayment extends TCMSSmartURLHandler_ShopBasketSte
         if (false !== $iIPaymentPos) {
             $sIPaymentCode = substr($oURLData->sRelativeURL, $iIPaymentPos + strlen(TShopPaymentHandlerIPayment::URL_PARAMETER_NAME));
             $oURLData->sRelativeURL = substr($oURLData->sRelativeURL, 0, $iIPaymentPos);
-            $aUrlParts = array();
+            $aUrlParts = [];
             if (!empty($oURLData->sRelativeURLPortalIdentifier)) {
                 $aUrlParts[] = $oURLData->sRelativeURLPortalIdentifier;
             }
@@ -45,7 +46,7 @@ class TCMSSmartURLHandler_ShopIPayment extends TCMSSmartURLHandler_ShopBasketSte
             $this->SetStepParameter($oStep);
 
             $aRedirectParameter = $oURLData->aParameters;
-            $aRedirectParameter['module_fnc'] = array($oURLData->aParameters['spot'] => 'PostProcessExternalPaymentHandlerHook');
+            $aRedirectParameter['module_fnc'] = [$oURLData->aParameters['spot'] => 'PostProcessExternalPaymentHandlerHook'];
             $aRedirectParameter['cmspaymentstate'] = $sIPaymentMessage;
             $sURL = $oURLData->sRelativeFullURL.'?'.str_replace('&amp;', '&', TTools::GetArrayAsURL($aRedirectParameter));
 

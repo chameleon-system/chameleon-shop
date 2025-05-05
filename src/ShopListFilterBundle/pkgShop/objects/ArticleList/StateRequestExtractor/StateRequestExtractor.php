@@ -16,7 +16,7 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\StateRequestExtractor\Interfa
 
 class StateRequestExtractor implements StateRequestExtractorInterface
 {
-    const CONFIG_CAN_BE_FILTERED = 'can_be_filtered';
+    public const CONFIG_CAN_BE_FILTERED = 'can_be_filtered';
 
     /**
      * {@inheritDoc}
@@ -24,12 +24,12 @@ class StateRequestExtractor implements StateRequestExtractorInterface
     public function extract(array $configuration, array $requestData, $listSpotName)
     {
         if (false === $this->postSearchFilterEnabled($configuration)) {
-            return array(); // no need to add state data
+            return []; // no need to add state data
         }
-        $stateData = array();
+        $stateData = [];
         if (false === isset($requestData[\TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA])) {
-            //we don't need to initialize whole filter
-            return array();
+            // we don't need to initialize whole filter
+            return [];
         }
         $filterState = \TdbPkgShopListfilter::GetActiveInstance()->GetCurrentFilterAsArray();
         if (count($filterState) > 0) {

@@ -26,7 +26,7 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
      */
     protected function GetListQueryBase($oListConfig)
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
         $oExtranetUser = $this->getExtranetUserProvider()->getActiveUser();
 
         if ($oExtranetUser->IsLoggedIn()) {
@@ -93,8 +93,8 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
      */
     protected function CreateTempNotice($aNoticeList)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sTmpTableName = '_tmp'.session_id().'noticelist';
         $quotedTmpTableName = $connection->quoteIdentifier($sTmpTableName);
@@ -111,7 +111,7 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
         $connection->executeStatement($query);
 
         foreach ($aNoticeList as $oNoteItem) {
-            /** @var $oNoteItem TdbShopUserNoticeList */
+            /* @var $oNoteItem TdbShopUserNoticeList */
             $connection->insert($sTmpTableName, [
                 'date_added' => $oNoteItem->fieldDateAdded,
                 'shop_article_id' => $oNoteItem->fieldShopArticleId,
@@ -160,6 +160,6 @@ class TShopModuleArticlelistFilterNoticeList extends TdbShopModuleArticleListFil
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 }

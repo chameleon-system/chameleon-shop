@@ -8,12 +8,11 @@ class ShopArticleImageSize
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldVarchar
         /** @var string - System name */
         private string $nameInternal = '',
@@ -69,7 +68,6 @@ class ShopArticleImageSize
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getNameInternal(): string
     {
@@ -82,7 +80,6 @@ class ShopArticleImageSize
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -97,7 +94,6 @@ class ShopArticleImageSize
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getWidth(): int
     {
@@ -110,7 +106,6 @@ class ShopArticleImageSize
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getHeight(): int
@@ -125,7 +120,6 @@ class ShopArticleImageSize
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isForceSize(): bool
     {
@@ -138,6 +132,4 @@ class ShopArticleImageSize
 
         return $this;
     }
-
-
 }

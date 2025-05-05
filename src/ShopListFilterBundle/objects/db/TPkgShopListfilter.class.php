@@ -19,13 +19,13 @@ if (!defined('PKG_SHOP_LISTFILTER_ENABLE_COUNT_PER_FILTER_ITEM')) {
 
 class TPkgShopListfilter extends TPkgShopListfilterAutoParent
 {
-    const VIEW_PATH = 'pkgShopListfilter/views/db/TPkgShopListfilter';
-    const URL_PARAMETER_IS_NEW_REQUEST = 'bFilterNewRequest';
+    public const VIEW_PATH = 'pkgShopListfilter/views/db/TPkgShopListfilter';
+    public const URL_PARAMETER_IS_NEW_REQUEST = 'bFilterNewRequest';
 
     /**
-     * @var null|array
+     * @var array|null
      */
-    private $staticFilter = null;
+    private $staticFilter;
 
     /**
      * @var string
@@ -49,7 +49,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
         static $oInstance = false;
         if (false === $oInstance) {
             /** @var $filterApi FilterApiInterface */
-            $filterApi = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_list_filter.filter_api');
+            $filterApi = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_list_filter.filter_api');
             $baseQuery = $filterApi->getArticleListQuery();
 
             $oInstance = self::getInstanceForPage(self::getMyActivePageService()->getActivePage(), $baseQuery);
@@ -61,7 +61,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
 
             $oFilterList = $oInstance->GetFieldPkgShopListfilterItemList();
             $oFilterList->GoToStart();
-            $aCloneList = array();
+            $aCloneList = [];
             while ($oFilterItem = $oFilterList->Next()) {
                 $filterQueryRestriction = $oFilterList->GetQueryRestriction($oFilterItem);
                 $sBaseQueryHash = 'h'.md5($filterQueryRestriction);
@@ -80,7 +80,6 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
     }
 
     /**
-     * @param array $listState
      * @return void
      */
     public function setListState(array $listState)
@@ -164,21 +163,20 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
     }
 
     /**
-     * @param TdbCmsTplPage $page
-     * @param string        $baseQuery
+     * @param string $baseQuery
      *
      * @return TdbPkgShopListfilter|null
      */
     private static function getInstanceForPage(TdbCmsTplPage $page, $baseQuery)
     {
         /** @var CacheInterface $cache */
-        $cache = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+        $cache = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
 
-        $cacheKey = $cache->getKey(array(
+        $cacheKey = $cache->getKey([
             'class' => __CLASS__,
             'method' => 'getInstanceForPage',
             'pageId' => $page->id,
-        ));
+        ]);
         $instance = $cache->get($cacheKey);
         if (null === $instance) {
             $instance = false;
@@ -203,13 +201,13 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
                 }
             }
 
-            $cache->set($cacheKey, $instance, array(array('table' => 'shop', 'id' => null), array('table' => 'cms_tpl_page', 'id' => $page->id), array('table' => 'pkg_shop_listfilter', 'id' => null)));
+            $cache->set($cacheKey, $instance, [['table' => 'shop', 'id' => null], ['table' => 'cms_tpl_page', 'id' => $page->id], ['table' => 'pkg_shop_listfilter', 'id' => null]]);
         }
 
         if (false === $instance) { // check if the category sets a filter
             $instance = null;
-            /** @var \ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface $shopService */
-            $shopService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+            /** @var ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface $shopService */
+            $shopService = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
             $activeCategory = $shopService->getActiveCategory();
             if (null !== $activeCategory) {
                 $instance = self::getInstanceForCategory($activeCategory, $shopService->getActiveShop());
@@ -217,7 +215,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
         }
 
         if (null === $instance) {
-            $instance = TdbPkgShopListfilter::GetNewInstance(\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop()->fieldPkgShopListfilterPostsearchId);
+            $instance = TdbPkgShopListfilter::GetNewInstance(ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop()->fieldPkgShopListfilterPostsearchId);
         }
 
         $instance->pushStaticFilterToRequest();
@@ -229,6 +227,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
 
     /**
      * @param string $articleListQuery
+     *
      * @return void
      */
     public function setArticleListQuery($articleListQuery)
@@ -239,16 +238,16 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
     /**
      * render the filter.
      *
-     * @param string $sViewName     - name of the view
-     * @param string $sViewType     - where to look for the view
-     * @param array  $aCallTimeVars - optional parameters to pass to render method
+     * @param string $sViewName - name of the view
+     * @param string $sViewType - where to look for the view
+     * @param array $aCallTimeVars - optional parameters to pass to render method
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
-        /** @var $oView TViewParser */
+        /* @var $oView TViewParser */
         $oView->AddVar('oListfilter', $this);
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);
         $aOtherParameters = $this->GetAdditionalViewVariables($sViewName, $sViewType);
@@ -268,7 +267,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }
@@ -282,7 +281,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
     {
         $oList = $this->GetFromInternalCache('FieldPkgShopListfilterItemList');
         if (is_null($oList)) {
-            $aTrigger = array('class' => __CLASS__, 'method' => 'GetFieldPkgShopListfilterItemList', 'id' => $this->id);
+            $aTrigger = ['class' => __CLASS__, 'method' => 'GetFieldPkgShopListfilterItemList', 'id' => $this->id];
             $aTrigger['activeFilter'] = TGlobal::instance()->GetUserData(TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA);
             $bCaching = false;
             if (!is_array($aTrigger['activeFilter']) || 0 == count($aTrigger['activeFilter'])) {
@@ -292,7 +291,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
             $sKey = null;
             if ($bCaching) {
                 /** @var CacheInterface $cache */
-                $cache = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+                $cache = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
                 $sKey = $cache->GetKey($aTrigger);
                 $oList = $cache->get($sKey);
             }
@@ -305,7 +304,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
                 }
                 $oList->GoToStart();
                 if ($bCaching) {
-                    $aCacheTrigger = array(array('table' => 'pkg_shop_listfilter_item', 'id' => null), array('table' => $this->table, 'id' => $this->id));
+                    $aCacheTrigger = [['table' => 'pkg_shop_listfilter_item', 'id' => null], ['table' => $this->table, 'id' => $this->id]];
                     $cache->set($sKey, $oList, $aCacheTrigger);
                 }
             }
@@ -363,7 +362,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
             if (is_array($aFilterData) && array_key_exists(TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA, $aFilterData) && is_array($aFilterData[TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA]) && count($aFilterData[TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA]) > 0) {
                 $aFilterData = $aFilterData[TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA];
                 $oFilterId = TdbPkgShopListfilterItem::GetNewInstance();
-                if ($oFilterId->LoadFromFields(array('pkg_shop_listfilter_id' => $this->id, 'systemname' => $sFilterSystemName))) {
+                if ($oFilterId->LoadFromFields(['pkg_shop_listfilter_id' => $this->id, 'systemname' => $sFilterSystemName])) {
                     if (is_array($aFilterData) && array_key_exists($oFilterId->id, $aFilterData)) {
                         if (is_array($aFilterData[$oFilterId->id]) && count($aFilterData[$oFilterId->id]) > 0) {
                             $aActiveFilter = $aFilterData[$oFilterId->id];
@@ -388,7 +387,7 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
 
         $filterData = TGlobal::instance()->GetUserData(TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA);
         if (!is_array($filterData)) {
-            $filterData = array();
+            $filterData = [];
         }
 
         foreach ($this->staticFilter as $param => $val) {
@@ -402,6 +401,6 @@ class TPkgShopListfilter extends TPkgShopListfilterAutoParent
      */
     private static function getMyActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

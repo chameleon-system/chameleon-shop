@@ -28,9 +28,6 @@ interface DbAdapterInterface
     public function getFilterDefinitionFromId($filterId);
 
     /**
-     * @param ConfigurationInterface $moduleConfiguration
-     * @param FilterInterface        $filter
-     *
      * @return ResultInterface
      */
     public function getListResults(ConfigurationInterface $moduleConfiguration, FilterInterface $filter);

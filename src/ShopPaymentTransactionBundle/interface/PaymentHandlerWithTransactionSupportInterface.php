@@ -14,7 +14,6 @@ namespace esono\pkgshoppaymenttransaction;
 /**
  * payment handler that implement this interface will route payment transactions through an instance of PaymentTransactionHandlerInterface.
  *
- *
  * Interface PaymentHandlerWithTransactionSupportInterface
  */
 interface PaymentHandlerWithTransactionSupportInterface

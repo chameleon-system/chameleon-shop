@@ -46,7 +46,7 @@ class TPkgShopMapper_ArticleTeaserBase extends AbstractPkgShopMapper_Article
         }
 
         $aData = [];
-        $aData['sShippingLink'] = $oShop->GetLinkToSystemPageAsPopUp(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.link.shipping_link'), 'shipping');
+        $aData['sShippingLink'] = $oShop->GetLinkToSystemPageAsPopUp(ServiceLocator::get('translator')->trans('chameleon_system_shop.link.shipping_link'), 'shipping');
 
         $aData['sPrice'] = $oLocal->FormatNumber($oArticle->dPrice, 2);
         if ($oArticle->fieldPriceReference > $oArticle->dPrice) {

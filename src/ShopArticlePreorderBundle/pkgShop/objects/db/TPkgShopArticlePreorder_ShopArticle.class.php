@@ -11,7 +11,6 @@
 
 class TPkgShopArticlePreorder_ShopArticle extends TPkgShopArticlePreorder_ShopArticleAutoParent
 {
-
     /**
      * returns true if the article is buyable, false if it is not.
      *
@@ -26,6 +25,7 @@ class TPkgShopArticlePreorder_ShopArticle extends TPkgShopArticlePreorder_ShopAr
                 $bIsBuyable = false;
             }
         }
+
         /*
         $oStockMessage = $this->GetFieldShopStockMessage();
         $bPreorder = false;

@@ -15,13 +15,10 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\ConfigurationInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\DbAdapterInterface;
 use ChameleonSystem\ShopProductExportBundle\Interfaces\ShopProductExporterInterface;
-use ErrorException;
-use IMapperCacheTriggerRestricted;
-use IMapperVisitorRestricted;
 
 class ShopProductExportModule extends \MTPkgViewRendererAbstractModuleMapper
 {
-    const PARAM_RESET_CACHE = 'reset';
+    public const PARAM_RESET_CACHE = 'reset';
 
     /**
      * @var string
@@ -34,11 +31,11 @@ class ShopProductExportModule extends \MTPkgViewRendererAbstractModuleMapper
     private $exportView;
 
     /**
-     * @var \ChameleonSystem\ShopProductExportBundle\Interfaces\ShopProductExporterInterface
+     * @var ShopProductExporterInterface
      */
     private $productExporter;
     /**
-     * @var \ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\DbAdapterInterface
+     * @var DbAdapterInterface
      */
     private $dbAdapter;
     /**
@@ -76,7 +73,7 @@ class ShopProductExportModule extends \MTPkgViewRendererAbstractModuleMapper
 
         if (false === is_dir($this->cacheDir)) {
             if (!@mkdir($this->cacheDir, 0777, true) && !is_dir($this->cacheDir)) {
-                throw new ErrorException(sprintf('failed to create cache folder: %s', $this->cacheDir));
+                throw new \ErrorException(sprintf('failed to create cache folder: %s', $this->cacheDir));
             }
         }
     }
@@ -96,20 +93,18 @@ class ShopProductExportModule extends \MTPkgViewRendererAbstractModuleMapper
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
-        $responseData = array(
+        $responseData = [
             'exportData' => null,
             'error' => false,
             'spotName' => $this->sModuleSpotName,
-        );
+        ];
 
         if (false === $this->productExporter->aliasExists($this->exportView)) {
             $responseData['error'] = 'no-view';
@@ -146,7 +141,7 @@ class ShopProductExportModule extends \MTPkgViewRendererAbstractModuleMapper
     /**
      * @return void
      */
-    protected function configureCacheTrigger(IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    protected function configureCacheTrigger(\IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
         $oCacheTriggerManager->addTrigger('shop_article');
         $oCacheTriggerManager->addTrigger('shop_module_article_list', $this->configuration->getId());
@@ -187,6 +182,7 @@ class ShopProductExportModule extends \MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @param string $exportKey
+     *
      * @return bool
      */
     private function isValidExportKey($exportKey)

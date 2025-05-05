@@ -19,7 +19,7 @@ class TCMSSmartURLHandler_ShopManufacturerProducts extends TCMSSmartURLHandler
         $iPageId = false;
         $oURLData = TCMSSmartURLData::GetActive();
 
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
 
         $sProductPath = $oShop->GetLinkToSystemPage('manufacturer');
         if ('.html' == substr($sProductPath, -5)) {
@@ -48,14 +48,14 @@ class TCMSSmartURLHandler_ShopManufacturerProducts extends TCMSSmartURLHandler
 
             if (null !== $manufacturerId) {
                 if (!array_key_exists(MTShopArticleCatalogCore::URL_FILTER, $this->aCustomURLParameters)) {
-                    $this->aCustomURLParameters[MTShopArticleCatalogCore::URL_FILTER] = array();
+                    $this->aCustomURLParameters[MTShopArticleCatalogCore::URL_FILTER] = [];
                 }
                 $this->aCustomURLParameters[MTShopArticleCatalogCore::URL_FILTER]['shop_manufacturer_id'] = $manufacturerId;
                 $this->aCustomURLParameters[MTShopManufacturerArticleCatalogCore::URL_MANUFACTURER_ID] = $manufacturerId;
 
                 $iNode = $oShop->GetSystemPageNodeId('manufacturer');
                 $oNode = new TCMSTreeNode();
-                /** @var $oNode TCMSTreeNode */
+                /* @var $oNode TCMSTreeNode */
                 $oNode->Load($iNode);
                 $iPageId = $oNode->GetLinkedPage();
             }

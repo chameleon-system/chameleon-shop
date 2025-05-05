@@ -6,16 +6,14 @@ class ShopOrderStatusItem
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopOrderStatus|null - Belongs to status */
-        private ?ShopOrderStatus $shopOrderStatus = null
-        ,
+        private ?ShopOrderStatus $shopOrderStatus = null,
         // TCMSFieldExtendedLookup
         /** @var ShopOrderItem|null - Product */
-        private ?ShopOrderItem $shopOrderItem = null
-        ,
+        private ?ShopOrderItem $shopOrderItem = null,
         // TCMSFieldDecimal
         /** @var string - Amount */
         private string $amount = ''
@@ -59,7 +57,6 @@ class ShopOrderStatusItem
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getShopOrderItem(): ?ShopOrderItem
     {
@@ -73,7 +70,6 @@ class ShopOrderStatusItem
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getAmount(): string
     {
@@ -86,6 +82,4 @@ class ShopOrderStatusItem
 
         return $this;
     }
-
-
 }

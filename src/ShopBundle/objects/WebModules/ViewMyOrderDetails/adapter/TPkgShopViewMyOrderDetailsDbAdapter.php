@@ -16,7 +16,7 @@ class TPkgShopViewMyOrderDetailsDbAdapter implements IPkgShopViewMyOrderDetailsD
      */
     private $dbConnection;
 
-    public function __construct(\Doctrine\DBAL\Connection $dbConnection)
+    public function __construct(Doctrine\DBAL\Connection $dbConnection)
     {
         $this->dbConnection = $dbConnection;
     }
@@ -28,7 +28,7 @@ class TPkgShopViewMyOrderDetailsDbAdapter implements IPkgShopViewMyOrderDetailsD
     {
         $query = 'select COUNT(id) AS matches FROM shop_order WHERE id = :orderId AND data_extranet_user_id = :userId';
 
-        $row = $this->dbConnection->fetchNumeric($query, array('orderId' => $orderId, 'userId' => $userId));
+        $row = $this->dbConnection->fetchNumeric($query, ['orderId' => $orderId, 'userId' => $userId]);
 
         return intval($row[0]) >= 1;
     }

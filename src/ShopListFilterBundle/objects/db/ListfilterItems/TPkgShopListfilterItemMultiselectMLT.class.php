@@ -24,7 +24,7 @@ class TPkgShopListfilterItemMultiselectMLT extends TPkgShopListfilterItemMultise
 
         if (is_null($sQuery)) {
             if (true === is_array($this->aActiveFilterData) && count($this->aActiveFilterData) > 0) {
-                $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+                $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
                 $sItemListQuery = $this->GetSQLQueryForQueryRestrictionForActiveFilter();
                 $aIdList = [];
 
@@ -36,7 +36,7 @@ class TPkgShopListfilterItemMultiselectMLT extends TPkgShopListfilterItemMultise
                 }
 
                 if (count($aIdList) > 0) {
-                    $sQuery = "`shop_article`.`id` IN (".implode(',', $aIdList).")";
+                    $sQuery = '`shop_article`.`id` IN ('.implode(',', $aIdList).')';
                 }
             }
             $this->SetInternalCache('sQueryRestrictionForActiveFilter', $sQuery);
@@ -53,7 +53,7 @@ class TPkgShopListfilterItemMultiselectMLT extends TPkgShopListfilterItemMultise
      */
     protected function GetSQLQueryForQueryRestrictionForActiveFilter()
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $aValues = array_map(function ($value) use ($connection) {
             return $connection->quote($value);
@@ -65,7 +65,7 @@ class TPkgShopListfilterItemMultiselectMLT extends TPkgShopListfilterItemMultise
         $sItemListQuery = "SELECT {$sEscapedTargetMLTTable}.*
                        FROM {$sEscapedTargetTable}
                  INNER JOIN {$sEscapedTargetMLTTable} ON {$sEscapedTargetTable}.`id` = {$sEscapedTargetMLTTable}.`target_id`
-                      WHERE ".$this->GetTargetTableNameField()." IN (".implode(',', $aValues).")";
+                      WHERE ".$this->GetTargetTableNameField().' IN ('.implode(',', $aValues).')';
 
         return $sItemListQuery;
     }
@@ -79,7 +79,7 @@ class TPkgShopListfilterItemMultiselectMLT extends TPkgShopListfilterItemMultise
     {
         $aOptions = $this->GetFromInternalCache('aOptions');
         if (is_null($aOptions)) {
-            $aOptions = array();
+            $aOptions = [];
             $sIdSelect = $this->GetResultSetBaseQuery();
             $databaseConnection = $this->getDatabaseConnection();
             $quotedItemTableName = $databaseConnection->quoteIdentifier($this->sItemTableName);

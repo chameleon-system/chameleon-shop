@@ -21,19 +21,19 @@ interface ShopProductExportHandlerInterface
     public function Init();
 
     /**
-     * @param \TdbShopArticleList $oArticleList
      * @return void
      */
     public function SetArticleList(\TIterator $articleList);
 
     /**
      * @param bool $debug
+     *
      * @return void
      */
     public function SetDebug($debug);
 
     /**
-     * Run the export. returns true if the export was successful, otherwise false
+     * Run the export. returns true if the export was successful, otherwise false.
      *
      * @return bool
      */

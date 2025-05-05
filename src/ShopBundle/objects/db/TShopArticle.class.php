@@ -92,7 +92,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     public function GetContributorList($aContributorTypes)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         if (!is_array($aContributorTypes)) {
             $aContributorTypes = [$aContributorTypes];
@@ -104,14 +104,14 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         $quotedArticleId = $connection->quote($this->id);
 
-        $sQuery = "
+        $sQuery = '
         SELECT `shop_contributor`.*
           FROM `shop_article_contributor`
      LEFT JOIN `shop_contributor`
             ON `shop_article_contributor`.`shop_contributor_id` = `shop_contributor`.`id`
      LEFT JOIN `shop_contributor_type`
             ON `shop_article_contributor`.`shop_contributor_type_id` = `shop_contributor_type`.`id`
-         WHERE `shop_contributor_type`.`identifier` IN (" . implode(', ', $quotedContributorTypes) . ")
+         WHERE `shop_contributor_type`.`identifier` IN ('.implode(', ', $quotedContributorTypes).")
            AND `shop_article_contributor`.`shop_article_id` = {$quotedArticleId}
       ORDER BY `shop_article_contributor`.`position`
     ";
@@ -227,7 +227,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
             if (is_null($oVat)) {
                 // try to fetch from shop
-                $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+                $oShopConfig = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $oVat = $oShopConfig->GetVat();
             }
             $this->SetInternalCache('ovat', $oVat);
@@ -358,7 +358,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         // if no category is given, fetch the first category of the article
         $oCategory = null;
 
-        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShopConfig = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
 
         if (!is_null($iCategoryId)) {
             $oCategory = TdbShopCategory::GetNewInstance();
@@ -593,7 +593,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if (false === $sMsgConsumerName) {
             $sMsgConsumerName = $this->GetMessageConsumerName();
         }
-        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShopConfig = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
 
         $aParameters = [
             'module_fnc' => [
@@ -631,7 +631,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function GetRemoveFromNoticeListLink($bIncludePortalLink = false, $sMsgConsumerName = false)
     {
-        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShopConfig = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         if (false === $sMsgConsumerName) {
             $sMsgConsumerName = $this->GetMessageConsumerName();
         }
@@ -854,7 +854,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         if (is_null($oPrimaryImage)) {
             if (!empty($this->fieldCmsMediaDefaultPreviewImageId) && (!is_numeric($this->fieldCmsMediaDefaultPreviewImageId) || intval($this->fieldCmsMediaDefaultPreviewImageId) > 1000)) {
-                $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+                $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $aData = ['shop_article_id' => $this->id, 'cms_media_id' => $this->fieldCmsMediaDefaultPreviewImageId, 'position' => 1];
                 $oPrimaryImage = TdbShopArticleImage::GetNewInstance();
                 $oPrimaryImage->LoadFromRow($aData);
@@ -862,7 +862,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
                 $oImages = $this->GetFieldShopArticleImageList();
                 $activePage = $this->getActivePageService()->getActivePage();
                 if (0 == $oImages->Length() && (!is_null($activePage))) {
-                    $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+                    $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                     $aData = ['shop_article_id' => $this->id, 'cms_media_id' => $oShop->fieldNotFoundImage, 'position' => 1];
                     $oPrimaryImage = TdbShopArticleImage::GetNewInstance();
                     $oPrimaryImage->LoadFromRow($aData);
@@ -998,9 +998,9 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if (TGlobal::IsCMSMode()) {
             $oPortals = TdbCmsPortalList::GetList();
             $oPortal = $oPortals->Current();
-            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oPortal->id);
+            $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oPortal->id);
         } else {
-            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+            $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         }
         $oImageSizeList = TdbShopArticleImageSizeList::GetListForShopId($oShop->id);
         $oExportObject->aImages = [];
@@ -1150,7 +1150,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
             if (null !== $this->id) {
                 /* @var $connection \Doctrine\DBAL\Connection */
-                $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+                $connection = ServiceLocator::get('database_connection');
 
                 $quotedId = $connection->quote($this->id);
 
@@ -1349,7 +1349,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         if (is_null($oVariantValueList)) {
             /* @var $connection \Doctrine\DBAL\Connection */
-            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+            $connection = ServiceLocator::get('database_connection');
 
             $quotedArticleId = $connection->quote($this->id);
 
@@ -1385,7 +1385,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     public function getVariantIDList($aSelectedTypeValues = [], $bLoadActiveOnly = true)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $aArticleIdList = [];
         $oVariantList = null;
@@ -1418,8 +1418,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function GetVariantValuesAvailableForType($oVariantType, $aSelectedTypeValues = [])
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ServiceLocator::get('database_connection');
 
         $oVariantValueList = null;
         $aArticleIdList = $this->getVariantIDList($aSelectedTypeValues, true);
@@ -1455,7 +1455,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     public function GetVariantValuesAvailableForTypeIncludingInActive($oVariantType, $aSelectedTypeValues = [])
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $oVariantValueList = null;
         $aArticleIdList = $this->getVariantIDList($aSelectedTypeValues, false);
@@ -1477,7 +1477,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
          LEFT JOIN `shop_article`
                 ON `shop_article`.`id` = `shop_article_shop_variant_type_value_mlt`.`source_id`
              WHERE `shop_variant_type_value`.`shop_variant_type_id` = {$quotedVariantTypeId}
-               AND `shop_article_shop_variant_type_value_mlt`.`source_id` IN (" . implode(',', $quotedArticleIds) . ")
+               AND `shop_article_shop_variant_type_value_mlt`.`source_id` IN (".implode(',', $quotedArticleIds).")
           GROUP BY `shop_variant_type_value`.`id`
           ORDER BY {$quotedOrderByField}
         ";
@@ -1498,10 +1498,10 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     public function GetVariantsForVariantTypeName($sVariantTypeIdentifier)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         /** @var TdbShopArticleList|null $oArticleList */
-        $oArticleList = $this->GetFromInternalCache('VariantsForVariantTypeName' . $sVariantTypeIdentifier);
+        $oArticleList = $this->GetFromInternalCache('VariantsForVariantTypeName'.$sVariantTypeIdentifier);
 
         if (is_null($oArticleList)) {
             $oArticleList = null;
@@ -1525,7 +1525,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
                     $sActiveArticleRestriction = TdbShopArticleList::GetActiveArticleQueryRestriction(false);
                     if (!empty($sActiveArticleRestriction)) {
-                        $sQueryAddition .= ' AND (' . $sActiveArticleRestriction . ')';
+                        $sQueryAddition .= ' AND ('.$sActiveArticleRestriction.')';
                     }
 
                     $query = "
@@ -1548,7 +1548,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
                     $oArticleList = TdbShopArticleList::GetList($query);
                     $oArticleList->bAllowItemCache = true;
-                    $this->SetInternalCache('VariantsForVariantTypeName' . $sVariantTypeIdentifier, $oArticleList);
+                    $this->SetInternalCache('VariantsForVariantTypeName'.$sVariantTypeIdentifier, $oArticleList);
                 }
             }
         }
@@ -1570,7 +1570,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     public function GetActiveVariantValue($sVariantTypeIdentifier)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $oVariantValueObject = null;
 
@@ -1681,7 +1681,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     public function GetVariantFromValues($aTypeValuePairs)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $oArticle = null;
         if (!$this->IsVariant()) {
@@ -1705,11 +1705,11 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             }
 
             if (!empty($aParts)) {
-                $query .= ' AND (' . implode(') OR (', $aParts) . ')';
+                $query .= ' AND ('.implode(') OR (', $aParts).')';
             }
 
             $query .= ' GROUP BY `shop_article`.`id`';
-            $query .= ' HAVING COUNT(`shop_article`.`id`) = ' . count($aParts);
+            $query .= ' HAVING COUNT(`shop_article`.`id`) = '.count($aParts);
             $query .= ' ORDER BY `shop_article`.`active` DESC'; // we want the active article if multiple present
 
             $aMatch = $connection->fetchAssociative($query);
@@ -1735,7 +1735,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     public function GetFieldShopArticleImageList()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $oImages = $this->GetFromInternalCache('FieldShopArticleImageList');
         if (is_null($oImages)) {
@@ -1948,7 +1948,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         if (is_null($bIsBuyable)) {
             $bIsBuyable = $this->isActive();
             if ($bIsBuyable) {
-                $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+                $oShopConfig = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
 
                 if (isset($oShopConfig->fieldAllowPurchaseOfVariantParents)
                     && !$oShopConfig->fieldAllowPurchaseOfVariantParents
@@ -2077,7 +2077,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
     protected function UpdateVariantParentActiveField()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $bParentActiveChanged = false;
         if ($this->IsVariant()) {
@@ -2097,7 +2097,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         }
 
         if ($bParentActiveChanged) {
-            $sActiveValue = ($sActiveValue === true) ? 1 : 0;
+            $sActiveValue = (true === $sActiveValue) ? 1 : 0;
 
             $this->sqlData['variant_parent_is_active'] = $sActiveValue;
             $this->fieldVariantParentIsActive = (1 === $sActiveValue);
@@ -2405,7 +2405,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
      */
     public function getToBasketLinkBasketParameters($bRedirectToBasket = false, $bReplaceBasketContents = false, $bGetAjaxParameter = false, $sMessageConsumer = MTShopBasketCore::MSG_CONSUMER_NAME_MINIBASKET)
     {
-        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShopConfig = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $aBasketData = [];
         $aParameters = [];
         if ($bGetAjaxParameter) {

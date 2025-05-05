@@ -10,12 +10,11 @@ class PkgShopRatingServiceTeaserCnf
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldNumber
         /** @var int - Number of ratings to be selected */
         private int $numberOfRatingsToSelectFrom = 0,
@@ -68,7 +67,6 @@ class PkgShopRatingServiceTeaserCnf
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getNumberOfRatingsToSelectFrom(): int
     {
@@ -81,7 +79,6 @@ class PkgShopRatingServiceTeaserCnf
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getHeadline(): string
@@ -96,7 +93,6 @@ class PkgShopRatingServiceTeaserCnf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getShowAllLinkName(): string
     {
@@ -109,8 +105,6 @@ class PkgShopRatingServiceTeaserCnf
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -143,6 +137,4 @@ class PkgShopRatingServiceTeaserCnf
 
         return $this;
     }
-
-
 }

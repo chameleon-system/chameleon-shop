@@ -12,13 +12,13 @@
 /**
  *  Module class for RatingServiceWidget.
  *
-/**/
+ * /**/
 class MTRatingServiceWidgetCore extends TUserCustomModelBase
 {
     /**
      * @var TdbPkgShopRatingServiceWidgetConfig|null
      */
-    protected $oModuleConfig = null;
+    protected $oModuleConfig;
 
     public function Execute()
     {
@@ -62,9 +62,10 @@ class MTRatingServiceWidgetCore extends TUserCustomModelBase
     public function GetHtmlHeadIncludes()
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
-        //if (!is_array($aIncludes)) $aIncludes = array();
-        //$aIncludes[] = "<link type='text/css' rel='stylesheet' href='/assets/css/PkgShopRatingServiceWidget.css' />";
-        //$aIncludes[] = "<script type='text/javascript' src='/assets/js/PkgShopRatingServiceWidget.js'></script>";
+
+        // if (!is_array($aIncludes)) $aIncludes = array();
+        // $aIncludes[] = "<link type='text/css' rel='stylesheet' href='/assets/css/PkgShopRatingServiceWidget.css' />";
+        // $aIncludes[] = "<script type='text/javascript' src='/assets/js/PkgShopRatingServiceWidget.js'></script>";
         return $aIncludes;
     }
 
@@ -93,10 +94,10 @@ class MTRatingServiceWidgetCore extends TUserCustomModelBase
     {
         $aTrigger = parent::_GetCacheTableInfos();
         if (!is_array($aTrigger)) {
-            $aTrigger = array();
+            $aTrigger = [];
         }
 
-        $aTrigger[] = array('table' => 'pkg_shop_rating_service_widget_config', 'id' => $this->oModuleConfig->id);
+        $aTrigger[] = ['table' => 'pkg_shop_rating_service_widget_config', 'id' => $this->oModuleConfig->id];
 
         return $aTrigger;
     }

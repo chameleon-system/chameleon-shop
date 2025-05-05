@@ -13,9 +13,9 @@ use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
 
 class MTPkgShopOrderViaPhone_MTShopOrderWizard extends MTPkgShopOrderViaPhone_MTShopOrderWizardAutoParent
 {
-    const ORDER_VIA_PHONE_URL_PARAMETER = 'order_via_phone';
+    public const ORDER_VIA_PHONE_URL_PARAMETER = 'order_via_phone';
 
-    const ORDER_VIA_PHONE_MESSAGE_CONSUMER_NAME = 'order_via_phone';
+    public const ORDER_VIA_PHONE_MESSAGE_CONSUMER_NAME = 'order_via_phone';
 
     protected function DefineInterface()
     {
@@ -47,6 +47,7 @@ class MTPkgShopOrderViaPhone_MTShopOrderWizard extends MTPkgShopOrderViaPhone_MT
 
     /**
      * @param array<string, mixed> $aUserData
+     *
      * @return bool
      */
     protected function OrderViaPhoneDataValid($aUserData)
@@ -70,6 +71,7 @@ class MTPkgShopOrderViaPhone_MTShopOrderWizard extends MTPkgShopOrderViaPhone_MT
 
     /**
      * @param array<string, mixed> $aUserData
+     *
      * @return bool
      */
     protected function OrderViaPhoneSendEmail($aUserData)
@@ -102,7 +104,7 @@ class MTPkgShopOrderViaPhone_MTShopOrderWizard extends MTPkgShopOrderViaPhone_MT
      */
     protected function OrderViaPhoneGetRequiredFields()
     {
-        return array('firstname', 'lastname', 'tel');
+        return ['firstname', 'lastname', 'tel'];
     }
 
     /**
@@ -110,7 +112,7 @@ class MTPkgShopOrderViaPhone_MTShopOrderWizard extends MTPkgShopOrderViaPhone_MT
      */
     private function getSystemPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 
     /**
@@ -118,6 +120,6 @@ class MTPkgShopOrderViaPhone_MTShopOrderWizard extends MTPkgShopOrderViaPhone_MT
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

@@ -16,12 +16,12 @@ class TPkgShopPrimaryNavigation_TShop extends TPkgShopPrimaryNavigation_TShopAut
     /**
      * @var TdbPkgShopPrimaryNaviList[]
      */
-    private $primaryNavigationList = array();
+    private $primaryNavigationList = [];
 
     /**
      * overwrite the method to allow caching.
      *
-     * @return \TdbPkgShopPrimaryNaviList
+     * @return TdbPkgShopPrimaryNaviList
      */
     public function GetFieldShopPrimaryNaviList()
     {
@@ -47,6 +47,6 @@ class TPkgShopPrimaryNavigation_TShop extends TPkgShopPrimaryNavigation_TShopAut
      */
     private static function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

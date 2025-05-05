@@ -19,17 +19,17 @@ class MTShopArticleDetails extends MTPkgViewRendererAbstractModuleMapper
     /**
      * @var string|null
      */
-    private $sActiveImageId = null;
+    private $sActiveImageId;
 
     /**
      * @var array
      */
-    private $aVariantTypeValues = array();
+    private $aVariantTypeValues = [];
 
     /**
      * @var TdbShopArticle
      */
-    private $oActiveArticle = null;
+    private $oActiveArticle;
     /**
      * @var TdbShopCategory
      */
@@ -44,8 +44,8 @@ class MTShopArticleDetails extends MTPkgViewRendererAbstractModuleMapper
         if ($this->global->UserDataExists('imageid')) {
             $this->sActiveImageId = $this->global->GetUserData('imageid');
         }
-        if ($this->global->UserDataExists(\TShopVariantType::URL_PARAMETER)) {
-            $this->aVariantTypeValues = $this->global->GetUserData(\TShopVariantType::URL_PARAMETER);
+        if ($this->global->UserDataExists(TShopVariantType::URL_PARAMETER)) {
+            $this->aVariantTypeValues = $this->global->GetUserData(TShopVariantType::URL_PARAMETER);
         }
         $shopService = $this->getShopService();
         $this->oActiveArticle = $shopService->getActiveProduct();
@@ -141,7 +141,7 @@ class MTShopArticleDetails extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 
     /**
@@ -149,7 +149,7 @@ class MTShopArticleDetails extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 
     /**
@@ -157,6 +157,6 @@ class MTShopArticleDetails extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

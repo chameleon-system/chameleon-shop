@@ -57,7 +57,7 @@ class TPkgShopPrimaryNavigation_TPkgCmsNavigationNode_Category extends AbstractP
         }
         if (null === $this->aChildren) {
             if (null !== $this->getNodeCopy()) {
-                $this->aChildren = array();
+                $this->aChildren = [];
                 /** @var $oNode TdbShopCategory */
                 $oNode = $this->getNodeCopy();
                 $language = $oNode->GetLanguage();
@@ -106,7 +106,7 @@ class TPkgShopPrimaryNavigation_TPkgCmsNavigationNode_Category extends AbstractP
             $this->bIsActive = false;
             /** @var $oNode TdbShopCategory */
             $oNode = $this->getNodeCopy();
-            $oActiveCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
+            $oActiveCategory = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
             if ($oActiveCategory && $oNode && $oActiveCategory->id === $oNode->id) {
                 $this->bIsActive = true;
             }
@@ -122,7 +122,7 @@ class TPkgShopPrimaryNavigation_TPkgCmsNavigationNode_Category extends AbstractP
             if (false === $this->bIsExpanded) {
                 /** @var $oNode TdbShopCategory */
                 $oNode = $this->getNodeCopy();
-                $aCategoryPath = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop()->GetActiveCategoryPath();
+                $aCategoryPath = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop()->GetActiveCategoryPath();
                 if ($oNode && is_array($aCategoryPath) && isset($aCategoryPath[$oNode->id])) {
                     $this->bIsExpanded = true;
                 }
@@ -156,6 +156,6 @@ class TPkgShopPrimaryNavigation_TPkgCmsNavigationNode_Category extends AbstractP
      */
     protected function getShopCategoryDataAccess()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_category_data_access');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_category_data_access');
     }
 }

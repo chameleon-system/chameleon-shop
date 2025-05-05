@@ -38,14 +38,10 @@ class ArticleListApiTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderListResponse
      *
-     * @param $responsePayload
-     * @param $expectedNextPageUrl
-     * @param $expectedPreviousPageUrl
-     * @param $expectedItems
+     * @dataProvider dataProviderListResponse
      */
-    public function it_fetches_a_response($responsePayload, $expectedPreviousPageUrl, $expectedNextPageUrl, $expectedItems)
+    public function itFetchesAResponse($responsePayload, $expectedPreviousPageUrl, $expectedNextPageUrl, $expectedItems)
     {
         $listSpotName = 'listSpotName';
         $listUrl = 'listUrl';
@@ -60,104 +56,104 @@ class ArticleListApiTest extends TestCase
 
     public function dataProviderListResponse()
     {
-        return array(
-            array(
+        return [
+            [
                 json_encode(
-                    array(
+                    [
                         'previousPage' => 'previousPageUrl',
                         'nextPage' => 'nextPageUrl',
-                        'items' => array(
-                            'FIRST-ITEM' => array('id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'),
-                            'SECOND-ITEM' => array('id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'),
-                            'LAST-ITEM' => array('id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'),
-                        ),
-                    )
-                ), //$responsePayload
-                'previousPageUrl', //$expectedPreviousPageUrl
-                'nextPageUrl', //$expectedNextPageUrl
-                array(
-                    'FIRST-ITEM' => array('id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'),
-                    'SECOND-ITEM' => array('id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'),
-                    'LAST-ITEM' => array('id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'),
-                ), //$expectedItems
-            ),
+                        'items' => [
+                            'FIRST-ITEM' => ['id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'],
+                            'SECOND-ITEM' => ['id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'],
+                            'LAST-ITEM' => ['id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'],
+                        ],
+                    ]
+                ), // $responsePayload
+                'previousPageUrl', // $expectedPreviousPageUrl
+                'nextPageUrl', // $expectedNextPageUrl
+                [
+                    'FIRST-ITEM' => ['id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'],
+                    'SECOND-ITEM' => ['id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'],
+                    'LAST-ITEM' => ['id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'],
+                ], // $expectedItems
+            ],
 
-            array(
+            [
                 json_encode(
-                    array(
+                    [
                         'previousPage' => null,
                         'nextPage' => 'nextPageUrl',
-                        'items' => array(
-                            'FIRST-ITEM' => array('id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'),
-                            'SECOND-ITEM' => array('id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'),
-                            'LAST-ITEM' => array('id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'),
-                        ),
-                    )
-                ), //$responsePayload
-                null, //$expectedPreviousPageUrl
-                'nextPageUrl', //$expectedNextPageUrl
-                array(
-                    'FIRST-ITEM' => array('id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'),
-                    'SECOND-ITEM' => array('id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'),
-                    'LAST-ITEM' => array('id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'),
-                ), //$expectedItems
-            ),
+                        'items' => [
+                            'FIRST-ITEM' => ['id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'],
+                            'SECOND-ITEM' => ['id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'],
+                            'LAST-ITEM' => ['id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'],
+                        ],
+                    ]
+                ), // $responsePayload
+                null, // $expectedPreviousPageUrl
+                'nextPageUrl', // $expectedNextPageUrl
+                [
+                    'FIRST-ITEM' => ['id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'],
+                    'SECOND-ITEM' => ['id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'],
+                    'LAST-ITEM' => ['id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'],
+                ], // $expectedItems
+            ],
 
-            array(
+            [
                 json_encode(
-                    array(
+                    [
                         'previousPage' => 'previousPageUrl',
                         'nextPage' => null,
-                        'items' => array(
-                            'FIRST-ITEM' => array('id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'),
-                            'SECOND-ITEM' => array('id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'),
-                            'LAST-ITEM' => array('id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'),
-                        ),
-                    )
-                ), //$responsePayload
-                'previousPageUrl', //$expectedPreviousPageUrl
-                null, //$expectedNextPageUrl
-                array(
-                    'FIRST-ITEM' => array('id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'),
-                    'SECOND-ITEM' => array('id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'),
-                    'LAST-ITEM' => array('id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'),
-                ), //$expectedItems
-            ),
+                        'items' => [
+                            'FIRST-ITEM' => ['id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'],
+                            'SECOND-ITEM' => ['id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'],
+                            'LAST-ITEM' => ['id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'],
+                        ],
+                    ]
+                ), // $responsePayload
+                'previousPageUrl', // $expectedPreviousPageUrl
+                null, // $expectedNextPageUrl
+                [
+                    'FIRST-ITEM' => ['id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'],
+                    'SECOND-ITEM' => ['id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'],
+                    'LAST-ITEM' => ['id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'],
+                ], // $expectedItems
+            ],
 
-            array(
+            [
                 json_encode(
-                    array(
+                    [
                         'previousPage' => null,
                         'nextPage' => null,
-                        'items' => array(
-                            'FIRST-ITEM' => array('id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'),
-                            'SECOND-ITEM' => array('id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'),
-                            'LAST-ITEM' => array('id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'),
-                        ),
-                    )
-                ), //$responsePayload
-                null, //$expectedPreviousPageUrl
-                null, //$expectedNextPageUrl
-                array(
-                    'FIRST-ITEM' => array('id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'),
-                    'SECOND-ITEM' => array('id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'),
-                    'LAST-ITEM' => array('id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'),
-                ), //$expectedItems
-            ),
+                        'items' => [
+                            'FIRST-ITEM' => ['id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'],
+                            'SECOND-ITEM' => ['id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'],
+                            'LAST-ITEM' => ['id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'],
+                        ],
+                    ]
+                ), // $responsePayload
+                null, // $expectedPreviousPageUrl
+                null, // $expectedNextPageUrl
+                [
+                    'FIRST-ITEM' => ['id' => 'FIRST-ITEM', 'name' => 'first item', 'url' => 'first item url'],
+                    'SECOND-ITEM' => ['id' => 'SECOND-ITEM', 'name' => 'second item', 'url' => 'second item url'],
+                    'LAST-ITEM' => ['id' => 'LAST-ITEM', 'name' => 'last item', 'url' => 'last item url'],
+                ], // $expectedItems
+            ],
 
-            array(
+            [
                 json_encode(
-                    array(
+                    [
                         'previousPage' => null,
                         'nextPage' => null,
-                        'items' => array(),
-                    )
-                ), //$responsePayload
-                null, //$expectedPreviousPageUrl
-                null, //$expectedNextPageUrl
-                array(), //$expectedItems
-            ),
-        );
+                        'items' => [],
+                    ]
+                ), // $responsePayload
+                null, // $expectedPreviousPageUrl
+                null, // $expectedNextPageUrl
+                [], // $expectedItems
+            ],
+        ];
     }
 
     private function given_that_the_list_is_in_spot($listSpotName)
@@ -203,9 +199,9 @@ class ArticleListApiTest extends TestCase
         $this->assertEquals($expectedPreviousPageUrl, $this->apiResult->getPreviousPageUrl(), $msg);
 
         $resultItems = $this->apiResult->getItemList();
-        $resultItemsAsPlainArray = array();
+        $resultItemsAsPlainArray = [];
         foreach ($resultItems as $resultItem) {
-            $resultItemsAsPlainArray[$resultItem->getId()] = array('id' => $resultItem->getId(), 'name' => $resultItem->getName(), 'url' => $resultItem->getUrl());
+            $resultItemsAsPlainArray[$resultItem->getId()] = ['id' => $resultItem->getId(), 'name' => $resultItem->getName(), 'url' => $resultItem->getUrl()];
         }
 
         $this->assertEquals($expectedItems, $resultItemsAsPlainArray, $msg);

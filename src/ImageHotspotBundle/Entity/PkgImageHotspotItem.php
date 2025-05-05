@@ -10,12 +10,11 @@ class PkgImageHotspotItem
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var PkgImageHotspot|null - Belongs to image hotspot */
-        private ?PkgImageHotspot $pkgImageHotspot = null
-        ,
+        private ?PkgImageHotspot $pkgImageHotspot = null,
         // TCMSFieldVarchar
         /** @var string - Alternative text for image */
         private string $name = '',
@@ -27,16 +26,13 @@ class PkgImageHotspotItem
         private int $position = 0,
         // ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field\TCMSFieldMediaWithImageCrop
         /** @var CmsMedia|null - Image */
-        private ?CmsMedia $cmsMedia = null
-        ,
-// ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field\TCMSFieldMediaWithImageCrop
+        private ?CmsMedia $cmsMedia = null,
+        // ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field\TCMSFieldMediaWithImageCrop
         /** @var CmsMedia|null - Image */
-        private ?CmsMedia $cmsMediaIdImageCrop = null
-        ,
+        private ?CmsMedia $cmsMediaIdImageCrop = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgImageHotspotItemSpot> - Hotspots and linked areas */
-        private Collection $pkgImageHotspotItemSpotCollection = new ArrayCollection()
-        ,
+        private Collection $pkgImageHotspotItemSpotCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgImageHotspotItemMarker> - Hotspots with image */
         private Collection $pkgImageHotspotItemMarkerCollection = new ArrayCollection()
@@ -80,7 +76,6 @@ class PkgImageHotspotItem
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -93,7 +88,6 @@ class PkgImageHotspotItem
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isActive(): bool
@@ -108,7 +102,6 @@ class PkgImageHotspotItem
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -121,7 +114,6 @@ class PkgImageHotspotItem
 
         return $this;
     }
-
 
     // ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field\TCMSFieldMediaWithImageCrop
     public function getCmsMedia(): ?CmsMedia
@@ -136,7 +128,7 @@ class PkgImageHotspotItem
         return $this;
     }
 
-// ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field\TCMSFieldMediaWithImageCrop
+    // ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field\TCMSFieldMediaWithImageCrop
     public function getCmsMediaIdImageCrop(): ?CmsMedia
     {
         return $this->cmsMediaIdImageCrop;
@@ -148,8 +140,6 @@ class PkgImageHotspotItem
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -183,8 +173,6 @@ class PkgImageHotspotItem
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -216,6 +204,4 @@ class PkgImageHotspotItem
 
         return $this;
     }
-
-
 }

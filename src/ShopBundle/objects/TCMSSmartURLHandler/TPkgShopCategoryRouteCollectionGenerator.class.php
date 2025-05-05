@@ -25,18 +25,13 @@ class TPkgShopCategoryRouteCollectionGenerator implements CollectionGeneratorInt
      */
     private $systemPageService;
 
-    /**
-     * @param SystemPageServiceInterface $systemPageService
-     */
     public function __construct(SystemPageServiceInterface $systemPageService)
     {
         $this->systemPageService = $systemPageService;
     }
 
     /**
-     * @param array          $config
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
+     * @param array $config
      *
      * @return RouteCollection
      *
@@ -47,12 +42,12 @@ class TPkgShopCategoryRouteCollectionGenerator implements CollectionGeneratorInt
     {
         $systemPage = $this->systemPageService->getSystemPage('products', $portal, $language);
         if (null === $systemPage) {
-            throw new TPkgCmsException_Log('No category system page defined (portal system page with name "products")', array('portal' => $portal->id));
+            throw new TPkgCmsException_Log('No category system page defined (portal system page with name "products")', ['portal' => $portal->id]);
         }
         $productNodeId = $systemPage->fieldCmsTreeId;
         $productNode = TdbCmsTree::GetNewInstance($productNodeId, $language->id);
         if (false === $productNode->sqlData) {
-            throw new TPkgCmsException_Log('No product list node is assigned to the category system page (portal system page with name "products")', array('portal' => $portal->id));
+            throw new TPkgCmsException_Log('No product list node is assigned to the category system page (portal system page with name "products")', ['portal' => $portal->id]);
         }
 
         $pageDef = $productNode->GetLinkedPage();
@@ -60,7 +55,7 @@ class TPkgShopCategoryRouteCollectionGenerator implements CollectionGeneratorInt
             throw new Exception("The product list node {$productNode->id} for portal {$portal->id} has no page assigned to it");
         }
 
-        $aPath = array();
+        $aPath = [];
         $breadcrumb = $productNode->GetBreadcrumb(true);
         /** @var TdbCmsTree $node */
         while ($node = $breadcrumb->Next()) {
@@ -71,7 +66,7 @@ class TPkgShopCategoryRouteCollectionGenerator implements CollectionGeneratorInt
 
         // exclude any sub-pages
         $childNodes = $productNode->GetChildren(true, $language->id);
-        $excludeList = array();
+        $excludeList = [];
         $excludeString = '';
         while ($childNode = $childNodes->Next()) {
             $excludeList[] = str_replace('|', '\\|', '/'.$childNode->fieldUrlname);
@@ -81,11 +76,11 @@ class TPkgShopCategoryRouteCollectionGenerator implements CollectionGeneratorInt
         }
 
         $route = new Route('/{categoryPath}/{category}',
-            array('_controller' => 'chameleon_system_shop.product_controller::shopCategory', 'pagedef' => $pageDef),
-            array(
+            ['_controller' => 'chameleon_system_shop.product_controller::shopCategory', 'pagedef' => $pageDef],
+            [
                 'categoryPath' => "(?i:{$path}){$excludeString}",
                 'category' => '(.+)',
-            )
+            ]
         );
 
         $collection = new RouteCollection();

@@ -20,18 +20,18 @@ use ChameleonSystem\ShopArticleDetailPagingBundle\Service\AddParametersToUrlServ
 class ArticleListApi implements ArticleListApiInterface
 {
     /**
-     * @var \ChameleonSystem\ShopArticleDetailPagingBundle\Service\AddParametersToUrlService
+     * @var AddParametersToUrlService
      */
     private $addParametersToUrlService;
     /**
-     * @var \ChameleonSystem\ShopArticleDetailPagingBundle\Interfaces\ContentFromUrlLoaderServiceInterface
+     * @var ContentFromUrlLoaderServiceInterface
      */
     private $contentLoader;
 
     /**
      * @var ListResult[]
      */
-    private $cachedResults = array();
+    private $cachedResults = [];
 
     public function __construct(ContentFromUrlLoaderServiceInterface $contentLoader, AddParametersToUrlService $addParametersToUrlService)
     {
@@ -52,14 +52,15 @@ class ArticleListApi implements ArticleListApiInterface
     /**
      * @param string $listUrl
      * @param string $spot
+     *
      * @return string
      */
     private function getFullURL($listUrl, $spot)
     {
-        $methodAccessParameter = array(
-            'module_fnc' => array($spot => 'ExecuteAjaxCall'),
+        $methodAccessParameter = [
+            'module_fnc' => [$spot => 'ExecuteAjaxCall'],
             '_fnc' => 'getAsJson',
-        );
+        ];
 
         return $this->addParametersToUrlService->addParameterToUrl($listUrl, $methodAccessParameter);
     }
@@ -106,7 +107,7 @@ class ArticleListApi implements ArticleListApiInterface
             $responseObject->setNextPageUrl($responseData['nextPage']);
         }
 
-        $itemObjs = array();
+        $itemObjs = [];
         foreach ($responseData['items'] as $item) {
             $itemObj = new ListItem();
             $itemObj->setId($item['id']);

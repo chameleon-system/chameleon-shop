@@ -27,21 +27,21 @@ class TShopModuleArticlelistFilterBestsellerActivePrimaryCategory extends TShopM
     protected function GetListQueryBase($oListConfig)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
-        $oActiveCategory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveRootCategory();
+        $connection = ServiceLocator::get('database_connection');
+        $oActiveCategory = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveRootCategory();
 
         if (null !== $oActiveCategory) {
             $aCategories = $oActiveCategory->GetAllChildrenIds();
             $aCategories[] = $oActiveCategory->id;
             $aCategories = array_map([$connection, 'quote'], $aCategories);
 
-            $sQuery = "SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
+            $sQuery = 'SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*
                  FROM `shop_article_shop_category_mlt`
            INNER JOIN `shop_article` ON `shop_article_shop_category_mlt`.`source_id` = `shop_article`.`id`
             LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
             LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
-                WHERE `shop_article_shop_category_mlt`.`target_id` IN (".implode(',', $aCategories).")
-                  AND `shop_article_stats`.`stats_sales` > 0";
+                WHERE `shop_article_shop_category_mlt`.`target_id` IN ('.implode(',', $aCategories).')
+                  AND `shop_article_stats`.`stats_sales` > 0';
 
             $results = $connection->fetchAllAssociative($sQuery);
             $iNumRecs = count($results);
@@ -50,7 +50,7 @@ class TShopModuleArticlelistFilterBestsellerActivePrimaryCategory extends TShopM
                 $sQuery = parent::GetListBaseQueryRestrictedToCategories($oListConfig, $aCategories);
                 if ($iNumRecs > 0) {
                     // add the records that have been sold
-                    $aList = array_map(fn($row) => $connection->quote($row['id']), $results);
+                    $aList = array_map(fn ($row) => $connection->quote($row['id']), $results);
                     if (count($aList) > 0) {
                         $sQuery .= ' OR `shop_article`.`id` IN ('.implode(',', $aList).')';
                     }

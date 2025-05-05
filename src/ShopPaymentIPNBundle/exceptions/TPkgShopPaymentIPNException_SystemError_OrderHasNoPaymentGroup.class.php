@@ -14,19 +14,18 @@ class TPkgShopPaymentIPNException_OrderHasNoPaymentGroup extends AbstractPkgShop
     /**
      * @var string
      */
-    private $orderId = null;
+    private $orderId;
 
     /**
      * @param string $sOrderId
      * @param string $message
      * @param int $code
-     * @param Exception|null $previous
      */
     public function __construct(
         $sOrderId,
         $message = '',
         $code = 0,
-        Exception $previous = null
+        ?Exception $previous = null
     ) {
         $this->orderId = $sOrderId;
         parent::__construct($message, $code, $previous);

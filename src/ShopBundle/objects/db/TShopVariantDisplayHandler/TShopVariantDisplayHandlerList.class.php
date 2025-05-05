@@ -15,8 +15,6 @@ class TShopVariantDisplayHandlerList extends TAdbShopVariantDisplayHandlerList
      * factory returning an element for the list.
      *
      * @param array $aData
-     *
-     * @return TdbShopVariantDisplayHandler
      */
     protected function _NewElement($aData): TdbShopVariantDisplayHandler
     {

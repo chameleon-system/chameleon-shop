@@ -6,12 +6,11 @@ class ShopCategoryTab
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopCategory|null - Belongs to category */
-        private ?ShopCategory $shopCategory = null
-        ,
+        private ?ShopCategory $shopCategory = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -58,7 +57,6 @@ class ShopCategoryTab
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -72,7 +70,6 @@ class ShopCategoryTab
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -85,6 +82,4 @@ class ShopCategoryTab
 
         return $this;
     }
-
-
 }

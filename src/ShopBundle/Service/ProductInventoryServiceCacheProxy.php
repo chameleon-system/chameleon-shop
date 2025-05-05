@@ -21,7 +21,7 @@ class ProductInventoryServiceCacheProxy implements ProductInventoryServiceInterf
     private $subject;
 
     /** @var array<string, mixed> */
-    private $cache = array();
+    private $cache = [];
 
     public function __construct(ProductInventoryServiceInterface $subject)
     {
@@ -43,7 +43,9 @@ class ProductInventoryServiceCacheProxy implements ProductInventoryServiceInterf
 
     /**
      * {@inheritdoc}
+     *
      * @psalm-suppress InvalidReturnStatement
+     *
      * @FIXME Returning a void return
      */
     public function addStock($shopArticleId, $stock): bool
@@ -55,7 +57,9 @@ class ProductInventoryServiceCacheProxy implements ProductInventoryServiceInterf
 
     /**
      * {@inheritdoc}
+     *
      * @psalm-suppress InvalidReturnStatement
+     *
      * @FIXME Returning a void return
      */
     public function setStock($shopArticleId, $stock): bool
@@ -67,7 +71,9 @@ class ProductInventoryServiceCacheProxy implements ProductInventoryServiceInterf
 
     /**
      * {@inheritdoc}
+     *
      * @psalm-suppress InvalidReturnStatement
+     *
      * @FIXME Returning a void return
      */
     public function updateVariantParentStock($parentArticleId): bool

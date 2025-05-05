@@ -26,18 +26,14 @@ class TPkgShopDhlPackstation_TPkgExtranetMapper_AddressForm extends TPkgShopDhlP
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     *
-     * @return
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         parent::Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
 
         $oAddress = $oVisitor->GetSourceObject('oAddressObject');
-        $aFieldList = array('aFieldPackstation' => 'is_dhl_packstation');
+        $aFieldList = ['aFieldPackstation' => 'is_dhl_packstation'];
         $this->SetInputFields($aFieldList, $oVisitor, $oAddress, 'checkbox');
     }
 }

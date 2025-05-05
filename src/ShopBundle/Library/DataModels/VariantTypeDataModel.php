@@ -31,12 +31,11 @@ class VariantTypeDataModel implements VariantTypeDataModelInterface
         $this->isSelectionAllowed = $isSelectionAllowed;
     }
 
-    
     public function getTitle(): string
     {
         return $this->title;
     }
-    
+
     public function getSystemName(): string
     {
         return $this->systemName;

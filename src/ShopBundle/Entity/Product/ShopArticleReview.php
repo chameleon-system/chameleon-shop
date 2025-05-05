@@ -3,22 +3,19 @@
 namespace ChameleonSystem\ShopBundle\Entity\Product;
 
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
-use DateTime;
 
 class ShopArticleReview
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopArticle|null - Belongs to product */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldLookupParentID
         /** @var DataExtranetUser|null - Written by */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldBoolean
         /** @var bool - Published */
         private bool $publish = false,
@@ -50,8 +47,8 @@ class ShopArticleReview
         /** @var string - Review */
         private string $comment = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Created on */
-        private ?DateTime $datecreated = null,
+        /** @var \DateTime|null - Created on */
+        private ?\DateTime $datecreated = null,
         // TCMSFieldVarchar
         /** @var string - IP address */
         private string $userIp = ''
@@ -95,7 +92,6 @@ class ShopArticleReview
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getDataExtranetUser(): ?DataExtranetUser
     {
@@ -108,7 +104,6 @@ class ShopArticleReview
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isPublish(): bool
@@ -123,7 +118,6 @@ class ShopArticleReview
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAuthorName(): string
     {
@@ -136,7 +130,6 @@ class ShopArticleReview
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTitle(): string
@@ -151,7 +144,6 @@ class ShopArticleReview
         return $this;
     }
 
-
     // TCMSFieldEmail
     public function getAuthorEmail(): string
     {
@@ -164,7 +156,6 @@ class ShopArticleReview
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isSendCommentNotification(): bool
@@ -179,7 +170,6 @@ class ShopArticleReview
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getRating(): int
     {
@@ -192,7 +182,6 @@ class ShopArticleReview
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getHelpfulCount(): int
@@ -207,7 +196,6 @@ class ShopArticleReview
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getNotHelpfulCount(): int
     {
@@ -220,7 +208,6 @@ class ShopArticleReview
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getActionId(): string
@@ -235,7 +222,6 @@ class ShopArticleReview
         return $this;
     }
 
-
     // TCMSFieldText
     public function getComment(): string
     {
@@ -249,20 +235,18 @@ class ShopArticleReview
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getUserIp(): string
@@ -276,6 +260,4 @@ class ShopArticleReview
 
         return $this;
     }
-
-
 }

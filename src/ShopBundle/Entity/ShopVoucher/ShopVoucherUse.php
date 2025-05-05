@@ -4,28 +4,25 @@ namespace ChameleonSystem\ShopBundle\Entity\ShopVoucher;
 
 use ChameleonSystem\ShopBundle\Entity\ShopCore\PkgShopCurrency;
 use ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrder;
-use DateTime;
 
 class ShopVoucherUse
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopVoucher|null - Belongs to voucher */
-        private ?ShopVoucher $shopVoucher = null
-        ,
+        private ?ShopVoucher $shopVoucher = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Used on */
-        private ?DateTime $dateUsed = null,
+        /** @var \DateTime|null - Used on */
+        private ?\DateTime $dateUsed = null,
         // TCMSFieldDecimal
         /** @var string - Value used up */
         private string $valueUsed = '',
         // TCMSFieldLookupParentID
         /** @var ShopOrder|null - Used in this order */
-        private ?ShopOrder $shopOrder = null
-        ,
+        private ?ShopOrder $shopOrder = null,
         // TCMSFieldDecimal
         /** @var string - Value consumed in the order currency */
         private string $valueUsedInOrderCurrency = '',
@@ -72,20 +69,18 @@ class ShopVoucherUse
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDateUsed(): ?DateTime
+    public function getDateUsed(): ?\DateTime
     {
         return $this->dateUsed;
     }
 
-    public function setDateUsed(?DateTime $dateUsed): self
+    public function setDateUsed(?\DateTime $dateUsed): self
     {
         $this->dateUsed = $dateUsed;
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getValueUsed(): string
@@ -100,7 +95,6 @@ class ShopVoucherUse
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getShopOrder(): ?ShopOrder
     {
@@ -113,7 +107,6 @@ class ShopVoucherUse
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getValueUsedInOrderCurrency(): string
@@ -128,7 +121,6 @@ class ShopVoucherUse
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getPkgShopCurrency(): ?PkgShopCurrency
     {
@@ -141,6 +133,4 @@ class ShopVoucherUse
 
         return $this;
     }
-
-
 }

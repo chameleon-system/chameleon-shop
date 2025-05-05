@@ -25,17 +25,17 @@ $bHasSelection = false;
 ?>
 <?php if (0 != $iActiveItemCount && 0 != $iInactiveItemCount) {
     ?>
-<div class="TPkgShopListfilterItem <?=get_class($oListItem); ?>">
+<div class="TPkgShopListfilterItem <?php echo get_class($oListItem); ?>">
     <div class="booleanLink">
-        <div class="listFilterName"><?=TGlobal::OutHTML($oListItem->fieldName); ?></div>
+        <div class="listFilterName"><?php echo TGlobal::OutHTML($oListItem->fieldName); ?></div>
         <div class="<?php if ($bNoActive) {
-        ?>valueitems<?php
-    } else {
-        ?>valueitems_high<?php
-    } ?> ">
+            ?>valueitems<?php
+        } else {
+            ?>valueitems_high<?php
+        } ?> ">
             <ul>
                 <?php
-                $sActive = '';
+                    $sActive = '';
     if ('1' == $oListItem->GetActiveValue()) {
         $bHasSelection = true;
         $sActive = 'active';

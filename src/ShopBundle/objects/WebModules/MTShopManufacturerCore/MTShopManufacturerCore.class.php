@@ -11,14 +11,14 @@
 
 class MTShopManufacturerCore extends TShopUserCustomModelBase
 {
-    const URL_ITEM_ID_NAME = 'manufacturerid';
+    public const URL_ITEM_ID_NAME = 'manufacturerid';
 
     /**
      * id of manufacturer.
      *
      * @var string|null
      */
-    protected $iActiveItemId = null;
+    protected $iActiveItemId;
 
     protected $bAllowHTMLDivWrapping = true;
 
@@ -68,15 +68,15 @@ class MTShopManufacturerCore extends TShopUserCustomModelBase
 
     public function GenerateModuleNavigation()
     {
-        $aItems = array();
+        $aItems = [];
         $oManufacturerList = TdbShopManufacturerList::GetList();
         $oManufacturerList->GoToStart();
         $iActiveItem = 0;
         $iNumItems = $oManufacturerList->Length();
-        //firstNode, lastNode, active
+        // firstNode, lastNode, active
         while ($oManufacturer = $oManufacturerList->Next()) {
             ++$iActiveItem;
-            $aClass = array();
+            $aClass = [];
             if (1 == $iActiveItem) {
                 $aClass[] = 'firstNode';
             }
@@ -97,7 +97,7 @@ class MTShopManufacturerCore extends TShopUserCustomModelBase
             $sNavi = '<ul>'.$sNavi.'</ul>';
         }
         if (!is_array($this->data)) {
-            $this->data = array();
+            $this->data = [];
         }
         $this->data['sModuleNavigation'] = $sNavi;
 
@@ -142,14 +142,14 @@ class MTShopManufacturerCore extends TShopUserCustomModelBase
     {
         $aCacheParams = parent::_GetCacheTableInfos();
         if (!is_array($aCacheParams)) {
-            $aCacheParams = array();
+            $aCacheParams = [];
         }
         if (!is_null($this->iActiveItemId)) {
-            $aCacheParams[] = array('table' => 'shop_manufacturer', 'id' => $this->iActiveItemId);
+            $aCacheParams[] = ['table' => 'shop_manufacturer', 'id' => $this->iActiveItemId];
         } else {
-            $aCacheParams[] = array('table' => 'shop_manufacturer', 'id' => '');
+            $aCacheParams[] = ['table' => 'shop_manufacturer', 'id' => ''];
         }
-        $aCacheParams[] = array('table' => 'shop_manufacturer_module_conf', 'cms_tpl_module_instance_id' => $this->instanceID);
+        $aCacheParams[] = ['table' => 'shop_manufacturer_module_conf', 'cms_tpl_module_instance_id' => $this->instanceID];
 
         return $aCacheParams;
     }

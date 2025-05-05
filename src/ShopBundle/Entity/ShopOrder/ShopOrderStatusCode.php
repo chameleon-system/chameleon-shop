@@ -10,15 +10,14 @@ class ShopOrderStatusCode
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
         // TCMSFieldLookupParentID
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldBoolean
         /** @var bool - Send status notification via email */
         private bool $sendMailNotification = true,
@@ -27,12 +26,10 @@ class ShopOrderStatusCode
         private string $systemName = '',
         // TCMSFieldExtendedLookup
         /** @var PkgShopPaymentTransactionType|null - Run following transaction, if status is executed */
-        private ?PkgShopPaymentTransactionType $pkgShopPaymentTransactionType = null
-        ,
+        private ?PkgShopPaymentTransactionType $pkgShopPaymentTransactionType = null,
         // TCMSFieldLookup
         /** @var DataMailProfile|null - Email profile */
-        private ?DataMailProfile $dataMailProfile = null
-        ,
+        private ?DataMailProfile $dataMailProfile = null,
         // TCMSFieldWYSIWYG
         /** @var string - Status text */
         private string $infoText = ''
@@ -76,7 +73,6 @@ class ShopOrderStatusCode
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getShop(): ?Shop
     {
@@ -89,7 +85,6 @@ class ShopOrderStatusCode
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isSendMailNotification(): bool
@@ -104,7 +99,6 @@ class ShopOrderStatusCode
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemName(): string
     {
@@ -117,7 +111,6 @@ class ShopOrderStatusCode
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getPkgShopPaymentTransactionType(): ?PkgShopPaymentTransactionType
@@ -132,7 +125,6 @@ class ShopOrderStatusCode
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getDataMailProfile(): ?DataMailProfile
     {
@@ -146,7 +138,6 @@ class ShopOrderStatusCode
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getInfoText(): string
     {
@@ -159,6 +150,4 @@ class ShopOrderStatusCode
 
         return $this;
     }
-
-
 }

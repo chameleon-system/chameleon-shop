@@ -15,8 +15,6 @@ class TPkgShopAffiliateList extends TPkgShopAffiliateListAutoParent
      * factory returning an element for the list.
      *
      * @param array $aData
-     *
-     * @return TdbPkgShopAffiliate
      */
     protected function _NewElement($aData): TdbPkgShopAffiliate
     {

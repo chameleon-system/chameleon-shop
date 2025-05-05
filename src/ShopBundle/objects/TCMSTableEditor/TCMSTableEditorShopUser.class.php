@@ -11,13 +11,13 @@
 
 /**
  * special handling for the shop users - we want to sync the newsletter info with the user info.
-/**/
+ * /**/
 class TCMSTableEditorShopUser extends TableEditorExtranetUser
 {
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
     protected function PostSaveHook($oFields, $oPostTable)
@@ -33,8 +33,8 @@ class TCMSTableEditorShopUser extends TableEditorExtranetUser
      */
     protected function UpdateNewsletterInfo($oPostTable)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedId = $connection->quote($oPostTable->id);
 
@@ -44,10 +44,10 @@ class TCMSTableEditorShopUser extends TableEditorExtranetUser
             /** @var $oUser TdbDataExtranetUser */
             if ($oUser->Load($oPostTable->id)) {
                 $oTableConf = new TCMSTableConf();
-                /** @var $oTableConf TCMSTableConf */
+                /* @var $oTableConf TCMSTableConf */
                 $oTableConf->LoadFromField('name', 'pkg_newsletter_user');
                 $oEditor = new TCMSTableEditorManager();
-                /** @var $oEditor TCMSTableEditorTree */
+                /* @var $oEditor TCMSTableEditorTree */
                 $oEditor->Init($oTableConf->id, $aRow['id']);
                 $aRow['email'] = $oUser->GetUserEMail();
                 $aRow['data_extranet_salutation_id'] = $oUser->fieldDataExtranetSalutationId;
@@ -67,18 +67,18 @@ class TCMSTableEditorShopUser extends TableEditorExtranetUser
      */
     protected function DeleteNewsletterInfo($iUserId)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedId = $connection->quote($iUserId);
 
         $query = "SELECT * FROM `pkg_newsletter_user` WHERE `data_extranet_user_id` = {$quotedId}";
         if ($aRow = $connection->fetchAssociative($query)) {
             $oTableConf = new TCMSTableConf();
-            /** @var $oTableConf TCMSTableConf */
+            /* @var $oTableConf TCMSTableConf */
             $oTableConf->LoadFromField('name', 'pkg_newsletter_user');
             $oEditor = new TCMSTableEditorManager();
-            /** @var $oEditor TCMSTableEditorTree */
+            /* @var $oEditor TCMSTableEditorTree */
             $oEditor->Init($oTableConf->id, $aRow['id']);
             $oEditor->Delete($aRow['id']);
         }

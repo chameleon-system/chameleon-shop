@@ -1,4 +1,5 @@
 <?php
+
 namespace ChameleonSystem\AmazonPaymentBundle\pkgExtranetUser;
 
 /**
@@ -6,5 +7,4 @@ namespace ChameleonSystem\AmazonPaymentBundle\pkgExtranetUser;
  */
 class AmazonPaymentExtranetUser extends \ChameleonSystemAmazonPaymentBundlepkgExtranetUserAmazonPaymentExtranetUserAutoParent
 {
-
 }

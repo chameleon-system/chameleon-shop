@@ -9,12 +9,11 @@ class ShopPaymentHandler
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopPaymentHandlerGroup|null - Belongs to payment provider */
-        private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
-        ,
+        private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null,
         // TCMSFieldVarchar
         /** @var string - Internal name for payment handler */
         private string $name = '',
@@ -73,7 +72,6 @@ class ShopPaymentHandler
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -86,7 +84,6 @@ class ShopPaymentHandler
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isBlockUserSelection(): bool
@@ -101,7 +98,6 @@ class ShopPaymentHandler
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClass(): string
     {
@@ -114,7 +110,6 @@ class ShopPaymentHandler
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getClassType(): string
@@ -129,7 +124,6 @@ class ShopPaymentHandler
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassSubtype(): string
     {
@@ -142,8 +136,6 @@ class ShopPaymentHandler
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -176,6 +168,4 @@ class ShopPaymentHandler
 
         return $this;
     }
-
-
 }

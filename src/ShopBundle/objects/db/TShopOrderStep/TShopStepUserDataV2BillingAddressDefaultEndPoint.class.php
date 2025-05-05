@@ -13,9 +13,8 @@
  * this step class works like TShopStepUserDataV2 but uses the billing address as default address
  * because TShopStepUserDataV2 will use the shipping address as default.
  *
- *
  * IMPORTANT: you should always access the class via "TShopStepUserDataV2BillingAddressDefault" (the virtual class entry point)
-/**/
+ * /**/
 class TShopStepUserDataV2BillingAddressDefaultEndPoint extends TShopStepUserDataV2
 {
     /**

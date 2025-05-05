@@ -14,10 +14,11 @@ class MTShopArticleListResponse
     /**
      * @var string|null
      */
-    public $iListKey = null;
+    public $iListKey;
 
     /**
      * @var int
+     *
      * @psalm-var positive-int|0
      */
     public $iNumberOfResults = 0;
@@ -34,6 +35,7 @@ class MTShopArticleListResponse
 
     /**
      * The rendered page.
+     *
      * @var string
      */
     public $sItemPage = '';

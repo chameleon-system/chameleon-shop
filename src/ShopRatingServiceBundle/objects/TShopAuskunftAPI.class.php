@@ -12,29 +12,30 @@
 /**
  * TShopAuskunftAPI Class to fetch data.
  *
-/**/
+ * /**/
 class TShopAuskunftAPI
 {
-    use \ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
+    use ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
 
     // XML-Parsing vars
     /** @var XMLParser */
     protected $parser;
 
-    /** @var bool  */
+    /** @var bool */
     protected $bRatingListInProgress = false;
 
     /** @var array<string, string> */
-    protected $aRatingItem = array();
+    protected $aRatingItem = [];
 
     /** @var bool */
     protected $bCriteriaInProgress = false;
 
     /** @var array array<string, string> */
-    protected $aCriteriaItem = array();
+    protected $aCriteriaItem = [];
 
     /**
-     * Current active tag
+     * Current active tag.
+     *
      * @var string
      */
     protected $current = '';
@@ -43,7 +44,7 @@ class TShopAuskunftAPI
     protected $inside_data = false;
 
     /** @var array<string, mixed> */
-    public $aAPIData = array();
+    public $aAPIData = [];
 
     /** @var string|null */
     public $xmlParsingError;
@@ -58,7 +59,7 @@ class TShopAuskunftAPI
     public function __construct()
     {
         if (!($this->parser = xml_parser_create())) {
-            die('Cannot create parser');
+            exit('Cannot create parser');
         }
 
         xml_set_object($this->parser, $this);
@@ -69,6 +70,7 @@ class TShopAuskunftAPI
     /**
      * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
      * @see self::__construct
+     *
      * @return void
      */
     public function TShopAuskunftAPI()
@@ -76,7 +78,7 @@ class TShopAuskunftAPI
         $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
      * Get content from URL.
@@ -116,8 +118,8 @@ class TShopAuskunftAPI
         $this->current = $name;
         $this->inside_data = false;
 
-        //if ($name == "RATINGLIST") { echo "<pre>liste begin\n"; }
-        //if ($name == "DEEPLINK") { echo "<a href=\""; }
+        // if ($name == "RATINGLIST") { echo "<pre>liste begin\n"; }
+        // if ($name == "DEEPLINK") { echo "<a href=\""; }
 
         if ('RATINGLIST' == $name) {
             $this->bRatingListInProgress = true;
@@ -129,7 +131,7 @@ class TShopAuskunftAPI
         if ('RATING' == $name) {
             if (is_array($attribs)) {
                 foreach ($attribs as $key => $val) {
-                    //echo strtolower($key)."=\"".$val."\"";
+                    // echo strtolower($key)."=\"".$val."\"";
                     if ('id' === strtolower($key)) {
                         $this->aRatingItem['id'] = $val;
                     }
@@ -140,6 +142,7 @@ class TShopAuskunftAPI
 
     /**
      * @see https://www.php.net/manual/en/function.xml-set-element-handler.php
+     *
      * @param resource $parser
      * @param string $name
      *
@@ -147,8 +150,8 @@ class TShopAuskunftAPI
      */
     public function end_tag($parser, $name)
     {
-        //if ($name == "RATINGLIST") { echo "liste end</pre>"; }
-        //if ($name == "DEEPLINK") { echo "\">LINK</a>"; }
+        // if ($name == "RATINGLIST") { echo "liste end</pre>"; }
+        // if ($name == "DEEPLINK") { echo "\">LINK</a>"; }
 
         if ('RATINGLIST' == $name) {
             $this->bRatingListInProgress = false;
@@ -215,11 +218,11 @@ class TShopAuskunftAPI
                 $this->aAPIData['Shopauskunft']['Shop']['name'] = $data;
             }
 
-            //address
+            // address
             if (isset($this->aAPIData['Shopauskunft']['Shop']['address'])) {
                 $aAddr = $this->aAPIData['Shopauskunft']['Shop']['address'];
             } else {
-                $aAddr = array();
+                $aAddr = [];
                 $this->aAPIData['Shopauskunft']['Shop']['address'] = $aAddr;
             }
             if ('DOMAIN' == $this->current) {
@@ -247,7 +250,7 @@ class TShopAuskunftAPI
                 $this->aAPIData['Shopauskunft']['Shop']['address'] = $aAddr;
             }
 
-            //rating_summary
+            // rating_summary
             if (isset($this->aAPIData['Shopauskunft']['Shop']['rating_summary'])) {
                 $aRatSum = $this->aAPIData['Shopauskunft']['Shop']['rating_summary'];
             }
@@ -297,7 +300,7 @@ class TShopAuskunftAPI
                 $this->aAPIData['Shopauskunft']['Shop']['rating_summary'] = $aRatSum;
             }
 
-            //rating
+            // rating
             if ('SCORETEXT' == $this->current) {
                 $this->aRatingItem['scoretext'] = $data;
             }
@@ -345,7 +348,7 @@ class TShopAuskunftAPI
                 }
             }
 
-            //legend
+            // legend
             if (isset($this->aAPIData['Shopauskunft']['Shop']['legend'])) {
                 $aLegend = $this->aAPIData['Shopauskunft']['Shop']['legend'];
             }
@@ -353,9 +356,9 @@ class TShopAuskunftAPI
                 $aLegend['time'] = $data;
             }
 
-            //criteria
+            // criteria
             if ($this->bCriteriaInProgress) {
-                //if ( in_array($this->current, array('CRITERION1', 'CRITERION2', 'CRITERION3', 'CRITERION4', 'CRITERION5', 'CRITERION6'))) {}
+                // if ( in_array($this->current, array('CRITERION1', 'CRITERION2', 'CRITERION3', 'CRITERION4', 'CRITERION5', 'CRITERION6'))) {}
                 if ('NAME' == $this->current) {
                     $this->aCriteriaItem['name'] = $data;
                 }
@@ -363,12 +366,12 @@ class TShopAuskunftAPI
                     $this->aCriteriaItem['desc'] = $data;
                 }
             }
-            //criteria-end
+            // criteria-end
 
             if (isset($aLegend)) {
                 $this->aAPIData['Shopauskunft']['Shop']['legend'] = $aLegend;
             }
-            //legend-end
+            // legend-end
         }
 
         $this->inside_data = true;
@@ -382,7 +385,7 @@ class TShopAuskunftAPI
     public function parse($data)
     {
         if (!empty($data)) {
-            //$data = eregi_replace(">"."[[:space:]]+"."< ",">< ",$data);
+            // $data = eregi_replace(">"."[[:space:]]+"."< ",">< ",$data);
             $data = preg_replace("/>\s+</i", '><', $data);
             if (!xml_parse($this->parser, $data, true)) {
                 $this->xmlParsingError = '';
@@ -390,7 +393,7 @@ class TShopAuskunftAPI
                 $this->xmlParsingError .= xml_get_current_line_number($this->parser);
 
                 return false;
-            //+++ die($reason);
+            // +++ die($reason);
             } else {
                 return true;
             }

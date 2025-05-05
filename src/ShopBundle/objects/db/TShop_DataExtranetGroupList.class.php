@@ -16,14 +16,14 @@ class TShop_DataExtranetGroupList extends TShop_DataExtranetGroupListAutoParent
      * @return TdbDataExtranetGroupList
     */
     /**
-     * @return TdbDataExtranetGroupList
-     *
      * @param float $dOrderValue
+     *
+     * @return TdbDataExtranetGroupList
      */
     public static function GetAutoGroupsForValue($dOrderValue)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedOrderValue = $connection->quote($dOrderValue);
 

@@ -13,12 +13,11 @@ use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * module used to render search forms.
-/**/
+ * /**/
 class MTShopSearchFormCore extends TShopUserCustomModelBase
 {
     protected $bAllowHTMLDivWrapping = true;
@@ -40,12 +39,12 @@ class MTShopSearchFormCore extends TShopUserCustomModelBase
 
         return $this->data;
     }
-    
+
     protected function getSearchQuery(): string
     {
         $inputFilterService = $this->getInputFilterService();
         $queryString = $inputFilterService->getFilteredInput('q', '');
-        
+
         if (false === \is_string($queryString)) {
             return '';
         }
@@ -62,7 +61,7 @@ class MTShopSearchFormCore extends TShopUserCustomModelBase
     {
         $inputFilterService = $this->getInputFilterService();
         $queryString = $inputFilterService->getFilteredInput('q');
-        
+
         return null === $queryString;
     }
 
@@ -86,7 +85,7 @@ class MTShopSearchFormCore extends TShopUserCustomModelBase
     {
         return ServiceLocator::get('chameleon_system_core.system_page_service');
     }
-    
+
     private function getInputFilterService(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');

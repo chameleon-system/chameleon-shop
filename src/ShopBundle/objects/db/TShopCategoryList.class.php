@@ -17,13 +17,13 @@ use Doctrine\DBAL\Connection;
 
 class TShopCategoryList extends TShopCategoryListAutoParent
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopCategoryList';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopCategoryList';
 
     /**
      * return all categories connected to the article
      * Add main category from article to list on first position.
      *
-     * @param int    $iArticleId
+     * @param int $iArticleId
      * @param string $sLanguageID
      *
      * @return TdbShopCategoryList
@@ -35,7 +35,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
         if (!empty($sCategoryRestriction)) {
             $sCategoryRestriction = ' AND '.$sCategoryRestriction;
         }
-        $db = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $db = ServiceLocator::get('database_connection');
 
         $query = 'SELECT `shop_category`.*, 1 AS isprimary
                     FROM `shop_article`
@@ -163,7 +163,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      * if no parent id is given, then the root categories will be returned.
      *
      * @param string|null $iParentId
-     * @param array       $aFilter     - an optional filter list for the category
+     * @param array $aFilter - an optional filter list for the category
      * @param string|null $sLanguageID
      *
      * @return TdbShopCategoryList
@@ -174,10 +174,10 @@ class TShopCategoryList extends TShopCategoryListAutoParent
         if (is_null($iParentId)) {
             $iParentId = '';
         }
-        $parameters = array(
+        $parameters = [
             'parentId' => $iParentId,
-        );
-        $parameterType = array();
+        ];
+        $parameterType = [];
 
         $query = 'SELECT `shop_category`.*
                   FROM `shop_category`
@@ -228,8 +228,8 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      * return category path from iEndNodeId to iStartNodeId. if not start node is given,
      * the path will start at the root category.
      *
-     * @param int    $iStartNodeId
-     * @param int    $iEndNodeId
+     * @param int $iStartNodeId
+     * @param int $iEndNodeId
      * @param string $sLanguageID
      *
      * @return TIterator
@@ -242,7 +242,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
 
         $bDone = false;
         $iCurrentCatId = $iEndNodeId;
-        $aTmpList = array(); // we store the list in a tmp array so we can reverse the order
+        $aTmpList = []; // we store the list in a tmp array so we can reverse the order
         do {
             $oCategory = TdbShopCategory::GetNewInstance();
             $oCategory->SetLanguage($sLanguageID);
@@ -276,13 +276,13 @@ class TShopCategoryList extends TShopCategoryListAutoParent
     /**
      * used to display a category list.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oCategoryList', $this);
@@ -304,7 +304,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -317,7 +317,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
     public static function getParentCategoryList($categoryId)
     {
         $categoryList = new TIterator();
-        $aTmpList = array(); // we store the list in a tmp array so we can reverse the order
+        $aTmpList = []; // we store the list in a tmp array so we can reverse the order
         $currentCategoryId = $categoryId;
         $bDone = false;
         $requestInfoService = self::getRequestInfoService();
@@ -357,7 +357,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      */
     private static function getConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
     /**
@@ -365,7 +365,7 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      */
     private static function getRequestInfoService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.request_info_service');
+        return ServiceLocator::get('chameleon_system_core.request_info_service');
     }
 
     /**
@@ -373,10 +373,10 @@ class TShopCategoryList extends TShopCategoryListAutoParent
      */
     private static function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
-    static private function getBackendSession(): BackendSessionInterface
+    private static function getBackendSession(): BackendSessionInterface
     {
         return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
     }

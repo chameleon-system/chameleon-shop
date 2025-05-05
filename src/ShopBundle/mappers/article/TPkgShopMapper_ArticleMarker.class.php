@@ -22,7 +22,7 @@ class TPkgShopMapper_ArticleMarker extends AbstractPkgShopMapper_Article
             $oCacheTriggerManager->addTrigger($oArticle->table, $oArticle->id);
         }
         $oArticleMarkerList = $oArticle->GetFieldShopArticleMarkerList();
-        $aArticleMarker = array(); //with (sImageUrl, sName, sDescription)
+        $aArticleMarker = []; // with (sImageUrl, sName, sDescription)
         while ($oArticleMarker = $oArticleMarkerList->Next()) {
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oArticleMarker->table, $oArticleMarker->id);
@@ -30,11 +30,11 @@ class TPkgShopMapper_ArticleMarker extends AbstractPkgShopMapper_Article
             if (!empty($oArticleMarker->fieldCmsMediaId) && $bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger('cms_media', $oArticleMarker->fieldCmsMediaId);
             }
-            $aMarker = array(
+            $aMarker = [
                 'sImageId' => $oArticleMarker->fieldCmsMediaId,
                 'sName' => $oArticleMarker->fieldTitle,
                 'sDescription' => $oArticleMarker->GetTextField('description'),
-            );
+            ];
             $aArticleMarker[] = $aMarker;
         }
         $oVisitor->SetMappedValue('aArticleMarker', $aArticleMarker);

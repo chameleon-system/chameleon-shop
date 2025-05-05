@@ -14,8 +14,6 @@ interface IPkgShopBasketArticleWithCustomData
     /**
      * validates the custom data.
      *
-     * @param array $customData
-     *
      * @return TShopBasketArticleCustomDataValidationError[]
      */
     public function validateCustomData(array $customData);

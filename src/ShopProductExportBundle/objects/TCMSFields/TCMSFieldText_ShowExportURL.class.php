@@ -42,30 +42,30 @@ class TCMSFieldText_ShowExportURL extends TCMSFieldVarchar
             $oPortalList = $oShop->GetFieldCmsPortalList();
             $systemPageService = $this->getSystemPageService();
             while ($oPortal = $oPortalList->Next()) {
-                $sExportPageURL = $systemPageService->getLinkToSystemPageRelative('productexport', array(), $oPortal);
+                $sExportPageURL = $systemPageService->getLinkToSystemPageRelative('productexport', [], $oPortal);
                 if (strstr($sExportPageURL, 'javascript:alert')) {
-                    $sReturn = '<div>'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_product_export.field_show_export_url.error_export_page_missing')).'</div>';
+                    $sReturn = '<div>'.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_product_export.field_show_export_url.error_export_page_missing')).'</div>';
                     continue;
                 }
                 $sExportPageId = $oPortal->GetSystemPageId('productexport');
                 $sSpotName = $this->getExportModuleSpotName($sExportPageId);
                 if ('' == $sSpotName) {
-                    $sReturn = '<div>'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_product_export.field_show_export_url.error_export_module_missing')).'</div>';
+                    $sReturn = '<div>'.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_product_export.field_show_export_url.error_export_module_missing')).'</div>';
                     continue;
                 }
                 $aViewList = $this->getViewNameList($sExportPageId);
                 if (0 === count($aViewList)) {
-                    $sReturn = '<div>'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_product_export.field_show_export_url.error_export_views_missing')).'</div>';
+                    $sReturn = '<div>'.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_product_export.field_show_export_url.error_export_views_missing')).'</div>';
                     continue;
                 }
-                $sReturn .= '<div><h5>'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_product_export.field_show_export_url.headline', array('%portalName%' => $oPortal->GetName()))).'</h5></div>';
+                $sReturn .= '<div><h5>'.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_product_export.field_show_export_url.headline', ['%portalName%' => $oPortal->GetName()])).'</h5></div>';
                 foreach ($aViewList as $sView) {
                     $sURL = $sExportPageURL.'sModuleSpotName/'.$sSpotName.'/view/'.$sView.'/key/'.$oShop->fieldExportKey;
                     $sReturn .= '<div><b>'.$sView.' -></b> <a href="'.$sURL.'" title="export" target="_blank">'.$sURL.'</a>';
                 }
             }
         } else {
-            $sReturn = $sReturn = '<div>'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_product_export.field_show_export_url.error_invalid_field_owner')).'</div>';
+            $sReturn = $sReturn = '<div>'.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_product_export.field_show_export_url.error_invalid_field_owner')).'</div>';
         }
 
         return $sReturn;
@@ -104,7 +104,7 @@ class TCMSFieldText_ShowExportURL extends TCMSFieldVarchar
      */
     protected function getViewNameList($sPageId)
     {
-        $aViewNameList = array();
+        $aViewNameList = [];
         $sQuery = "SELECT `cms_tpl_page_cms_master_pagedef_spot`.`model` FROM `cms_tpl_page_cms_master_pagedef_spot`
                     INNER JOIN `cms_master_pagedef_spot`ON `cms_master_pagedef_spot`.`id` = `cms_tpl_page_cms_master_pagedef_spot`.`cms_master_pagedef_spot_id`
                      WHERE `cms_tpl_page_cms_master_pagedef_spot`.`cms_tpl_page_id` = '".$sPageId."'
@@ -147,8 +147,8 @@ class TCMSFieldText_ShowExportURL extends TCMSFieldVarchar
         $(document).ready(function() {
           $('#showExportURLList').click(function(){
             GetAjaxCallTransparent('".$this->GenerateAjaxURL(
-                array('_fnc' => 'GetExportURLList', '_fieldName' => $this->name)
-            )."', GetExportURLList);
+            ['_fnc' => 'GetExportURLList', '_fieldName' => $this->name]
+        )."', GetExportURLList);
             return false;});
         });
 
@@ -167,11 +167,11 @@ class TCMSFieldText_ShowExportURL extends TCMSFieldVarchar
      */
     private function getSystemPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 
     private function getTranslator(): TranslatorInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 }

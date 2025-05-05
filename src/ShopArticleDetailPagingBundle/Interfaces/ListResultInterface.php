@@ -30,18 +30,21 @@ interface ListResultInterface
 
     /**
      * @param string $url
+     *
      * @return void
      */
     public function setNextPageUrl($url);
 
     /**
      * @param string $url
+     *
      * @return void
      */
     public function setPreviousPageUrl($url);
 
     /**
      * @param array<string, ListItemInterface> $items (key = id)
+     *
      * @return void
      */
     public function setItemList(array $items);

@@ -13,7 +13,7 @@
  * the cronjob imports all rating data
  * see #10260.
  *
-/**/
+ * /**/
 class TPkgShopRating_CronJob_ImportRating extends TdbCmsCronjobs
 {
     /**

@@ -37,16 +37,16 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
         if ($this->AllowCreatingVoucherCodes()) {
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'createvoucher';
-            $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.action_create');
+            $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.action_create');
             $oMenuItem->sIcon = 'fas fa-file-invoice-dollar';
 
             $oGlobal = TGlobal::instance();
             $oExecutingModulePointer = $oGlobal->GetExecutingModulePointer();
 
-            $aURLData = array('module_fnc' => array($oExecutingModulePointer->sModuleSpotName => 'ExecuteAjaxCall'), '_fnc' => 'CreateVoucherCodes', '_noModuleFunction' => 'true', 'pagedef' => $oGlobal->GetUserData('pagedef'), 'id' => $this->sId, 'tableid' => $this->oTableConf->id);
+            $aURLData = ['module_fnc' => [$oExecutingModulePointer->sModuleSpotName => 'ExecuteAjaxCall'], '_fnc' => 'CreateVoucherCodes', '_noModuleFunction' => 'true', 'pagedef' => $oGlobal->GetUserData('pagedef'), 'id' => $this->sId, 'tableid' => $this->oTableConf->id];
             $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aURLData);
-            $sNumberOfVouchersToCreatePromptText = TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.prompt_number_of_vouchers_to_create'));
-            $sVoucherCodeToCreatePromptText = TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.prompt_voucher_code_to_create'));
+            $sNumberOfVouchersToCreatePromptText = TGlobal::OutJS(ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.prompt_number_of_vouchers_to_create'));
+            $sVoucherCodeToCreatePromptText = TGlobal::OutJS(ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.prompt_voucher_code_to_create'));
             $sJS = "TCMSShopTableEditor_ShopVoucherSeries_CreateVouchers('{$sURL}','".$sNumberOfVouchersToCreatePromptText."','".$sVoucherCodeToCreatePromptText."');";
             $oMenuItem->sOnClick = $sJS;
             $this->oMenuItems->AddItem($oMenuItem);
@@ -54,13 +54,13 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
         if ($this->AllowExportingVoucherCodes()) {
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'exportvoucher';
-            $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.action_export');
+            $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_shop.voucher.action_export');
             $oMenuItem->sIcon = 'fas fa-file-download';
 
             $oGlobal = TGlobal::instance();
             $oExecutingModulePointer = $oGlobal->GetExecutingModulePointer();
 
-            $aURLData = array('module_fnc' => array($oExecutingModulePointer->sModuleSpotName => 'ExportVoucherCodes'), '_noModuleFunction' => 'true', 'pagedef' => $oGlobal->GetUserData('pagedef'), 'id' => $this->sId, 'tableid' => $this->oTableConf->id);
+            $aURLData = ['module_fnc' => [$oExecutingModulePointer->sModuleSpotName => 'ExportVoucherCodes'], '_noModuleFunction' => 'true', 'pagedef' => $oGlobal->GetUserData('pagedef'), 'id' => $this->sId, 'tableid' => $this->oTableConf->id];
             $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aURLData);
             $sJS = "void(window.open('".$sURL."'))";
             $oMenuItem->sOnClick = $sJS;
@@ -71,15 +71,15 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
     /**
      * create a number of vouchers in the shop_voucher table.
      *
-     * @param string $sCode             - the code to use. if empty, a random unique code will be generated
-     * @param int    $iNumberOfVouchers - number of vouchers to create (will fetch this from user input if null given)
+     * @param string $sCode - the code to use. if empty, a random unique code will be generated
+     * @param int $iNumberOfVouchers - number of vouchers to create (will fetch this from user input if null given)
      *
      * @return stdClass
      */
     public function CreateVoucherCodes($sCode = null, $iNumberOfVouchers = null)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ServiceLocator::get('database_connection');
 
         $oReturn = new stdClass();
         $oReturn->bError = false;
@@ -115,7 +115,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
                 /** @var $oVoucher TdbShopVoucher */
                 $oVoucherCodeTableConf = $oVoucher->GetTableConf();
                 $oVoucherCodeEditor = new TCMSTableEditorManager();
-                /** @var $oVoucherCodeEditor TCMSTableEditorManager */
+                /* @var $oVoucherCodeEditor TCMSTableEditorManager */
                 $oVoucherCodeEditor->Init($oVoucherCodeTableConf->id, null);
 
                 $oVoucher->AllowEditByAll(true);
@@ -160,7 +160,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
             $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
             $bUserIsInCodeTableGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $oTargetTableConf->fieldName);
-            $bHasNewPermissionOnTargetTable = ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, 'shop_voucher'));
+            $bHasNewPermissionOnTargetTable = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, 'shop_voucher');
             $bAllowCreatingCodes = ($bUserIsInCodeTableGroup && $bHasNewPermissionOnTargetTable);
         }
 
@@ -197,8 +197,8 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
         $sReturn = '';
 
         if ($this->AllowExportingVoucherCodes()) {
-            /** @var \Doctrine\DBAL\Connection $connection */
-            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+            /** @var Doctrine\DBAL\Connection $connection */
+            $connection = ServiceLocator::get('database_connection');
             $quotedSeriesId = $connection->quote($this->sId);
 
             $oVouchers = TdbShopVoucherList::GetList("SELECT * FROM `shop_voucher` WHERE `shop_voucher_series_id` = {$quotedSeriesId}");
@@ -226,7 +226,7 @@ class TCMSShopTableEditor_ShopVoucherSeries extends TCMSTableEditor
                 $sCsv .= '"'.implode('";"', $aCsvVouchers[$i])."\"\n";
             }
 
-            $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+            $translator = ServiceLocator::get('translator');
             $sCsv = '"'.TGlobal::OutHTML($translator->trans('chameleon_system_shop.voucher.export_column_code')).'";"'.TGlobal::OutHTML($translator->trans('chameleon_system_shop.voucher.export_column_created')).'";"'.TGlobal::OutHTML($translator->trans('chameleon_system_shop.voucher.export_column_spent')).'";"'.TGlobal::OutHTML($translator->trans('chameleon_system_shop.voucher.export_column_spent_date'))."\"\n".$sCsv;
 
             while (@ob_end_clean()) {

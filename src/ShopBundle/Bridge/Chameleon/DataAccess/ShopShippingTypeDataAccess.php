@@ -13,7 +13,6 @@ namespace ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess;
 
 use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopShippingTypeDataAccessInterface;
 use Doctrine\DBAL\Connection;
-use TShopBasket;
 
 class ShopShippingTypeDataAccess implements ShopShippingTypeDataAccessInterface
 {
@@ -22,9 +21,6 @@ class ShopShippingTypeDataAccess implements ShopShippingTypeDataAccessInterface
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -89,15 +85,15 @@ class ShopShippingTypeDataAccess implements ShopShippingTypeDataAccessInterface
     /**
      * {@inheritdoc}
      */
-    public function getAvailableShippingTypes($shippingGroupId, $shippingCountryId, TShopBasket $basket)
+    public function getAvailableShippingTypes($shippingGroupId, $shippingCountryId, \TShopBasket $basket)
     {
-        $parameters = array(
+        $parameters = [
             'iGroupId' => $shippingGroupId,
             'dNumberOfArticles' => $basket->dTotalNumberOfArticles,
             'dWeight' => $basket->dTotalWeight,
             'dBasketVolume' => $basket->dTotalVolume,
             'dBasketValue' => $basket->dCostArticlesTotalAfterDiscounts,
-        );
+        ];
         if ('' !== $shippingCountryId) {
             $parameters['sActiveShippingCountryId'] = $shippingCountryId;
         }
@@ -177,7 +173,7 @@ class ShopShippingTypeDataAccess implements ShopShippingTypeDataAccessInterface
                     FROM %1$s
                    WHERE %1$s.`source_id` = :shippingTypeId
                     ', $this->connection->quoteIdentifier($mltName));
-        $idRows = $this->connection->fetchAllAssociative($query, array('shippingTypeId' => $shippingTypeId));
+        $idRows = $this->connection->fetchAllAssociative($query, ['shippingTypeId' => $shippingTypeId]);
 
         return array_map(
             function (array $row) {

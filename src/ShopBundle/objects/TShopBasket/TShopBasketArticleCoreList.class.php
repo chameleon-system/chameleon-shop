@@ -18,7 +18,7 @@
  */
 class TShopBasketArticleCoreList extends TIterator
 {
-    const VIEW_PATH = 'pkgShop/views/TShopBasket/TShopBasketArticleList';
+    public const VIEW_PATH = 'pkgShop/views/TShopBasket/TShopBasketArticleList';
 
     /**
      * the sume of all amount fields in the basket (ie total number of articles).
@@ -53,12 +53,12 @@ class TShopBasketArticleCoreList extends TIterator
      *
      * @var array
      */
-    private $aObservers = array();
+    private $aObservers = [];
 
     /**
      * register an observer with the user.
      *
-     * @param string                    $sObserverName
+     * @param string $sObserverName
      * @param IDataExtranetUserObserver $oObserver
      *
      * @return void
@@ -111,8 +111,6 @@ class TShopBasketArticleCoreList extends TIterator
     /**
      * returns array with pointers to all basket articles that match the shipping type.
      *
-     * @param TdbShopShippingType $oShippingType
-     *
      * @return TShopBasketArticleList
      */
     public function GetArticlesAffectedByShippingType(TdbShopShippingType $oShippingType)
@@ -130,7 +128,7 @@ class TShopBasketArticleCoreList extends TIterator
             // this shipping type should match ALL articles... so we now work with all articles
             $this->GoToStart();
             $oArticles = new TShopBasketArticleList();
-            /** @var $oArticles TShopBasketArticleList */
+            /* @var $oArticles TShopBasketArticleList */
             while ($oItem = $this->Next()) {
                 $oArticles->AddItem($oItem);
             }
@@ -146,7 +144,7 @@ class TShopBasketArticleCoreList extends TIterator
         } else {
             // does not match... so reset the list
             $oArticles = new TShopBasketArticleList();
-            /** @var $oArticles TShopBasketArticleList */
+            /* @var $oArticles TShopBasketArticleList */
         }
 
         $this->setItemPointer($iPointer);
@@ -156,8 +154,6 @@ class TShopBasketArticleCoreList extends TIterator
 
     /**
      * return list matchin the vat group.
-     *
-     * @param TdbShopVat $oVat
      *
      * @return TShopBasketArticleList
      */
@@ -181,9 +177,6 @@ class TShopBasketArticleCoreList extends TIterator
 
     /**
      * marks the item in the list with the shipping type.
-     *
-     * @param TShopBasketArticle  $oItem
-     * @param TdbShopShippingType $oShippingType
      *
      * @return void
      */
@@ -271,8 +264,6 @@ class TShopBasketArticleCoreList extends TIterator
      * if the item does not exists, it is added
      * returns true if the item was added, false if it was removed (amount fell below zero).
      *
-     * @param TShopBasketArticle $oItem
-     *
      * @return bool
      */
     public function UpdateItemAmount(TShopBasketArticle $oItem)
@@ -314,8 +305,6 @@ class TShopBasketArticleCoreList extends TIterator
 
     /**
      * overwrote the method so that the id could type hint properly.
-     *
-     * @return TShopBasketArticle|bool
      */
     public function next(): TShopBasketArticle|bool
     {
@@ -354,8 +343,6 @@ class TShopBasketArticleCoreList extends TIterator
      * Searches for an Item matching the passed item, removes it from the list and returns it. if no item is found
      * the method will return null.
      *
-     * @param TShopBasketArticle $oItem
-     *
      * @return TShopBasketArticle|null
      */
     public function RemoveArticle(TShopBasketArticle $oItem)
@@ -374,11 +361,11 @@ class TShopBasketArticleCoreList extends TIterator
     }
 
     /**
-     * @return float
-     *
      * @param TdbShopVoucher $oVoucher
      *                                 returns the total basket value for alle articles that may be used for the voucher passed. the method takes
      *                                 active discounts into account
+     *
+     * @return float
      */
     public function GetBasketSumForVoucher(TdbShopVoucher $oVoucher)
     {
@@ -417,7 +404,6 @@ class TShopBasketArticleCoreList extends TIterator
      * All this means is: the voucher value will be distributed over all affected items in such a way that the total discount values of the items sums
      *  to the voucher value with a precision of 2 while most but not all discounted item prices will also be 2 digit precision
      *
-     * @param TdbShopVoucher $oVoucher
      * @param float $dVoucherValue
      *
      * @return void
@@ -426,7 +412,7 @@ class TShopBasketArticleCoreList extends TIterator
     {
         $currentPosition = $this->getItemPointer();
         $this->GoToStart();
-        $articlesAffected = array();
+        $articlesAffected = [];
         $totalValueOfAffectedItems = 0;
         while ($basketItem = $this->Next()) {
             if (true === $oVoucher->AllowVoucherForArticle($basketItem)) {
@@ -440,14 +426,13 @@ class TShopBasketArticleCoreList extends TIterator
     }
 
     /**
-     * @param TdbShopDiscount $discount
-     * @param float           $unusedDiscountValue value difference between discount based on single article and discount based on all articles
+     * @param float $unusedDiscountValue value difference between discount based on single article and discount based on all articles
      */
-    public function reducePriceForItemsAffectedByDiscount(\TdbShopDiscount $discount, float $unusedDiscountValue): void
+    public function reducePriceForItemsAffectedByDiscount(TdbShopDiscount $discount, float $unusedDiscountValue): void
     {
         $currentPosition = $this->getItemPointer();
         $this->GoToStart();
-        $articlesAffected = array();
+        $articlesAffected = [];
         $totalValueOfAffectedItems = 0;
         while ($basketItem = $this->Next()) {
             if (true === $discount->AllowDiscountForArticle($basketItem)) {
@@ -468,20 +453,20 @@ class TShopBasketArticleCoreList extends TIterator
             return;
         }
         $dRemainingDiscountUse = $unusedDiscountValue;
-        foreach ($articlesAffected as  $affectedArticle) {
+        foreach ($articlesAffected as $affectedArticle) {
             // total value used for the article is calculated based on the relative value of the article to the other articles
             // (200*(49/448.95))/1 =
-            if (0 === (int)round($totalValueOfAffectedItems*100,0)) {
+            if (0 === (int) round($totalValueOfAffectedItems * 100, 0)) {
                 // if the voucher applies with no value to the articles, we need to prevent a division by zero
                 $dValueToUse = 0;
             } else {
                 $dValueToUse = ($unusedDiscountValue * ($affectedArticle->dPriceTotalAfterDiscountWithoutVouchers / $totalValueOfAffectedItems)) / $affectedArticle->dAmount;
             }
             $dValueToUse = $dValueToUse * 100;
-            //the reason for adding the 0.5 in the next step is float precision error in php, see http://php.net/float
+            // the reason for adding the 0.5 in the next step is float precision error in php, see http://php.net/float
             $dValueToUse = intval(floor($dValueToUse + 0.5)) / 100;
             $dRealUse = $dValueToUse * $affectedArticle->dAmount;
-            //round has to be done because php doesn't handle values correctly and returns true for identical values for ($dRealUse > $dRemainingDiscountUse)
+            // round has to be done because php doesn't handle values correctly and returns true for identical values for ($dRealUse > $dRemainingDiscountUse)
             $dRealUse = round($dRealUse, 10);
             $dRemainingDiscountUse = round($dRemainingDiscountUse, 10);
             if ($dRealUse > $dRemainingDiscountUse) {
@@ -545,8 +530,6 @@ class TShopBasketArticleCoreList extends TIterator
     /**
      * returns the total number of items affected by a voucher.
      *
-     * @param TdbShopVoucher $oVoucher
-     *
      * @return float
      */
     public function GetBasketQuantityForVoucher(TdbShopVoucher $oVoucher)
@@ -568,8 +551,6 @@ class TShopBasketArticleCoreList extends TIterator
     /**
      * returns the total basket value for alle articles that may be used for the discount passed. the method takes
      * active discounts into account.
-     *
-     * @param TdbShopDiscount $oDiscount
      *
      * @return float
      */
@@ -593,8 +574,6 @@ class TShopBasketArticleCoreList extends TIterator
     /**
      * returns the total number of items affected by a discount.
      *
-     * @param TdbShopDiscount $oDiscount
-     *
      * @return float
      */
     public function GetBasketQuantityForDiscount(TdbShopDiscount $oDiscount)
@@ -617,17 +596,17 @@ class TShopBasketArticleCoreList extends TIterator
     /**
      * used to display the basket article list.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'mini', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'mini', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oView->AddVar('oShop', $oShop);
         $oView->AddVar('oArticleList', $this);
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);
@@ -648,15 +627,13 @@ class TShopBasketArticleCoreList extends TIterator
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }
 
     /**
      * apply a discount to the basket item list.
-     *
-     * @param TdbShopDiscount $oDiscount
      *
      * @return void
      */
@@ -746,9 +723,9 @@ class TShopBasketArticleCoreList extends TIterator
     * @return boolean
     */
     /**
-     * @return bool
-     *
      * @param string $sMessageManager
+     *
+     * @return bool
      */
     public function ValidateBasketContents($sMessageManager)
     {
@@ -785,8 +762,7 @@ class TShopBasketArticleCoreList extends TIterator
     /**
      * Checks if given basket article is buyable. If not remove it from basket with message.
      *
-     * @param TShopBasketArticle $oBasketArticle
-     * @param string             $sMessageManager
+     * @param string $sMessageManager
      *
      * @return bool
      */
@@ -865,7 +841,7 @@ class TShopBasketArticleCoreList extends TIterator
                 $mergedItems = true;
                 continue;
             }
-            /** @var TShopBasketArticle $item */
+            /* @var TShopBasketArticle $item */
             $items[$key] = $item;
         }
         $this->setItemPointer(0);

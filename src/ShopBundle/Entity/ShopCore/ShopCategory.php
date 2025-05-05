@@ -11,20 +11,17 @@ class ShopCategory
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopCategory|null - Subcategory of */
-        private ?ShopCategory $shopCategory = null
-        ,
+        private ?ShopCategory $shopCategory = null,
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Template for the details page */
-        private ?CmsTree $detailPageCmsTree = null
-        ,
+        private ?CmsTree $detailPageCmsTree = null,
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Icon for navigation */
-        private ?CmsMedia $naviIconCmsMedia = null
-        ,
+        private ?CmsMedia $naviIconCmsMedia = null,
         // TCMSFieldText
         /** @var string - URL path */
         private string $urlPath = '',
@@ -45,8 +42,7 @@ class ShopCategory
         private string $seoPattern = '',
         // TCMSFieldLookup
         /** @var ShopVat|null - VAT group */
-        private ?ShopVat $shopVat = null
-        ,
+        private ?ShopVat $shopVat = null,
         // TCMSFieldColorpicker
         /** @var string - Color code */
         private string $colorcode = '',
@@ -55,15 +51,13 @@ class ShopCategory
         private bool $categoryHightlight = false,
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Category image */
-        private ?CmsMedia $image = null
-        ,
+        private ?CmsMedia $image = null,
         // TCMSFieldPosition
         /** @var int - Position */
         private int $position = 0,
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopCategory> - Subcategories */
-        private Collection $shopCategoryCollection = new ArrayCollection()
-        ,
+        private Collection $shopCategoryCollection = new ArrayCollection(),
         // TCMSFieldWYSIWYG
         /** @var string - Short description of the category */
         private string $descriptionShort = '',
@@ -75,12 +69,10 @@ class ShopCategory
         private string $metaKeywords = '',
         // TCMSFieldLookup
         /** @var PkgShopListfilter|null - List filter for the category */
-        private ?PkgShopListfilter $pkgShopListfilter = null
-        ,
+        private ?PkgShopListfilter $pkgShopListfilter = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopCategoryTab> - Category */
-        private Collection $shopCategoryTabCollection = new ArrayCollection()
-        ,
+        private Collection $shopCategoryTabCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Meta description */
         private string $metaDescription = ''
@@ -125,7 +117,6 @@ class ShopCategory
         return $this;
     }
 
-
     // TCMSFieldTreeNode
 
     public function getNaviIconCmsMedia(): ?CmsMedia
@@ -139,7 +130,6 @@ class ShopCategory
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookupMedia
 
@@ -155,7 +145,6 @@ class ShopCategory
         return $this;
     }
 
-
     // TCMSFieldText
 
     public function getName(): string
@@ -169,7 +158,6 @@ class ShopCategory
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
 
@@ -185,7 +173,6 @@ class ShopCategory
         return $this;
     }
 
-
     // TCMSFieldBoolean
 
     public function isTreeActive(): bool
@@ -199,7 +186,6 @@ class ShopCategory
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
 
@@ -215,7 +201,6 @@ class ShopCategory
         return $this;
     }
 
-
     // TCMSFieldVarchar
 
     public function getSeoPattern(): string
@@ -229,7 +214,6 @@ class ShopCategory
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
 
@@ -245,7 +229,6 @@ class ShopCategory
         return $this;
     }
 
-
     // TCMSFieldLookup
 
     public function getColorcode(): string
@@ -259,7 +242,6 @@ class ShopCategory
 
         return $this;
     }
-
 
     // TCMSFieldColorpicker
 
@@ -275,7 +257,6 @@ class ShopCategory
         return $this;
     }
 
-
     // TCMSFieldBoolean
 
     public function getImage(): ?CmsMedia
@@ -290,7 +271,6 @@ class ShopCategory
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
 
     public function getPosition(): int
@@ -304,7 +284,6 @@ class ShopCategory
 
         return $this;
     }
-
 
     // TCMSFieldPosition
 
@@ -325,8 +304,6 @@ class ShopCategory
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -354,7 +331,6 @@ class ShopCategory
         return $this->shopCategory;
     }
 
-
     // TCMSFieldWYSIWYG
 
     public function getDescriptionShort(): string
@@ -369,7 +345,6 @@ class ShopCategory
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -382,7 +357,6 @@ class ShopCategory
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getMetaKeywords(): string
@@ -397,7 +371,6 @@ class ShopCategory
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getPkgShopListfilter(): ?PkgShopListfilter
     {
@@ -410,8 +383,6 @@ class ShopCategory
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -445,7 +416,6 @@ class ShopCategory
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getMetaDescription(): string
     {
@@ -458,6 +428,4 @@ class ShopCategory
 
         return $this;
     }
-
-
 }

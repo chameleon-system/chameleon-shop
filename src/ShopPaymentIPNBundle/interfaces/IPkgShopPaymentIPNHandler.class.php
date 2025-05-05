@@ -16,7 +16,6 @@ interface IPkgShopPaymentIPNHandler
      * the call should return true if processing should continue, false if it is to stop. On Error it should throw an error
      * extending AbstractPkgShopPaymentIPNHandlerException.
      *
-     * @param TPkgShopPaymentIPNRequest $oRequest
      * @trows AbstractPkgShopPaymentIPNHandlerException
      *
      * @return bool
@@ -26,8 +25,6 @@ interface IPkgShopPaymentIPNHandler
     /**
      * return an instance of TPkgShopPaymentIPN_TransactionDetails if your IPN should trigger a transaction for the order
      * (ie payment or refunds etc). if you return null, then no transaction will be triggered.
-     *
-     * @param TPkgShopPaymentIPNRequest $oRequest
      *
      * @return TPkgShopPaymentIPN_TransactionDetails|null
      */

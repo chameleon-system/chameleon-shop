@@ -16,6 +16,7 @@ interface IPkgShopViewMyOrderDetails
     /**
      * @param string $orderId
      * @param string|null $userId
+     *
      * @return void
      */
     public function addOrderIdToMyList($orderId, $userId = null);
@@ -23,6 +24,7 @@ interface IPkgShopViewMyOrderDetails
     /**
      * @param string $orderId
      * @param string|null $userId
+     *
      * @return bool
      */
     public function orderIdBelongsToUser($orderId, $userId = null);

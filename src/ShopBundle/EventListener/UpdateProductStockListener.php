@@ -12,7 +12,6 @@ class UpdateProductStockListener
         private readonly Connection $databaseConnection,
         private readonly ProductInventoryServiceInterface $productInventoryService
     ) {
-
     }
 
     public function enableDisableProductBasedOnStock(UpdateProductStockEvent $event): void
@@ -36,8 +35,8 @@ class UpdateProductStockListener
                ';
         $aBundleChangeList = $this->databaseConnection->fetchAllAssociative(
             $query,
-            array('articleId' => $event->getProductId(), 'newStock' => $event->getNewStock()),
-            array('articleId' => \PDO::PARAM_STR, 'newStock' => \PDO::PARAM_INT)
+            ['articleId' => $event->getProductId(), 'newStock' => $event->getNewStock()],
+            ['articleId' => \PDO::PARAM_STR, 'newStock' => \PDO::PARAM_INT]
         );
         foreach ($aBundleChangeList as $aBundleChange) {
             $iAllowedStock = floor($event->getNewStock() / $aBundleChange['ItemsPerBundle']);

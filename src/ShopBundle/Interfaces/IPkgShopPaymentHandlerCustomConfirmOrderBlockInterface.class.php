@@ -17,17 +17,12 @@
 interface IPkgShopPaymentHandlerCustomConfirmOrderBlockInterface
 {
     /**
-     * @param TdbShopPaymentMethod $paymentMethod
-     * @param TdbDataExtranetUser  $user
-     *
      * @return string
      */
     public function renderConfirmOrderBlock(TdbShopPaymentMethod $paymentMethod, TdbDataExtranetUser $user);
 
     /**
-     * @param TdbShopPaymentMethod $paymentMethod
-     * @param TdbDataExtranetUser  $user
-     * @param array                $userData
+     * @param array $userData
      *
      * @return bool
      */

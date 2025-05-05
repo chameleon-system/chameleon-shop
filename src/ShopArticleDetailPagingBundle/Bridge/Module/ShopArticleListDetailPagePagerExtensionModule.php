@@ -37,9 +37,6 @@ class ShopArticleListDetailPagePagerExtensionModule extends \ChameleonSystemShop
         return $allowAccess || 'getAsJson' === $sMethodName;
     }
 
-    /**
-     * @return void
-     */
     public function setRequestToListUrlConverter(RequestToListUrlConverterInterface $requestToListUrlConverter): void
     {
         $this->requestToListUrlConverter = $requestToListUrlConverter;
@@ -59,11 +56,11 @@ class ShopArticleListDetailPagePagerExtensionModule extends \ChameleonSystemShop
 
         $currentPage = $enrichedState->getState(StateInterface::PAGE, 0);
 
-        $data = array(
+        $data = [
             'nextPage' => null,
             'previousPage' => null,
             'items' => $items,
-        );
+        ];
         if ($currentPage > 0) {
             $data['previousPage'] = str_replace('_pageNumber_', $currentPage - 1, $listPageUrl);
         }
@@ -77,14 +74,12 @@ class ShopArticleListDetailPagePagerExtensionModule extends \ChameleonSystemShop
 
     /**
      * @param \TdbShopArticle[] $itemList
-     *
-     * @return array
      */
     private function mapItemsAsJson(array $itemList): array
     {
-        $response = array();
+        $response = [];
         foreach ($itemList as $item) {
-            $response[$item->id] = array('id' => $item->id, 'name' => $item->GetNameSEO(), 'url' => $item->getLink());
+            $response[$item->id] = ['id' => $item->id, 'name' => $item->GetNameSEO(), 'url' => $item->getLink()];
         }
 
         return $response;

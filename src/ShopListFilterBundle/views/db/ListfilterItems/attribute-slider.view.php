@@ -1,5 +1,5 @@
 <?php
-/*@var $oListItem TdbPkgShopListfilterItem */
+/* @var $oListItem TdbPkgShopListfilterItem */
 $oListFilter = TdbPkgShopListfilter::GetActiveInstance();
 $aData = $oListFilter->GetCurrentFilterAsArray();
 $oLocal = TCMSLocal::GetActive();
@@ -63,16 +63,16 @@ if (count($aData) > 0) {
     }
 </style>
 
-<div class="TPkgShopListfilterItem <?=get_class($oListItem); ?>">
+<div class="TPkgShopListfilterItem <?php echo get_class($oListItem); ?>">
     <div class="valuelist">
-        <div class="listFilterName"><?=TGlobal::OutHTML($oListItem->fieldName); ?></div>
+        <div class="listFilterName"><?php echo TGlobal::OutHTML($oListItem->fieldName); ?></div>
         <div class="valueitems_high">
             <div id="slider"></div>
             <div class="cleardiv">&nbsp;</div>
             <div id="input">
-                <input type="text" name="<?=$oListItem->GetURLInputName().'[dStartValue]'; ?>" id="amountStart" style=""
+                <input type="text" name="<?php echo $oListItem->GetURLInputName().'[dStartValue]'; ?>" id="amountStart" style=""
                        readonly="readonly"/>
-                <input type="text" name="<?=$oListItem->GetURLInputName().'[dEndValue]'; ?>" id="amountEnd" style=""
+                <input type="text" name="<?php echo $oListItem->GetURLInputName().'[dEndValue]'; ?>" id="amountEnd" style=""
                        readonly="readonly"/>
             </div>
             <div class="cleardiv">&nbsp;</div>
@@ -83,9 +83,9 @@ if (count($aData) > 0) {
             $(document).ready(function () {
                 $("#slider").slider({
                     range:true,
-                    values:[<?=$dStartAmount.', '.$dEndAmount; ?>],
-                    min: <?=$oListItem->GetMinValue(); ?>,
-                    max: <?=$oListItem->GetMaxValue(); ?>,
+                    values:[<?php echo $dStartAmount.', '.$dEndAmount; ?>],
+                    min: <?php echo $oListItem->GetMinValue(); ?>,
+                    max: <?php echo $oListItem->GetMaxValue(); ?>,
                     slide:function (event, ui) {
                         $("#amountStart").val(ui.values[0]);
                         $("#amountEnd").val(ui.values[1]);

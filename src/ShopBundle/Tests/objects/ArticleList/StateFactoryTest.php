@@ -28,7 +28,7 @@ class StateFactoryTest extends TestCase
      */
     private $userData;
     /**
-     * @var \ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface
+     * @var StateInterface
      */
     private $state;
     /**
@@ -40,7 +40,7 @@ class StateFactoryTest extends TestCase
      */
     private $configuration;
     /**
-     * @var \ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface
+     * @var StateInterface
      */
     private $enrichedState;
 
@@ -51,18 +51,18 @@ class StateFactoryTest extends TestCase
      */
     public static function getStateFactory()
     {
-        $stateFactory = new \ChameleonSystem\ShopBundle\objects\ArticleList\StateFactory();
-        $stateFactory->registerStateElement(new \ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementCurrentPage());
-        $stateFactory->registerStateElement(new \ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementSort());
-        $stateFactory->registerStateElement(new \ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementPageSize(array(
+        $stateFactory = new StateFactory();
+        $stateFactory->registerStateElement(new State\StateElementCurrentPage());
+        $stateFactory->registerStateElement(new State\StateElementSort());
+        $stateFactory->registerStateElement(new State\StateElementPageSize([
                 null,
                 5,
                 10,
                 15,
                 20,
                 21,
-            )));
-        $stateFactory->registerStateElement(new \ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementQuery());
+            ]));
+        $stateFactory->registerStateElement(new State\StateElementQuery());
 
         return $stateFactory;
     }
@@ -84,12 +84,10 @@ class StateFactoryTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderUserInput
      *
-     * @param $userData
-     * @param $expectedState
+     * @dataProvider dataProviderUserInput
      */
-    public function it_creates_state_object_from_user_input($userData, $expectedState)
+    public function itCreatesStateObjectFromUserInput($userData, $expectedState)
     {
         $this->givenUserData($userData);
         $this->whenWeCallTheFactoryMethod();
@@ -98,32 +96,32 @@ class StateFactoryTest extends TestCase
 
     public function dataProviderUserInput()
     {
-        $data = array();
+        $data = [];
 
         // from state string plus param
         $expectedState = self::getStateFactory()->createState();
         $expectedState->setState(StateInterface::PAGE, 4);
         $expectedState->setState(StateInterface::PAGE_SIZE, 20);
-        $stateString = $expectedState->getStateString(array(StateInterface::PAGE));
-        $userData = array(StateInterface::STATE_STRING => $stateString, StateInterface::PAGE => 4);
-        $data[] = array($userData, $expectedState);
+        $stateString = $expectedState->getStateString([StateInterface::PAGE]);
+        $userData = [StateInterface::STATE_STRING => $stateString, StateInterface::PAGE => 4];
+        $data[] = [$userData, $expectedState];
 
         // from parameter array
-        $param = array(
+        $param = [
             StateInterface::PAGE => 5,
             StateInterface::PAGE_SIZE => 21,
             StateInterface::SORT => 'somesortid',
-        );
+        ];
         $expectedState = self::getStateFactory()->createState();
         $expectedState->setState(StateInterface::PAGE, 5);
         $expectedState->setState(StateInterface::PAGE_SIZE, 21);
         $expectedState->setState(StateInterface::SORT, 'somesortid');
-        $data[] = array($param, $expectedState);
+        $data[] = [$param, $expectedState];
 
         // nothing
         $expectedState = self::getStateFactory()->createState();
-        $data[] = array(array(), $expectedState);
-        $data[] = array(null, $expectedState);
+        $data[] = [[], $expectedState];
+        $data[] = [null, $expectedState];
 
         return $data;
     }
@@ -145,13 +143,10 @@ class StateFactoryTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderEnrichedStates
      *
-     * @param \ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface $state
-     * @param array                                                                     $defaultStateValues
-     * @param \ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface $expectedState
+     * @dataProvider dataProviderEnrichedStates
      */
-    public function it_should_create_a_state_based_on_another_state_enriched_by_default_values(StateInterface $state, array $defaultStateValues, array $expectedStateData)
+    public function itShouldCreateAStateBasedOnAnotherStateEnrichedByDefaultValues(StateInterface $state, array $defaultStateValues, array $expectedStateData)
     {
         $this->givenAState($state);
         $this->givenDefaultStateValues($defaultStateValues);
@@ -161,14 +156,14 @@ class StateFactoryTest extends TestCase
 
     public function dataProviderEnrichedStates()
     {
-        $data = array();
+        $data = [];
 
         $state = self::getStateFactory()->createState();
-        $defaultStateValues = array(
+        $defaultStateValues = [
             StateInterface::PAGE_SIZE => 10,
             StateInterface::SORT => 'somesortid',
-        );
-        $data[] = array($state, $defaultStateValues, $defaultStateValues);
+        ];
+        $data[] = [$state, $defaultStateValues, $defaultStateValues];
 
         $state = self::getStateFactory()->createState();
         $state->setState(StateInterface::SORT, 'newsortid');
@@ -176,25 +171,25 @@ class StateFactoryTest extends TestCase
         $expectedResult = $defaultStateValues;
         $expectedResult[StateInterface::SORT] = 'newsortid';
         $expectedResult[StateInterface::QUERY] = 'somequery';
-        $data[] = array($state, $defaultStateValues, $expectedResult);
+        $data[] = [$state, $defaultStateValues, $expectedResult];
 
         $state = self::getStateFactory()->createState();
         $state->setState(StateInterface::PAGE_SIZE, 20);
         $expectedResult = $defaultStateValues;
         $expectedResult[StateInterface::PAGE_SIZE] = 20;
-        $data[] = array($state, $defaultStateValues, $expectedResult);
+        $data[] = [$state, $defaultStateValues, $expectedResult];
 
         $state = self::getStateFactory()->createState();
         $state->setState(StateInterface::PAGE, 2);
         $expectedResult = $defaultStateValues;
         $expectedResult[StateInterface::PAGE] = 2;
-        $data[] = array($state, $defaultStateValues, $expectedResult);
+        $data[] = [$state, $defaultStateValues, $expectedResult];
 
         $state = self::getStateFactory()->createState();
         $state->setState(StateInterface::SORT, 'newsortid');
         $expectedResult = $defaultStateValues;
         $expectedResult[StateInterface::SORT] = 'newsortid';
-        $data[] = array($state, $defaultStateValues, $expectedResult);
+        $data[] = [$state, $defaultStateValues, $expectedResult];
 
         return $data;
     }

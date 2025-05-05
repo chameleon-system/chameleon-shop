@@ -27,7 +27,7 @@ class DbAdapter implements DbAdapterInterface
     /**
      * @param string $instanceID
      *
-     * @return \ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\ConfigurationInterface
+     * @return ConfigurationInterface
      */
     public function getConfigurationFromInstanceId($instanceID)
     {
@@ -40,7 +40,7 @@ class DbAdapter implements DbAdapterInterface
     /**
      * @param string $filterId
      *
-     * @return \ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\FilterDefinitionInterface
+     * @return Interfaces\FilterDefinitionInterface
      */
     public function getFilterDefinitionFromId($filterId)
     {
@@ -48,10 +48,7 @@ class DbAdapter implements DbAdapterInterface
     }
 
     /**
-     * @param \ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\ConfigurationInterface $moduleConfiguration
-     * @param \ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\FilterInterface        $filter
-     *
-     * @return \ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\ResultInterface
+     * @return Interfaces\ResultInterface
      */
     public function getListResults(ConfigurationInterface $moduleConfiguration, FilterInterface $filter)
     {
@@ -72,8 +69,6 @@ class DbAdapter implements DbAdapterInterface
     }
 
     /**
-     * @param Connection $connection
-     *
      * @return void
      */
     public function setDatabaseConnection(Connection $connection)
@@ -96,7 +91,7 @@ class DbAdapter implements DbAdapterInterface
      */
     public function getSortListForConfiguration($configurationId)
     { // shop_module_article_list_shop_module_articlelist_orderby_mlt
-        $sortList = array();
+        $sortList = [];
         $query = 'SELECT `shop_module_articlelist_orderby`.*
                     FROM `shop_module_articlelist_orderby`
               INNER JOIN `shop_module_article_list_shop_module_articlelist_orderby_mlt` ON `shop_module_articlelist_orderby`.`id` = `shop_module_article_list_shop_module_articlelist_orderby_mlt`.`target_id`
@@ -105,10 +100,10 @@ class DbAdapter implements DbAdapterInterface
         ';
         $list = \TdbShopModuleArticlelistOrderbyList::GetList($query);
         while ($listItem = $list->Next()) {
-            $sortList[] = array(
+            $sortList[] = [
                 'id' => $listItem->id,
                 'name' => $listItem->fieldNamePublic,
-            );
+            ];
         }
 
         return $sortList;

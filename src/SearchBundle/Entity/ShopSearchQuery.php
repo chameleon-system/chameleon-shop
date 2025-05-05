@@ -2,14 +2,11 @@
 
 namespace ChameleonSystem\SearchBundle\Entity;
 
-
-use DateTime;
-
 class ShopSearchQuery
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name / title of query */
@@ -21,11 +18,11 @@ class ShopSearchQuery
         /** @var bool - Index is running */
         private bool $indexRunning = false,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Index started on */
-        private ?DateTime $indexStarted = null,
+        /** @var \DateTime|null - Index started on */
+        private ?\DateTime $indexStarted = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Index completed on */
-        private ?DateTime $indexCompleted = null
+        /** @var \DateTime|null - Index completed on */
+        private ?\DateTime $indexCompleted = null
     ) {
     }
 
@@ -66,7 +63,6 @@ class ShopSearchQuery
         return $this;
     }
 
-
     // TCMSFieldText
     public function getQuery(): string
     {
@@ -79,7 +75,6 @@ class ShopSearchQuery
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isIndexRunning(): bool
@@ -94,33 +89,29 @@ class ShopSearchQuery
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getIndexStarted(): ?DateTime
+    public function getIndexStarted(): ?\DateTime
     {
         return $this->indexStarted;
     }
 
-    public function setIndexStarted(?DateTime $indexStarted): self
+    public function setIndexStarted(?\DateTime $indexStarted): self
     {
         $this->indexStarted = $indexStarted;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getIndexCompleted(): ?DateTime
+    public function getIndexCompleted(): ?\DateTime
     {
         return $this->indexCompleted;
     }
 
-    public function setIndexCompleted(?DateTime $indexCompleted): self
+    public function setIndexCompleted(?\DateTime $indexCompleted): self
     {
         $this->indexCompleted = $indexCompleted;
 
         return $this;
     }
-
-
 }

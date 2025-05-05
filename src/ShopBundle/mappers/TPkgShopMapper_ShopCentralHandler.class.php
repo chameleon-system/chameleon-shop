@@ -18,13 +18,10 @@ class TPkgShopMapper_ShopCentralHandler extends AbstractViewMapper
      */
     private $shopService;
 
-    /**
-     * @param ShopServiceInterface|null $shopService
-     */
-    public function __construct(ShopServiceInterface $shopService = null)
+    public function __construct(?ShopServiceInterface $shopService = null)
     {
         if (null === $shopService) {
-            $this->shopService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+            $this->shopService = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
         } else {
             $this->shopService = $shopService;
         }

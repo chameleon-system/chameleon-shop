@@ -18,14 +18,14 @@ class TPkgShopPaymentIPN_TCMSTableEditor_PkgShopPaymentIpnMessage extends TCMSTa
     {
         parent::GetCustomMenuItems();
 
-        $aParam = TGlobal::instance()->GetUserData(null, array('module_fnc', '_noModuleFunction'));
+        $aParam = TGlobal::instance()->GetUserData(null, ['module_fnc', '_noModuleFunction']);
 
-        $aParam['module_fnc'] = array(TGlobal::instance()->GetExecutingModulePointer()->sModuleSpotName => 'ReplayIPN');
+        $aParam['module_fnc'] = [TGlobal::instance()->GetExecutingModulePointer()->sModuleSpotName => 'ReplayIPN'];
         $aParam['_noModuleFunction'] = 'true';
 
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'ReplayIPN';
-        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_ipn.action.replay_ipn');
+        $oMenuItem->sDisplayName = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_ipn.action.replay_ipn');
         $oMenuItem->sIcon = 'fas fa-redo-alt';
         $oMenuItem->sOnClick = "document.location.href='?".TTools::GetArrayAsURL($aParam)."'";
         $this->oMenuItems->AddItem($oMenuItem);

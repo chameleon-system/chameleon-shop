@@ -14,9 +14,9 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
 {
-    const VIEW_PATH = 'pkgShopListfilter/views/db/ListfilterItems';
+    public const VIEW_PATH = 'pkgShopListfilter/views/db/ListfilterItems';
 
-    const URL_PARAMETER_FILTER_DATA = 'aPkgShopListfilter';
+    public const URL_PARAMETER_FILTER_DATA = 'aPkgShopListfilter';
 
     /**
      * you need to set this to the field name you want to filter by.
@@ -89,8 +89,10 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
 
     /**
      * @param array<string, mixed>|string $aData
+     *
      * @psalm-param array<string, mixed>|'' $aData
-     * @return array<string, mixed>|null - Returns `null` if the resulting array would be empty or if an empty string was passed as input.
+     *
+     * @return array<string, mixed>|null - Returns `null` if the resulting array would be empty or if an empty string was passed as input
      */
     protected function RemoveEmptyValues($aData)
     {
@@ -148,7 +150,7 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
      */
     public function GetActiveSettingAsHiddenInputField()
     {
-        /**
+        /*
          * @psalm-suppress InvalidArgument
          * @FIXME Passing an array (`aActiveFilterData`) to `TGlobal::OutHTML` which expects a string. Due to `htmlentities` being used in that method, this will return an empty string up to PHP7.4 but result in an fatal error in PHP8+
          */
@@ -162,9 +164,9 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
      */
     public function GetActiveSettingAsArray()
     {
-        $aData = array();
+        $aData = [];
         if (is_array($this->aActiveFilterData) || !empty($this->aActiveFilterData)) {
-            $aData = array(TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA => array($this->id => $this->aActiveFilterData));
+            $aData = [TdbPkgShopListfilterItem::URL_PARAMETER_FILTER_DATA => [$this->id => $this->aActiveFilterData]];
         }
 
         return $aData;
@@ -209,7 +211,7 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
     {
         $aOptions = $this->GetFromInternalCache('aOptions');
         if (is_null($aOptions)) {
-            $aOptions = array();
+            $aOptions = [];
             $sIdSelect = $this->GetResultSetBaseQuery();
 
             if (PKG_SHOP_LISTFILTER_ENABLE_COUNT_PER_FILTER_ITEM) {
@@ -238,16 +240,16 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
     /**
      * render the filter.
      *
-     * @param string $sViewName     - name of the view
-     * @param string $sViewType     - where to look for the view
-     * @param array  $aCallTimeVars - optional parameters to pass to render method
+     * @param string $sViewName - name of the view
+     * @param string $sViewType - where to look for the view
+     * @param array $aCallTimeVars - optional parameters to pass to render method
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
-        /** @var $oView TViewParser */
+        /* @var $oView TViewParser */
         $oView->AddVar('oListItem', $this);
         $oView->AddVar('oFilterType', $this->GetFieldPkgShopListfilterItemType());
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);
@@ -268,7 +270,7 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }
@@ -317,8 +319,6 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
 
     /**
      * @param array<string, mixed> $aOptions
-     *
-     * @return void
      */
     protected function OrderOptions(array &$aOptions): void
     {
@@ -340,7 +340,7 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
      */
     protected function getQueryModifierOrderByService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.query_modifier.order_by');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.query_modifier.order_by');
     }
 
     /**
@@ -348,6 +348,6 @@ class TPkgShopListfilterItem extends TAdbPkgShopListfilterItem
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

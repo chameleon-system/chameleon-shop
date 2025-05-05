@@ -14,7 +14,7 @@
  * it should be used in combination with TShopStepUserDataV2.
  *
  * IMPORTANT: you should always access the class via "TShopStepLogin" (the virtual class entry point)
-/**/
+ * /**/
 class TShopStepLoginEndPoint extends TdbShopOrderStep
 {
     /**

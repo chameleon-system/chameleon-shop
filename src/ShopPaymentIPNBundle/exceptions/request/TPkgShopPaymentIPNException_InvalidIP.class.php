@@ -15,18 +15,16 @@ class TPkgShopPaymentIPNException_InvalidIP extends TPkgShopPaymentIPNException_
     private $requestIP = '';
 
     /**
-     * @param string                    $sRequestIP
-     * @param TPkgShopPaymentIPNRequest $oRequest
-     * @param string                    $message
-     * @param int                       $code
-     * @param Exception|null            $previous
+     * @param string $sRequestIP
+     * @param string $message
+     * @param int $code
      */
     public function __construct(
         $sRequestIP,
         TPkgShopPaymentIPNRequest $oRequest,
         $message = '',
         $code = 0,
-        Exception $previous = null
+        ?Exception $previous = null
     ) {
         $this->requestIP = $sRequestIP;
         parent::__construct($oRequest, $message, $code, $previous);

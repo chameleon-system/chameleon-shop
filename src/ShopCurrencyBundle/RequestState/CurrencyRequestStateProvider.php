@@ -20,10 +20,6 @@ class CurrencyRequestStateProvider implements RequestStateElementProviderInterfa
      */
     private $currencyService;
 
-    /**
-     * @param RequestInfoServiceInterface  $requestInfoService
-     * @param ShopCurrencyServiceInterface $currencyService
-     */
     public function __construct(
         RequestInfoServiceInterface $requestInfoService,
         ShopCurrencyServiceInterface $currencyService

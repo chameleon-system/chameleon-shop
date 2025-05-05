@@ -18,28 +18,28 @@ use Psr\Log\LoggerInterface;
 /**
  * represents a payment method the user can choose from. it uses a payment handler to gather payment infos
  * and execute the payment.
-/**/
+ * /**/
 class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgShopVatable
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopPaymentMethod';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopPaymentMethod';
 
     /**
      * @var float|null
      */
-    protected $dPrice = null;
+    protected $dPrice;
 
     /**
      * payment handler.
      *
      * @var TdbShopPaymentHandler
      */
-    protected $oPaymentHandler = null;
+    protected $oPaymentHandler;
     /**
      * we need this information to unserialize the payment handler.
      *
      * @var array
      */
-    protected $aPaymentHandlerClassData = null;
+    protected $aPaymentHandlerClassData;
 
     public function GetName()
     {
@@ -58,9 +58,6 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
     /**
      * called after the payment method is selected - return false the selection is invalid.
      *
-     * @param TdbShop             $oShop
-     * @param TShopBasket         $oBasket
-     * @param TdbDataExtranetUser $oUser
      * @param string $sMessageConsumer
      *
      * @return bool
@@ -197,8 +194,6 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
     /**
      * check user group.
      *
-     * @param TdbDataExtranetUser $oUser
-     *
      * @return bool
      */
     protected function checkUserGroup(TdbDataExtranetUser $oUser)
@@ -217,8 +212,6 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
     /**
      * now check user id.
      *
-     * @param TdbDataExtranetUser $oUser
-     *
      * @return bool
      */
     protected function checkUser(TdbDataExtranetUser $oUser)
@@ -236,8 +229,6 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
 
     /**
      * check shipping country.
-     *
-     * @param TdbDataExtranetUser $oUser
      *
      * @return bool
      */
@@ -262,13 +253,11 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
      */
     protected function getPaymentMethodDataAccess()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.payment_method_data_access');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.payment_method_data_access');
     }
 
     /**
      * check billing country.
-     *
-     * @param TdbDataExtranetUser $oUser
      *
      * @return bool
      */
@@ -443,7 +432,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
         if (is_null($oVat)) {
             $oVat = $this->GetFieldShopVat();
             if (is_null($oVat)) {
-                $oShopConf = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+                $oShopConf = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $oVat = $oShopConf->GetVat();
             }
 
@@ -456,18 +445,18 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
     /**
      * used to display the shipping group.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'user-input', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'user-input', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 
         // add view variables
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oView->AddVar('oShop', $oShop);
         $oView->AddVar('oPaymentMethod', $this);
 
@@ -489,7 +478,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -508,8 +497,6 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
      * form elements requiring user input should all be in aInput (for example <input name="aInput[somedata]"...>
      * note: user data and validation results should be made available via processConfirmOrderUserResponse.
      *
-     * @param TdbDataExtranetUser $user
-     *
      * @return string
      */
     public function renderConfirmOrderBlock(TdbDataExtranetUser $user)
@@ -518,7 +505,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
             return '';
         }
 
-        /**
+        /*
          * @psalm-suppress UndefinedMethod - At this point we know that the payment handler implements `IPkgShopPaymentHandlerCustomConfirmOrderBlockInterface`
          */
         return $this->GetFieldShopPaymentHandler()->renderConfirmOrderBlock($this, $user);
@@ -537,7 +524,7 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
             return true;
         }
 
-        /**
+        /*
          * @psalm-suppress UndefinedMethod - At this point we know that the payment handler implements `IPkgShopPaymentHandlerCustomConfirmOrderBlockInterface`
          */
         return $this->GetFieldShopPaymentHandler()->processConfirmOrderUserResponse($this, $user, $userData);
@@ -548,12 +535,12 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
      */
     private function getShopPaymentHandlerFactory()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.payment.handler_factory');
     }
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order');
     }
 
     /**
@@ -561,6 +548,6 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

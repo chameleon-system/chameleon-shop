@@ -25,8 +25,8 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
      */
     public static function UpdateAutoAssignToUserQuick($sUserid, $dOrderValue)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ServiceLocator::get('database_connection');
 
         $quotedUserid = $connection->quote($sUserid);
 
@@ -82,7 +82,7 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
     public function UpdateAutoAssignAllUsers()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $quotedGroupId = $connection->quote($this->id);
 
@@ -109,7 +109,7 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
             $selectQuery .= " AND SUM(`shop_order`.`value_total`) < {$this->fieldAutoAssignOrderValueEnd}";
         }
 
-        $selectQuery .= ")";
+        $selectQuery .= ')';
 
         if (0.01 == $this->fieldAutoAssignOrderValueEnd) {
             $selectQuery .= ' OR SUM(`shop_order`.`value_total`) IS NULL';
@@ -124,6 +124,7 @@ class TShop_DataExtranetGroup extends TShop_DataExtranetGroupAutoParent
 
         return $insertedRows;
     }
+
     /*
      * update the group assignment for the user. return true if at least one group was changed
      * @return boolean

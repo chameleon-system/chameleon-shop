@@ -14,11 +14,11 @@ use esono\pkgCmsCache\CacheInterface;
 
 class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
 {
-    const SESSION_AFFILIATE_PROGRAM_CODE = 'TdbPkgShopAffiliate-data';
-    const COOKIE_NAME = 'chameleon-affiliate-marker';
+    public const SESSION_AFFILIATE_PROGRAM_CODE = 'TdbPkgShopAffiliate-data';
+    public const COOKIE_NAME = 'chameleon-affiliate-marker';
 
     /** @var string|null */
-    public $sCode = null;
+    public $sCode;
 
     /**
      * return instance of class (casted as correct type.
@@ -53,7 +53,6 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
         static $oInstance = null;
 
         if (is_null($oInstance) && array_key_exists(TdbPkgShopAffiliate::SESSION_AFFILIATE_PROGRAM_CODE, $_SESSION)) {
-
             /**
              * @FIXME Setting `$oInstance = false` and immediately overriding it with a different value only confuses the typing in this method.
              */
@@ -65,7 +64,7 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
             $oInstance->sCode = $aData['sCode'];
         }
 
-        if (is_null($oInstance)) { //if is null try to load the tradedoubler affiliate
+        if (is_null($oInstance)) { // if is null try to load the tradedoubler affiliate
             $oTradeDoublerAffiliate = TdbPkgShopAffiliate::GetNewInstance();
             if ($oTradeDoublerAffiliate->LoadFromField('name', 'TradeDoubler')) {
                 $oInstance = TdbPkgShopAffiliate::GetInstance($oTradeDoublerAffiliate->id);
@@ -91,12 +90,12 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
             $shop = self::getShopService()->getActiveShop();
 
             $cache = self::getCache();
-            $sCacheKey = $cache->getKey(array(
+            $sCacheKey = $cache->getKey([
                 'class' => __CLASS__,
                 'method' => 'ScanURLForAffiliateProgramCodes',
                 'object' => 'GetFieldPkgShopAffiliateList',
                 'shop' => $shop->id,
-            ));
+            ]);
             $oCodeList = $cache->get($sCacheKey);
             if (null === $oCodeList) {
                 $oCodeList = $shop->GetFieldPkgShopAffiliateList();
@@ -107,7 +106,7 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
                 }
 
                 $oCodeList->GoToStart();
-                $aTrigger = array(array('table' => 'pkg_shop_affiliate', 'id' => null), array('table' => 'pkg_shop_affiliate_parameter', 'id' => null));
+                $aTrigger = [['table' => 'pkg_shop_affiliate', 'id' => null], ['table' => 'pkg_shop_affiliate_parameter', 'id' => null]];
                 $cache->set($sCacheKey, $oCodeList, $aTrigger);
             }
 
@@ -115,7 +114,7 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
                 if (array_key_exists($oCode->fieldUrlParameterName, $aParams)) {
                     $bItemFound = true;
                     $sCode = $oGlobal->GetUserData($oCode->fieldUrlParameterName);
-                    $_SESSION[TdbPkgShopAffiliate::SESSION_AFFILIATE_PROGRAM_CODE] = array('id' => $oCode->id, 'sCode' => $sCode);
+                    $_SESSION[TdbPkgShopAffiliate::SESSION_AFFILIATE_PROGRAM_CODE] = ['id' => $oCode->id, 'sCode' => $sCode];
 
                     // save info in cookie
                     if ($oCode->fieldNumberOfSecondsValid > 0) {
@@ -150,8 +149,6 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
     }
 
     /**
-     * @param array $affiliateData
-     *
      * @return string
      */
     private static function getMarshalledAffiliateData(array $affiliateData)
@@ -172,8 +169,8 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
     /**
      * hook is called when an affiliate code is found in the url parameters.
      *
-     * @param string $sCode               - code found
-     * @param bool   $bRestoredFromCookie - set to true, if the data was restored from a cookie
+     * @param string $sCode - code found
+     * @param bool $bRestoredFromCookie - set to true, if the data was restored from a cookie
      *
      * @return void
      */
@@ -228,7 +225,7 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
      * add custom vars to the view.
      *
      * @param TdbShopOrder $oOrder
-     * @param array        $aParameter
+     * @param array $aParameter
      *
      * @return void
      */
@@ -241,7 +238,7 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
      */
     private static function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 
     /**
@@ -249,6 +246,6 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
      */
     private static function getCache()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
     }
 }

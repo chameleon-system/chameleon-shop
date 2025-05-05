@@ -31,13 +31,13 @@ class ShopPaymentConfigLoaderTest extends TestCase
     /**
      * @test
      */
-    public function it_loads_empty_values_on_empty_configuration_in_loadFromPaymentHandlerId()
+    public function itLoadsEmptyValuesOnEmptyConfigurationInLoadFromPaymentHandlerId()
     {
         $this->shopPaymentConfigLoaderDataAccess->getEnvironment('groupId')->willReturn(\IPkgShopOrderPaymentConfig::ENVIRONMENT_SANDBOX);
-        $this->shopPaymentConfigLoaderDataAccess->loadPaymentHandlerGroupConfig('groupId')->willReturn(array());
-        $this->shopPaymentConfigLoaderDataAccess->loadPaymentHandlerConfig('handlerId')->willReturn(array());
+        $this->shopPaymentConfigLoaderDataAccess->loadPaymentHandlerGroupConfig('groupId')->willReturn([]);
+        $this->shopPaymentConfigLoaderDataAccess->loadPaymentHandlerConfig('handlerId')->willReturn([]);
 
-        $expected = array();
+        $expected = [];
 
         $loader = $this->getShopPaymentConfigLoader(\IPkgShopOrderPaymentConfig::ENVIRONMENT_SANDBOX);
         $config = $loader->loadFromPaymentHandlerId('handlerId', 'portalId1');
@@ -49,7 +49,7 @@ class ShopPaymentConfigLoaderTest extends TestCase
     /**
      * @test
      */
-    public function it_loads_correct_sandbox_configuration_in_loadFromOrderId()
+    public function itLoadsCorrectSandboxConfigurationInLoadFromOrderId()
     {
         $this->shopPaymentConfigLoaderDataAccess->getEnvironment('groupId')->willReturn(
             \IPkgShopOrderPaymentConfig::ENVIRONMENT_SANDBOX
@@ -71,7 +71,7 @@ class ShopPaymentConfigLoaderTest extends TestCase
     /**
      * @test
      */
-    public function it_loads_correct_sandbox_configuration_in_loadFromPaymentHandlerId()
+    public function itLoadsCorrectSandboxConfigurationInLoadFromPaymentHandlerId()
     {
         $this->shopPaymentConfigLoaderDataAccess->getEnvironment('groupId')->willReturn(
             \IPkgShopOrderPaymentConfig::ENVIRONMENT_SANDBOX
@@ -92,7 +92,7 @@ class ShopPaymentConfigLoaderTest extends TestCase
     /**
      * @test
      */
-    public function it_loads_correct_sandbox_configuration_with_default_environment_in_loadFromPaymentHandlerId()
+    public function itLoadsCorrectSandboxConfigurationWithDefaultEnvironmentInLoadFromPaymentHandlerId()
     {
         $this->shopPaymentConfigLoaderDataAccess->getEnvironment('groupId')->willReturn('default');
         $this->initFullConfig();
@@ -111,7 +111,7 @@ class ShopPaymentConfigLoaderTest extends TestCase
     /**
      * @test
      */
-    public function it_loads_correct_sandbox_configuration_in_loadFromPaymentHandlerGroupId()
+    public function itLoadsCorrectSandboxConfigurationInLoadFromPaymentHandlerGroupId()
     {
         $this->shopPaymentConfigLoaderDataAccess->getEnvironment('groupId')->willReturn(
             \IPkgShopOrderPaymentConfig::ENVIRONMENT_SANDBOX
@@ -132,7 +132,7 @@ class ShopPaymentConfigLoaderTest extends TestCase
     /**
      * @test
      */
-    public function it_loads_correct_sandbox_configuration_in_loadFromPaymentHandlerGroupSystemName()
+    public function itLoadsCorrectSandboxConfigurationInLoadFromPaymentHandlerGroupSystemName()
     {
         $this->shopPaymentConfigLoaderDataAccess->getEnvironment('groupId')->willReturn(
             \IPkgShopOrderPaymentConfig::ENVIRONMENT_SANDBOX
@@ -154,7 +154,7 @@ class ShopPaymentConfigLoaderTest extends TestCase
     /**
      * @test
      */
-    public function it_throws_configuration_exception_on_error()
+    public function itThrowsConfigurationExceptionOnError()
     {
         $this->shopPaymentConfigLoaderDataAccess->getEnvironment('groupId')->willReturn(
             \IPkgShopOrderPaymentConfig::ENVIRONMENT_SANDBOX
@@ -176,9 +176,9 @@ class ShopPaymentConfigLoaderTest extends TestCase
 
     private function initFullConfig($includeHandlerOnlyValues = true)
     {
-        $groupConfig = array();
-        $additionalConfig = array();
-        $handlerConfig = array();
+        $groupConfig = [];
+        $additionalConfig = [];
+        $handlerConfig = [];
 
         /*
          * values that are only present in the group (no portal restriction)
@@ -333,7 +333,7 @@ class ShopPaymentConfigLoaderTest extends TestCase
 
     private function initFullExpectedValue()
     {
-        $this->expectedConfig = array(
+        $this->expectedConfig = [
             'name01' => 'groupValue01common',
             'name02' => 'groupValue02sandbox',
             'name03' => 'groupValue03common',
@@ -368,12 +368,12 @@ class ShopPaymentConfigLoaderTest extends TestCase
             'name85' => 'handlerValue85common',
             'name86' => 'handlerValue86common',
             'name87' => 'groupValue87common_sameportal',
-        );
+        ];
     }
 
     private function initPaymentHandlerGroupOnlyExpectedValue()
     {
-        $this->expectedConfig = array(
+        $this->expectedConfig = [
             'name01' => 'groupValue01common',
             'name02' => 'groupValue02sandbox',
             'name03' => 'groupValue03common',
@@ -405,7 +405,7 @@ class ShopPaymentConfigLoaderTest extends TestCase
             'name85' => 'groupValue85sandbox_sameportal',
             'name86' => 'groupValue86sandbox_sameportal',
             'name87' => 'groupValue87common_sameportal',
-        );
+        ];
     }
 
     private function getShopPaymentConfigLoader($environment)

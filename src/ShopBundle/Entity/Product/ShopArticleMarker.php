@@ -8,7 +8,7 @@ class ShopArticleMarker
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - System name */
@@ -18,8 +18,7 @@ class ShopArticleMarker
         private string $title = '',
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Icon */
-        private ?CmsMedia $cmsMedia = null
-        ,
+        private ?CmsMedia $cmsMedia = null,
         // TCMSFieldWYSIWYG
         /** @var string - Description */
         private string $description = ''
@@ -63,7 +62,6 @@ class ShopArticleMarker
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getTitle(): string
     {
@@ -76,7 +74,6 @@ class ShopArticleMarker
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
@@ -91,7 +88,6 @@ class ShopArticleMarker
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -104,6 +100,4 @@ class ShopArticleMarker
 
         return $this;
     }
-
-
 }

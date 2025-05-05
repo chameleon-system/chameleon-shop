@@ -10,12 +10,11 @@ class PkgImageHotspot
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Headline */
         private string $name = '',
@@ -65,7 +64,6 @@ class PkgImageHotspot
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -79,7 +77,6 @@ class PkgImageHotspot
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getAutoSlideTime(): int
     {
@@ -92,8 +89,6 @@ class PkgImageHotspot
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -126,6 +121,4 @@ class PkgImageHotspot
 
         return $this;
     }
-
-
 }

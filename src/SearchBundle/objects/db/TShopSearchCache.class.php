@@ -11,40 +11,40 @@
 
 class TShopSearchCache extends TShopSearchCacheAutoParent
 {
-    const MAX_CACHE_AGE_IN_SECONDS = 3600;
+    public const MAX_CACHE_AGE_IN_SECONDS = 3600;
 
     /**
      * the search term.
      *
      * @var string
      */
-    public $sSearchTerm = null;
+    public $sSearchTerm;
 
     /**
      * the search term spellchecked.
      *
      * @var string
      */
-    public $sSearchTermSpellChecked = null;
+    public $sSearchTermSpellChecked;
 
     /**
      * the search term spellchecked.
      *
      * @var string
      */
-    public $sSearchTermSpellCheckedFormated = null;
+    public $sSearchTermSpellCheckedFormated;
     /**
      * a list of field specific search terms.
      *
      * @var array
      */
-    public $aSearchTerms = null;
+    public $aSearchTerms;
     /**
      * any filter applied to the search.
      *
      * @var array
      */
-    public $aFilter = null;
+    public $aFilter;
 
     /**
      * @param string|null $id
@@ -65,7 +65,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
     {
         static $aFilter = 'x';
         if ('x' == $aFilter) {
-            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+            $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             $aFilter = $oShop->GetActiveFilter();
         }
 
@@ -81,11 +81,11 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      *
      * @return string
      */
-    public function GetSearchLink($aFilterAddition = array(), $aExcludeFilterKeys = array())
+    public function GetSearchLink($aFilterAddition = [], $aExcludeFilterKeys = [])
     {
         $sLink = '';
 
-        $aParams = array();
+        $aParams = [];
 
         if (is_array($this->aSearchTerms) && count($this->aSearchTerms) > 0) {
             $aParams[TShopModuleArticlelistFilterSearch::PARAM_QUERY.'[0]'] = $this->sSearchTerm;
@@ -100,7 +100,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
         $aFilter = $this->GetCurrentFilter();
         if (!is_array($aFilter) && count($aFilterAddition) > 0) {
-            $aFilter = array();
+            $aFilter = [];
         }
         foreach ($aFilterAddition as $sFilterKey => $sFilterValue) {
             $aFilter[$sFilterKey] = $sFilterValue;
@@ -116,7 +116,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
             }
         }
 
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $sLink = $oShop->GetLinkToSystemPage('search', $aParams);
 
         return $sLink;
@@ -124,12 +124,13 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
     /**
      * @param string $sTerm
+     *
      * @return string
      */
     public function GetSearchLinkForTerm($sTerm)
     {
-        $aParams = array(TShopModuleArticlelistFilterSearch::PARAM_QUERY => $sTerm);
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $aParams = [TShopModuleArticlelistFilterSearch::PARAM_QUERY => $sTerm];
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $sLink = $oShop->GetLinkToSystemPage('search', $aParams);
 
         return $sLink;
@@ -137,27 +138,27 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
     /**
      * @param string $sKey
-     * @param null|string $sShopId
+     * @param string|null $sShopId
      *
      * @return TdbShopSearchCache|null
      */
     protected static function GetSearchCacheItem($sKey, $sShopId = null)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $oItem = TdbShopSearchCache::GetNewInstance();
         $oItem->SetEnableObjectCaching(false);
 
         $aFindSearchCacheFilter = [
-            "`searchkey` = " . $connection->quote($sKey),
+            '`searchkey` = '.$connection->quote($sKey),
         ];
         if (null !== $sShopId) {
-            $aFindSearchCacheFilter[] = "`shop_id` = " . $connection->quote($sShopId);
+            $aFindSearchCacheFilter[] = '`shop_id` = '.$connection->quote($sShopId);
         }
 
         $query = 'SELECT * FROM `shop_search_cache`
-              WHERE ' . implode(' AND ', $aFindSearchCacheFilter);
+              WHERE '.implode(' AND ', $aFindSearchCacheFilter);
 
         $iMaxNumberOfAttempts = 50;
         $bDone = false;
@@ -166,7 +167,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
             $aItem = $statement->fetchAssociative();
 
             if ($aItem) {
-                /** @var $oItem TdbShopSearchCache */
+                /* @var $oItem TdbShopSearchCache */
                 $oItem->LoadFromRow($aItem);
                 if ($oItem->CacheIsStale()) {
                     $oItem->ClearCache();
@@ -200,7 +201,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
     /**
      * creates/refreshes a search cache query.
      *
-     * @param string $sKey   - key identifying the search
+     * @param string $sKey - key identifying the search
      * @param string $sQuery
      * @param string $sSearchTerm
      * @param array|null $aSearchTerms
@@ -208,13 +209,13 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      *
      * @return TdbShopSearchCache
      */
-    public static function CreateSearchCache($sKey, $sQuery, $sSearchTerm, $aSearchTerms = null, $aFilter = array())
+    public static function CreateSearchCache($sKey, $sQuery, $sSearchTerm, $aSearchTerms = null, $aFilter = [])
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sShopId = null;
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         if ($oShop) {
             $sShopId = $oShop->id;
         }
@@ -231,7 +232,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
             $oItem->LoadFromRow($aData);
             $oItem->AllowEditByAll(true);
             $oItem->Save();
-            //die(0);
+            // die(0);
             $quotedItemId = $connection->quote($oItem->id);
 
             $sTmpQuery = "
@@ -246,7 +247,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
             if (TdbShopSearchIndexer::searchWithAND()) {
                 $aTerms = TdbShopSearchIndexer::PrepareSearchWords($sSearchTerm, true);
-                $sTmpQuery .= ' HAVING SUM(tmpres.wordhit) >= ' . count($aTerms);
+                $sTmpQuery .= ' HAVING SUM(tmpres.wordhit) >= '.count($aTerms);
             }
 
             $sTmpQuery = $oItem->ProcessSearchQueryBeforeInsert($sTmpQuery);
@@ -283,7 +284,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
                 $oItem->sSearchTermSpellChecked = $aCorrections['string'];
                 $oItem->sSearchTermSpellCheckedFormated = $oItem->sSearchTerm;
                 foreach ($aCorrections['corrections'] as $sOrg => $sCorrection) {
-                    $oItem->sSearchTermSpellCheckedFormated = str_replace($sOrg, '<span class="correction">' . $sCorrection . '</span>', $oItem->sSearchTermSpellCheckedFormated);
+                    $oItem->sSearchTermSpellCheckedFormated = str_replace($sOrg, '<span class="correction">'.$sCorrection.'</span>', $oItem->sSearchTermSpellCheckedFormated);
                 }
             } else {
                 $oItem->sSearchTermSpellChecked = null;
@@ -302,6 +303,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
      * callback usable to manipulate the search cache query before it is executed.
      *
      * @param string $sQuery
+     *
      * @return string
      */
     public function ProcessSearchQueryBeforeInsert($sQuery)
@@ -311,13 +313,15 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
     /**
      * @param string[] $aWords
+     *
      * @return string
+     *
      * @throws TPkgCmsException_Log
      */
     public function GetBestSuggestion($aWords)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sBestWord = '';
         reset($aWords);
@@ -347,16 +351,18 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
 
         return $sBestWord;
     }
+
     /**
      * return array with categorie ids and number of hits for that category.
      *
      * @param string $sFilters
+     *
      * @return array
      */
     public function GetSearchResultCategoryHits($sFilters = '')
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $aHits = [];
         if (!empty($this->fieldCategoryHits) && empty($sFilters)) {
@@ -431,7 +437,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
     public function GetNumberOfHits()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         if ($this->fieldNumberOfRecordsFound < 0) {
             $quotedId = $connection->quote($this->id);
@@ -477,7 +483,7 @@ class TShopSearchCache extends TShopSearchCacheAutoParent
     public function ClearCache()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedId = $connection->quote($this->id);
 

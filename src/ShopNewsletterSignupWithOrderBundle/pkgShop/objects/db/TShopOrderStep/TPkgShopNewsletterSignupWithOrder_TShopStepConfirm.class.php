@@ -12,8 +12,6 @@
 class TPkgShopNewsletterSignupWithOrder_TShopStepConfirm extends TPkgShopNewsletterSignupWithOrder_TShopStepConfirmAutoParent
 {
     /**
-     * @param TShopBasket $oBasket
-     *
      * @return void
      */
     protected function addDataToBasket(TShopBasket $oBasket)
@@ -55,12 +53,12 @@ class TPkgShopNewsletterSignupWithOrder_TShopStepConfirm extends TPkgShopNewslet
         $connection = $this->getDatabaseConnection();
         $oUser = TdbDataExtranetUser::GetInstance();
         // show newsletter signup at all?
-        $aCondition = array(
-            "`email` = ".$connection->quote($oUser->GetUserEMail()),
-        );
+        $aCondition = [
+            '`email` = '.$connection->quote($oUser->GetUserEMail()),
+        ];
 
         if ($oUser && $oUser->IsLoggedIn()) {
-            $aCondition[] = "`data_extranet_user_id` = ".$connection->quote($oUser->id);
+            $aCondition[] = '`data_extranet_user_id` = '.$connection->quote($oUser->id);
         }
         $query = "SELECT COUNT(*) AS total FROM `pkg_newsletter_user` WHERE `optin` = '1' AND ((".implode(') OR (', $aCondition).'))';
         $aRow = $connection->fetchAssociative($query);

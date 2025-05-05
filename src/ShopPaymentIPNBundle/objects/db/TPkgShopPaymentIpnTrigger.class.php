@@ -14,8 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
 {
     /**
-     * @param TdbPkgShopPaymentIpnMessageTrigger $oMessageTrigger
-     *
      * @return void
      */
     public function runTrigger(TdbPkgShopPaymentIpnMessageTrigger $oMessageTrigger)
@@ -42,7 +40,7 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
                     'IPN invalid response body - expecting "OK"'
                 );
             }
-            $aUpdate = array(
+            $aUpdate = [
                 'done' => '1',
                 'done_date' => date('Y-m-d H:i:s'),
                 'success' => '1',
@@ -52,11 +50,11 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
                     .'REQUEST: '.$oToHost->getLastRequest()."\n"
                     .'RESPONSE: '.$oToHost->getLastResponseHeader().$oToHost->getLastResponseBody()
                     ."\n-----------------------------------------------------------------\n",
-            );
+            ];
             $oMessageTrigger->AllowEditByAll(true);
             $oMessageTrigger->SaveFieldsFast($aUpdate);
         } catch (TPkgCmsException $e) {
-            $aUpdate = array(
+            $aUpdate = [
                 'attempt_count' => $oMessageTrigger->fieldAttemptCount + 1,
                 'log' => $oMessageTrigger->fieldLog."\n"
                     .$this->getLogHeader(__FILE__, __LINE__)."\n"
@@ -64,7 +62,7 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
                     .'RESPONSE: '.$oToHost->getLastResponseHeader().$oToHost->getLastResponseBody()
                     .'EXCEPTION: '.(string) $e
                     ."\n-----------------------------------------------------------------\n",
-            );
+            ];
             $iNextAttempt = $this->getNextAttemptTimestamp($oMessageTrigger->fieldAttemptCount + 1);
             if (false === $iNextAttempt) {
                 $aUpdate['done'] = '1';
@@ -81,7 +79,7 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
 
     /**
      * @param string $sCallFromFile
-     * @param int    $iLineNumber
+     * @param int $iLineNumber
      *
      * @return string
      */
@@ -116,7 +114,7 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
             $sOriginalURL = $_SERVER['REQUEST_URI'];
         }
 
-        $aData = array(
+        $aData = [
             date('Y-m-d H:i:s'),
             'PID: '.TTools::GetProcessId(),
             $request->getClientIp(),
@@ -125,21 +123,23 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
             $sOriginalURL,
             'CALL: '.$sCallFromFile,
             'LINE: '.$iLineNumber,
-        );
+        ];
 
         return implode('|', $aData);
     }
 
     /**
      * @param int $iAttemptNumber
+     *
      * @return int|false
      *
      * @psalm-param positive-int $iAttemptNumber
+     *
      * @psalm-return positive-int|false
      */
     private function getNextAttemptTimestamp($iAttemptNumber)
     {
-        $aMapping = array(
+        $aMapping = [
             0,
             0,
             60 * 5,    // 5 min
@@ -151,7 +151,7 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
             60 * 60 * 24, // 24 hours
             60 * 60 * 24, // 24 hours
             60 * 60 * 24, // 24 hours
-        );
+        ];
         if ($iAttemptNumber >= count($aMapping) || $iAttemptNumber < 0) {
             return false;
         }
@@ -164,6 +164,6 @@ class TPkgShopPaymentIpnTrigger extends TPkgShopPaymentIpnTriggerAutoParent
      */
     private function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 }

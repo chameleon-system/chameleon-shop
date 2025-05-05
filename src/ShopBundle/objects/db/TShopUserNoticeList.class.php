@@ -20,8 +20,8 @@ class TShopUserNoticeList extends TAdbShopUserNoticeList
      */
     public function GetRemoveFromNoticeListLink()
     {
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
-        $aParams = array('module_fnc['.$oShop->GetBasketModuleSpotName().']' => 'RemoveFromNoticeList', MTShopBasketCore::URL_ITEM_ID => $this->fieldShopArticleId);
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $aParams = ['module_fnc['.$oShop->GetBasketModuleSpotName().']' => 'RemoveFromNoticeList', MTShopBasketCore::URL_ITEM_ID => $this->fieldShopArticleId];
 
         return $this->getActivePageService()->getLinkToActivePageRelative($aParams);
     }
@@ -31,8 +31,8 @@ class TShopUserNoticeList extends TAdbShopUserNoticeList
      */
     public function GetRemoveFromNoticeListLinkAjax()
     {
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
-        $aParams = array('module_fnc['.$oShop->GetBasketModuleSpotName().']' => 'ExecuteAjaxCall', '_fnc' => 'RemoveFromNoticeListAjax', MTShopBasketCore::URL_ITEM_ID => $this->fieldShopArticleId);
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $aParams = ['module_fnc['.$oShop->GetBasketModuleSpotName().']' => 'ExecuteAjaxCall', '_fnc' => 'RemoveFromNoticeListAjax', MTShopBasketCore::URL_ITEM_ID => $this->fieldShopArticleId];
 
         return $this->getActivePageService()->getLinkToActivePageRelative($aParams);
     }
@@ -41,11 +41,11 @@ class TShopUserNoticeList extends TAdbShopUserNoticeList
      * @param string $sViewName
      * @param string $sSubType
      * @param string $sType
-     * @param array  $aCallTimeVars
+     * @param array $aCallTimeVars
      *
      * @return string
      */
-    public function Render($sViewName, $sSubType = 'pkgShop/views/db/TShopUserNoticeList', $sType = 'Customer', $aCallTimeVars = array())
+    public function Render($sViewName, $sSubType = 'pkgShop/views/db/TShopUserNoticeList', $sType = 'Customer', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oNoticeItem', $this);
@@ -61,6 +61,6 @@ class TShopUserNoticeList extends TAdbShopUserNoticeList
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

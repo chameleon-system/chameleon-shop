@@ -20,7 +20,7 @@ class TPkgSearchObserver implements IPkgCmsEventObserver
      *
      * @var array
      */
-    private $aSearches = array();
+    private $aSearches = [];
 
     /**
      * @static
@@ -40,6 +40,7 @@ class TPkgSearchObserver implements IPkgCmsEventObserver
 
     /**
      * @param string $sSearchTypeIdentifier
+     *
      * @return mixed|null
      */
     public function GetSearch($sSearchTypeIdentifier)
@@ -64,9 +65,7 @@ class TPkgSearchObserver implements IPkgCmsEventObserver
     }
 
     /**
-     * @param IPkgCmsEvent $oEvent
-     *
-     * @return \IPkgCmsEvent
+     * @return IPkgCmsEvent
      */
     public function PkgCmsEventNotify(IPkgCmsEvent $oEvent)
     {
@@ -78,9 +77,9 @@ class TPkgSearchObserver implements IPkgCmsEventObserver
                     $iTotalResults = $iTotalResults + $oSearchData->iNumberOfResults;
                 }
                 if (0 === $iTotalResults) {
-                    $url = $this->getSystemPageService()->getLinkToSystemPageRelative('not-found-page-product-search', array(
+                    $url = $this->getSystemPageService()->getLinkToSystemPageRelative('not-found-page-product-search', [
                         'q' => $this->getInputFilterUtil()->getFilteredInput('q'),
-                    ));
+                    ]);
                     $this->getRedirect()->redirect($url);
                 }
             }
@@ -94,7 +93,7 @@ class TPkgSearchObserver implements IPkgCmsEventObserver
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 
     /**
@@ -102,7 +101,7 @@ class TPkgSearchObserver implements IPkgCmsEventObserver
      */
     private function getSystemPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 
     /**
@@ -110,7 +109,7 @@ class TPkgSearchObserver implements IPkgCmsEventObserver
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     /**
@@ -118,6 +117,6 @@ class TPkgSearchObserver implements IPkgCmsEventObserver
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

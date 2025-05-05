@@ -1,9 +1,9 @@
 // start currency postload (see postload.view.php in TPkgShopCurrency_CMSFieldPrice
 if(!TGlobal::IsCMSMode()) {
-    if (isset($this->sqlData['<?= $sFieldDatabaseName; ?>'])) {
+    if (isset($this->sqlData['<?php echo $sFieldDatabaseName; ?>'])) {
 
-        $currencyTypeFieldNameSql = '<?= $sFieldDatabaseName; ?>__currencyType';
-        $originalCurrencyFieldNameSql = '<?= $sFieldDatabaseName; ?>__original';
+        $currencyTypeFieldNameSql = '<?php echo $sFieldDatabaseName; ?>__currencyType';
+        $originalCurrencyFieldNameSql = '<?php echo $sFieldDatabaseName; ?>__original';
 
         $oActiveCurrency = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_currency.shop_currency')->getObject();
         if(false !== $oActiveCurrency) {
@@ -11,25 +11,25 @@ if(!TGlobal::IsCMSMode()) {
             $currencyTypeOfFieldChanged = $currencyTypeOfFieldChanged || $this->sqlData[$currencyTypeFieldNameSql] !== $oActiveCurrency->id;
 
             if (true === $currencyTypeOfFieldChanged && false === $oActiveCurrency->fieldIsBaseCurrency) {
-                $this-><?= $sFieldName; ?>Original = $this->sqlData['<?= $sFieldDatabaseName; ?>'];
-                $this->sqlData[$originalCurrencyFieldNameSql] = $this-><?= $sFieldName; ?>Original;
+                $this-><?php echo $sFieldName; ?>Original = $this->sqlData['<?php echo $sFieldDatabaseName; ?>'];
+                $this->sqlData[$originalCurrencyFieldNameSql] = $this-><?php echo $sFieldName; ?>Original;
 
                 <?php if (null !== $sValueTypeFieldName) {
-    ?>
-                if (isset($this->sqlData['<?= $sValueTypeFieldName; ?>']) && $this->sqlData['<?= $sValueTypeFieldName; ?>'] === 'absolut') {
-                    $this->sqlData['<?= $sFieldDatabaseName; ?>'] = TdbPkgShopCurrency::ConvertToActiveCurrency($this->sqlData['<?= $sFieldDatabaseName; ?>']);
+                    ?>
+                if (isset($this->sqlData['<?php echo $sValueTypeFieldName; ?>']) && $this->sqlData['<?php echo $sValueTypeFieldName; ?>'] === 'absolut') {
+                    $this->sqlData['<?php echo $sFieldDatabaseName; ?>'] = TdbPkgShopCurrency::ConvertToActiveCurrency($this->sqlData['<?php echo $sFieldDatabaseName; ?>']);
                 }
                 <?php
-} else {
-        ?>
-                $this->sqlData['<?= $sFieldDatabaseName; ?>'] = TdbPkgShopCurrency::ConvertToActiveCurrency($this->sqlData['<?= $sFieldDatabaseName; ?>']);
+                } else {
+                    ?>
+                $this->sqlData['<?php echo $sFieldDatabaseName; ?>'] = TdbPkgShopCurrency::ConvertToActiveCurrency($this->sqlData['<?php echo $sFieldDatabaseName; ?>']);
                 <?php
-    } ?>
+                } ?>
 
                 $this->sqlData[$currencyTypeFieldNameSql] = $oActiveCurrency->id;
             }
-            $this-><?= $sFieldName; ?> = $this->sqlData['<?= $sFieldDatabaseName; ?>'];
-            $this-><?= $sFieldName; ?>Formated = $oActiveCurrency->GetFormattedCurrency($this->sqlData['<?= $sFieldDatabaseName; ?>']);
+            $this-><?php echo $sFieldName; ?> = $this->sqlData['<?php echo $sFieldDatabaseName; ?>'];
+            $this-><?php echo $sFieldName; ?>Formated = $oActiveCurrency->GetFormattedCurrency($this->sqlData['<?php echo $sFieldDatabaseName; ?>']);
         }
     }
 
@@ -39,14 +39,14 @@ if(!TGlobal::IsCMSMode()) {
         $oLocal = TCMSLocal::GetActive();
     }
 
-    if (isset($this->sqlData['<?= $sFieldDatabaseName; ?>'])) {
-        $this-><?= $sFieldName; ?> = $this->sqlData['<?= $sFieldDatabaseName; ?>'];
+    if (isset($this->sqlData['<?php echo $sFieldDatabaseName; ?>'])) {
+        $this-><?php echo $sFieldName; ?> = $this->sqlData['<?php echo $sFieldDatabaseName; ?>'];
     } else {
-        $this-><?= $sFieldName; ?> = 0;
+        $this-><?php echo $sFieldName; ?> = 0;
     }
 
     if (!is_null($oLocal)) {
-        $this-><?= $sFieldName; ?>Formated = $oLocal->FormatNumber($this-><?= $sFieldName; ?>,<?= $numberOfDecimals; ?>);
+        $this-><?php echo $sFieldName; ?>Formated = $oLocal->FormatNumber($this-><?php echo $sFieldName; ?>,<?php echo $numberOfDecimals; ?>);
     }
 }
 // end currency logic

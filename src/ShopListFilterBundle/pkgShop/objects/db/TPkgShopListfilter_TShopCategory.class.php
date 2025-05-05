@@ -57,10 +57,12 @@ class TPkgShopListfilter_TShopCategory extends TPkgShopListfilter_TShopCategoryA
                         ";
         /**
          * @var non-empty-list<string>|false
+         *
          * @psalm-suppress UndefinedThisPropertyFetch
+         *
          * @FIXME Property `fieldLft` does not exist - maybe `fieldPkgShopListfilterId` is meant?
          */
-        $match = $this->getDatabaseConnection()->fetchNumeric($query, array('activeLeft' => $this->fieldLft));
+        $match = $this->getDatabaseConnection()->fetchNumeric($query, ['activeLeft' => $this->fieldLft]);
         if (false === $match) {
             return '';
         }

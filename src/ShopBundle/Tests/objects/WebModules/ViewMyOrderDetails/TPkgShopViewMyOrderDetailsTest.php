@@ -10,8 +10,8 @@
  */
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * Class TPkgShopViewMyOrderDetailsTest.
@@ -49,7 +49,7 @@ class TPkgShopViewMyOrderDetailsTest extends TestCase
     /**
      * @test
      */
-    public function it_addsAnOrderToAGuestsOrderList()
+    public function itAddsAnOrderToAGuestsOrderList()
     {
         $this->mockSessionAdapter->addOrderId('ORDERID')->shouldBeCalled(null);
         $viewMyOrderDetails = new TPkgShopViewMyOrderDetails($this->mockDbAdapter->reveal(), $this->mockSessionAdapter->reveal());
@@ -60,7 +60,7 @@ class TPkgShopViewMyOrderDetailsTest extends TestCase
     /**
      * @test
      */
-    public function it_addsAnOrderToAUsersOrderList()
+    public function itAddsAnOrderToAUsersOrderList()
     {
         $viewMyOrderDetails = new TPkgShopViewMyOrderDetails($this->mockDbAdapter->reveal(), $this->mockSessionAdapter->reveal());
 
@@ -70,7 +70,7 @@ class TPkgShopViewMyOrderDetailsTest extends TestCase
     /**
      * @test
      */
-    public function it_confirmsOrderInUsersOrderList()
+    public function itConfirmsOrderInUsersOrderList()
     {
         $this->mockDbAdapter->hasOrder('USERID', 'ORDERID')->willReturn(true);
         $viewMyOrderDetails = new TPkgShopViewMyOrderDetails($this->mockDbAdapter->reveal(), $this->mockSessionAdapter->reveal());
@@ -81,7 +81,7 @@ class TPkgShopViewMyOrderDetailsTest extends TestCase
     /**
      * @test
      */
-    public function it_confirmsOrderInGuestsOrderList()
+    public function itConfirmsOrderInGuestsOrderList()
     {
         $this->mockSessionAdapter->hasOrder('ORDERID')->willReturn(true);
         $viewMyOrderDetails = new TPkgShopViewMyOrderDetails($this->mockDbAdapter->reveal(), $this->mockSessionAdapter->reveal());
@@ -92,7 +92,7 @@ class TPkgShopViewMyOrderDetailsTest extends TestCase
     /**
      * @test
      */
-    public function it_deniesOrderInUsersOrderList()
+    public function itDeniesOrderInUsersOrderList()
     {
         $this->mockDbAdapter->hasOrder('USERID', 'ORDERID')->willReturn(false);
         $viewMyOrderDetails = new TPkgShopViewMyOrderDetails($this->mockDbAdapter->reveal(), $this->mockSessionAdapter->reveal());
@@ -103,7 +103,7 @@ class TPkgShopViewMyOrderDetailsTest extends TestCase
     /**
      * @test
      */
-    public function it_deniesOrderInGuestsOrderList()
+    public function itDeniesOrderInGuestsOrderList()
     {
         $this->mockSessionAdapter->hasOrder('ORDERID')->willReturn(false);
         $viewMyOrderDetails = new TPkgShopViewMyOrderDetails($this->mockDbAdapter->reveal(), $this->mockSessionAdapter->reveal());

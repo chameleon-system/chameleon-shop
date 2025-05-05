@@ -8,16 +8,14 @@ class ShopArticleImage
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopArticle|null - Belongs to article */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Image */
-        private ?CmsMedia $cmsMedia = null
-        ,
+        private ?CmsMedia $cmsMedia = null,
         // TCMSFieldPosition
         /** @var int - Position */
         private int $position = 0
@@ -61,7 +59,6 @@ class ShopArticleImage
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
     {
@@ -75,7 +72,6 @@ class ShopArticleImage
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -88,6 +84,4 @@ class ShopArticleImage
 
         return $this;
     }
-
-
 }

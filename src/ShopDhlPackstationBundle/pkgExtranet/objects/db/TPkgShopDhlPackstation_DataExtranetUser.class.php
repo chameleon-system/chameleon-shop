@@ -16,7 +16,7 @@ class TPkgShopDhlPackstation_DataExtranetUser extends TPkgShopDhlPackstation_Dat
      *
      * @param string $sAddressId
      *
-     * @return TdbDataExtranetUserAddress|null|false
+     * @return TdbDataExtranetUserAddress|false|null
      */
     public function SetAddressAsBillingAddress($sAddressId)
     {
@@ -24,10 +24,10 @@ class TPkgShopDhlPackstation_DataExtranetUser extends TPkgShopDhlPackstation_Dat
         if (0 != strcmp($this->fieldDefaultBillingAddressId, $sAddressId)) {
             $oAdr = TdbDataExtranetUserAddress::GetNewInstance();
             if ($oAdr->LoadFromFields(
-                array('id' => $sAddressId, 'data_extranet_user_id' => $this->id, 'is_dhl_packstation' => '0')
+                ['id' => $sAddressId, 'data_extranet_user_id' => $this->id, 'is_dhl_packstation' => '0']
             )
             ) {
-                $this->SaveFieldsFast(array('default_billing_address_id' => $sAddressId));
+                $this->SaveFieldsFast(['default_billing_address_id' => $sAddressId]);
                 $oNewBillingAdr = $this->GetBillingAddress(true);
             }
         } else {

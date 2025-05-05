@@ -49,7 +49,7 @@ class TShopInterfaceExportSearchWords extends TCMSInterfaceManagerBaseExportCSV
 
     protected function GetFieldMapping()
     {
-        $aFields = array('search_date' => 'DATETIME NOT NULL', 'number_of_results' => 'INT( 11 ) NOT NULL', 'name' => 'VARCHAR( 255 ) NOT NULL', 'login' => 'VARCHAR( 255 ) NOT NULL', 'firstname' => 'VARCHAR( 255 ) NOT NULL', 'lastname' => 'VARCHAR( 255 ) NOT NULL');
+        $aFields = ['search_date' => 'DATETIME NOT NULL', 'number_of_results' => 'INT( 11 ) NOT NULL', 'name' => 'VARCHAR( 255 ) NOT NULL', 'login' => 'VARCHAR( 255 ) NOT NULL', 'firstname' => 'VARCHAR( 255 ) NOT NULL', 'lastname' => 'VARCHAR( 255 ) NOT NULL'];
 
         return $aFields;
     }

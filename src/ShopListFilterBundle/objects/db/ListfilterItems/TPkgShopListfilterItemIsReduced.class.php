@@ -27,7 +27,7 @@ class TPkgShopListfilterItemIsReduced extends TPkgShopListfilterItemBoolean
     {
         $aOptions = $this->GetFromInternalCache('aOptions');
         if (is_null($aOptions)) {
-            $aOptions = $this->oItemListFilteredByOtherItems->GetItemUniqueValueListForField('id', array($this, 'ArticleIsReduced'));
+            $aOptions = $this->oItemListFilteredByOtherItems->GetItemUniqueValueListForField('id', [$this, 'ArticleIsReduced']);
             $this->OrderOptions($aOptions);
             $this->SetInternalCache('aOptions', $aOptions);
         }
@@ -39,6 +39,7 @@ class TPkgShopListfilterItemIsReduced extends TPkgShopListfilterItemBoolean
      * @param string $sFieldName
      * @param string $sValue
      * @param array<string, string> $aRow
+     *
      * @return string
      *
      * @psalm-return '0'|'1'

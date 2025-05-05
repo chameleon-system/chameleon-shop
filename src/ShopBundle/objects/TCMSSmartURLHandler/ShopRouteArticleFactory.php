@@ -21,7 +21,7 @@ class ShopRouteArticleFactory implements ShopRouteArticleFactoryInterface
     public function __construct()
     {
         if (defined('PKG_SHOP_PRODUCT_URL_KEY_FIELD')) {
-            /**
+            /*
              * should inject the constant at some point - since this whould change the interface we can not do so in a patch version.
              */
             $this->sqlTableFieldName = PKG_SHOP_PRODUCT_URL_KEY_FIELD;
@@ -33,7 +33,7 @@ class ShopRouteArticleFactory implements ShopRouteArticleFactoryInterface
     /**
      * @param string $identificationToken
      *
-     * @return \TdbShopArticle|null
+     * @return TdbShopArticle|null
      */
     public function createArticleFromIdentificationToken($identificationToken)
     {

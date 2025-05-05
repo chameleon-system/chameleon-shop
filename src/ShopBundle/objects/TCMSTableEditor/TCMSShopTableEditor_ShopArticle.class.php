@@ -55,7 +55,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
      * if the current article is a parent article, update all fixed fields of its variants
      * to contain the same info as the parent. Note: we do NOT copy property or mlt fields.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
     protected function PostSaveHook($oFields, $oPostTable)
@@ -66,7 +66,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
         if ($product->HasVariants()) {
             $oVariantSet = $product->GetFieldShopVariantSet();
             /** @var $oVariantSet TdbShopVariantSet */
-            $aDoNotCopyFieldNames = array();
+            $aDoNotCopyFieldNames = [];
             if (!is_null($oVariantSet)) {
                 $oDoNotCopyFields = $oVariantSet->GetFieldCmsFieldConfList();
                 while ($oNotCopyField = $oDoNotCopyFields->Next()) {
@@ -83,7 +83,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
             }
             $aRawData['variant_parent_is_active'] = $this->oTable->sqlData['active'];
 
-            $oVariants = $product->GetFieldShopArticleVariantsList(array(), false);
+            $oVariants = $product->GetFieldShopArticleVariantsList([], false);
             $oVariants->GoToStart();
             while ($oVariant = $oVariants->Next()) {
                 $aTmpRawData = $aRawData;
@@ -97,7 +97,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
             }
         } elseif ($product->IsVariant()) {
             $oVariantSet = $product->GetFieldShopVariantSet();
-            $aDoNotCopyFieldNames = array();
+            $aDoNotCopyFieldNames = [];
             if (null !== $oVariantSet) {
                 $oDoNotCopyFields = $oVariantSet->GetFieldCmsFieldConfList();
                 while ($oNotCopyField = $oDoNotCopyFields->Next()) {
@@ -185,6 +185,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
      * a copy of the parent.
      *
      * @psalm-suppress InvalidReturnType
+     *
      * @FIXME This method should return TCMSstdClass with the object data similar to its parent, not `void`.
      */
     public function Insert()
@@ -218,7 +219,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
      * if we are creating a variant, do NOT copy the parents variants.
      *
      * @param TCMSField $oField
-     * @param int       $sourceRecordID
+     * @param int $sourceRecordID
      *
      * @return void
      */
@@ -240,7 +241,7 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
         $product = $this->oTable;
         $oLowestPriceVariant = $product->GetLowestPricedVariant();
         if ($oLowestPriceVariant) {
-            $aData = array('price' => $oLowestPriceVariant->fieldPriceFormated, 'price_reference' => $oLowestPriceVariant->fieldPriceReferenceFormated);
+            $aData = ['price' => $oLowestPriceVariant->fieldPriceFormated, 'price_reference' => $oLowestPriceVariant->fieldPriceReferenceFormated];
             $this->SaveFields($aData, false);
         }
     }

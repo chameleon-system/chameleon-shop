@@ -15,10 +15,8 @@ class TPkgShopPrimaryNaviList extends TPkgShopPrimaryNaviListAutoParent
      * return default query for the table.
      * if not in CMS mode return only active navigation trees.
      *
-     * @param int         $iLanguageId   - language used for query
+     * @param int $iLanguageId - language used for query
      * @param bool|string $sFilterString - any filter conditions to add to the query
-     *
-     * @return string
      */
     public static function GetDefaultQuery($iLanguageId, $sFilterString = false): string
     {

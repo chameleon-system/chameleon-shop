@@ -26,8 +26,6 @@ class CollectPaymentConfigProvidersPass implements CompilerPassInterface
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
-     * @param ContainerBuilder $container
-     *
      * @api
      *
      * @return void
@@ -53,7 +51,7 @@ class CollectPaymentConfigProvidersPass implements CompilerPassInterface
                 );
             }
 
-            $loaderDefinition->addMethodCall('addConfigProvider', array($systemName, new Reference($serviceId)));
+            $loaderDefinition->addMethodCall('addConfigProvider', [$systemName, new Reference($serviceId)]);
         }
     }
 }

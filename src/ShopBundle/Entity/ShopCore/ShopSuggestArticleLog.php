@@ -4,25 +4,22 @@ namespace ChameleonSystem\ShopBundle\Entity\ShopCore;
 
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
 use ChameleonSystem\ShopBundle\Entity\Product\ShopArticle;
-use DateTime;
 
 class ShopSuggestArticleLog
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldDateTime
-        /** @var DateTime|null - Created on */
-        private ?DateTime $datecreated = null,
+        /** @var \DateTime|null - Created on */
+        private ?\DateTime $datecreated = null,
         // TCMSFieldLookupParentID
         /** @var DataExtranetUser|null - Shop customer */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldLookup
         /** @var ShopArticle|null - Product / item */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldEmail
         /** @var string - From (email) */
         private string $fromEmail = '',
@@ -66,18 +63,17 @@ class ShopSuggestArticleLog
     }
 
     // TCMSFieldDateTime
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
 
     // TCMSFieldLookupParentID
     public function getDataExtranetUser(): ?DataExtranetUser
@@ -92,7 +88,6 @@ class ShopSuggestArticleLog
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopArticle(): ?ShopArticle
     {
@@ -105,7 +100,6 @@ class ShopSuggestArticleLog
 
         return $this;
     }
-
 
     // TCMSFieldEmail
     public function getFromEmail(): string
@@ -120,7 +114,6 @@ class ShopSuggestArticleLog
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFromName(): string
     {
@@ -133,7 +126,6 @@ class ShopSuggestArticleLog
 
         return $this;
     }
-
 
     // TCMSFieldEmail
     public function getToEmail(): string
@@ -148,7 +140,6 @@ class ShopSuggestArticleLog
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getToName(): string
     {
@@ -162,7 +153,6 @@ class ShopSuggestArticleLog
         return $this;
     }
 
-
     // TCMSFieldText
     public function getComment(): string
     {
@@ -175,6 +165,4 @@ class ShopSuggestArticleLog
 
         return $this;
     }
-
-
 }

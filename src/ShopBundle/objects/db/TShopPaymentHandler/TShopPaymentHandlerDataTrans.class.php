@@ -13,18 +13,18 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 /**
  * This is the base class for DataTrans Paymenthandler. If you want to add a new payment method.
-/**/
+ * /**/
 class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
 {
     /*
     *  constant to identifies data trans notify message
     */
-    const URL_IDENTIFIER_NOTIFY = 'datatranspostfeedback';
+    public const URL_IDENTIFIER_NOTIFY = 'datatranspostfeedback';
 
     /*
     * transaction type for settlement 05 debit , 06 credit
     */
-    const PAYMENT_CREDIT_CARD_TRANS_TYPE_ID = '05';
+    public const PAYMENT_CREDIT_CARD_TRANS_TYPE_ID = '05';
 
     /**
      * Transaction id for DataTrans authorisation. Needed for settlement authorised transactions.
@@ -72,7 +72,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     {
         $aViewVariables = parent::GetAdditionalViewVariables($sViewName, $sViewType);
         if (!is_array($aViewVariables)) {
-            $aViewVariables = array();
+            $aViewVariables = [];
         }
         $aViewVariables['PaymentHiddenInput'] = $this->GetPaymentParameter();
         $aViewVariables['PaymentHiddenInput']['sign'] = $this->GetSecurityHash($this->GetTestLiveModeParameter('sign'), $aViewVariables['PaymentHiddenInput']['merchantId'], $aViewVariables['PaymentHiddenInput']['amount'], $aViewVariables['PaymentHiddenInput']['currency'], $aViewVariables['PaymentHiddenInput']['refno']);
@@ -90,7 +90,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      */
     protected function GetPaymentTypeSpecificParameter()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -100,7 +100,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      */
     protected function GetUserAddressDataParameter()
     {
-        $aUserAddressData = array();
+        $aUserAddressData = [];
         $oActiveUser = TdbDataExtranetUser::GetInstance();
         if ($oActiveUser) {
             $oBillingAddress = $oActiveUser->GetBillingAddress();
@@ -135,7 +135,6 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     /**
      * Returns a new reference number for an authorisation (default).
      * Or returns active reference number for settlement ($bForAuthorisation = false).
-     *
      *
      * @param bool $bForAuthorisation
      *
@@ -190,7 +189,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      */
     protected function GetPaymentParameter()
     {
-        $aParameter = array();
+        $aParameter = [];
         $sCurrency = $this->GetCurrencyIdentifier();
         $oLocal = TCMSLocal::GetActive();
         $oShopBasket = TShopBasket::GetInstance();
@@ -330,6 +329,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
 
     /**
      * @param string $sErrorCode
+     *
      * @return string
      */
     protected function TransformDataTransMessages($sErrorCode)
@@ -388,8 +388,6 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     /**
      * Getused payment method form DataTrans authorisation response.
      * Overwrite this if your payment method returns in other parameter.
-     *
-     * @return mixed
      */
     protected function GetPaymentMethodFormAuthorisationRequest()
     {
@@ -417,7 +415,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      */
     protected function GetResponseURL()
     {
-        $sReturnURLBase = $this->getActivePageService()->getActivePage()->GetRealURLPlain(array(), true);
+        $sReturnURLBase = $this->getActivePageService()->getActivePage()->GetRealURLPlain([], true);
         if ('.html' === substr($sReturnURLBase, -5)) {
             $sReturnURLBase = substr($sReturnURLBase, 0, -5);
         }
@@ -451,8 +449,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      *
      * If amount has changed after authorisation don't execute payment
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -474,8 +471,6 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
 
     /**
      * Send settlement for authorised transaction.
-     *
-     * @param \TdbShopOrder $oOrder
      *
      * @return bool
      */
@@ -516,8 +511,6 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
     /**
      * Sends email to shop owner to settle transaction manually.
      *
-     * @param TdbShopOrder $oOrder
-     *
      * @return bool
      */
     protected function SendFailureSettlementMail(TdbShopOrder $oOrder)
@@ -525,12 +518,12 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
         $bSendMail = false;
         $oMail = TdbDataMailProfile::GetProfile('payment_datatrans_error_settlement');
         if (!is_null($oMail)) {
-            $sInfo = TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.settlement_failure_mail_info',
-                    array(
-                        '%ordernumber%' => $oOrder->fieldOrdernumber,
-                        '%ref%' => $this->GetRefNoParameter(false),
-                    )
-                ));
+            $sInfo = TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_data_trans.settlement_failure_mail_info',
+                [
+                    '%ordernumber%' => $oOrder->fieldOrdernumber,
+                    '%ref%' => $this->GetRefNoParameter(false),
+                ]
+            ));
             $oMail->AddData('sInfo', $sInfo);
             $bSendMail = $oMail->SendUsingObjectView('emails', 'Customer');
         }
@@ -566,7 +559,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
                 if (isset($oXML->body->transaction->error->errorMessage)) {
                     $sErrorMessage .= strval($oXML->body->transaction->error->errorMessage);
                 }
-                TTools::WriteLogEntrySimple('Payment DataTrans: Fehlerhafte XML Settlement Response for transaction'.$this->sTransactionId.'and reference number '.$sRefNo.'. CODE('.$sErrorCode.') MESSAGE('.$sErrorMessage.')'.' response: '.$sResponse, 1, __FILE__, __LINE__);
+                TTools::WriteLogEntrySimple('Payment DataTrans: Fehlerhafte XML Settlement Response for transaction'.$this->sTransactionId.'and reference number '.$sRefNo.'. CODE('.$sErrorCode.') MESSAGE('.$sErrorMessage.') response: '.$sResponse, 1, __FILE__, __LINE__);
             } else {
                 TTools::WriteLogEntrySimple('Payment DataTrans: Fehlerhafte XML Settlement Response for transaction'.$this->sTransactionId.'and reference number '.$sRefNo.' response: '.$sResponse, 1, __FILE__, __LINE__);
             }
@@ -659,7 +652,7 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
         }
         $key = str_pad($key, $b, chr(0x00));
         $ipad = str_pad('', $b, chr(0x36));
-        $opad = str_pad('', $b, chr(0x5c));
+        $opad = str_pad('', $b, chr(0x5C));
         $k_ipad = $key ^ $ipad;
         $k_opad = $key ^ $opad;
 
@@ -688,6 +681,6 @@ class TShopPaymentHandlerDataTrans extends TdbShopPaymentHandler
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

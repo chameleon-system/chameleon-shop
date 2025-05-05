@@ -13,7 +13,7 @@ class TPkgShopDhlPackstation_DataExtranetUserAddress extends TPkgShopDhlPackstat
 {
     /**
      * @param bool $bIsPackstation
-     * @param bool $bSave          set to false if you not want to save cleard fiel values
+     * @param bool $bSave set to false if you not want to save cleard fiel values
      *
      * @return void
      */
@@ -21,9 +21,9 @@ class TPkgShopDhlPackstation_DataExtranetUserAddress extends TPkgShopDhlPackstat
     {
         $aData = $this->sqlData;
         if ($bIsPackstation) {
-            $aClear = array('company', 'address_additional_info', 'streetnr');
+            $aClear = ['company', 'address_additional_info', 'streetnr'];
         } else {
-            $aClear = array('address_additional_info', 'streetnr', 'street');
+            $aClear = ['address_additional_info', 'streetnr', 'street'];
         }
         foreach ($aClear as $sClearField) {
             if (array_key_exists($sClearField, $aData)) {

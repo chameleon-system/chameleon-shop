@@ -10,19 +10,17 @@ class ShopVariantSet
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopVariantType> - Variant types of variant set */
-        private Collection $shopVariantTypeCollection = new ArrayCollection()
-        ,
+        private Collection $shopVariantTypeCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxesSelectFieldsFromTable
         /** @var Collection<int, CmsFieldConf> - Fields of variant which may differ from parent item */
-        private Collection $cmsFieldConfCollection = new ArrayCollection()
-        ,
+        private Collection $cmsFieldConfCollection = new ArrayCollection(),
         // TCMSFieldLookup
         /** @var ShopVariantDisplayHandler|null - Display handler for variant selection in  shop */
         private ?ShopVariantDisplayHandler $shopVariantDisplayHandler = null
@@ -66,8 +64,6 @@ class ShopVariantSet
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -99,8 +95,6 @@ class ShopVariantSet
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxesSelectFieldsFromTable
 
@@ -134,7 +128,6 @@ class ShopVariantSet
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopVariantDisplayHandler(): ?ShopVariantDisplayHandler
     {
@@ -147,6 +140,4 @@ class ShopVariantSet
 
         return $this;
     }
-
-
 }

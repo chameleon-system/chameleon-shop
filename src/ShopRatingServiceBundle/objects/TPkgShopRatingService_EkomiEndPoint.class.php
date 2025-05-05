@@ -24,6 +24,7 @@ class TPkgShopRatingService_EkomiEndPoint extends TdbPkgShopRatingService
      *
      * @param array<string, mixed> $aOrder
      * @param TdbDataExtranetUser $oUser
+     *
      * @return bool
      */
     public function SendShopRatingEmail($oUser, $aOrder)
@@ -35,6 +36,7 @@ class TPkgShopRatingService_EkomiEndPoint extends TdbPkgShopRatingService
      * @return bool
      *
      * @psalm-suppress NullArgument
+     *
      * @FIXME Second argument to `fgetcsv` does not accept `null` anymore as of PHP 5.x. Supplying `0` should behave exactly the same.
      */
     public function Import()
@@ -47,7 +49,7 @@ class TPkgShopRatingService_EkomiEndPoint extends TdbPkgShopRatingService
             return false;
         }
         $this->sCsvFilePath = $cacheDir.'ekomi_ratings.csv';
-        //http://api.ekomi.de/get_feedback.php?interface_id=ID&interface_pw=PASSWORD&type=csv
+        // http://api.ekomi.de/get_feedback.php?interface_id=ID&interface_pw=PASSWORD&type=csv
         if ($this->FetchCSVFile()) {
             if (false !== ($handle = fopen($this->sCsvFilePath, 'r'))) {
                 while ($aCSV = fgetcsv($handle, null, ',', '"')) {
@@ -76,7 +78,7 @@ class TPkgShopRatingService_EkomiEndPoint extends TdbPkgShopRatingService
              [3] => Ich bin 100% zufrieden, die Ware kam schnell und bruchsicher verpackt bei mir an. Leider hatte ich zuviele Teile bestellt, die ich sofort zurück geschickt habe. Es gab keine Probleme, habe mein Geld sofort zurück erhalten.
              [4] =>
          */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sRemoteKey = md5($aCSV[0].$aCSV[1]);
         $quotedRemoteKey = $connection->quote($sRemoteKey);
@@ -125,7 +127,7 @@ class TPkgShopRatingService_EkomiEndPoint extends TdbPkgShopRatingService
 
     /**
      * @param string $sMessage
-     * @param int    $iLine
+     * @param int $iLine
      *
      * @return void
      */
@@ -142,6 +144,6 @@ class TPkgShopRatingService_EkomiEndPoint extends TdbPkgShopRatingService
      */
     private function getCacheUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_rating_service.util.cache');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop_rating_service.util.cache');
     }
 }

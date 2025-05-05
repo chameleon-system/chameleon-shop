@@ -5,7 +5,6 @@ namespace ChameleonSystem\ShopPaymentTransactionBundle\Entity;
 use ChameleonSystem\DataAccessBundle\Entity\Core\CmsUser;
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
 use ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrder;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -13,31 +12,26 @@ class PkgShopPaymentTransaction
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopOrder|null - Belongs to order */
-        private ?ShopOrder $shopOrder = null
-        ,
+        private ?ShopOrder $shopOrder = null,
         // TCMSFieldExtendedLookup
         /** @var DataExtranetUser|null - Executed by user */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopPaymentTransactionPosition> - Positions */
-        private Collection $pkgShopPaymentTransactionPositionCollection = new ArrayCollection()
-        ,
+        private Collection $pkgShopPaymentTransactionPositionCollection = new ArrayCollection(),
         // TCMSFieldLookup
         /** @var PkgShopPaymentTransactionType|null - Transaction type */
-        private ?PkgShopPaymentTransactionType $pkgShopPaymentTransactionType = null
-        ,
+        private ?PkgShopPaymentTransactionType $pkgShopPaymentTransactionType = null,
         // TCMSFieldExtendedLookup
         /** @var CmsUser|null - Executed by CMS user */
-        private ?CmsUser $cmsUser = null
-        ,
+        private ?CmsUser $cmsUser = null,
         // TCMSFieldCreatedTimestamp
-        /** @var DateTime|null - Created on */
-        private ?DateTime $datecreated = null,
+        /** @var \DateTime|null - Created on */
+        private ?\DateTime $datecreated = null,
         // TCMSFieldVarchar
         /** @var string - Executed via IP */
         private string $ip = '',
@@ -54,8 +48,8 @@ class PkgShopPaymentTransaction
         /** @var bool - Confirmed */
         private bool $confirmed = false,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Confirmed on */
-        private ?DateTime $confirmedDate = null
+        /** @var \DateTime|null - Confirmed on */
+        private ?\DateTime $confirmedDate = null
     ) {
     }
 
@@ -96,7 +90,6 @@ class PkgShopPaymentTransaction
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getDataExtranetUser(): ?DataExtranetUser
     {
@@ -109,8 +102,6 @@ class PkgShopPaymentTransaction
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -146,7 +137,6 @@ class PkgShopPaymentTransaction
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getPkgShopPaymentTransactionType(): ?PkgShopPaymentTransactionType
     {
@@ -159,7 +149,6 @@ class PkgShopPaymentTransaction
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getCmsUser(): ?CmsUser
@@ -174,20 +163,18 @@ class PkgShopPaymentTransaction
         return $this;
     }
 
-
     // TCMSFieldCreatedTimestamp
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getIp(): string
@@ -202,7 +189,6 @@ class PkgShopPaymentTransaction
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getAmount(): string
     {
@@ -215,7 +201,6 @@ class PkgShopPaymentTransaction
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getContext(): string
@@ -230,7 +215,6 @@ class PkgShopPaymentTransaction
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getSequenceNumber(): int
     {
@@ -243,7 +227,6 @@ class PkgShopPaymentTransaction
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isConfirmed(): bool
@@ -258,19 +241,16 @@ class PkgShopPaymentTransaction
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getConfirmedDate(): ?DateTime
+    public function getConfirmedDate(): ?\DateTime
     {
         return $this->confirmedDate;
     }
 
-    public function setConfirmedDate(?DateTime $confirmedDate): self
+    public function setConfirmedDate(?\DateTime $confirmedDate): self
     {
         $this->confirmedDate = $confirmedDate;
 
         return $this;
     }
-
-
 }

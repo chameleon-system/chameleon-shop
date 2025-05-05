@@ -19,11 +19,11 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 class ContentFromUrlLoaderService implements ContentFromUrlLoaderServiceInterface
 {
     /**
-     * @var \Symfony\Component\HttpKernel\HttpKernelInterface
+     * @var HttpKernelInterface
      */
     private $kernel;
     /**
-     * @var \Symfony\Component\HttpFoundation\RequestStack
+     * @var RequestStack
      */
     private $requestStack;
 
@@ -41,7 +41,7 @@ class ContentFromUrlLoaderService implements ContentFromUrlLoaderServiceInterfac
     public function load($url)
     {
         $masterRequest = $this->requestStack->getMainRequest();
-        $request = Request::create($url, 'GET', array(), $masterRequest->cookies->all(), array(), $masterRequest->server->all());
+        $request = Request::create($url, 'GET', [], $masterRequest->cookies->all(), [], $masterRequest->server->all());
         if (true === $masterRequest->hasSession()) {
             $request->setSession($masterRequest->getSession());
         }

@@ -25,21 +25,21 @@ class TPkgShopMapper_ArticleTags extends AbstractPkgShopMapper_Article
             $oCacheTriggerManager->addTrigger($oArticle->table, $oArticle->id);
         }
         $oArticleTags = $oArticle->GetFieldCmsTagsList('`cms_tags`.`count` DESC, `cms_tags`.`name`');
-        $aArticleTags = array();
+        $aArticleTags = [];
         $systemPageService = $this->getSystemPageService();
         $searchSystemPage = $systemPageService->getSystemPage('search');
         while ($oTag = $oArticleTags->Next()) {
             $sSearchPageUrl = '';
-            $aTag = array(
+            $aTag = [
                 'iCount' => $oTag->fieldCount,
                 'sName' => $oTag->fieldName,
                 'sUrlName' => $oTag->fieldUrlname,
-            );
+            ];
             if (null !== $searchSystemPage) {
                 try {
-                    $sSearchPageUrl = $systemPageService->getLinkToSystemPageRelative('search', array(
+                    $sSearchPageUrl = $systemPageService->getLinkToSystemPageRelative('search', [
                         'q' => $oTag->fieldName,
-                    ));
+                    ]);
                 } catch (RouteNotFoundException $e) {
                     $sSearchPageUrl = '';
                 }
@@ -55,6 +55,6 @@ class TPkgShopMapper_ArticleTags extends AbstractPkgShopMapper_Article
      */
     private function getSystemPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 }

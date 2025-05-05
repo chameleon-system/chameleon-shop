@@ -36,8 +36,8 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
         if ($bResponse) {
             $oUser = TdbDataExtranetUser::GetInstance();
             if (is_null($oUser->id)) {
-                $aBilling = array();
-                $aShipping = array();
+                $aBilling = [];
+                $aShipping = [];
                 $this->GetUserDataFromPayPalData($aBilling, $aShipping);
                 if (empty($aShipping['firstname']) && empty($aShipping['lastname'])) {
                     $aShipping['firstname'] = $aBilling['firstname'];
@@ -58,8 +58,8 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
             } elseif ($oUser->IsLoggedIn()) {
                 // user is logged in - we just set the shipping address
                 $oBillingAdr = $oUser->GetBillingAddress();
-                $aBilling = array();
-                $aShipping = array();
+                $aBilling = [];
+                $aShipping = [];
                 $this->GetUserDataFromPayPalData($aBilling, $aShipping);
                 //          if (!array_key_exists('data_extranet_salutation_id',$aShipping) || empty($aShipping['data_extranet_salutation_id'])) $aShipping['data_extranet_salutation_id'] = $oBillingAdr->fieldDataExtranetSalutationId;
                 if (empty($aShipping['firstname']) && empty($aShipping['lastname'])) {
@@ -71,11 +71,11 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
             } else {
                 // user has an ID but is not logged in. That should not happen, so log it and exit
                 $oMsgManager = TCMSMessageManager::GetInstance();
-                $oMsgManager->AddMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_paypal_express.error_guest_user_with_id')));
+                $oMsgManager->AddMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', ['errorMsg' => ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_paypal_express.error_guest_user_with_id')]);
                 trigger_error('A user with ID was marked as not logged in in TShopBsPaymentHandlerPayPal::PostProcessExternalPaymentHandlerHook', E_USER_WARNING);
                 $bResponse = false;
             }
-            //$this->aCheckoutDetails
+            // $this->aCheckoutDetails
         }
 
         $logger = $this->getPaypalLogger();
@@ -107,11 +107,6 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
     /**
      * updates teh aBilling and aShipping arrays with the user billing and shipping
      * info returned from paypal.
-     *
-     * @param array $billingAddressData
-     * @param array $shippingAddressData
-     *
-     * @return void
      */
     protected function GetUserDataFromPayPalData(array &$billingAddressData, array &$shippingAddressData): void
     {
@@ -177,11 +172,10 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
         string $userFirstname,
         string $userLastname,
         ?string $shipToName
-    ): array
-    {
+    ): array {
         $result = [
             'firstname' => $userFirstname,
-            'lastname'  => $userLastname,
+            'lastname' => $userLastname,
         ];
 
         if (null === $shipToName) {
@@ -199,16 +193,10 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
 
         return [
             'firstname' => '',
-            'lastname'  => $shipToName,
+            'lastname' => $shipToName,
         ];
     }
 
-    /**
-     * @param array $billingAddress
-     * @param array $shippingAddress
-     *
-     * @return bool
-     */
     protected function postProcessBillingAndShippingAddress(array &$billingAddress, array &$shippingAddress): bool
     {
         $modified = false;
@@ -231,6 +219,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
     /**
      * @param string $postalcode
      * @param string $city
+     *
      * @return bool
      */
     protected function postalCodeAndCitySwitched($postalcode, $city)

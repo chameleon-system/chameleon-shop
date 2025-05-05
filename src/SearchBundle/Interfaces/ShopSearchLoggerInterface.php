@@ -17,6 +17,7 @@ interface ShopSearchLoggerInterface
      * @param string $searchString
      * @param array<string, string> $searchFilter
      * @param int $numberOfMatches
+     *
      * @return void
      */
     public function logSearch($searchString, array $searchFilter, $numberOfMatches);

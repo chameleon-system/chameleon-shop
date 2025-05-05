@@ -14,12 +14,12 @@ class TPkgShopOrderStatusItemDataEndPoint implements IPkgShopOrderStatusData
     /**
      * @var string
      */
-    private $shopOrderItemId = null;
+    private $shopOrderItemId;
 
     /**
      * @var int
      */
-    private $amount = null;
+    private $amount;
 
     /**
      * @param string $shopOrderItemId
@@ -77,10 +77,10 @@ class TPkgShopOrderStatusItemDataEndPoint implements IPkgShopOrderStatusData
      */
     public function getDataAsTdbArray()
     {
-        return array(
+        return [
             'shop_order_status_id' => '',
             'shop_order_item_id' => $this->getShopOrderItemId(),
             'amount' => $this->getAmount(),
-        );
+        ];
     }
 }

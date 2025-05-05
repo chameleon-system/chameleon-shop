@@ -11,7 +11,7 @@
 
 class TShopOrderStepList extends TShopOrderStepListAutoParent
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopOrderStep/TShopOrderStepList';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopOrderStep/TShopOrderStepList';
 
     /**
      * the order step list should allow caching of the steps.
@@ -31,8 +31,8 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      */
     public static function GetNextStep($oStep)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedPosition = $connection->quote($oStep->fieldPosition);
 
@@ -60,8 +60,8 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      */
     public static function GetPreviousStep($oStep)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedPosition = $connection->quote($oStep->fieldPosition);
 
@@ -80,14 +80,12 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
     /**
      * returns all navi steps marked as navi steps. the active step will be marked as "is active".
      *
-     * @param TdbShopOrderStep $oActiveStep
-     *
      * @return TdbShopOrderStepList
      */
     public static function GetNavigationStepList(TdbShopOrderStep $oActiveStep)
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        /** @var Doctrine\DBAL\Connection $connection */
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $query = "SELECT *
               FROM `shop_order_step`
@@ -115,8 +113,8 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
 
             $query = "SELECT *
                   FROM `shop_order_step`
-                 WHERE `show_in_navigation` = '1' AND `id` IN (".implode(',', $quotedIds).")
-              ORDER BY `position` ASC";
+                 WHERE `show_in_navigation` = '1' AND `id` IN (".implode(',', $quotedIds).')
+              ORDER BY `position` ASC';
             $oSteps = TdbShopOrderStepList::GetList($query);
             $oSteps->bAllowItemCache = true;
 
@@ -163,12 +161,12 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      *
      * @return string
      */
-    public function Render($sViewName = 'navi', $sViewType = 'Core', $sSpotName = null, $aCallTimeVars = array())
+    public function Render($sViewName = 'navi', $sViewType = 'Core', $sSpotName = null, $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oSteps', $this);
 
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oView->AddVar('oShop', $oShop);
         $oView->AddVar('sSpotName', $sSpotName);
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);
@@ -190,7 +188,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }

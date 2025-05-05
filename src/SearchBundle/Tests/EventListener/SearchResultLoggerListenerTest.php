@@ -42,13 +42,10 @@ class SearchResultLoggerListenerTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderLogSearch
      *
-     * @param $searchParameter
-     * @param $numberOfResults
-     * @param $userHasSearchedBefore
+     * @dataProvider dataProviderLogSearch
      */
-    public function it_should_log_a_search($filterType, $searchParameter, $numberOfResults, $userHasSearchedBefore)
+    public function itShouldLogASearch($filterType, $searchParameter, $numberOfResults, $userHasSearchedBefore)
     {
         $this->given_a_filter_type($filterType);
         $this->given_a_search_for($searchParameter);
@@ -113,7 +110,7 @@ class SearchResultLoggerListenerTest extends TestCase
 
         /** @var $state StateInterface|ObjectProphecy */
         $state = $this->prophesize(StateInterface::class);
-        $state->getState(StateInterface::QUERY, array())->willReturn($this->searchParameter);
+        $state->getState(StateInterface::QUERY, [])->willReturn($this->searchParameter);
         $event->getState()->willReturn($state->reveal());
 
         $filter = $this->prophesize($this->filterType);
@@ -129,26 +126,26 @@ class SearchResultLoggerListenerTest extends TestCase
 
     public function dataProviderLogSearch()
     {
-        return array(
-            array(
+        return [
+            [
                 '\TShopModuleArticlelistFilterSearch', // is search filter
-                array('q' => 'something', 'lf' => array()), // $searchParameter
+                ['q' => 'something', 'lf' => []], // $searchParameter
                 10, // $numberOfResults
                 false, // $userHasSearchedBefore
-            ),
-            array(
+            ],
+            [
                 '\TShopModuleArticlelistFilterSearch', // is search filter
-                array('q' => 'something', 'lf' => array()), // $searchParameter
+                ['q' => 'something', 'lf' => []], // $searchParameter
                 10, // $numberOfResults
                 true, // $userHasSearchedBefore
-            ),
-            array(
+            ],
+            [
                 '\TShopModuleArticleListFilter', // is search filter
-                array('q' => 'something', 'lf' => array()), // $searchParameter
+                ['q' => 'something', 'lf' => []], // $searchParameter
                 10, // $numberOfResults
                 false, // $userHasSearchedBefore
-            ),
-        );
+            ],
+        ];
     }
 
     private function given_a_filter_type($filterType)

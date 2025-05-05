@@ -25,7 +25,7 @@ class TPkgShopMapper_ArticleOtherCategoriesTeaser extends AbstractPkgShopMapper_
         }
         $oActiveCategory = $this->getShopService()->getActiveCategory();
 
-        $aLinks = array();
+        $aLinks = [];
         $oCategoryList = $this->getCategoryList($oArticle);
         while ($oCategory = $oCategoryList->Next()) {
             if ($oCategory->id !== $oActiveCategory->id) {
@@ -39,8 +39,6 @@ class TPkgShopMapper_ArticleOtherCategoriesTeaser extends AbstractPkgShopMapper_
 
     /**
      * return category list for article or parent article if article is variant and fetched category list is empty.
-     *
-     * @param TdbShopArticle $oArticle
      *
      * @return TdbShopCategoryList
      */
@@ -61,16 +59,14 @@ class TPkgShopMapper_ArticleOtherCategoriesTeaser extends AbstractPkgShopMapper_
     /**
      * converts the category into an array with link data.
      *
-     * @param TdbShopCategory               $oCategory
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     * @param bool                          $bCachingEnabled
-     * @param bool                          $bLinkOnlyLastItem    set to true if only the last category should have a link set otherwise each item has a link set
+     * @param bool $bCachingEnabled
+     * @param bool $bLinkOnlyLastItem set to true if only the last category should have a link set otherwise each item has a link set
      *
      * @return array
      */
     protected function getLink(TdbShopCategory $oCategory, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled, $bLinkOnlyLastItem = false)
     {
-        $aLinkParts = array();
+        $aLinkParts = [];
 
         $oBreadcrumb = $oCategory->GetBreadcrumb();
         /** @var $oBreadcrumbItem TdbShopCategory */
@@ -78,10 +74,10 @@ class TPkgShopMapper_ArticleOtherCategoriesTeaser extends AbstractPkgShopMapper_
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oBreadcrumbItem->table, $oBreadcrumbItem->id);
             }
-            $aLinkData = array(
+            $aLinkData = [
                 'sName' => $oBreadcrumbItem->GetName(),
                 'sLink' => '',
-            );
+            ];
 
             if (false === $bLinkOnlyLastItem || (true === $bLinkOnlyLastItem && $oBreadcrumb->IsLast())) {
                 $aLinkData['sLink'] = $oBreadcrumbItem->GetLink();
@@ -99,7 +95,7 @@ class TPkgShopMapper_ArticleOtherCategoriesTeaser extends AbstractPkgShopMapper_
      */
     protected function getHeadline()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.text.other_categories_headline');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.text.other_categories_headline');
     }
 
     /**
@@ -107,6 +103,6 @@ class TPkgShopMapper_ArticleOtherCategoriesTeaser extends AbstractPkgShopMapper_
      */
     private function getShopService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 }

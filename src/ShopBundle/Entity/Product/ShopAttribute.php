@@ -9,7 +9,7 @@ class ShopAttribute
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -19,8 +19,7 @@ class ShopAttribute
         private bool $isSystemAttribute = false,
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopAttributeValue> - Attribute values */
-        private Collection $shopAttributeValueCollection = new ArrayCollection()
-        ,
+        private Collection $shopAttributeValueCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Internal name */
         private string $systemName = '',
@@ -67,7 +66,6 @@ class ShopAttribute
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIsSystemAttribute(): bool
     {
@@ -80,8 +78,6 @@ class ShopAttribute
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -115,7 +111,6 @@ class ShopAttribute
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemName(): string
     {
@@ -129,7 +124,6 @@ class ShopAttribute
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -142,6 +136,4 @@ class ShopAttribute
 
         return $this;
     }
-
-
 }

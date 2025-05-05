@@ -8,7 +8,7 @@ class ShopWrapping
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -59,7 +59,6 @@ class ShopWrapping
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -73,7 +72,6 @@ class ShopWrapping
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getShopArticle(): ?ShopArticle
     {
@@ -86,6 +84,4 @@ class ShopWrapping
 
         return $this;
     }
-
-
 }

@@ -11,7 +11,7 @@
 
 class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
 {
-    const MSG_MANAGER_NAME = 'TShopPaymentHandlerOgoneAliasGatewayMSG';
+    public const MSG_MANAGER_NAME = 'TShopPaymentHandlerOgoneAliasGatewayMSG';
 
     /**
      * @return string
@@ -45,7 +45,7 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
      */
     protected function GetAllInputFieldParameter()
     {
-        $aParameter = array();
+        $aParameter = [];
 
         $aParameter['PSPID'] = $this->GetConfigParameter('user_id');
         $aParameter['ACCEPTURL'] = $this->GetSuccessURL();
@@ -87,7 +87,7 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
             }
 
             if ('shipping' == $sStepName) {
-                $aResponse = array('module_fnc' => array(TGlobal::instance()->GetExecutingModulePointer()->sModuleSpotName => 'ExecuteStep'), MTShopOrderWizardCore::URL_PARAM_STEP_METHOD => '', 'aShipping' => array('shop_shipping_group_id' => TShopBasket::GetInstance()->GetActiveShippingGroup()->id, 'shop_payment_method_id' => $this->GetOwningPaymentMethodId()));
+                $aResponse = ['module_fnc' => [TGlobal::instance()->GetExecutingModulePointer()->sModuleSpotName => 'ExecuteStep'], MTShopOrderWizardCore::URL_PARAM_STEP_METHOD => '', 'aShipping' => ['shop_shipping_group_id' => TShopBasket::GetInstance()->GetActiveShippingGroup()->id, 'shop_payment_method_id' => $this->GetOwningPaymentMethodId()]];
                 $sURL .= '?'.str_replace('&amp;', '&', TTools::GetArrayAsURL($aResponse));
             }
         }
@@ -134,7 +134,7 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
     {
         $aViewVariables = parent::GetAdditionalViewVariables($sViewName, $sViewType);
         if (!is_array($aViewVariables)) {
-            $aViewVariables = array();
+            $aViewVariables = [];
         }
         $aViewVariables['sAliasGatewayRequestUrl'] = $this->GetRequestURL();
         $aViewVariables['aHiddenInput'] = $this->GetAllInputFieldParameter();
@@ -165,7 +165,7 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
         parent::GetUserPaymentData();
 
         $oGlobal = TGlobal::instance();
-        //if no new payment data was submitted try to get the data from the active payment method
+        // if no new payment data was submitted try to get the data from the active payment method
         if (!$oGlobal->UserDataExists(TdbShopPaymentHandler::URL_PAYMENT_USER_INPUT) && !isset($this->aPaymentUserData['NCERROR'])) {
             $oBasket = TShopBasket::GetInstance();
             $oPaymentMethod = $oBasket->GetActivePaymentMethod();
@@ -225,7 +225,7 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
             $oGlobal = TGlobal::instance();
             $aErrorFields = $this->GetErrorFields();
             $aReturnedParameter = $oGlobal->GetUserData();
-            $aTrackedErrors = array();
+            $aTrackedErrors = [];
             $sConsumerName = self::MSG_MANAGER_NAME;
             foreach ($aErrorFields as $sErrorField) {
                 if (array_key_exists($sErrorField, $aReturnedParameter) && $aReturnedParameter[$sErrorField] > 0) {
@@ -246,6 +246,6 @@ class TShopPaymentHandlerOgoneAliasGateway extends TShopPaymentHandlerOgoneBase
      */
     protected function GetErrorFields()
     {
-        return array('NCErrorCN', 'NCErrorCardNo', 'NCErrorCVC', 'NCErrorED', 'NCError');
+        return ['NCErrorCN', 'NCErrorCardNo', 'NCErrorCVC', 'NCErrorED', 'NCError'];
     }
 }

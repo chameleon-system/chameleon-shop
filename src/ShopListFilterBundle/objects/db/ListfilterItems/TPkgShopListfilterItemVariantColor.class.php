@@ -11,12 +11,11 @@
 
 /**
  * base class used to select from a specific variant type.
-/**/
+ * /**/
 class TPkgShopListfilterItemVariantColor extends TPkgShopListfilterItemVariant
 {
     /**
      * @param array<string, mixed> $aOptions
-     * @return void
      */
     protected function OrderOptions(array &$aOptions): void
     {
@@ -49,7 +48,7 @@ class TPkgShopListfilterItemVariantColor extends TPkgShopListfilterItemVariant
                   ORDER BY `shop_variant_type_value`.{$quotedFieldName}
                    ";
                 $result = $connection->executeQuery($query);
-                $aNewOptions = array();
+                $aNewOptions = [];
                 while ($aRow = $result->fetchAssociative()) {
                     if (!empty($aRow['name_grouped']) && array_key_exists($aRow['name_grouped'], $aOptions)) {
                         $aNewOptions[$aRow['name_grouped']] = $aOptions[$aRow['name_grouped']];

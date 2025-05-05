@@ -11,33 +11,33 @@
 
 class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
 {
-    const VIEW_PATH = '/pkgShop/views/db/TShopArticlePreviewImage';
+    public const VIEW_PATH = '/pkgShop/views/db/TShopArticlePreviewImage';
 
     /**
      * the connected article.
      *
      * @var TdbShopArticle
      */
-    protected $oArticle = null;
+    protected $oArticle;
     /**
      * the preview image object.
      *
      * @var TCMSImage
      */
-    protected $oImage = null;
+    protected $oImage;
     /**
      * the image size of the preview image.
      *
      * @var TdbShopArticleImageSize
      */
-    protected $oImageSize = null;
+    protected $oImageSize;
 
     /**
      * return the image preview object. if the shop did not define one for this size,
      * then we create a virtual instance based on the first image of the article.
      *
-     * @param TdbShopArticle $oArticle      - the article object
-     * @param string         $sInternalName - image size name
+     * @param TdbShopArticle $oArticle - the article object
+     * @param string $sInternalName - image size name
      *
      * @return bool
      */
@@ -46,15 +46,15 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
         $bLoaded = false;
         $this->oArticle = $oArticle;
         $this->oImageSize = TdbShopArticleImageSize::GetNewInstance();
-        /** @var $oImageSize TdbShopArticleImageSize */
+        /* @var $oImageSize TdbShopArticleImageSize */
         if ($this->oImageSize->LoadFromField('name_internal', $sInternalName)) {
-            if ($this->LoadFromFields(array('shop_article_id' => $oArticle->id, 'shop_article_image_size_id' => $this->oImageSize->id))) {
+            if ($this->LoadFromFields(['shop_article_id' => $oArticle->id, 'shop_article_image_size_id' => $this->oImageSize->id])) {
                 $bLoaded = true;
             } else {
                 $oPrimaryImage = $oArticle->GetPrimaryImage();
                 /** @var $oPrimaryImage TdbShopArticleImage */
                 if (!is_null($oPrimaryImage)) {
-                    $aData = array('cms_media_id' => $oPrimaryImage->sqlData['cms_media_id'], 'shop_article_image_size_id' => $this->oImageSize->id, 'shop_article_id' => $oArticle->id);
+                    $aData = ['cms_media_id' => $oPrimaryImage->sqlData['cms_media_id'], 'shop_article_image_size_id' => $this->oImageSize->id, 'shop_article_id' => $oArticle->id];
                     $this->LoadFromRow($aData);
                     $bLoaded = true;
                 }
@@ -68,13 +68,13 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
      * render the preview image using the defined view (found in self::VIEW_PATH).
      *
      * @param string $sView - the view
-     * @param string $type  - Core, Custom-Core, Customer
+     * @param string $type - Core, Custom-Core, Customer
      * @param string[] $aEffects
      * @param bool $bHideNewMarker
      *
      * @return string
      */
-    public function Render($sView = 'simple', $type = 'Core', $aEffects = array(), $bHideNewMarker = false)
+    public function Render($sView = 'simple', $type = 'Core', $aEffects = [], $bHideNewMarker = false)
     {
         $oView = new TViewParser();
 
@@ -132,9 +132,10 @@ class TShopArticlePreviewImage extends TShopArticlePreviewImageAutoParent
      * return thumbnail for current size.
      *
      * @param string[] $aEffects
+     *
      * @return TCMSImage
      */
-    public function GetImageThumbnailObject($aEffects = array())
+    public function GetImageThumbnailObject($aEffects = [])
     {
         $oImageSize = $this->GetImageSizeObject();
         $oImage = $this->GetImageObject();

@@ -1128,7 +1128,7 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             $oOrder->Save();
             // 'order_ident'=>$oBasket->sBasketIdentifier
             if (!empty($oBasketCopy->sBasketIdentifier)) { // if the basket has no identifier, then we do not update the shop_order_basket record
-                $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+                $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
                 $connection->executeStatement(
                     'UPDATE `shop_order_basket` SET `shop_order_id` = :orderId WHERE `order_ident` = :basketIdent',
                     [
@@ -1952,10 +1952,10 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         $oDiscountList = $this->GetActiveDiscounts();
         $oDiscountList->GoToStart();
         $aDiscountId = [];
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
         while ($oDiscount = $oDiscountList->Next()) {
             $aDiscountId[] = sprintf(
-                "(`shop_discount`.`id` != %s AND `shop_discount`.`restrict_to_value_from` >= %s AND `shop_discount`.`restrict_to_articles_from` >= %s)",
+                '(`shop_discount`.`id` != %s AND `shop_discount`.`restrict_to_value_from` >= %s AND `shop_discount`.`restrict_to_articles_from` >= %s)',
                 $connection->quote($oDiscount->id),
                 $connection->quote($oDiscount->sqlData['restrict_to_value_from']),
                 $connection->quote($oDiscount->sqlData['restrict_to_articles_from'])

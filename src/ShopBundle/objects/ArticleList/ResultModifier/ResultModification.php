@@ -20,7 +20,7 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\SortString;
 class ResultModification implements ResultModificationInterface
 {
     /**
-     * @var \ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\DbAdapterInterface
+     * @var DbAdapterInterface
      */
     private $dbAdapter;
 
@@ -30,8 +30,6 @@ class ResultModification implements ResultModificationInterface
     }
 
     /**
-     * @param ResultInterface $result
-     * @param array           $configuration
      * @param int $filterDepth
      *
      * @return ResultInterface
@@ -42,10 +40,6 @@ class ResultModification implements ResultModificationInterface
     }
 
     /**
-     * @param ResultInterface $result
-     * @param array           $configuration
-     * @param StateInterface  $state
-     *
      * @return ResultInterface
      */
     public function applyState(ResultInterface $result, array $configuration, StateInterface $state)
@@ -60,7 +54,6 @@ class ResultModification implements ResultModificationInterface
     }
 
     /**
-     * @param ResultInterface $results
      * @param string $activeSortId
      *
      * @return ResultInterface

@@ -22,8 +22,6 @@ interface StateElementInterface
     public function getKey();
 
     /**
-     * @param mixed $value
-     *
      * @return bool
      *
      * @psalm-assert TNormalizedValue $value
@@ -33,7 +31,6 @@ interface StateElementInterface
     public function validate($value);
 
     /**
-     * @param mixed $value
      * @return TNormalizedValue
      */
     public function normalize($value);

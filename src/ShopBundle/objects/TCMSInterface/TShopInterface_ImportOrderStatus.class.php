@@ -12,7 +12,7 @@
 /**
  * import the order status from a csv. the system will send a mail to users
  * to inform them of their order changes.
-/**/
+ * /**/
 class TShopInterface_ImportOrderStatus extends TCMSInterfaceManagerBase
 {
     /** @var string */
@@ -22,10 +22,10 @@ class TShopInterface_ImportOrderStatus extends TCMSInterfaceManagerBase
     protected $sPathName = '';
 
     /** @var resource|false */
-    protected $fp = null;
+    protected $fp;
 
     /** @var array|false */
-    protected $aHeaderFields = array();
+    protected $aHeaderFields = [];
 
     /** @var string */
     protected $sLineSplit = ';';
@@ -56,7 +56,7 @@ class TShopInterface_ImportOrderStatus extends TCMSInterfaceManagerBase
         $this->aHeaderFields = $this->GetLine();
         while ($aRow = $this->GetLine()) {
             // prepare data
-            $aTmpData = array();
+            $aTmpData = [];
             reset($this->aHeaderFields);
             foreach ($this->aHeaderFields as $iFieldIndex => $sFieldName) {
                 if (array_key_exists($iFieldIndex, $aRow)) {

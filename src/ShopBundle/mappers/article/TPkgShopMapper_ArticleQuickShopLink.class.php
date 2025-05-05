@@ -58,12 +58,12 @@ class TPkgShopMapper_ArticleQuickShopLink extends AbstractPkgShopMapper_Article
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Request|null
+     * @return Symfony\Component\HttpFoundation\Request|null
      */
     private function getRequest()
     {
-        /** @var \Symfony\Component\HttpFoundation\RequestStack $requestStack */
-        $requestStack = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack');
+        /** @var Symfony\Component\HttpFoundation\RequestStack $requestStack */
+        $requestStack = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack');
 
         return $requestStack->getCurrentRequest();
     }
@@ -73,6 +73,6 @@ class TPkgShopMapper_ArticleQuickShopLink extends AbstractPkgShopMapper_Article
      */
     private function getRouter()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.router.chameleon_frontend');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.router.chameleon_frontend');
     }
 }

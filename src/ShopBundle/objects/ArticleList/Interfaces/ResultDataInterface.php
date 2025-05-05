@@ -17,6 +17,7 @@ interface ResultDataInterface
 {
     /**
      * @param int $totalNumberOfResults
+     *
      * @return void
      */
     public function setTotalNumberOfResults($totalNumberOfResults);
@@ -78,7 +79,6 @@ interface ResultDataInterface
     public function getRawResult();
 
     /**
-     * @param ResultInterface $rawResult
      * @return void
      */
     public function setRawResult(ResultInterface $rawResult);

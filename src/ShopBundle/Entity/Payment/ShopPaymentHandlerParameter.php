@@ -8,12 +8,11 @@ class ShopPaymentHandlerParameter
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopPaymentHandler|null - Belongs to payment handler */
-        private ?ShopPaymentHandler $shopPaymentHandler = null
-        ,
+        private ?ShopPaymentHandler $shopPaymentHandler = null,
         // TCMSFieldVarchar
         /** @var string - Display name */
         private string $name = '',
@@ -72,7 +71,6 @@ class ShopPaymentHandlerParameter
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -85,7 +83,6 @@ class ShopPaymentHandlerParameter
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getType(): string
@@ -100,7 +97,6 @@ class ShopPaymentHandlerParameter
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemname(): string
     {
@@ -113,7 +109,6 @@ class ShopPaymentHandlerParameter
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getDescription(): string
@@ -128,7 +123,6 @@ class ShopPaymentHandlerParameter
         return $this;
     }
 
-
     // TCMSFieldText
     public function getValue(): string
     {
@@ -142,7 +136,6 @@ class ShopPaymentHandlerParameter
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
     {
@@ -155,6 +148,4 @@ class ShopPaymentHandlerParameter
 
         return $this;
     }
-
-
 }

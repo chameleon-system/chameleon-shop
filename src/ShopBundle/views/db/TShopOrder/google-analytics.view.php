@@ -2,7 +2,7 @@
 /** @var $oOrder TdbShopOrder */
 /** @var $aCallTimeVars array */
 $oLocal = TCMSLocal::GetActive();
-$portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+$portalDomainService = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
 $activePortal = $portalDomainService->getActivePortal();
 
 if (!empty($activePortal->fieldGoogleAnalyticNumber)) {
@@ -11,7 +11,7 @@ if (!empty($activePortal->fieldGoogleAnalyticNumber)) {
     $(document).ready(function () {
         <?php
         $oLastOrder = $oOrder;
-    //start of trans data?>
+    // start of trans data?>
         _gaq.push(['_addTrans',
             <?php
             echo "'".$oLastOrder->fieldOrdernumber."',";
@@ -26,7 +26,7 @@ if (!empty($activePortal->fieldGoogleAnalyticNumber)) {
     echo "'".$oCountry->GetDisplayValue()."'"; ?>
         ]);
         <?php
-        //start of basket data
+        // start of basket data
         $oOrderItemsList = $oLastOrder->GetFieldShopOrderItemList();
     $oOrderItemsList->GoToStart();
 

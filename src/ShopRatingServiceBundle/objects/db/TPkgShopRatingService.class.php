@@ -22,7 +22,7 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
      */
     public static function GetInstanceFromSystemName($sSystemName)
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $quotedSystemName = $connection->quote($sSystemName);
         $query = "SELECT * FROM `pkg_shop_rating_service` WHERE `system_name` = {$quotedSystemName}";
@@ -42,10 +42,9 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
      *
      * factory creates a new instance and returns it.
      *
-     * @param string|array $sData     - either the id of the object to load, or the row with which the instance should be initialized
-     * @param string       $sLanguage - init with the language passed
-     *
-     * @return TdbPkgShopRatingService     */
+     * @param string|array $sData - either the id of the object to load, or the row with which the instance should be initialized
+     * @param string $sLanguage - init with the language passed
+     */
     public static function GetNewInstance($sData = null, $sLanguage = null): TdbPkgShopRatingService
     {
         $oObject = parent::GetNewInstance($sData, $sLanguage);
@@ -54,7 +53,7 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
             $aData = $oObject->sqlData;
             $sClassName = $aData['class'];
             $oObject = new $sClassName();
-            /** @var $oInterface TCMSInterfaceManagerBase */
+            /* @var $oInterface TCMSInterfaceManagerBase */
             $oObject->LoadFromRow($aData);
         }
 
@@ -67,18 +66,18 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
      * @param string $sViewName
      * @param string $sViewSubType
      * @param string $sViewType
-     * @param null   $sSpotName
-     * @param array  $aCallTimeVars
+     * @param null $sSpotName
+     * @param array $aCallTimeVars
      *
      * @return string
      */
-    public function Render($sViewName = 'RatingService_standard', $sViewSubType = 'pkgShopRatingService/views', $sViewType = 'Customer', $sSpotName = null, $aCallTimeVars = array())
+    public function Render($sViewName = 'RatingService_standard', $sViewSubType = 'pkgShopRatingService/views', $sViewType = 'Customer', $sSpotName = null, $aCallTimeVars = [])
     {
         $sHTML = '';
         $oView = new TViewParser();
-        /** @var $oView TViewParser */
+        /* @var $oView TViewParser */
 
-        //create view name for this "active" rating-service
+        // create view name for this "active" rating-service
         if (!empty($this->fieldAffiliateValue)) {
             $sViewName = $sViewName.'_'.trim($this->fieldAffiliateValue);
         }
@@ -118,7 +117,7 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
             $oAVG = MySqlLegacySupport::getInstance()->fetch_object($rs);
         }
 
-        //Update value
+        // Update value
         if ($oAVG->main_score > 0) {
             $sQuery = "UPDATE pkg_shop_rating_service SET current_rating = '".$oAVG->main_score."', current_rating_date = NOW() WHERE id = '".$this->id."' ";
             MySqlLegacySupport::getInstance()->query($sQuery);
@@ -161,6 +160,7 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
     /**
      * @param array<string, mixed> $aOrder
      * @param TdbDataExtranetUser $oUser
+     *
      * @return bool
      */
     public function SendShopRatingEmail($oUser, $aOrder)
@@ -181,7 +181,7 @@ class TPkgShopRatingService extends TPkgShopRatingServiceAutoParent
         $oMailProfile->AddData('rating_service_url', $this->fieldRatingUrl);
         $oMailProfile->AddData('rating_service_email_text', $this->fieldEmailText);
 
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $aShopData = $oShop->GetSQLWithTablePrefix();
         $oMailProfile->AddDataArray($aShopData);
         $oMailProfile->AddData('shop_name', $oShop->fieldName);

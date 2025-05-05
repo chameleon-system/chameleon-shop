@@ -18,10 +18,10 @@ class MTShopMyAccountCore extends MTExtranetMyAccountCore
         parent::Execute();
 
         $activePage = $this->getActivePageService()->getActivePage();
-        $aSignup = array('module_fnc' => array($this->sModuleSpotName => 'NewsletterSubscribe'));
+        $aSignup = ['module_fnc' => [$this->sModuleSpotName => 'NewsletterSubscribe']];
         $this->data['sNewsSignupLink'] = $activePage->GetRealURLPlain($aSignup);
 
-        $aSignout = array('module_fnc' => array($this->sModuleSpotName => 'NewsletterUnsubscribe'));
+        $aSignout = ['module_fnc' => [$this->sModuleSpotName => 'NewsletterUnsubscribe']];
         $this->data['sNewsSignoutLink'] = $activePage->GetRealURLPlain($aSignout);
 
         return $this->data;
@@ -45,14 +45,14 @@ class MTShopMyAccountCore extends MTExtranetMyAccountCore
         $oNewsletter = TdbPkgNewsletterUser::GetInstanceForActiveUser();
         if (is_null($oNewsletter)) {
             $oNewsletter = TdbPkgNewsletterUser::GetNewInstance();
-            $aData = array();
+            $aData = [];
             $sNow = date('Y-m-d H:i:s');
             $aData['email'] = $oUser->GetUserEMail();
             $aData['data_extranet_salutation_id'] = $oUser->fieldDataExtranetSalutationId;
             $aData['lastname'] = $oUser->fieldLastname;
             $aData['firstname'] = $oUser->fieldFirstname;
             $aData['signup_date'] = $sNow;
-            /**
+            /*
              * There are different ways of opting in into the newsletter table:
              * - Subscribe on Website
              * - Subscribe on MyAccount page
@@ -120,7 +120,7 @@ class MTShopMyAccountCore extends MTExtranetMyAccountCore
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -128,6 +128,6 @@ class MTShopMyAccountCore extends MTExtranetMyAccountCore
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

@@ -10,16 +10,14 @@ class PkgShopPaymentIpnTrigger
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopPaymentHandlerGroup|null - Belongs to payment provider */
-        private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
-        ,
+        private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopPaymentIpnMessageTrigger> - */
-        private Collection $pkgShopPaymentIpnMessageTriggerCollection = new ArrayCollection()
-        ,
+        private Collection $pkgShopPaymentIpnMessageTriggerCollection = new ArrayCollection(),
         // TCMSFieldBoolean
         /** @var bool - Active */
         private bool $active = false,
@@ -72,8 +70,6 @@ class PkgShopPaymentIpnTrigger
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -108,7 +104,6 @@ class PkgShopPaymentIpnTrigger
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isActive(): bool
     {
@@ -121,7 +116,6 @@ class PkgShopPaymentIpnTrigger
 
         return $this;
     }
-
 
     // TCMSFieldURL
     public function getTargetUrl(): string
@@ -136,7 +130,6 @@ class PkgShopPaymentIpnTrigger
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getTimeoutSeconds(): int
     {
@@ -149,8 +142,6 @@ class PkgShopPaymentIpnTrigger
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -183,6 +174,4 @@ class PkgShopPaymentIpnTrigger
 
         return $this;
     }
-
-
 }

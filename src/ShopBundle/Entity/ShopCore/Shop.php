@@ -25,27 +25,23 @@ class Shop
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopOrderStatusCode> - Available shipping status codes */
-        private Collection $shopOrderStatusCodeCollection = new ArrayCollection()
-        ,
+        private Collection $shopOrderStatusCodeCollection = new ArrayCollection(),
         // TCMSFieldExtendedLookup
         /** @var PkgShopCurrency|null - Default currency */
-        private ?PkgShopCurrency $defaultPkgShopCurrency = null
-        ,
+        private ?PkgShopCurrency $defaultPkgShopCurrency = null,
         // TCMSFieldVarchar
         /** @var string - Shop name */
         private string $name = '',
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsPortal> - Belongs to these portals */
-        private Collection $cmsPortalCollection = new ArrayCollection()
-        ,
+        private Collection $cmsPortalCollection = new ArrayCollection(),
         // TCMSFieldExtendedLookup
         /** @var ShopCategory|null - Shop main category */
-        private ?ShopCategory $shopCategory = null
-        ,
+        private ?ShopCategory $shopCategory = null,
         // TCMSFieldVarchar
         /** @var string - Company name */
         private string $adrCompany = '',
@@ -60,8 +56,7 @@ class Shop
         private string $adrCity = '',
         // TCMSFieldLookup
         /** @var TCountry|null - Company country */
-        private ?TCountry $tCountry = null
-        ,
+        private ?TCountry $tCountry = null,
         // TCMSFieldVarchar
         /** @var string - Telephone (customer service) */
         private string $customerServiceTelephone = '',
@@ -73,57 +68,46 @@ class Shop
         private string $shopvatnumber = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopBankAccount> - Bank accounts */
-        private Collection $shopBankAccountCollection = new ArrayCollection()
-        ,
+        private Collection $shopBankAccountCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, DataExtranetUser> - Customers */
-        private Collection $dataExtranetUserCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetUserCollection = new ArrayCollection(),
         // TCMSFieldNumber
         /** @var int - Length of product history of an user */
         private int $dataExtranetUserShopArticleHistoryMaxArticleCount = 20,
         // TCMSFieldLookup
         /** @var ShopModuleArticlelistOrderby|null - Default sorting of items in the category view */
-        private ?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby = null
-        ,
+        private ?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby = null,
         // TCMSFieldLookup
         /** @var ShopVat|null - Default VAT group */
-        private ?ShopVat $shopVat = null
-        ,
+        private ?ShopVat $shopVat = null,
         // TCMSFieldLookup
         /** @var ShopShippingGroup|null - Default shipping group */
-        private ?ShopShippingGroup $shopShippingGroup = null
-        ,
+        private ?ShopShippingGroup $shopShippingGroup = null,
         // TCMSFieldBoolean
         /** @var bool - Make VAT of shipping costs dependent on basket contents */
         private bool $shippingVatDependsOnBasketContents = true,
         // TCMSFieldLookup
         /** @var DataExtranetSalutation|null - Default salutation */
-        private ?DataExtranetSalutation $dataExtranetSalutation = null
-        ,
+        private ?DataExtranetSalutation $dataExtranetSalutation = null,
         // TCMSFieldLookup
         /** @var DataCountry|null - Default country */
-        private ?DataCountry $dataCountry = null
-        ,
+        private ?DataCountry $dataCountry = null,
         // TCMSFieldVarchar
         /** @var string - Affiliate URL parameter */
         private string $affiliateParameterName = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopAffiliate> - Affiliate programs */
-        private Collection $pkgShopAffiliateCollection = new ArrayCollection()
-        ,
+        private Collection $pkgShopAffiliateCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopArticleImageSize> - Size of product images */
-        private Collection $shopArticleImageSizeCollection = new ArrayCollection()
-        ,
+        private Collection $shopArticleImageSizeCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopSystemInfo> - Shop specific information / text blocks (e.g. Terms and Conditions) */
-        private Collection $shopSystemInfoCollection = new ArrayCollection()
-        ,
+        private Collection $shopSystemInfoCollection = new ArrayCollection(),
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Replacement image */
-        private ?CmsMedia $notFoundImage = null
-        ,
+        private ?CmsMedia $notFoundImage = null,
         // TCMSFieldDecimal
         /** @var string - Weight bonus for whole words in search */
         private string $shopSearchWordBonus = '',
@@ -147,24 +131,19 @@ class Shop
         private int $maxSearchCacheAgeInHours = 0,
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopSearchLog> - Search log */
-        private Collection $shopSearchLogCollection = new ArrayCollection()
-        ,
+        private Collection $shopSearchLogCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopSearchFieldWeight> - Fields weight */
-        private Collection $shopSearchFieldWeightCollection = new ArrayCollection()
-        ,
+        private Collection $shopSearchFieldWeightCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopSearchIgnoreWord> - Words to be ignored in searches */
-        private Collection $shopSearchIgnoreWordCollection = new ArrayCollection()
-        ,
+        private Collection $shopSearchIgnoreWordCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopSearchKeywordArticle> - Manually selected search results */
-        private Collection $shopSearchKeywordArticleCollection = new ArrayCollection()
-        ,
+        private Collection $shopSearchKeywordArticleCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopSearchCache> - Search cache */
-        private Collection $shopSearchCacheCollection = new ArrayCollection()
-        ,
+        private Collection $shopSearchCacheCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Name of the spot in the layouts containing the basket module */
         private string $basketSpotName = '',
@@ -197,8 +176,7 @@ class Shop
         private bool $logArticleSuggestions = true,
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopStockMessage> - Stock messages */
-        private Collection $shopStockMessageCollection = new ArrayCollection()
-        ,
+        private Collection $shopStockMessageCollection = new ArrayCollection(),
         // TCMSFieldText_ShowExportURL
         /** @var string - Export key */
         private string $exportKey = '',
@@ -207,8 +185,7 @@ class Shop
         private string $cartInfoText = '',
         // TCMSFieldLookup
         /** @var PkgShopListfilter|null - Results list filter */
-        private ?PkgShopListfilter $pkgShopListfilterPostsearch = null
-        ,
+        private ?PkgShopListfilter $pkgShopListfilterPostsearch = null,
         // TCMSFieldBoolean
         /** @var bool - If there are no results, refer to page "no results for product search" */
         private bool $redirectToNotFoundPageProductSearchOnNoResults = false,
@@ -217,8 +194,7 @@ class Shop
         private bool $useShopSearchLog = true,
         // TCMSFieldLookup
         /** @var PkgShopListfilter|null - Category list filter for categories without subcategories */
-        private ?PkgShopListfilter $pkgShopListfilterCategoryFilter = null
-        ,
+        private ?PkgShopListfilter $pkgShopListfilterCategoryFilter = null,
         // TCMSFieldNumber
         /** @var int - Maximum size of cookie for item history (in KB) */
         private int $dataExtranetUserShopArticleHistoryMaxCookieSize = 0,
@@ -295,7 +271,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getDefaultPkgShopCurrency(): ?PkgShopCurrency
     {
@@ -309,7 +284,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -322,8 +296,6 @@ class Shop
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -357,7 +329,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getShopCategory(): ?ShopCategory
     {
@@ -370,7 +341,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrCompany(): string
@@ -385,7 +355,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAdrStreet(): string
     {
@@ -398,7 +367,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAdrZip(): string
@@ -413,7 +381,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAdrCity(): string
     {
@@ -426,7 +393,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getTCountry(): ?TCountry
@@ -441,7 +407,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCustomerServiceTelephone(): string
     {
@@ -454,7 +419,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldEmail
     public function getCustomerServiceEmail(): string
@@ -469,7 +433,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getShopvatnumber(): string
     {
@@ -482,8 +445,6 @@ class Shop
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -517,8 +478,6 @@ class Shop
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -551,7 +510,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getDataExtranetUserShopArticleHistoryMaxArticleCount(): int
     {
@@ -566,7 +524,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopModuleArticlelistOrderby(): ?ShopModuleArticlelistOrderby
     {
@@ -579,7 +536,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getShopVat(): ?ShopVat
@@ -594,7 +550,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopShippingGroup(): ?ShopShippingGroup
     {
@@ -607,7 +562,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isShippingVatDependsOnBasketContents(): bool
@@ -622,7 +576,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getDataExtranetSalutation(): ?DataExtranetSalutation
     {
@@ -635,7 +588,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getDataCountry(): ?DataCountry
@@ -650,7 +602,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAffiliateParameterName(): string
     {
@@ -663,8 +614,6 @@ class Shop
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -698,8 +647,6 @@ class Shop
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -731,8 +678,6 @@ class Shop
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -766,7 +711,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getNotFoundImage(): ?CmsMedia
     {
@@ -779,7 +723,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getShopSearchWordBonus(): string
@@ -794,7 +737,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getShopSearchWordLengthFactor(): string
     {
@@ -807,7 +749,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getShopSearchSoundexPenalty(): string
@@ -822,7 +763,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getShopSearchMinIndexLength(): int
     {
@@ -835,7 +775,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getShopSearchMaxIndexLength(): int
@@ -850,7 +789,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShopSearchUseBooleanAnd(): bool
     {
@@ -864,7 +802,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getMaxSearchCacheAgeInHours(): int
     {
@@ -877,8 +814,6 @@ class Shop
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -912,8 +847,6 @@ class Shop
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -945,8 +878,6 @@ class Shop
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -980,8 +911,6 @@ class Shop
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -1013,8 +942,6 @@ class Shop
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -1048,7 +975,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getBasketSpotName(): string
     {
@@ -1061,7 +987,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getShopCentralHandlerSpotName(): string
@@ -1076,7 +1001,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowEmptyCategories(): bool
     {
@@ -1089,7 +1013,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isAllowPurchaseOfVariantParents(): bool
@@ -1104,7 +1027,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isLoadInactiveVariants(): bool
     {
@@ -1117,7 +1039,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isSyncProfileDataWithBillingData(): bool
@@ -1132,7 +1053,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isAllowMultipleBillingAddresses(): bool
     {
@@ -1145,7 +1065,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isAllowMultipleShippingAddresses(): bool
@@ -1160,7 +1079,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isAllowGuestPurchase(): bool
     {
@@ -1174,7 +1092,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isLogArticleSuggestions(): bool
     {
@@ -1187,8 +1104,6 @@ class Shop
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -1222,7 +1137,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldText_ShowExportURL
     public function getExportKey(): string
     {
@@ -1235,7 +1149,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getCartInfoText(): string
@@ -1250,7 +1163,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getPkgShopListfilterPostsearch(): ?PkgShopListfilter
     {
@@ -1263,7 +1175,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isRedirectToNotFoundPageProductSearchOnNoResults(): bool
@@ -1279,7 +1190,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isUseShopSearchLog(): bool
     {
@@ -1293,7 +1203,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getPkgShopListfilterCategoryFilter(): ?PkgShopListfilter
     {
@@ -1306,7 +1215,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getDataExtranetUserShopArticleHistoryMaxCookieSize(): int
@@ -1322,7 +1230,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getProductUrlMode(): string
     {
@@ -1335,7 +1242,6 @@ class Shop
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getShopreviewmailMailDelay(): int
@@ -1350,7 +1256,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getShopreviewmailPercentOfCustomers(): string
     {
@@ -1364,7 +1269,6 @@ class Shop
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShopreviewmailSendForEachOrder(): bool
     {
@@ -1377,8 +1281,6 @@ class Shop
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -1411,6 +1313,4 @@ class Shop
 
         return $this;
     }
-
-
 }

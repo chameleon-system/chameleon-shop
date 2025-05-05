@@ -46,7 +46,6 @@ class StateElementCurrentPage implements StateElementInterface
         return true;
     }
 
-
     public function normalize($value)
     {
         $num = intval($value);

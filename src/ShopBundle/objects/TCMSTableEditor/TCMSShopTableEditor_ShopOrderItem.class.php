@@ -12,7 +12,7 @@
 /**
  * if we are deleting a bundle article we need to delete the related items
  * note: adding or changing an article will trigger no such change.
-/**/
+ * /**/
 class TCMSShopTableEditor_ShopOrderItem extends TCMSTableEditor
 {
     /**
@@ -31,7 +31,7 @@ class TCMSShopTableEditor_ShopOrderItem extends TCMSTableEditor
             while ($oBundleArticle = $oBundleArticles->Next()) {
                 // now delete connected order item
                 $oOrderItemEditor = new TCMSTableEditorManager();
-                /** @var $oOrderItemEditor TCMSTableEditorManager */
+                /* @var $oOrderItemEditor TCMSTableEditorManager */
                 $oOrderItemEditor->Init($oOrderItemTableConf->id, $oBundleArticle->fieldBundleArticleId);
                 $oOrderItemEditor->Delete($oBundleArticle->fieldBundleArticleId);
             }

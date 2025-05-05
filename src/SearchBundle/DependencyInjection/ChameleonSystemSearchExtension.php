@@ -24,7 +24,7 @@ class ChameleonSystemSearchExtension extends Extension implements PrependExtensi
      */
     public function load(array $config, ContainerBuilder $container)
     {
-        $loader = new XMLFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');
     }
 

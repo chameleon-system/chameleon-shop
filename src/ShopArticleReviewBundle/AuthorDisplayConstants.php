@@ -13,9 +13,9 @@ namespace ChameleonSystem\ShopArticleReviewBundle;
 
 class AuthorDisplayConstants
 {
-    const AUTHOR_DISPLAY_TYPE_ALIAS = 'alias';
-    const AUTHOR_DISPLAY_TYPE_ALIAS_PROVIDED = 'alias_provided';
-    const AUTHOR_DISPLAY_TYPE_FULL_NAME = 'full_name';
-    const AUTHOR_DISPLAY_TYPE_INITIALS = 'initials';
-    const AUTHOR_DISPLAY_TYPE_ANONYMOUS = 'anonymous';
+    public const AUTHOR_DISPLAY_TYPE_ALIAS = 'alias';
+    public const AUTHOR_DISPLAY_TYPE_ALIAS_PROVIDED = 'alias_provided';
+    public const AUTHOR_DISPLAY_TYPE_FULL_NAME = 'full_name';
+    public const AUTHOR_DISPLAY_TYPE_INITIALS = 'initials';
+    public const AUTHOR_DISPLAY_TYPE_ANONYMOUS = 'anonymous';
 }

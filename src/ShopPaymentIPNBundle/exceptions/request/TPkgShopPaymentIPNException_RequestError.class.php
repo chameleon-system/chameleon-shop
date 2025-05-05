@@ -14,19 +14,17 @@ class TPkgShopPaymentIPNException_RequestError extends AbstractPkgShopPaymentIPN
     /**
      * @var TPkgShopPaymentIPNRequest|null
      */
-    private $request = null;
+    private $request;
 
     /**
-     * @param TPkgShopPaymentIPNRequest $oRequest
-     * @param string                    $message
-     * @param int                       $code
-     * @param Exception                 $previous
+     * @param string $message
+     * @param int $code
      */
     public function __construct(
         TPkgShopPaymentIPNRequest $oRequest,
         $message = '',
         $code = 0,
-        Exception $previous = null
+        ?Exception $previous = null
     ) {
         $this->request = $oRequest;
         parent::__construct($message, $code, $previous);

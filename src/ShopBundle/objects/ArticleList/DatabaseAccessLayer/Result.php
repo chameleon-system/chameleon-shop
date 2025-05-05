@@ -29,6 +29,7 @@ class Result implements ResultInterface
 
     /**
      * @var array<string, string>
+     *
      * @psalm-var array<string, 'ASC'|'DESC'>
      */
     private $sort;
@@ -69,7 +70,7 @@ class Result implements ResultInterface
             $this->page = 0;
             $this->content->SetPagingInfo(0, $this->pageSize);
             throw new InvalidPageNumberException("the page you requested [{$this->page}] is larger than the result set (found ".$this->count(
-                )." records, page size set to {$this->pageSize})");
+            )." records, page size set to {$this->pageSize})");
         }
     }
 
@@ -101,7 +102,7 @@ class Result implements ResultInterface
      */
     public function asArray()
     {
-        $data = array();
+        $data = [];
         $this->content->GoToStart();
         while ($item = $this->content->Next()) {
             $data[] = $item;
@@ -116,7 +117,7 @@ class Result implements ResultInterface
             return 1;
         }
 
-        /** @var int */
+        /* @var int */
         return ceil($this->count() / $this->pageSize);
     }
 

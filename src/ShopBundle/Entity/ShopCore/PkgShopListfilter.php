@@ -9,7 +9,7 @@ class PkgShopListfilter
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -63,7 +63,6 @@ class PkgShopListfilter
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getTitle(): string
     {
@@ -77,7 +76,6 @@ class PkgShopListfilter
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getIntrotext(): string
     {
@@ -90,8 +88,6 @@ class PkgShopListfilter
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -124,6 +120,4 @@ class PkgShopListfilter
 
         return $this;
     }
-
-
 }

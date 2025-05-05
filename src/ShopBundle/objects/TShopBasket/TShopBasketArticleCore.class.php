@@ -15,7 +15,7 @@ use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 
 /**
  * represents an article in the basket.
-/**/
+ * /**/
 class TShopBasketArticleCore extends TdbShopArticle
 {
     /**
@@ -75,17 +75,17 @@ class TShopBasketArticleCore extends TdbShopArticle
      *             the properties is automatically set via the UpdateBasketItemKey method which needs to be
      *             called anytime any of the relevant properties change
      */
-    public $sBasketItemKey = null;
+    public $sBasketItemKey;
 
     /**
      * @var TShopBasketArticleDiscountList
      */
-    protected $oActingShopDiscountList = null;
+    protected $oActingShopDiscountList;
 
     /**
      * @var TdbShopShippingType
      */
-    protected $oActingShopBasketShippingType = null;
+    protected $oActingShopBasketShippingType;
 
     /**
      * timestamp set to the last time the amount of the item changed
@@ -93,12 +93,12 @@ class TShopBasketArticleCore extends TdbShopArticle
      *
      * @var int|null
      */
-    private $iLastChangedTimestamp = null;
+    private $iLastChangedTimestamp;
 
     /**
      * @var array
      */
-    private $customData = array();
+    private $customData = [];
 
     /**
      * return timestamp when the item was last updated.
@@ -138,8 +138,7 @@ class TShopBasketArticleCore extends TdbShopArticle
      * apply a discount to the article (note that the method will not check if the discount
      * may be applied - it assumes you checked that using the function in TShopDiscount.
      *
-     * @param TdbShopDiscount $oShopDiscount
-     * @param double          $dMaxValueUsable - for absolute value discounts, this parameter defines how much may be at most applied to the article
+     * @param float $dMaxValueUsable - for absolute value discounts, this parameter defines how much may be at most applied to the article
      *
      * @return float - returns the remaining discount value to distribute (0 if the discount is a percent discount)
      */
@@ -158,7 +157,7 @@ class TShopBasketArticleCore extends TdbShopArticle
             $oShopDiscount->dRealValueUsed = $dUsedValue;
         } else {
             $oShopDiscount->dRealValueUsed = round($this->dPriceTotal * ($oShopDiscount->fieldValue / 100), 2);
-            if($oShopDiscount->dRealValueUsed > $this->dPriceTotalAfterDiscount) {
+            if ($oShopDiscount->dRealValueUsed > $this->dPriceTotalAfterDiscount) {
                 $oShopDiscount->dRealValueUsed = $this->dPriceTotalAfterDiscount;
             }
         }
@@ -182,8 +181,6 @@ class TShopBasketArticleCore extends TdbShopArticle
 
     /**
      * will set the custom data - if it is able to validate the data (you must overwrite the basket item and validate the data).
-     *
-     * @param array $customData
      *
      * @return void
      */
@@ -212,12 +209,12 @@ class TShopBasketArticleCore extends TdbShopArticle
             return parent::GetToNoticeListLink($bIncludePortalLink);
         }
         $shop = $this->getShopService()->getActiveShop();
-        $parameters = array(
+        $parameters = [
             'module_fnc['.$shop->GetBasketModuleSpotName().']' => 'TransferToNoticeList',
             MTShopBasketCore::URL_ITEM_ID => $this->id,
             MTShopBasketCore::URL_ITEM_AMOUNT => $this->dAmount,
             MTShopBasketCore::URL_MESSAGE_CONSUMER => MTShopBasketCore::MSG_CONSUMER_NAME,
-        );
+        ];
 
         return $this->getActivePageService()->getLinkToActivePageRelative($parameters);
     }
@@ -230,17 +227,17 @@ class TShopBasketArticleCore extends TdbShopArticle
     public function GetRemoveFromBasketLink()
     {
         $activeShop = $this->getShopService()->getActiveShop();
-        $aParameters = array('module_fnc['.$activeShop->GetBasketModuleSpotName().']' => 'RemoveFromBasketViaBasketItemKey', MTShopBasketCore::URL_ITEM_BASKET_KEY => $this->sBasketItemKey, MTShopBasketCore::URL_MESSAGE_CONSUMER => MTShopBasketCore::MSG_CONSUMER_NAME);
+        $aParameters = ['module_fnc['.$activeShop->GetBasketModuleSpotName().']' => 'RemoveFromBasketViaBasketItemKey', MTShopBasketCore::URL_ITEM_BASKET_KEY => $this->sBasketItemKey, MTShopBasketCore::URL_MESSAGE_CONSUMER => MTShopBasketCore::MSG_CONSUMER_NAME];
 
         return $this->getActivePageService()->getLinkToActivePageRelative($aParameters);
     }
 
     /**
-     * @return bool
-     *
      * @param TShopBasketArticle $oItem
      *                                  returns true if the passed item is the same as this instance. Relevant for this comparision is the article id and
      *                                  some other parameters
+     *
+     * @return bool
      */
     public function IsSameAs($oItem)
     {
@@ -294,8 +291,6 @@ class TShopBasketArticleCore extends TdbShopArticle
      * saves a pointer to the acting shop basket discount for this item.
      * Also updates the dPriceTotalAfterDiscount value.
      *
-     * @param TdbShopDiscount $oActingShopDiscount
-     *
      * @psalm-suppress UndefinedThisPropertyAssignment
      *
      * @FIXME `oActingShopDiscount` is set dynamically here and does not seem to be used anywhere. Also, `SetActingDiscount` does not seem to be called anywhere.
@@ -309,8 +304,6 @@ class TShopBasketArticleCore extends TdbShopArticle
 
     /**
      * set the acting shipping type for the basket item.
-     *
-     * @param TdbShopShippingType $oShippingType
      *
      * @return void
      */
@@ -337,7 +330,7 @@ class TShopBasketArticleCore extends TdbShopArticle
      */
     protected function UpdateBasketItemKey()
     {
-        $aParts = array('id' => $this->id);
+        $aParts = ['id' => $this->id];
         $this->sBasketItemKey = md5(serialize($aParts));
     }
 
@@ -371,11 +364,12 @@ class TShopBasketArticleCore extends TdbShopArticle
 
     public function __sleep()
     {
-        $aSleep = array('table', 'id', 'iLanguageId', 'dAmount', 'dPriceTotal',
+        $aSleep = ['table', 'id', 'iLanguageId', 'dAmount', 'dPriceTotal',
             'dPriceAfterDiscount', 'dPriceTotalAfterDiscount', 'dPriceAfterDiscountWithoutVouchers', 'dPriceTotalAfterDiscountWithoutVouchers',
             'dTotalWeight', 'dTotalVolume', 'sBasketItemKey',
             "\0TShopBasketArticleCore\0iLastChangedTimestamp",
-            "\0TShopBasketArticleCore\0customData", ); // the \0CLASSNAME\0PROPERTY is needed for private vars if the class is extended by some other class
+            "\0TShopBasketArticleCore\0customData", ]; // the \0CLASSNAME\0PROPERTY is needed for private vars if the class is extended by some other class
+
         return $aSleep;
     }
 

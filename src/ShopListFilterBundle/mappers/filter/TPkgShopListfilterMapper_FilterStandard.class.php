@@ -26,11 +26,7 @@ class TPkgShopListfilterMapper_FilterStandard extends AbstractPkgShopListfilterM
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     *
-     * @return
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
@@ -42,16 +38,16 @@ class TPkgShopListfilterMapper_FilterStandard extends AbstractPkgShopListfilterM
         /** @var $oActiveFilter TdbPkgShopListfilter */
         $oActiveFilter = $oVisitor->GetSourceObject('oActiveFilter');
 
-        $aFilterData = array();
+        $aFilterData = [];
         $aOptions = $oFilterItem->GetOptions();
         foreach ($aOptions as $sValue => $iCount) {
-            $aFilterData[] = array(
+            $aFilterData[] = [
                 'sValue' => $sValue,
                 'bActive' => $oFilterItem->IsSelected(trim($sValue)),
                 'iCount' => $iCount,
                 'sURL' => $oFilterItem->GetAddFilterURL(trim($sValue)),
                 'bAllowMultiSelect' => $oFilterItem->fieldAllowMultiSelection,
-            );
+            ];
         }
 
         $oVisitor->SetMappedValue('aFilterData', $aFilterData);

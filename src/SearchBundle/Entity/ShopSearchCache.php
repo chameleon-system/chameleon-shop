@@ -3,7 +3,6 @@
 namespace ChameleonSystem\SearchBundle\Entity;
 
 use ChameleonSystem\ShopBundle\Entity\ShopCore\Shop;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -11,22 +10,20 @@ class ShopSearchCache
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldVarchar
         /** @var string - Search key */
         private string $searchkey = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Last used */
-        private ?DateTime $lastUsedDate = null,
+        /** @var \DateTime|null - Last used */
+        private ?\DateTime $lastUsedDate = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopSearchCacheItem> - Results */
-        private Collection $shopSearchCacheItemCollection = new ArrayCollection()
-        ,
+        private Collection $shopSearchCacheItemCollection = new ArrayCollection(),
         // TCMSFieldText
         /** @var string - Category hits */
         private string $categoryHits = '',
@@ -73,7 +70,6 @@ class ShopSearchCache
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSearchkey(): string
     {
@@ -87,21 +83,18 @@ class ShopSearchCache
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getLastUsedDate(): ?DateTime
+    public function getLastUsedDate(): ?\DateTime
     {
         return $this->lastUsedDate;
     }
 
-    public function setLastUsedDate(?DateTime $lastUsedDate): self
+    public function setLastUsedDate(?\DateTime $lastUsedDate): self
     {
         $this->lastUsedDate = $lastUsedDate;
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -135,7 +128,6 @@ class ShopSearchCache
         return $this;
     }
 
-
     // TCMSFieldText
     public function getCategoryHits(): string
     {
@@ -149,7 +141,6 @@ class ShopSearchCache
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getNumberOfRecordsFound(): int
     {
@@ -162,6 +153,4 @@ class ShopSearchCache
 
         return $this;
     }
-
-
 }

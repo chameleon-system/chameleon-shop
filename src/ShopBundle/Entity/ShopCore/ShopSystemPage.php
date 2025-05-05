@@ -8,12 +8,11 @@ class ShopSystemPage
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldVarchar
         /** @var string - Internal system name */
         private string $nameInternal = '',
@@ -63,7 +62,6 @@ class ShopSystemPage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getNameInternal(): string
     {
@@ -76,7 +74,6 @@ class ShopSystemPage
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -91,7 +88,6 @@ class ShopSystemPage
         return $this;
     }
 
-
     // TCMSFieldTreeNode
     public function getCmsTree(): ?CmsTree
     {
@@ -104,6 +100,4 @@ class ShopSystemPage
 
         return $this;
     }
-
-
 }

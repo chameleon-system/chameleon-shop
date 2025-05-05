@@ -29,17 +29,17 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
             if (!$oGlobal->UserDataExists('custom')) {
                 $logger->error(
                     'PayPal IPN: parameter "custom" missing from paypal IPN response: '.print_r(
-                        $oGlobal->GetUserData(null, array(), TCMSUserInput::FILTER_NONE),
+                        $oGlobal->GetUserData(null, [], TCMSUserInput::FILTER_NONE),
                         true
                     )
                 );
             } else {
-                $sCustomParameters = $oGlobal->GetUserData('custom', array(), TCMSUserInput::FILTER_DEFAULT);
+                $sCustomParameters = $oGlobal->GetUserData('custom', [], TCMSUserInput::FILTER_DEFAULT);
                 $aCustomParameters = explode(',', $sCustomParameters);
                 if (2 != count($aCustomParameters)) {
                     $logger->error(
                         'PayPal IPN: parameter "custom" invalid from paypal IPN response: '.print_r(
-                            $oGlobal->GetUserData(null, array(), TCMSUserInput::FILTER_NONE),
+                            $oGlobal->GetUserData(null, [], TCMSUserInput::FILTER_NONE),
                             true
                         )
                     );
@@ -60,21 +60,21 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
                         );
                         if ($oPaymentHandler->ProcessIPNRequest(
                             $oOrder,
-                            $oGlobal->GetUserData(null, array(), TCMSUserInput::FILTER_NONE)
+                            $oGlobal->GetUserData(null, [], TCMSUserInput::FILTER_NONE)
                         )
                         ) {
                             header('HTTP/1.1 200 OK');
-                            die(0);
+                            exit(0);
                         } else {
                             header(
                                 'HTTP/1.1 200 OK'
                             ); // also return a 200 on error - to prevent paypal from resending the request
-                            die(0);
+                            exit(0);
                         }
                     } catch (ConfigurationException $e) {
                         $logger->error(
                             "PayPal IPN: failed to load payment handler {$sPaymentHandlerId}: ".print_r(
-                                $oGlobal->GetUserData(null, array(), TCMSUserInput::FILTER_NONE),
+                                $oGlobal->GetUserData(null, [], TCMSUserInput::FILTER_NONE),
                                 true
                             )
                         );
@@ -83,7 +83,7 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
                 } else {
                     $logger->error(
                         "PayPal IPN: failed to load order [{$sOrderId}]: ".print_r(
-                            $oGlobal->GetUserData(null, array(), TCMSUserInput::FILTER_NONE),
+                            $oGlobal->GetUserData(null, [], TCMSUserInput::FILTER_NONE),
                             true
                         )
                     );
@@ -92,7 +92,7 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
             } else {
                 $logger->error(
                     'PayPal IPN: parameter "custom" missing from paypal IPN response: '.print_r(
-                        $oGlobal->GetUserData(null, array(), TCMSUserInput::FILTER_NONE),
+                        $oGlobal->GetUserData(null, [], TCMSUserInput::FILTER_NONE),
                         true
                     )
                 );
@@ -109,7 +109,7 @@ class TCMSSmartURLHandler_ShopPayPalIPN extends TCMSSmartURLHandler
     private function handleError()
     {
         header('HTTP/1.1 400 Bad Request');
-        die(0);
+        exit(0);
     }
 
     /**

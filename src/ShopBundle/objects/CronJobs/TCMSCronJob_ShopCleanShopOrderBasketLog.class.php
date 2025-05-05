@@ -13,7 +13,7 @@
  * clear all rawdata from shop_order_basket that are older than x-days
  * delete all entries from the table that are older than n-days (n>x)
  * compress session objects in shop_order where entries older than n-days.
-/**/
+ * /**/
 class TCMSCronJob_ShopCleanShopOrderBasketLog extends TdbCmsCronjobs
 {
     /**

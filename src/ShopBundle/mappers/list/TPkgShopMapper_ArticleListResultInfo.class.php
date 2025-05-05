@@ -38,11 +38,11 @@ class TPkgShopMapper_ArticleListResultInfo extends AbstractViewMapper
             $iEndItem = $iMaxItems;
         }
 
-        $aListPaging = array(
+        $aListPaging = [
             'sStartItem' => $oLocal->FormatNumber($iStartItem, 0),
             'sEndItem' => $oLocal->FormatNumber($iEndItem, 0),
             'sMaxItems' => $oLocal->FormatNumber($iMaxItems, 0),
-        );
+        ];
         $oVisitor->SetMappedValueFromArray($aListPaging);
     }
 }

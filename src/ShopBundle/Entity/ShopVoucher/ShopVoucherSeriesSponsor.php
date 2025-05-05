@@ -8,7 +8,7 @@ class ShopVoucherSeriesSponsor
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -56,7 +56,6 @@ class ShopVoucherSeriesSponsor
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
     {
@@ -69,6 +68,4 @@ class ShopVoucherSeriesSponsor
 
         return $this;
     }
-
-
 }

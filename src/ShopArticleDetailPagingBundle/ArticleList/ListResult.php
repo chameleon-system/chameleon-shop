@@ -19,15 +19,15 @@ class ListResult implements ListResultInterface
     /**
      * @var string
      */
-    private $nextPageUrl = null;
+    private $nextPageUrl;
     /**
      * @var string
      */
-    private $previousPageUrl = null;
+    private $previousPageUrl;
     /**
      * @var array<string, ListItemInterface> (key = id)
      */
-    private $itemList = array();
+    private $itemList = [];
 
     /**
      * @param array<string, ListItemInterface> $itemList

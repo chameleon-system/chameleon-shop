@@ -17,30 +17,30 @@ class TPkgShopListfilterMapper_FilterBoolean extends AbstractPkgShopListfilterMa
 
         /** @var $oFilterItem TPkgShopListfilterItemBoolean */
         $oFilterItem = $oVisitor->GetSourceObject('oFilterItem');
-        $aFilterData = array(
-            '0' => array(
+        $aFilterData = [
+            '0' => [
                 'sValue' => '',
                 'bActive' => false,
                 'iCount' => 0,
                 'sURL' => '#',
-            ),
-            '1' => array(
+            ],
+            '1' => [
                 'sValue' => '',
                 'bActive' => false,
                 'iCount' => 0,
                 'sURL' => '#',
-            ),
-        );
+            ],
+        ];
 
         $aOptions = $oFilterItem->GetOptions();
         $iActiveValue = $oFilterItem->GetActiveValue();
         foreach ($aOptions as $sValue => $iCount) {
-            $aFilterData[$sValue] = array(
+            $aFilterData[$sValue] = [
                 'sValue' => $sValue,
                 'bActive' => $sValue == $iActiveValue,
                 'iCount' => $iCount,
                 'sURL' => $oFilterItem->GetAddFilterURL($sValue),
-            );
+            ];
         }
 
         $oVisitor->SetMappedValue('aFilterData', $aFilterData);

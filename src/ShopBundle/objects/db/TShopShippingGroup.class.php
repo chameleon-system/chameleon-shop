@@ -16,31 +16,31 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * shipping costs are grouped into shipping groups. these groups hold the allowed payment methods, and they
  * can be restricted to certain users, user groups, or delivery countries.
-/**/
+ * /**/
 class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgShopVatable
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopShippingGroup';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopShippingGroup';
 
     /**
      * @var TdbShopShippingTypeList
      */
-    protected $oActingShippingTypeList = null;
+    protected $oActingShippingTypeList;
 
     /**
      * a list of all payment methods valid for the group (and the current user/basket).
      *
      * @var TdbShopPaymentMethodList
      */
-    protected $oValidPaymentMethods = null;
+    protected $oValidPaymentMethods;
 
     /**
      * @var float|null
      */
-    protected $dPrice = null;
+    protected $dPrice;
 
     public function __sleep()
     {
-        return array('table', 'id', 'iLanguageId');
+        return ['table', 'id', 'iLanguageId'];
     }
 
     public function __wakeup()
@@ -93,7 +93,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         if ($bIsValid && false === $this->hasShippingTypeThatStopsTypeChain()) {
             $oBasket = TShopBasket::GetInstance();
-            //check to make sure that every item in the basket has one shipping type
+            // check to make sure that every item in the basket has one shipping type
             $oBasketItemList = $oBasket->GetBasketContents();
             $oBasketItemList->GoToStart();
             while ($bIsValid && ($oBasketItem = $oBasketItemList->Next())) {
@@ -132,7 +132,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         if ($bIsValid) {
             // check group restrictions
-            $aShippingGroupIdList = array();
+            $aShippingGroupIdList = [];
             $oShippingGroup = TShopBasket::GetInstance()->GetAvailableShippingGroups();
             if (null !== $oShippingGroup) {
                 $aShippingGroupIdList = $oShippingGroup->GetIdList();
@@ -236,7 +236,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      */
     protected function getShippingGroupDataAccess()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_shipping_group_data_access');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_shipping_group_data_access');
     }
 
     /**
@@ -342,6 +342,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      * @param bool $bRefresh - set to true to force a regeneration of the list
      *
      * @return TdbShopPaymentMethodList
+     *
      * @psalm-suppress InvalidNullableReturnType, NullableReturnStatement - In this instance we know that the return type cannot be null
      */
     public function GetValidPaymentMethods($bRefresh = false)
@@ -431,19 +432,20 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         if (is_null($oVat)) {
             $oVat = null;
-            $oShopConf = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+            $oShopConf = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             if (true === $oShopConf->fieldShippingVatDependsOnBasketContents) {
                 $oBasket = TShopBasket::GetInstance();
                 $oVat = $oBasket->GetLargestVATObject();
-                if(null !== $oVat) {
+                if (null !== $oVat) {
                     $this->SetInternalCache('ovat', $oVat);
+
                     return $oVat;
                 }
             }
 
             $oVat = $this->GetFieldShopVat();
             if (is_null($oVat)) {
-                $oShopConf = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+                $oShopConf = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $oVat = $oShopConf->GetVat();
             }
             $this->SetInternalCache('ovat', $oVat);
@@ -455,17 +457,17 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
     /**
      * used to display the shipping group.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'user-input', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'user-input', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oView->AddVar('oShop', $oShop);
         $oView->AddVar('oShippingGroup', $this);
         $oView->AddVar('oPaymentMethods', $this->GetValidPaymentMethodsSelectableByTheUser());
@@ -484,7 +486,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
     public function GetValidPaymentMethodsSelectableByTheUser()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $oPaymentMethods = clone $this->GetValidPaymentMethods(true);
         $aInvalidMethods = [];
@@ -498,7 +500,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
         }
 
         if (count($aInvalidMethods) > 0) {
-            $oPaymentMethods->AddFilterString('`shop_payment_method`.`id` NOT IN (' . implode(',', $aInvalidMethods) . ')');
+            $oPaymentMethods->AddFilterString('`shop_payment_method`.`id` NOT IN ('.implode(',', $aInvalidMethods).')');
         }
 
         $oPaymentMethods->GoToStart();
@@ -517,7 +519,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }
@@ -526,7 +528,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      * Get a list of shipping types based on a basket article list and the desired shipping country id.
      *
      * @param TShopBasketArticleList $oBasketArticleList
-     * @param string                 $sDataCountryId
+     * @param string $sDataCountryId
      *
      * @return TIterator
      */
@@ -556,14 +558,14 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      * Calculate the shipping costs for a basket article list to be expected for a certain shipping country id.
      *
      * @param TShopBasketArticleList $oBasketArticleList
-     * @param string                 $sDataCountryId
+     * @param string $sDataCountryId
      *
      * @return float
      */
     public function GetShippingCostsForBasketArticleListAndCountry($oBasketArticleList, $sDataCountryId)
     {
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
 
         $oBasketArticleList->GoToStart();
 
@@ -606,7 +608,6 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         $dShippingCosts = $oTmpBasket->dCostShipping;
 
-
         if (null !== $request && true === $request->hasSession()) {
             $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oOldBasket);
             $request->getSession()->set(TdbDataExtranetUser::SESSION_KEY_NAME, $oOldUser);
@@ -630,7 +631,7 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
 
         $oTmpBasket = new TShopBasket();
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         if (null !== $request && true === $request->hasSession()) {
             $request->getSession()->set(TShopBasket::SESSION_KEY_NAME, $oTmpBasket);
         }
@@ -673,6 +674,6 @@ class TShopShippingGroup extends TShopShippingGroupAutoParent implements IPkgSho
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

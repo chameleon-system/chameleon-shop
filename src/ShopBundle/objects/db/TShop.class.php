@@ -218,7 +218,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
     public static function GetFilterSQLString($sFilterKey, $sFilterVal)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $sSQL = '';
 
@@ -234,7 +234,7 @@ class TShop extends TShopAutoParent implements IPkgShopVatable
                         return $connection->quote($id);
                     }, $aCatIdList);
 
-                    $sSQL .= "`shop_article_shop_category_mlt`.`target_id` IN (" . implode(', ', $quotedCatIds) . ")";
+                    $sSQL .= '`shop_article_shop_category_mlt`.`target_id` IN ('.implode(', ', $quotedCatIds).')';
                 }
                 break;
 

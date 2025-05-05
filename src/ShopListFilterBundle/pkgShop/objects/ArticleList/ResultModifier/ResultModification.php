@@ -17,11 +17,9 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\ResultModifier\Interfaces\Res
 
 class ResultModification implements ResultModificationInterface
 {
-    const CONFIG_CAN_BE_FILTERED = 'can_be_filtered';
+    public const CONFIG_CAN_BE_FILTERED = 'can_be_filtered';
 
     /**
-     * @param ResultInterface $result
-     * @param array           $configuration
      * @param int $filterDepth
      *
      * @return ResultInterface
@@ -38,9 +36,9 @@ class ResultModification implements ResultModificationInterface
     }
 
     /**
-     * @return bool
-     *
      * @param int $filterDepth
+     *
+     * @return bool
      */
     private function listAllowsUseOfPostSearchFilter(array $configuration, $filterDepth)
     {
@@ -67,6 +65,7 @@ class ResultModification implements ResultModificationInterface
 
     /**
      * @param int $filterDepth
+     *
      * @return bool
      */
     private function isTheResultSetOfAFallbackFilter($filterDepth)
@@ -83,10 +82,6 @@ class ResultModification implements ResultModificationInterface
     }
 
     /**
-     * @param ResultInterface $result
-     * @param array           $configuration
-     * @param StateInterface  $state
-     *
      * @return ResultInterface
      */
     public function applyState(ResultInterface $result, array $configuration, StateInterface $state)

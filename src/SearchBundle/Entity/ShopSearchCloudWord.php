@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\SearchBundle\Entity;
 
-
 class ShopSearchCloudWord
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Word */
@@ -55,7 +54,6 @@ class ShopSearchCloudWord
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getWeight(): string
     {
@@ -68,6 +66,4 @@ class ShopSearchCloudWord
 
         return $this;
     }
-
-
 }

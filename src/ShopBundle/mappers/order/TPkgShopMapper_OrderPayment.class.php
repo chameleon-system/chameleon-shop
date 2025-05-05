@@ -39,14 +39,13 @@ class TPkgShopMapper_OrderPayment extends AbstractViewMapper
     }
 
     /**
-     * @param TdbShopOrder $oOrder
      * @param bool $bCachingEnabled
      *
      * @return array
      */
     protected function getPaymentInformation(TdbShopOrder $oOrder, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aPaymentInformation = array();
+        $aPaymentInformation = [];
 
         $oPaymentMethodParameterList = $oOrder->GetFieldShopOrderPaymentMethodParameterList();
         $oPaymentMethodParameterList->GoToStart();
@@ -54,10 +53,10 @@ class TPkgShopMapper_OrderPayment extends AbstractViewMapper
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oPaymentParameter->table, $oPaymentParameter->id);
             }
-            $aPaymentInformation[] = array(
+            $aPaymentInformation[] = [
                 'sName' => $oPaymentParameter->fieldName,
                 'sValue' => $oPaymentParameter->fieldValue,
-            );
+            ];
         }
 
         return $aPaymentInformation;

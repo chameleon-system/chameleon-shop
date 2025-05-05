@@ -27,7 +27,7 @@ class TShopModuleArticlelistFilterLastViewed extends TdbShopModuleArticleListFil
     protected function GetListQueryBase($oListConfig)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $sQuery = '';
         $oExtranetUser = $this->getExtranetUserProvider()->getActiveUser();
@@ -60,7 +60,7 @@ class TShopModuleArticlelistFilterLastViewed extends TdbShopModuleArticleListFil
               LEFT JOIN `shop_article_stats` ON `shop_article`.`id` = `shop_article_stats`.`shop_article_id`
               LEFT JOIN `shop_article_stock` ON `shop_article`.`id` = `shop_article_stock`.`shop_article_id`
              INNER JOIN {$quotedTmpTableName} AS HISTLIST ON `shop_article`.`id` = HISTLIST.`shop_article_id`
-                  WHERE `shop_article`.`id` IN (".implode(',', $aKeys).")";
+                  WHERE `shop_article`.`id` IN (".implode(',', $aKeys).')';
             } else {
                 $sQuery = "SELECT DISTINCT 0 AS cms_search_weight, `shop_article`.*, '0000-00-00 00:00:00' AS item_added_to_list_date
                    FROM `shop_article`
@@ -82,7 +82,7 @@ class TShopModuleArticlelistFilterLastViewed extends TdbShopModuleArticleListFil
     protected function CreateTempHistory($aHistoryList)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         // create tmp table for items
         $tmpTableName = '_tmp'.session_id().'histlist';
@@ -99,7 +99,7 @@ class TShopModuleArticlelistFilterLastViewed extends TdbShopModuleArticleListFil
         $connection->executeStatement($query);
 
         foreach ($aHistoryList as $oItem) {
-            /** @var $oItem TdbDataExtranetUserShopArticleHistory */
+            /* @var $oItem TdbDataExtranetUserShopArticleHistory */
             $connection->executeStatement(
                 "INSERT INTO {$quotedTmpTableName} (`datecreated`, `shop_article_id`) VALUES (:datecreated, :shop_article_id)",
                 [
@@ -156,6 +156,6 @@ class TShopModuleArticlelistFilterLastViewed extends TdbShopModuleArticleListFil
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 }

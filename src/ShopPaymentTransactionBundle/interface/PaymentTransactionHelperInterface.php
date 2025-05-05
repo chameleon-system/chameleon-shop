@@ -11,31 +11,24 @@
 
 namespace esono\pkgshoppaymenttransaction;
 
-use TdbShopOrder;
-use TdbShopOrderItem;
-
 interface PaymentTransactionHelperInterface
 {
     /**
-     * @param TdbShopOrder $order
-     * @param bool         $isCaptureOnShipment
+     * @param bool $isCaptureOnShipment
      *
      * @return array key = order item id, value = amount
      */
-    public function getProductsCaptureOnOrderCreation(TdbShopOrder $order, $isCaptureOnShipment);
+    public function getProductsCaptureOnOrderCreation(\TdbShopOrder $order, $isCaptureOnShipment);
 
     /**
-     * @param TdbShopOrder $order
-     * @param bool         $isCaptureOnShipment
+     * @param bool $isCaptureOnShipment
      *
      * @return array key = order item id, value = amount
      */
-    public function getProductsCaptureOnShipping(TdbShopOrder $order, $isCaptureOnShipment);
+    public function getProductsCaptureOnShipping(\TdbShopOrder $order, $isCaptureOnShipment);
 
     /**
-     * @param TdbShopOrderItem $orderedProduct
-     *
      * @return bool
      */
-    public function allowProductCaptureOnShipment(TdbShopOrderItem $orderedProduct);
+    public function allowProductCaptureOnShipment(\TdbShopOrderItem $orderedProduct);
 }

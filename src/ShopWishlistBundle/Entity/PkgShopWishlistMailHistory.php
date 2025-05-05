@@ -2,21 +2,18 @@
 
 namespace ChameleonSystem\ShopWishlistBundle\Entity;
 
-use DateTime;
-
 class PkgShopWishlistMailHistory
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var PkgShopWishlist|null - Belongs to wishlist */
-        private ?PkgShopWishlist $pkgShopWishlist = null
-        ,
+        private ?PkgShopWishlist $pkgShopWishlist = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Email sent on */
-        private ?DateTime $datesend = null,
+        /** @var \DateTime|null - Email sent on */
+        private ?\DateTime $datesend = null,
         // TCMSFieldVarchar
         /** @var string - Recipient name */
         private string $toName = '',
@@ -66,20 +63,18 @@ class PkgShopWishlistMailHistory
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDatesend(): ?DateTime
+    public function getDatesend(): ?\DateTime
     {
         return $this->datesend;
     }
 
-    public function setDatesend(?DateTime $datesend): self
+    public function setDatesend(?\DateTime $datesend): self
     {
         $this->datesend = $datesend;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getToName(): string
@@ -94,7 +89,6 @@ class PkgShopWishlistMailHistory
         return $this;
     }
 
-
     // TCMSFieldEmail
     public function getToEmail(): string
     {
@@ -108,7 +102,6 @@ class PkgShopWishlistMailHistory
         return $this;
     }
 
-
     // TCMSFieldText
     public function getComment(): string
     {
@@ -121,6 +114,4 @@ class PkgShopWishlistMailHistory
 
         return $this;
     }
-
-
 }

@@ -19,8 +19,6 @@ class ArticleListPass implements CompilerPassInterface
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
-     * @param ContainerBuilder $container
-     *
      * @api
      *
      * @return void
@@ -29,6 +27,6 @@ class ArticleListPass implements CompilerPassInterface
     {
         $listModuleService = $container->getDefinition('chameleon_system_shop.module.article_list');
         $requestToListConverter = $container->getDefinition('chameleon_system_shop_article_detail_paging.request_to_list_url_converter');
-        $listModuleService->addMethodCall('setRequestToListUrlConverter', array($requestToListConverter));
+        $listModuleService->addMethodCall('setRequestToListUrlConverter', [$requestToListConverter]);
     }
 }

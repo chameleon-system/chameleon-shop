@@ -58,20 +58,20 @@ class ContentFromUrlLoaderStandardService implements ContentFromUrlLoaderService
          * The user agent is needed, as the session validation would otherwise fail if
          * CHAMELEON_SECURITY_EXTRANET_SESSION_USE_USER_AGENT_IN_KEY is set and that leads to a user logout.
          */
-        $headers = array(
+        $headers = [
             'Cookie' => urlencode($session->getName()).'='.urlencode($session->getId()),
             'User-Agent' => $request->headers->get('User-Agent'),
-        );
+        ];
         $headerString = '';
         foreach ($headers as $name => $value) {
             $headerString .= sprintf("%s: %s\r\n", $name, $value);
         }
-        $opts = array(
-            'http' => array(
+        $opts = [
+            'http' => [
                 'method' => 'GET',
                 'header' => $headerString,
-            ),
-        );
+            ],
+        ];
 
         $context = stream_context_create($opts);
 

@@ -15,7 +15,7 @@
 class ShopauskunftXmlStreamer extends XmlStreamer
 {
     /** @var string|null */
-    private $ratingServiceId = null;
+    private $ratingServiceId;
 
     /**
      * {@inheritdoc}
@@ -35,7 +35,7 @@ class ShopauskunftXmlStreamer extends XmlStreamer
             $dateMysqlFormat = date('Y-m-d 00:00:00', $dateTimestamp);
 
             $uuid = TTools::GetUUID();
-            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+            $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
             $quotedUuid = $connection->quote($uuid);
             $quotedRatingServiceId = $connection->quote($this->ratingServiceId);
@@ -70,7 +70,7 @@ class ShopauskunftXmlStreamer extends XmlStreamer
      */
     private function checkIfRatingExists($ratingId)
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
         $quotedRatingId = $connection->quote($ratingId);
 
         $query = "SELECT COUNT(*) AS item_count FROM pkg_shop_rating_service_rating WHERE remote_key = {$quotedRatingId}";
@@ -90,9 +90,9 @@ class ShopauskunftXmlStreamer extends XmlStreamer
      *
      * @return float The average score
      */
-    protected function getCriterionsAverageScore(\SimpleXMLElement $rating)
+    protected function getCriterionsAverageScore(SimpleXMLElement $rating)
     {
-        $criterions = array('criterion1', 'criterion2', 'criterion3', 'criterion4', 'criterion5', 'criterion6');
+        $criterions = ['criterion1', 'criterion2', 'criterion3', 'criterion4', 'criterion5', 'criterion6'];
         $sum = 0;
         $divider = 0;
         foreach ($criterions as $criterion) {

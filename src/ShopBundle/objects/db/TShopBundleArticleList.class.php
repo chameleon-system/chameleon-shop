@@ -11,18 +11,18 @@
 
 class TShopBundleArticleList extends TAdbShopBundleArticleList
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopBundleArticleList';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopBundleArticleList';
 
     /**
      * used to display an article.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Customer', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oShopBundleArticleList', $this);
@@ -44,7 +44,7 @@ class TShopBundleArticleList extends TAdbShopBundleArticleList
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -57,7 +57,7 @@ class TShopBundleArticleList extends TAdbShopBundleArticleList
      */
     public static function GetCacheRelevantTables($sViewName = null, $sViewType = null)
     {
-        $aTables = array();
+        $aTables = [];
         $aTables[] = 'shop_article';
         $aTables[] = 'shop_bundle_article';
 

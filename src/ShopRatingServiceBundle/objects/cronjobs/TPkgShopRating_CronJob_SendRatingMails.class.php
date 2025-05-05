@@ -13,11 +13,11 @@
  * the cronjob sends a rating mail to compleat shipped orders
  * see #10393.
  *
-/**/
+ * /**/
 class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
 {
     /** @var bool */
-    private $bDebug = true; //set to true - for debugging output!
+    private $bDebug = true; // set to true - for debugging output!
     /**
      * set to true if you do not want to insert the info into the db if the mail was sent.
      *
@@ -34,18 +34,17 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
     /** @var bool */
     private $Shopreviewmail_SendForEachOrder;
 
+    /** @var string */
+    private $sShopID;
 
     /** @var string */
-    private $sShopID = null;
+    private $sLanguageID;
 
     /** @var string */
-    private $sLanguageID = null;
+    private $sCountryID;
 
     /** @var string */
-    private $sCountryID = null;
-
-    /** @var string */
-    private $sUserCountryID = null;
+    private $sUserCountryID;
 
     /**
      * @return void
@@ -54,7 +53,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
     {
         $this->GetConfigValues();
 
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId(1);
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId(1);
         $this->sShopID = $oShop->id;
 
         $oLanguage = TdbCmsLanguage::GetNewInstance();
@@ -89,7 +88,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
      */
     protected function GetConfigValues()
     {
-        $oShopConfig = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId(1);
+        $oShopConfig = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId(1);
         $this->Shopreviewmail_MailDelay = $oShopConfig->fieldShopreviewmailMailDelay;
         $this->Shopreviewmail_PercentOfCustomers = $oShopConfig->fieldShopreviewmailPercentOfCustomers;
         $this->Shopreviewmail_SendForEachOrder = $oShopConfig->fieldShopreviewmailSendForEachOrder;
@@ -100,7 +99,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
      */
     protected function ProcessCompletedOrders()
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $iSendForShippingDateNewerThan = $this->GetShippingDateLowerBound();
         $iMaxNumberOfShopReviewMailsToSend = $this->GetMaxNumberOfShopReviewMailsToSend($iSendForShippingDateNewerThan);
@@ -186,13 +185,13 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
      * return true if a review mail may be send for the given customer/order.
      *
      * @param TdbDataExtranetUser $oUser
-     * @param array               $aOrder
+     * @param array $aOrder
      *
      * @return bool
      */
     public function AllowSendingMailForOrder($oUser, $aOrder)
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $bAllowSendingMail = true;
 
@@ -240,7 +239,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
      */
     public function SendShopReviewMail($aOrder)
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $bMailWasSend = false;
 
@@ -299,7 +298,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
         $sRet = '';
         $sAffiliateCode = trim($sAffiliateCode);
         if (!empty($sAffiliateCode)) {
-            //get all rating services
+            // get all rating services
             $sQuery = "  SELECT *
                        FROM `pkg_shop_rating_service`
                       WHERE `active` = '1'
@@ -308,12 +307,12 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
             $oRatingServiceList = TdbPkgShopRatingServiceList::GetList($sQuery);
             $oRatingServiceList->GoToStart();
 
-            //loop and try to identify one...
+            // loop and try to identify one...
             while ($oService = $oRatingServiceList->Next()) {
                 /* @var $oService TdbPkgShopRatingService */
                 $pos = strpos($sAffiliateCode, strtolower(trim($oService->fieldAffiliateValue)));
                 if (false !== $pos) {
-                    //service found!
+                    // service found!
                     $oRatingServiceList->GoToEnd();
                     $sRet = $oService->fieldAffiliateValue;
                 }
@@ -359,12 +358,12 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
         /**
          * @var array{weight: int, value: TdbPkgShopRatingService}[]
          */
-        $aRatingServices = array();
+        $aRatingServices = [];
         while ($oRatingService = $oAvailableRatingServiceList->Next()) {
             if (strtolower(trim($oRatingService->fieldAffiliateValue)) === $sAffiliateCode) {
                 return $oRatingService;
             }
-            $aRatingServices[] = array('weight' => $oRatingService->fieldWeight, 'value' => $oRatingService);
+            $aRatingServices[] = ['weight' => $oRatingService->fieldWeight, 'value' => $oRatingService];
         }
         if (count($aRatingServices)) {
             $oRatingService = TTools::GetWeightedRandomArrayValue($aRatingServices);
@@ -385,7 +384,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
      */
     public function GetMaxNumberOfShopReviewMailsToSend($iSendForShippingDateNewerThan)
     {
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         if ($this->bDebug) {
             echo '<br><br>';
@@ -459,6 +458,7 @@ class TPkgShopRating_CronJob_SendRatingMails extends TdbCmsCronjobs
 
     /**
      * @param bool $bDisableSentHistory
+     *
      * @return void
      */
     public function SetDisableSentHistory($bDisableSentHistory)

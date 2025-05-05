@@ -24,11 +24,8 @@ class ProductStatisticsServiceRuntimeCacheDecorator implements ProductStatistics
     /**
      * @var ProductStatisticsInterface[]
      */
-    private $cacheStats = array();
+    private $cacheStats = [];
 
-    /**
-     * @param ProductStatisticsServiceInterface $subject
-     */
     public function __construct(ProductStatisticsServiceInterface $subject)
     {
         $this->subject = $subject;
@@ -71,7 +68,7 @@ class ProductStatisticsServiceRuntimeCacheDecorator implements ProductStatistics
     public function updateAllBasedOnVariants($parentArticleId)
     {
         $this->subject->updateAllBasedOnVariants($parentArticleId);
-        $this->cacheStats = array();
+        $this->cacheStats = [];
     }
 
     /**

@@ -27,24 +27,24 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class ResultFactory implements ResultFactoryInterface
 {
     /**
-     * @var DatabaseAccessLayer\Interfaces\DbAdapterInterface
+     * @var DbAdapterInterface
      */
     private $dbAdapter;
     /**
-     * @var Interfaces\FilterFactoryInterface
+     * @var FilterFactoryInterface
      */
     private $filterFactory;
     /**
-     * @var ResultModifier\Interfaces\ResultModifierInterface
+     * @var ResultModifierInterface
      */
     private $resultModifier;
 
     /**
      * @var DatabaseAccessLayer\Interfaces\FilterInterface[]
      */
-    private $filterCache = array();
+    private $filterCache = [];
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var EventDispatcherInterface
      */
     private $eventDispatcher;
 
@@ -72,8 +72,6 @@ class ResultFactory implements ResultFactoryInterface
     }
 
     /**
-     * @param ConfigurationInterface $moduleConfiguration
-     *
      * @return ResultInterface
      */
     private function createUnfilteredResults(ConfigurationInterface $moduleConfiguration)
@@ -93,9 +91,6 @@ class ResultFactory implements ResultFactoryInterface
     }
 
     /**
-     * @param ResultInterface $results
-     * @param array $moduleConfig
-     * @param StateInterface $state
      * @return ResultInterface
      */
     private function applyStateToResults(ResultInterface $results, array $moduleConfig, StateInterface $state)
@@ -126,8 +121,6 @@ class ResultFactory implements ResultFactoryInterface
     }
 
     /**
-     * @param ResultInterface $results
-     *
      * @return ResultDataInterface
      */
     private function createResultDataFromResults(ResultInterface $results)
@@ -144,8 +137,6 @@ class ResultFactory implements ResultFactoryInterface
     }
 
     /**
-     * @param ConfigurationInterface $moduleConfiguration
-     *
      * @return DatabaseAccessLayer\Interfaces\FilterInterface
      */
     private function getFilter(ConfigurationInterface $moduleConfiguration)
@@ -177,13 +168,13 @@ class ResultFactory implements ResultFactoryInterface
     public function _GetCacheTableInfos(ConfigurationInterface $moduleConfiguration)
     {
         $filter = $this->getFilter($moduleConfiguration)->_GetCacheTableInfos();
-        $result = array(
-            array('table' => 'shop_module_article_list', 'id' => $moduleConfiguration->getId()),
-            array('table' => 'shop_article', 'id' => null),
-            array('table' => 'shop', 'id' => null),
-            array('table' => 'shop_category', 'id' => null),
-            array('table' => 'shop_manufacturer', 'id' => null),
-        );
+        $result = [
+            ['table' => 'shop_module_article_list', 'id' => $moduleConfiguration->getId()],
+            ['table' => 'shop_article', 'id' => null],
+            ['table' => 'shop', 'id' => null],
+            ['table' => 'shop_category', 'id' => null],
+            ['table' => 'shop_manufacturer', 'id' => null],
+        ];
 
         return array_merge($filter, $result);
     }

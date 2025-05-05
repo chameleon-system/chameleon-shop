@@ -12,7 +12,7 @@
 use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class TPkgShopBasketStepsRouteController extends \esono\pkgCmsRouting\AbstractRouteController
+class TPkgShopBasketStepsRouteController extends esono\pkgCmsRouting\AbstractRouteController
 {
     /**
      * @var ChameleonControllerInterface
@@ -28,13 +28,12 @@ class TPkgShopBasketStepsRouteController extends \esono\pkgCmsRouting\AbstractRo
     }
 
     /**
-     * @param Request $request
      * @param string $basketStepId
      * @param string $basketStepSystemName
      * @param string $defaultCheckoutPageId
      * @param string $stepCheckoutPageId
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function basketStep(Request $request, $basketStepId, $basketStepSystemName, $defaultCheckoutPageId, $stepCheckoutPageId)
     {

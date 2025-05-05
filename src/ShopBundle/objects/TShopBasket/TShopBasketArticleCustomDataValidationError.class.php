@@ -14,24 +14,23 @@ class TShopBasketArticleCustomDataValidationError
     /**
      * @var string
      */
-    private $itemName = null;
+    private $itemName;
 
     /**
      * @var string
      */
-    private $errorMessageCode = null;
+    private $errorMessageCode;
 
     /**
      * @var array
      */
-    private $additionalData = array();
+    private $additionalData = [];
 
     /**
      * @param string $itemName
      * @param string $errorMessageCode
-     * @param array $additionalData
      */
-    public function __construct($itemName, $errorMessageCode, array $additionalData = array())
+    public function __construct($itemName, $errorMessageCode, array $additionalData = [])
     {
         $this->itemName = $itemName;
         $this->errorMessageCode = $errorMessageCode;

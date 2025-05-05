@@ -11,7 +11,7 @@
 
 class TPkgExtranetRegistrationGuest_TDataExtranetUser extends TPkgExtranetRegistrationGuest_TDataExtranetUserAutoParent
 {
-    const NAME_SYSTEM_PAGE = 'register-after-shopping';
+    public const NAME_SYSTEM_PAGE = 'register-after-shopping';
 
     /**
      * Checks if active user and given last bought user.
@@ -38,7 +38,7 @@ class TPkgExtranetRegistrationGuest_TDataExtranetUser extends TPkgExtranetRegist
     public function GetLinkForRegistrationGuest()
     {
         $oURLData = TCMSSmartURLData::GetActive();
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
+        $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId($oURLData->iPortalId);
         $sRegisterPath = $oShop->GetLinkToSystemPage(self::NAME_SYSTEM_PAGE);
 
         return $sRegisterPath;

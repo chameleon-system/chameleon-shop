@@ -22,10 +22,10 @@ class TCMSWizardStepMapper_UserProfileEmail extends AbstractTCMSWizardStepMapper
         /** @var $oWizardStep TCMSWizardStep */
         $oWizardStep = $oVisitor->GetSourceObject('oObject');
 
-        $aFieldList = array('aFieldEmail' => 'name', 'aFieldPassword' => 'sRequirePassword');
+        $aFieldList = ['aFieldEmail' => 'name', 'aFieldPassword' => 'sRequirePassword'];
         $this->SetInputFields($aFieldList, $oVisitor, $sCustomMSGConsumer);
 
-        $aTextData = array();
+        $aTextData = [];
         $aTextData['sTitle'] = $oWizardStep->fieldName;
         $aTextData['sText'] = $oWizardStep->GetTextField('description');
 
@@ -43,16 +43,16 @@ class TCMSWizardStepMapper_UserProfileEmail extends AbstractTCMSWizardStepMapper
     /**
      * set errors and values for given field list.
      *
-     * @param array                    $aFieldList   (MappedFieldName(name used in template) => RealFieldName (user input field name) )
+     * @param array $aFieldList (MappedFieldName(name used in template) => RealFieldName (user input field name) )
      * @param IMapperVisitorRestricted $oVisitor
-     * @param string                   $sMSGConsumer
+     * @param string $sMSGConsumer
      *
      * @return void
      */
     protected function SetInputFields($aFieldList, $oVisitor, $sMSGConsumer)
     {
         foreach ($aFieldList as $sMappedFieldName => $sRealFieldName) {
-            $aField = array();
+            $aField = [];
             $aField['sError'] = $this->GetMessageForField($sRealFieldName, $sMSGConsumer);
             $aField['sValue'] = '';
             $oVisitor->SetMappedValue($sMappedFieldName, $aField);

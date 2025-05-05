@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\ProductList;
 
-
 class ShopModuleArticlelistOrderby
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Internal name */
@@ -70,7 +69,6 @@ class ShopModuleArticlelistOrderby
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getNamePublic(): string
     {
@@ -83,7 +81,6 @@ class ShopModuleArticlelistOrderby
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -98,7 +95,6 @@ class ShopModuleArticlelistOrderby
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -111,7 +107,6 @@ class ShopModuleArticlelistOrderby
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSqlOrderBy(): string
@@ -126,7 +121,6 @@ class ShopModuleArticlelistOrderby
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getOrderDirection(): string
     {
@@ -140,7 +134,6 @@ class ShopModuleArticlelistOrderby
         return $this;
     }
 
-
     // TCMSFieldText
     public function getSqlSecondaryOrderByString(): string
     {
@@ -153,6 +146,4 @@ class ShopModuleArticlelistOrderby
 
         return $this;
     }
-
-
 }

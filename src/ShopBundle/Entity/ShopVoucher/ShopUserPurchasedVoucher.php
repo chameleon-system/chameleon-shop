@@ -3,25 +3,22 @@
 namespace ChameleonSystem\ShopBundle\Entity\ShopVoucher;
 
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
-use DateTime;
 
 class ShopUserPurchasedVoucher
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var DataExtranetUser|null - Belongs to customer */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldExtendedLookup
         /** @var ShopVoucher|null - Voucher */
-        private ?ShopVoucher $shopVoucher = null
-        ,
+        private ?ShopVoucher $shopVoucher = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Bought on */
-        private ?DateTime $datePurchased = null
+        /** @var \DateTime|null - Bought on */
+        private ?\DateTime $datePurchased = null
     ) {
     }
 
@@ -62,7 +59,6 @@ class ShopUserPurchasedVoucher
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getShopVoucher(): ?ShopVoucher
     {
@@ -76,19 +72,16 @@ class ShopUserPurchasedVoucher
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDatePurchased(): ?DateTime
+    public function getDatePurchased(): ?\DateTime
     {
         return $this->datePurchased;
     }
 
-    public function setDatePurchased(?DateTime $datePurchased): self
+    public function setDatePurchased(?\DateTime $datePurchased): self
     {
         $this->datePurchased = $datePurchased;
 
         return $this;
     }
-
-
 }

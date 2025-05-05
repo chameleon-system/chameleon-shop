@@ -12,7 +12,6 @@
 namespace ChameleonSystem\ShopBundle\Basket;
 
 use ChameleonSystem\ShopBundle\Interfaces\BasketProductAmountValidatorInterface;
-use TdbShopArticle;
 
 /**
  * {@inheritdoc}
@@ -23,7 +22,7 @@ class BasketProductAmountValidator implements BasketProductAmountValidatorInterf
      * {@inheritdoc}
      * This implementation only allows integer values.
      */
-    public function isAmountValid(TdbShopArticle $product, $requestedAmount)
+    public function isAmountValid(\TdbShopArticle $product, $requestedAmount)
     {
         if (false === is_numeric($requestedAmount)) {
             return false;

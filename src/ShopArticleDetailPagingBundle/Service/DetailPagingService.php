@@ -130,10 +130,10 @@ class DetailPagingService implements DetailPagingServiceInterface
             }
             reset($nextItems);
 
-            return array('item' => current($nextItems), 'pageUrl' => $nextPageUrl);
+            return ['item' => current($nextItems), 'pageUrl' => $nextPageUrl];
         }
 
-        return array('item' => $items[$keys[$positionNextElement]], 'pageUrl' => $listUrl);
+        return ['item' => $items[$keys[$positionNextElement]], 'pageUrl' => $listUrl];
     }
 
     /**
@@ -175,14 +175,13 @@ class DetailPagingService implements DetailPagingServiceInterface
                 return null;
             }
 
-            return array('item' => end($nextItems), 'pageUrl' => $previousPageUrl);
+            return ['item' => end($nextItems), 'pageUrl' => $previousPageUrl];
         }
 
-        return array('item' => $items[$keys[$positionPreviousElement]], 'pageUrl' => $listUrl);
+        return ['item' => $items[$keys[$positionPreviousElement]], 'pageUrl' => $listUrl];
     }
 
     /**
-     * @param ListItemInterface $item
      * @param string $listPageUrl
      *
      * @return ListItemInterface

@@ -26,11 +26,7 @@ class TPkgShopArticleReviewMapper_Module extends AbstractViewMapper
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     *
-     * @return
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
@@ -68,8 +64,6 @@ class TPkgShopArticleReviewMapper_Module extends AbstractViewMapper
      * $oRequirements->NeedsSourceObject("foo",'stdClass','default-value');
      * $oRequirements->NeedsSourceObject("bar");
      * $oRequirements->NeedsMappedValue("baz");
-     *
-     * @param IMapperRequirementsRestricted $oRequirements
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {

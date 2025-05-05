@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\ShopBundle\Interfaces;
 
-use TdbShopArticle;
-
 /**
  * BasketProductAmountValidatorInterface checks if a certain amount of products may be added to a basket.
  */
@@ -23,10 +21,9 @@ interface BasketProductAmountValidatorInterface
      * this method is only intended to check the amount format, not any logical constraints (such as checks if there are
      * sufficient products on stock).
      *
-     * @param TdbShopArticle   $product
      * @param int|float|string $requestedAmount
      *
      * @return bool
      */
-    public function isAmountValid(TdbShopArticle $product, $requestedAmount);
+    public function isAmountValid(\TdbShopArticle $product, $requestedAmount);
 }

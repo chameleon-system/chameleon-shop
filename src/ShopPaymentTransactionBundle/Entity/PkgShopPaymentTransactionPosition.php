@@ -8,12 +8,11 @@ class PkgShopPaymentTransactionPosition
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var PkgShopPaymentTransaction|null - Belongs to transaction */
-        private ?PkgShopPaymentTransaction $pkgShopPaymentTransaction = null
-        ,
+        private ?PkgShopPaymentTransaction $pkgShopPaymentTransaction = null,
         // TCMSFieldNumber
         /** @var int - Amount */
         private int $amount = 0,
@@ -66,7 +65,6 @@ class PkgShopPaymentTransactionPosition
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getAmount(): int
     {
@@ -79,7 +77,6 @@ class PkgShopPaymentTransactionPosition
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getValue(): string
@@ -94,7 +91,6 @@ class PkgShopPaymentTransactionPosition
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getType(): string
     {
@@ -108,7 +104,6 @@ class PkgShopPaymentTransactionPosition
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getShopOrderItem(): ?ShopOrderItem
     {
@@ -121,6 +116,4 @@ class PkgShopPaymentTransactionPosition
 
         return $this;
     }
-
-
 }

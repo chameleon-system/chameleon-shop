@@ -20,13 +20,11 @@ class TPkgShopPaymentTransaction_TPkgShopOrderStatusManager extends TPkgShopPaym
     }
 
     /**
-     * @param TdbShopOrderStatus $oStatus
+     * @return void
      *
      * @throws TPkgCmsException_Log
      * @throws TPkgCmsException_LogAndMessage
      * @throws TPkgShopPaymentTransactionException_PaymentHandlerDoesNotSupportTransaction
-     *
-     * @return void
      */
     protected function triggerTransactionBasedOnStatus(TdbShopOrderStatus $oStatus)
     {
@@ -38,23 +36,23 @@ class TPkgShopPaymentTransaction_TPkgShopOrderStatusManager extends TPkgShopPaym
         $oTransactionType = $oStatusCode->GetFieldPkgShopPaymentTransactionType();
         if (!$oTransactionType) {
             throw new TPkgCmsException_Log('unable to finde transaction type connected to order status code',
-                array('status' => $oStatus)
+                ['status' => $oStatus]
             );
         }
 
         $oOrder = $oStatus->GetFieldShopOrder();
         if (!$oOrder) {
             throw new TPkgCmsException_Log('status has no order (invalid order id or no order id set)',
-                array('status' => $oStatus)
+                ['status' => $oStatus]
             );
         }
 
         /** @var $paymentHandler \esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface|\TdbShopPaymentHandler */
         $paymentHandler = $oOrder->GetPaymentHandler();
 
-        if (false === ($paymentHandler instanceof \esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface)) {
+        if (false === ($paymentHandler instanceof esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface)) {
             throw new TPkgShopPaymentTransactionException_PaymentHandlerDoesNotSupportTransaction('payment handler '.get_class($paymentHandler).' does not support \esono\pkgshoppaymenttransaction\PaymentHandlerWithTransactionSupportInterface',
-                array('status' => $oStatus)
+                ['status' => $oStatus]
             );
         }
 
@@ -64,7 +62,7 @@ class TPkgShopPaymentTransaction_TPkgShopOrderStatusManager extends TPkgShopPaym
         $oStatusItemList = $oStatus->GetFieldShopOrderStatusItemList();
         if ($oStatusItemList->Length() > 0) {
             /** @var array<string, int> $aOrderItemRestriction */
-            $aOrderItemRestriction = array();
+            $aOrderItemRestriction = [];
             while ($oStatusItem = $oStatusItemList->Next()) {
                 $aOrderItemRestriction[$oStatusItem->fieldShopOrderItemId] = $oStatusItem->fieldAmount;
             }
@@ -87,7 +85,7 @@ class TPkgShopPaymentTransaction_TPkgShopOrderStatusManager extends TPkgShopPaym
                     $aOrderItemRestriction
                 );
             } else {
-                \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order')->warning(
+                ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.order')->warning(
                     "no transaction executed for {$oOrder->id} because allowTransaction returned false for type {$oTransactionType->fieldSystemName}"
                 );
 

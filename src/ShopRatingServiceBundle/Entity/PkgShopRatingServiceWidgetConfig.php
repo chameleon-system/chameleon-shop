@@ -8,12 +8,11 @@ class PkgShopRatingServiceWidgetConfig
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldLookup
         /** @var PkgShopRatingService|null - Rating service */
         private ?PkgShopRatingService $pkgShopRatingService = null
@@ -57,7 +56,6 @@ class PkgShopRatingServiceWidgetConfig
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getPkgShopRatingService(): ?PkgShopRatingService
     {
@@ -70,6 +68,4 @@ class PkgShopRatingServiceWidgetConfig
 
         return $this;
     }
-
-
 }

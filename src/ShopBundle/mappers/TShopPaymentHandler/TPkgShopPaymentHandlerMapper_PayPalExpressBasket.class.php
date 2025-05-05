@@ -28,8 +28,8 @@ class TPkgShopPaymentHandlerMapper_PayPalExpressBasket extends AbstractPkgShopPa
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $oPaymentMethod = TdbShopPaymentMethod::GetNewInstance();
-        if ($oPaymentMethod->LoadFromFields(array('name_internal' => 'paypal-express', 'active' => '1'))) {
-            if (false === \TdbShopShippingGroupList::GetShippingGroupsThatAllowPaymentWith('paypal-express')) {
+        if ($oPaymentMethod->LoadFromFields(['name_internal' => 'paypal-express', 'active' => '1'])) {
+            if (false === TdbShopShippingGroupList::GetShippingGroupsThatAllowPaymentWith('paypal-express')) {
                 $oVisitor->SetMappedValue('sPayPalExpressLink', false);
 
                 return;
@@ -38,7 +38,7 @@ class TPkgShopPaymentHandlerMapper_PayPalExpressBasket extends AbstractPkgShopPa
             /** @var string $sSpotName */
             $sSpotName = $oVisitor->GetSourceObject('sSpotName');
             $activePageService = $this->getActivePageService();
-            $aURLData = array('module_fnc' => array($sSpotName => 'JumpSelectPaymentMethod'), 'sPaymentMethodNameInternal' => 'paypal-express');
+            $aURLData = ['module_fnc' => [$sSpotName => 'JumpSelectPaymentMethod'], 'sPaymentMethodNameInternal' => 'paypal-express'];
             $oVisitor->SetMappedValue('sPayPalExpressLink', str_replace('&amp;', '&', $activePageService->getLinkToActivePageRelative($aURLData)));
         }
     }
@@ -48,6 +48,6 @@ class TPkgShopPaymentHandlerMapper_PayPalExpressBasket extends AbstractPkgShopPa
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

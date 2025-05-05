@@ -22,7 +22,7 @@ class TPkgShopListfilterItemPriceSlider extends TPkgShopListfilterItemNumeric
     {
         $aOptions = $this->GetFromInternalCache('aOptions');
         if (is_null($aOptions)) {
-            $aOptions = array();
+            $aOptions = [];
 
             // we only care for the max and min value...
             $sIdSelect = $this->GetResultSetBaseQuery();

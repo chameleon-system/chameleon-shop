@@ -20,12 +20,12 @@ class State implements StateInterface
     /**
      * @var array<string, mixed>
      */
-    private $stateData = array();
+    private $stateData = [];
 
     /**
      * @var array<string, \ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateElementInterface>
      */
-    private $stateElement = array();
+    private $stateElement = [];
 
     public function setStateFromString($stateString)
     {
@@ -45,7 +45,7 @@ class State implements StateInterface
 
     /**
      * @param string $name
-     * @param mixed $value
+     *
      * @return void
      */
     public function setState($name, $value)
@@ -85,10 +85,10 @@ class State implements StateInterface
      *
      * @return string
      */
-    public function getStateString(array $varyingStateParameter = null)
+    public function getStateString(?array $varyingStateParameter = null)
     {
         $stateInput = $this->getStateArrayWithoutQueryParameter();
-        $parts = array();
+        $parts = [];
         foreach ($stateInput as $key => $value) {
             if (null !== $varyingStateParameter && in_array($key, $varyingStateParameter)) {
                 continue;
@@ -105,8 +105,6 @@ class State implements StateInterface
 
     /**
      * @param string $name
-     * @param mixed $default
-     * @return mixed
      */
     public function getState($name, $default = null)
     {
@@ -140,13 +138,13 @@ class State implements StateInterface
         return $stateData;
     }
 
-    public function getStateAsUrlQueryArray($parameterIdentifier, array $varyingStateParameter = null)
+    public function getStateAsUrlQueryArray($parameterIdentifier, ?array $varyingStateParameter = null)
     {
-        $urlQueryData = array();
+        $urlQueryData = [];
 
         $state = $this->getStateString($varyingStateParameter);
         if ('' !== $state) {
-            $urlQueryData[$parameterIdentifier] = array(StateInterface::STATE_STRING => $state);
+            $urlQueryData[$parameterIdentifier] = [StateInterface::STATE_STRING => $state];
         }
 
         return array_merge($urlQueryData, $this->getQueryParameter());
@@ -154,7 +152,7 @@ class State implements StateInterface
 
     /**
      * @param string $name
-     * @param mixed $value
+     *
      * @return bool
      */
     private function validStateValue($name, $value)
@@ -167,7 +165,7 @@ class State implements StateInterface
      */
     public function getQueryParameter()
     {
-        return $this->getState(StateInterface::QUERY, array());
+        return $this->getState(StateInterface::QUERY, []);
     }
 
     public function registerStateElement(StateElementInterface $element)
@@ -177,6 +175,7 @@ class State implements StateInterface
 
     /**
      * @param string $name
+     *
      * @return bool
      */
     private function stateElementExists($name)
@@ -187,7 +186,6 @@ class State implements StateInterface
     /**
      * @param string $name
      * @param int|string $value
-     * @return mixed
      */
     private function getNormalizedStateValue($name, $value)
     {

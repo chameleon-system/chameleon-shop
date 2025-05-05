@@ -50,12 +50,12 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
 
         try {
             $orderItems = $oOrder->GetFieldShopOrderItemList();
-            $itemList = array();
+            $itemList = [];
             while ($orderItem = $orderItems->Next()) {
                 $itemList[$orderItem->id] = $orderItem->fieldOrderAmount;
             }
             $orderItems->GoToStart();
-            /** @var PaymentHandlerWithTransactionSupportInterface|\TdbShopPaymentHandler $paymentHandler */
+            /** @var PaymentHandlerWithTransactionSupportInterface|TdbShopPaymentHandler $paymentHandler */
             $paymentHandler = $oOrder->GetPaymentHandler();
             $paymentTransactionHandler = $paymentHandler->paymentTransactionHandlerFactory($oOrder->fieldCmsPortalId);
 
@@ -72,7 +72,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
                 $oMsgManager->AddMessage(
                     TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
                     TPkgShopPaymentTransactionManager::MESSAGE_PAYMENT_EXECUTED,
-                    array('value' => $transaction->fieldAmount)
+                    ['value' => $transaction->fieldAmount]
                 );
             }
         } catch (TPkgCmsException_LogAndMessage $e) {
@@ -83,7 +83,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
                 $e->getAdditionalData()
             );
         }
-        $aParam = TGlobal::instance()->GetUserData(null, array('module_fnc', '_noModuleFunction'));
+        $aParam = TGlobal::instance()->GetUserData(null, ['module_fnc', '_noModuleFunction']);
         $sURL = URL_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl($aParam, '', '&');
         $this->getRedirect()->redirect($sURL);
     }
@@ -105,7 +105,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
 
         try {
             $orderItems = $oOrder->GetFieldShopOrderItemList();
-            $itemList = array();
+            $itemList = [];
             while ($orderItem = $orderItems->Next()) {
                 $itemList[$orderItem->id] = $orderItem->fieldOrderAmount;
             }
@@ -128,7 +128,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
                 $oMsgManager->AddMessage(
                     TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
                     TPkgShopPaymentTransactionManager::MESSAGE_CREDIT_EXECUTED,
-                    array('value' => $dAmount)
+                    ['value' => $dAmount]
                 );
             }
         } catch (TPkgCmsException_LogAndMessage $e) {
@@ -139,7 +139,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
                 $e->getAdditionalData()
             );
         }
-        $aParam = TGlobal::instance()->GetUserData(null, array('module_fnc', '_noModuleFunction'));
+        $aParam = TGlobal::instance()->GetUserData(null, ['module_fnc', '_noModuleFunction']);
         $sURL = URL_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl($aParam, '', '&');
         $this->getRedirect()->redirect($sURL);
     }
@@ -208,7 +208,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
                 $oMsgManager->AddMessage(
                     TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
                     $sMessageCode,
-                    array('value' => $transactionValue)
+                    ['value' => $transactionValue]
                 );
             }
         } catch (TPkgCmsException_LogAndMessage $e) {
@@ -219,7 +219,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
                 $e->getAdditionalData()
             );
         }
-        $aParam = TGlobal::instance()->GetUserData(null, array('module_fnc', '_noModuleFunction', 'debitType'));
+        $aParam = TGlobal::instance()->GetUserData(null, ['module_fnc', '_noModuleFunction', 'debitType']);
         $sURL = URL_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl($aParam, '', '&');
         $this->getRedirect()->redirect($sURL);
     }
@@ -256,22 +256,22 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'collectall';
-        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.action.collect_all');
+        $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.action.collect_all');
         $oMenuItem->sIcon = 'fas fa-tasks';
 
         $sURL = URL_CMS_CONTROLLER.'?';
-        $aParams = array(
-            'module_fnc' => array('contentmodule' => 'paymentTransactionCollectAll'),
+        $aParams = [
+            'module_fnc' => ['contentmodule' => 'paymentTransactionCollectAll'],
             '_noModuleFunction' => 'true',
             'pagedef' => 'tableeditor',
             'tableid' => $this->oTableConf->id,
             'id' => $this->sId,
-        );
+        ];
         $sURL .= TTools::GetArrayAsURLForJavascript($aParams);
 
-        $oMenuItem->sOnClick = "if (true == confirm('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
-                'chameleon_system_shop_payment_transaction.confirm.collect_all'
-            )."')) {TPkgShopPaymentTransaction_closeForm();document.location.href='{$sURL}';}";
+        $oMenuItem->sOnClick = "if (true == confirm('".ServiceLocator::get('translator')->trans(
+            'chameleon_system_shop_payment_transaction.confirm.collect_all'
+        )."')) {TPkgShopPaymentTransaction_closeForm();document.location.href='{$sURL}';}";
 
         return $oMenuItem;
     }
@@ -283,22 +283,22 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'refundall';
-        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.action.refund_all');
+        $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.action.refund_all');
         $oMenuItem->sIcon = 'fas fa-undo-alt';
 
         $sURL = URL_CMS_CONTROLLER.'?';
-        $aParams = array(
-            'module_fnc' => array('contentmodule' => 'paymentTransactionRefundAll'),
+        $aParams = [
+            'module_fnc' => ['contentmodule' => 'paymentTransactionRefundAll'],
             '_noModuleFunction' => 'true',
             'pagedef' => 'tableeditor',
             'tableid' => $this->oTableConf->id,
             'id' => $this->sId,
-        );
+        ];
         $sURL .= TTools::GetArrayAsURLForJavascript($aParams);
 
-        $oMenuItem->sOnClick = "if (true == confirm('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
-                'chameleon_system_shop_payment_transaction.confirm.refund_all'
-            )."')) {TPkgShopPaymentTransaction_closeForm();document.location.href='{$sURL}'};";
+        $oMenuItem->sOnClick = "if (true == confirm('".ServiceLocator::get('translator')->trans(
+            'chameleon_system_shop_payment_transaction.confirm.refund_all'
+        )."')) {TPkgShopPaymentTransaction_closeForm();document.location.href='{$sURL}'};";
 
         return $oMenuItem;
     }
@@ -310,20 +310,20 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'collectpartial';
-        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
+        $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans(
             'chameleon_system_shop_payment_transaction.action.collect_partial'
         );
         $oMenuItem->sIcon = 'fas fa-undo-alt';
 
         $sURL = URL_CMS_CONTROLLER.'?';
-        $aParams = array(
-            'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'),
+        $aParams = [
+            'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
             '_fnc' => 'pkgShopPaymentTransaction_getPartialCollectForm',
             '_noModuleFunction' => 'true',
             'pagedef' => 'tableeditor',
             'tableid' => $this->oTableConf->id,
             'id' => $this->sId,
-        );
+        ];
         $sURL .= TTools::GetArrayAsURLForJavascript($aParams);
         $oMenuItem->sOnClick = "TPkgShopPaymentTransaction_closeForm();GetAjaxCallTransparent('".$sURL."', TPkgShopPaymentTransaction_showForm);";
 
@@ -337,20 +337,20 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'refundpartial';
-        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
+        $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans(
             'chameleon_system_shop_payment_transaction.action.refund_partial'
         );
         $oMenuItem->sIcon = 'fas fa-undo-alt';
 
         $sURL = URL_CMS_CONTROLLER.'?';
-        $aParams = array(
-            'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'),
+        $aParams = [
+            'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
             '_fnc' => 'pkgShopPaymentTransaction_getPartialRefundForm',
             '_noModuleFunction' => 'true',
             'pagedef' => 'tableeditor',
             'tableid' => $this->oTableConf->id,
             'id' => $this->sId,
-        );
+        ];
         $sURL .= TTools::GetArrayAsURLForJavascript($aParams);
         $oMenuItem->sOnClick = "TPkgShopPaymentTransaction_closeForm();GetAjaxCallTransparent('".$sURL."', TPkgShopPaymentTransaction_showForm);";
 
@@ -437,7 +437,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
      */
     private function getViewRendererSnippetDirectory()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
+        return ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
     }
 
     /**
@@ -445,7 +445,7 @@ class TPkgShopPaymentTransaction_TCMSTableEditorShopOrder extends TPkgShopPaymen
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 
     private function getUrlUtil(): UrlUtil

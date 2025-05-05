@@ -22,8 +22,6 @@ class TPkgShopBasketMapper_TelephoneOrderForm extends AbstractViewMapper
      * $oRequirements->NeedsSourceObject("foo",'stdClass','default-value');
      * $oRequirements->NeedsSourceObject("bar");
      * $oRequirements->NeedsMappedValue("baz");
-     *
-     * @param IMapperRequirementsRestricted $oRequirements
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
@@ -59,11 +57,7 @@ class TPkgShopBasketMapper_TelephoneOrderForm extends AbstractViewMapper
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     *
-     * @return
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
@@ -85,14 +79,14 @@ class TPkgShopBasketMapper_TelephoneOrderForm extends AbstractViewMapper
         $oMessageManager = $oVisitor->GetSourceObject('oMessageManager');
         $oVisitor->SetMappedValue('sOverallError', $oMessageManager->RenderMessages($oVisitor->GetSourceObject('sCustomMSGConsumer')));
 
-        $aFieldList = array('aFieldFirstName' => 'firstname',
+        $aFieldList = ['aFieldFirstName' => 'firstname',
                             'aFieldLastName' => 'lastname',
                             'aFieldTel' => 'tel',
                             'aFieldReason' => 'subject',
-        );
+        ];
         $oUser = $oVisitor->GetSourceObject('oActiveUser');
         $oGlobal = $oVisitor->GetSourceObject('oGlobal');
-        $aUserData = array('firstname' => $oUser->fieldFirstname, 'lastname' => $oUser->fieldLastname, 'tel' => $oUser->fieldTelefon, 'subject' => '');
+        $aUserData = ['firstname' => $oUser->fieldFirstname, 'lastname' => $oUser->fieldLastname, 'tel' => $oUser->fieldTelefon, 'subject' => ''];
         if ($oGlobal->UserDataExists($oVisitor->GetSourceObject('sTelephoneURLParameter'))) {
             $aUserData = $oGlobal->GetUserData($oVisitor->GetSourceObject('sTelephoneURLParameter'));
         }
@@ -102,7 +96,7 @@ class TPkgShopBasketMapper_TelephoneOrderForm extends AbstractViewMapper
     /**
      * set errors and values for given field list.
      *
-     * @param array                    $aFieldList (MappedFieldName(name used in template) => RealFieldName (user input field name) )
+     * @param array $aFieldList (MappedFieldName(name used in template) => RealFieldName (user input field name) )
      * @param IMapperVisitorRestricted $oVisitor
      * @param array<string, mixed> $aUserData
      *
@@ -111,7 +105,7 @@ class TPkgShopBasketMapper_TelephoneOrderForm extends AbstractViewMapper
     protected function SetInputFields($aFieldList, $oVisitor, $aUserData)
     {
         foreach ($aFieldList as $sMappedFieldName => $sRealFieldName) {
-            $aField = array();
+            $aField = [];
             $aField['sError'] = $this->GetMessageForField($sRealFieldName, $oVisitor->GetSourceObject('sCustomMSGConsumer'), $oVisitor);
             $aField['sValue'] = $aUserData[$sRealFieldName];
             $aField['sFieldId'] = $oVisitor->GetSourceObject('sTelephoneURLParameter').'['.$sRealFieldName.']';
@@ -145,6 +139,6 @@ class TPkgShopBasketMapper_TelephoneOrderForm extends AbstractViewMapper
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

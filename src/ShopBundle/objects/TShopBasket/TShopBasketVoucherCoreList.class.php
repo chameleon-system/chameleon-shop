@@ -11,7 +11,6 @@
 
 class TShopBasketVoucherCoreList extends TIterator
 {
-
     /**
      * Adds a voucher to the list. note that it wil not check if the voucher is valid (this must be done by the calling method)
      * Returns the voucher key generated when adding the voucher.
@@ -35,7 +34,7 @@ class TShopBasketVoucherCoreList extends TIterator
     {
         $iCurrentPointer = $this->getItemPointer();
         $this->GoToStart();
-        $aItemKeyList = array();
+        $aItemKeyList = [];
         while ($oItem = $this->Next()) {
             $aItemKeyList[] = $oItem->sBasketVoucherKey;
         }
@@ -50,8 +49,6 @@ class TShopBasketVoucherCoreList extends TIterator
 
     /**
      * return voucher.
-     *
-     * @return TdbShopVoucher|bool
      */
     public function next(): TdbShopVoucher|bool
     {
@@ -90,7 +87,7 @@ class TShopBasketVoucherCoreList extends TIterator
      * Removes all vouchers from the basket, that are not valid based on the contents of the basket and the current user
      * Returns the number of vouchers removed.
      *
-     * @param string      $sMessangerName
+     * @param string $sMessangerName
      * @param TShopBasket $oBasket
      *
      * @return void
@@ -114,8 +111,8 @@ class TShopBasketVoucherCoreList extends TIterator
         foreach ($aVoucherList as $iVoucherKey => $oVoucher) {
             // skip all vouchers that are not of the current type that is being calculated.
             if (
-                (TShopBasket::VOUCHER_NOT_SPONSORED === $oBasket->getVoucherTypeCurrentlyRecalculating() && $oVoucher->IsSponsored()) ||
-                (TShopBasket::VOUCHER_SPONSORED === $oBasket->getVoucherTypeCurrentlyRecalculating() && !$oVoucher->IsSponsored())
+                (TShopBasket::VOUCHER_NOT_SPONSORED === $oBasket->getVoucherTypeCurrentlyRecalculating() && $oVoucher->IsSponsored())
+                || (TShopBasket::VOUCHER_SPONSORED === $oBasket->getVoucherTypeCurrentlyRecalculating() && !$oVoucher->IsSponsored())
             ) {
                 $this->AddItem($oVoucher);
                 continue;
@@ -145,7 +142,7 @@ class TShopBasketVoucherCoreList extends TIterator
      * handling to the event you wnat.
      *
      * @param TdbShopVoucher $oInvalidVoucher
-     * @param TShopBasket    $oBasket
+     * @param TShopBasket $oBasket
      *
      * @return void
      */

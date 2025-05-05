@@ -10,12 +10,11 @@ class ShopSystemInfoModuleConfig
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Optional title */
         private string $name = '',
@@ -65,7 +64,6 @@ class ShopSystemInfoModuleConfig
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -79,7 +77,6 @@ class ShopSystemInfoModuleConfig
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getIntro(): string
     {
@@ -92,8 +89,6 @@ class ShopSystemInfoModuleConfig
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -126,6 +121,4 @@ class ShopSystemInfoModuleConfig
 
         return $this;
     }
-
-
 }

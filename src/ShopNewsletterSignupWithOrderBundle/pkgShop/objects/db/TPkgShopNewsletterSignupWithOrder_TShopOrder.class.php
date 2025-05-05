@@ -17,7 +17,7 @@ class TPkgShopNewsletterSignupWithOrder_TShopOrder extends TPkgShopNewsletterSig
      * method can be used to modify the data saved to order before the save is executed.
      *
      * @param TShopBasket $oBasket
-     * @param array       $aOrderData
+     * @param array $aOrderData
      *
      * @return void
      */
@@ -58,7 +58,7 @@ class TPkgShopNewsletterSignupWithOrder_TShopOrder extends TPkgShopNewsletterSig
             }
 
             if (is_null($oNewsletter)) {
-                $aData = array();
+                $aData = [];
                 $sNow = date('Y-m-d H:i:s');
                 $aData['email'] = $sMail;
                 $aData['data_extranet_salutation_id'] = $this->fieldAdrBillingSalutationId;
@@ -67,7 +67,7 @@ class TPkgShopNewsletterSignupWithOrder_TShopOrder extends TPkgShopNewsletterSig
                 $aData['signup_date'] = $sNow;
                 $aData['optin'] = '1';
                 $aData['optin_date'] = $sNow;
-                /**
+                /*
                  * There are different ways of opting in into the newsletter table:
                  * - Subscribe on Website
                  * - Subscribe on MyAccount page
@@ -84,7 +84,7 @@ class TPkgShopNewsletterSignupWithOrder_TShopOrder extends TPkgShopNewsletterSig
                 TdbPkgNewsletterUser::GetInstanceForActiveUser(true);
             } elseif (false == $oNewsletter->fieldOptin) {
                 $oNewsletter->AllowEditByAll(true);
-                $oNewsletter->SaveFieldsFast(array('optincode' => 'signup-via-order-confirm-page', 'optin' => '1', 'optin_date' => date('Y-m-d H:i:s')));
+                $oNewsletter->SaveFieldsFast(['optincode' => 'signup-via-order-confirm-page', 'optin' => '1', 'optin_date' => date('Y-m-d H:i:s')]);
                 TdbPkgNewsletterUser::GetInstanceForActiveUser(true);
             }
         }

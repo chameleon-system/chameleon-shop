@@ -25,7 +25,7 @@ interface ProductInventoryServiceInterface
 
     /**
      * @param string $shopArticleId
-     * @param int    $stock
+     * @param int $stock
      *
      * @return void
      */
@@ -33,16 +33,12 @@ interface ProductInventoryServiceInterface
 
     /**
      * @param string $shopArticleId
-     * @param int    $stock
-     *
-     * @return bool
+     * @param int $stock
      */
     public function setStock($shopArticleId, $stock): bool;
 
     /**
      * @param string $parentArticleId
-     *
-     * @return bool
      */
     public function updateVariantParentStock($parentArticleId): bool;
 }

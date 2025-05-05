@@ -42,7 +42,7 @@ class TShopOrder extends TShopOrderAutoParent
         parent::PostInsertHook();
         // we need to add an order number to the order... since generation of this number may differ
         // from shop to shop, we have added the method to fetch a new order number to the shop class
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $iOrderNumber = $oShop->GetNextFreeOrderNumber();
         $aData = $this->sqlData;
         $aData['ordernumber'] = $iOrderNumber;
@@ -63,7 +63,7 @@ class TShopOrder extends TShopOrderAutoParent
      */
     public function LoadFromBasket(TShopBasket $oBasket)
     {
-        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $oPortal = $this->getPortalDomainService()->getActivePortal();
         $oUser = TdbDataExtranetUser::GetInstance();
         $oBillingAdr = $oUser->GetBillingAddress();
@@ -240,7 +240,7 @@ class TShopOrder extends TShopOrderAutoParent
     protected function SaveArticle(TShopBasketArticle $oBasketItem)
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ServiceLocator::get('database_connection');
 
         $oVat = $oBasketItem->GetVat();
         $oOrderItem = TdbShopOrderItem::GetNewInstance();
@@ -556,7 +556,7 @@ class TShopOrder extends TShopOrderAutoParent
             if (false === $orderNotificationBeforeSendStatus) {
                 $this->updateSendOrderNotificationState(false);
             }
-            $bOrderSend = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.order_notification.error_mail_template_not_found', ['%emailTemplate%' => self::MAIL_CONFIRM_ORDER]);
+            $bOrderSend = ServiceLocator::get('translator')->trans('chameleon_system_shop.order_notification.error_mail_template_not_found', ['%emailTemplate%' => self::MAIL_CONFIRM_ORDER]);
         } else {
             $aMailData = $this->sqlData;
             $aMailData = $this->AddOrderNotificationEmailData($aMailData);
@@ -820,9 +820,9 @@ class TShopOrder extends TShopOrderAutoParent
      */
     public static function getUserTypeOrdered($sDBValue, $aOrderRow)
     {
-        $sUserType = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.order_list.user_type_guest');
+        $sUserType = ServiceLocator::get('translator')->trans('chameleon_system_shop.order_list.user_type_guest');
         if ('' != $sDBValue) {
-            $sUserType = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.order_list.user_type_customer');
+            $sUserType = ServiceLocator::get('translator')->trans('chameleon_system_shop.order_list.user_type_customer');
         }
 
         return $sUserType;

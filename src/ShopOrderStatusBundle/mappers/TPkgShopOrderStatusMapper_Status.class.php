@@ -20,8 +20,6 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
      * $oRequirements->NeedsSourceObject("foo",'stdClass','default-value');
      * $oRequirements->NeedsSourceObject("bar");
      * $oRequirements->NeedsMappedValue("baz");
-     *
-     * @param IMapperRequirementsRestricted $oRequirements
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
@@ -44,9 +42,7 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,
@@ -63,10 +59,10 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
             return;
         }
         if ($oObject instanceof TdbShopOrder) {
-            $aStatusList = array();
+            $aStatusList = [];
 
             $oStatusList = $oObject->GetFieldShopOrderStatusList();
-            $oStatusList->ChangeOrderBy(array('status_date' => 'DESC'));
+            $oStatusList->ChangeOrderBy(['status_date' => 'DESC']);
 
             while ($oStatus = $oStatusList->Next()) {
                 $aStatusList[] = $this->getDataFromStatus($oStatus, $local, $oCacheTriggerManager, $bCachingEnabled);
@@ -89,15 +85,15 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
         IMapperCacheTriggerRestricted $oCacheTriggerManager,
         $bCachingEnabled
     ) {
-        $aStatus = array(
+        $aStatus = [
             'date' => $local->FormatDate(
-                    $oStatus->fieldStatusDate,
-                    TdbCmsLocals::DATEFORMAT_SHOW_DATE | TdbCmsLocals::DATEFORMAT_SHOW_TIME_HOUR | TdbCmsLocals::DATEFORMAT_SHOW_TIME_MINUTE
-                ),
+                $oStatus->fieldStatusDate,
+                TdbCmsLocals::DATEFORMAT_SHOW_DATE | TdbCmsLocals::DATEFORMAT_SHOW_TIME_HOUR | TdbCmsLocals::DATEFORMAT_SHOW_TIME_MINUTE
+            ),
             'codeName' => $oStatus->GetFieldShopOrderStatusCode()->fieldName,
             'info' => $oStatus->GetStatusText(),
-            'aPositions' => array(),
-        );
+            'aPositions' => [],
+        ];
         $oStatusPosList = $oStatus->GetFieldShopOrderStatusItemList();
         while ($oPos = $oStatusPosList->Next()) {
             $aArticleData = $this->getArticle(
@@ -115,8 +111,6 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
     /**
      * the the value map for one article (order item).
      *
-     * @param TdbShopOrderStatusItem        $oPosition
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
      * @param bool $bCachingEnabled
      *
      * @return array
@@ -127,7 +121,7 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
         $bCachingEnabled
     ) {
         $oOrderItem = $oPosition->GetFieldShopOrderItem();
-        $aArticle = array();
+        $aArticle = [];
         /** @var $oArticle TdbShopArticle */
         $oArticle = $oOrderItem->GetFieldShopArticle();
 
@@ -155,8 +149,7 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
     /**
      * get the image id of connected article for given order item in the dimensions defined by the given image size identifier.
      *
-     * @param TdbShopOrderItem $oOrderItem
-     * @param string           $sImageSizeName
+     * @param string $sImageSizeName
      * @param bool $bCachingEnabled
      *
      * @return string empty string or image id
@@ -201,7 +194,7 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
      */
     protected function GetVariantInfo($oArticle, $aData, IMapperCacheTriggerRestricted $oCacheTriggerManager, $bCachingEnabled)
     {
-        $aVariantTypeList = array();
+        $aVariantTypeList = [];
         if ($oArticle) {
             if ($oArticle->IsVariant()) {
                 $oVariantSet = $oArticle->GetFieldShopVariantSet();
@@ -217,20 +210,20 @@ class TPkgShopOrderStatusMapper_Status extends AbstractViewMapper
                     if ($oValue && $bCachingEnabled) {
                         $oCacheTriggerManager->addTrigger($oValue->table, $oValue->id);
                     }
-                    $aType = array(
+                    $aType = [
                         'sTitle' => $oVariantType->fieldName,
                         'sSystemName' => $oVariantType->fieldIdentifier,
                         'cms_media_id' => $oVariantType->fieldCmsMediaId,
-                        'aItems' => array(),
-                    );
-                    $aItems = array();
-                    $aItem = array(
+                        'aItems' => [],
+                    ];
+                    $aItems = [];
+                    $aItem = [
                         'sTitle' => $oValue->fieldName,
                         'sColor' => $oValue->fieldColorCode,
                         'cms_media_id' => $oValue->fieldCmsMediaId,
                         'bIsActive' => false,
                         'sSelectLink' => '',
-                    );
+                    ];
                     $aItems[] = $aItem;
                     $aType['aItems'] = $aItems;
                     $aVariantTypeList[] = $aType;

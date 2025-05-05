@@ -13,7 +13,6 @@ namespace ChameleonSystem\ShopBundle\Bridge\Chameleon\DataAccess;
 
 use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopStockMessageDataAccessInterface;
 use Doctrine\DBAL\Connection;
-use TdbShopStockMessage;
 
 class ShopStockMessageDataAccess implements ShopStockMessageDataAccessInterface
 {
@@ -22,9 +21,6 @@ class ShopStockMessageDataAccess implements ShopStockMessageDataAccessInterface
      */
     private $databaseConnection;
 
-    /**
-     * @param Connection $databaseConnection
-     */
     public function __construct(Connection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
@@ -35,7 +31,7 @@ class ShopStockMessageDataAccess implements ShopStockMessageDataAccessInterface
      */
     public function getStockMessage($id, $languageId)
     {
-        $message = TdbShopStockMessage::GetNewInstance($id, $languageId);
+        $message = \TdbShopStockMessage::GetNewInstance($id, $languageId);
 
         if (false === $message->sqlData) {
             return null;
@@ -58,7 +54,7 @@ class ShopStockMessageDataAccess implements ShopStockMessageDataAccessInterface
 
                 return $carry;
             },
-            array()
+            []
         );
     }
 }

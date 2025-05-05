@@ -1,4 +1,5 @@
 <?php
+
 namespace ChameleonSystem\AmazonPaymentBundle\pkgShop\db;
 
 /**

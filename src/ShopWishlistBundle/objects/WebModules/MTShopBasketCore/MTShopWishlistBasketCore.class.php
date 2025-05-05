@@ -25,9 +25,9 @@ class MTShopWishlistBasketCore extends MTShopBasketCore
      * Adds the article passed to the wishlist of the user (if the user is logged in).
      *
      * @param string $sArticleId
-     * @param float  $dAmount
+     * @param float $dAmount
      * @param string $sMessageHandler
-     * @param bool   $bIsInternalCall
+     * @param bool $bIsInternalCall
      *
      * @return void
      */
@@ -65,9 +65,9 @@ class MTShopWishlistBasketCore extends MTShopBasketCore
             $oItem = TdbShopArticle::GetNewInstance();
             /** @var $oItem TdbShopArticle */
             if ($oItem->Load($sArticleId)) {
-                $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+                $oShop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                 $oExtranet = TdbDataExtranet::GetInstance();
-                $aInfoData = array('sLinkLoginStart' => '<a href="'.$oExtranet->GetLinkLoginPage().'">', 'sLinkLoginEnd' => '</a>', 'sLinkWishlistStart' => '<a href="'.$oShop->GetLinkToSystemPage('wishlist').'">', 'sLinkWishlistEnd' => '</a>', 'sLinkArticleStart' => '<a href="'.$oItem->getLink().'">', 'sLinkArticleEnd' => '</a>', 'sArticleName' => TGlobal::OutHTML($oItem->GetName()), 'dAddedAmount' => $dAmount);
+                $aInfoData = ['sLinkLoginStart' => '<a href="'.$oExtranet->GetLinkLoginPage().'">', 'sLinkLoginEnd' => '</a>', 'sLinkWishlistStart' => '<a href="'.$oShop->GetLinkToSystemPage('wishlist').'">', 'sLinkWishlistEnd' => '</a>', 'sLinkArticleStart' => '<a href="'.$oItem->getLink().'">', 'sLinkArticleEnd' => '</a>', 'sArticleName' => TGlobal::OutHTML($oItem->GetName()), 'dAddedAmount' => $dAmount];
                 $oUser = TdbDataExtranetUser::GetInstance();
                 if (!$oUser->IsLoggedIn()) {
                     $oMsgManager->AddMessage($sMessageHandler, 'WISHLIST-USER-NOT-LOGGED-IN', $aInfoData);
@@ -107,7 +107,7 @@ class MTShopWishlistBasketCore extends MTShopBasketCore
      *
      * @param string $sPkgShopWishlistArticleId - the pkg_shop_wishlist_article_id to remove from the list
      * @param string $sMessageHandler
-     * @param bool   $bIsInternalCall
+     * @param bool $bIsInternalCall
      *
      * @return void
      */
@@ -134,13 +134,13 @@ class MTShopWishlistBasketCore extends MTShopBasketCore
             $oMessageManager->AddMessage($sMessageHandler, 'WISHLIST-USER-NOT-LOGGED-IN');
         } else {
             $oWishlistItem = TdbPkgShopWishlistArticle::GetNewInstance();
-            /** @var $oWishlistItem TdbPkgShopWishlistArticle */
+            /* @var $oWishlistItem TdbPkgShopWishlistArticle */
             $oWishlistItem->Load($sPkgShopWishlistArticleId);
             $oArticle = $oWishlistItem->GetFieldShopArticle();
             if ($oArticle) {
-                $aMessageData = array('sArticleLinkStart' => '<a href="'.TGlobal::OutHTML($oArticle->getLink()).'">', 'sArticleLinkEnd' => '</a>', 'sArticleName' => $oArticle->GetName());
+                $aMessageData = ['sArticleLinkStart' => '<a href="'.TGlobal::OutHTML($oArticle->getLink()).'">', 'sArticleLinkEnd' => '</a>', 'sArticleName' => $oArticle->GetName()];
             } else {
-                $aMessageData = array();
+                $aMessageData = [];
             }
             $oUser->RemoveArticleFromWishlist($sPkgShopWishlistArticleId);
             $oMessageManager->AddMessage($sMessageHandler, 'WISHLIST-REMOVED-ITEM', $aMessageData);

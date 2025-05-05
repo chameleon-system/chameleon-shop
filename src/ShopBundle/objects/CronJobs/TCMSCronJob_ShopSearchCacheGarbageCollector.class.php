@@ -11,10 +11,10 @@
 
 /**
  * cleanup old search results.
-/**/
+ * /**/
 class TCMSCronJob_ShopSearchCacheGarbageCollector extends TdbCmsCronjobs
 {
-    const MAX_CACHE_AGE_IN_SECONDS = 3600;
+    public const MAX_CACHE_AGE_IN_SECONDS = 3600;
 
     /**
      * @return void
@@ -22,15 +22,15 @@ class TCMSCronJob_ShopSearchCacheGarbageCollector extends TdbCmsCronjobs
     protected function _ExecuteCron()
     {
         /* @var $connection \Doctrine\DBAL\Connection */
-        $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $now = time();
 
         $query = "
         SELECT *
           FROM `shop_search_cache`
-         WHERE ({$now} - UNIX_TIMESTAMP(`last_used_date`)) > " . self::MAX_CACHE_AGE_IN_SECONDS . "
-    ";
+         WHERE ({$now} - UNIX_TIMESTAMP(`last_used_date`)) > ".self::MAX_CACHE_AGE_IN_SECONDS.'
+    ';
 
         $statement = $connection->executeQuery($query);
 

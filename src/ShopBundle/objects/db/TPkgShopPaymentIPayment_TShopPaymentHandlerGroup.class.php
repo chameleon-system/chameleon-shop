@@ -12,8 +12,6 @@
 class TPkgShopPaymentIPayment_TShopPaymentHandlerGroup extends TdbShopPaymentHandlerGroup
 {
     /**
-     * @param TPkgShopPaymentIPNRequest $oRequest
-     *
      * @return TdbPkgShopPaymentIpnStatus|null
      */
     public function getIPNStatus(TPkgShopPaymentIPNRequest $oRequest)
@@ -26,7 +24,7 @@ class TPkgShopPaymentIPayment_TShopPaymentHandlerGroup extends TdbShopPaymentHan
 
         $sCode = trim($aPayload['ret_status']);
         $oStatus = TdbPkgShopPaymentIpnStatus::GetNewInstance();
-        if (false === $oStatus->LoadFromFields(array('code' => $sCode, 'shop_payment_handler_group_id' => $this->id))) {
+        if (false === $oStatus->LoadFromFields(['code' => $sCode, 'shop_payment_handler_group_id' => $this->id])) {
             return null;
         }
 
@@ -40,8 +38,8 @@ class TPkgShopPaymentIPayment_TShopPaymentHandlerGroup extends TdbShopPaymentHan
      */
     protected function getIPNHandlerChain()
     {
-        return array(
+        return [
             'TPkgShopPaymentIPayment_TPkgShopPaymentIPNHandler_BaseResponse', // send response to payone
-        );
+        ];
     }
 }

@@ -19,13 +19,13 @@ class TPkgShopRatingService_Idealo extends TdbPkgShopRatingService
         $sViewSubType = 'pkgShopRatingService/views',
         $sViewType = 'Customer',
         $sSpotName = null,
-        $aCallTimeVars = array()
+        $aCallTimeVars = []
     ) {
         $aCallTimeVars['sRatingURL'] = $this->fieldRatingUrl;
         $aCallTimeVars['sRatingApiId'] = $this->fieldRatingApiId;
         $aCallTimeVars['oRatingServiceImage'] = $this->GetImage(0, 'icon_cms_media_id');
 
-        //please call parent here to render!
+        // please call parent here to render!
         $sHTML = parent::Render($sViewName, $sViewSubType, $sViewType, $sSpotName, $aCallTimeVars);
 
         return $sHTML;

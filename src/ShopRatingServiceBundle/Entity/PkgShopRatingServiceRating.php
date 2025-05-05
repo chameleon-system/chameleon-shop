@@ -2,18 +2,15 @@
 
 namespace ChameleonSystem\ShopRatingServiceBundle\Entity;
 
-use DateTime;
-
 class PkgShopRatingServiceRating
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookup
         /** @var PkgShopRatingService|null - Rating service */
-        private ?PkgShopRatingService $pkgShopRatingService = null
-        ,
+        private ?PkgShopRatingService $pkgShopRatingService = null,
         // TCMSFieldVarchar
         /** @var string - Remote key */
         private string $remoteKey = '',
@@ -30,8 +27,8 @@ class PkgShopRatingServiceRating
         /** @var string - Rating text */
         private string $ratingText = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Date of rating */
-        private ?DateTime $ratingDate = null
+        /** @var \DateTime|null - Date of rating */
+        private ?\DateTime $ratingDate = null
     ) {
     }
 
@@ -72,7 +69,6 @@ class PkgShopRatingServiceRating
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getRemoteKey(): string
     {
@@ -85,7 +81,6 @@ class PkgShopRatingServiceRating
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getScore(): string
@@ -100,7 +95,6 @@ class PkgShopRatingServiceRating
         return $this;
     }
 
-
     // TCMSFieldText
     public function getRawdata(): string
     {
@@ -113,7 +107,6 @@ class PkgShopRatingServiceRating
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getRatingUser(): string
@@ -128,7 +121,6 @@ class PkgShopRatingServiceRating
         return $this;
     }
 
-
     // TCMSFieldText
     public function getRatingText(): string
     {
@@ -142,19 +134,16 @@ class PkgShopRatingServiceRating
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getRatingDate(): ?DateTime
+    public function getRatingDate(): ?\DateTime
     {
         return $this->ratingDate;
     }
 
-    public function setRatingDate(?DateTime $ratingDate): self
+    public function setRatingDate(?\DateTime $ratingDate): self
     {
         $this->ratingDate = $ratingDate;
 
         return $this;
     }
-
-
 }

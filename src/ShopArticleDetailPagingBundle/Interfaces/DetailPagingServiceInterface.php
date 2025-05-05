@@ -37,6 +37,7 @@ interface DetailPagingServiceInterface
 
     /**
      * @param string $pagerSpotName
+     *
      * @return string|null
      */
     public function getBackToListUrl($pagerSpotName);

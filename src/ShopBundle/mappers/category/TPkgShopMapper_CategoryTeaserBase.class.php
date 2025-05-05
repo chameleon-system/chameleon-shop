@@ -23,7 +23,7 @@ class TPkgShopMapper_CategoryTeaserBase extends AbstractPkgShopMapper_Category
         }
         $oRootCategory = $oCategory->GetRootCategory();
 
-        $aData = array();
+        $aData = [];
         $sImageId = false;
         if (!is_numeric($oCategory->fieldImage) || $oCategory->fieldImage > 100) {
             $sImageId = $oCategory->fieldImage;

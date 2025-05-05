@@ -24,12 +24,10 @@ class SortStringTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderSortRawData
      *
-     * @param $sortString
-     * @param $expectedArray
+     * @dataProvider dataProviderSortRawData
      */
-    public function it_should_return_an_sort_array($sortString, $expectedArray)
+    public function itShouldReturnAnSortArray($sortString, $expectedArray)
     {
         $this->givenASortTypeWith($sortString);
         $this->whenICallGetAsArray();
@@ -38,13 +36,13 @@ class SortStringTest extends TestCase
 
     public function dataProviderSortRawData()
     {
-        return array(
-            array('', array()),
-            array('field2 ASC, field3 DESC, field4', array('field2' => 'ASC', 'field3' => 'DESC', 'field4' => 'ASC')),
-            array('field2 ASC, field3 DESC, field4', array('field2' => 'ASC', 'field3' => 'DESC', 'field4' => 'ASC')),
-            array('field2 bar, field3 DESC, field4', array('field2 bar' => 'ASC', 'field3' => 'DESC', 'field4' => 'ASC')),
-            array('field2 some expression ASC, some expression desc, some other expression', array('field2 some expression' => 'ASC', 'some expression' => 'DESC', 'some other expression' => 'ASC')),
-        );
+        return [
+            ['', []],
+            ['field2 ASC, field3 DESC, field4', ['field2' => 'ASC', 'field3' => 'DESC', 'field4' => 'ASC']],
+            ['field2 ASC, field3 DESC, field4', ['field2' => 'ASC', 'field3' => 'DESC', 'field4' => 'ASC']],
+            ['field2 bar, field3 DESC, field4', ['field2 bar' => 'ASC', 'field3' => 'DESC', 'field4' => 'ASC']],
+            ['field2 some expression ASC, some expression desc, some other expression', ['field2 some expression' => 'ASC', 'some expression' => 'DESC', 'some other expression' => 'ASC']],
+        ];
     }
 
     private function givenASortTypeWith($secondarySort)

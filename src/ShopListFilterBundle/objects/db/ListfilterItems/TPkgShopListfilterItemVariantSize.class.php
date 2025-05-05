@@ -11,7 +11,7 @@
 
 /**
  * base class used to select from a specific variant type.
-/**/
+ * /**/
 class TPkgShopListfilterItemVariantSize extends TPkgShopListfilterItemVariant
 {
     protected $sVariantTypeIdentifier = 'size';

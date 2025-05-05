@@ -17,9 +17,9 @@ namespace ChameleonSystem\ShopBundle\Payment\PaymentConfig;
  */
 class ShopPaymentConfigRawValue
 {
-    const SOURCE_GROUP = 1;
-    const SOURCE_ADDITIONAL = 2;
-    const SOURCE_HANDLER = 3;
+    public const SOURCE_GROUP = 1;
+    public const SOURCE_ADDITIONAL = 2;
+    public const SOURCE_HANDLER = 3;
 
     /** @var string */
     private $name;
@@ -35,17 +35,19 @@ class ShopPaymentConfigRawValue
 
     /**
      * @var int
+     *
      * @psalm-var self::SOURCE_*
      */
     private $source;
 
     /**
-     * @param string $name        The configuration key
-     * @param string $value       The configuration value
+     * @param string $name The configuration key
+     * @param string $value The configuration value
      * @param string $environment the environment for which this value is valid (one of IPkgShopPaymentConfig::ENVIRONMENT_*)
-     * @param string $portalId    The portal for which this value is valid, or '' if valid for all portals
-     * @param int    $source      Depicts from which configuration level the value is from (the payment handler group,
-     *                            the configuration provider or the payment handler). One of SOURCE_GROUP, SOURCE_ADDITIONAL or SOURCE_HANDLER.
+     * @param string $portalId The portal for which this value is valid, or '' if valid for all portals
+     * @param int $source Depicts from which configuration level the value is from (the payment handler group,
+     *                    the configuration provider or the payment handler). One of SOURCE_GROUP, SOURCE_ADDITIONAL or SOURCE_HANDLER.
+     *
      * @psalm-param self::SOURCE_* $source
      */
     public function __construct($name, $value, $environment, $portalId, $source)
@@ -91,6 +93,7 @@ class ShopPaymentConfigRawValue
 
     /**
      * @return int
+     *
      * @psalm-return self::SOURCE_*
      */
     public function getSource()

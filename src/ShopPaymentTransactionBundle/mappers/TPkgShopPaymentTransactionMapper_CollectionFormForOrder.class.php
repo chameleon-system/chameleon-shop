@@ -20,8 +20,6 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
      * $oRequirements->NeedsSourceObject("foo",'stdClass','default-value');
      * $oRequirements->NeedsSourceObject("bar");
      * $oRequirements->NeedsMappedValue("baz");
-     *
-     * @param IMapperRequirementsRestricted $oRequirements
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
@@ -44,9 +42,7 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,
@@ -60,14 +56,14 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
         $sHeadline = '';
         switch ($sTransactionType) {
             case TPkgShopPaymentTransactionData::TYPE_PAYMENT:
-                $sHeadline = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.collection_form.headline_payment');
+                $sHeadline = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.collection_form.headline_payment');
                 break;
             case TPkgShopPaymentTransactionData::TYPE_CREDIT:
             case TPkgShopPaymentTransactionData::TYPE_PAYMENT_REVERSAL:
-                $sHeadline = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.collection_form.headline_refund');
+                $sHeadline = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.collection_form.headline_refund');
                 break;
             default:
-                $sHeadline = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.error.invalid_transaction_type', array('%sTransactionType%' => $sTransactionType));
+                $sHeadline = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_payment_transaction.error.invalid_transaction_type', ['%sTransactionType%' => $sTransactionType]);
                 break;
         }
 
@@ -75,10 +71,10 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
 
         $oTransactionManager = new TPkgShopPaymentTransactionManager($order);
 
-        //$sTransactionType
+        // $sTransactionType
         $oTransactionData = $oTransactionManager->getTransactionDataFromOrder($sTransactionType, null, false);
 
-        $aItemList = array();
+        $aItemList = [];
 
         $aItems = $oTransactionData->getItems();
         foreach ($aItems as $oItem) {
@@ -92,7 +88,7 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
 
         $oVisitor->SetMappedValue('items', $aItemList);
 
-        $aSummaryData = array(
+        $aSummaryData = [
             'valueProducts' => $oTransactionData->getTotalValueForItemType(TPkgShopPaymentTransactionItemData::TYPE_PRODUCT),
             'valueDiscount' => $oTransactionData->getTotalValueForItemType(TPkgShopPaymentTransactionItemData::TYPE_DISCOUNT),
             'valueDiscountVouchers' => $oTransactionData->getTotalValueForItemType(TPkgShopPaymentTransactionItemData::TYPE_DISCOUNT_VOUCHER),
@@ -102,23 +98,23 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
             'valueVoucher' => $oTransactionData->getTotalValueForItemType(TPkgShopPaymentTransactionItemData::TYPE_VOUCHER),
             'valueGrandTotal' => $oTransactionData->getTotalValue(),
             'order_total' => $order->fieldValueTotal,
-        );
+        ];
 
         $orderTransactionList = $order->GetFieldPkgShopPaymentTransactionList();
-        $orderTransactionList->ChangeOrderBy(array('datecreated' => 'ASC'));
-        $transactionList = array();
+        $orderTransactionList->ChangeOrderBy(['datecreated' => 'ASC']);
+        $transactionList = [];
         $sum = 0;
         $local = TCMSLocal::GetActive();
         while ($transaction = $orderTransactionList->Next()) {
             $sum += $transaction->fieldAmount;
-            $transactionList[] = array(
+            $transactionList[] = [
                 'date' => $local->FormatDate($transaction->fieldDatecreated),
                 'amount' => $transaction->fieldAmountFormated,
                 'confirmed' => $transaction->fieldConfirmed,
                 'type' => $transaction->GetFieldPkgShopPaymentTransactionType()->fieldName,
                 'sum' => $local->FormatNumber($sum, 2),
-                'orderBalance' => $local->FormatNumber(($order->fieldValueTotal - $sum), 2),
-            );
+                'orderBalance' => $local->FormatNumber($order->fieldValueTotal - $sum, 2),
+            ];
         }
 
         $oVisitor->SetMappedValueFromArray($aSummaryData);
@@ -126,14 +122,14 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
         $oVisitor->SetMappedValue('transactionList', $transactionList);
         $oVisitor->SetMappedValue('sTargetURL', URL_CMS_CONTROLLER);
         $sHiddenFields = TTools::GetArrayAsFormInput(
-            array(
-                 'module_fnc' => array('contentmodule' => 'pkgShopPaymentTransaction_PartialDebit'),
+            [
+                 'module_fnc' => ['contentmodule' => 'pkgShopPaymentTransaction_PartialDebit'],
                  '_noModuleFunction' => 'true',
                  'pagedef' => 'tableeditor',
                  'tableid' => $order->GetTableConf()->id,
                  'id' => $order->id,
                  'debitType' => $sTransactionType,
-            )
+            ]
         );
         $oVisitor->SetMappedValue('sHiddenFields', $sHiddenFields);
 
@@ -155,9 +151,9 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
             $sMsg = 'unable to load the shop_order_item ['.$shopOrderItem->id."] in order [{$order->id}]";
             throw new TPkgCmsException_LogAndMessage(
                 TPkgShopPaymentTransactionManager::MESSAGE_ERROR,
-                array('sMessage' => $sMsg),
+                ['sMessage' => $sMsg],
                 $sMsg,
-                array('order' => $order)
+                ['order' => $order]
             );
         }
 
@@ -202,7 +198,7 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
             $totalQuantityCanceledConfirmed = $totalQuantityCanceledConfirmed * -1;
         }
 
-        $aItem = array(
+        $aItem = [
             'id' => $oTransactionItem->getOrderItemId(),
             'articlenumber' => $shopOrderItem->fieldArticlenumber,
             'name' => $shopOrderItem->fieldName,
@@ -214,7 +210,7 @@ class TPkgShopPaymentTransactionMapper_CollectionFormForOrder extends AbstractVi
             'totalQuantityForTransaction' => $oTransactionItem->getAmount(),
             'price' => $oTransactionItem->getValue(),
             'totalValueForTransaction' => round($oTransactionItem->getAmount() * $oTransactionItem->getValue(), 2),
-        );
+        ];
 
         if ('' != $shopOrderItem->fieldNameVariantInfo) {
             $aItem['name'] = $aItem['name'].' - '.$shopOrderItem->fieldNameVariantInfo;

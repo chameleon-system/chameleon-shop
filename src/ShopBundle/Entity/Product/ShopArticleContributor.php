@@ -6,20 +6,17 @@ class ShopArticleContributor
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopArticle|null - Belongs to article */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldExtendedLookup
         /** @var ShopContributor|null - Contributing person */
-        private ?ShopContributor $shopContributor = null
-        ,
+        private ?ShopContributor $shopContributor = null,
         // TCMSFieldLookup
         /** @var ShopContributorType|null - Role of the contributing person / contribution type */
-        private ?ShopContributorType $shopContributorType = null
-        ,
+        private ?ShopContributorType $shopContributorType = null,
         // TCMSFieldPosition
         /** @var int - Position */
         private int $position = 0
@@ -63,7 +60,6 @@ class ShopArticleContributor
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getShopContributor(): ?ShopContributor
     {
@@ -76,7 +72,6 @@ class ShopArticleContributor
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getShopContributorType(): ?ShopContributorType
@@ -91,7 +86,6 @@ class ShopArticleContributor
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -104,6 +98,4 @@ class ShopArticleContributor
 
         return $this;
     }
-
-
 }

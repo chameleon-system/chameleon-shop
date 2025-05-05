@@ -14,7 +14,7 @@ class TShopPaymentHandlerIPaymentCreditCard extends TShopPaymentHandlerIPayment
     /**
      * constant for class specific error messages.
      */
-    const MSG_MANAGER_NAME = 'TShopIPaymentHandlerCreditCardMSG';
+    public const MSG_MANAGER_NAME = 'TShopIPaymentHandlerCreditCardMSG';
 
     /**
      * Get path to view location.
@@ -52,10 +52,10 @@ class TShopPaymentHandlerIPaymentCreditCard extends TShopPaymentHandlerIPayment
      *
      * @return array $aParameter
      */
-    protected function GetPaymentTypeSpecifivParameter($aParameter = array())
+    protected function GetPaymentTypeSpecifivParameter($aParameter = [])
     {
         if (!is_array($aParameter)) {
-            $aParameter = array();
+            $aParameter = [];
         }
         $aParameter['trx_paymenttyp'] = 'cc';
 
@@ -66,6 +66,7 @@ class TShopPaymentHandlerIPaymentCreditCard extends TShopPaymentHandlerIPayment
      * if request to IPayment was not successfully create a error message.
      *
      * @param string $sMessageConsumer
+     *
      * @return void
      */
     protected function SetErrorCodesFromResponseToMessageManager($sMessageConsumer = '')
@@ -76,7 +77,7 @@ class TShopPaymentHandlerIPaymentCreditCard extends TShopPaymentHandlerIPayment
         $SReturnMessage = $this->GetErrorCodesFromResponse();
         if (!empty($SReturnMessage)) {
             $oMsgManager = TCMSMessageManager::GetInstance();
-            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', array('errorMsg' => $SReturnMessage));
+            $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-PAYMENT-ERROR', ['errorMsg' => $SReturnMessage]);
         }
     }
 }

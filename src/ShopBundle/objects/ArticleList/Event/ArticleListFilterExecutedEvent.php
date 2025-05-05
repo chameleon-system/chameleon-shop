@@ -33,7 +33,7 @@ class ArticleListFilterExecutedEvent extends Event
     private $state;
 
     /**
-     * @var \ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\FilterInterface
+     * @var FilterInterface
      */
     private $filter;
 
@@ -45,11 +45,7 @@ class ArticleListFilterExecutedEvent extends Event
     /**
      * ArticleListFilterExecutedEvent constructor.
      *
-     * @param FilterInterface        $filter
-     * @param ResultDataInterface    $resultData
-     * @param ConfigurationInterface $moduleConfiguration
-     * @param StateInterface         $state
-     * @param bool                   $resultFromCache
+     * @param bool $resultFromCache
      */
     public function __construct(
         FilterInterface $filter,

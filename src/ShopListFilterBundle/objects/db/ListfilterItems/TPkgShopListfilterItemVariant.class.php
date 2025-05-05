@@ -11,7 +11,7 @@
 
 /**
  * base class used to select from a specific variant type.
-/**/
+ * /**/
 class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
 {
     /**
@@ -51,7 +51,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
         if (null === $oVariantType) {
             $oVariantType = TdbShopVariantType::GetNewInstance();
             if (!empty($aRow['shop_variant_set_id'])) {
-                if (!$oVariantType->LoadFromFields(array('identifier' => $this->sVariantTypeIdentifier, 'shop_variant_set_id' => $aRow['shop_variant_set_id']))) {
+                if (!$oVariantType->LoadFromFields(['identifier' => $this->sVariantTypeIdentifier, 'shop_variant_set_id' => $aRow['shop_variant_set_id']])) {
                     $oVariantType = false;
                 }
             } else {
@@ -65,14 +65,12 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
 
     /**
      * @param array<string, mixed> $aOptions
-     *
-     * @return void
      */
     protected function OrderOptions(array &$aOptions): void
     {
         // get the variant type based on the first value
         if (count($aOptions) > 0) {
-            $connection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+            $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
             $aTmpOption = array_keys($aOptions);
             $sKey = $aTmpOption[0];
             $quotedKey = $connection->quote($sKey);
@@ -88,7 +86,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
 
             if ($aType) {
                 $quotedIdentifier = $connection->quote($this->sVariantTypeIdentifier);
-                $escapedOptions = array_map(fn($val) => $connection->quote($val), $aTmpOption);
+                $escapedOptions = array_map(fn ($val) => $connection->quote($val), $aTmpOption);
                 $orderField = $connection->quoteIdentifier($aType['shop_variant_type_value_cmsfieldname']);
 
                 $query = "SELECT `shop_variant_type_value`.`name`
@@ -115,24 +113,24 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
      *
      * @param string $sFieldName
      * @param string $sFieldValue
-     * @param array  $aRow
+     * @param array $aRow
      *
      * @return string[]
      */
     public function GetItemName($sFieldName, $sFieldValue, $aRow)
     {
         /** @var array<string, string[]> $aLookupList */
-        static $aLookupList = array();
+        static $aLookupList = [];
 
         if (!array_key_exists($aRow['id'], $aLookupList)) {
-            $aLookupList[$aRow['id']] = array();
+            $aLookupList[$aRow['id']] = [];
             $oVariantType = $this->GetVariantType($aRow);
             if ($oVariantType) {
                 $oArticle = TdbShopArticle::GetNewInstance();
                 $oArticle->LoadFromRow($aRow);
 
                 /** @var string[] $aResult */
-                $aResult = array();
+                $aResult = [];
                 $oVariantValues = $oArticle->GetVariantValuesAvailableForType($oVariantType);
                 if ($oVariantValues) {
                     while ($oVariantValue = $oVariantValues->Next()) {
@@ -165,25 +163,25 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
             $aValues = $this->aActiveFilterData;
             if (!is_array($aValues)) {
                 if (empty($aValues)) {
-                    $aValues = array();
+                    $aValues = [];
                 } else {
-                    $aValues = array($aValues);
+                    $aValues = [$aValues];
                 }
             }
             if (count($aValues) > 0) {
                 $connection = $this->getDatabaseConnection();
-                $quotedValues = array_map(fn($v) => $connection->quote($v), $aValues);
+                $quotedValues = array_map(fn ($v) => $connection->quote($v), $aValues);
                 $quotedIdentifier = $connection->quote($this->sVariantTypeIdentifier);
 
                 // $oVariantType = $this->GetVariantType();
 
-                $sItemListQuery = "SELECT DISTINCT `shop_article`.`variant_parent_id`
+                $sItemListQuery = 'SELECT DISTINCT `shop_article`.`variant_parent_id`
                   FROM `shop_variant_type_value`
             INNER JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
             INNER JOIN `shop_article` ON `shop_article_shop_variant_type_value_mlt`.`source_id` = `shop_article`.`id`
             INNER JOIN `shop_article` AS PARENTARTICLE ON `shop_article`.`variant_parent_id` = PARENTARTICLE.`id`
             INNER JOIN `shop_variant_type` ON `shop_variant_type_value`.`shop_variant_type_id` = `shop_variant_type`.`id`
-                 WHERE (`shop_variant_type_value`.`name` IN (".implode(',', $quotedValues).") OR `shop_variant_type_value`.`name_grouped` IN (".implode(',', $quotedValues)."))
+                 WHERE (`shop_variant_type_value`.`name` IN ('.implode(',', $quotedValues).') OR `shop_variant_type_value`.`name_grouped` IN ('.implode(',', $quotedValues)."))
                    AND `shop_variant_type`.`identifier` = {$quotedIdentifier}
                    AND PARENTARTICLE.`active` = '1'
                ";
@@ -192,7 +190,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
                     $sItemListQuery .= ' AND ('.$sActiveRestrictions.')';
                 }
 
-                //echo $sItemListQuery;echo "\n\n";
+                // echo $sItemListQuery;echo "\n\n";
                 $aIdList = [];
                 $result = $connection->executeQuery($sItemListQuery);
                 while ($row = $result->fetchAssociative()) {
@@ -200,7 +198,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
                 }
 
                 if (count($aIdList) > 0) {
-                    $sQuery = "`shop_article`.`id` IN (".implode(',', $aIdList).")";
+                    $sQuery = '`shop_article`.`id` IN ('.implode(',', $aIdList).')';
                 }
             }
 
@@ -219,7 +217,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
     {
         $aOptions = $this->GetFromInternalCache('aOptions');
         if (is_null($aOptions)) {
-            $aOptions = array();
+            $aOptions = [];
             $sIdSelect = $this->GetResultSetBaseQuery();
 
             $databaseConnection = $this->getDatabaseConnection();
@@ -260,7 +258,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
      */
     public function getVariantTypeIds()
     {
-        $aId = array();
+        $aId = [];
         $connection = $this->getDatabaseConnection();
 
         $quotedIdentifier = $connection->quote($this->sVariantTypeIdentifier);

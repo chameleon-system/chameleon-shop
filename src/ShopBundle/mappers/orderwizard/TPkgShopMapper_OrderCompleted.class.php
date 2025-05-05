@@ -31,15 +31,15 @@ class TPkgShopMapper_OrderCompleted extends AbstractViewMapper
         if ($oActiveOrderStep && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oActiveOrderStep->table, $oActiveOrderStep->id);
         }
-        $aTextData = array();
+        $aTextData = [];
         $aTextData['sTitle'] = $oActiveOrderStep->fieldName;
         $aTextData['sText'] = '';
 
-        $aOrderPrintData = array();
+        $aOrderPrintData = [];
         $aOrderPrintData['sText'] = $oActiveOrderStep->GetDescription();
         $oLastOrder = $oVisitor->GetSourceObject('oOrder');
         if (!$oLastOrder->fieldSystemOrderNotificationSend) {
-            $aOrderPrintData['sText'] .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.error.unable_to_send_order_confirm_mail');
+            $aOrderPrintData['sText'] .= ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.error.unable_to_send_order_confirm_mail');
             if ($bCachingEnabled) {
                 $oCacheTriggerManager->addTrigger($oLastOrder->table, $oLastOrder->id);
             }

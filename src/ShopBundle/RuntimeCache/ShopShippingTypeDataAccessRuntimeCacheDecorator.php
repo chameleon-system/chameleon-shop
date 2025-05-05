@@ -12,7 +12,6 @@
 namespace ChameleonSystem\ShopBundle\RuntimeCache;
 
 use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopShippingTypeDataAccessInterface;
-use TShopBasket;
 
 class ShopShippingTypeDataAccessRuntimeCacheDecorator implements ShopShippingTypeDataAccessInterface
 {
@@ -23,11 +22,8 @@ class ShopShippingTypeDataAccessRuntimeCacheDecorator implements ShopShippingTyp
     /**
      * @var array<string, mixed>
      */
-    private $cache = array();
+    private $cache = [];
 
-    /**
-     * @param ShopShippingTypeDataAccessInterface $subject
-     */
     public function __construct(ShopShippingTypeDataAccessInterface $subject)
     {
         $this->subject = $subject;
@@ -134,15 +130,15 @@ class ShopShippingTypeDataAccessRuntimeCacheDecorator implements ShopShippingTyp
     /**
      * {@inheritdoc}
      */
-    public function getAvailableShippingTypes($shippingGroupId, $shippingCountryId, TShopBasket $basket)
+    public function getAvailableShippingTypes($shippingGroupId, $shippingCountryId, \TShopBasket $basket)
     {
-        $parameter = array(
+        $parameter = [
             'iGroupId' => $shippingGroupId,
             'dNumberOfArticles' => $basket->dTotalNumberOfArticles,
             'dWeight' => $basket->dTotalWeight,
             'dBasketVolume' => $basket->dTotalVolume,
             'dBasketValue' => $basket->dCostArticlesTotalAfterDiscounts,
-        );
+        ];
         if ('' !== $shippingCountryId) {
             $parameter['sActiveShippingCountryId'] = $shippingCountryId;
         }

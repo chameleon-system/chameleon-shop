@@ -13,12 +13,11 @@ class ShopModuleArticleList
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldBoolean
         /** @var bool - Release for the Post-Search-Filter */
         private bool $canBeFiltered = false,
@@ -27,20 +26,16 @@ class ShopModuleArticleList
         private string $name = '',
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Icon */
-        private ?CmsMedia $icon = null
-        ,
+        private ?CmsMedia $icon = null,
         // TCMSFieldLookup
         /** @var ShopModuleArticleListFilter|null - Filter / content */
-        private ?ShopModuleArticleListFilter $shopModuleArticleListFilter = null
-        ,
+        private ?ShopModuleArticleListFilter $shopModuleArticleListFilter = null,
         // TCMSFieldLookup
         /** @var ShopModuleArticlelistOrderby|null - Sorting */
-        private ?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby = null
-        ,
+        private ?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby = null,
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, ShopModuleArticlelistOrderby> - Available sortings */
-        private Collection $shopModuleArticlelistOrderbyCollection = new ArrayCollection()
-        ,
+        private Collection $shopModuleArticlelistOrderbyCollection = new ArrayCollection(),
         // TCMSFieldNumber
         /** @var int - Number of articles shown */
         private int $numberOfArticles = -1,
@@ -55,12 +50,10 @@ class ShopModuleArticleList
         private string $descriptionEnd = '',
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopArticleGroup> - Show articles from these article groups */
-        private Collection $shopArticleGroupCollection = new ArrayCollection()
-        ,
+        private Collection $shopArticleGroupCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopCategory> - Show articles from these product categories */
-        private Collection $shopCategoryCollection = new ArrayCollection()
-        ,
+        private Collection $shopCategoryCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopModuleArticleListArticle> - Show these articles */
         private Collection $shopModuleArticleListArticleCollection = new ArrayCollection()
@@ -104,7 +97,6 @@ class ShopModuleArticleList
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isCanBeFiltered(): bool
     {
@@ -117,7 +109,6 @@ class ShopModuleArticleList
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -132,7 +123,6 @@ class ShopModuleArticleList
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getIcon(): ?CmsMedia
     {
@@ -145,7 +135,6 @@ class ShopModuleArticleList
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getShopModuleArticleListFilter(): ?ShopModuleArticleListFilter
@@ -160,7 +149,6 @@ class ShopModuleArticleList
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopModuleArticlelistOrderby(): ?ShopModuleArticlelistOrderby
     {
@@ -173,8 +161,6 @@ class ShopModuleArticleList
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -210,7 +196,6 @@ class ShopModuleArticleList
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getNumberOfArticles(): int
     {
@@ -223,7 +208,6 @@ class ShopModuleArticleList
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getNumberOfArticlesPerPage(): int
@@ -238,7 +222,6 @@ class ShopModuleArticleList
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescriptionStart(): string
     {
@@ -252,7 +235,6 @@ class ShopModuleArticleList
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescriptionEnd(): string
     {
@@ -265,8 +247,6 @@ class ShopModuleArticleList
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -300,8 +280,6 @@ class ShopModuleArticleList
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -333,8 +311,6 @@ class ShopModuleArticleList
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -368,6 +344,4 @@ class ShopModuleArticleList
 
         return $this;
     }
-
-
 }

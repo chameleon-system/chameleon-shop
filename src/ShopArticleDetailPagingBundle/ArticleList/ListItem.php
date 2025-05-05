@@ -16,13 +16,13 @@ use ChameleonSystem\ShopArticleDetailPagingBundle\Interfaces\ListItemInterface;
 class ListItem implements ListItemInterface
 {
     /** @var string|null */
-    private $id = null;
+    private $id;
 
     /** @var string|null */
-    private $name = null;
+    private $name;
 
     /** @var string|null */
-    private $url = null;
+    private $url;
 
     /**
      * @param string $id

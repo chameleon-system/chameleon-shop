@@ -6,12 +6,11 @@ class ShopArticleStats
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopArticle|null - Belongs to */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldNumber
         /** @var int - Sales */
         private int $statsSales = 0,
@@ -64,7 +63,6 @@ class ShopArticleStats
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getStatsSales(): int
     {
@@ -77,7 +75,6 @@ class ShopArticleStats
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getStatsDetailViews(): int
@@ -92,7 +89,6 @@ class ShopArticleStats
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getStatsReviewAverage(): string
     {
@@ -106,7 +102,6 @@ class ShopArticleStats
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getStatsReviewCount(): int
     {
@@ -119,6 +114,4 @@ class ShopArticleStats
 
         return $this;
     }
-
-
 }

@@ -28,7 +28,7 @@ class BasketItemEvent extends Event implements BasketItemEventInterface
      */
     private $user;
 
-    public function __construct(\TdbDataExtranetUser $user, \TShopBasket $basket, \TShopBasketArticle $basketArticle = null)
+    public function __construct(\TdbDataExtranetUser $user, \TShopBasket $basket, ?\TShopBasketArticle $basketArticle = null)
     {
         $this->basket = $basket;
         $this->basketArticle = $basketArticle;

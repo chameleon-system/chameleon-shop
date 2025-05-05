@@ -13,10 +13,10 @@
  * the paymenthandlers are used to handle the different payment methods. They ensure that the right
  * information is collected from the user, and that the payment is executed (as may be the case for online payment)
  * Note that the default handler has no functionality. it must be extended in order to do anything usefull.
-/**/
+ * /**/
 class TShopPaymentHandlerDebitNoSEPA extends TdbShopPaymentHandler
 {
-    const MSG_MANAGER_NAME = 'TShopPaymentHandlerDebitMSG';
+    public const MSG_MANAGER_NAME = 'TShopPaymentHandlerDebitMSG';
 
     protected function GetViewPath()
     {
@@ -41,8 +41,6 @@ class TShopPaymentHandlerDebitNoSEPA extends TdbShopPaymentHandler
     /**
      * return true if the user data is valid
      * data will be passed as an array.
-     *
-     * @param array $aUserData - the user data
      *
      * @return bool
      */
@@ -75,8 +73,7 @@ class TShopPaymentHandlerDebitNoSEPA extends TdbShopPaymentHandler
     /**
      * executes payment for order.
      *
-     * @param TdbShopOrder $oOrder
-     * @param string       $sMessageConsumer - send error messages here
+     * @param string $sMessageConsumer - send error messages here
      *
      * @return bool
      */
@@ -102,7 +99,7 @@ class TShopPaymentHandlerDebitNoSEPA extends TdbShopPaymentHandler
     {
         $aPaymentData = parent::PreSaveUserPaymentDataToOrderHook($aPaymentData);
 
-        $aFilteredData = array('accountOwner' => '', 'accountNr' => '', 'bankNr' => '');
+        $aFilteredData = ['accountOwner' => '', 'accountNr' => '', 'bankNr' => ''];
         if (array_key_exists('accountOwner', $aPaymentData)) {
             $aFilteredData['accountOwner'] = $aPaymentData['accountOwner'];
         }

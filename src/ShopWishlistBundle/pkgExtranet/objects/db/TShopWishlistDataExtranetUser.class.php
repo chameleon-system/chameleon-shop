@@ -15,7 +15,7 @@ class TShopWishlistDataExtranetUser extends TShopWishlistDataExtranetUserAutoPar
      * add an article to the wishlist.
      *
      * @param string $sArticleId
-     * @param float  $dAmount
+     * @param float $dAmount
      *
      * @return float - new amount on list
      */
@@ -40,7 +40,7 @@ class TShopWishlistDataExtranetUser extends TShopWishlistDataExtranetUserAutoPar
         $oWishlist = $this->GetWishlist(true);
         $oWishlistItem = TdbPkgShopWishlistArticle::GetNewInstance();
         /** @var $oWishlistItem TdbPkgShopWishlistArticle */
-        if ($oWishlistItem->LoadFromFields(array('pkg_shop_wishlist_id' => $oWishlist->id, 'id' => $sPkgShopWishlistArticleId))) {
+        if ($oWishlistItem->LoadFromFields(['pkg_shop_wishlist_id' => $oWishlist->id, 'id' => $sPkgShopWishlistArticleId])) {
             $oWishlistItem->AllowEditByAll(true);
             $oWishlistItem->Delete();
         }
@@ -70,7 +70,7 @@ class TShopWishlistDataExtranetUser extends TShopWishlistDataExtranetUserAutoPar
             if (is_null($oWishlist) && $bCreateIfNotExists) {
                 $oWishlist = TdbPkgShopWishlist::GetNewInstance();
                 if (!$oWishlist->LoadFromField('data_extranet_user_id', $this->id)) {
-                    $aBaseData = array('data_extranet_user_id' => $this->id, 'is_public' => '0');
+                    $aBaseData = ['data_extranet_user_id' => $this->id, 'is_public' => '0'];
                     $oWishlist->LoadFromRow($aBaseData);
                     $oWishlist->Save();
                 }

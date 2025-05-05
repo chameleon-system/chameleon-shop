@@ -23,16 +23,14 @@ interface ShopProductExporterInterface
     public function isValidExportKey($exportKey);
 
     /**
-     * @param ConfigurationInterface $moduleConfiguration
-     * @param string                 $alias
+     * @param string $alias
      *
      * @return string
      */
     public function export(ConfigurationInterface $moduleConfiguration, $alias);
 
     /**
-     * @param string                            $alias
-     * @param ShopProductExportHandlerInterface $exportHandler
+     * @param string $alias
      *
      * @return void
      */

@@ -13,10 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TShopArticleReview extends TAdbShopArticleReview
 {
-    const VIEW_PATH = 'pkgShop/views/db/TShopArticleReview';
-    const MSG_CONSUMER_BASE_NAME = 'tshoparticlereview';
-    const INPUT_BASE_NAME = 'aReviewData';
-    const SESSION_REVIEWED_KEY_NAME = 'sReviewSessionIdentifier';
+    public const VIEW_PATH = 'pkgShop/views/db/TShopArticleReview';
+    public const MSG_CONSUMER_BASE_NAME = 'tshoparticlereview';
+    public const INPUT_BASE_NAME = 'aReviewData';
+    public const SESSION_REVIEWED_KEY_NAME = 'sReviewSessionIdentifier';
 
     /**
      * return the age of the review as a string.
@@ -54,7 +54,7 @@ class TShopArticleReview extends TAdbShopArticleReview
             $iAgeHour += 0.5;
         }
 
-        $aAgeParts = array();
+        $aAgeParts = [];
         $oLocal = TCMSLocal::GetActive();
         if ($iAgeYear > 0) {
             $sName = 'Jahr';
@@ -99,14 +99,14 @@ class TShopArticleReview extends TAdbShopArticleReview
     /**
      * used to display an article.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      * @param bool $bAllowCache
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array(), $bAllowCache = true)
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [], $bAllowCache = true)
     {
         $oView = new TViewParser();
         $oView->AddVar('oReview', $this);
@@ -123,7 +123,7 @@ class TShopArticleReview extends TAdbShopArticleReview
      *
      * @return array
      */
-    protected function GetCacheTrigger($id, $aCallTimeVars = array())
+    protected function GetCacheTrigger($id, $aCallTimeVars = [])
     {
         $aCacheTrigger = $this->GetCacheRelatedTables($id);
 
@@ -133,8 +133,8 @@ class TShopArticleReview extends TAdbShopArticleReview
     protected function GetCacheRelatedTables($id)
     {
         $aCacheRelatedTables = parent::GetCacheRelatedTables($id);
-        $aCacheRelatedTables[] = array('table' => 'shop_article', 'id' => $this->fieldShopArticleId);
-        $aCacheRelatedTables[] = array('table' => 'data_extranet_user', 'id' => $this->fieldDataExtranetUserId);
+        $aCacheRelatedTables[] = ['table' => 'shop_article', 'id' => $this->fieldShopArticleId];
+        $aCacheRelatedTables[] = ['table' => 'data_extranet_user', 'id' => $this->fieldDataExtranetUserId];
 
         return $aCacheRelatedTables;
     }
@@ -150,7 +150,7 @@ class TShopArticleReview extends TAdbShopArticleReview
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }
@@ -234,6 +234,6 @@ class TShopArticleReview extends TAdbShopArticleReview
      */
     private function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 }

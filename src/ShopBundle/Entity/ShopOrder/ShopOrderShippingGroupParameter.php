@@ -6,12 +6,11 @@ class ShopOrderShippingGroupParameter
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopOrder|null - Belongs to order */
-        private ?ShopOrder $shopOrder = null
-        ,
+        private ?ShopOrder $shopOrder = null,
         // TCMSFieldVarchar
         /** @var string - Parameter name */
         private string $name = '',
@@ -58,7 +57,6 @@ class ShopOrderShippingGroupParameter
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -72,7 +70,6 @@ class ShopOrderShippingGroupParameter
         return $this;
     }
 
-
     // TCMSFieldText
     public function getValue(): string
     {
@@ -85,6 +82,4 @@ class ShopOrderShippingGroupParameter
 
         return $this;
     }
-
-
 }

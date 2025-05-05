@@ -2,18 +2,15 @@
 
 namespace ChameleonSystem\ShopBundle\Entity\ShopOrder;
 
-use ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrder;
-
 class ShopOrderDiscount
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopOrder|null - Order ID */
-        private ?ShopOrder $shopOrder = null
-        ,
+        private ?ShopOrder $shopOrder = null,
         // TCMSFieldVarchar
         /** @var string - Discount ID */
         private string $shopDiscountId = '',
@@ -78,7 +75,6 @@ class ShopOrderDiscount
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getShopDiscountId(): string
     {
@@ -91,7 +87,6 @@ class ShopOrderDiscount
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -106,7 +101,6 @@ class ShopOrderDiscount
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getValue(): string
     {
@@ -119,7 +113,6 @@ class ShopOrderDiscount
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getValuetype(): string
@@ -134,7 +127,6 @@ class ShopOrderDiscount
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFreearticleName(): string
     {
@@ -147,7 +139,6 @@ class ShopOrderDiscount
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getFreearticleArticlenumber(): string
@@ -162,7 +153,6 @@ class ShopOrderDiscount
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFreearticleId(): string
     {
@@ -176,7 +166,6 @@ class ShopOrderDiscount
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getTotal(): string
     {
@@ -189,6 +178,4 @@ class ShopOrderDiscount
 
         return $this;
     }
-
-
 }

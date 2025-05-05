@@ -6,12 +6,11 @@ class ShopBankAccount
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -76,7 +75,6 @@ class ShopBankAccount
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -89,7 +87,6 @@ class ShopBankAccount
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAccountOwner(): string
@@ -104,7 +101,6 @@ class ShopBankAccount
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getBankname(): string
     {
@@ -117,7 +113,6 @@ class ShopBankAccount
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getBankcode(): string
@@ -132,7 +127,6 @@ class ShopBankAccount
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAccountNumber(): string
     {
@@ -145,7 +139,6 @@ class ShopBankAccount
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getBicCode(): string
@@ -160,7 +153,6 @@ class ShopBankAccount
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIbannumber(): string
     {
@@ -174,7 +166,6 @@ class ShopBankAccount
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -187,6 +178,4 @@ class ShopBankAccount
 
         return $this;
     }
-
-
 }

@@ -11,35 +11,35 @@
 
 class TPkgShopPaymentTransactionItemDataEndPoint
 {
-    const TYPE_PRODUCT = 'product';
-    const TYPE_VOUCHER = 'voucher';
-    const TYPE_DISCOUNT_VOUCHER = 'discount-voucher';
-    const TYPE_DISCOUNT = 'discount';
-    const TYPE_SHIPPING = 'shipping';
-    const TYPE_PAYMENT = 'payment';
-    const TYPE_OTHER = 'other'; // everything that is not covered by one of the other options
+    public const TYPE_PRODUCT = 'product';
+    public const TYPE_VOUCHER = 'voucher';
+    public const TYPE_DISCOUNT_VOUCHER = 'discount-voucher';
+    public const TYPE_DISCOUNT = 'discount';
+    public const TYPE_SHIPPING = 'shipping';
+    public const TYPE_PAYMENT = 'payment';
+    public const TYPE_OTHER = 'other'; // everything that is not covered by one of the other options
 
     /**
      * @var int
      */
-    private $amount = null;
+    private $amount;
     /**
      * @var float
      */
-    private $value = null;
+    private $value;
     /**
      * @var string
      */
-    private $type = null;
+    private $type;
     /**
      * @var string
      */
-    private $orderItemId = null;
+    private $orderItemId;
 
     /**
      * @var TdbShopOrderItem|null
      */
-    private $orderItem = null;
+    private $orderItem;
 
     /**
      * @param float $value
@@ -126,9 +126,9 @@ class TPkgShopPaymentTransactionItemDataEndPoint
                 $sMsg = "unable to load the shop_order_item [{$this->getOrderItemId()}]";
                 throw new TPkgCmsException_LogAndMessage(
                     TPkgShopPaymentTransactionManager::MESSAGE_ERROR,
-                    array('sMessage' => $sMsg),
+                    ['sMessage' => $sMsg],
                     $sMsg,
-                    array('item' => $this)
+                    ['item' => $this]
                 );
             } else {
                 $this->orderItem = $oOrderItem;

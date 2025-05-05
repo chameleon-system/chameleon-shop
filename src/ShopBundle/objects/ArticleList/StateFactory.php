@@ -22,7 +22,7 @@ class StateFactory implements StateFactoryInterface
     /**
      * @var StateElementInterface[]
      */
-    private $stateElements = array();
+    private $stateElements = [];
 
     /**
      * {@inheritdoc}
@@ -35,7 +35,7 @@ class StateFactory implements StateFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createState(array $userData = null)
+    public function createState(?array $userData = null)
     {
         $state = $this->createStateObject();
 
@@ -64,10 +64,10 @@ class StateFactory implements StateFactoryInterface
      */
     public function createStateEnrichedWithDefaults(StateInterface $state, ConfigurationInterface $configuration)
     {
-        $defaultValues = array(
+        $defaultValues = [
             StateInterface::PAGE_SIZE => $configuration->getDefaultPageSize(),
             StateInterface::SORT => $configuration->getDefaultSortId(),
-        );
+        ];
         $enrichedState = clone $state;
         $enrichedState->setUnsetStatesOnly($defaultValues);
 
@@ -75,7 +75,7 @@ class StateFactory implements StateFactoryInterface
     }
 
     /**
-     * @return \ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface
+     * @return StateInterface
      */
     private function createStateObject()
     {

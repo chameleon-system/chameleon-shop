@@ -15,17 +15,19 @@ class TPkgShopOrderPaymentConfig implements IPkgShopOrderPaymentConfig
 {
     /**
      * @var string
+     *
      * @psalm-var self::ENVIRONMENT_*
      */
     private $environment;
     /**
      * @var ParameterBag
      */
-    private $data = null;
+    private $data;
 
     /**
-     * @param string   $environment self::ENVIRONMENT_SANDBOX or self::ENVIRONMENT_PRODUCTION
+     * @param string $environment self::ENVIRONMENT_SANDBOX or self::ENVIRONMENT_PRODUCTION
      * @param string[] $configData
+     *
      * @psalm-param self::ENVIRONMENT_* $environment
      */
     public function __construct($environment, array $configData)
@@ -42,6 +44,7 @@ class TPkgShopOrderPaymentConfig implements IPkgShopOrderPaymentConfig
 
     /**
      * @return string - self::ENVIRONMENT_PRODUCTION|self::ENVIRONMENT_SANDBOX
+     *
      * @psalm-return self::ENVIRONMENT_*
      */
     public function getEnvironment()
@@ -60,26 +63,29 @@ class TPkgShopOrderPaymentConfig implements IPkgShopOrderPaymentConfig
     /**
      * @param bool $captureOnShipment
      *
-     * @throws InvalidArgumentException
-     *
      * @return void
+     *
+     * @throws InvalidArgumentException
      */
     public function setCaptureOnShipment($captureOnShipment)
     {
         if (false === is_bool($captureOnShipment)) {
-            throw new \InvalidArgumentException('captureOnShipment must be boolean');
+            throw new InvalidArgumentException('captureOnShipment must be boolean');
         }
         $this->data->set('captureOnShipment', $captureOnShipment);
     }
 
     /**
      * @param string $key
-     * @param mixed  $default
+     *
      * @return mixed
      *
-     * Assumption: The return type is defined by the default parameter.
+     * Assumption: The return type is defined by the default parameter
+     *
      * @psalm-template T
+     *
      * @psalm-param T $default
+     *
      * @psalm-return (T is null ? mixed : T)
      */
     public function getValue($key, $default = null)

@@ -9,16 +9,14 @@ class ShopSearchFieldWeight
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldExtendedLookup
         /** @var CmsLanguage|null - Language */
-        private ?CmsLanguage $cmsLanguage = null
-        ,
+        private ?CmsLanguage $cmsLanguage = null,
         // TCMSFieldVarchar
         /** @var string - Descriptive name of the field / table combination */
         private string $name = '',
@@ -33,8 +31,7 @@ class ShopSearchFieldWeight
         private string $weight = '',
         // TCMSFieldLookup
         /** @var ShopSearchQuery|null - Selection to be used */
-        private ?ShopSearchQuery $shopSearchQuery = null
-        ,
+        private ?ShopSearchQuery $shopSearchQuery = null,
         // TCMSFieldVarchar
         /** @var string - Field name in query */
         private string $fieldNameInQuery = '',
@@ -81,7 +78,6 @@ class ShopSearchFieldWeight
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getCmsLanguage(): ?CmsLanguage
     {
@@ -94,7 +90,6 @@ class ShopSearchFieldWeight
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -109,7 +104,6 @@ class ShopSearchFieldWeight
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getTablename(): string
     {
@@ -122,7 +116,6 @@ class ShopSearchFieldWeight
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getFieldname(): string
@@ -137,7 +130,6 @@ class ShopSearchFieldWeight
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getWeight(): string
     {
@@ -150,7 +142,6 @@ class ShopSearchFieldWeight
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getShopSearchQuery(): ?ShopSearchQuery
@@ -165,7 +156,6 @@ class ShopSearchFieldWeight
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFieldNameInQuery(): string
     {
@@ -179,7 +169,6 @@ class ShopSearchFieldWeight
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIndexPartialWords(): bool
     {
@@ -192,6 +181,4 @@ class ShopSearchFieldWeight
 
         return $this;
     }
-
-
 }

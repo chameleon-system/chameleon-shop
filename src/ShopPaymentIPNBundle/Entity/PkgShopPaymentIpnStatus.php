@@ -8,12 +8,11 @@ class PkgShopPaymentIpnStatus
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ShopPaymentHandlerGroup|null - Belongs to the configuration of */
-        private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
-        ,
+        private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -63,7 +62,6 @@ class PkgShopPaymentIpnStatus
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -76,7 +74,6 @@ class PkgShopPaymentIpnStatus
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getCode(): string
@@ -91,7 +88,6 @@ class PkgShopPaymentIpnStatus
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -104,6 +100,4 @@ class PkgShopPaymentIpnStatus
 
         return $this;
     }
-
-
 }

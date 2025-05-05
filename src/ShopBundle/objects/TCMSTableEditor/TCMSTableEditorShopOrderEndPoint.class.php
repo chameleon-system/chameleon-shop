@@ -34,16 +34,16 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
         $this->oMenuItems->AddItem($exportMenuItem);
     }
 
-    private function getSendConfirmMenuItem(): \TCMSTableEditorMenuItem
+    private function getSendConfirmMenuItem(): TCMSTableEditorMenuItem
     {
-        $oMenuItem = new \TCMSTableEditorMenuItem();
+        $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'sendordermail';
-        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.action_send_order_confirm_mail');
+        $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.action_send_order_confirm_mail');
         $oMenuItem->sIcon = 'fas fa-envelope';
 
         $oGlobal = TGlobal::instance();
         $sURL = PATH_CMS_CONTROLLER.'?';
-        $aParams = array('module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'GetFrontendActionUrlToSendOrderEmail', '_noModuleFunction' => 'true', 'pagedef' => 'tableeditor', 'tableid' => $this->oTableConf->id, 'id' => $this->sId);
+        $aParams = ['module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'], '_fnc' => 'GetFrontendActionUrlToSendOrderEmail', '_noModuleFunction' => 'true', 'pagedef' => 'tableeditor', 'tableid' => $this->oTableConf->id, 'id' => $this->sId];
         $sURL .= TTools::GetArrayAsURLForJavascript($aParams);
 
         $oMenuItem->sOnClick = "ShopOrderSendConfirmOrderMail('{$sURL}', '".TGlobal::OutHTML($this->oTable->sqlData['user_email'])."');";
@@ -51,11 +51,11 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
         return $oMenuItem;
     }
 
-    private function getExportMenuItem(): \TCMSTableEditorMenuItem
+    private function getExportMenuItem(): TCMSTableEditorMenuItem
     {
         $translator = $this->getTranslator();
 
-        $menuItem = new \TCMSTableEditorMenuItem();
+        $menuItem = new TCMSTableEditorMenuItem();
         $menuItem->sItemKey = 'exportorder';
         $menuItem->setTitle($translator->trans('chameleon_system_shop.orders.export_button_title'));
         $menuItem->sIcon = 'fas fa-file-export';
@@ -71,7 +71,7 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
         ];
         $url .= $this->getUrlUtil()->getArrayAsUrl($params, '', '&');
 
-        $confirmText = \TGlobal::OutJS($translator->trans('chameleon_system_shop.orders.export_confirm'));
+        $confirmText = TGlobal::OutJS($translator->trans('chameleon_system_shop.orders.export_confirm'));
         $menuItem->sOnClick = "if (confirm('$confirmText')) { GetAjaxCall('".$url."',DisplayAjaxMessage); }";
 
         return $menuItem;
@@ -103,7 +103,7 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
 
         $bSuccess = false;
         $oOrder = TdbShopOrder::GetNewInstance();
-        /** @var $oOrder TdbShopOrder */
+        /* @var $oOrder TdbShopOrder */
         $oOrder->AllowEditByAll(true);
         if (!$oOrder->Load($this->sId)) {
             $oOrder = null;
@@ -113,10 +113,10 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
 
         if (true === $bSuccess) {
             $oReturnData->bSuccess = true;
-            $oReturnData->sMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.msg_order_confirm_sent', array('%mail%' => $sMail));
+            $oReturnData->sMessage = ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.msg_order_confirm_sent', ['%mail%' => $sMail]);
         } else {
             $oReturnData->bSuccess = false;
-            $oReturnData->sMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.error_sending_confirm_mail', array('%error%' => $bSuccess));
+            $oReturnData->sMessage = ServiceLocator::get('translator')->trans('chameleon_system_shop.orders.error_sending_confirm_mail', ['%error%' => $bSuccess]);
         }
 
         return $oReturnData;
@@ -134,7 +134,7 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
     {
         $sURL = '';
         if (is_null($sMail)) {
-            $oGlobal = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.global');
+            $oGlobal = ServiceLocator::get('chameleon_system_core.global');
             $sMail = $oGlobal->GetUserData('sTargetMail');
         }
         if (!empty($sMail) && is_object($this->oTable)) {
@@ -143,7 +143,7 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
                 $oPortal = $this->getPortalDomainService()->getActivePortal();
                 $sPortalId = $oPortal->id;
             }
-            $oAction = TdbPkgRunFrontendAction::CreateAction('TPkgRunFrontendAction_SendOrderEMail', $sPortalId, array('email' => $sMail, 'order_id' => $this->sId));
+            $oAction = TdbPkgRunFrontendAction::CreateAction('TPkgRunFrontendAction_SendOrderEMail', $sPortalId, ['email' => $sMail, 'order_id' => $this->sId]);
             $sURL = $oAction->getUrlToRunAction();
         }
 
@@ -159,16 +159,15 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
 
             return [
                 'messageType' => 'SUCCESS',
-                'message' => $translator->trans('chameleon_system_shop.orders.export_success')
+                'message' => $translator->trans('chameleon_system_shop.orders.export_success'),
             ];
         }
 
         // TODO this should however be an http error response; which would then use AjaxError() on js side
         return [
             'messageType' => 'ERROR',
-            'message' => $translator->trans('chameleon_system_shop.orders.export_failure')
+            'message' => $translator->trans('chameleon_system_shop.orders.export_failure'),
         ];
-
     }
 
     /**
@@ -187,7 +186,7 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
     protected function PostSaveHook($oFields, $oPostTable)
@@ -224,7 +223,9 @@ class TCMSTableEditorShopOrderEndPoint extends TCMSTableEditor
      * executes the final SQL Delete Query.
      *
      * @return void
+     *
      * @psalm-suppress AssignmentToVoid, InvalidReturnStatement
+     *
      * @FIXME Saving the result of `parent::DeleteExecute()` and returning does not make sense for a `void` return
      */
     protected function DeleteExecute()

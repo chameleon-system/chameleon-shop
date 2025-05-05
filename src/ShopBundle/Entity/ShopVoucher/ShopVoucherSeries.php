@@ -9,7 +9,6 @@ use ChameleonSystem\ShopBundle\Entity\Product\ShopArticleGroup;
 use ChameleonSystem\ShopBundle\Entity\Product\ShopManufacturer;
 use ChameleonSystem\ShopBundle\Entity\ShopCore\ShopCategory;
 use ChameleonSystem\ShopBundle\Entity\ShopCore\ShopVat;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -17,15 +16,14 @@ class ShopVoucherSeries
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
         // TCMSFieldLookup
         /** @var ShopVoucherSeriesSponsor|null - Voucher sponsor */
-        private ?ShopVoucherSeriesSponsor $shopVoucherSeriesSponsor = null
-        ,
+        private ?ShopVoucherSeriesSponsor $shopVoucherSeriesSponsor = null,
         // TCMSFieldPrice
         /** @var string - Value */
         private string $value = '',
@@ -34,8 +32,7 @@ class ShopVoucherSeries
         private string $valueType = 'absolut',
         // TCMSFieldLookup
         /** @var ShopVat|null - VAT group */
-        private ?ShopVat $shopVat = null
-        ,
+        private ?ShopVat $shopVat = null,
         // TCMSFieldBoolean
         /** @var bool - Free shipping */
         private bool $freeShipping = false,
@@ -43,11 +40,11 @@ class ShopVoucherSeries
         /** @var bool - Active */
         private bool $active = false,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Active from */
-        private ?DateTime $activeFrom = null,
+        /** @var \DateTime|null - Active from */
+        private ?\DateTime $activeFrom = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Active until */
-        private ?DateTime $activeTo = null,
+        /** @var \DateTime|null - Active until */
+        private ?\DateTime $activeTo = null,
         // TCMSFieldPrice
         /** @var string - Minimum order value */
         private string $restrictToValue = '',
@@ -65,28 +62,22 @@ class ShopVoucherSeries
         private bool $restrictToFirstOrder = false,
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, DataExtranetUser> - Restrict to following customers */
-        private Collection $dataExtranetUserCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetUserCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, DataExtranetGroup> - Restrict to following customer groups */
-        private Collection $dataExtranetGroupCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetGroupCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopManufacturer> - Restrict to products from this manufacturer */
-        private Collection $shopManufacturerCollection = new ArrayCollection()
-        ,
+        private Collection $shopManufacturerCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopArticleGroup> - Restrict to products from these product groups */
-        private Collection $shopArticleGroupCollection = new ArrayCollection()
-        ,
+        private Collection $shopArticleGroupCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopCategory> - Restrict to products from these product categories */
-        private Collection $shopCategoryCollection = new ArrayCollection()
-        ,
+        private Collection $shopCategoryCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, ShopArticle> - Restrict to these products */
-        private Collection $shopArticleCollection = new ArrayCollection()
-        ,
+        private Collection $shopArticleCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopVoucher> - Vouchers belonging to the series */
         private Collection $shopVoucherCollection = new ArrayCollection()
@@ -130,7 +121,6 @@ class ShopVoucherSeries
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopVoucherSeriesSponsor(): ?ShopVoucherSeriesSponsor
     {
@@ -143,7 +133,6 @@ class ShopVoucherSeries
 
         return $this;
     }
-
 
     // TCMSFieldPrice
     public function getValue(): string
@@ -158,7 +147,6 @@ class ShopVoucherSeries
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getValueType(): string
     {
@@ -171,7 +159,6 @@ class ShopVoucherSeries
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getShopVat(): ?ShopVat
@@ -186,7 +173,6 @@ class ShopVoucherSeries
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isFreeShipping(): bool
     {
@@ -199,7 +185,6 @@ class ShopVoucherSeries
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isActive(): bool
@@ -214,34 +199,31 @@ class ShopVoucherSeries
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getActiveFrom(): ?DateTime
+    public function getActiveFrom(): ?\DateTime
     {
         return $this->activeFrom;
     }
 
-    public function setActiveFrom(?DateTime $activeFrom): self
+    public function setActiveFrom(?\DateTime $activeFrom): self
     {
         $this->activeFrom = $activeFrom;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getActiveTo(): ?DateTime
+    public function getActiveTo(): ?\DateTime
     {
         return $this->activeTo;
     }
 
-    public function setActiveTo(?DateTime $activeTo): self
+    public function setActiveTo(?\DateTime $activeTo): self
     {
         $this->activeTo = $activeTo;
 
         return $this;
     }
-
 
     // TCMSFieldPrice
     public function getRestrictToValue(): string
@@ -256,7 +238,6 @@ class ShopVoucherSeries
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isRestrictToOtherSeries(): bool
     {
@@ -269,7 +250,6 @@ class ShopVoucherSeries
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isAllowNoOtherVouchers(): bool
@@ -284,7 +264,6 @@ class ShopVoucherSeries
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isRestrictToOnePerUser(): bool
     {
@@ -298,7 +277,6 @@ class ShopVoucherSeries
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isRestrictToFirstOrder(): bool
     {
@@ -311,8 +289,6 @@ class ShopVoucherSeries
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -346,8 +322,6 @@ class ShopVoucherSeries
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -379,8 +353,6 @@ class ShopVoucherSeries
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -414,8 +386,6 @@ class ShopVoucherSeries
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -447,8 +417,6 @@ class ShopVoucherSeries
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -482,8 +450,6 @@ class ShopVoucherSeries
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -516,8 +482,6 @@ class ShopVoucherSeries
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -549,6 +513,4 @@ class ShopVoucherSeries
 
         return $this;
     }
-
-
 }

@@ -11,9 +11,9 @@
 
 class TPkgShopListfilterItemShopAttributeNumeric extends TPkgShopListfilterItemMultiselectMLT
 {
-    const URL_PARAMETER_FILTER_START_VALUE = 'dStartValue';
+    public const URL_PARAMETER_FILTER_START_VALUE = 'dStartValue';
 
-    const URL_PARAMETER_FILTER_END_VALUE = 'dEndValue';
+    public const URL_PARAMETER_FILTER_END_VALUE = 'dEndValue';
 
     /**
      * you need to set this to the table name of the connected table.
@@ -91,7 +91,7 @@ class TPkgShopListfilterItemShopAttributeNumeric extends TPkgShopListfilterItemM
         if (false !== $dStartValue && false !== $dEndValue) {
             $connection = $this->getDatabaseConnection();
             $quotedTargetTable = $connection->quoteIdentifier($this->sItemTableName);
-            $quotedMLTTable = $connection->quoteIdentifier('shop_article_' . $this->sItemTableName . '_mlt');
+            $quotedMLTTable = $connection->quoteIdentifier('shop_article_'.$this->sItemTableName.'_mlt');
             $quotedStart = $connection->quote($dStartValue);
             $quotedEnd = $connection->quote($dEndValue);
             $quotedAttributeId = $connection->quote($this->GetFieldShopAttribute()->id);

@@ -42,7 +42,7 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
      */
     protected function GetFields()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -59,8 +59,6 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
      * Returns a CSV line from the given field data. This line does not end with line break characters.
      *
      * @param string[] $fields
-     *
-     * @return string
      */
     private function getLine(array $fields): string
     {
@@ -114,7 +112,7 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
      * loops through the available fields and calls GetFieldValue method for each field.
      *
      * @param TdbShopArticle $oArticle
-     * @param array          $aFields
+     * @param array $aFields
      *
      * @return string
      */
@@ -135,7 +133,7 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
             $sMemUsageTmp = $sMemUsageBeforeArticleProcessed;
         }
 
-        $aFieldValues = array();
+        $aFieldValues = [];
         reset($aFields);
         foreach ($aFields as $sFieldName) {
             $aFieldValues[] = $this->GetFieldValue($sFieldName, $oArticle);
@@ -176,10 +174,8 @@ class TPkgShopProductExportCSVEndPoint extends TPkgShopProductExportBase
      * returns value for the given field name
      * could be done by a switch case for each field handling.
      *
-     * @param string         $sFieldName
+     * @param string $sFieldName
      * @param TdbShopArticle $oArticle
-     *
-     * @return mixed
      */
     protected function GetFieldValue($sFieldName, $oArticle)
     {

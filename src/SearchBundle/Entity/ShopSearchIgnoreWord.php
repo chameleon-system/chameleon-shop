@@ -9,16 +9,14 @@ class ShopSearchIgnoreWord
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldExtendedLookup
         /** @var CmsLanguage|null - Language */
-        private ?CmsLanguage $cmsLanguage = null
-        ,
+        private ?CmsLanguage $cmsLanguage = null,
         // TCMSFieldVarchar
         /** @var string - Word */
         private string $name = ''
@@ -62,7 +60,6 @@ class ShopSearchIgnoreWord
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getCmsLanguage(): ?CmsLanguage
     {
@@ -76,7 +73,6 @@ class ShopSearchIgnoreWord
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -89,6 +85,4 @@ class ShopSearchIgnoreWord
 
         return $this;
     }
-
-
 }

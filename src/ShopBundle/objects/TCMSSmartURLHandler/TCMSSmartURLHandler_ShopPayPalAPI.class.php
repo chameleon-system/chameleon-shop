@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
  * takes paypal return urls and mapps them to chameleon urls.
  *
  * @psalm-suppress UndefinedPropertyAssignment
+ *
  * @FIXME Writing data into `$OURLData` when there is no magic `__set` method for them defined.
  */
 class TCMSSmartURLHandler_ShopPayPalAPI extends TCMSSmartURLHandler_ShopBasketSteps
@@ -40,7 +41,7 @@ class TCMSSmartURLHandler_ShopPayPalAPI extends TCMSSmartURLHandler_ShopBasketSt
             $sPayPalPayload = substr($sPayPalMethod, strlen($sPayPalMessage) + 1);
             $aPayPalPayLoadTmp = explode('-', $sPayPalPayload);
 
-            $aPayPalPayLoad = array();
+            $aPayPalPayLoad = [];
             foreach ($aPayPalPayLoadTmp as $sPayLoadItem) {
                 $sSplitOffset = strpos($sPayLoadItem, '_');
                 if (false !== $sSplitOffset) {
@@ -49,11 +50,10 @@ class TCMSSmartURLHandler_ShopPayPalAPI extends TCMSSmartURLHandler_ShopBasketSt
             }
 
             /** @var array<string, string> $aPayPalPayLoad */
-
             $aRedirectParameter = $oURLData->aParameters;
             switch ($sPayPalMessage) {
                 case 'success':
-                    $aRedirectParameter['module_fnc'] = array($aPayPalPayLoad['spot'] => 'PostProcessExternalPaymentHandlerHook');
+                    $aRedirectParameter['module_fnc'] = [$aPayPalPayLoad['spot'] => 'PostProcessExternalPaymentHandlerHook'];
                     break;
                 case 'cancel':
                     $aRedirectParameter['paypalreturn'] = '1';
@@ -73,6 +73,6 @@ class TCMSSmartURLHandler_ShopPayPalAPI extends TCMSSmartURLHandler_ShopBasketSt
      */
     private function getUrlUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

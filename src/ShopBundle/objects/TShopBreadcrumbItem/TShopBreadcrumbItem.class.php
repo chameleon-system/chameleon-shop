@@ -19,12 +19,12 @@ class TShopBreadcrumbItem
     /**
      * @var TItem
      */
-    public $oItem = null;
+    public $oItem;
 
     /**
      * @var string
      */
-    public $id = null;
+    public $id;
 
     /**
      * @return string
@@ -35,9 +35,12 @@ class TShopBreadcrumbItem
     }
 
     /**
-     * Subclasses *MUST* override this method
+     * Subclasses *MUST* override this method.
+     *
      * @return string
+     *
      * @abstract
+     *
      * @psalm-suppress InvalidReturnType
      */
     public function GetLink()

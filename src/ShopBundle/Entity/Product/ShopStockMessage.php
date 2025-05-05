@@ -10,7 +10,7 @@ class ShopStockMessage
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Class */
@@ -23,8 +23,7 @@ class ShopStockMessage
         private string $classType = 'Customer',
         // TCMSFieldLookupParentID
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldVarchar
         /** @var string - Interface identifier */
         private string $identifier = '',
@@ -39,8 +38,7 @@ class ShopStockMessage
         private string $internalName = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopStockMessageTrigger> - Stock messages */
-        private Collection $shopStockMessageTriggerCollection = new ArrayCollection()
-        ,
+        private Collection $shopStockMessageTriggerCollection = new ArrayCollection(),
         // TCMSFieldBoolean
         /** @var bool - Automatically deactivate when stock = 0 */
         private bool $autoDeactivateOnZeroStock = true,
@@ -90,7 +88,6 @@ class ShopStockMessage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassSubtype(): string
     {
@@ -103,7 +100,6 @@ class ShopStockMessage
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getClassType(): string
@@ -118,7 +114,6 @@ class ShopStockMessage
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getShop(): ?Shop
     {
@@ -131,7 +126,6 @@ class ShopStockMessage
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getIdentifier(): string
@@ -146,7 +140,6 @@ class ShopStockMessage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClass(): string
     {
@@ -159,7 +152,6 @@ class ShopStockMessage
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -174,7 +166,6 @@ class ShopStockMessage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getInternalName(): string
     {
@@ -187,8 +178,6 @@ class ShopStockMessage
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -222,7 +211,6 @@ class ShopStockMessage
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isAutoDeactivateOnZeroStock(): bool
     {
@@ -235,7 +223,6 @@ class ShopStockMessage
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isAutoActivateOnStock(): bool
@@ -250,7 +237,6 @@ class ShopStockMessage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getGoogleAvailability(): string
     {
@@ -263,6 +249,4 @@ class ShopStockMessage
 
         return $this;
     }
-
-
 }
