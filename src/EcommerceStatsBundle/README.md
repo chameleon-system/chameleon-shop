@@ -1,7 +1,38 @@
-# eCommerce Statistics Bundle
+# Chameleon System EcommerceStatsBundle
+=====================================
 
-This bundle generates statistics reports and exposes them in multiple ways
-in the backend.
+## Overview
+The EcommerceStatsBundle collects and displays e-commerce metrics in the Chameleon backend. It supports custom data providers, database-driven statistic groups, and dashboard widgets for insightful reporting.
+
+Key Features
+------------
+- **Custom StatsProvider**: implement `StatsProviderInterface` and tag with `chameleon_system_ecommerce_stats.stats_provider` to programmatically add statistics.
+- **SQL-Based Groups**: configure `pkg_shop_statistics_group` records with parameterized SQL queries for database-driven stats.
+- **Dashboard Widgets**: visualize statistic groups on the Chameleon Dashboard with configurable timeframes.
+- **Flexible Date Grouping**: group data by day, week, month, or year.
+- **Extensible UI**: integrates with Twig and ViewRenderer for seamless backend display.
+
+Installation
+------------
+This bundle is included in `chameleon-system/chameleon-shop` and auto-registered via Symfony.
+No additional Composer installation is needed.
+To register manually (or without without Flex), add to `app/AppKernel.php`:
+```php
+// app/AppKernel.php
+public function registerBundles()
+{
+    $bundles = [
+        // ...
+        new ChameleonSystem\EcommerceStatsBundle\ChameleonSystemEcommerceStatsBundle(),
+    ];
+    return $bundles;
+}
+```
+Clear cache:
+```bash
+php bin/console cache:clear
+```
+
 
 ## Extending
 
@@ -81,3 +112,6 @@ The bundle also provides dashboard widgets that are registered in the Chameleon 
 
 You can set a timeframe for the widget stats by adding a parameter in your parameters.yml or env vars
 like: `chameleon_system_core_dashboard_default_timeframe: '-30 days'` (be sure to set it to a minus value used in DateTime::modify)
+
+## License
+This bundle is released under the same license as the Chameleon System. See the LICENSE file in the project root.
