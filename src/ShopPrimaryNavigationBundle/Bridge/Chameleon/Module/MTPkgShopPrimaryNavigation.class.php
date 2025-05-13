@@ -22,7 +22,7 @@ class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
         $activePortal = $this->getPortalDomainService()->getActivePortal();
-        if ($bCachingEnabled) {
+        if ($bCachingEnabled && null !== $activePortal) {
             $oCacheTriggerManager->addTrigger($activePortal->table, $activePortal->id);
         }
         $oVisitor->SetMappedValue('oPortal', $activePortal);
@@ -45,16 +45,9 @@ class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
         return $parameters;
     }
 
-    /**
-     * @return string|null
-     */
-    private function getActivePageId()
+    private function getActivePageId(): ?string
     {
-        /** @var ActivePageServiceInterface $activePageService */
-        $activePageService = ServiceLocator::get('chameleon_system_core.active_page_service');
-        $activePage = $activePageService->getActivePage();
-
-        return $activePage->id;
+        return $this->getActivePageService()->getActivePage()?->id;
     }
 
     /**
@@ -70,31 +63,22 @@ class MTPkgShopPrimaryNavigation extends MTPkgViewRendererAbstractModuleMapper
         return $user->GetUserGroupIds();
     }
 
-    /**
-     * @return string|null
-     */
-    private function getActiveCategoryId()
+    private function getActivePageService(): ActivePageServiceInterface
     {
-        $activeCategory = $this->getActiveCategory();
-        if (null === $activeCategory) {
-            return null;
-        }
-
-        return $activeCategory->id;
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return TdbShopCategory
-     */
-    private function getActiveCategory()
+    private function getActiveCategoryId(): ?string
+    {
+        return $this->getActiveCategory()?->id;
+    }
+
+    private function getActiveCategory(): ?TdbShopCategory
     {
         return ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory();
     }
 
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private function getPortalDomainService()
+    private function getPortalDomainService(): PortalDomainServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
