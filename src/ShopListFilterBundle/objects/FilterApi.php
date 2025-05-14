@@ -30,10 +30,10 @@ class FilterApi implements FilterApiInterface
     private StateFactoryInterface $stateFactory;
     private RequestStack $requestStack;
     private ResultFactoryInterface $resultFactory;
-    private ConfigurationInterface $listModuleConfig;
+    private ?ConfigurationInterface $listModuleConfig = null;
     private ActivePageServiceInterface $activePageService;
-    private ?string $articleListSpotName;
-    private StateInterface $articleListState;
+    private ?string $articleListSpotName = null;
+    private ?StateInterface $articleListState = null;
     private CacheInterface $cache;
     private StateRequestExtractorCollectionInterface $stateRequestExtractorCollection;
 
