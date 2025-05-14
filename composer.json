@@ -93,7 +93,7 @@
             "src/ShopPrimaryNavigationBundle/objects",
             "src/ShopPrimaryNavigationBundle/pkgCmsNavigation",
             "src/ShopPrimaryNavigationBundle/pkgShop",
-            "src/ShopPrimaryNavigationBundle/web_modules",
+            "src/ShopPrimaryNavigationBundle/Bridge/Chameleon/Module",
             "src/ShopProductExportBundle/objects",
             "src/ShopRatingServiceBundle/mappers",
             "src/ShopRatingServiceBundle/objects",
