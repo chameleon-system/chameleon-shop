@@ -99,7 +99,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
                 $result = $connection->fetchAssociative($query);
                 $aNewOptions = [];
                 foreach ($result as $aRow) {
-                    if (array_key_exists($aRow['name'], $aOptions)) {
+                    if (is_array($aRow) && array_key_exists($aRow['name'], $aOptions)) {
                         $aNewOptions[$aRow['name']] = $aOptions[$aRow['name']];
                     }
                 }
@@ -243,11 +243,14 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
             }
 
             $tRes = MySqlLegacySupport::getInstance()->query($sItemQuery);
-            while ($aOption = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-                $aOptions[$aOption['attribute']] = $aOption['matches'];
+
+            if (false !== $tRes) {
+                while ($aOption = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
+                    $aOptions[$aOption['attribute']] = $aOption['matches'];
+                }
+                $this->OrderOptions($aOptions);
+                $this->SetInternalCache('aOptions', $aOptions);
             }
-            $this->OrderOptions($aOptions);
-            $this->SetInternalCache('aOptions', $aOptions);
         }
 
         return $aOptions;
