@@ -237,7 +237,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
 
         /** @var array<string, mixed> $billingAddressData */
         $billingAddressData = $inputFilterUtil->getFilteredPostInputArray(TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING);
-        if (null !== $billingAddressData) {
+        if (null !== $billingAddressData && 0 !== count($billingAddressData)) {
             $this->SetBillingAddressData($billingAddressData);
             $this->bUserDataSubmission = true;
         } else {

@@ -59,16 +59,19 @@ class TPkgShopListfilterMapper_Variants extends TPkgShopListfilterMapper_FilterS
             $aRestriction[] = $connection->quote($aFilter['sValue']);
         }
 
-        $query = "SELECT *
+        $aMapping = [];
+
+        if ('' !== $sShopVariantTypeIds) {
+            $query = "SELECT *
                 FROM `shop_variant_type_value`
                WHERE `shop_variant_type_id` IN ({$sShopVariantTypeIds})
                  AND `name` IN (".implode(',', $aRestriction).')
              ';
-        $oValueList = TdbShopVariantTypeValueList::GetList($query);
+            $oValueList = TdbShopVariantTypeValueList::GetList($query);
 
-        $aMapping = [];
-        while ($oValue = $oValueList->Next()) {
-            $aMapping[$oValue->fieldName] = $oValue;
+            while ($oValue = $oValueList->Next()) {
+                $aMapping[$oValue->fieldName] = $oValue;
+            }
         }
 
         foreach ($aFilterData as $sIndex => $aFilter) {
