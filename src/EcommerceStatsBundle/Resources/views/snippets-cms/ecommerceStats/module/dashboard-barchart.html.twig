@@ -24,7 +24,15 @@
             }
         };
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('widget:loaded', function (event) {
+            if (event?.detail?.serviceAlias !== "{{ widgetId|raw }}") {
+                return;
+            }
+            const oldChart = document.getElementById('chart{{ chartId }}').chart;
+            if (oldChart) {
+                oldChart.destroy();
+            }
+
             CHAMELEON.CORE.Charts.generateChart(
                 'chart{{ chartId }}',
                 chartData{{ chartId }}.labels,

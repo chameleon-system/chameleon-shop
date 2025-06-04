@@ -39,17 +39,8 @@ class LastOrdersDashboardWidget extends DashboardWidget
 
     public function getDropdownItems(): array
     {
-        $reloadItem = new WidgetDropdownItemDataModel(
-            'reload-'.$this->getWidgetId(),
-            $this->translator->trans('chameleon_system_shop.widget.reload_button_label'),
-            ''
-        );
-
-        $reloadItem->addDataAttribute('data-service-alias', $this->getWidgetId());
-
         return [
             new WidgetDropdownItemDataModel('lastOrdersDashboardWidgetAllOrders', $this->translator->trans('chameleon_system_shop.widget.last_orders_all_orders'), '/cms?pagedef=tablemanager&id=268'),
-            $reloadItem,
         ];
     }
 
@@ -63,20 +54,8 @@ class LastOrdersDashboardWidget extends DashboardWidget
         $orders = $this->getLastOrders();
 
         $this->renderer->AddSourceObject('orders', $orders);
-        $this->renderer->AddSourceObject('reloadEventButtonId', 'reload-'.$this->getWidgetId());
 
         return $this->renderer->Render('Dashboard/Widgets/last-orders.html.twig');
-    }
-
-    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
-    public function getWidgetHtmlAsJson(): JsonResponse
-    {
-        $data = [
-            'htmlTable' => $this->getBodyHtml(true),
-            'dateTime' => date('d.m.Y H:i'),
-        ];
-
-        return new JsonResponse(json_encode($data));
     }
 
     private function getLastOrders(): array

@@ -53,28 +53,7 @@ class ShopStatusWidget extends DashboardWidget
 
     public function getDropdownItems(): array
     {
-        $reloadItem = new WidgetDropdownItemDataModel(
-            'reload-'.$this->getWidgetId(),
-            $this->translator->trans('chameleon_system_shop.widget.reload_button_label'),
-            ''
-        );
-
-        $reloadItem->addDataAttribute('data-service-alias', $this->getWidgetId());
-
-        return [
-            $reloadItem,
-        ];
-    }
-
-    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
-    public function getWidgetHtmlAsJson(): JsonResponse
-    {
-        $data = [
-            'htmlTable' => $this->getBodyHtml(true),
-            'dateTime' => date('d.m.Y H:i'),
-        ];
-
-        return new JsonResponse(json_encode($data));
+        return [];
     }
 
     protected function generateBodyHtml(): string
