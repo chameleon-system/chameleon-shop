@@ -16,7 +16,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ShopStatusWidget extends DashboardWidget
 {
-    private const WIDGET_NAME = 'widget-shop-status';
+    public const string WIDGET_ID = 'widget-shop-status';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
@@ -48,7 +48,7 @@ class ShopStatusWidget extends DashboardWidget
 
     public function getWidgetId(): string
     {
-        return self::WIDGET_NAME;
+        return self::WIDGET_ID;
     }
 
     public function getDropdownItems(): array

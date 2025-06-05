@@ -12,7 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class TopSellerDashboardWidget extends DashboardBaseWidget
 {
     private const TOP_SELLER_STATISTICS_GROUP_SYSTEM_NAME = 'top_seller';
-    const string WIDGET_ID = 'top-seller';
+    public const string WIDGET_ID = 'top-seller';
 
     public function __construct(
         DashboardCacheService $dashboardCacheService,

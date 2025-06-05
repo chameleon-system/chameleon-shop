@@ -12,7 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class SalesVolumeDashboardWidget extends DashboardBaseWidget
 {
     private const ORDER_NUMBER_STATISTICS_GROUP_SYSTEM_NAME = 'sales_without_shipping';
-    const string WIDGET_ID = 'sales-volume';
+    public const string WIDGET_ID = 'sales-volume';
 
     public function __construct(
         DashboardCacheService $dashboardCacheService,

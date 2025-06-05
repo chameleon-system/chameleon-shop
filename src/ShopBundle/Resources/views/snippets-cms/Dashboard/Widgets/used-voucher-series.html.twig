@@ -4,7 +4,7 @@
 
 <script>
     document.addEventListener('widget:loaded', function (event) {
-        if (event?.detail?.widgetId !== 'widget-used-vouchers') {
+        if (event?.detail?.widgetId !== {{ constant('\\ChameleonSystem\\ShopBundle\\Bridge\\Chameleon\\Dashboard\\Widgets\\UsedVoucherSeriesWidget::WIDGET_ID') }}) {
             return;
         }
         const voucherSeries = {{ chartData|json_encode|raw }};

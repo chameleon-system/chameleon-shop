@@ -8,7 +8,7 @@
     </div>
     <script>
         document.addEventListener('widget:loaded', function (event) {
-            if (event?.detail?.serviceAlias !== "{{ widgetId|raw }}") {
+            if (event?.detail?.widgetId !== "{{ widgetId|raw }}") {
                 return;
             }
             const chartData{{ chartId }} = {

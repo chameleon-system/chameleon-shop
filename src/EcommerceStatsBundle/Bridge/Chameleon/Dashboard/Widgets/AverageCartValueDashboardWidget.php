@@ -12,7 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AverageCartValueDashboardWidget extends DashboardBaseWidget
 {
     private const CART_VALUE_STATISTICS_GROUP_SYSTEM_NAME = 'basket_size_without_shipping';
-    const string WIDGET_ID = 'average-cart-value';
+    public const string WIDGET_ID = 'average-cart-value';
 
     public function __construct(
         DashboardCacheService $dashboardCacheService,

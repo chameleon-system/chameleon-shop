@@ -14,8 +14,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LastOrdersDashboardWidget extends DashboardWidget
 {
-    private const LAST_ORDER_SYSTEM_NAME = 'widget-last-orders';
     public const CMS_RIGHT_SHOP_SHOW_ORDERS = 'CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE';
+    public const string WIDGET_ID = 'widget-last-orders';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
@@ -46,7 +46,7 @@ class LastOrdersDashboardWidget extends DashboardWidget
 
     public function getWidgetId(): string
     {
-        return self::LAST_ORDER_SYSTEM_NAME;
+        return self::WIDGET_ID;
     }
 
     protected function generateBodyHtml(): string
