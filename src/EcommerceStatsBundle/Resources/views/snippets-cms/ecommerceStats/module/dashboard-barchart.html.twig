@@ -7,24 +7,32 @@
         <canvas id="chart{{ chartId }}"></canvas>
     </div>
     <script>
-        const chartData{{ chartId }} = {
-            labels: {{ statsData.labels|json_encode|raw }},
-            datasets: {{ statsData.datasets|json_encode|raw }},
-            options: {
-                legend: {
-                    display: {{ statsData.datasets | length > 1 ? 'true' : 'false' }}
-                }
-            },
-            additionalConfig: {
-                hasCurrency: {{ statsData.hasCurrency ? 'true' : 'false' }},
-                displayGraphLabels: {{ displayGraphLabels is not null ? displayGraphLabels : 'false' }},
-                currency: {
-                    symbol: '{{ statsData.currency }}'
-                }
+        document.addEventListener('widget:loaded', function (event) {
+            if (event?.detail?.widgetId !== "{{ widgetId|raw }}") {
+                return;
             }
-        };
+            const chartData{{ chartId }} = {
+                labels: {{ statsData.labels|json_encode|raw }},
+                datasets: {{ statsData.datasets|json_encode|raw }},
+                options: {
+                    legend: {
+                        display: {{ statsData.datasets | length > 1 ? 'true' : 'false' }}
+                    }
+                },
+                additionalConfig: {
+                    hasCurrency: {{ statsData.hasCurrency ? 'true' : 'false' }},
+                    displayGraphLabels: {{ displayGraphLabels is not null ? displayGraphLabels : 'false' }},
+                    currency: {
+                        symbol: '{{ statsData.currency }}'
+                    }
+                }
+            };
 
-        document.addEventListener('DOMContentLoaded', function () {
+            const oldChart = Chart.getChart('chart{{ chartId }}');
+            if (oldChart) {
+                oldChart.destroy();
+            }
+
             CHAMELEON.CORE.Charts.generateChart(
                 'chart{{ chartId }}',
                 chartData{{ chartId }}.labels,

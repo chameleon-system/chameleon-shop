@@ -11,7 +11,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UsedVoucherSeriesDashboardWidget extends DashboardWidget
 {
-    private const WIDGET_NAME = 'widget-used-voucher-series';
+    public const string WIDGET_ID = 'widget-used-voucher-series';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
@@ -36,7 +36,7 @@ class UsedVoucherSeriesDashboardWidget extends DashboardWidget
 
     public function getWidgetId(): string
     {
-        return self::WIDGET_NAME;
+        return self::WIDGET_ID;
     }
 
     public function getDropdownItems(): array

@@ -12,7 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ShopProductStatusWidget extends DashboardWidget
 {
-    private const WIDGET_NAME = 'widget-shop-product-status';
+    public const string WIDGET_ID = 'widget-shop-product-status';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
@@ -43,7 +43,7 @@ class ShopProductStatusWidget extends DashboardWidget
 
     public function getWidgetId(): string
     {
-        return self::WIDGET_NAME;
+        return self::WIDGET_ID;
     }
 
     protected function generateBodyHtml(): string

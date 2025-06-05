@@ -3,7 +3,10 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('widget:loaded', function (event) {
+        if (event?.detail?.widgetId !== {{ constant('\\ChameleonSystem\\ShopBundle\\Dashboard\\Widgets\\ShopProductStatusWidget::WIDGET_ID') }}) {
+            return;
+        }
         const shops = {{ chartData|json_encode|raw }};
 
         const container = document.getElementById('charts-container');

@@ -12,6 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class CustomerTypeDashboardWidget extends DashboardBaseWidget
 {
     private const CUSTOMER_TYPE_STATISTICS_GROUP_SYSTEM_NAME = 'customer_types';
+    public const string WIDGET_ID = 'widget-customer-type';
 
     public function __construct(
         DashboardCacheService $dashboardCacheService,
@@ -29,7 +30,7 @@ class CustomerTypeDashboardWidget extends DashboardBaseWidget
 
     public function getWidgetId(): string
     {
-        return 'customer-type';
+        return self::WIDGET_ID;
     }
 
     protected function getStatsGroupSystemName(): string

@@ -12,6 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class PaymentMethodDashboardWidget extends DashboardBaseWidget
 {
     private const PAYMENT_METHOD_STATISTICS_GROUP_SYSTEM_NAME = 'used_payments';
+    public const string WIDGET_ID = 'payment-method';
 
     public function __construct(
         DashboardCacheService $dashboardCacheService,
@@ -29,7 +30,7 @@ class PaymentMethodDashboardWidget extends DashboardBaseWidget
 
     public function getWidgetId(): string
     {
-        return 'payment-method';
+        return self::WIDGET_ID;
     }
 
     protected function getStatsGroupSystemName(): string

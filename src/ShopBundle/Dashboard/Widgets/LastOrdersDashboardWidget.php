@@ -14,8 +14,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LastOrdersDashboardWidget extends DashboardWidget
 {
-    private const LAST_ORDER_SYSTEM_NAME = 'widget-last-orders';
     public const CMS_RIGHT_SHOP_SHOW_ORDERS = 'CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE';
+    public const string WIDGET_ID = 'widget-last-orders';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
@@ -39,23 +39,14 @@ class LastOrdersDashboardWidget extends DashboardWidget
 
     public function getDropdownItems(): array
     {
-        $reloadItem = new WidgetDropdownItemDataModel(
-            'reload-'.$this->getWidgetId(),
-            $this->translator->trans('chameleon_system_shop.widget.reload_button_label'),
-            ''
-        );
-
-        $reloadItem->addDataAttribute('data-service-alias', $this->getWidgetId());
-
         return [
             new WidgetDropdownItemDataModel('lastOrdersDashboardWidgetAllOrders', $this->translator->trans('chameleon_system_shop.widget.last_orders_all_orders'), '/cms?pagedef=tablemanager&id=268'),
-            $reloadItem,
         ];
     }
 
     public function getWidgetId(): string
     {
-        return self::LAST_ORDER_SYSTEM_NAME;
+        return self::WIDGET_ID;
     }
 
     protected function generateBodyHtml(): string
@@ -63,20 +54,8 @@ class LastOrdersDashboardWidget extends DashboardWidget
         $orders = $this->getLastOrders();
 
         $this->renderer->AddSourceObject('orders', $orders);
-        $this->renderer->AddSourceObject('reloadEventButtonId', 'reload-'.$this->getWidgetId());
 
         return $this->renderer->Render('Dashboard/Widgets/last-orders.html.twig');
-    }
-
-    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
-    public function getWidgetHtmlAsJson(): JsonResponse
-    {
-        $data = [
-            'htmlTable' => $this->getBodyHtml(true),
-            'dateTime' => date('d.m.Y H:i'),
-        ];
-
-        return new JsonResponse(json_encode($data));
     }
 
     private function getLastOrders(): array

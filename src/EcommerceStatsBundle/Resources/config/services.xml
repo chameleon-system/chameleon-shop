@@ -212,7 +212,7 @@
             <tag name="chameleon_system.dashboard_widget" collection="customer-stats-and-payment" priority="6" />
         </service>
 
-        <service id="customer-type" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.customer_type_dashboard_widget" public="true" />
+        <service id="widget-customer-type" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.customer_type_dashboard_widget" public="true" />
 
         <!-- Support for autowiring interfaces -->
         <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\CsvExportServiceInterface" alias="chameleon_system_ecommerce_stats.csv_export" />

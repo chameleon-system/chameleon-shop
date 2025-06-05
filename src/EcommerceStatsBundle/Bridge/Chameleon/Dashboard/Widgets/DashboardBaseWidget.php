@@ -2,17 +2,14 @@
 
 namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets;
 
-use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
-use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
 use ChameleonSystem\CmsDashboardBundle\Library\Interfaces\ColorGeneratorServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\DashboardTimeframeDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class DashboardBaseWidget extends DashboardWidget
@@ -45,16 +42,7 @@ abstract class DashboardBaseWidget extends DashboardWidget
 
     public function getDropdownItems(): array
     {
-        $button = new WidgetDropdownItemDataModel(
-            'reload'.$this->getWidgetId(),
-            $this->translator->trans('chameleon_system_ecommerce_stats.widgets.reload_button_label'),
-            ''
-        );
-
-        $button->addDataAttribute('data-service-alias', $this->getWidgetId());
-        $button->addDataAttribute('data-reload-chart', 'reload'); // just a dummy for the event listener
-
-        return [$button];
+        return [];
     }
 
     protected function getStatsGroupSystemName(): string
@@ -66,6 +54,7 @@ abstract class DashboardBaseWidget extends DashboardWidget
     {
         $this->renderer->AddSourceObject('statsData', $this->getStatsDataAsArray());
         $this->renderer->AddSourceObject('chartId', str_replace('-', '', $this->getWidgetId()));
+        $this->renderer->AddSourceObject('widgetId', $this->getWidgetId());
 
         $renderedStatistic = $this->renderer->Render('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/dashboard-barchart.html.twig');
 
@@ -99,15 +88,6 @@ abstract class DashboardBaseWidget extends DashboardWidget
         $this->statsCache[$statsSystemName] = $statisticBlocks[$statsSystemName] ?? null;
 
         return $this->statsCache[$statsSystemName];
-    }
-
-    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getStatsDataAsJson')]
-    public function getStatsDataAsJson(): JsonResponse
-    {
-        $this->getBodyHtml(true); // trigger widget rendering to update the cache
-        $dataset = $this->getStatsDataAsArray();
-
-        return new JsonResponse($dataset);
     }
 
     private function getStatsDataAsArray(): array

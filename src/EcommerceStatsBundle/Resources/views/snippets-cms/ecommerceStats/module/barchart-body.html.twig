@@ -77,7 +77,7 @@
             },
         };
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('widget:loaded', function (event) {
             CHAMELEON.CORE.Charts.generateChart(
                 'chart{{ chartId }}',
                 chartData{{ chartId }}.labels,
