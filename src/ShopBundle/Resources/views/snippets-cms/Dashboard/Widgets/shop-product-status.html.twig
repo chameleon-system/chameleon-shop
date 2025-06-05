@@ -4,7 +4,7 @@
 
 <script>
     document.addEventListener('widget:loaded', function (event) {
-        if (event?.detail?.widgetId !== {{ constant('\\ChameleonSystem\\ShopBundle\\Dashboard\\Widgets\\ShopProductStatusWidget::WIDGET_ID') }}) {
+        if (event?.detail?.widgetId !== "{{ constant('\\ChameleonSystem\\ShopBundle\\Dashboard\\Widgets\\ShopProductStatusWidget::WIDGET_ID') }}") {
             return;
         }
         const shops = {{ chartData|json_encode|raw }};
