@@ -45,6 +45,7 @@
         >
             <argument key="$translator" type="service" id="chameleon_system_core.translator" />
             <argument key="$currencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service" />
+            <argument key="$backendSession" type="service" id="chameleon_system_cms_backend.backend_session" />
             <tag name="chameleon_system_ecommerce_stats.stats_provider" />
         </service>
 

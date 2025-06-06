@@ -89,8 +89,9 @@ The query should return at least the following keys:
 The query may contain the following placeholders, that will be replaced before
 execution:
 
-* `[{sColumnName}]` The query part that selects the name of the column. Should be used as follows: `SELECT [{sColumnName}] AS sColumnName`
+* `[{sColumnName}]`: The query part that selects the name of the column. Should be used as follows: `SELECT [{sColumnName}] AS sColumnName`
 * `[{sCondition}]`: Additional conditions including the `WHERE` keyword.
+* `<trans>field</trans>`: You can mark any field like this to have it translated to the active language. 
 
 Example:
 
