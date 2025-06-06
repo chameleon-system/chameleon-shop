@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ChameleonSystem\EcommerceStatsBundle\StatsProvider;
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsTableDataModel;
@@ -92,7 +91,8 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
                 // If no language prefix is set, return the field as is
                 return $field;
             }
-            return $field.'__'. $suffix;
+
+            return $field.'__'.$suffix;
         }, $query);
     }
 
