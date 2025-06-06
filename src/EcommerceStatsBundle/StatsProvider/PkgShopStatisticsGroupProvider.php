@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\StatsProvider;
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsTableDataModel;
@@ -38,7 +39,8 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         Connection $connection,
         LoggerInterface $logger,
         TranslatorInterface $translator,
-        private readonly StatsCurrencyServiceInterface $currencyService
+        private readonly StatsCurrencyServiceInterface $currencyService,
+        private readonly BackendSessionInterface $backendSession
     ) {
         $this->connection = $connection;
         $this->logger = $logger;
@@ -69,6 +71,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
             }
 
             $blockQuery = str_replace(['[{sColumnName}]', '[{sCondition}]'], [$dateQueryPart, $condition], $baseQuery);
+            $blockQuery = $this->replaceTranslatableFields($blockQuery);
             $groupFields = explode(',', $group->fieldGroups);
             $realGroupFields = array_filter(array_map('trim', $groupFields));
 
@@ -76,6 +79,21 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         }
 
         return $statsTable;
+    }
+
+    private function replaceTranslatableFields(string $query): string
+    {
+        return preg_replace_callback('/<trans>([a-z0-9_]+\.[a-z0-9_]+)<\/trans>/i', function ($matches) {
+            $field = $matches[1];
+            $activeBackendLanguage = $this->backendSession->getCurrentEditLanguageId();
+            $suffix = \TGlobal::GetLanguagePrefix($activeBackendLanguage);
+            if ('' === $suffix) {
+                // If no language prefix is set, return the field as is
+                return $field;
+            }
+
+            return $field.'__'.$suffix;
+        }, $query);
     }
 
     public function fetchAllStatisticGroupsNames(): array
@@ -166,7 +184,8 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
             $statsTable->addBlock($blockSystemName, $block);
         }
 
-        foreach ($this->fetchRows($query, $params) as $dataRow) {
+        $rows = $this->fetchRows($query, $params);
+        foreach ($rows as $dataRow) {
             if (!\array_key_exists('sColumnName', $dataRow) || !\array_key_exists('dColumnValue', $dataRow)) {
                 $this->logger->error(sprintf(
                     'Could not add block `%s` to table: Query must select at least `sColumnName` and `dColumnValue`',
