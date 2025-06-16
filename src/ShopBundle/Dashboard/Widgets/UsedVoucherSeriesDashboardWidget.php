@@ -33,7 +33,6 @@ class UsedVoucherSeriesDashboardWidget extends DashboardWidget
 
     public function showWidget(): bool
     {
-        return true;
         return $this->securityHelperAccess->isGranted(EcommerceStatsBackendModule::CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE) && true === $this->enableDashboard;
     }
 
