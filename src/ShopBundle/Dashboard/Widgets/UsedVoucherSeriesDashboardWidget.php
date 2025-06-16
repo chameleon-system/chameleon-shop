@@ -73,7 +73,9 @@ class UsedVoucherSeriesDashboardWidget extends DashboardWidget
 
             $voucherCount = $this->databaseConnection->fetchOne($query, ['voucherSeriesId' => $voucherSeries['id']]);
 
-            if('0' === $voucherCount) {continue;}
+            if ('0' === $voucherCount) {
+              continue;
+            }
 
             $chartData[] = ['seriesName' => $voucherSeries['name'], 'usedVoucherCount' => $voucherCount];
         }
