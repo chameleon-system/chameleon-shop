@@ -83,16 +83,45 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
 
     private function replaceTranslatableFields(string $query): string
     {
-        return preg_replace_callback('/<trans>([a-z0-9_]+\.[a-z0-9_]+)<\/trans>/i', function ($matches) {
-            $field = $matches[1];
+        return preg_replace_callback('/<trans>(.*?)<\/trans>/i', function ($matches) {
+            $content = $matches[1];
             $activeBackendLanguage = $this->backendSession->getCurrentEditLanguageId();
-            $suffix = \TGlobal::GetLanguagePrefix($activeBackendLanguage);
-            if ('' === $suffix) {
-                // If no language prefix is set, return the field as is
-                return $field;
+            $langKey = \TGlobal::GetLanguagePrefix($activeBackendLanguage);
+
+            // attempt to decode JSON content inside <trans> tag
+            $decoded = json_decode($content, true);
+            if (true === is_array($decoded)) {
+                // handle explicit language mapping like {"de": "...", "en": "...", "default": "en"}
+                if (isset($decoded[$langKey])) {
+                    return $decoded[$langKey];
+                }
+
+                // en, as the default language, has no language prefix
+                if ($langKey === '' && isset($decoded['en'])) {
+                    return $decoded['en'];
+                }
+
+                if (isset($decoded['default']) && isset($decoded[$decoded['default']])) {
+                    return $decoded[$decoded['default']];
+                }
+
+                // fallback: return the first available value
+                return reset($decoded);
             }
 
-            return $field.'__'.$suffix;
+            // if not JSON, treat it as a field name (e.g., table.field) and append suffix
+            if ('' === $langKey) {
+                return $content;
+            }
+
+            // remove backticks from the content if present
+            $content = str_replace('`', '', $content);
+            $result = $content . '__' . $langKey;
+
+            //re-add backticks around the result, add backticks before and after any '.'
+            $result = '`' . str_replace('.', '`.`', $result) . '`';
+
+            return $result;
         }, $query);
     }
 
