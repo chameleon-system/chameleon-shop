@@ -13,7 +13,7 @@ class UsedVoucherSeriesDashboardWidget extends DashboardWidget
 {
     public const string WIDGET_ID = 'widget-used-voucher-series';
 
-    public const string USED_VOUCHER_DAYS_INTERVAL = '14';
+    public const int USED_VOUCHER_DAYS_INTERVAL = 14;
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
