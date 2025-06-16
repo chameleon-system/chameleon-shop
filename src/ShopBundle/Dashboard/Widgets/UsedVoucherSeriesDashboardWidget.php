@@ -13,6 +13,8 @@ class UsedVoucherSeriesDashboardWidget extends DashboardWidget
 {
     public const string WIDGET_ID = 'widget-used-voucher-series';
 
+    public const int USED_VOUCHER_DAYS_INTERVAL = 14;
+
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
         protected readonly TranslatorInterface $translator,
@@ -44,6 +46,16 @@ class UsedVoucherSeriesDashboardWidget extends DashboardWidget
         return [];
     }
 
+    public function getFooterIncludes(): array
+    {
+        $includes = parent::getFooterIncludes();
+        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart.4.4.7.js"></script>';
+        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chartjs-adapter-date-fns.3.0.0.js"></script>';
+        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart-init.4.4.7.js"></script>';
+
+        return $includes;
+    }
+
     protected function generateBodyHtml(): string
     {
         $chartData = [];
@@ -57,9 +69,13 @@ class UsedVoucherSeriesDashboardWidget extends DashboardWidget
             $query = "SELECT COUNT(*) as voucherCount FROM `shop_voucher`
                           WHERE `shop_voucher_series_id` = :voucherSeriesId
                           AND `is_used_up` = '1'
-                          AND `date_used_up` >= DATE_SUB(NOW(), INTERVAL 14 DAY)";
+                          AND `date_used_up` >= DATE_SUB(NOW(), INTERVAL .". self::USED_VOUCHER_DAYS_INTERVAL . " DAY)";
 
             $voucherCount = $this->databaseConnection->fetchOne($query, ['voucherSeriesId' => $voucherSeries['id']]);
+
+            if ('0' === $voucherCount) {
+              continue;
+            }
 
             $chartData[] = ['seriesName' => $voucherSeries['name'], 'usedVoucherCount' => $voucherCount];
         }

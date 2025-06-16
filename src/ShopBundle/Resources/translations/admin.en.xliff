@@ -440,6 +440,10 @@
                 <source>chameleon_system_shop.widget.used_voucher_series.title</source>
                 <target>Used Vouchers</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_shop.widget.shop_product_status_widget.no_data">
+                 <source>chameleon_system_shop.widget.shop_product_status_widget.no_data</source>
+                 <target>There are no used vouchers in the last %days% days</target>
+             </trans-unit>
         </body>
     </file>
 </xliff>
