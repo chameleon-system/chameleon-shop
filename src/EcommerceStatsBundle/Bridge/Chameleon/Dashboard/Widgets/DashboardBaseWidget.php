@@ -30,8 +30,6 @@ abstract class DashboardBaseWidget extends DashboardWidget
         parent::__construct($dashboardCacheService, $translator);
     }
 
-    //FIXME This is only called on page load, not on AJAX reloads.
-    //FIXME If the query returns empty, the title will be empty.
     public function getTitle(): string
     {
         return $this->getStatsGroup($this->getStatsGroupSystemName())?->getGroupTitle() ?? '';
