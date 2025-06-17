@@ -16,6 +16,9 @@
             return;
         }
         const voucherSeries = {{ chartData|json_encode|raw }};
+        if (!voucherSeries || voucherSeries.length === 0) {
+            return;
+        }
 
         const container = document.getElementById('used-vouchers-chart-container');
         const canvas = document.createElement('canvas');
