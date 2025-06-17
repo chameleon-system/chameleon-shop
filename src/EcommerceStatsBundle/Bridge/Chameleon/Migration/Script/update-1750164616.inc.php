@@ -29,17 +29,6 @@ TCMSLogChange::update(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de')
   ->setFields([
-      // 'name' => 'Ø Warenkorb Wert ohne Versand',
-      'system_name' => 'basket_size_without_shipping',
-  ])
-  ->setWhereEquals([
-      'id' => 'd577de75-6494-9075-15b7-7cb887d7b065',
-  ])
-;
-TCMSLogChange::update(__LINE__, $data);
-
-$data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de')
-  ->setFields([
       // 'name' => 'Umsatz ohne Versand',
       'system_name' => 'sales_without_shipping',
   ])
