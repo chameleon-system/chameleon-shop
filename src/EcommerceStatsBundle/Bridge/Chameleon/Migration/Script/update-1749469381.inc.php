@@ -5,7 +5,7 @@
 </div>
 <?php
 
-$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields([
         // 'translation' => 'Query',
         '049_helptext' => 'The query is used to collect the data. It is important that the query returns the following values:
@@ -17,7 +17,17 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
 5. You can provide your own language dependent values by writing them like so: <code>&lt;trans&gt;{"de": "Neukunde", "en": "new customer", "default": "en"}&lt;/trans&gt;</code> where <code>de</code> and <code>en</code> are language codes.
 
 This ensures that the data is provided in a structured way, allowing for clear grouping and analysis.',
-        '049_helptext__de' => 'Die Abfrage dient der Sammlung der Daten. Wichtig ist, dass die Abfrage folgende Werte zurückgibt:
+    ])
+    ->setWhereEquals([
+        'id' => 'e64db517-7cd9-a4e2-3049-f0b20b4bf5f2',
+    ])
+;
+TCMSLogChange::update(__LINE__, $data);
+
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
+    ->setFields([
+        // 'translation' => 'Query',
+        '049_helptext' => 'Die Abfrage dient der Sammlung der Daten. Wichtig ist, dass die Abfrage folgende Werte zurückgibt:
 
 1. sColumnName: Name für jedes einzelne Tupel (entspricht der X-Achse), zum Beispiel im Format YYYY-mm-dd, YYYY-mm oder YYYY.
 2. dColumnValue: Der Wert für das jeweilige Tupel (entspricht der Y-Achse).
