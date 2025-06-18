@@ -7,7 +7,7 @@
 @var ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel group
 #}
 
-{% if group.groupTotals | length > 0 %}
+{% if group.groupTotals | length > 0 and (statsData.labels | length > 0) %}
     <div>
         <canvas id="chart{{ chartId }}"></canvas>
     </div>

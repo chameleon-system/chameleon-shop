@@ -2,7 +2,7 @@
 @var int chartId
 @var array statsData
 #}
-{% if statsData.datasets | length > 0 %}
+{% if (statsData.datasets | length > 0) and (statsData.labels | length > 0) %}
     <div>
         <canvas id="chart{{ chartId }}"></canvas>
     </div>
@@ -43,7 +43,7 @@
         });
     </script>
 {% else %}
-    <div class="chart-no-data-message alert alert-info">
+    <div class="chart-no-data-message m-2 alert alert-info">
         {{ 'chameleon_system_ecommerce_stats.form_no_data_for_current_filters' | trans }}
     </div>
 {% endif %}
