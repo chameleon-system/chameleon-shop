@@ -1,6 +1,6 @@
 {# array chartData #}
 {% if chartData|length == 0 %}
-    <div class="alert alert-info">
+    <div class="m-2 alert alert-info">
         {{ 'chameleon_system_shop.widget.shop_product_status_widget.no_data'|trans({
             '%days%': constant('ChameleonSystem\\ShopBundle\\Dashboard\\Widgets\\UsedVoucherSeriesDashboardWidget::USED_VOUCHER_DAYS_INTERVAL'),
         }) }}

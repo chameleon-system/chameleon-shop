@@ -149,7 +149,6 @@ abstract class DashboardBaseWidget extends DashboardWidget
         $includes = parent::getFooterIncludes();
         $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart.4.4.7.js"></script>';
         $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart-init.4.4.7.js"></script>';
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemecommercestats/ecommerce_stats/js/dashboard.js"></script>';
 
         return $includes;
     }
