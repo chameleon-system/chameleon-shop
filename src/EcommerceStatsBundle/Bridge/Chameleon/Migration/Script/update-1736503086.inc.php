@@ -2,10 +2,11 @@
 <h2>Date: 2025-01-10</h2>
 <div class="changelog">
     - #65182: add new statistic group, customer type
+    - #66938 //UPDATE id of statistic group
 </div>
 <?php
 
-$id = TCMSLogChange::createUnusedRecordId('pkg_shop_statistic_group');
+$id = '7abee4ca-3232-6257-97bd-809df1ed3921';
 
 $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en')
     ->setFields([

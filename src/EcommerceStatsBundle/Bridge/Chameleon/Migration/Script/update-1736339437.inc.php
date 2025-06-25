@@ -2,11 +2,11 @@
 <h2>Date: 2025-01-03</h2>
 <div class="changelog">
     - #65182: add new statistic groups
+    - #66938 //UPDATE id of statistic group
 </div>
 <?php
 
-$id = TCMSLogChange::createUnusedRecordId('pkg_shop_statistic_group');
-
+$id = '86d68501-3159-c5dd-95aa-850c63e95caf';
 $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en')
     ->setFields([
         'name' => 'Payment Method',
