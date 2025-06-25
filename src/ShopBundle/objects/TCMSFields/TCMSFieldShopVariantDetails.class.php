@@ -96,7 +96,7 @@ class TCMSFieldShopVariantDetails extends TCMSFieldLookupMultiselectCheckboxes
             $viewRenderer->AddSourceObject('variantTypeParameters', $variantTypeParameters);
         }
 
-        return $viewRenderer->Render('ChameleonSystemShopBundle:snippets-cms/TCMSFieldShopVariantDetails:main-product.html.twig');
+        return $viewRenderer->Render('@ChameleonSystemShop/snippets-cms/TCMSFieldShopVariantDetails/main-product.html.twig');
     }
 
     /**
