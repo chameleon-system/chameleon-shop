@@ -10,6 +10,7 @@ use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsTableDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -31,20 +32,14 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         self::DATA_GROUP_TYPE_DAY => 'DATE(%1$s)',
     ];
 
-    private Connection $connection;
-    private LoggerInterface $logger;
-    private TranslatorInterface $translator;
-
     public function __construct(
-        Connection $connection,
-        LoggerInterface $logger,
-        TranslatorInterface $translator,
+        private readonly Connection $connection,
+        private readonly LoggerInterface $logger,
+        private readonly TranslatorInterface $translator,
         private readonly StatsCurrencyServiceInterface $currencyService,
-        private readonly BackendSessionInterface $backendSession
+        private readonly SecurityHelperAccess $securityHelperAccess
     ) {
-        $this->connection = $connection;
-        $this->logger = $logger;
-        $this->translator = $translator;
+
     }
 
     public function addStatsToTable(
@@ -85,7 +80,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
     {
         return preg_replace_callback('/<trans>(.*?)<\/trans>/i', function ($matches) {
             $content = $matches[1];
-            $activeBackendLanguage = $this->backendSession->getCurrentEditLanguageId();
+            $activeBackendLanguage = $this->securityHelperAccess->getUser()?->getCmsLanguageId();
             $langKey = \TGlobal::GetLanguagePrefix($activeBackendLanguage);
 
             // attempt to decode JSON content inside <trans> tag
