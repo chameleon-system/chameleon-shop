@@ -64,7 +64,7 @@ $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de'
                     GROUP BY `sColumnName`',
   ])
   ->setWhereEquals([
-      'id' => '14218a53-dc84-81cf-0885-7c1801497ed9',
+      'id' => '7abee4ca-3232-6257-97bd-809df1ed3921',
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
@@ -89,7 +89,7 @@ $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de'
                     ORDER BY `dColumnValue` DESC',
   ])
   ->setWhereEquals([
-      'id' => '70c1d8e9-7c01-5c9e-c54e-4f4a6ad111bb',
+      'id' => 'bed3cceb-9b2c-df56-1608-b156c20cbec9',
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
@@ -171,7 +171,7 @@ $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de'
                     ORDER BY  [{sColumnName}]',
   ])
   ->setWhereEquals([
-      'id' => '7f8d9be6-ff13-a724-e2f7-ccf49cd7a550',
+      'id' => '86d68501-3159-c5dd-95aa-850c63e95caf',
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);

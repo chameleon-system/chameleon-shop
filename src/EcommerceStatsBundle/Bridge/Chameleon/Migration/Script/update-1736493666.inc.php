@@ -2,11 +2,11 @@
 <h2>Date: 2025-01-10</h2>
 <div class="changelog">
     - #65182: add new statistic group, top category
+    - #66938 //UPDATE id of statistic group
 </div>
 <?php
 
-$id = TCMSLogChange::createUnusedRecordId('pkg_shop_statistic_group');
-
+$id = 'bed3cceb-9b2c-df56-1608-b156c20cbec9';
 $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'en')
     ->setFields([
         'name' => 'Top Categories',
