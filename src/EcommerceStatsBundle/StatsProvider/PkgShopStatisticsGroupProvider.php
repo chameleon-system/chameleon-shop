@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\StatsProvider;
 
-use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsTableDataModel;
@@ -39,7 +38,6 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         private readonly StatsCurrencyServiceInterface $currencyService,
         private readonly SecurityHelperAccess $securityHelperAccess
     ) {
-
     }
 
     public function addStatsToTable(
@@ -92,7 +90,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
                 }
 
                 // en, as the default language, has no language prefix
-                if ($langKey === '' && isset($decoded['en'])) {
+                if ('' === $langKey && isset($decoded['en'])) {
                     return $decoded['en'];
                 }
 
@@ -111,10 +109,10 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
 
             // remove backticks from the content if present
             $content = str_replace('`', '', $content);
-            $result = $content . '__' . $langKey;
+            $result = $content.'__'.$langKey;
 
-            //re-add backticks around the result, add backticks before and after any '.'
-            $result = '`' . str_replace('.', '`.`', $result) . '`';
+            // re-add backticks around the result, add backticks before and after any '.'
+            $result = '`'.str_replace('.', '`.`', $result).'`';
 
             return $result;
         }, $query);
