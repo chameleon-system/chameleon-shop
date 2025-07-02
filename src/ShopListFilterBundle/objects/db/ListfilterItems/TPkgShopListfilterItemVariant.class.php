@@ -96,7 +96,7 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
                        AND `shop_variant_type_value`.`name` IN (".implode(', ', $escapedOptions).")
                   ORDER BY {$orderField}";
 
-                $result = $connection->fetchAssociative($query);
+                $result = $connection->fetchAllAssociative($query);
                 $aNewOptions = [];
                 foreach ($result as $aRow) {
                     if (is_array($aRow) && array_key_exists($aRow['name'], $aOptions)) {
@@ -173,8 +173,6 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
                 $quotedValues = array_map(fn ($v) => $connection->quote($v), $aValues);
                 $quotedIdentifier = $connection->quote($this->sVariantTypeIdentifier);
 
-                // $oVariantType = $this->GetVariantType();
-
                 $sItemListQuery = 'SELECT DISTINCT `shop_article`.`variant_parent_id`
                   FROM `shop_variant_type_value`
             INNER JOIN `shop_article_shop_variant_type_value_mlt` ON `shop_variant_type_value`.`id` = `shop_article_shop_variant_type_value_mlt`.`target_id`
@@ -190,7 +188,6 @@ class TPkgShopListfilterItemVariant extends TPkgShopListfilterItemMultiselectMLT
                     $sItemListQuery .= ' AND ('.$sActiveRestrictions.')';
                 }
 
-                // echo $sItemListQuery;echo "\n\n";
                 $aIdList = [];
                 $result = $connection->executeQuery($sItemListQuery);
                 while ($row = $result->fetchAssociative()) {
