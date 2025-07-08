@@ -183,7 +183,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     {
         /** @var array<string, mixed>|null $userData */
         $userData = $this->getInputFilterUtil()->getFilteredPostInputArray('aUser');
-        if (null === $userData) {
+        if (null === $userData || 0 === count($userData)) {
             $oUser = self::getExtranetUserProvider()->getActiveUser();
             $this->SetUserData($oUser->sqlData);
         } else {
@@ -204,12 +204,12 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
 
         /** @var array<string, mixed>|null $shippingAddressData */
         $shippingAddressData = $inputFilterUtil->getFilteredPostInputArray(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
-        if (null !== $shippingAddressData) {
+        if (null !== $shippingAddressData && 0 !== count($shippingAddressData)) {
             $this->SetShippingAddressData($shippingAddressData);
             $this->bUserDataSubmission = true;
         } else {
             $billingAddressData = $inputFilterUtil->getFilteredPostInputArray(TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING);
-            if (null !== $billingAddressData && TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING == $this->AddressUsedAsPrimaryAddress()) {
+            if (null !== $billingAddressData && 0 !== count($billingAddressData) && TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING == $this->AddressUsedAsPrimaryAddress()) {
                 $this->SetShippingAddressData($this->GetBillingAddressData());
             } else {
                 $oUser = self::getExtranetUserProvider()->getActiveUser();
@@ -242,7 +242,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
             $this->bUserDataSubmission = true;
         } else {
             $shippingAddressData = $inputFilterUtil->getFilteredPostInputArray(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
-            if (null !== $shippingAddressData && TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING == $this->AddressUsedAsPrimaryAddress()) {
+            if (null !== $shippingAddressData && 0 !== count($shippingAddressData) && TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING == $this->AddressUsedAsPrimaryAddress()) {
                 $this->SetBillingAddressData($this->GetShippingAddressData());
             } else {
                 $oUser = self::getExtranetUserProvider()->getActiveUser();
