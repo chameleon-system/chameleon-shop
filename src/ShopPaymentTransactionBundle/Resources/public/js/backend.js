@@ -1,5 +1,4 @@
 TPkgShopPaymentTransaction_showForm = function(data, status) {
-
     var mynode = $(data);
     $('body').append(mynode);
     $('#pkgShopPaymentTransaction-form').dialog(
