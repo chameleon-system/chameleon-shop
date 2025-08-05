@@ -1,5 +1,5 @@
 TPkgShopPaymentTransaction_showForm = function(data, status) {
-
+    console.log('oben');
     var mynode = $(data);
     $('body').append(mynode);
     $('#pkgShopPaymentTransaction-form').dialog(
@@ -11,6 +11,7 @@ TPkgShopPaymentTransaction_showForm = function(data, status) {
 };
 
 TPkgShopPaymentTransaction_closeForm = function() {
+    console.log('unten');
     var form = $('#pkgShopPaymentTransaction-form');
     if (form.length) {
         form.remove();

@@ -1,4 +1,4 @@
 css:
-   - /assets/snippets/pkgShopPaymentTransaction/partial-form.css
+   - /bundles/chameleonsystemshoppaymenttransaction/css/partial-form.css
 js:
-  - /assets/snippets/pkgShopPaymentTransaction/backend.js
+  - /bundles/chameleonsystemshoppaymenttransaction/js/backend.js
