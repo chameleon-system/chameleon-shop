@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Doctrine\DBAL\Connection;
 
 class TPkgShopPaymentIPNManager
 {
@@ -70,19 +72,18 @@ class TPkgShopPaymentIPNManager
         return $sIdentifier;
     }
 
-    /**
-     * @return LanguageServiceInterface
-     */
-    private function getLanguageService()
+    private function getDatabaseConnection(): Connection
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ServiceLocator::get('database_connection');
     }
 
-    /**
-     * @return PageServiceInterface
-     */
-    private function getPageService()
+    private function getLanguageService(): LanguageServiceInterface
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    private function getPageService(): PageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.page_service');
     }
 }
