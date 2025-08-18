@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Doctrine\DBAL\Connection;
+
 class TPkgShopPaymentIPNRequest
 {
     public const URL_IPN_IDENTIFIER = '_api_pkgshopipn_';
@@ -285,5 +288,10 @@ class TPkgShopPaymentIPNRequest
     public function getPaymentHandler()
     {
         return $this->paymentHandler;
+    }
+
+    private function getDatabaseConnection(): Connection
+    {
+        return ServiceLocator::get('database_connection');
     }
 }
