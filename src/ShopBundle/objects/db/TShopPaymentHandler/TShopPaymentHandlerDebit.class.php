@@ -186,6 +186,7 @@ class TShopPaymentHandlerDebit extends TdbShopPaymentHandler
 
     private function getValidator(): ValidatorInterface
     {
-        return ServiceLocator::get('validator');
+        $chameleonValidatorService = ServiceLocator::get('chameleon_system_shop.service.chameleon_validator_service');
+        return $chameleonValidatorService->getValidator();
     }
 }
