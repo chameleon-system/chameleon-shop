@@ -17,3 +17,18 @@
         {% endfor %}
     </div>
 </div>
+
+<script>
+    (function () {
+        function fire() {
+            if (document.querySelector('.module-shop-statistic')) {
+                document.dispatchEvent(new CustomEvent('widget:loaded'));
+            }
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', fire);
+        } else {
+            fire();
+        }
+    })();
+</script>
