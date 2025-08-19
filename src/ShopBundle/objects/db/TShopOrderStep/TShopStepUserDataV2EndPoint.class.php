@@ -819,6 +819,11 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
         $aReturnVal = false;
         if (array_key_exists('aShipping', $this->aUserData)) {
             $aAddress = $this->aUserData['aShipping'];
+
+            if (false === $aAddress) {
+                return false;
+            }
+
             if (array_key_exists('id', $aAddress) && !array_key_exists('selectedAddressId', $aAddress)) {
                 $aAddress['selectedAddressId'] = $aAddress['id'];
             }
