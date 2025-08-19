@@ -374,6 +374,9 @@
 
         <service id="widget-used-voucher-series" alias="chameleon_system_shop.dashboard_widgets.used_voucher_series_dashboard_widget" public="true" />
 
+        <service id="chameleon_system_shop.service.chameleon_validator_service" class="ChameleonSystem\ShopBundle\Service\ChameleonValidatorService" public="true">
+            <argument type="service" id="validator"/>
+        </service>
     </services>
 
 </container>
