@@ -26,6 +26,7 @@ UPGRADE FROM 7.1 to 8.0
   - `TdbShop::GetActiveRootCategory()` -> `\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveRootCategory()`
   - `TShop::GetActiveRootCategory()` -> `\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveRootCategory()`
   - finaly search for `->GetActiveRootCategory()` to find any other calles maybe based on TShop service instances
+  - Symfony `validator` service has been inlined and is not public. Use `chameleon_system_shop.service.chameleon_validator_service` to get the validator instead
 
 ### Removed PaymentHandlers:
  By executing the `update-1739765632.inc.php` the payment handlers should be removed
