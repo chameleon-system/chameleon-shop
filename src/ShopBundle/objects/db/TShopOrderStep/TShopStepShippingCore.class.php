@@ -45,7 +45,7 @@ class TShopStepShippingCore extends TdbShopOrderStep
         $inputFilterUtil = $this->getInputFilterUtil();
 
         /** @var array|null $shippingData */
-        $shippingData = $inputFilterUtil->getFilteredPostInput('aShipping');
+        $shippingData = $inputFilterUtil->getFilteredPostInputArray('aShipping');
         if (null !== $shippingData) {
             $this->aRequestData = $shippingData;
             if (!is_array($this->aRequestData)) {
