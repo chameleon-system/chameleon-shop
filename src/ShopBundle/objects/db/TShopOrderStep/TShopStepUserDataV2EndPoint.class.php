@@ -779,7 +779,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
             }
             $aNotAllowed = ['id', 'name', 'cmsident', 'password', 'session_key', 'login_timestamp', 'login_salt', 'shop_id', 'datecreated', 'tmpconfirmkey', 'confirmed', 'confirmedon', 'reg_email_send'];
 
-            if ($aPrimaryAddress) {
+            if (is_array($aPrimaryAddress)) {
                 foreach ($aPrimaryAddress as $sField => $sValue) {
                     if (!in_array($sField, $aNotAllowed)) {
                         $aUserData[$sField] = $sValue;
