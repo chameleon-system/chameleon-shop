@@ -82,7 +82,7 @@ class TPkgShopRouteControllerArticle extends esono\pkgCmsRouting\AbstractRouteCo
             return $this->processArticleResponse($aResponse, null);
         }
 
-        $variantSelection = $this->inputFilterUtil->getFilteredGetInput(TShopVariantType::URL_PARAMETER, []);
+        $variantSelection = $this->inputFilterUtil->getFilteredGetInputArray(TShopVariantType::URL_PARAMETER, []);
         $article = $this->productVariantService->getProductBasedOnSelection($article, $variantSelection);
         $aResponse['activeShopArticle'] = $article;
 
@@ -119,7 +119,7 @@ class TPkgShopRouteControllerArticle extends esono\pkgCmsRouting\AbstractRouteCo
             $queryParameter = null;
         }
 
-        $variantSelection = $this->inputFilterUtil->getFilteredGetInput(TShopVariantType::URL_PARAMETER, []);
+        $variantSelection = $this->inputFilterUtil->getFilteredGetInputArray(TShopVariantType::URL_PARAMETER, []);
         $aKey = ['class' => __CLASS__, 'fnc' => 'shopArticle', 'catid' => $catid, 'cmsident' => $identifier, 'variantSelection' => $variantSelection];
         $cache = $this->getCache();
         $key = $cache->getKey($aKey);

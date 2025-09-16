@@ -153,7 +153,7 @@ class TPkgShopMapper_ArticleGetOneVariantType extends AbstractPkgShopMapper_Arti
             }
         } else {
             /** @var array $selectedTypeValues */
-            $selectedTypeValues = $this->getInputFilterUtil()->getFilteredGetInput(TShopVariantType::URL_PARAMETER, []);
+            $selectedTypeValues = $this->getInputFilterUtil()->getFilteredGetInputArray(TShopVariantType::URL_PARAMETER, []);
         }
 
         return $selectedTypeValues;
