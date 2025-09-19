@@ -13,7 +13,7 @@ class UsedVoucherSeriesDashboardWidget extends DashboardWidget
 {
     public const string WIDGET_ID = 'widget-used-voucher-series';
 
-    public const int USED_VOUCHER_DAYS_INTERVAL = 14;
+    public const string USED_VOUCHER_DAYS_INTERVAL = 'INTERVAL 14 DAY';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
@@ -69,7 +69,7 @@ class UsedVoucherSeriesDashboardWidget extends DashboardWidget
             $query = "SELECT COUNT(*) as voucherCount FROM `shop_voucher`
                           WHERE `shop_voucher_series_id` = :voucherSeriesId
                           AND `is_used_up` = '1'
-                          AND `date_used_up` >= DATE_SUB(NOW(), INTERVAL .". self::USED_VOUCHER_DAYS_INTERVAL . " DAY)";
+                          AND `date_used_up` >= NOW() - ".self::USED_VOUCHER_DAYS_INTERVAL;
 
             $voucherCount = $this->databaseConnection->fetchOne($query, ['voucherSeriesId' => $voucherSeries['id']]);
 

@@ -12,6 +12,13 @@
 
 <script>
     document.addEventListener('widget:loaded', function (event) {
+
+        oldCanvas = document.getElementById('chart-used-vouchers');
+
+        if (oldCanvas) {
+            container.removeChild(oldCanvas);
+        }
+
         if (event?.detail?.widgetId !== "{{ constant('\\ChameleonSystem\\ShopBundle\\Dashboard\\Widgets\\UsedVoucherSeriesDashboardWidget::WIDGET_ID') }}") {
             return;
         }
