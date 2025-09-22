@@ -122,8 +122,10 @@ class TCMSCronJob_ShopSendBasketLogStatisics extends TdbCmsCronjobs
             $sStatistics = $this->GetCancelBasketInformation($oOrderBasket);
             $oUser = TdbDataExtranetUser::GetNewInstance();
             $oUser = unserialize(base64_decode($oOrderBasket->fieldRawdataUser));
-            if (is_object($oUser)) {
-                $sStatistics .= $this->GetUserStatistics($oUser);
+            if (false !== $oUser && null !== $oUser->id) {
+                if (is_object($oUser)) {
+                    $sStatistics .= $this->GetUserStatistics($oUser);
+                }
             }
             $oBasket = new TShopBasket();
             $oBasket = unserialize(base64_decode($oOrderBasket->fieldRawdataBasket));
