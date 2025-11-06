@@ -183,7 +183,7 @@ class TPkgShopCurrency extends TPkgShopCurrencyAutoParent
         if ('www.' === substr($sDomain, 0, 4)) {
             $sDomain = substr($sDomain, 4);
         }
-        setcookie(TdbPkgShopCurrency::SESSION_NAME, base64_encode($sCurrencyId), time() + 60 * 60 * 24 * 365, '/', '.'.$sDomain, false, true);
+        setcookie(TdbPkgShopCurrency::SESSION_NAME, base64_encode($sCurrencyId), time() + 60 * 60 * 24 * 365, '/', '.'.$sDomain, true, true);
         $oUser = TdbDataExtranetUser::GetInstance();
 
         if (!empty($oUser->id) && array_key_exists('pkg_shop_currency_id', $oUser->sqlData) && $oUser->sqlData['pkg_shop_currency_id'] != $sCurrencyId && $oUser->IsLoggedIn()) {
