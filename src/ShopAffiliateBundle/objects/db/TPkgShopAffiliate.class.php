@@ -124,7 +124,7 @@ class TPkgShopAffiliate extends TPkgShopAffiliateAutoParent
                         if ('www.' == substr($sDomain, 0, 4)) {
                             $sDomain = substr($sDomain, 4);
                         }
-                        setcookie(TdbPkgShopAffiliate::COOKIE_NAME, $sCookieData, $iExpire, '/', '.'.$sDomain, false, true);
+                        setcookie(TdbPkgShopAffiliate::COOKIE_NAME, $sCookieData, $iExpire, '/', '.'.$sDomain, true, true);
                     }
 
                     $oCode->FoundCodeHook($sCode);
