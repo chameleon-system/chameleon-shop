@@ -161,7 +161,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
         if ('www.' == substr($domain, 0, 4)) {
             $domain = substr($domain, 4);
         }
-        setcookie(TdbDataExtranetUser::COOKIE_NAME_HISTORY, '', time() - 3600, '/', '.'.$domain, false, true);
+        setcookie(TdbDataExtranetUser::COOKIE_NAME_HISTORY, '', time() - 3600, '/', '.'.$domain, true, true);
     }
 
     /**
@@ -196,7 +196,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
         if ('www.' == substr($domain, 0, 4)) {
             $domain = substr($domain, 4);
         }
-        setcookie(TdbDataExtranetUser::COOKIE_NAME_NOTICELIST, '', time() - 3600, '/', '.'.$domain, false, true);
+        setcookie(TdbDataExtranetUser::COOKIE_NAME_NOTICELIST, '', time() - 3600, '/', '.'.$domain, true, true);
     }
 
     /**
@@ -329,7 +329,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
             if ('www.' == substr($domain, 0, 4)) {
                 $domain = substr($domain, 4);
             }
-            setcookie(TdbDataExtranetUser::COOKIE_NAME_HISTORY, $sHistory, $expireTime, '/', '.'.$domain, false, true);
+            setcookie(TdbDataExtranetUser::COOKIE_NAME_HISTORY, $sHistory, $expireTime, '/', '.'.$domain, true, true);
         }
     }
 
@@ -531,7 +531,7 @@ class TShopDataExtranetUser extends TShopDataExtranetUserAutoParent
         if ('www.' === substr($domain, 0, 4)) {
             $domain = substr($domain, 4);
         }
-        setcookie(TdbDataExtranetUser::COOKIE_NAME_NOTICELIST, $sNoticeList, $expireTime, '/', '.'.$domain, false, true);
+        setcookie(TdbDataExtranetUser::COOKIE_NAME_NOTICELIST, $sNoticeList, $expireTime, '/', '.'.$domain, true, true);
     }
 
     /**
