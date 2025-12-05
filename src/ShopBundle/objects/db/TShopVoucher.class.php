@@ -282,8 +282,8 @@ class TShopVoucher extends TShopVoucherAutoParent
             }
         }
 
-        // if the voucher may only be used with the first order, check if the user has ordered before
-        if (TdbShopVoucher::ALLOW_USE == $bAllowUse && $oSeries->fieldRestrictToFirstOrder) {
+        // if the voucher may only be used with the first order, check if the logged-in user has ordered before
+        if (TdbShopVoucher::ALLOW_USE == $bAllowUse && $oSeries->fieldRestrictToFirstOrder && $oUser->IsLoggedIn() && !empty($oUser->id)) {
             $oUserOrders = TdbShopOrderList::GetListForDataExtranetUserId($oUser->id);
             if ($oUserOrders->Length() > 0) {
                 $bAllowUse = TdbShopVoucher::USE_ERROR_NOT_FIRST_ORDER;
