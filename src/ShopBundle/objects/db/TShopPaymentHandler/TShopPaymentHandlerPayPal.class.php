@@ -251,8 +251,9 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
             $logContext = [
                 'Command' => $aCommand,
                 'PayPalAnswer' => $aAnswer,
-            ];
-            $this->getPaypalLogger()->critical('PayPal payment could not be executed for order id '.$oOrder->id, $logContext);
+                'orderId' => $oOrder->id,
+            );
+            $this->getPaypalLogger()->critical('PayPal payment could not be executed for order!', $logContext);
         }
 
         return $bPaymentOk;
