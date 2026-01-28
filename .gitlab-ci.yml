@@ -4,3 +4,4 @@ include:
     file:
       - 'index.yaml'
       - 'google-chat-notifications.yaml'
+      - 'composer-publish.yml'
