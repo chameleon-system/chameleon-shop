@@ -16,11 +16,6 @@ namespace ChameleonSystem\EcommerceStatsBundle\Library\DataModel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-use function Safe\fopen;
-use function Safe\fputcsv;
-use function Safe\rewind;
-use function Safe\stream_get_contents;
-
 class CsvResponse extends Response
 {
     /**
@@ -28,17 +23,17 @@ class CsvResponse extends Response
      */
     public static function fromRows(string $fileName, array $data, string $separator = ';'): CsvResponse
     {
-        $csv = fopen('php://temp/maxmemory:'. 1024 * 1024, 'r+');
+        $csv = \fopen('php://temp/maxmemory:'. 1024 * 1024, 'r+');
 
         foreach ($data as $row) {
-            fputcsv($csv, $row, $separator);
+            \fputcsv($csv, $row, $separator);
         }
 
-        rewind($csv);
+        \rewind($csv);
 
         return new CsvResponse(
             $fileName,
-            stream_get_contents($csv)
+            \stream_get_contents($csv)
         );
     }
 
