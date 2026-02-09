@@ -24,6 +24,12 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
      */
     public const PAYPAL_API_VERSION = '84.0';
 
+    /**
+     * Failure Code because of funding issue, which can be solved by a redirect
+     * https://developer.paypal.com/docs/archive/express-checkout/ht-ec-fundingfailure10486/
+     */
+    public const FUNDING_FAILURE_ERROR_CODE = '10486';
+
     protected ?string $sPayPalToken;
 
     /**
@@ -240,6 +246,13 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
                 )
             );
             $transactionManager->addTransaction($transactionData);
+        } elseif (true === $this->isFundingFailure($aAnswer, $ack)) {
+            $token = $aAnswer['TOKEN'] ?? $this->sPayPalToken;
+            $redirectUrl = !empty($token) ? $this->buildFundingFailureRedirectUrl($token) : '';
+            if (!empty($redirectUrl)) {
+                TdbShopPaymentHandler::SetExecutePaymentInterrupt(true);
+                $this->getRedirect()->redirect($redirectUrl);
+            }
         } else {
             $bPaymentOk = false;
         }
@@ -391,5 +404,44 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     private function getRedirect(): ICmsCoreRedirect
     {
         return ServiceLocator::get('chameleon_system_core.redirect');
+    }
+
+    /**
+     * PayPal funding failure detection for error 10486.
+     *
+     * @param array<string, mixed> $answer
+     */
+    private function isFundingFailure(array $answer, string $ack): bool
+    {
+        return 'FAILURE' === $ack
+            && array_key_exists('L_ERRORCODE0', $answer)
+            && self::FUNDING_FAILURE_ERROR_CODE === (string) $answer['L_ERRORCODE0'];
+    }
+
+    /**
+     * Builds the Express Checkout funding error redirect URL and normalizes known PayPal base URLs.
+     * Older configs sometimes use https://www.paypal.com/webscr (without cgi-bin) so we patch it in.
+     */
+    private function buildFundingFailureRedirectUrl(string $token): string
+    {
+        $baseUrl = $this->GetConfigParameter('url');
+        if (empty($baseUrl)) {
+            return '';
+        }
+
+        $pathWithCgiBin = '/cgi-bin/webscr';
+        $positionCgiBin = stripos($baseUrl, $pathWithCgiBin);
+        if (false !== $positionCgiBin) {
+            $normalizedBase = substr($baseUrl, 0, $positionCgiBin + strlen($pathWithCgiBin));
+        } else {
+            $positionWebscr = stripos($baseUrl, '/webscr');
+            if (false !== $positionWebscr) {
+                $normalizedBase = substr($baseUrl, 0, $positionWebscr).$pathWithCgiBin;
+            } else {
+                $normalizedBase = rtrim($baseUrl, '/').$pathWithCgiBin;
+            }
+        }
+
+        return $normalizedBase.'?cmd=_express-checkout&token='.$token;
     }
 }
