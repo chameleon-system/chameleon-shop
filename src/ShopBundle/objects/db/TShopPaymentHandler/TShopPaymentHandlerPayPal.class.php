@@ -26,7 +26,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
 
     /**
      * Failure Code because of funding issue, which can be solved by a redirect
-     * https://developer.paypal.com/docs/archive/express-checkout/ht-ec-fundingfailure10486/
+     * https://developer.paypal.com/docs/archive/express-checkout/ht-ec-fundingfailure10486/.
      */
     public const FUNDING_FAILURE_ERROR_CODE = '10486';
 
@@ -248,7 +248,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
             $transactionManager->addTransaction($transactionData);
         } elseif (true === $this->isFundingFailure($aAnswer, $ack)) {
             $token = $aAnswer['TOKEN'] ?? $this->sPayPalToken;
-            $this->getPaypalLogger()->info('PayPal Payment, funding error detected, redirecting the user to the paypal page', [$token,$oOrder]);
+            $this->getPaypalLogger()->info('PayPal Payment, funding error detected, redirecting the user to the paypal page', [$token, $oOrder]);
             $redirectUrl = (false === empty($token)) ? $this->buildFundingFailureRedirectUrl($token) : '';
             if ('' !== $redirectUrl) {
                 TdbShopPaymentHandler::SetExecutePaymentInterrupt(true);
@@ -396,7 +396,6 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     private function isFundingFailure(array $answer, string $ack): bool
     {
         return 'FAILURE' === $ack && self::FUNDING_FAILURE_ERROR_CODE === ($answer['L_ERRORCODE0'] ?? null);
-
     }
 
     /**
@@ -411,30 +410,30 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
         }
 
         $pathWithCgiBin = '/cgi-bin/webscr';
-        $query = '?cmd=_express-checkout&token=' . $token;
+        $query = '?cmd=_express-checkout&token='.$token;
 
         $positionCgiBin = stripos($baseUrl, $pathWithCgiBin);
         if (false !== $positionCgiBin) {
             $normalizedBase = substr($baseUrl, 0, $positionCgiBin + strlen($pathWithCgiBin));
 
-            return $normalizedBase . $query;
+            return $normalizedBase.$query;
         }
 
         $positionWebscr = stripos($baseUrl, '/webscr');
         if (false !== $positionWebscr) {
-            $normalizedBase = substr($baseUrl, 0, $positionWebscr) . $pathWithCgiBin;
+            $normalizedBase = substr($baseUrl, 0, $positionWebscr).$pathWithCgiBin;
 
-            return $normalizedBase . $query;
+            return $normalizedBase.$query;
         }
 
-        $normalizedBase = rtrim($baseUrl, '/') . $pathWithCgiBin;
+        $normalizedBase = rtrim($baseUrl, '/').$pathWithCgiBin;
 
-        return $normalizedBase . $query;
+        return $normalizedBase.$query;
     }
 
     private function getActivePageService(): ActivePageServiceInterface
     {
-        /** @var ActivePageServiceInterface */
+        /* @var ActivePageServiceInterface */
         return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
@@ -445,13 +444,13 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
 
     private function getPaypalLogger(): LoggerInterface
     {
-        /** @var LoggerInterface */
+        /* @var LoggerInterface */
         return ServiceLocator::get('monolog.logger.order');
     }
 
     private function getRedirect(): ICmsCoreRedirect
     {
-        /** @var ICmsCoreRedirect */
+        /* @var ICmsCoreRedirect */
         return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }
