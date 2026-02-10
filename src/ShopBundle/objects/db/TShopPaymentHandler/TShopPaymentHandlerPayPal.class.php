@@ -24,6 +24,12 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
      */
     public const PAYPAL_API_VERSION = '84.0';
 
+    /**
+     * Failure Code because of funding issue, which can be solved by a redirect
+     * https://developer.paypal.com/docs/archive/express-checkout/ht-ec-fundingfailure10486/.
+     */
+    public const FUNDING_FAILURE_ERROR_CODE = '10486';
+
     protected ?string $sPayPalToken;
 
     /**
@@ -240,6 +246,15 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
                 )
             );
             $transactionManager->addTransaction($transactionData);
+        } elseif (true === $this->isFundingFailure($aAnswer, $ack)) {
+            $token = $aAnswer['TOKEN'] ?? $this->sPayPalToken;
+            $this->getPaypalLogger()->info('PayPal Payment, funding error detected, redirecting the user to the paypal page', [$token, $oOrder]);
+            $redirectUrl = (false === empty($token)) ? $this->buildFundingFailureRedirectUrl($token) : '';
+            if ('' !== $redirectUrl) {
+                TdbShopPaymentHandler::SetExecutePaymentInterrupt(true);
+                $this->getRedirect()->redirect($redirectUrl);
+            }
+            $bPaymentOk = false;
         } else {
             $bPaymentOk = false;
         }
@@ -373,8 +388,52 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
         return $sCurrencyCode;
     }
 
+    /**
+     * PayPal funding failure detection for error 10486.
+     *
+     * @param array<string, mixed> $answer
+     */
+    private function isFundingFailure(array $answer, string $ack): bool
+    {
+        return 'FAILURE' === $ack && self::FUNDING_FAILURE_ERROR_CODE === ($answer['L_ERRORCODE0'] ?? null);
+    }
+
+    /**
+     * Builds the Express Checkout funding error redirect URL and normalizes known PayPal base URLs.
+     * Older configs sometimes use https://www.paypal.com/webscr (without cgi-bin) so we patch it in.
+     */
+    private function buildFundingFailureRedirectUrl(string $token): string
+    {
+        $baseUrl = $this->GetConfigParameter('url');
+        if (true === empty($baseUrl)) {
+            return '';
+        }
+
+        $pathWithCgiBin = '/cgi-bin/webscr';
+        $query = '?cmd=_express-checkout&token='.$token;
+
+        $positionCgiBin = stripos($baseUrl, $pathWithCgiBin);
+        if (false !== $positionCgiBin) {
+            $normalizedBase = substr($baseUrl, 0, $positionCgiBin + strlen($pathWithCgiBin));
+
+            return $normalizedBase.$query;
+        }
+
+        $positionWebscr = stripos($baseUrl, '/webscr');
+        if (false !== $positionWebscr) {
+            $normalizedBase = substr($baseUrl, 0, $positionWebscr).$pathWithCgiBin;
+
+            return $normalizedBase.$query;
+        }
+
+        $normalizedBase = rtrim($baseUrl, '/').$pathWithCgiBin;
+
+        return $normalizedBase.$query;
+    }
+
     private function getActivePageService(): ActivePageServiceInterface
     {
+        /* @var ActivePageServiceInterface */
         return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
@@ -385,11 +444,13 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
 
     private function getPaypalLogger(): LoggerInterface
     {
+        /* @var LoggerInterface */
         return ServiceLocator::get('monolog.logger.order');
     }
 
     private function getRedirect(): ICmsCoreRedirect
     {
+        /* @var ICmsCoreRedirect */
         return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }
