@@ -130,19 +130,25 @@ class TPkgShopRouteControllerArticle extends \esono\pkgCmsRouting\AbstractRouteC
         $aResponse = $cache->get($key);
         if (null !== $aResponse) {
             $aResponse['queryParameter'] = $queryParameter;
-            // check if we need a redirect
+            $hasActiveShopArticle = isset($aResponse['activeShopArticle']) && null !== $aResponse['activeShopArticle'];
+            $hasRedirect = isset($aResponse['redirectURL']) && '' !== $aResponse['redirectURL'];
 
-            if (!isset($aResponse['activeShopArticle']) || null === $aResponse['activeShopArticle']) {
-                return $this->processArticleResponse($aResponse, null);
+            if (false === $hasActiveShopArticle && false === $hasRedirect) {
+                // The cache entry is incomplete. Delete and continue as cache miss.
+                $cache->delete($key);
+                $aResponse = null;
+            } else {
+                // check if we need a redirect
+                if (true === $hasActiveShopArticle) {
+                    $realItemURL = (isset($aResponse['fullURL'])) ? $aResponse['fullURL'] : $request->getPathInfo();
+                    if ($realItemURL !== $request->getPathInfo()) {
+                        $aResponse['redirectURL'] = $realItemURL;
+                        $aResponse['redirectPermanent'] = true;
+                    }
+                }
+
+                return $this->processArticleResponse($aResponse, $request);
             }
-
-            $realItemURL = (isset($aResponse['fullURL'])) ? $aResponse['fullURL'] : $request->getPathInfo();
-            if ($realItemURL !== $request->getPathInfo()) {
-                $aResponse['redirectURL'] = $realItemURL;
-                $aResponse['redirectPermanent'] = true;
-            }
-
-            return $this->processArticleResponse($aResponse, $request);
         }
 
         $aResponse = array(
