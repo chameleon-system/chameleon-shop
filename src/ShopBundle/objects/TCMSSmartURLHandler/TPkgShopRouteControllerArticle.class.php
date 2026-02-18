@@ -127,17 +127,16 @@ class TPkgShopRouteControllerArticle extends esono\pkgCmsRouting\AbstractRouteCo
         $aResponse = $cache->get($key);
         if (null !== $aResponse) {
             $aResponse['queryParameter'] = $queryParameter;
-            $hasActiveShopArticle = isset($aResponse['activeShopArticle']) && null !== $aResponse['activeShopArticle'];
-            $hasRedirect = isset($aResponse['redirectURL']) && '' !== $aResponse['redirectURL'];
+            $hasActiveShopArticle = null !== ($aResponse['activeShopArticle'] ?? null);
+            $hasRedirect = '' !== ($aResponse['redirectURL'] ?? '');
 
             if (false === $hasActiveShopArticle && false === $hasRedirect) {
                 // The cache entry is incomplete. Delete and continue as cache miss.
                 $cache->delete($key);
-                $aResponse = null;
             } else {
                 // check if we need a redirect
                 if (true === $hasActiveShopArticle) {
-                    $realItemURL = (isset($aResponse['fullURL'])) ? $aResponse['fullURL'] : $request->getPathInfo();
+                    $realItemURL = $aResponse['fullURL'] ?? $request->getPathInfo();
                     if ($realItemURL !== $request->getPathInfo()) {
                         $aResponse['redirectURL'] = $realItemURL;
                         $aResponse['redirectPermanent'] = true;
