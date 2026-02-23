@@ -272,7 +272,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
      *
      * If this behavior is not desired, override this method.
      *
-     * * @return void
+     * @return void
      */
     protected function InitChangeShipToBillingState()
     {
