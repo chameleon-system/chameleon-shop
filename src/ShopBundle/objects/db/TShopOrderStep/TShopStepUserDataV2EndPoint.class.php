@@ -257,14 +257,22 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     }
 
     /**
-     * tries to get the ChangeShipToBillingState - if submitted the bChangeShipToBillingStateRequest will be set to true (value of ChangeShipToBillingState post variable must be 1 or true (!empty check)).
+     * Checks whether the "ChangeShipToBillingState" field was submitted.
      *
-     * the value of bShipToBillingAddress will be used to set the state should be 1 or 0 (true or false)
+     * If the POST parameter "ChangeShipToBillingState" is present and its value
+     * is 1 or evaluates to true (non-empty), the property $bChangeShipToBillingStateRequest
+     * will be set to true.
      *
-     * if no data was submitted because the browser will submit nothing if a checkbox is not checked but other post data was submitted
-     * we have a submit request so the the SetShipToBillingAddress will be called with value 1 (true) by default if you don't want this - overwrite this method
+     * The value of $bShipToBillingAddress determines whether the state should be
+     * set to 1 (true) or 0 (false).
      *
-     * @return void
+     * Note: Browsers do not submit any value for unchecked checkboxes. Therefore,
+     * if the form was submitted but "ChangeShipToBillingState" is missing,
+     * SetShipToBillingAddress() will be called with the default value 1 (true).
+     *
+     * If this behavior is not desired, override this method.
+     *
+     * * @return void
      */
     protected function InitChangeShipToBillingState()
     {
@@ -276,10 +284,10 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
         // if the user wants to ship to billing address (or no longer wants to ship to billing address - handle that request here)
         $this->bChangeShipToBillingStateRequest = true;
 
-        // try to get the new state from post data if it exists - otherwise negate the value returned by $this->GetShipToBillingAddress
+        // try to get the new state from post-data if it exists - otherwise negate the value returned by $this->GetShipToBillingAddress
         $shipToBillingData = $inputFilterUtil->getFilteredPostInput('bShipToBillingAddress');
         if (null === $shipToBillingData) {
-            $bShipToBilling = ('1' === $this->GetShipToBillingAddress()) ? (0) : (1);
+            $bShipToBilling = (1 === $this->GetShipToBillingAddress()) ? (0) : (1);
         } else {
             $bShipToBilling = ('1' === $shipToBillingData) ? (1) : (0);
         }
