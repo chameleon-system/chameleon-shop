@@ -13,7 +13,7 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
         $this->config = $config;
     }
 
-    public function captureOrder(\TPkgShopPaymentTransactionManager $transactionManager, \TdbShopOrder &$order)
+    public function captureOrder(\TPkgShopPaymentTransactionManager $transactionManager, \TdbShopOrder $order)
     {
         // we don't have access to the PAYERID here, so we capture the payment in the order.
         throw new \Exception('method not implemented (currently still in the payment handler');
@@ -21,7 +21,7 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
 
     public function captureShipment(
         \TPkgShopPaymentTransactionManager $transactionManager,
-        \TdbShopOrder &$order,
+        \TdbShopOrder $order,
         $value,
         $invoiceNumber = null,
         ?array $orderItemList = null
@@ -31,7 +31,7 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
 
     public function refund(
         \TPkgShopPaymentTransactionManager $transactionManager,
-        \TdbShopOrder &$order,
+        \TdbShopOrder $order,
         $value,
         $invoiceNumber = null,
         $sellerRefundNote = null,
@@ -135,7 +135,7 @@ class PayPalTransactionHandler implements PaymentTransactionHandlerInterface
 
     public function cancelOrder(
         \TPkgShopPaymentTransactionManager $transactionManager,
-        \TdbShopOrder &$order,
+        \TdbShopOrder $order,
         $cancellationReason = null
     ) {
         // currently we do not pre-authorize, so there is nothing to do. if we ever do, then we need to use to void the authorization using 'METHOD': 'DoVoid','AUTHORIZATIONID': auth_id,
