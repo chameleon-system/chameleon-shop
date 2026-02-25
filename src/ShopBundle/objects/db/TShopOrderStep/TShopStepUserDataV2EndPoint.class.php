@@ -327,6 +327,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
         }
         $aViewVariables['oBillingAddress'] = TdbDataExtranetUserAddress::GetNewInstance($aBillingAddress);
 
+        // caution: notation assumes we have a bool, but actually we have an int
         $aViewVariables['bShipToBillingAddress'] = $this->GetShipToBillingAddress();
 
         $aViewVariables['oUser'] = self::getExtranetUserProvider()->getActiveUser();
@@ -363,7 +364,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
             if ($bContinue) {
                 $bContinue = $this->UpdateUser($this->GetUserData());
                 // if we ship to billing address, we update only the primary address and change the secondary address to match this
-                if (false !== $bContinue && '1' == $this->GetShipToBillingAddress()) {
+                if (false !== $bContinue && 1 === $this->GetShipToBillingAddress()) {
                     $oUser = self::getExtranetUserProvider()->getActiveUser();
 
                     if (null === $oUser) {
@@ -420,10 +421,10 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     {
         $bContinue = $this->ValidateUser($this->GetUserData());
 
-        // which address do we need to validate? if $this->GetShipToBillingAddress() != 1 then we need to validate both..
+        // which address do we need to validate? if $this->GetShipToBillingAddress() !== 1 then we need to validate both..
         // otherwise one will do...
 
-        if ('1' !== $this->GetShipToBillingAddress()) {
+        if (1 !== $this->GetShipToBillingAddress()) {
             $bContinue = $this->ValidateShippingAddress($this->GetShippingAddressData()) && $bContinue;
             $bContinue = $this->ValidateBillingAddress($this->GetBillingAddressData()) && $bContinue;
         } else {
@@ -715,14 +716,13 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
     protected function GetShipToBillingAddress()
     {
         if (array_key_exists('bShipToBillingAddress', $this->aUserData)) {
-            return $this->aUserData['bShipToBillingAddress'];
+            return (int)$this->aUserData['bShipToBillingAddress']; // should contain an int, but to be sure, we convert
         }
         if (array_key_exists('shopstepuserdata_bShipToBillingAddress', $_SESSION)) {
-            return $_SESSION['shopstepuserdata_bShipToBillingAddress'];
+            return (int)$_SESSION['shopstepuserdata_bShipToBillingAddress'];
         }
 
         $oUser = self::getExtranetUserProvider()->getActiveUser();
-
         if (null === $oUser) {
             return 0;
         }
@@ -927,7 +927,7 @@ class TShopStepUserDataV2EndPoint extends TdbShopOrderStep
             /** @var string $sNewBillingAddressId */
             $sNewBillingAddressId = $this->GetBillingAddressData('selectedAddressId');
 
-            if ('1' === $this->GetShipToBillingAddress()) {
+            if (1 === $this->GetShipToBillingAddress()) {
                 if (0 !== strcmp($sNewBillingAddressId, $sNewShippingAddressId)) {
                     if (TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING === $this->AddressUsedAsPrimaryAddress()) {
                         $sNewShippingAddressId = $sNewBillingAddressId;

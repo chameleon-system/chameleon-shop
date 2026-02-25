@@ -64,7 +64,7 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
 
         if ($bIsDhlPackstation) {
             $bChangedBillingAddress = false;
-            if ('0' != $this->GetShipToBillingAddress()) {
+            if (0 !== $this->GetShipToBillingAddress()) {
                 $this->SetShipToBillingAddress('0');
                 $bChangedBillingAddress = true;
             }
@@ -218,7 +218,7 @@ class TPkgShopDhlPackstation_ShopStepUserDataV2 extends TPkgShopDhlPackstation_S
     private function isShipToBillingAddressAndBillingAddressIsPackstation()
     {
         return '1' === $this->GetBillingAddressData('is_dhl_packstation')
-                && 1 === (int) $this->GetShipToBillingAddress();
+                && 1 === $this->GetShipToBillingAddress();
     }
 
     /**
