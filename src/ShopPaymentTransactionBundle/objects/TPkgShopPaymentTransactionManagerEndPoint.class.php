@@ -770,7 +770,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
         return $dOrderTotal;
     }
 
-    private function getTransactionOrderDataVoucherValue(string $transactionType, float $orderTotal): float
+    protected function getTransactionOrderDataVoucherValue(string $transactionType, float $orderTotal): float
     {
         $voucherValueUsed = $this->getTransactionPositionTotalForType(
             TPkgShopPaymentTransactionItemData::TYPE_VOUCHER,
