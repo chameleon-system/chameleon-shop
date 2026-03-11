@@ -14,16 +14,20 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 class TPkgShopPaymentTransactionManagerEndPoint
 {
-    public const LOG = '/logs/pkgShopPaymentTransaction.log';
-    public const MESSAGE_CREDIT_EXECUTED = 'TPkgShopPaymentTransaction-CREDIT-EXECUTED';
-    public const MESSAGE_PAYMENT_EXECUTED = 'TPkgShopPaymentTransaction-PAYMENT-EXECUTED';
+    public const string LOG = '/logs/pkgShopPaymentTransaction.log';
+    public const string MESSAGE_CREDIT_EXECUTED = 'TPkgShopPaymentTransaction-CREDIT-EXECUTED';
+    public const string MESSAGE_PAYMENT_EXECUTED = 'TPkgShopPaymentTransaction-PAYMENT-EXECUTED';
 
-    public const MESSAGE_ERROR = 'TPkgShopPaymentTransaction-ERROR';
-    public const MESSAGE_INVALID_AMOUNT = 'TPkgShopPaymentTransaction-ERROR-INVALID-VALUE';
-    public const TRANSACTION_TYPE_PAYMENT = 'payment';
-    public const TRANSACTION_TYPE_CREDIT = 'credit';
-    public const TRANSACTION_TYPE_PAYMENT_REVERSAL = 'payment-reversal';
-    private $order;
+    public const string MESSAGE_ERROR = 'TPkgShopPaymentTransaction-ERROR';
+    public const string MESSAGE_INVALID_AMOUNT = 'TPkgShopPaymentTransaction-ERROR-INVALID-VALUE';
+    public const string TRANSACTION_TYPE_PAYMENT = 'payment';
+    public const string TRANSACTION_TYPE_CREDIT = 'credit';
+    public const string TRANSACTION_TYPE_PAYMENT_REVERSAL = 'payment-reversal';
+
+    /**
+     * @var TdbShopOrder
+     */
+    protected $order;
 
     public function __construct(TdbShopOrder $oOrder)
     {
@@ -766,7 +770,7 @@ class TPkgShopPaymentTransactionManagerEndPoint
         return $dOrderTotal;
     }
 
-    private function getTransactionOrderDataVoucherValue(string $transactionType, float $orderTotal): float
+    protected function getTransactionOrderDataVoucherValue(string $transactionType, float $orderTotal): float
     {
         $voucherValueUsed = $this->getTransactionPositionTotalForType(
             TPkgShopPaymentTransactionItemData::TYPE_VOUCHER,
