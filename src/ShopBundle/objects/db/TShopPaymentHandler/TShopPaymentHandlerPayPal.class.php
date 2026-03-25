@@ -357,7 +357,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     public function OnPaymentErrorAfterInterruptedPaymentHook()
     {
         if (true === defined('CMS_PAYMENT_REDIRECT_ON_FAILURE') && '' !== CMS_PAYMENT_REDIRECT_ON_FAILURE) {
-            $orderStep = \TdbShopOrderStep::GetStep(CMS_PAYMENT_REDIRECT_ON_FAILURE);
+            $orderStep = TdbShopOrderStep::GetStep(CMS_PAYMENT_REDIRECT_ON_FAILURE);
             $orderStep?->JumpToStep($orderStep);
         }
     }
