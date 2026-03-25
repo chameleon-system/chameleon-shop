@@ -527,35 +527,23 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
         return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * Returns the current master request if one exists.
-     */
     private function getCurrentRequest(): ?Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
-    /**
-     * Returns the order/payment logger used for PayPal request diagnostics.
-     */
     private function getPaypalLogger(): LoggerInterface
     {
         /* @var LoggerInterface */
         return ServiceLocator::get('monolog.logger.order');
     }
 
-    /**
-     * Returns the redirect service used for external payment handoffs.
-     */
     private function getRedirect(): ICmsCoreRedirect
     {
         /* @var ICmsCoreRedirect */
         return ServiceLocator::get('chameleon_system_core.redirect');
     }
 
-    /**
-     * Returns the global request wrapper used by the legacy checkout flow.
-     */
     private function getGlobal(): TGlobal
     {
         /* @var \TGlobal */
