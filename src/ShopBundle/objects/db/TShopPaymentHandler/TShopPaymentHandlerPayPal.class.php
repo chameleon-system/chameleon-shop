@@ -295,7 +295,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
 
         if ('' === $token || '' === $payerId) {
             $logger->warning(
-                'PayPal payment interrupted return missing token or PayerID.',
+                'PayPal payment was interrupted, return missing token or PayerID.',
                 [
                     'orderId' => $oOrder->id,
                     'token' => $token,
@@ -328,7 +328,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
 
         if ('SUCCESS' !== $ack || '' === $returnedPayerId || $returnedPayerId !== $payerId) {
             $logger->warning(
-                'PayPal Payment was interrupted return could not be validated.',
+                'PayPal Payment was interrupted, return could not be validated.',
                 [
                     'orderId' => $oOrder->id,
                     'token' => $token,
