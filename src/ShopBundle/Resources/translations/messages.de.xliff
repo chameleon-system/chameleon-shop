@@ -199,6 +199,10 @@
                 <target>Hersteller</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_shop.payment_paypal_payment.error.payment_failed">
+                <source>chameleon_system_shop.payment_paypal_payment.error.payment_failed</source>
+                <target>Die gewählte Zahlmethode hat leider nicht funktioniert. Der Rücksprung war leider unvollständig bzw. wurde abgebrochen.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

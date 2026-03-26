@@ -183,7 +183,7 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
      *
      * @param string $sMessageConsumer - send error messages here
      *
-     * @return bool
+     * @return bool - true if payment was successfull, false if it wasn't successful
      */
     public function ExecutePayment(TdbShopOrder $oOrder, $sMessageConsumer = '')
     {
@@ -275,11 +275,91 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     }
 
     /**
-     * Overwrite this if you need to add prefix to order number because you have more than one shop with equal order numbers.
+     * Re-validates the PayPal return payload after an interrupted external payment flow
+     * and resumes the actual payment capture for the existing order.
+     *
+     * @param string $sMessageConsumer
      */
-    protected function GetOrderNumber(TdbShopOrder $oOrder)
+    public function postExecutePaymentInterruptedHook(TdbShopOrder $oOrder, $sMessageConsumer)
     {
-        return $oOrder->fieldOrdernumber;
+        $success = parent::postExecutePaymentInterruptedHook($oOrder, $sMessageConsumer);
+        if (false === $success) {
+            return $success;
+        }
+
+        $oGlobal = $this->getGlobal();
+        $logger = $this->getPaypalLogger();
+
+        $token = (string) $oGlobal->GetUserData('token');
+        $payerId = (string) $oGlobal->GetUserData('PayerID');
+
+        if ('' === $token || '' === $payerId) {
+            $logger->warning(
+                'PayPal payment was interrupted, return missing token or PayerID.',
+                [
+                    'orderId' => $oOrder->id,
+                    'token' => $token,
+                    'payerId' => $payerId,
+                    'returnData' => $oGlobal->GetUserData(),
+                ]
+            );
+
+            TCMSMessageManager::GetInstance()->AddMessage(
+                $sMessageConsumer,
+                'ERROR-ORDER-REQUEST-PAYMENT-ERROR',
+                [
+                    'errorMsg' => ServiceLocator::get('translator')->trans(
+                        'chameleon_system_shop.payment_paypal_payment.error.payment_failed'
+                    ),
+                ]
+            );
+
+            return false;
+        }
+
+        $this->sPayPalToken = $token;
+        $this->aCheckoutDetails = $this->ExecutePayPalCall(
+            'GetExpressCheckoutDetails',
+            ['TOKEN' => $this->sPayPalToken]
+        );
+
+        $ack = strtoupper((string) ($this->aCheckoutDetails['ACK'] ?? ''));
+        $returnedPayerId = (string) ($this->aCheckoutDetails['PAYERID'] ?? '');
+
+        if ('SUCCESS' !== $ack || '' === $returnedPayerId || $returnedPayerId !== $payerId) {
+            $logger->warning(
+                'PayPal Payment was interrupted, return could not be validated.',
+                [
+                    'orderId' => $oOrder->id,
+                    'token' => $token,
+                    'expectedPayerId' => $payerId,
+                    'checkoutDetails' => $this->aCheckoutDetails,
+                ]
+            );
+
+            TCMSMessageManager::GetInstance()->AddMessage(
+                $sMessageConsumer,
+                'ERROR-ORDER-REQUEST-PAYMENT-ERROR',
+                [
+                    'errorMsg' => self::GetPayPalErrorMessage($this->aCheckoutDetails),
+                ]
+            );
+
+            return false;
+        }
+
+        return $this->ExecutePayment($oOrder, $sMessageConsumer);
+    }
+
+    /**
+     * Redirects the user back to the configured order step after a failed interrupted payment return.
+     */
+    public function OnPaymentErrorAfterInterruptedPaymentHook()
+    {
+        if (true === defined('CMS_PAYMENT_REDIRECT_ON_FAILURE') && '' !== CMS_PAYMENT_REDIRECT_ON_FAILURE) {
+            $orderStep = TdbShopOrderStep::GetStep(CMS_PAYMENT_REDIRECT_ON_FAILURE);
+            $orderStep?->JumpToStep($orderStep);
+        }
     }
 
     // =============================================================================================
@@ -371,6 +451,16 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     }
 
     /**
+     * Overwrite this if you need to add prefix to order number because you have more than one shop with equal order numbers.
+     *
+     * @return string
+     */
+    protected function GetOrderNumber(TdbShopOrder $oOrder)
+    {
+        return $oOrder->fieldOrdernumber;
+    }
+
+    /**
      * return the currency identifier for the currency we pay in.
      *
      * @param TdbPkgShopCurrency|null $oPkgShopCurrency
@@ -452,5 +542,11 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
     {
         /* @var ICmsCoreRedirect */
         return ServiceLocator::get('chameleon_system_core.redirect');
+    }
+
+    private function getGlobal(): TGlobal
+    {
+        /* @var \TGlobal */
+        return ServiceLocator::get('chameleon_system_core.global');
     }
 }
