@@ -1,0 +1,73 @@
+<?xml version="1.0" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon_system_shop_revocation.data_access.shop_revocation_order_selection_data_access"
+                 class="ChameleonSystem\ShopRevocationBundle\DataAccess\ShopRevocationOrderSelectionDataAccess" public="false">
+            <argument type="service" id="doctrine.dbal.default_connection"/>
+        </service>
+
+        <service id="chameleon_system_shop_revocation.selection.shop_revocation_order_selection_service"
+                 class="ChameleonSystem\ShopRevocationBundle\Service\ShopRevocationOrderSelectionService" public="false">
+            <argument type="service" id="chameleon_system_shop_revocation.data_access.shop_revocation_order_selection_data_access"/>
+            <argument type="service" id="chameleon_system_shop_revocation.relevance.shop_revocation_order_relevance_service"/>
+        </service>
+
+        <service id="chameleon_system_shop_revocation.delivery_date.default_delivery_date_provider"
+                 class="ChameleonSystem\ShopRevocationBundle\Service\DefaultDeliveryDateProvider" public="false"/>
+
+        <service id="chameleon_system_shop_revocation.delivery_date.delivery_date_provider"
+                 alias="chameleon_system_shop_revocation.delivery_date.default_delivery_date_provider" public="false"/>
+
+        <service id="chameleon_system_shop_revocation.additional_days.default_revocation_additional_days_provider"
+                 class="ChameleonSystem\ShopRevocationBundle\Service\DefaultRevocationAdditionalDaysProvider" public="false">
+            <argument type="service" id="chameleon_system_shop.shop_service"/>
+        </service>
+
+        <service id="chameleon_system_shop_revocation.additional_days.revocation_additional_days_provider"
+                 alias="chameleon_system_shop_revocation.additional_days.default_revocation_additional_days_provider" public="false"/>
+
+        <service id="chameleon_system_shop_revocation.relevance.shop_revocation_order_relevance_service"
+                 class="ChameleonSystem\ShopRevocationBundle\Service\ShopRevocationOrderRelevanceService" public="false">
+            <argument type="service" id="chameleon_system_shop_revocation.delivery_date.delivery_date_provider"/>
+            <argument type="service" id="chameleon_system_shop_revocation.additional_days.revocation_additional_days_provider"/>
+        </service>
+
+        <service id="chameleon_system_shop_revocation.validation.shop_revocation_validation_service"
+                 class="ChameleonSystem\ShopRevocationBundle\Service\ShopRevocationValidationService" public="false">
+            <argument type="service" id="chameleon_system_core.tools"/>
+            <argument type="service" id="chameleon_system_shop_revocation.relevance.shop_revocation_order_relevance_service"/>
+            <argument type="service" id="chameleon_system_shop.shop_service"/>
+            <argument type="service" id="translator"/>
+        </service>
+
+        <service id="chameleon_system_shop_revocation.persistence.shop_revocation_persistence_service"
+                 class="ChameleonSystem\ShopRevocationBundle\Service\ShopRevocationPersistenceService" public="false"/>
+
+        <service id="chameleon_system_shop_revocation.link.shop_revocation_order_link_service"
+                 class="ChameleonSystem\ShopRevocationBundle\Service\ShopRevocationOrderLinkService" public="false"/>
+
+        <service id="chameleon_system_shop_revocation.mail.shop_revocation_mail_service"
+                 class="ChameleonSystem\ShopRevocationBundle\Service\ShopRevocationMailService" public="false">
+            <argument type="service" id="logger"/>
+        </service>
+
+        <service id="chameleon_system_shop_revocation.modules.shop_revocation_module"
+                 class="ChameleonSystem\ShopRevocationBundle\Modules\ShopRevocationModule" public="true" shared="false">
+            <argument type="service" id="chameleon_system_extranet.extranet_user_provider"/>
+            <argument type="service" id="chameleon_system_core.flash_messages"/>
+            <argument type="service" id="chameleon_system_core.util.input_filter"/>
+            <argument type="service" id="chameleon_system_shop.shop_service"/>
+            <argument type="service" id="chameleon_system_shop_revocation.selection.shop_revocation_order_selection_service"/>
+            <argument type="service" id="chameleon_system_shop_revocation.validation.shop_revocation_validation_service"/>
+            <argument type="service" id="chameleon_system_shop_revocation.persistence.shop_revocation_persistence_service"/>
+            <argument type="service" id="chameleon_system_shop_revocation.link.shop_revocation_order_link_service"/>
+            <argument type="service" id="chameleon_system_shop_revocation.mail.shop_revocation_mail_service"/>
+            <argument type="service" id="chameleon_system_core.system_page_service"/>
+            <argument type="service" id="translator"/>
+            <tag name="chameleon_system.module"/>
+        </service>
+    </services>
+</container>
