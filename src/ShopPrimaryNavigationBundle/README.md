@@ -9,6 +9,8 @@ Features
 --------
 - Define navigation items via the `pkg_shop_primary_navi` table in the CMS backend.
 - Support for linking to CMS pages or shop categories, with optional root-category tree expansion.
+- Support for external URLs via `external_url`.
+- Optional opening of external links in a new tab via `open_external_link_in_new_tab`.
 - CSS class customization for each navigation item.
 - Automatic caching with invalidation on portal, category, page or navigation changes.
 - Extendable mapping logic: customize the node objects or rendering behavior.
@@ -27,8 +29,14 @@ Configuration
    - **CMS Page**: link to an existing CMS page (`TdbCmsTree`).
    - **Shop Category**: link directly to a shop category (`TdbShopCategory`).
 3. For page targets, you can enable **Show Root Category Tree** to include a submenu of all top-level categories.
-4. Set a **Name**, **CSS Class**, and **Priority** (sort order) for each item.
-5. Assign the navigation module to your page layout (see Usage).
+4. For external links, set **External Url** and optionally enable **Open External Link In New Tab**.
+5. Set a **Name**, **CSS Class**, and **Priority** (sort order) for each item.
+6. Assign the navigation module to your page layout (see Usage).
+
+Rendering note:
+- If `external_url` is set, the internal target selection is ignored for that item.
+- The bundle returns a standard navigation node for external URLs, so the frontend renderer must output `sTarget` if you want `_blank` to reach the final `<a>` tag.
+- If your theme overrides the primary navigation Twig templates, make sure those templates forward `sTarget` as well.
   
 Usage
 -----
