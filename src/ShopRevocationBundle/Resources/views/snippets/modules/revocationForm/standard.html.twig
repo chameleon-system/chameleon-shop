@@ -1,6 +1,6 @@
 {% set formDefaultLabelClass = formDefaultLabelClass|default('col-12 col-md-4 col-lg-3') %}
-{% set formDefaultInputClass = formDefaultInputClass|default('col-12 col-md-8 col-lg-6') %}
-{% set formDefaultHelpClass = formDefaultHelpClass|default('col-12 offset-md-4 col-md-8 offset-lg-3 col-lg-9') %}
+{% set formDefaultInputClass = formDefaultInputClass|default('w-100') %}
+{% set formDefaultHelpClass = formDefaultHelpClass|default('col-12 col-md-8 col-lg-6') %}
 {% set formValues = formValues|default({}) %}
 {% set errors = errors|default({}) %}
 {% set orders = orders|default([]) %}
@@ -97,24 +97,24 @@
 
             {% block revocation_form_order_field %}
                 {% if true == isLoggedIn %}
-                    {% block revocation_form_order_select_field %}
-                        {% set aFieldOrderSelectMapped = {
-                            sLabelText: 'chameleon_system_shop_revocation.field.order'|trans,
-                            sLabelClass: formDefaultLabelClass,
-                            sInputClass: formDefaultInputClass,
-                            sHelpClass: formDefaultHelpClass,
-                            sName: 'shopOrderId',
-                            sFieldId: 'revocationShopOrderId',
-                            bRequired: not showLoggedInOrderNumberFallback,
-                            sPlaceholder: 'chameleon_system_shop_revocation.field.select_placeholder'|trans,
-                            sError: errors.shopOrderId|default(''),
-                            sValue: formValues.shopOrderId|default(''),
-                            aValueList: orders,
-                        } %}
-                        {{ include('/common/userInput/form/select.html.twig', aFieldOrderSelectMapped) }}
-                    {% endblock %}
+                    {% if orders | length > 0 %}
+                        {% block revocation_form_order_select_field %}
+                            {% set aFieldOrderSelectMapped = {
+                                sLabelText: 'chameleon_system_shop_revocation.field.order'|trans,
+                                sLabelClass: formDefaultLabelClass,
+                                sInputClass: formDefaultInputClass,
+                                sHelpClass: formDefaultHelpClass,
+                                sName: 'shopOrderId',
+                                sFieldId: 'revocationShopOrderId',
+                                bRequired: not showLoggedInOrderNumberFallback,
+                                sPlaceholder: 'chameleon_system_shop_revocation.field.select_placeholder'|trans,
+                                sError: errors.shopOrderId|default(''),
+                                sValue: formValues.shopOrderId|default(''),
+                                aValueList: orders,
+                            } %}
+                            {{ include('/common/userInput/form/select.html.twig', aFieldOrderSelectMapped) }}
+                        {% endblock %}
 
-                    {% block revocation_form_logged_in_order_number_fallback %}
                         {% if true == showLoggedInOrderNumberFallback %}
                             <div class="mb-3 row">
                                 <div class="{{ formDefaultHelpClass }}">
@@ -123,7 +123,10 @@
                                     </div>
                                 </div>
                             </div>
-
+                        {% endif %}
+                    {% endif %}
+                    {% block revocation_form_logged_in_order_number_fallback %}
+                        {% if true == showLoggedInOrderNumberFallback %}
                             {% set aFieldOrderNumberFallbackMapped = {
                                 sLabelText: 'chameleon_system_shop_revocation.field.order_number'|trans,
                                 sLabelClass: formDefaultLabelClass,
@@ -180,10 +183,14 @@
             {% endblock %}
 
             {% block revocation_form_submit %}
-                {{ include('/common/userInput/buttonStandard.html.twig', {
-                    sButtonText: 'chameleon_system_shop_revocation.form.submit'|trans,
-                    sButtonClass: formDefaultHelpClass,
-                }) }}
+                <div class="row">
+                    <div class="col-12 col-md-8 col-lg-6 mx-auto snippetRevocationForm__submit">
+                        {{ include('/common/userInput/buttonStandard.html.twig', {
+                            sButtonText: 'chameleon_system_shop_revocation.form.submit'|trans,
+                            sButtonClass: 'w-100',
+                        }) }}
+                    </div>
+                </div>
             {% endblock %}
         </form>
     {% endblock %}

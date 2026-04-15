@@ -79,7 +79,7 @@ The default mail placeholders are:
 
 Installation and integration
 ----------------------------
-The bundle is part of `chameleon-system/chameleon-base`; no separate Composer package is needed.
+The bundle is part of `chameleon-system/chameleon-shop`; no separate Composer package is needed.
 
 The bundle ships the core functionality, but the project still has to integrate it.
 
