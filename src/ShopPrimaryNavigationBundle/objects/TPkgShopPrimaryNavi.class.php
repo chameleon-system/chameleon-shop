@@ -17,6 +17,19 @@ class TPkgShopPrimaryNavi extends TPkgShopPrimaryNaviAutoParent
     public function getPkgCmsNavigationNodeObject()
     {
         $oNaviNode = null;
+
+        if ('' !== trim((string) $this->fieldExternalUrl)) {
+            $oNaviNode = new TPkgCmsNavigationNode();
+            $oNaviNode->sLink = trim((string) $this->fieldExternalUrl);
+            $oNaviNode->sTitle = $this->fieldName;
+            $oNaviNode->sCssClass = $this->fieldCssClass;
+            if (true === (bool) $this->fieldOpenExternalLinkInNewTab) {
+                $oNaviNode->sTarget = '_blank';
+            }
+
+            return $oNaviNode;
+        }
+
         if (true === empty($this->fieldTarget)) {
             return $oNaviNode;
         }
