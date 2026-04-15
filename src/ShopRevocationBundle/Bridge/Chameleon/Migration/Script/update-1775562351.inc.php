@@ -41,3 +41,6 @@ TCMSLogChange::RunQuery(__LINE__, $query);
 $query ="ALTER TABLE `shop_order` ADD INDEX `shop_order_revocation_id` (`shop_order_revocation_id`)";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
+$query ="ALTER TABLE `shop_order`
+                     ADD INDEX `shop_order_revocation_lookup` (`shop_id`, `data_extranet_user_id`, `canceled`, `datecreated`)";
+TCMSLogChange::RunQuery(__LINE__, $query);

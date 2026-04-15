@@ -8,14 +8,6 @@
 $data = TCMSLogChange::createMigrationQueryData('data_mail_profile', 'de')
   ->setFields([
       'name' => '',
-      'id' => 'f2d53343-ebd7-44ee-a7aa-4effe21fc96f',
-  ])
-;
-TCMSLogChange::insert(__LINE__, $data);
-
-$data = TCMSLogChange::createMigrationQueryData('data_mail_profile', 'de')
-  ->setFields([
-      'name' => '',
       'id' => '41502190-84ec-27b9-be90-072fdb9e3b01',
   ])
 ;

@@ -22,7 +22,6 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
     private const MESSAGE_CONSUMER = 'shop_revocation_module';
     private const DEFAULT_SUBMIT_FUNCTION = 'submitRevocation';
     private const CONTACT_SYSTEM_PAGE = 'contactPage';
-    private const TRANSLATION_PREFIX = 'chameleon_system_shop_revocation.';
 
     private ExtranetUserProviderInterface $extranetUserProvider;
 
@@ -107,7 +106,7 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('orders', $orders);
         $oVisitor->SetMappedValue('hiddenFields', []);
         $oVisitor->SetMappedValue('showLoggedInOrderNumberFallback', $showLoggedInOrderNumberFallback);
-        $oVisitor->SetMappedValue('loggedInOrderNumberFallbackHint', true === $showLoggedInOrderNumberFallback ? $this->trans('hint.no_relevant_orders') : null);
+        $oVisitor->SetMappedValue('loggedInOrderNumberFallbackHint', true === $showLoggedInOrderNumberFallback ? $this->translator->trans('chameleon_system_shop_revocation.hint.no_relevant_orders') : null);
         $oVisitor->SetMappedValue('invalidOrderHint', $this->invalidOrderHint);
         $oVisitor->SetMappedValue('contactPageUrl', $this->contactPageUrl);
         $oVisitor->SetMappedValue('showRequiredFieldsHint', true);
@@ -150,10 +149,10 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->errors = $validationResult->getErrors();
 
         if (true === $validationResult->hasErrors()) {
-            $this->generalError = $this->errors->getGeneral() ?? $this->trans('error.check_input');
+            $this->generalError = $this->errors->getGeneral() ?? $this->translator->trans('chameleon_system_shop_revocation.error.check_input');
 
             if (true === $validationResult->shouldShowInvalidOrderHint()) {
-                $this->invalidOrderHint = $this->trans('hint.invalid_order');
+                $this->invalidOrderHint = $this->translator->trans('chameleon_system_shop_revocation.hint.invalid_order');
                 $this->contactPageUrl = $this->getContactPageUrl();
             }
 
@@ -162,7 +161,7 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $resolvedOrder = $validationResult->getResolvedOrder();
         if (null === $resolvedOrder) {
-            $this->generalError = $this->trans('error.save_failed');
+            $this->generalError = $this->translator->trans('chameleon_system_shop_revocation.error.save_failed');
 
             return;
         }
@@ -184,7 +183,7 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
                 )
             );
         } catch (\Throwable) {
-            $this->generalError = $this->trans('error.save_failed');
+            $this->generalError = $this->translator->trans('chameleon_system_shop_revocation.error.save_failed');
 
             return;
         }
@@ -194,7 +193,7 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->generalError = null;
         $this->invalidOrderHint = null;
         $this->contactPageUrl = null;
-        $this->successMessage = $this->trans('success.submitted');
+        $this->successMessage = $this->translator->trans('chameleon_system_shop_revocation.success.submitted');
     }
 
     /**
@@ -222,10 +221,5 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
         } catch (\Exception) {
             return $orderDate;
         }
-    }
-
-    private function trans(string $key, array $parameters = []): string
-    {
-        return $this->translator->trans(self::TRANSLATION_PREFIX.$key, $parameters);
     }
 }
