@@ -56,7 +56,7 @@ $query ="ALTER TABLE `pkg_shop_primary_navi`
                             `external_url` VARCHAR(255) NOT NULL COMMENT 'Externe Url: '";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
-TCMSLogChange::SetFieldPosition('pkg_shop_primary_navi', 'external_url', 'target_two');
+TCMSLogChange::SetFieldPosition('pkg_shop_primary_navi', 'external_url', 'position');
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
         ->setFields([
