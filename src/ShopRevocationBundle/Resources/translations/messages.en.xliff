@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="messages.en.xliff">
+        <body>
+            <trans-unit id="chameleon_system_shop_revocation.form.headline">
+                <source>chameleon_system_shop_revocation.form.headline</source>
+                <target>Cancel contract</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.form.intro_text">
+                <source>chameleon_system_shop_revocation.form.intro_text</source>
+                <target>Use this form to submit your cancellation electronically.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.form.customer_note_help_text">
+                <source>chameleon_system_shop_revocation.form.customer_note_help_text</source>
+                <target>Optionally, you can specify which items you would like to cancel.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.form.submit">
+                <source>chameleon_system_shop_revocation.form.submit</source>
+                <target>Confirm cancellation</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.field.name">
+                <source>chameleon_system_shop_revocation.field.name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.field.email">
+                <source>chameleon_system_shop_revocation.field.email</source>
+                <target>Email address</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.field.order">
+                <source>chameleon_system_shop_revocation.field.order</source>
+                <target>Order</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.field.order_number">
+                <source>chameleon_system_shop_revocation.field.order_number</source>
+                <target>Order number</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.field.customer_note">
+                <source>chameleon_system_shop_revocation.field.customer_note</source>
+                <target>Which items would you like to cancel?</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.field.select_placeholder">
+                <source>chameleon_system_shop_revocation.field.select_placeholder</source>
+                <target>Please choose</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.action.contact">
+                <source>chameleon_system_shop_revocation.action.contact</source>
+                <target>Contact</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.hint.invalid_order">
+                <source>chameleon_system_shop_revocation.hint.invalid_order</source>
+                <target>If your order should still be cancellable, please use our contact form.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.hint.no_relevant_orders">
+                <source>chameleon_system_shop_revocation.hint.no_relevant_orders</source>
+                <target>No relevant orders were found. If your order should still be cancellable, please enter the order number manually.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.error.check_input">
+                <source>chameleon_system_shop_revocation.error.check_input</source>
+                <target>Please check your entries.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.error.save_failed">
+                <source>chameleon_system_shop_revocation.error.save_failed</source>
+                <target>The cancellation could not be saved at the moment. Please try again.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.success.submitted">
+                <source>chameleon_system_shop_revocation.success.submitted</source>
+                <target>Your cancellation has been submitted successfully.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.name_required">
+                <source>chameleon_system_shop_revocation.validation.name_required</source>
+                <target>Please enter your name.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.email_required">
+                <source>chameleon_system_shop_revocation.validation.email_required</source>
+                <target>Please enter your email address.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.email_invalid">
+                <source>chameleon_system_shop_revocation.validation.email_invalid</source>
+                <target>Please enter a valid email address.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.order_selection_required">
+                <source>chameleon_system_shop_revocation.validation.order_selection_required</source>
+                <target>Please select an order or enter an order number.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.order_number_required">
+                <source>chameleon_system_shop_revocation.validation.order_number_required</source>
+                <target>Please enter an order number.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.order_number_not_found">
+                <source>chameleon_system_shop_revocation.validation.order_number_not_found</source>
+                <target>The specified order number could not be found.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.email_order_mismatch">
+                <source>chameleon_system_shop_revocation.validation.email_order_mismatch</source>
+                <target>The email address does not match the order.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.order_number_not_relevant">
+                <source>chameleon_system_shop_revocation.validation.order_number_not_relevant</source>
+                <target>The specified order is presumably no longer within the cancellation period.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.selected_order_not_found">
+                <source>chameleon_system_shop_revocation.validation.selected_order_not_found</source>
+                <target>The selected order could not be found.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.selected_order_not_owned">
+                <source>chameleon_system_shop_revocation.validation.selected_order_not_owned</source>
+                <target>The selected order does not belong to your customer account.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.selected_order_not_relevant">
+                <source>chameleon_system_shop_revocation.validation.selected_order_not_relevant</source>
+                <target>The selected order is presumably no longer within the cancellation period.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.order_number_not_owned">
+                <source>chameleon_system_shop_revocation.validation.order_number_not_owned</source>
+                <target>The specified order does not belong to your customer account.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
