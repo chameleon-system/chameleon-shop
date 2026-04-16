@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule;
 
 use ChameleonSystem\CoreBundle\Util\InputFilterUtil;
-use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatisticEvaluationRequestDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
@@ -32,7 +32,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     public function __construct(
         private readonly StatsTableServiceInterface $stats,
         private readonly TranslatorInterface $translator,
-        private readonly UrlUtil $urlUtil,
+        private readonly UrlGeneratorInterface $urlGenerator,
         private readonly StatsCurrencyServiceInterface $statsCurrencyService,
         private readonly SecurityHelperAccess $securityHelperAccess,
         private readonly ShopServiceInterface $shopService,
@@ -68,17 +68,6 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         ];
         $urlParameters = array_merge($urlParameters, $this->getCustomFilterUrlParameters($customFilters));
 
-        // @TODO Fix download
-        // @TODO Build URL without hard string
-        $csvDownloadUrl = $this->urlUtil->getArrayAsUrl(
-            $urlParameters,
-            '/cms/chameleon_system_ecommerce_stats/stats.csv?'
-        );
-        $topSellerDownloadUrl = $this->urlUtil->getArrayAsUrl(
-            $urlParameters,
-            '/cms/chameleon_system_ecommerce_stats/topsellers.csv?'
-        );
-
         $shopStatisticGroupOptions = array_merge(
             [self::ALL_STATS_FILTER_NAME => $this->translator->trans('chameleon_system_ecommerce_stats.form_all_stats_label')],
             $this->getStatisticOptions()
@@ -90,8 +79,14 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         $oVisitor->SetMappedValueFromArray([
-            'csvDownloadUrl' => $csvDownloadUrl,
-            'topSellerDownloadUrl' => $topSellerDownloadUrl,
+            'csvDownloadUrl' => $this->urlGenerator->generate(
+                'chameleon_system_ecommerce_stats.export_csv.stats',
+                $urlParameters
+            ),
+            'topSellerDownloadUrl' => $this->urlGenerator->generate(
+                'chameleon_system_ecommerce_stats.export_csv.topsellers',
+                $urlParameters
+            ),
             'activeViewName' => $viewName,
             'viewOptions' => $this->getViewList(),
             'dateGroupOptions' => $this->getDateGroupOptions(),
