@@ -70,7 +70,6 @@ readonly class CsvExportController
 
         $selectedPortalId = $request->get('portalId', '');
         $selectedShopId = $request->get('shopId', '');
-        //@TODO Handle custom filter extension
 
         $limit = $request->request->getInt('limit', 50);
 

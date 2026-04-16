@@ -5,18 +5,18 @@ namespace ChameleonSystem\EcommerceStatsBundle\Service;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsCurrencyDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 
-class StatsCurrencyService implements StatsCurrencyServiceInterface
+readonly class StatsCurrencyService implements StatsCurrencyServiceInterface
 {
-    public function __construct(
-        private readonly Connection $connection
-    ) {
+    public function __construct(private Connection $connection)
+    {
     }
 
     /**
-     * @return StatsCurrencyDataModel[]
+     * @throws Exception
      */
-    public function getCurrenciesForSelect(): array
+    public function getCurrencyOptions(): array
     {
         $query = 'SELECT `id`, `iso4217` FROM `pkg_shop_currency`';
 

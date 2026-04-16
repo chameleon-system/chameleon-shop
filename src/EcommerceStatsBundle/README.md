@@ -2,7 +2,8 @@
 =====================================
 
 ## Overview
-The EcommerceStatsBundle collects and displays e-commerce metrics in the Chameleon backend. It supports custom data providers, database-driven statistic groups, and dashboard widgets for insightful reporting.
+The EcommerceStatsBundle collects and displays e-commerce metrics in the Chameleon backend. It supports custom data providers,
+database-driven statistic groups, and dashboard widgets for insightful reporting.
 
 Key Features
 ------------
@@ -16,7 +17,7 @@ Installation
 ------------
 This bundle is included in `chameleon-system/chameleon-shop` and auto-registered via Symfony.
 No additional Composer installation is needed.
-To register manually (or without without Flex), add to `app/AppKernel.php`:
+To register manually (or without Flex), add to `app/AppKernel.php`:
 ```php
 // app/AppKernel.php
 public function registerBundles()
@@ -28,6 +29,15 @@ public function registerBundles()
     return $bundles;
 }
 ```
+
+It is also mandatory to register the bundle routes in your routing file, otherwise the CSV export routes are not available:
+
+```yaml
+chameleon_system_ecommerce_stats:
+    resource: "@ChameleonSystemEcommerceStatsBundle/Resources/config/routing.yml"
+    type: yaml
+```
+
 Clear cache:
 ```bash
 php bin/console cache:clear
@@ -39,14 +49,15 @@ php bin/console cache:clear
 There are currently 2 ways of adding statistics to the bundles output:
 
 ### 1. Implementing a custom `StatsProvider`
-In order to add new stats through a StatsProvider, add a service that implements `StatsProviderInterface` and tag it with `chameleon_system_ecommerce_stats.stats_provider`.
+In order to add new stats through a StatsProvider, add a service that implements `StatsProviderInterface` and 
+tag it with `chameleon_system_ecommerce_stats.stats_provider`.
 
 ```php
 class MyStatsProvider implements StatsProviderInterface {
 
     public function addStatsToTable(
         StatsTableDataModel $statsTable,
-        StatsEvaluationRequestDataModel $request
+        StatisticEvaluationRequestDataModel $request
     ) : StatsTableDataModel {
     
         $block = new StatsGroupDataModel('My Example Stats', 'my_example_stats');
@@ -82,6 +93,7 @@ The query should return at least the following keys:
 
 * `sColumnName`: The name of the column (X-Axis)
 * `dColumnValue`: The value corresponding to it (Y-Axis)
+* optional group columns: additional columns that can be referenced by `fieldGroups` in order to build subgroups in the backend output
 
 The query may contain the following placeholders, that will be replaced before
 execution:
@@ -94,15 +106,19 @@ Example:
 
 ```sql
 SELECT [{sColumnName}] AS sColumnName,
-  `shop_order_item`.`order_amount` AS dColumnValue,
-  shop_payment_method_name
+       COUNT(`shop_order`.`id`) AS dColumnValue,
+       <trans>`shop_payment_method`.`name`</trans> AS shop_payment_method_name
 FROM `shop_order`
-LEFT JOIN `shop_order_item` 
-    ON `shop_order`.`id` = `shop_order_item`.`shop_order_id`
+JOIN `shop_payment_method`
+    ON `shop_order`.`shop_payment_method_id` = `shop_payment_method`.`id`
 [{sCondition}]
 AND `shop_order`.`canceled` = '0'
-ORDER BY datecreated
+GROUP BY `sColumnName`, `shop_payment_method_name`
+ORDER BY `sColumnName`, `shop_payment_method_name`
 ```
+
+If you return additional grouping columns such as `shop_payment_method_name`, make sure the statistic group's `fieldGroups` configuration references them.
+If `fieldGroups` references columns that are not part of the query result, the backend output will fall back to "nothing assigned".
 
 ## Dashboard Widgets
 

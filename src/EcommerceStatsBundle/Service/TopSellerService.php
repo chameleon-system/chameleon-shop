@@ -17,9 +17,9 @@ use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\ShopOrderItemDataMode
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\TopSellerServiceInterface;
 use Doctrine\DBAL\Connection;
 
-class TopSellerService implements TopSellerServiceInterface
+readonly class TopSellerService implements TopSellerServiceInterface
 {
-    public function __construct(private readonly Connection $connection)
+    public function __construct(private Connection $connection)
     {
     }
 

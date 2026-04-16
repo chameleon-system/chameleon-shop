@@ -94,6 +94,9 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
             $content = $matches[1];
             $activeBackendLanguage = $this->securityHelperAccess->getUser()?->getCmsLanguageId();
             $langKey = \TGlobal::GetLanguagePrefix($activeBackendLanguage);
+            if('' === $langKey){
+                $langKey = $this->securityHelperAccess->getUser()?->getCurrentEditLanguageIsoCode();
+            }
 
             // attempt to decode JSON content inside <trans> tag
             $decoded = json_decode($content, true);
@@ -174,7 +177,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         $params[':to'] = $statisticEvaluationRequestDataModel->getEndDate()->format('Y-m-d H:i:s');
 
         if (true === $group->fieldHasCurrency) {
-            $baseConditionList[] = $this->connection->quoteIdentifier('`shop_order`.`pkg_shop_currency_id`').' = :currencyId';
+            $baseConditionList[] = $this->connection->quoteIdentifier('shop_order.pkg_shop_currency_id').' = :currencyId';
             $params[':currencyId'] = $statisticEvaluationRequestDataModel->getCurrencyId();
         }
 

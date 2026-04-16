@@ -98,7 +98,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             'portalOptions' => $this->getActivePortalOptions(),
             'shopOptions' => $this->shopService->getAllShops(),
             'shopStatisticGroupOptions' => $shopStatisticGroupOptions,
-            'currencyOptions' => $this->statsCurrencyService->getCurrenciesForSelect(),
+            'currencyOptions' => $this->statsCurrencyService->getCurrencyOptions(),
             'startDate' => $statsEvaluationRequest->getStartDate()->format('Y-m-d'),
             'endDate' => $statsEvaluationRequest->getEndDate()->format('Y-m-d'),
             'showChange' => $statsEvaluationRequest->isShowDiffColumn(),
@@ -143,7 +143,8 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 '0'
             ),
             $this->inputFilterUtil->getFilteredInput(
-                'portalId'
+                'portalId',
+                ''
             ),
             $this->inputFilterUtil->getFilteredInput(
                 'currencyId',
@@ -154,7 +155,8 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
                 self::ALL_STATS_FILTER_NAME
             ),
             $this->inputFilterUtil->getFilteredInput(
-                'shopId'
+                'shopId',
+                ''
             ),
             // @TODO handle custom filter extension
         );
