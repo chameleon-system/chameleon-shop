@@ -1,7 +1,7 @@
-<h1>Build #1776239749</h1>
+<h1>Build ##1776322519</h1>
 <h2>Date: 2026-04-15</h2>
 <div class="changelog">
-    - #68714: add external link field to shop primary navigation table
+    - #68714: recover external link field migration for shop primary navigation table
 </div>
 <?php
 
