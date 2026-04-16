@@ -16,15 +16,15 @@ class StatsCurrencyService implements StatsCurrencyServiceInterface
     /**
      * @return StatsCurrencyDataModel[]
      */
-    public function getAllCurrencies(): array
+    public function getCurrenciesForSelect(): array
     {
-        $query = 'SELECT `id`, `iso4217`, `symbol` FROM `pkg_shop_currency`';
+        $query = 'SELECT `id`, `iso4217` FROM `pkg_shop_currency`';
 
         $currencies = $this->connection->fetchAllAssociative($query);
 
         $currencyModels = [];
         foreach ($currencies as $currency) {
-            $currencyModels[] = new StatsCurrencyDataModel($currency['iso4217'], $currency['id'], $currency['symbol']);
+            $currencyModels[$currency['id']] = $currency['iso4217'];
         }
 
         return $currencyModels;

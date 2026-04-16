@@ -46,10 +46,7 @@ class MyStatsProvider implements StatsProviderInterface {
 
     public function addStatsToTable(
         StatsTableDataModel $statsTable,
-        \DateTime $startDate,
-        \DateTime $endDate,
-        string $dateGroupType,
-        string $portalId
+        StatsEvaluationRequestDataModel $request
     ) : StatsTableDataModel {
     
         $block = new StatsGroupDataModel('My Example Stats', 'my_example_stats');

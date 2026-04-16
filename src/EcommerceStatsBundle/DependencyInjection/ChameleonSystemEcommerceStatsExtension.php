@@ -21,9 +21,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class ChameleonSystemEcommerceStatsExtension extends Extension
 {
     /**
-     * @param array<string, mixed> $config
+     * @param array<string, mixed> $configs
      */
-    public function load(array $config, ContainerBuilder $container): void
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');

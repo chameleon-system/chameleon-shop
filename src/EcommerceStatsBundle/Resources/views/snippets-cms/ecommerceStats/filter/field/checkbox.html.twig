@@ -1,0 +1,27 @@
+{#
+    @var string name
+    @var string label
+    @var bool checked
+    @var string|null dataParam
+    @var string wrapperClass
+#}
+
+{% set wrapperClass = wrapperClass|default('d-flex align-items-center mb-4') %}
+{% set inputClass = inputClass|default('switch-input') %}
+{% set dataParam = dataParam|default(name) %}
+{% set addProduceParamsClass = addProduceParamsClass|default(false) %}
+
+<div class="{{ wrapperClass }}">
+    <label class="switch switch-label switch-pill switch-success mb-0 mr-2">
+        <input
+            class="{{ inputClass }}{% if addProduceParamsClass %} produce-params{% endif %}"
+            type="checkbox"
+            value="1"
+            name="{{ name|e('html_attr') }}"
+            {% if checked %}checked="checked"{% endif %}
+            {% if dataParam is not same as(false) %}data-param="{{ dataParam|e('html_attr') }}"{% endif %}
+        />
+        <span class="switch-slider" data-checked="✓" data-unchecked="✕"></span>
+    </label>
+    <span>{{ label }}</span>
+</div>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ChameleonSystem\EcommerceStatsBundle\StatsProvider;
 
 use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
+use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatisticEvaluationRequestDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsTableDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
@@ -24,12 +25,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class PkgShopStatisticsGroupProvider implements StatsProviderInterface
 {
-    private const DATE_QUERY_PARTS = [
-        self::DATA_GROUP_TYPE_YEAR => 'YEAR(%1$s)',
-        self::DATA_GROUP_TYPE_MONTH => 'DATE_FORMAT(%1$s,\'%%Y-%%m\')',
-        self::DATA_GROUP_TYPE_WEEK => 'CONCAT(YEAR(%1$s), \'-KW\', WEEK(%1$s, 7))',
-        self::DATA_GROUP_TYPE_DAY => 'DATE(%1$s)',
+    private const array DATE_QUERY_PARTS = [
+        self::DATE_GROUP_YEAR => 'YEAR(%1$s)',
+        self::DATE_GROUP_MONTH => 'DATE_FORMAT(%1$s,\'%%Y-%%m\')',
+        self::DATE_GROUP_WEEK => 'DATE_FORMAT(%1$s,\'%%x-KW%%v\')',
+        self::DATE_GROUP_DATE => 'DATE(%1$s)',
     ];
+
+    private const string DEFAULT_DATE_RESTRICTION_FIELD = 'datecreated';
 
     public function __construct(
         private readonly Connection $connection,
@@ -42,33 +45,44 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
 
     public function addStatsToTable(
         StatsTableDataModel $statsTable,
-        \DateTime $startDate,
-        \DateTime $endDate,
-        string $dateGroupType,
-        string $portalId,
-        string $currencyId,
-        string $selectedStatsGroupSystemName
+        StatisticEvaluationRequestDataModel $statisticEvaluationRequestDataModel
     ): StatsTableDataModel {
-        foreach ($this->fetchStatistics($selectedStatsGroupSystemName) as $group) {
-            [$conditionList, $params] = $this->getBaseConditions($group, $startDate, $endDate, $portalId);
-            $dateQueryPart = $this->getDateQueryPart($dateGroupType, $group->fieldDateRestrictionField ?? 'datecreated');
+        foreach ($this->fetchStatistics($statisticEvaluationRequestDataModel->getSelectedStatsGroupSystemName()) as $group) {
+            [$conditionList, $params] = $this->getBaseConditions(
+                $group,
+                $statisticEvaluationRequestDataModel
+            );
 
-            $baseQuery = $group->fieldQuery;
             $condition = '';
             if (count($conditionList) > 0) {
                 $condition = 'WHERE ('.implode(') AND (', $conditionList).')';
-
-                if (true === $group->fieldHasCurrency) {
-                    $condition .= ' AND (`shop_order`.`pkg_shop_currency_id` ='."'".$currencyId."')";
-                }
             }
 
-            $blockQuery = str_replace(['[{sColumnName}]', '[{sCondition}]'], [$dateQueryPart, $condition], $baseQuery);
+            $dateQueryPart = sprintf(
+                self::DATE_QUERY_PARTS[$statisticEvaluationRequestDataModel->getDateGroup()] ?? self::DATE_QUERY_PARTS[self::DATE_GROUP_DATE],
+                $group->fieldDateRestrictionField ?? self::DEFAULT_DATE_RESTRICTION_FIELD
+            );
+
+            $blockQuery = str_replace(
+                ['[{sColumnName}]', '[{sCondition}]'],
+                [$dateQueryPart, $condition],
+                $group->fieldQuery
+            );
+
             $blockQuery = $this->replaceTranslatableFields($blockQuery);
             $groupFields = explode(',', $group->fieldGroups);
             $realGroupFields = array_filter(array_map('trim', $groupFields));
 
-            $statsTable = $this->addBlock($statsTable, $group->fieldName, $group->fieldSystemName, $group->fieldHasCurrency, $blockQuery, $realGroupFields, $params, $currencyId);
+            $statsTable = $this->addBlock(
+                $statsTable,
+                $group->fieldName,
+                $group->fieldSystemName,
+                $group->fieldHasCurrency,
+                $blockQuery,
+                $realGroupFields,
+                $params,
+                $statisticEvaluationRequestDataModel->getCurrencyId()
+            );
         }
 
         return $statsTable;
@@ -118,41 +132,24 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         }, $query);
     }
 
-    public function fetchAllStatisticGroupsNames(): array
-    {
-        $groupNames = [];
-        $groupList = \TdbPkgShopStatisticGroupList::GetList();
-        while ($group = $groupList->Next()) {
-            $groupNames[$group->fieldSystemName] = $group->fieldName;
-        }
-
-        return $groupNames;
-    }
-
     /**
      * @return \Generator<\TdbPkgShopStatisticGroup>
      */
     private function fetchStatistics(string $selectedStatsGroupSystemName): \Generator
     {
-        if (EcommerceStatsBackendModule::ALL_STATS_FILTER_NAME === $selectedStatsGroupSystemName || '' === $selectedStatsGroupSystemName) {
-            $groups = \TdbPkgShopStatisticGroupList::GetList();
-        } else {
-            $query = 'SELECT * FROM `pkg_shop_statistic_group` WHERE `pkg_shop_statistic_group`.`system_name` = '."'$selectedStatsGroupSystemName'";
-
-            $groups = \TdbPkgShopStatisticGroupList::GetList($query);
+        $query = null;
+        if (
+            EcommerceStatsBackendModule::ALL_STATS_FILTER_NAME !== $selectedStatsGroupSystemName
+            && '' !== $selectedStatsGroupSystemName
+        ) {
+            $query = 'SELECT * FROM `pkg_shop_statistic_group` WHERE `pkg_shop_statistic_group`.`system_name` = '
+                .$this->connection->quote($selectedStatsGroupSystemName);
         }
+        $groups = \TdbPkgShopStatisticGroupList::GetList($query);
 
         while ($group = $groups->Next()) {
             yield $group;
         }
-    }
-
-    private function getDateQueryPart(string $dateGroupType, string $dateColumn): string
-    {
-        $part = self::DATE_QUERY_PARTS[$dateGroupType]
-            ?? self::DATE_QUERY_PARTS[self::DATA_GROUP_TYPE_DAY];
-
-        return sprintf($part, $dateColumn);
     }
 
     /**
@@ -161,22 +158,36 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
      */
     private function getBaseConditions(
         \TdbPkgShopStatisticGroup $group,
-        \DateTime $startDate,
-        \DateTime $endDate,
-        string $portalId
+        StatisticEvaluationRequestDataModel $statisticEvaluationRequestDataModel
     ): array {
         $baseConditionList = [];
         $params = [];
 
-        $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldDateRestrictionField)).' >= :from';
-        $params[':from'] = $startDate->format('Y-m-d H:i:s');
+        $baseConditionList[] = $this->connection->quoteIdentifier(
+            str_replace('`', '', $group->fieldDateRestrictionField)
+        ).' >= :from';
+        $params[':from'] = $statisticEvaluationRequestDataModel->getStartDate()->format('Y-m-d H:i:s');
 
-        $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldDateRestrictionField)).' <= :to';
-        $params[':to'] = $endDate->format('Y-m-d H:i:s');
+        $baseConditionList[] = $this->connection->quoteIdentifier(
+            str_replace('`', '', $group->fieldDateRestrictionField)
+        ).' <= :to';
+        $params[':to'] = $statisticEvaluationRequestDataModel->getEndDate()->format('Y-m-d H:i:s');
 
-        if ('' !== $group->fieldPortalRestrictionField && '' !== $portalId) {
-            $baseConditionList[] = $this->connection->quoteIdentifier(str_replace('`', '', $group->fieldPortalRestrictionField)).' = :portalId';
-            $params[':portalId'] = $portalId;
+        if (true === $group->fieldHasCurrency) {
+            $baseConditionList[] = $this->connection->quoteIdentifier('`shop_order`.`pkg_shop_currency_id`').' = :currencyId';
+            $params[':currencyId'] = $statisticEvaluationRequestDataModel->getCurrencyId();
+        }
+
+        if ('' !== $group->fieldPortalRestrictionField && '' !== $statisticEvaluationRequestDataModel->getPortalId()) {
+            $baseConditionList[] = $this->connection->quoteIdentifier(
+                str_replace('`', '', $group->fieldPortalRestrictionField)
+            ).' = :portalId';
+            $params[':portalId'] = $statisticEvaluationRequestDataModel->getPortalId();
+        }
+
+        if ('' !== $statisticEvaluationRequestDataModel->getShopId()) {
+            $baseConditionList[] = $this->connection->quoteIdentifier('shop_order.shop_id').' = :shopId';
+            $params[':shopId'] = $statisticEvaluationRequestDataModel->getShopId();
         }
 
         return [$baseConditionList, $params];

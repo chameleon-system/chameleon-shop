@@ -24,6 +24,7 @@ interface TopSellerServiceInterface
         ?\DateTime $startDate,
         ?\DateTime $endDate,
         string $portalId,
+        string $shopId,
         int $limit = 50
     ): array;
 }

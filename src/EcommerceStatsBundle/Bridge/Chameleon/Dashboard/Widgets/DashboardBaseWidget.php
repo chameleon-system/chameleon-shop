@@ -6,6 +6,7 @@ use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\Dashbo
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\Library\Interfaces\ColorGeneratorServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
+use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatisticEvaluationRequestDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\DashboardTimeframeDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
@@ -45,6 +46,15 @@ abstract class DashboardBaseWidget extends DashboardWidget
         return [];
     }
 
+    public function getFooterIncludes(): array
+    {
+        $includes = parent::getFooterIncludes();
+        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart.4.4.7.js"></script>';
+        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart-init.4.4.7.js"></script>';
+
+        return $includes;
+    }
+
     protected function getStatsGroupSystemName(): string
     {
         return '';
@@ -73,21 +83,35 @@ abstract class DashboardBaseWidget extends DashboardWidget
 
         $timespan = $this->getTimeframe();
 
-        $statistic = $this->stats->evaluate(
+        $statistic = $this->stats->evaluate(new StatisticEvaluationRequestDataModel(
             $timespan->getStartDate(),
             $timespan->getEndDate(),
             'day',
             false,
             '',
             $this->statsCurrencyService->getCurrencyIdByIsoCode(EcommerceStatsBackendModule::STANDARD_CURRENCY_ISO_CODE),
-            $statsSystemName
-        );
+            $statsSystemName,
+            ''
+        ));
 
         $statisticBlocks = $statistic->getBlocks();
 
         $this->statsCache[$statsSystemName] = $statisticBlocks[$statsSystemName] ?? null;
 
         return $this->statsCache[$statsSystemName];
+    }
+
+    protected function getTimeframe(): DashboardTimeframeDataModel
+    {
+        $endDate = new \DateTime('now');
+
+        $startDate = clone $endDate;
+        $startDate->modify($this->defaultTimeframe);
+
+        return new DashboardTimeframeDataModel(
+            $startDate,
+            $endDate
+        );
     }
 
     private function getStatsDataAsArray(): array
@@ -142,27 +166,5 @@ abstract class DashboardBaseWidget extends DashboardWidget
             'hasCurrency' => $statsGroup->hasCurrency(),
             'currency' => $statsGroup->getCurrency() ? $statsGroup->getCurrency()->getSymbol() : '€',
         ];
-    }
-
-    public function getFooterIncludes(): array
-    {
-        $includes = parent::getFooterIncludes();
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart.4.4.7.js"></script>';
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart-init.4.4.7.js"></script>';
-
-        return $includes;
-    }
-
-    protected function getTimeframe(): DashboardTimeframeDataModel
-    {
-        $endDate = new \DateTime('now');
-
-        $startDate = clone $endDate;
-        $startDate->modify($this->defaultTimeframe);
-
-        return new DashboardTimeframeDataModel(
-            $startDate,
-            $endDate
-        );
     }
 }
