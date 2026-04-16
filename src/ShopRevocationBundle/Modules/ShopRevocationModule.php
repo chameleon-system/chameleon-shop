@@ -87,7 +87,15 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
                 $this->formData->setName(trim(sprintf('%s %s', (string) $activeUser->fieldFirstname, (string) $activeUser->fieldLastname)));
             }
             if ('' === $this->formData->getEmail()) {
-                $this->formData->setEmail((string) $activeUser->fieldEmail);
+                $email = '';
+                if (method_exists($activeUser, 'GetUserEMail')) {
+                    $email = (string) $activeUser->GetUserEMail();
+                }
+                if ('' === $email) {
+                    $email = (string) ($activeUser->fieldEmail ?? '');
+                }
+
+                $this->formData->setEmail($email);
             }
 
             $activeShop = $this->shopService->getActiveShop();
