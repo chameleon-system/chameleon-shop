@@ -44,8 +44,12 @@ class ShopRevocationValidationService
 
     private function validateMandatoryFields(RevocationFormDataModel $formData, RevocationFormErrorsDataModel $errors, bool $isLoggedIn): void
     {
-        if ('' === $formData->getName()) {
-            $errors->setName($this->trans('validation.name_required'));
+        if ('' === $formData->getFirstName()) {
+            $errors->setFirstName($this->trans('validation.first_name_required'));
+        }
+
+        if ('' === $formData->getLastName()) {
+            $errors->setLastName($this->trans('validation.last_name_required'));
         }
 
         if ('' === $formData->getEmail()) {

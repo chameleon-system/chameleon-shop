@@ -5,7 +5,8 @@ namespace ChameleonSystem\ShopRevocationBundle\DataModel;
 class RevocationFormErrorsDataModel
 {
     public function __construct(
-        private ?string $name = null,
+        private ?string $firstName = null,
+        private ?string $lastName = null,
         private ?string $email = null,
         private ?string $orderNumber = null,
         private ?string $shopOrderId = null,
@@ -16,12 +17,32 @@ class RevocationFormErrorsDataModel
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
     public function setName(?string $name): void
     {
-        $this->name = $name;
+        $this->firstName = $name;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): void
+    {
+        $this->lastName = $lastName;
     }
 
     public function getEmail(): ?string
@@ -86,12 +107,14 @@ class RevocationFormErrorsDataModel
     }
 
     /**
-     * @return array{name: ?string, email: ?string, ordernumber: ?string, shopOrderId: ?string, customerNote: ?string, general: ?string}
+     * @return array{firstName: ?string, lastName: ?string, name: ?string, email: ?string, ordernumber: ?string, shopOrderId: ?string, customerNote: ?string, general: ?string}
      */
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
+            'firstName' => $this->firstName,
+            'lastName' => $this->lastName,
+            'name' => $this->firstName,
             'email' => $this->email,
             'ordernumber' => $this->orderNumber,
             'shopOrderId' => $this->shopOrderId,

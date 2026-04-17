@@ -62,20 +62,36 @@
                 {% endfor %}
             {% endblock %}
 
-            {% block revocation_form_name_field %}
-                {% set aFieldNameMapped = {
-                    sLabelText: 'chameleon_system_shop_revocation.field.name'|trans,
+            {% block revocation_form_first_name_field %}
+                {% set aFieldFirstNameMapped = {
+                    sLabelText: 'chameleon_system_shop_revocation.field.first_name'|trans,
                     sLabelClass: formDefaultLabelClass,
                     sInputClass: formDefaultInputClass,
                     sHelpClass: formDefaultHelpClass,
-                    sName: 'name',
-                    sFieldId: 'revocationName',
+                    sName: 'firstName',
+                    sFieldId: 'revocationFirstName',
                     bRequired: true,
-                    autocomplete: 'name',
-                    sError: errors.name|default(''),
-                    sValue: formValues.name|default(''),
+                    autocomplete: 'given-name',
+                    sError: errors.firstName|default(''),
+                    sValue: formValues.firstName|default(''),
                 } %}
-                {{ include('/common/userInput/form/text.html.twig', aFieldNameMapped) }}
+                {{ include('/common/userInput/form/text.html.twig', aFieldFirstNameMapped) }}
+            {% endblock %}
+
+            {% block revocation_form_last_name_field %}
+                {% set aFieldLastNameMapped = {
+                    sLabelText: 'chameleon_system_shop_revocation.field.last_name'|trans,
+                    sLabelClass: formDefaultLabelClass,
+                    sInputClass: formDefaultInputClass,
+                    sHelpClass: formDefaultHelpClass,
+                    sName: 'lastName',
+                    sFieldId: 'revocationLastName',
+                    bRequired: true,
+                    autocomplete: 'family-name',
+                    sError: errors.lastName|default(''),
+                    sValue: formValues.lastName|default(''),
+                } %}
+                {{ include('/common/userInput/form/text.html.twig', aFieldLastNameMapped) }}
             {% endblock %}
 
             {% block revocation_form_email_field %}
@@ -174,6 +190,20 @@
                     sValue: formValues.customerNote|default(''),
                 } %}
                 {{ include('/common/userInput/form/textarea.html.twig', aFieldCustomerNoteMapped) }}
+            {% endblock %}
+
+            {% block revocation_form_legal_notice %}
+                <div class="row mb-3">
+                    <div class="{{ formDefaultLabelClass }}"></div>
+                    <div class="{{ formDefaultHelpClass }}">
+                        <div class="form-text">
+                            {{ 'chameleon_system_shop_revocation.form.legal_notice'|trans({
+                                '%agbUrl%': '/AGB',
+                                '%privacyUrl%': '/Datenschutz',
+                            })|raw }}
+                        </div>
+                    </div>
+                </div>
             {% endblock %}
 
             {% block revocation_form_required_hint %}

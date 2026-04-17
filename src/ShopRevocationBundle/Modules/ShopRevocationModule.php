@@ -83,8 +83,11 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
         $showLoggedInOrderNumberFallback = false;
 
         if (true === $isLoggedIn) {
-            if ('' === $this->formData->getName()) {
-                $this->formData->setName(trim(sprintf('%s %s', (string) $activeUser->fieldFirstname, (string) $activeUser->fieldLastname)));
+            if ('' === $this->formData->getFirstName()) {
+                $this->formData->setFirstName(trim((string) $activeUser->fieldFirstname));
+            }
+            if ('' === $this->formData->getLastName()) {
+                $this->formData->setLastName(trim((string) $activeUser->fieldLastname));
             }
             if ('' === $this->formData->getEmail()) {
                 $email = '';
@@ -139,13 +142,22 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
             $activeExtranetUserId = (string) $activeUser->id;
         }
 
+        $firstName = trim((string) $this->inputFilterUtil->getFilteredPostInput('firstName', '', false, 'TCMSUserInput_SafeTextBlock'));
+        $lastName = trim((string) $this->inputFilterUtil->getFilteredPostInput('lastName', '', false, 'TCMSUserInput_SafeTextBlock'));
+        $fullName = trim((string) $this->inputFilterUtil->getFilteredPostInput('name', '', false, 'TCMSUserInput_SafeTextBlock'));
+
         $this->formData = new RevocationFormDataModel(
-            trim((string) $this->inputFilterUtil->getFilteredPostInput('name', '', false, 'TCMSUserInput_SafeTextBlock')),
+            $firstName,
+            $lastName,
             trim((string) $this->inputFilterUtil->getFilteredPostInput('email', '')),
             trim((string) $this->inputFilterUtil->getFilteredPostInput('ordernumber', '')),
             trim((string) $this->inputFilterUtil->getFilteredPostInput('shopOrderId', '')),
             trim((string) $this->inputFilterUtil->getFilteredPostInput('customerNote', '', false, 'TCMSUserInput_SafeTextBlock'))
         );
+
+        if ('' === $this->formData->getFirstName() && '' === $this->formData->getLastName() && '' !== $fullName) {
+            $this->formData->setName($fullName);
+        }
 
         $this->errors = $this->validationService->getEmptyErrors();
         $this->generalError = null;

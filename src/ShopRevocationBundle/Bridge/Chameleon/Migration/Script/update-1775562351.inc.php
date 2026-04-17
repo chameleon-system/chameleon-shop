@@ -15,8 +15,8 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
 ;
 TCMSLogChange::insert(__LINE__, $data);
 
-$query ="ALTER TABLE `shop_order`
-                        ADD `new_field` VARCHAR(255) NOT NULL";
+$query = 'ALTER TABLE `shop_order`
+                        ADD `new_field` VARCHAR(255) NOT NULL';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
@@ -33,14 +33,14 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-$query ="ALTER TABLE `shop_order`
+$query = "ALTER TABLE `shop_order`
                      CHANGE `new_field`
                             `shop_order_revocation_id` CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'Widerruf: '";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
-$query ="ALTER TABLE `shop_order` ADD INDEX `shop_order_revocation_id` (`shop_order_revocation_id`)";
+$query = 'ALTER TABLE `shop_order` ADD INDEX `shop_order_revocation_id` (`shop_order_revocation_id`)';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
-$query ="ALTER TABLE `shop_order`
-                     ADD INDEX `shop_order_revocation_lookup` (`shop_id`, `data_extranet_user_id`, `canceled`, `datecreated`)";
+$query = 'ALTER TABLE `shop_order`
+                     ADD INDEX `shop_order_revocation_lookup` (`shop_id`, `data_extranet_user_id`, `canceled`, `datecreated`)';
 TCMSLogChange::RunQuery(__LINE__, $query);
