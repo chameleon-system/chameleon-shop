@@ -16,9 +16,9 @@ The bundle currently provides:
   `chameleon_system_shop_revocation.modules.shop_revocation_module`
 - A default Twig template for the revocation form at
   `modules/revocationForm/standard.html.twig`
-- A guest flow with mandatory fields `name`, `email`, and `ordernumber`
-- A logged-in flow with prefilled `name` and `email`, an order dropdown, and a fallback
-  to manual order number entry if no relevant orders are available
+- A guest flow with mandatory fields `firstName`, `lastName`, `email`, and `ordernumber`
+- A logged-in flow with prefilled `firstName`, `lastName`, and `email`, an order dropdown,
+  and a fallback to manual order number entry if no relevant orders are available
 - Server-side validation for required fields, email format, shop ownership, email/order
   matching, and revocation relevance
 - Persistence into `shop_order_revocation`
@@ -234,8 +234,11 @@ Typical override points are:
 - `revocation_form_header`
 - `revocation_form_messages`
 - `revocation_form_invalid_order_hint`
+- `revocation_form_first_name_field`
+- `revocation_form_last_name_field`
 - `revocation_form_order_select_field`
 - `revocation_form_logged_in_order_number_fallback`
+- `revocation_form_legal_notice`
 - `revocation_form_submit`
 
 Use template overrides for presentation concerns. Do not move business validation into Twig.
