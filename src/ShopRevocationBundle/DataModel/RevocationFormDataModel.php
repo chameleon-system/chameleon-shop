@@ -20,20 +20,6 @@ class RevocationFormDataModel
         return $this->firstName.' '.$this->lastName;
     }
 
-    public function setName(string $name): void
-    {
-        $nameParts = preg_split('/\s+/', trim($name), 2);
-        if (false === $nameParts) {
-            $this->firstName = trim($name);
-            $this->lastName = '';
-
-            return;
-        }
-
-        $this->firstName = trim((string) ($nameParts[0] ?? ''));
-        $this->lastName = trim((string) ($nameParts[1] ?? ''));
-    }
-
     public function getFirstName(): string
     {
         return $this->firstName;
@@ -105,14 +91,13 @@ class RevocationFormDataModel
     }
 
     /**
-     * @return array{firstName: string, lastName: string, name: string, email: string, ordernumber: string, shopOrderId: string, customerNote: string, legalConsent: bool}
+     * @return array{firstName: string, lastName: string, email: string, ordernumber: string, shopOrderId: string, customerNote: string, legalConsent: bool}
      */
     public function toArray(): array
     {
         return [
             'firstName' => $this->firstName,
             'lastName' => $this->lastName,
-            'name' => $this->getName(),
             'email' => $this->email,
             'ordernumber' => $this->orderNumber,
             'shopOrderId' => $this->shopOrderId,

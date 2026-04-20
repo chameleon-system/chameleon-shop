@@ -144,8 +144,6 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $firstName = trim((string) $this->inputFilterUtil->getFilteredPostInput('firstName', '', false, 'TCMSUserInput_SafeTextBlock'));
         $lastName = trim((string) $this->inputFilterUtil->getFilteredPostInput('lastName', '', false, 'TCMSUserInput_SafeTextBlock'));
-        $fullName = trim((string) $this->inputFilterUtil->getFilteredPostInput('name', '', false, 'TCMSUserInput_SafeTextBlock'));
-
         $this->formData = new RevocationFormDataModel(
             $firstName,
             $lastName,
@@ -155,10 +153,6 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
             trim((string) $this->inputFilterUtil->getFilteredPostInput('customerNote', '', false, 'TCMSUserInput_SafeTextBlock')),
             '' !== trim((string) $this->inputFilterUtil->getFilteredPostInput('legalConsent', ''))
         );
-
-        if ('' === $this->formData->getFirstName() && '' === $this->formData->getLastName() && '' !== $fullName) {
-            $this->formData->setName($fullName);
-        }
 
         $this->errors = $this->validationService->getEmptyErrors();
         $this->generalError = null;

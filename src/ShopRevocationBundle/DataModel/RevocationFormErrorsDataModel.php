@@ -16,16 +16,6 @@ class RevocationFormErrorsDataModel
     ) {
     }
 
-    public function getName(): ?string
-    {
-        return $this->firstName;
-    }
-
-    public function setName(?string $name): void
-    {
-        $this->firstName = $name;
-    }
-
     public function getFirstName(): ?string
     {
         return $this->firstName;
@@ -118,14 +108,13 @@ class RevocationFormErrorsDataModel
     }
 
     /**
-     * @return array{firstName: ?string, lastName: ?string, name: ?string, email: ?string, ordernumber: ?string, shopOrderId: ?string, customerNote: ?string, legalConsent: ?string, general: ?string}
+     * @return array{firstName: ?string, lastName: ?string, email: ?string, ordernumber: ?string, shopOrderId: ?string, customerNote: ?string, legalConsent: ?string, general: ?string}
      */
     public function toArray(): array
     {
         return [
             'firstName' => $this->firstName,
             'lastName' => $this->lastName,
-            'name' => $this->firstName,
             'email' => $this->email,
             'ordernumber' => $this->orderNumber,
             'shopOrderId' => $this->shopOrderId,
