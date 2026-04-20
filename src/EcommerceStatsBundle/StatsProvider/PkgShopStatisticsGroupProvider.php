@@ -94,7 +94,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
             $content = $matches[1];
             $activeBackendLanguage = $this->securityHelperAccess->getUser()?->getCmsLanguageId();
             $langKey = \TGlobal::GetLanguagePrefix($activeBackendLanguage);
-            if('' === $langKey){
+            if ('' === $langKey) {
                 $langKey = $this->securityHelperAccess->getUser()?->getCurrentEditLanguageIsoCode();
             }
 
