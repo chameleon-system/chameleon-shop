@@ -56,16 +56,9 @@ readonly class CsvExportController
     {
         $this->throwIfNoBackendUserLoggedIn();
 
-        $startDate = \DateTime::createFromFormat(
-            'Y-m-d',
-            (string) $request->get('startDate', date('Y-m-01'))
-        );
+        $startDate = $this->getDateFromRequest($request, 'startDate', 'Y-m-01');
         $startDate->setTime(0, 0, 0);
-
-        $endDate = \DateTime::createFromFormat(
-            'Y-m-d',
-            (string) $request->get('endDate', date('Y-m-d'))
-        );
+        $endDate = $this->getDateFromRequest($request, 'endDate', 'Y-m-d');
         $endDate->setTime(23, 59, 59);
 
         $selectedPortalId = $request->get('portalId', '');
@@ -82,16 +75,9 @@ readonly class CsvExportController
 
     private function createStatisticEvaluationRequest(Request $request): StatisticEvaluationRequestDataModel
     {
-        $startDate = \DateTime::createFromFormat(
-            'Y-m-d',
-            (string) $request->get('startDate', date('Y-m-01'))
-        );
+        $startDate = $this->getDateFromRequest($request, 'startDate', 'Y-m-01');
         $startDate->setTime(0, 0, 0);
-
-        $endDate = \DateTime::createFromFormat(
-            'Y-m-d',
-            (string) $request->get('endDate', date('Y-m-d'))
-        );
+        $endDate = $this->getDateFromRequest($request, 'endDate', 'Y-m-d');
         $endDate->setTime(23, 59, 59);
 
         return new StatisticEvaluationRequestDataModel(
@@ -134,5 +120,12 @@ readonly class CsvExportController
         if (false === $this->securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)) {
             throw new AccessDeniedHttpException();
         }
+    }
+
+    private function getDateFromRequest(Request $request, string $key, string $dateDefaultFormat): \DateTime{
+        return \DateTime::createFromFormat(
+            'Y-m-d',
+            (string) $request->get($key, date($dateDefaultFormat))
+        );
     }
 }
