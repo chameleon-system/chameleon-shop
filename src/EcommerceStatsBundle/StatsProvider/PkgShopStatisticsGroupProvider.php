@@ -29,7 +29,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
         self::DATE_GROUP_YEAR => 'YEAR(%1$s)',
         self::DATE_GROUP_MONTH => 'DATE_FORMAT(%1$s,\'%%Y-%%m\')',
         self::DATE_GROUP_WEEK => 'DATE_FORMAT(%1$s,\'%%x-KW%%v\')',
-        self::DATE_GROUP_DATE => 'DATE(%1$s)',
+        self::DATE_GROUP_DAY => 'DATE(%1$s)',
     ];
 
     private const string DEFAULT_DATE_RESTRICTION_FIELD = 'datecreated';
@@ -59,7 +59,7 @@ class PkgShopStatisticsGroupProvider implements StatsProviderInterface
             }
 
             $dateQueryPart = sprintf(
-                self::DATE_QUERY_PARTS[$statisticEvaluationRequestDataModel->getDateGroup()] ?? self::DATE_QUERY_PARTS[self::DATE_GROUP_DATE],
+                self::DATE_QUERY_PARTS[$statisticEvaluationRequestDataModel->getDateGroup()] ?? self::DATE_QUERY_PARTS[self::DATE_GROUP_DAY],
                 $group->fieldDateRestrictionField ?? self::DEFAULT_DATE_RESTRICTION_FIELD
             );
 

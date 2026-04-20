@@ -131,7 +131,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             $endDate,
             $this->inputFilterUtil->getFilteredInput(
                 'dateGroup',
-                StatsProviderInterface::DATE_GROUP_DATE
+                StatsProviderInterface::DATE_GROUP_DAY
             ),
             '1' === $this->inputFilterUtil->getFilteredInput(
                 'showChange',
@@ -204,7 +204,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             StatsProviderInterface::DATE_GROUP_YEAR => $this->translator->trans('chameleon_system_ecommerce_stats.date_year'),
             StatsProviderInterface::DATE_GROUP_MONTH => $this->translator->trans('chameleon_system_ecommerce_stats.date_month'),
             StatsProviderInterface::DATE_GROUP_WEEK => $this->translator->trans('chameleon_system_ecommerce_stats.date_week'),
-            StatsProviderInterface::DATE_GROUP_DATE => $this->translator->trans('chameleon_system_ecommerce_stats.date_day'),
+            StatsProviderInterface::DATE_GROUP_DAY => $this->translator->trans('chameleon_system_ecommerce_stats.date_day'),
         ];
     }
 

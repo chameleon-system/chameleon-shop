@@ -99,7 +99,7 @@ readonly class CsvExportController
             $endDate,
             $request->get(
                 'dateGroup',
-                $request->get('dateGroup', StatsProviderInterface::DATE_GROUP_DATE)
+                $request->get('dateGroup', StatsProviderInterface::DATE_GROUP_DAY)
             ),
             filter_var(
                 $request->get('showChange', false),

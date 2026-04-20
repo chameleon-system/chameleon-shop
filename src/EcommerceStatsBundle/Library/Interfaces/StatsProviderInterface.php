@@ -12,7 +12,7 @@ interface StatsProviderInterface
     /**
      * Data is grouped by date: Every day produces a new column.
      */
-    public const DATE_GROUP_DATE = 'day';
+    public const DATE_GROUP_DAY = 'day';
 
     /**
      * Data is grouped by month: Every month produces a new column.
