@@ -5,23 +5,35 @@ namespace ChameleonSystem\ShopRevocationBundle\DataModel;
 class RevocationFormErrorsDataModel
 {
     public function __construct(
-        private ?string $name = null,
+        private ?string $firstName = null,
+        private ?string $lastName = null,
         private ?string $email = null,
         private ?string $orderNumber = null,
         private ?string $shopOrderId = null,
         private ?string $customerNote = null,
+        private ?string $legalConsent = null,
         private ?string $general = null
     ) {
     }
 
-    public function getName(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
-    public function setName(?string $name): void
+    public function setFirstName(?string $firstName): void
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): void
+    {
+        $this->lastName = $lastName;
     }
 
     public function getEmail(): ?string
@@ -64,6 +76,16 @@ class RevocationFormErrorsDataModel
         $this->customerNote = $customerNote;
     }
 
+    public function getLegalConsent(): ?string
+    {
+        return $this->legalConsent;
+    }
+
+    public function setLegalConsent(?string $legalConsent): void
+    {
+        $this->legalConsent = $legalConsent;
+    }
+
     public function getGeneral(): ?string
     {
         return $this->general;
@@ -86,16 +108,18 @@ class RevocationFormErrorsDataModel
     }
 
     /**
-     * @return array{name: ?string, email: ?string, ordernumber: ?string, shopOrderId: ?string, customerNote: ?string, general: ?string}
+     * @return array{firstName: ?string, lastName: ?string, email: ?string, ordernumber: ?string, shopOrderId: ?string, customerNote: ?string, legalConsent: ?string, general: ?string}
      */
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
+            'firstName' => $this->firstName,
+            'lastName' => $this->lastName,
             'email' => $this->email,
             'ordernumber' => $this->orderNumber,
             'shopOrderId' => $this->shopOrderId,
             'customerNote' => $this->customerNote,
+            'legalConsent' => $this->legalConsent,
             'general' => $this->general,
         ];
     }

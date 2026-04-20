@@ -82,7 +82,6 @@ $data = TCMSLogChange::createMigrationQueryData('data_mail_profile', 'en')
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-
 $data = TCMSLogChange::createMigrationQueryData('data_mail_profile', 'de')
   ->setFields([
       'idcode' => 'revocation_shop_owner',

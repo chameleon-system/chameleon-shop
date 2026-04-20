@@ -14,9 +14,21 @@
                 <source>chameleon_system_shop_revocation.form.customer_note_help_text</source>
                 <target>Optionally, you can specify which items you would like to cancel.</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.form.legal_consent">
+                <source>chameleon_system_shop_revocation.form.legal_consent</source>
+                <target><![CDATA[I have read and agree to the <a href="%agbUrl%" target="_blank">Terms and Conditions</a> and the <a href="%privacyUrl%" target="_blank">Privacy Policy</a>.]]></target>
+            </trans-unit>
             <trans-unit id="chameleon_system_shop_revocation.form.submit">
                 <source>chameleon_system_shop_revocation.form.submit</source>
                 <target>Confirm cancellation</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.field.first_name">
+                <source>chameleon_system_shop_revocation.field.first_name</source>
+                <target>First name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.field.last_name">
+                <source>chameleon_system_shop_revocation.field.last_name</source>
+                <target>Last name</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_revocation.field.name">
                 <source>chameleon_system_shop_revocation.field.name</source>
@@ -66,9 +78,13 @@
                 <source>chameleon_system_shop_revocation.success.submitted</source>
                 <target>Your cancellation has been submitted successfully.</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_shop_revocation.validation.name_required">
-                <source>chameleon_system_shop_revocation.validation.name_required</source>
-                <target>Please enter your name.</target>
+            <trans-unit id="chameleon_system_shop_revocation.validation.first_name_required">
+                <source>chameleon_system_shop_revocation.validation.first_name_required</source>
+                <target>Please enter your first name.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.last_name_required">
+                <source>chameleon_system_shop_revocation.validation.last_name_required</source>
+                <target>Please enter your last name.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_revocation.validation.email_required">
                 <source>chameleon_system_shop_revocation.validation.email_required</source>
@@ -77,6 +93,10 @@
             <trans-unit id="chameleon_system_shop_revocation.validation.email_invalid">
                 <source>chameleon_system_shop_revocation.validation.email_invalid</source>
                 <target>Please enter a valid email address.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.legal_consent_required">
+                <source>chameleon_system_shop_revocation.validation.legal_consent_required</source>
+                <target>Please confirm that you have read and agree to the Terms and Conditions and the Privacy Policy.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_revocation.validation.order_selection_required">
                 <source>chameleon_system_shop_revocation.validation.order_selection_required</source>

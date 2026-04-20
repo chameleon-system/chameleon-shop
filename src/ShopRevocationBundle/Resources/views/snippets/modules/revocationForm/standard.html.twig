@@ -62,20 +62,36 @@
                 {% endfor %}
             {% endblock %}
 
-            {% block revocation_form_name_field %}
-                {% set aFieldNameMapped = {
-                    sLabelText: 'chameleon_system_shop_revocation.field.name'|trans,
+            {% block revocation_form_first_name_field %}
+                {% set aFieldFirstNameMapped = {
+                    sLabelText: 'chameleon_system_shop_revocation.field.first_name'|trans,
                     sLabelClass: formDefaultLabelClass,
                     sInputClass: formDefaultInputClass,
                     sHelpClass: formDefaultHelpClass,
-                    sName: 'name',
-                    sFieldId: 'revocationName',
+                    sName: 'firstName',
+                    sFieldId: 'revocationFirstName',
                     bRequired: true,
-                    autocomplete: 'name',
-                    sError: errors.name|default(''),
-                    sValue: formValues.name|default(''),
+                    autocomplete: 'given-name',
+                    sError: errors.firstName|default(''),
+                    sValue: formValues.firstName|default(''),
                 } %}
-                {{ include('/common/userInput/form/text.html.twig', aFieldNameMapped) }}
+                {{ include('/common/userInput/form/text.html.twig', aFieldFirstNameMapped) }}
+            {% endblock %}
+
+            {% block revocation_form_last_name_field %}
+                {% set aFieldLastNameMapped = {
+                    sLabelText: 'chameleon_system_shop_revocation.field.last_name'|trans,
+                    sLabelClass: formDefaultLabelClass,
+                    sInputClass: formDefaultInputClass,
+                    sHelpClass: formDefaultHelpClass,
+                    sName: 'lastName',
+                    sFieldId: 'revocationLastName',
+                    bRequired: true,
+                    autocomplete: 'family-name',
+                    sError: errors.lastName|default(''),
+                    sValue: formValues.lastName|default(''),
+                } %}
+                {{ include('/common/userInput/form/text.html.twig', aFieldLastNameMapped) }}
             {% endblock %}
 
             {% block revocation_form_email_field %}
@@ -180,6 +196,36 @@
                 {% if true == showRequiredFieldsHint|default(true) %}
                     {{ include('/common/userInput/required-fields-hint.html.twig') }}
                 {% endif %}
+            {% endblock %}
+
+            {% block revocation_form_legal_consent_field %}
+                <div class="row mb-3">
+                    <div class="{{ formDefaultLabelClass }}"></div>
+                    <div class="{{ formDefaultHelpClass }}">
+                        <div class="custom-control custom-checkbox">
+                            <input
+                                id="revocationLegalConsent"
+                                class="custom-control-input"
+                                type="checkbox"
+                                value="1"
+                                name="legalConsent"
+                                required="required"
+                                {% if formValues.legalConsent|default(false) %}checked="checked"{% endif %}
+                            />
+                            <label for="revocationLegalConsent" class="custom-control-label align-middle">
+                                {{ 'chameleon_system_shop_revocation.form.legal_consent'|trans({
+                                    '%agbUrl%': '/AGB',
+                                    '%privacyUrl%': '/Datenschutz',
+                                })|raw }}
+                            </label>
+                        </div>
+                        {% if errors.legalConsent is defined and errors.legalConsent %}
+                            <div class="invalid-feedback d-block">
+                                {{ errors.legalConsent }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
             {% endblock %}
 
             {% block revocation_form_submit %}

@@ -27,6 +27,7 @@ class ShopRevocationValidationService
         $errors = $this->getEmptyErrors();
 
         $this->validateMandatoryFields($formData, $errors, $isLoggedIn);
+        $this->validateLegalConsent($formData, $errors);
         $this->validateEmail($formData, $errors);
         $orderValidationOutcome = $this->validateOrder($formData, $errors, $activeExtranetUserId);
 
@@ -44,8 +45,12 @@ class ShopRevocationValidationService
 
     private function validateMandatoryFields(RevocationFormDataModel $formData, RevocationFormErrorsDataModel $errors, bool $isLoggedIn): void
     {
-        if ('' === $formData->getName()) {
-            $errors->setName($this->trans('validation.name_required'));
+        if ('' === $formData->getFirstName()) {
+            $errors->setFirstName($this->trans('validation.first_name_required'));
+        }
+
+        if ('' === $formData->getLastName()) {
+            $errors->setLastName($this->trans('validation.last_name_required'));
         }
 
         if ('' === $formData->getEmail()) {
@@ -63,6 +68,15 @@ class ShopRevocationValidationService
         if ('' === $formData->getOrderNumber()) {
             $errors->setOrderNumber($this->trans('validation.order_number_required'));
         }
+    }
+
+    private function validateLegalConsent(RevocationFormDataModel $formData, RevocationFormErrorsDataModel $errors): void
+    {
+        if (true === $formData->hasLegalConsent()) {
+            return;
+        }
+
+        $errors->setLegalConsent($this->trans('validation.legal_consent_required'));
     }
 
     private function validateEmail(RevocationFormDataModel $formData, RevocationFormErrorsDataModel $errors): void
