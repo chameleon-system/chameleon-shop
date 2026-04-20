@@ -152,7 +152,8 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
             trim((string) $this->inputFilterUtil->getFilteredPostInput('email', '')),
             trim((string) $this->inputFilterUtil->getFilteredPostInput('ordernumber', '')),
             trim((string) $this->inputFilterUtil->getFilteredPostInput('shopOrderId', '')),
-            trim((string) $this->inputFilterUtil->getFilteredPostInput('customerNote', '', false, 'TCMSUserInput_SafeTextBlock'))
+            trim((string) $this->inputFilterUtil->getFilteredPostInput('customerNote', '', false, 'TCMSUserInput_SafeTextBlock')),
+            '' !== trim((string) $this->inputFilterUtil->getFilteredPostInput('legalConsent', ''))
         );
 
         if ('' === $this->formData->getFirstName() && '' === $this->formData->getLastName() && '' !== $fullName) {

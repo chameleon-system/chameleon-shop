@@ -192,24 +192,40 @@
                 {{ include('/common/userInput/form/textarea.html.twig', aFieldCustomerNoteMapped) }}
             {% endblock %}
 
-            {% block revocation_form_legal_notice %}
-                <div class="row mb-3">
-                    <div class="{{ formDefaultLabelClass }}"></div>
-                    <div class="{{ formDefaultHelpClass }}">
-                        <div class="form-text">
-                            {{ 'chameleon_system_shop_revocation.form.legal_notice'|trans({
-                                '%agbUrl%': '/AGB',
-                                '%privacyUrl%': '/Datenschutz',
-                            })|raw }}
-                        </div>
-                    </div>
-                </div>
-            {% endblock %}
-
             {% block revocation_form_required_hint %}
                 {% if true == showRequiredFieldsHint|default(true) %}
                     {{ include('/common/userInput/required-fields-hint.html.twig') }}
                 {% endif %}
+            {% endblock %}
+
+            {% block revocation_form_legal_consent_field %}
+                <div class="row mb-3">
+                    <div class="{{ formDefaultLabelClass }}"></div>
+                    <div class="{{ formDefaultHelpClass }}">
+                        <div class="custom-control custom-checkbox">
+                            <input
+                                id="revocationLegalConsent"
+                                class="custom-control-input"
+                                type="checkbox"
+                                value="1"
+                                name="legalConsent"
+                                required="required"
+                                {% if formValues.legalConsent|default(false) %}checked="checked"{% endif %}
+                            />
+                            <label for="revocationLegalConsent" class="custom-control-label align-middle">
+                                {{ 'chameleon_system_shop_revocation.form.legal_consent'|trans({
+                                    '%agbUrl%': '/AGB',
+                                    '%privacyUrl%': '/Datenschutz',
+                                })|raw }}
+                            </label>
+                        </div>
+                        {% if errors.legalConsent is defined and errors.legalConsent %}
+                            <div class="invalid-feedback d-block">
+                                {{ errors.legalConsent }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
             {% endblock %}
 
             {% block revocation_form_submit %}

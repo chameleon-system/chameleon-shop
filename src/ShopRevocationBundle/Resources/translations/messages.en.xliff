@@ -14,9 +14,9 @@
                 <source>chameleon_system_shop_revocation.form.customer_note_help_text</source>
                 <target>Optionally, you can specify which items you would like to cancel.</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_shop_revocation.form.legal_notice">
-                <source>chameleon_system_shop_revocation.form.legal_notice</source>
-                <target><![CDATA[Please also note our <a href="%agbUrl%" target="_blank">Terms and Conditions</a> and our <a href="%privacyUrl%" target="_blank">Privacy Policy</a>.]]></target>
+            <trans-unit id="chameleon_system_shop_revocation.form.legal_consent">
+                <source>chameleon_system_shop_revocation.form.legal_consent</source>
+                <target><![CDATA[I have read and agree to the <a href="%agbUrl%" target="_blank">Terms and Conditions</a> and the <a href="%privacyUrl%" target="_blank">Privacy Policy</a>.]]></target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_revocation.form.submit">
                 <source>chameleon_system_shop_revocation.form.submit</source>
@@ -93,6 +93,10 @@
             <trans-unit id="chameleon_system_shop_revocation.validation.email_invalid">
                 <source>chameleon_system_shop_revocation.validation.email_invalid</source>
                 <target>Please enter a valid email address.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_shop_revocation.validation.legal_consent_required">
+                <source>chameleon_system_shop_revocation.validation.legal_consent_required</source>
+                <target>Please confirm that you have read and agree to the Terms and Conditions and the Privacy Policy.</target>
             </trans-unit>
             <trans-unit id="chameleon_system_shop_revocation.validation.order_selection_required">
                 <source>chameleon_system_shop_revocation.validation.order_selection_required</source>

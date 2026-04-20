@@ -10,7 +10,8 @@ class RevocationFormDataModel
         private string $email = '',
         private string $orderNumber = '',
         private string $shopOrderId = '',
-        private string $customerNote = ''
+        private string $customerNote = '',
+        private bool $legalConsent = false
     ) {
     }
 
@@ -93,8 +94,18 @@ class RevocationFormDataModel
         $this->customerNote = $customerNote;
     }
 
+    public function hasLegalConsent(): bool
+    {
+        return $this->legalConsent;
+    }
+
+    public function setLegalConsent(bool $legalConsent): void
+    {
+        $this->legalConsent = $legalConsent;
+    }
+
     /**
-     * @return array{firstName: string, lastName: string, name: string, email: string, ordernumber: string, shopOrderId: string, customerNote: string}
+     * @return array{firstName: string, lastName: string, name: string, email: string, ordernumber: string, shopOrderId: string, customerNote: string, legalConsent: bool}
      */
     public function toArray(): array
     {
@@ -106,6 +117,7 @@ class RevocationFormDataModel
             'ordernumber' => $this->orderNumber,
             'shopOrderId' => $this->shopOrderId,
             'customerNote' => $this->customerNote,
+            'legalConsent' => $this->legalConsent,
         ];
     }
 }

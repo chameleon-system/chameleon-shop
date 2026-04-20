@@ -11,6 +11,7 @@ class RevocationFormErrorsDataModel
         private ?string $orderNumber = null,
         private ?string $shopOrderId = null,
         private ?string $customerNote = null,
+        private ?string $legalConsent = null,
         private ?string $general = null
     ) {
     }
@@ -85,6 +86,16 @@ class RevocationFormErrorsDataModel
         $this->customerNote = $customerNote;
     }
 
+    public function getLegalConsent(): ?string
+    {
+        return $this->legalConsent;
+    }
+
+    public function setLegalConsent(?string $legalConsent): void
+    {
+        $this->legalConsent = $legalConsent;
+    }
+
     public function getGeneral(): ?string
     {
         return $this->general;
@@ -107,7 +118,7 @@ class RevocationFormErrorsDataModel
     }
 
     /**
-     * @return array{firstName: ?string, lastName: ?string, name: ?string, email: ?string, ordernumber: ?string, shopOrderId: ?string, customerNote: ?string, general: ?string}
+     * @return array{firstName: ?string, lastName: ?string, name: ?string, email: ?string, ordernumber: ?string, shopOrderId: ?string, customerNote: ?string, legalConsent: ?string, general: ?string}
      */
     public function toArray(): array
     {
@@ -119,6 +130,7 @@ class RevocationFormErrorsDataModel
             'ordernumber' => $this->orderNumber,
             'shopOrderId' => $this->shopOrderId,
             'customerNote' => $this->customerNote,
+            'legalConsent' => $this->legalConsent,
             'general' => $this->general,
         ];
     }
