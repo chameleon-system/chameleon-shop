@@ -35,7 +35,8 @@ readonly class CsvExportController
         private TopSellerServiceInterface $topSellerService,
         private SecurityHelperAccess $securityHelperAccess,
         private StatsCurrencyServiceInterface $statsCurrencyService,
-    ) {}
+    ) {
+    }
 
     public function exportStatistics(Request $request): Response
     {
@@ -122,7 +123,8 @@ readonly class CsvExportController
         }
     }
 
-    private function getDateFromRequest(Request $request, string $key, string $dateDefaultFormat): \DateTime{
+    private function getDateFromRequest(Request $request, string $key, string $dateDefaultFormat): \DateTime
+    {
         return \DateTime::createFromFormat(
             'Y-m-d',
             (string) $request->get($key, date($dateDefaultFormat))
