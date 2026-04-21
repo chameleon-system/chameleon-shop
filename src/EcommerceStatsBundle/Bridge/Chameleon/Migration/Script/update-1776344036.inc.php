@@ -125,7 +125,7 @@ TCMSLogChange::update(__LINE__, $data);
 $data = TCMSLogChange::createMigrationQueryData('pkg_shop_statistic_group', 'de')
   ->setFields([
       // 'name' => 'Meistverkaufte Produkte',
-      'group' => 'product_name',
+      'groups' => 'product_name',
       'query' => 'SELECT ranked.sColumnName,
          ranked.product_name,
          ranked.dColumnValue
