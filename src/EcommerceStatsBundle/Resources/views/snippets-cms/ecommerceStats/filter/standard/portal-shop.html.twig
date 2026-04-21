@@ -1,7 +1,7 @@
 {% if portalOptions|length > 1 or shopOptions|length > 1%}
     <div class="row">
     {% if portalOptions|length > 1 %}
-        {% include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/select.html.twig', {
+        {{ include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/select.html.twig', {
             name: 'portalId',
             label: 'chameleon_system_ecommerce_stats.form_portal'|trans,
             options: portalOptions,
@@ -11,10 +11,10 @@
             emptyOptionLabel: 'chameleon_system_ecommerce_stats.all_portals'|trans,
             emptyOptionValue: '',
             colClass: 'col-6'
-        }) %}
+        }) }}
     {% endif %}
     {% if shopOptions|length > 1 %}
-        {% include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/select.html.twig', {
+        {{ include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/select.html.twig', {
             name: 'shopId',
             label: 'chameleon_system_ecommerce_stats.form_shop'|trans,
             options: shopOptions,
@@ -24,7 +24,7 @@
             emptyOptionLabel: 'chameleon_system_ecommerce_stats.all_shops'|trans,
             emptyOptionValue: '',
             colClass: 'col-6'
-        }) %}
+        }) }}
     {% endif %}
     </div>
 {% endif %}

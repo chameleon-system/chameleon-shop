@@ -1,5 +1,5 @@
 <div class="row">
-    {% include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/input.html.twig', {
+    {{ include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/input.html.twig', {
         name: 'startDate',
         label: 'chameleon_system_ecommerce_stats.form_date_from'|trans,
         type: 'date',
@@ -7,9 +7,9 @@
         dataParam: 'startDate',
         addProduceParamsClass: true,
         colClass: 'col-12 col-sm-6'
-    }) %}
+    }) }}
 
-    {% include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/input.html.twig', {
+    {{ include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/input.html.twig', {
         name: 'endDate',
         label: 'chameleon_system_ecommerce_stats.form_date_to'|trans,
         type: 'date',
@@ -17,5 +17,5 @@
         dataParam: 'endDate',
         addProduceParamsClass: true,
         colClass: 'col-12 col-sm-6'
-    }) %}
+    }) }}
 </div>

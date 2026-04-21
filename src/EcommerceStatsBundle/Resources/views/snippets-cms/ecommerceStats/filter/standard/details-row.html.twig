@@ -1,19 +1,19 @@
 <div class="row">
-    {% include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/select.html.twig', {
+    {{ include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/select.html.twig', {
         name: 'currencyId',
         label: 'chameleon_system_ecommerce_stats.form_currency'|trans,
         options: currencyOptions,
         selectedValue: selectedCurrencyId,
         dataParam: 'currencyId',
         colClass: 'col-12 col-sm-6'
-    }) %}
+    }) }}
 
-    {% include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/select.html.twig', {
+    {{ include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/select.html.twig', {
         name: 'statsGroup',
         label: 'chameleon_system_ecommerce_stats.form_stats_group'|trans,
         options: shopStatisticGroupOptions,
         selectedValue: selectedShopStatisticGroupName,
         dataParam: 'statsGroup',
         colClass: 'col-12 col-sm-6'
-    }) %}
+    }) }}
 </div>
