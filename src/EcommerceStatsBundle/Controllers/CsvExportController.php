@@ -15,7 +15,9 @@ namespace ChameleonSystem\EcommerceStatsBundle\Controllers;
 
 use ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\CsvResponse;
+use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatisticEvaluationRequestDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\CsvExportServiceInterface;
+use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\TopSellerServiceInterface;
@@ -24,41 +26,29 @@ use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class CsvExportController
+readonly class CsvExportController
 {
-    private CsvExportServiceInterface $csvExportService;
-    private StatsTableServiceInterface $statsTableService;
-    private TopSellerServiceInterface $topSellerService;
-    private SecurityHelperAccess $securityHelperAccess;
-
     public function __construct(
-        CsvExportServiceInterface $csvExportService,
-        StatsTableServiceInterface $statsTableService,
-        TopSellerServiceInterface $topSellerService,
-        SecurityHelperAccess $securityHelperAccess
+        private CsvExportServiceInterface $csvExportService,
+        private StatsTableServiceInterface $statsTableService,
+        private TopSellerServiceInterface $topSellerService,
+        private SecurityHelperAccess $securityHelperAccess,
+        private StatsCurrencyServiceInterface $statsCurrencyService,
     ) {
-        $this->csvExportService = $csvExportService;
-        $this->statsTableService = $statsTableService;
-        $this->topSellerService = $topSellerService;
-        $this->securityHelperAccess = $securityHelperAccess;
     }
 
     public function exportStatistics(Request $request): Response
     {
         $this->throwIfNoBackendUserLoggedIn();
 
-        $dateGroupType = $request->get('dateGroupType', StatsProviderInterface::DATA_GROUP_TYPE_DAY);
-        $showChange = $request->request->getBoolean('showChange');
-        $selectedPortalId = $request->get('portalId', '');
-        $selectedStatsGroupId = EcommerceStatsBackendModule::ALL_STATS_FILTER_NAME;
-        $startDate = $this->getRequiredDate($request, 'startDate')->setTime(0, 0, 0);
-        $endDate = $this->getRequiredDate($request, 'endDate')->setTime(23, 59, 59);
-
-        $statsTable = $this->statsTableService->evaluate($startDate, $endDate, $dateGroupType, $showChange, $selectedPortalId, $selectedStatsGroupId);
+        $statisticEvaluationRequest = $this->createStatisticEvaluationRequest($request);
+        $statsTable = $this->statsTableService->evaluate($statisticEvaluationRequest);
         $csvData = $this->csvExportService->getCsvDataFromStatsTable($statsTable);
-        $fileName = $this->getCsvFilename('stats', $startDate, $endDate);
+        $fileName = $this->getCsvFilename('stats',
+            $statisticEvaluationRequest->getStartDate(),
+            $statisticEvaluationRequest->getEndDate()
+        );
 
         return CsvResponse::fromRows($fileName, $csvData);
     }
@@ -67,38 +57,53 @@ class CsvExportController
     {
         $this->throwIfNoBackendUserLoggedIn();
 
-        $startDate = $this->getRequiredDate($request, 'startDate')->setTime(0, 0, 0);
-        $endDate = $this->getRequiredDate($request, 'endDate')->setTime(23, 59, 59);
+        $startDate = $this->getDateFromRequest($request, 'startDate', 'Y-m-01');
+        $startDate->setTime(0, 0, 0);
+        $endDate = $this->getDateFromRequest($request, 'endDate', 'Y-m-d');
+        $endDate->setTime(23, 59, 59);
+
         $selectedPortalId = $request->get('portalId', '');
+        $selectedShopId = $request->get('shopId', '');
+
         $limit = $request->request->getInt('limit', 50);
 
-        $topSellers = $this->topSellerService->getTopsellers($startDate, $endDate, $selectedPortalId, $limit);
+        $topSellers = $this->topSellerService->getTopsellers($startDate, $endDate, $selectedPortalId, $selectedShopId, $limit);
         $csvData = $this->csvExportService->getCsvDataFromTopsellers($topSellers);
         $fileName = $this->getCsvFilename('topsellers', $startDate, $endDate);
 
         return CsvResponse::fromRows($fileName, $csvData);
     }
 
-    private function getRequiredDate(Request $request, string $parameter): \DateTime
+    private function createStatisticEvaluationRequest(Request $request): StatisticEvaluationRequestDataModel
     {
-        $dateString = $request->get($parameter);
-        if (null === $dateString) {
-            throw new BadRequestHttpException(sprintf(
-                'Request argument `%s` is required.',
-                $parameter
-            ));
-        }
+        $startDate = $this->getDateFromRequest($request, 'startDate', 'Y-m-01');
+        $startDate->setTime(0, 0, 0);
+        $endDate = $this->getDateFromRequest($request, 'endDate', 'Y-m-d');
+        $endDate->setTime(23, 59, 59);
 
-        $dateInstance = \DateTime::createFromFormat('Y-m-d', $dateString);
-        if (false === $dateInstance) {
-            throw new BadRequestHttpException(sprintf(
-                'Date in argument `%s` must be in format `Y-m-d` - `%s` is not.',
-                $parameter,
-                $dateString
-            ));
-        }
-
-        return $dateInstance;
+        return new StatisticEvaluationRequestDataModel(
+            $startDate,
+            $endDate,
+            $request->get(
+                'dateGroup',
+                $request->get('dateGroup', StatsProviderInterface::DATE_GROUP_DAY)
+            ),
+            filter_var(
+                $request->get('showChange', false),
+                FILTER_VALIDATE_BOOLEAN
+            ),
+            $request->get('portalId', ''),
+            $request->get(
+                'currencyId',
+                $this->statsCurrencyService->getCurrencyIdByIsoCode(EcommerceStatsBackendModule::STANDARD_CURRENCY_ISO_CODE)
+            ),
+            $request->get(
+                'statsGroup',
+                EcommerceStatsBackendModule::ALL_STATS_FILTER_NAME
+            ),
+            $request->get('shopId', ''),
+            // @TODO get custom filters
+        );
     }
 
     private function getCsvFilename(string $basename, \DateTime $startDate, \DateTime $endDate): string
@@ -116,5 +121,13 @@ class CsvExportController
         if (false === $this->securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)) {
             throw new AccessDeniedHttpException();
         }
+    }
+
+    private function getDateFromRequest(Request $request, string $key, string $dateDefaultFormat): \DateTime
+    {
+        return \DateTime::createFromFormat(
+            'Y-m-d',
+            (string) $request->get($key, date($dateDefaultFormat))
+        );
     }
 }

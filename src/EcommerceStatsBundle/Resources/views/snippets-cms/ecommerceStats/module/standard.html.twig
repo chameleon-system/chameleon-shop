@@ -1,13 +1,13 @@
 {#
-    @var string moduleSpotName
+
     @var bool showChange
     @var string portalId
     @var string selectedPortalId
-    @var array portalList
-    @var array viewList
+    @var array portalOptions
+    @var array viewOptions
     @var string activeViewName
-    @var string activeDateGroupType
-    @var array dateGroupTypeList
+    @var string selectedDateGroup
+    @var array dateGroupOptions
     @var string csvDownloadUrl
     @var string topSellerDownloadUrl
     @var string [] tableData
@@ -50,12 +50,12 @@
 
                 <div class="statistics mt-4">
                     {% set includeFileName = '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/module/' ~ (activeViewName == 'html.barchart' ? 'html-barchart.html.twig' : 'html-table.html.twig') %}
-                    {{ include( includeFileName , {
+                    {{ include(includeFileName, {
                         blocks: tableData.blocks,
                         columnNames: tableData.columnNames,
                         showDiffColumn: tableData.showDiffColumn,
-                        maxGroupCount: tableData.maxGroupCount
-                    } ) }}
+                        maxGroupCount: tableData.maxGroupCount,
+                    }) }}
                 </div>
                 {% endif %}
             {% endif %}

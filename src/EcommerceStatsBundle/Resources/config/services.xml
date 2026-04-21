@@ -15,7 +15,7 @@
             class="ChameleonSystem\EcommerceStatsBundle\Controllers\CsvExportController"
             autowire="true"
         >
-            <tag name="controller.service_arguments" />
+            <tag name="controller.service_arguments"/>
         </service>
 
         <!-- Module -->
@@ -25,11 +25,12 @@
             shared="false"
             autowire="true"
         >
-            <argument key="$translator" type="service" id="chameleon_system_core.translator" />
-            <argument key="$urlUtil" type="service" id="chameleon_system_core.util.url" />
-            <argument key="$statsCurrencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service" />
-            <argument key="$statsProviderCollection" type="service" id="chameleon_system_ecommerce_stats.stats_provider.pkg_shop_statistics" />
-            <argument key="$securityHelperAccess" type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument key="$translator" type="service" id="chameleon_system_core.translator"/>
+            <argument key="$urlGenerator" type="service" id="router"/>
+            <argument key="$statsCurrencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service"/>
+            <argument key="$securityHelperAccess" type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
+            <argument key="$shopService" type="service" id="chameleon_system_shop.shop_service"/>
+            <argument key="$inputFilterUtil" type="service" id="chameleon_system_core.util.input_filter"/>
             <tag name="chameleon_system.module"/>
         </service>
 
@@ -43,10 +44,10 @@
             class="ChameleonSystem\EcommerceStatsBundle\StatsProvider\PkgShopStatisticsGroupProvider"
             autowire="true"
         >
-            <argument key="$translator" type="service" id="chameleon_system_core.translator" />
-            <argument key="$currencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service" />
-            <argument key="$securityHelperAccess" type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
-            <tag name="chameleon_system_ecommerce_stats.stats_provider" />
+            <argument key="$translator" type="service" id="chameleon_system_core.translator"/>
+            <argument key="$currencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service"/>
+            <argument key="$securityHelperAccess" type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
+            <tag name="chameleon_system_ecommerce_stats.stats_provider"/>
         </service>
 
         <!-- Services -->
@@ -59,13 +60,13 @@
             id="chameleon_system_ecommerce_stats.csv_export"
             class="ChameleonSystem\EcommerceStatsBundle\Service\CsvExportService"
         >
-            <argument type="service" id="chameleon_system_core.translator" />
+            <argument type="service" id="chameleon_system_core.translator"/>
         </service>
         <service
             id="chameleon_system_ecommerce_stats.top_seller"
             class="ChameleonSystem\EcommerceStatsBundle\Service\TopSellerService"
         >
-            <argument type="service" id="database_connection" />
+            <argument type="service" id="database_connection"/>
         </service>
 
         <service
@@ -78,7 +79,7 @@
         <service
                 class="ChameleonSystem\EcommerceStatsBundle\Service\StatsCurrencyService"
                 id="chameleon_system_ecommerce_stats.service.stats_currency_service">
-            <argument type="service" id="database_connection" />
+            <argument type="service" id="database_connection"/>
         </service>
 
         <!-- Dashboard Widgets -->
@@ -92,7 +93,7 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
             <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
         </service>
 
@@ -106,12 +107,12 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
             <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
-            <tag name="chameleon_system.dashboard_widget" collection="sales" priority="1" collectionPriority="100" />
+            <tag name="chameleon_system.dashboard_widget" collection="sales" priority="1" collectionPriority="100"/>
         </service>
 
-        <service id="order-number" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.order_number_dashboard_widget" public="true" />
+        <service id="order-number" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.order_number_dashboard_widget" public="true"/>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.sales_volume_dashboard_widget"
                  class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\SalesVolumeDashboardWidget"
@@ -123,12 +124,12 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
             <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
-            <tag name="chameleon_system.dashboard_widget" collection="sales" priority="2" />
+            <tag name="chameleon_system.dashboard_widget" collection="sales" priority="2"/>
         </service>
 
-        <service id="sales-volume" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.sales_volume_dashboard_widget" public="true" />
+        <service id="sales-volume" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.sales_volume_dashboard_widget" public="true"/>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.average_cart_value_dashboard_widget"
                  class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\AverageCartValueDashboardWidget"
@@ -140,12 +141,12 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
             <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
-            <tag name="chameleon_system.dashboard_widget" collection="sales" priority="3" />
+            <tag name="chameleon_system.dashboard_widget" collection="sales" priority="3"/>
         </service>
 
-        <service id="average-cart-value" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.average_cart_value_dashboard_widget" public="true" />
+        <service id="average-cart-value" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.average_cart_value_dashboard_widget" public="true"/>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.payment_method_dashboard_widget"
                  class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\PaymentMethodDashboardWidget"
@@ -157,12 +158,12 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
             <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
-            <tag name="chameleon_system.dashboard_widget" collection="customer-stats-and-payment" priority="4" />
+            <tag name="chameleon_system.dashboard_widget" collection="customer-stats-and-payment" priority="4"/>
         </service>
 
-        <service id="payment-method" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.payment_method_dashboard_widget" public="true" />
+        <service id="payment-method" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.payment_method_dashboard_widget" public="true"/>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.top_seller_dashboard_widget"
                  class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\TopSellerDashboardWidget"
@@ -174,12 +175,12 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
             <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
-            <tag name="chameleon_system.dashboard_widget" collection="product-stats" priority="5" />
+            <tag name="chameleon_system.dashboard_widget" collection="product-stats" priority="5"/>
         </service>
 
-        <service id="top-seller" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.top_seller_dashboard_widget" public="true" />
+        <service id="top-seller" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.top_seller_dashboard_widget" public="true"/>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.top_categories_dashboard_widget"
                  class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\TopCategoriesDashboardWidget"
@@ -191,12 +192,12 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
             <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
-            <tag name="chameleon_system.dashboard_widget" collection="product-stats" priority="6" />
+            <tag name="chameleon_system.dashboard_widget" collection="product-stats" priority="6"/>
         </service>
 
-        <service id="top-categories" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.top_categories_dashboard_widget" public="true" />
+        <service id="top-categories" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.top_categories_dashboard_widget" public="true"/>
 
         <service id="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.customer_type_dashboard_widget"
                  class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Dashboard\Widgets\CustomerTypeDashboardWidget"
@@ -208,19 +209,19 @@
             <argument id="chameleon_system_ecommerce_stats.service.stats_currency_service" type="service"/>
             <argument type="string">%chameleon_system_core.dashboard.default_timeframe%</argument>
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
             <argument type="string">%chameleon_system_shop.enable_dashboard%</argument>
-            <tag name="chameleon_system.dashboard_widget" collection="customer-stats-and-payment" priority="6" />
+            <tag name="chameleon_system.dashboard_widget" collection="customer-stats-and-payment" priority="6"/>
         </service>
 
-        <service id="widget-customer-type" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.customer_type_dashboard_widget" public="true" />
+        <service id="widget-customer-type" alias="chameleon_system_ecommerce_stats.bridge_chameleon_dashboard_widgets.customer_type_dashboard_widget" public="true"/>
 
         <!-- Support for autowiring interfaces -->
-        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\CsvExportServiceInterface" alias="chameleon_system_ecommerce_stats.csv_export" />
-        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface" alias="ChameleonSystem\EcommerceStatsBundle\StatsProvider\StatsProviderCollection" />
-        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface" alias="chameleon_system_ecommerce_stats.ecommerce_stats_table" />
-        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\TopSellerServiceInterface" alias="chameleon_system_ecommerce_stats.top_seller" />
-        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface" alias="chameleon_system_ecommerce_stats.service.stats_currency_service" />
+        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\CsvExportServiceInterface" alias="chameleon_system_ecommerce_stats.csv_export"/>
+        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface" alias="ChameleonSystem\EcommerceStatsBundle\StatsProvider\StatsProviderCollection"/>
+        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface" alias="chameleon_system_ecommerce_stats.ecommerce_stats_table"/>
+        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\TopSellerServiceInterface" alias="chameleon_system_ecommerce_stats.top_seller"/>
+        <service id="ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface" alias="chameleon_system_ecommerce_stats.service.stats_currency_service"/>
 
     </services>
 </container>

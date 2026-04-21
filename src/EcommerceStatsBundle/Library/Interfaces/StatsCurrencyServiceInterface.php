@@ -6,7 +6,7 @@ use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsCurrencyDataMode
 
 interface StatsCurrencyServiceInterface
 {
-    public function getAllCurrencies();
+    public function getCurrencyOptions(): array;
 
     public function getCurrencyById(string $currencyId): ?StatsCurrencyDataModel;
 

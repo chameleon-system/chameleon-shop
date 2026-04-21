@@ -1,0 +1,37 @@
+{#
+    @var string name
+    @var string label
+    @var iterable options
+    @var scalar|null selectedValue
+    @var string colClass
+    @var string|null dataParam
+    @var string|null emptyOptionLabel
+    @var scalar|null emptyOptionValue
+#}
+
+{% set colClass = colClass|default('col-12') %}
+{% set selectedValue = selectedValue|default('') %}
+{% set selectClass = selectClass|default('form-control') %}
+{% set dataParam = dataParam|default(name) %}
+{% set addProduceParamsClass = addProduceParamsClass|default(false) %}
+{% set emptyOptionValue = emptyOptionValue|default('') %}
+
+<div class="{{ colClass }}">
+    <div class="form-group">
+        <label class="font-weight-bold">
+            {{ label }}:
+        </label>
+        <select
+            class="{{ selectClass }}{% if addProduceParamsClass %} produce-params{% endif %}"
+            name="{{ name|e('html_attr') }}"
+            {% if dataParam is not same as(false) %}data-param="{{ dataParam|e('html_attr') }}"{% endif %}
+        >
+            {% if emptyOptionLabel is defined and emptyOptionLabel is not same as(false) %}
+                <option value="{{ emptyOptionValue|e('html_attr') }}" {% if selectedValue == emptyOptionValue %}selected="selected"{% endif %}>{{ emptyOptionLabel }}</option>
+            {% endif %}
+            {% for optionValue, optionLabel in options %}
+                <option value="{{ optionValue|e('html_attr') }}" {% if selectedValue == optionValue %}selected="selected"{% endif %}>{{ optionLabel }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>

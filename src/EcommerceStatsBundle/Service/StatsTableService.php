@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\Service;
 
+use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatisticEvaluationRequestDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsGroupDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsTableDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface;
@@ -31,23 +32,13 @@ class StatsTableService implements StatsTableServiceInterface
         $this->statsProviders = $statsProviderCollection->getProviders();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function evaluate(
-        \DateTime $startDate,
-        \DateTime $endDate,
-        string $dateGroupType,
-        bool $showDiffColumn,
-        string $portalId = '',
-        string $currencyId = '',
-        string $selectedStatsGroupSystemName = ''): StatsTableDataModel
+    public function evaluate(StatisticEvaluationRequestDataModel $statisticEvaluationRequestDataModel): StatsTableDataModel
     {
         $statsTable = new StatsTableDataModel();
-        $statsTable->setShowDiffColumn($showDiffColumn);
+        $statsTable->setShowDiffColumn($statisticEvaluationRequestDataModel->isShowDiffColumn());
 
         foreach ($this->statsProviders as $provider) {
-            $statsTable = $provider->addStatsToTable($statsTable, $startDate, $endDate, $dateGroupType, $portalId, $currencyId, $selectedStatsGroupSystemName);
+            $statsTable = $provider->addStatsToTable($statsTable, $statisticEvaluationRequestDataModel);
         }
 
         $blocks = $statsTable->getBlocks();

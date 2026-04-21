@@ -21,7 +21,7 @@ class CsvResponse extends Response
     /**
      * @param string[][] $data
      */
-    public static function fromRows(string $fileName, array $data, string $separator = ';'): CsvResponse
+    public static function fromRows(string $fileName, array $data, string $separator = ';'): self
     {
         $csv = \fopen('php://temp/maxmemory:'. 1024 * 1024, 'r+');
 
@@ -40,7 +40,7 @@ class CsvResponse extends Response
     /**
      * @param array<string, string> $headers
      */
-    public function __construct(string $fileName, string $content, $status = 200, $headers = [])
+    public function __construct(string $fileName, string $content, $status = 200, array $headers = [])
     {
         parent::__construct($content, $status, $headers);
 

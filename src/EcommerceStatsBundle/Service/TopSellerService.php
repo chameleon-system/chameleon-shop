@@ -17,13 +17,10 @@ use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\ShopOrderItemDataMode
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\TopSellerServiceInterface;
 use Doctrine\DBAL\Connection;
 
-class TopSellerService implements TopSellerServiceInterface
+readonly class TopSellerService implements TopSellerServiceInterface
 {
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
-        $this->connection = $connection;
     }
 
     /**
@@ -33,28 +30,29 @@ class TopSellerService implements TopSellerServiceInterface
         ?\DateTime $startDate,
         ?\DateTime $endDate,
         string $portalId,
+        string $shopId,
         int $limit = 50
     ): array {
         $query = sprintf('
-            SELECT 
+            SELECT
                 SUM(`shop_order_item`.`order_amount`) AS totalordered,
                 SUM(`shop_order_item`.`order_price_after_discounts`) AS totalorderedvalue,
-                `shop_category`.`url_path` AS categorypath, 
+                `shop_category`.`url_path` AS categorypath,
                 `shop_order_item`.`articlenumber`,
                 `shop_order_item`.`name`
             FROM `shop_order_item`
                 LEFT JOIN `shop_order`
                     ON `shop_order_item`.`shop_order_id` = `shop_order`.`id`
-                LEFT JOIN `shop_article_shop_category_mlt` 
+                LEFT JOIN `shop_article_shop_category_mlt`
                     ON `shop_order_item`.`shop_article_id` = `shop_article_shop_category_mlt`.`source_id`
-                LEFT JOIN `shop_category` 
+                LEFT JOIN `shop_category`
                     ON `shop_article_shop_category_mlt`.`target_id` = `shop_category`.`id`
             %1$s
             GROUP BY `shop_category`.`id`, `shop_order_item`.`shop_article_id`
             ORDER BY `totalordered` DESC
             LIMIT 0,%2$d
                ',
-            $this->getWhereQueryPart($startDate, $endDate, $portalId),
+            $this->getWhereQueryPart($startDate, $endDate, $portalId, $shopId),
             $limit
         );
 
@@ -78,17 +76,24 @@ class TopSellerService implements TopSellerServiceInterface
      *
      * The returned string is safe to use in a query.
      */
-    private function getWhereQueryPart(?\DateTime $startDate, ?\DateTime $endDate, string $portalId): string
+    private function getWhereQueryPart(?\DateTime $startDate, ?\DateTime $endDate, string $portalId, string $shopId): string
     {
         $conditions = [];
         if (null !== $startDate) {
-            $conditions[] = '`shop_order`.`datecreated` >= '.$this->connection->quote($startDate->format('Y-m-d H:i:s'));
+            $conditions[] = '`shop_order`.`datecreated` >= '.$this->connection->quote(
+                $startDate->format('Y-m-d H:i:s')
+            );
         }
         if (null !== $endDate) {
-            $conditions[] = '`shop_order`.`datecreated` <= '.$this->connection->quote($endDate->format('Y-m-d H:i:s'));
+            $conditions[] = '`shop_order`.`datecreated` <= '.$this->connection->quote(
+                $endDate->format('Y-m-d H:i:s')
+            );
         }
         if ('' !== $portalId) {
             $conditions[] = '`shop_order`.`cms_portal_id` = '.$this->connection->quote($portalId);
+        }
+        if ('' !== $portalId) {
+            $conditions[] = '`shop_order`.`shop_id` = '.$this->connection->quote($shopId);
         }
 
         if (0 === count($conditions)) {

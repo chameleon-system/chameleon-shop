@@ -150,6 +150,14 @@
                 <source>chameleon_system_cms_dashboard.widget.group_name_analytics-orders</source>
                 <target>Bestellungen</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.form_shop">
+                <source>chameleon_system_ecommerce_stats.form_shop</source>
+                <target>Anzeigen für Shop</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_ecommerce_stats.all_shops">
+                <source>chameleon_system_ecommerce_stats.all_shops</source>
+                <target>Alle Shops</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

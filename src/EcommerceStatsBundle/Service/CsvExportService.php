@@ -20,23 +20,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CsvExportService implements CsvExportServiceInterface
 {
-    private const TRANSLATION_TOTAL = 'chameleon_system_ecommerce_stats.total';
-    private const TRANSLATION_DELTA = 'chameleon_system_ecommerce_stats.delta';
-
-    private TranslatorInterface $translator;
     private \TCMSLocal $local;
 
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(private readonly TranslatorInterface $translator)
     {
-        $this->translator = $translator;
-
-        $local = \TCMSLocal::GetActive();
-        if ($local instanceof \TCMSLocal) {
-            $this->local = $local;
-        } else {
-            // Empty local
-            $this->local = new \TCMSLocal();
-        }
+        $this->registerTCMSLocal();
     }
 
     public function getCsvDataFromStatsTable(StatsTableDataModel $statsTable): array
@@ -63,7 +51,7 @@ class CsvExportService implements CsvExportServiceInterface
         foreach ($statsTable->getColumnNames() as $name) {
             $row[] = $name;
             if ($statsTable->isShowDiffColumn()) {
-                $row[] = $this->translator->trans(self::TRANSLATION_DELTA);
+                $row[] = $this->translator->trans('chameleon_system_ecommerce_stats.delta');
             }
         }
 
@@ -71,7 +59,7 @@ class CsvExportService implements CsvExportServiceInterface
     }
 
     /**
-     * @param string[] $data
+     * @param string[][] $data
      */
     private function exportBlockCSV(
         array &$data,
@@ -85,7 +73,7 @@ class CsvExportService implements CsvExportServiceInterface
         $emptyGroups = $statsTable->getMaxGroupCount() - $level;
 
         for ($i = 0; $i < $emptyGroups; ++$i) {
-            $row[] = $this->translator->trans(self::TRANSLATION_TOTAL);
+            $row[] = $this->translator->trans('chameleon_system_ecommerce_stats.total');
         }
 
         $lastValue = 0;
@@ -130,5 +118,16 @@ class CsvExportService implements CsvExportServiceInterface
         }
 
         return $data;
+    }
+
+    private function registerTCMSLocal(): void
+    {
+        $local = \TCMSLocal::GetActive();
+        if ($local instanceof \TCMSLocal) {
+            $this->local = $local;
+        } else {
+            // Empty local
+            $this->local = new \TCMSLocal();
+        }
     }
 }

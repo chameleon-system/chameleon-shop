@@ -1,0 +1,30 @@
+{#
+    @var string name
+    @var string label
+    @var string type
+    @var string value
+    @var string colClass
+    @var string|null dataParam
+#}
+
+{% set colClass = colClass|default('col-12') %}
+{% set type = type|default('text') %}
+{% set value = value|default('') %}
+{% set inputClass = inputClass|default('form-control') %}
+{% set dataParam = dataParam|default(name) %}
+{% set addProduceParamsClass = addProduceParamsClass|default(false) %}
+
+<div class="{{ colClass }}">
+    <div class="form-group">
+        <label class="font-weight-bold">
+            {{ label }}:
+        </label>
+        <input
+            class="{{ inputClass }}{% if addProduceParamsClass %} produce-params{% endif %}"
+            type="{{ type|e('html_attr') }}"
+            name="{{ name|e('html_attr') }}"
+            value="{{ value|e('html_attr') }}"
+            {% if dataParam is not same as(false) %}data-param="{{ dataParam|e('html_attr') }}"{% endif %}
+        />
+    </div>
+</div>

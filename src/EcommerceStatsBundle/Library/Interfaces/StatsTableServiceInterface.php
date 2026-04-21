@@ -13,22 +13,10 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\Library\Interfaces;
 
+use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatisticEvaluationRequestDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatsTableDataModel;
 
 interface StatsTableServiceInterface
 {
-    /**
-     * evaluates the statistics.
-     *
-     * @param string $dateGroupType one of StatsProviderInterface::DATA_GROUP_TYPE_*
-     */
-    public function evaluate(
-        \DateTime $startDate,
-        \DateTime $endDate,
-        string $dateGroupType,
-        bool $showDiffColumn,
-        string $portalId = '',
-        string $currencyId = '',
-        string $selectedStatsGroupSystemName = ''
-    ): StatsTableDataModel;
+    public function evaluate(StatisticEvaluationRequestDataModel $statisticEvaluationRequestDataModel): StatsTableDataModel;
 }

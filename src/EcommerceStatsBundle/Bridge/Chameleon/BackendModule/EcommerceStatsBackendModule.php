@@ -13,38 +13,32 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule;
 
-use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtil;
+use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatisticEvaluationRequestDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterface;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
-    public const STANDARD_CURRENCY_ISO_CODE = 'EUR';
-    public const ALL_STATS_FILTER_NAME = 'allStats';
-    public const CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE = 'CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE';
-
-    private StatsTableServiceInterface $stats;
-    private TranslatorInterface $translator;
-    private UrlUtil $urlUtil;
-    private StatsCurrencyServiceInterface $statsCurrencyService;
+    public const string STANDARD_CURRENCY_ISO_CODE = 'EUR';
+    public const string ALL_STATS_FILTER_NAME = 'allStats';
+    public const string CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE = 'CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE';
 
     public function __construct(
-        StatsTableServiceInterface $stats,
-        TranslatorInterface $translator,
-        UrlUtil $urlUtil,
-        StatsCurrencyServiceInterface $statsCurrencyService,
-        private readonly StatsProviderInterface $statsProviderCollection,
-        private readonly SecurityHelperAccess $securityHelperAccess
+        private readonly StatsTableServiceInterface $stats,
+        private readonly TranslatorInterface $translator,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly StatsCurrencyServiceInterface $statsCurrencyService,
+        private readonly SecurityHelperAccess $securityHelperAccess,
+        private readonly ShopServiceInterface $shopService,
+        private readonly InputFilterUtil $inputFilterUtil
     ) {
         parent::__construct();
-
-        $this->stats = $stats;
-        $this->translator = $translator;
-        $this->urlUtil = $urlUtil;
-        $this->statsCurrencyService = $statsCurrencyService;
     }
 
     /**
@@ -58,70 +52,130 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             return;
         }
 
-        $startDate = $this->getDateUserInput('startDate', 'Y-m-01')->setTime(0, 0, 0);
-        $endDate = $this->getDateUserInput('endDate', 'Y-m-d')->setTime(23, 59, 59);
-
-        /** @var string $dateGroupType */
-        $dateGroupType = $this->GetUserInput('dateGroupType', StatsProviderInterface::DATA_GROUP_TYPE_DAY);
-        $showChange = '1' === $this->GetUserInput('showChange', '0');
-        $viewName = $this->GetUserInput('viewName', null);
-        $currencyId = $this->GetUserInput('currency', $this->statsCurrencyService->getCurrencyIdByIsoCode(self::STANDARD_CURRENCY_ISO_CODE));
-        $selectedStatsGroupSystemName = $this->GetUserInput('statsGroup', self::ALL_STATS_FILTER_NAME);
-
-        /** @var string $portalId */
-        $portalId = $this->GetUserInput('portalId', '');
+        $viewName = $this->inputFilterUtil->getFilteredInput('viewName');
+        $statsEvaluationRequest = $this->createStatisticEvaluationRequest();
+        $customFilters = $statsEvaluationRequest->getCustomFilters();
 
         $urlParameters = [
-            'startDate' => $startDate->format('Y-m-d'),
-            'endDate' => $endDate->format('Y-m-d'),
-            'dateGroupType' => $dateGroupType,
-            'showChange' => $showChange ? '1' : '0',
-            'portalId' => $portalId,
+            'startDate' => $statsEvaluationRequest->getStartDate()->format('Y-m-d'),
+            'endDate' => $statsEvaluationRequest->getEndDate()->format('Y-m-d'),
+            'dateGroup' => $statsEvaluationRequest->getDateGroup(),
+            'showChange' => $statsEvaluationRequest->isShowDiffColumn() ? '1' : '0',
+            'portalId' => $statsEvaluationRequest->getPortalId(),
+            'shopId' => $statsEvaluationRequest->getShopId(),
+            'currencyId' => $statsEvaluationRequest->getCurrencyId(),
+            'statsGroup' => $statsEvaluationRequest->getSelectedStatsGroupSystemName(),
         ];
-        $csvDownloadUrl = $this->urlUtil->getArrayAsUrl($urlParameters, '/cms/chameleon_system_ecommerce_stats/stats.csv?');
-        $topSellerDownloadUrl = $this->urlUtil->getArrayAsUrl($urlParameters, '/cms/chameleon_system_ecommerce_stats/topsellers.csv?');
+        $urlParameters = array_merge($urlParameters, $this->getCustomFilterUrlParameters($customFilters));
 
+        $shopStatisticGroupOptions = array_merge(
+            [self::ALL_STATS_FILTER_NAME => $this->translator->trans('chameleon_system_ecommerce_stats.form_all_stats_label')],
+            $this->getStatisticOptions()
+        );
+
+        $tableData = null;
         if (null !== $viewName) {
-            $tableData = $this->stats->evaluate(
-                $startDate,
-                $endDate,
-                $dateGroupType,
-                $showChange,
-                $portalId,
-                $currencyId,
-                $selectedStatsGroupSystemName
-            );
-            $oVisitor->SetMappedValue('tableData', $tableData);
+            $tableData = $this->stats->evaluate($statsEvaluationRequest);
         }
 
-        $currencyList = $this->statsCurrencyService->getAllCurrencies();
+        $oVisitor->SetMappedValueFromArray([
+            'csvDownloadUrl' => $this->urlGenerator->generate(
+                'chameleon_system_ecommerce_stats.export_csv.stats',
+                $urlParameters
+            ),
+            'topSellerDownloadUrl' => $this->urlGenerator->generate(
+                'chameleon_system_ecommerce_stats.export_csv.topsellers',
+                $urlParameters
+            ),
+            'activeViewName' => $viewName,
+            'viewOptions' => $this->getViewList(),
+            'dateGroupOptions' => $this->getDateGroupOptions(),
+            'portalOptions' => $this->getActivePortalOptions(),
+            'shopOptions' => $this->shopService->getAllShops(),
+            'shopStatisticGroupOptions' => $shopStatisticGroupOptions,
+            'currencyOptions' => $this->statsCurrencyService->getCurrencyOptions(),
+            'startDate' => $statsEvaluationRequest->getStartDate()->format('Y-m-d'),
+            'endDate' => $statsEvaluationRequest->getEndDate()->format('Y-m-d'),
+            'showChange' => $statsEvaluationRequest->isShowDiffColumn(),
+            'selectedPortalId' => $statsEvaluationRequest->getPortalId(),
+            'selectedShopId' => $statsEvaluationRequest->getShopId(),
+            'selectedCurrencyId' => $statsEvaluationRequest->getCurrencyId(),
+            'selectedShopStatisticGroupName' => $statsEvaluationRequest->getSelectedStatsGroupSystemName(),
+            'selectedDateGroup' => $statsEvaluationRequest->getDateGroup(),
+            'filterTemplates' => array_merge(
+                $this->getDefaultFilterTemplates(),
+                $this->getCustomFilterTemplates()
+            ),
+            'customFilters' => $customFilters,
+            'displayGraphLabels' => true,
+            'tableData' => $tableData,
+        ]);
+    }
 
-        $oVisitor->SetMappedValue('csvDownloadUrl', $csvDownloadUrl);
-        $oVisitor->SetMappedValue('topSellerDownloadUrl', $topSellerDownloadUrl);
-        $oVisitor->SetMappedValue('moduleSpotName', $this->sModuleSpotName);
-        $oVisitor->SetMappedValue('startDate', $startDate->format('Y-m-d'));
-        $oVisitor->SetMappedValue('endDate', $endDate->format('Y-m-d'));
-        $oVisitor->SetMappedValue('dateGroupTypeList', $this->getDateGroupTypeList());
-        $oVisitor->SetMappedValue('activeDateGroupType', $dateGroupType);
-        $oVisitor->SetMappedValue('showChange', $showChange);
-        $oVisitor->SetMappedValue('activeViewName', $viewName);
-        $oVisitor->SetMappedValue('viewList', $this->getViewList());
-        $oVisitor->SetMappedValue('portalList', $this->getPortalList());
-        $oVisitor->SetMappedValue('selectedPortalId', $portalId);
-        $oVisitor->SetMappedValue('currencyList', $currencyList);
-        $oVisitor->SetMappedValue('currencyId', $currencyId);
-        $oVisitor->SetMappedValue('selectedStatsGroupSystemName', $selectedStatsGroupSystemName);
-        $oVisitor->SetMappedValue('statsGroupsSelection', $this->statsProviderCollection->fetchAllStatisticGroupsNames());
-        $oVisitor->SetMappedValue('displayGraphLabels', true);
+    protected function createStatisticEvaluationRequest(): StatisticEvaluationRequestDataModel
+    {
+        $startDate = \DateTime::createFromFormat(
+            'Y-m-d',
+            (string) $this->inputFilterUtil->getFilteredInput('startDate', date('Y-m-01'))
+        );
+        $startDate->setTime(0, 0, 0);
+
+        $endDate = \DateTime::createFromFormat(
+            'Y-m-d',
+            (string) $this->inputFilterUtil->getFilteredInput('endDate', date('Y-m-d'))
+        );
+        $endDate->setTime(23, 59, 59);
+
+        return new StatisticEvaluationRequestDataModel(
+            $startDate,
+            $endDate,
+            $this->inputFilterUtil->getFilteredInput(
+                'dateGroup',
+                StatsProviderInterface::DATE_GROUP_DAY
+            ),
+            '1' === $this->inputFilterUtil->getFilteredInput(
+                'showChange',
+                '0'
+            ),
+            $this->inputFilterUtil->getFilteredInput(
+                'portalId',
+                ''
+            ),
+            $this->inputFilterUtil->getFilteredInput(
+                'currencyId',
+                $this->statsCurrencyService->getCurrencyIdByIsoCode(self::STANDARD_CURRENCY_ISO_CODE)
+            ),
+            $this->inputFilterUtil->getFilteredInput(
+                'statsGroup',
+                self::ALL_STATS_FILTER_NAME
+            ),
+            $this->inputFilterUtil->getFilteredInput(
+                'shopId',
+                ''
+            ),
+            // @TODO handle custom filter extension
+        );
+    }
+
+    private function getStatisticOptions(): array
+    {
+        $groupNames = [];
+        $groupList = \TdbPkgShopStatisticGroupList::GetList();
+        while ($group = $groupList->Next()) {
+            $groupNames[$group->fieldSystemName] = $group->fieldName;
+        }
+
+        return $groupNames;
     }
 
     /**
      * @return array<string, string> id => name
      */
-    private function getPortalList(): array
+    private function getActivePortalOptions(): array
     {
         $portalIdList = [];
         $portalList = \TdbCmsPortalList::GetList();
+        $portalList->AddFilterString("`deactive_portal` = '0'");
 
         while ($portal = $portalList->Next()) {
             $portalIdList[(string) $portal->id] = (string) $portal->GetName();
@@ -144,30 +198,65 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     /**
      * @return array<string, string>
      */
-    private function getDateGroupTypeList(): array
+    private function getDateGroupOptions(): array
     {
         return [
-            StatsProviderInterface::DATA_GROUP_TYPE_YEAR => $this->translator->trans('chameleon_system_ecommerce_stats.date_year'),
-            StatsProviderInterface::DATA_GROUP_TYPE_MONTH => $this->translator->trans('chameleon_system_ecommerce_stats.date_month'),
-            StatsProviderInterface::DATA_GROUP_TYPE_WEEK => $this->translator->trans('chameleon_system_ecommerce_stats.date_week'),
-            StatsProviderInterface::DATA_GROUP_TYPE_DAY => $this->translator->trans('chameleon_system_ecommerce_stats.date_day'),
+            StatsProviderInterface::DATE_GROUP_YEAR => $this->translator->trans('chameleon_system_ecommerce_stats.date_year'),
+            StatsProviderInterface::DATE_GROUP_MONTH => $this->translator->trans('chameleon_system_ecommerce_stats.date_month'),
+            StatsProviderInterface::DATE_GROUP_WEEK => $this->translator->trans('chameleon_system_ecommerce_stats.date_week'),
+            StatsProviderInterface::DATE_GROUP_DAY => $this->translator->trans('chameleon_system_ecommerce_stats.date_day'),
         ];
     }
 
-    private function getDateUserInput(string $parameter, string $default): \DateTime
+    /**
+     * @return string[]
+     */
+    protected function getDefaultFilterTemplates(): array
     {
-        /** @var string|null $dateString */
-        $dateString = $this->GetUserInput($parameter);
-        if (null === $dateString) {
-            $dateInstance = \DateTime::createFromFormat('Y-m-d', date($default));
-            if (false !== $dateInstance) {
-                return $dateInstance;
+        return [
+            '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/standard/show-change.html.twig',
+            '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/standard/portal-shop.html.twig',
+            '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/standard/output-row.html.twig',
+            '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/standard/date-row.html.twig',
+            '@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/standard/details-row.html.twig',
+        ];
+    }
+
+    /**
+     * Override in project-specific subclasses to register additional filter templates.
+     *
+     * @return string[]
+     */
+    protected function getCustomFilterTemplates(): array
+    {
+        return [];
+    }
+
+    /**
+     * Override in project-specific subclasses to add custom filter values to the stats request.
+     *
+     * @return array<string, mixed>
+     */
+    protected function getCustomFilterValues(): array
+    {
+        return [];
+    }
+
+    /**
+     * @param array<string, mixed> $customFilters
+     *
+     * @return array<string, scalar|null>
+     */
+    protected function getCustomFilterUrlParameters(array $customFilters): array
+    {
+        $urlParameters = [];
+        foreach ($customFilters as $name => $value) {
+            if (null === $value || is_scalar($value)) {
+                $urlParameters[$name] = $value;
             }
         }
 
-        return \DateTime::createFromFormat('Y-m-d', (string) $dateString)
-            ?: \DateTime::createFromFormat('Y-m-d', date($default))
-            ?: new \DateTime();
+        return $urlParameters;
     }
 
     /**
