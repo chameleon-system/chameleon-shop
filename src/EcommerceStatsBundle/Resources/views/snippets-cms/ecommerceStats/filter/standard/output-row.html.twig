@@ -1,14 +1,14 @@
 <div class="row">
-    {{ include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/select.html.twig', {
+    {% include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/select.html.twig', {
         name: 'viewName',
         label: 'chameleon_system_ecommerce_stats.form_output_type'|trans,
         options: viewOptions,
         selectedValue: activeViewName,
         dataParam: false,
         colClass: 'col-12 col-sm-6'
-    }) }}
+    }) %}
 
-    {{ include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/select.html.twig', {
+    {% include('@ChameleonSystemEcommerceStats/snippets-cms/ecommerceStats/filter/field/select.html.twig', {
         name: 'dateGroup',
         label: 'chameleon_system_ecommerce_stats.group_by'|trans,
         options: dateGroupOptions,
@@ -16,5 +16,5 @@
         dataParam: 'dateGroup',
         addProduceParamsClass: true,
         colClass: 'col-12 col-sm-6'
-    }) }}
+    }) %}
 </div>
