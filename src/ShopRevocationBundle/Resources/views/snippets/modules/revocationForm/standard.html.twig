@@ -10,235 +10,237 @@
 
 {% block revocation_form_wrapper %}
 <div class="snippetRevocationForm container">
-    {% block revocation_form_header %}
-        <h1>{{ 'chameleon_system_shop_revocation.form.headline'|trans }}</h1>
-        <p>{{ 'chameleon_system_shop_revocation.form.intro_text'|trans }}</p>
-    {% endblock %}
+    {% block revocation_form_content %}
+        {% block revocation_form_header %}
+            <h1>{{ 'chameleon_system_shop_revocation.form.headline'|trans }}</h1>
+            <p>{{ 'chameleon_system_shop_revocation.form.intro_text'|trans }}</p>
+        {% endblock %}
 
-    {% block revocation_form_messages %}
-        {% if messages is defined and messages %}
-            <div class="messages">
-                {{ messages|raw }}
-            </div>
-        {% endif %}
-    {% endblock %}
+        {% block revocation_form_messages %}
+            {% if messages is defined and messages %}
+                <div class="messages">
+                    {{ messages|raw }}
+                </div>
+            {% endif %}
+        {% endblock %}
 
-    {% block revocation_form_general_error %}
-        {% if generalError is defined and generalError %}
-            <div class="alert alert-danger" role="alert">
-                {{ generalError }}
-            </div>
-        {% endif %}
-    {% endblock %}
+        {% block revocation_form_general_error %}
+            {% if generalError is defined and generalError %}
+                <div class="alert alert-danger" role="alert">
+                    {{ generalError }}
+                </div>
+            {% endif %}
+        {% endblock %}
 
-    {% block revocation_form_invalid_order_hint %}
-        {% if invalidOrderHint is defined and invalidOrderHint %}
-            <div class="alert alert-warning" role="alert">
-                {{ invalidOrderHint }}
-                {% if contactPageUrl is defined and contactPageUrl %}
-                    <a href="{{ contactPageUrl }}">{{ 'chameleon_system_shop_revocation.action.contact'|trans }}</a>
-                {% endif %}
-            </div>
-        {% endif %}
-    {% endblock %}
+        {% block revocation_form_invalid_order_hint %}
+            {% if invalidOrderHint is defined and invalidOrderHint %}
+                <div class="alert alert-warning" role="alert">
+                    {{ invalidOrderHint }}
+                    {% if contactPageUrl is defined and contactPageUrl %}
+                        <a href="{{ contactPageUrl }}">{{ 'chameleon_system_shop_revocation.action.contact'|trans }}</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endblock %}
 
-    {% block revocation_form_success_message %}
-        {% if successMessage is defined and successMessage %}
-            <div class="alert alert-success" role="alert">
-                {{ successMessage }}
-            </div>
-        {% endif %}
-    {% endblock %}
+        {% block revocation_form_success_message %}
+            {% if successMessage is defined and successMessage %}
+                <div class="alert alert-success" role="alert">
+                    {{ successMessage }}
+                </div>
+            {% endif %}
+        {% endblock %}
 
-    {% block revocation_form %}
-        <form method="post">
-            {% block revocation_form_module_fnc %}
-                <input type="hidden" name="module_fnc[{{ moduleSpotName }}]" value="{{ submitFunction }}" />
-            {% endblock %}
+        {% block revocation_form %}
+            <form method="post">
+                {% block revocation_form_module_fnc %}
+                    <input type="hidden" name="module_fnc[{{ moduleSpotName }}]" value="{{ submitFunction }}" />
+                {% endblock %}
 
-            {% block revocation_form_hidden_fields %}
-                {% for hiddenField in hiddenFields %}
-                    <input type="hidden" name="{{ hiddenField.sName }}" value="{{ hiddenField.sValue }}" />
-                {% endfor %}
-            {% endblock %}
+                {% block revocation_form_hidden_fields %}
+                    {% for hiddenField in hiddenFields %}
+                        <input type="hidden" name="{{ hiddenField.sName }}" value="{{ hiddenField.sValue }}" />
+                    {% endfor %}
+                {% endblock %}
 
-            {% block revocation_form_first_name_field %}
-                {% set aFieldFirstNameMapped = {
-                    sLabelText: 'chameleon_system_shop_revocation.field.first_name'|trans,
-                    sLabelClass: formDefaultLabelClass,
-                    sInputClass: formDefaultInputClass,
-                    sHelpClass: formDefaultHelpClass,
-                    sName: 'firstName',
-                    sFieldId: 'revocationFirstName',
-                    bRequired: true,
-                    autocomplete: 'given-name',
-                    sError: errors.firstName|default(''),
-                    sValue: formValues.firstName|default(''),
-                } %}
-                {{ include('/common/userInput/form/text.html.twig', aFieldFirstNameMapped) }}
-            {% endblock %}
+                {% block revocation_form_first_name_field %}
+                    {% set aFieldFirstNameMapped = {
+                        sLabelText: 'chameleon_system_shop_revocation.field.first_name'|trans,
+                        sLabelClass: formDefaultLabelClass,
+                        sInputClass: formDefaultInputClass,
+                        sHelpClass: formDefaultHelpClass,
+                        sName: 'firstName',
+                        sFieldId: 'revocationFirstName',
+                        bRequired: true,
+                        autocomplete: 'given-name',
+                        sError: errors.firstName|default(''),
+                        sValue: formValues.firstName|default(''),
+                    } %}
+                    {{ include('/common/userInput/form/text.html.twig', aFieldFirstNameMapped) }}
+                {% endblock %}
 
-            {% block revocation_form_last_name_field %}
-                {% set aFieldLastNameMapped = {
-                    sLabelText: 'chameleon_system_shop_revocation.field.last_name'|trans,
-                    sLabelClass: formDefaultLabelClass,
-                    sInputClass: formDefaultInputClass,
-                    sHelpClass: formDefaultHelpClass,
-                    sName: 'lastName',
-                    sFieldId: 'revocationLastName',
-                    bRequired: true,
-                    autocomplete: 'family-name',
-                    sError: errors.lastName|default(''),
-                    sValue: formValues.lastName|default(''),
-                } %}
-                {{ include('/common/userInput/form/text.html.twig', aFieldLastNameMapped) }}
-            {% endblock %}
+                {% block revocation_form_last_name_field %}
+                    {% set aFieldLastNameMapped = {
+                        sLabelText: 'chameleon_system_shop_revocation.field.last_name'|trans,
+                        sLabelClass: formDefaultLabelClass,
+                        sInputClass: formDefaultInputClass,
+                        sHelpClass: formDefaultHelpClass,
+                        sName: 'lastName',
+                        sFieldId: 'revocationLastName',
+                        bRequired: true,
+                        autocomplete: 'family-name',
+                        sError: errors.lastName|default(''),
+                        sValue: formValues.lastName|default(''),
+                    } %}
+                    {{ include('/common/userInput/form/text.html.twig', aFieldLastNameMapped) }}
+                {% endblock %}
 
-            {% block revocation_form_email_field %}
-                {% set aFieldEmailMapped = {
-                    sLabelText: 'chameleon_system_shop_revocation.field.email'|trans,
-                    sLabelClass: formDefaultLabelClass,
-                    sInputClass: formDefaultInputClass,
-                    sHelpClass: formDefaultHelpClass,
-                    sName: 'email',
-                    sFieldId: 'revocationEmail',
-                    sFieldType: 'email',
-                    bRequired: true,
-                    autocomplete: 'email',
-                    sError: errors.email|default(''),
-                    sValue: formValues.email|default(''),
-                } %}
-                {{ include('/common/userInput/form/text.html.twig', aFieldEmailMapped) }}
-            {% endblock %}
+                {% block revocation_form_email_field %}
+                    {% set aFieldEmailMapped = {
+                        sLabelText: 'chameleon_system_shop_revocation.field.email'|trans,
+                        sLabelClass: formDefaultLabelClass,
+                        sInputClass: formDefaultInputClass,
+                        sHelpClass: formDefaultHelpClass,
+                        sName: 'email',
+                        sFieldId: 'revocationEmail',
+                        sFieldType: 'email',
+                        bRequired: true,
+                        autocomplete: 'email',
+                        sError: errors.email|default(''),
+                        sValue: formValues.email|default(''),
+                    } %}
+                    {{ include('/common/userInput/form/text.html.twig', aFieldEmailMapped) }}
+                {% endblock %}
 
-            {% block revocation_form_order_field %}
-                {% if true == isLoggedIn %}
-                    {% if orders | length > 0 %}
-                        {% block revocation_form_order_select_field %}
-                            {% set aFieldOrderSelectMapped = {
-                                sLabelText: 'chameleon_system_shop_revocation.field.order'|trans,
-                                sLabelClass: formDefaultLabelClass,
-                                sInputClass: formDefaultInputClass,
-                                sHelpClass: formDefaultHelpClass,
-                                sName: 'shopOrderId',
-                                sFieldId: 'revocationShopOrderId',
-                                bRequired: not showLoggedInOrderNumberFallback,
-                                sPlaceholder: 'chameleon_system_shop_revocation.field.select_placeholder'|trans,
-                                sError: errors.shopOrderId|default(''),
-                                sValue: formValues.shopOrderId|default(''),
-                                aValueList: orders,
-                            } %}
-                            {{ include('/common/userInput/form/select.html.twig', aFieldOrderSelectMapped) }}
-                        {% endblock %}
+                {% block revocation_form_order_field %}
+                    {% if true == isLoggedIn %}
+                        {% if orders | length > 0 %}
+                            {% block revocation_form_order_select_field %}
+                                {% set aFieldOrderSelectMapped = {
+                                    sLabelText: 'chameleon_system_shop_revocation.field.order'|trans,
+                                    sLabelClass: formDefaultLabelClass,
+                                    sInputClass: formDefaultInputClass,
+                                    sHelpClass: formDefaultHelpClass,
+                                    sName: 'shopOrderId',
+                                    sFieldId: 'revocationShopOrderId',
+                                    bRequired: not showLoggedInOrderNumberFallback,
+                                    sPlaceholder: 'chameleon_system_shop_revocation.field.select_placeholder'|trans,
+                                    sError: errors.shopOrderId|default(''),
+                                    sValue: formValues.shopOrderId|default(''),
+                                    aValueList: orders,
+                                } %}
+                                {{ include('/common/userInput/form/select.html.twig', aFieldOrderSelectMapped) }}
+                            {% endblock %}
 
-                        {% if true == showLoggedInOrderNumberFallback %}
-                            <div class="mb-3 row">
-                                <div class="{{ formDefaultHelpClass }}">
-                                    <div class="form-text">
-                                        {{ loggedInOrderNumberFallbackHint|default('') }}
+                            {% if true == showLoggedInOrderNumberFallback %}
+                                <div class="mb-3 row">
+                                    <div class="{{ formDefaultHelpClass }}">
+                                        <div class="form-text">
+                                            {{ loggedInOrderNumberFallbackHint|default('') }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
-                    {% block revocation_form_logged_in_order_number_fallback %}
-                        {% if true == showLoggedInOrderNumberFallback %}
-                            {% set aFieldOrderNumberFallbackMapped = {
+                        {% block revocation_form_logged_in_order_number_fallback %}
+                            {% if true == showLoggedInOrderNumberFallback %}
+                                {% set aFieldOrderNumberFallbackMapped = {
+                                    sLabelText: 'chameleon_system_shop_revocation.field.order_number'|trans,
+                                    sLabelClass: formDefaultLabelClass,
+                                    sInputClass: formDefaultInputClass,
+                                    sHelpClass: formDefaultHelpClass,
+                                    sName: 'ordernumber',
+                                    sFieldId: 'revocationOrderNumberFallback',
+                                    bRequired: true,
+                                    autocomplete: 'off',
+                                    sError: errors.ordernumber|default(''),
+                                    sValue: formValues.ordernumber|default(''),
+                                } %}
+                                {{ include('/common/userInput/form/text.html.twig', aFieldOrderNumberFallbackMapped) }}
+                            {% endif %}
+                        {% endblock %}
+                    {% else %}
+                        {% block revocation_form_order_number_field %}
+                            {% set aFieldOrderNumberMapped = {
                                 sLabelText: 'chameleon_system_shop_revocation.field.order_number'|trans,
                                 sLabelClass: formDefaultLabelClass,
                                 sInputClass: formDefaultInputClass,
                                 sHelpClass: formDefaultHelpClass,
                                 sName: 'ordernumber',
-                                sFieldId: 'revocationOrderNumberFallback',
+                                sFieldId: 'revocationOrderNumber',
                                 bRequired: true,
                                 autocomplete: 'off',
                                 sError: errors.ordernumber|default(''),
                                 sValue: formValues.ordernumber|default(''),
                             } %}
-                            {{ include('/common/userInput/form/text.html.twig', aFieldOrderNumberFallbackMapped) }}
-                        {% endif %}
-                    {% endblock %}
-                {% else %}
-                    {% block revocation_form_order_number_field %}
-                        {% set aFieldOrderNumberMapped = {
-                            sLabelText: 'chameleon_system_shop_revocation.field.order_number'|trans,
-                            sLabelClass: formDefaultLabelClass,
-                            sInputClass: formDefaultInputClass,
-                            sHelpClass: formDefaultHelpClass,
-                            sName: 'ordernumber',
-                            sFieldId: 'revocationOrderNumber',
-                            bRequired: true,
-                            autocomplete: 'off',
-                            sError: errors.ordernumber|default(''),
-                            sValue: formValues.ordernumber|default(''),
-                        } %}
-                        {{ include('/common/userInput/form/text.html.twig', aFieldOrderNumberMapped) }}
-                    {% endblock %}
-                {% endif %}
-            {% endblock %}
+                            {{ include('/common/userInput/form/text.html.twig', aFieldOrderNumberMapped) }}
+                        {% endblock %}
+                    {% endif %}
+                {% endblock %}
 
-            {% block revocation_form_customer_note_field %}
-                {% set aFieldCustomerNoteMapped = {
-                    sLabelText: 'chameleon_system_shop_revocation.field.customer_note'|trans,
-                    sLabelClass: formDefaultLabelClass,
-                    sInputClass: formDefaultInputClass,
-                    sHelpClass: formDefaultHelpClass,
-                    sName: 'customerNote',
-                    sFieldId: 'revocationCustomerNote',
-                    sHelpText: 'chameleon_system_shop_revocation.form.customer_note_help_text'|trans,
-                    sError: errors.customerNote|default(''),
-                    sValue: formValues.customerNote|default(''),
-                } %}
-                {{ include('/common/userInput/form/textarea.html.twig', aFieldCustomerNoteMapped) }}
-            {% endblock %}
+                {% block revocation_form_customer_note_field %}
+                    {% set aFieldCustomerNoteMapped = {
+                        sLabelText: 'chameleon_system_shop_revocation.field.customer_note'|trans,
+                        sLabelClass: formDefaultLabelClass,
+                        sInputClass: formDefaultInputClass,
+                        sHelpClass: formDefaultHelpClass,
+                        sName: 'customerNote',
+                        sFieldId: 'revocationCustomerNote',
+                        sHelpText: 'chameleon_system_shop_revocation.form.customer_note_help_text'|trans,
+                        sError: errors.customerNote|default(''),
+                        sValue: formValues.customerNote|default(''),
+                    } %}
+                    {{ include('/common/userInput/form/textarea.html.twig', aFieldCustomerNoteMapped) }}
+                {% endblock %}
 
-            {% block revocation_form_required_hint %}
-                {% if true == showRequiredFieldsHint|default(true) %}
-                    {{ include('/common/userInput/required-fields-hint.html.twig') }}
-                {% endif %}
-            {% endblock %}
+                {% block revocation_form_required_hint %}
+                    {% if true == showRequiredFieldsHint|default(true) %}
+                        {{ include('/common/userInput/required-fields-hint.html.twig') }}
+                    {% endif %}
+                {% endblock %}
 
-            {% block revocation_form_legal_consent_field %}
-                <div class="row mb-3">
-                    <div class="{{ formDefaultLabelClass }}"></div>
-                    <div class="{{ formDefaultHelpClass }}">
-                        <div class="custom-control custom-checkbox">
-                            <input
-                                id="revocationLegalConsent"
-                                class="custom-control-input"
-                                type="checkbox"
-                                value="1"
-                                name="legalConsent"
-                                required="required"
-                                {% if formValues.legalConsent|default(false) %}checked="checked"{% endif %}
-                            />
-                            <label for="revocationLegalConsent" class="custom-control-label align-middle">
-                                {{ 'chameleon_system_shop_revocation.form.legal_consent'|trans({
-                                    '%agbUrl%': '/AGB',
-                                    '%privacyUrl%': '/Datenschutz',
-                                })|raw }}
-                            </label>
-                        </div>
-                        {% if errors.legalConsent is defined and errors.legalConsent %}
-                            <div class="invalid-feedback d-block">
-                                {{ errors.legalConsent }}
+                {% block revocation_form_legal_consent_field %}
+                    <div class="row mb-3">
+                        <div class="{{ formDefaultLabelClass }}"></div>
+                        <div class="{{ formDefaultHelpClass }}">
+                            <div class="custom-control custom-checkbox">
+                                <input
+                                        id="revocationLegalConsent"
+                                        class="custom-control-input"
+                                        type="checkbox"
+                                        value="1"
+                                        name="legalConsent"
+                                        required="required"
+                                        {% if formValues.legalConsent|default(false) %}checked="checked"{% endif %}
+                                />
+                                <label for="revocationLegalConsent" class="custom-control-label align-middle">
+                                    {{ 'chameleon_system_shop_revocation.form.legal_consent'|trans({
+                                        '%agbUrl%': '/AGB',
+                                        '%privacyUrl%': '/Datenschutz',
+                                    })|raw }}
+                                </label>
                             </div>
-                        {% endif %}
+                            {% if errors.legalConsent is defined and errors.legalConsent %}
+                                <div class="invalid-feedback d-block">
+                                    {{ errors.legalConsent }}
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-            {% endblock %}
+                {% endblock %}
 
-            {% block revocation_form_submit %}
-                <div class="row">
-                    <div class="col-12 col-md-8 col-lg-6 mx-auto snippetRevocationForm__submit">
-                        {{ include('/common/userInput/buttonStandard.html.twig', {
-                            sButtonText: 'chameleon_system_shop_revocation.form.submit'|trans,
-                            sButtonClass: 'w-100',
-                        }) }}
+                {% block revocation_form_submit %}
+                    <div class="row">
+                        <div class="col-12 col-md-8 col-lg-6 mx-auto snippetRevocationForm__submit">
+                            {{ include('/common/userInput/buttonStandard.html.twig', {
+                                sButtonText: 'chameleon_system_shop_revocation.form.submit'|trans,
+                                sButtonClass: 'w-100',
+                            }) }}
+                        </div>
                     </div>
-                </div>
-            {% endblock %}
-        </form>
+                {% endblock %}
+            </form>
+        {% endblock %}
     {% endblock %}
 </div>
 {% endblock %}
