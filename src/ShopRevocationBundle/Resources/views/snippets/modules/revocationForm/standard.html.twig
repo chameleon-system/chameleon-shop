@@ -215,8 +215,8 @@
                                 />
                                 <label for="revocationLegalConsent" class="custom-control-label align-middle">
                                     {{ 'chameleon_system_shop_revocation.form.legal_consent'|trans({
-                                        '%agbUrl%': '/AGB',
-                                        '%privacyUrl%': '/Datenschutz',
+                                        '%agbUrl%': agbPageUrl|default('#'),
+                                        '%privacyUrl%': privacyPageUrl|default('#'),
                                     })|raw }}
                                 </label>
                             </div>

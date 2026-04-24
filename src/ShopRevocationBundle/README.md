@@ -114,6 +114,11 @@ Recommended project setup steps:
 
 5. Create the project-side page and add the CMS module to it.
 
+6. Create the required system pages used by the legal-consent text in the form:
+
+   - `agb`
+   - `privacy`
+
 The bundle itself does not currently add its frontend views to a theme snippet chain automatically,
 because that depends on the target project theme.
 
@@ -121,6 +126,8 @@ After the technical setup, the project still has to integrate the feature:
 
 - create a reachable frontend page or route for the revocation form
 - place the CMS module on that page
+- create the system pages `agb` and `privacy`, because the form links to them in the
+  legal-consent text
 - expose the entry point, for example via a footer link
 - adjust the revocation notice and any order-confirmation wording in the project context
 - configure the mail recipients in the mail profiles `revocation_customer` and
