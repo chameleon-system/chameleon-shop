@@ -21,6 +21,8 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
 {
     private const MESSAGE_CONSUMER = 'shop_revocation_module';
     private const DEFAULT_SUBMIT_FUNCTION = 'submitRevocation';
+    private const AGB_SYSTEM_PAGE = 'agb';
+    private const PRIVACY_SYSTEM_PAGE = 'privacy';
     private const CONTACT_SYSTEM_PAGE = 'contactPage';
 
     private ExtranetUserProviderInterface $extranetUserProvider;
@@ -120,6 +122,8 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('loggedInOrderNumberFallbackHint', true === $showLoggedInOrderNumberFallback ? $this->translator->trans('chameleon_system_shop_revocation.hint.no_relevant_orders') : null);
         $oVisitor->SetMappedValue('invalidOrderHint', $this->invalidOrderHint);
         $oVisitor->SetMappedValue('contactPageUrl', $this->contactPageUrl);
+        $oVisitor->SetMappedValue('agbPageUrl', $this->getSystemPageUrl(self::AGB_SYSTEM_PAGE));
+        $oVisitor->SetMappedValue('privacyPageUrl', $this->getSystemPageUrl(self::PRIVACY_SYSTEM_PAGE));
         $oVisitor->SetMappedValue('showRequiredFieldsHint', true);
     }
 
@@ -168,7 +172,7 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
 
             if (true === $validationResult->shouldShowInvalidOrderHint()) {
                 $this->invalidOrderHint = $this->translator->trans('chameleon_system_shop_revocation.hint.invalid_order');
-                $this->contactPageUrl = $this->getContactPageUrl();
+                $this->contactPageUrl = $this->getSystemPageUrl(self::CONTACT_SYSTEM_PAGE);
             }
 
             return;
@@ -220,10 +224,10 @@ class ShopRevocationModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->methodCallAllowed[] = self::DEFAULT_SUBMIT_FUNCTION;
     }
 
-    private function getContactPageUrl(): ?string
+    private function getSystemPageUrl(string $systemPageName): ?string
     {
         try {
-            return $this->systemPageService->getLinkToSystemPageRelative(self::CONTACT_SYSTEM_PAGE);
+            return $this->systemPageService->getLinkToSystemPageRelative($systemPageName);
         } catch (\Throwable) {
             return null;
         }
