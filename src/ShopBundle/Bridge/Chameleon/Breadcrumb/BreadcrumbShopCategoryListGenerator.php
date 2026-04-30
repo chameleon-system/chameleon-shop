@@ -6,7 +6,7 @@ use ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Breadcrumb\AbstractBreadcr
 use ChameleonSystem\BreadcrumbBundle\Interfaces\BreadcrumbGeneratorUtilsInterface;
 use ChameleonSystem\BreadcrumbBundle\Library\DataModel\BreadcrumbDataModel;
 use ChameleonSystem\BreadcrumbBundle\Library\DataModel\BreadcrumbItemDataModel;
-use esono\pkgCmsCache\Cache;
+use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 final class BreadcrumbShopCategoryListGenerator extends AbstractBreadcrumbGenerator
@@ -18,7 +18,7 @@ final class BreadcrumbShopCategoryListGenerator extends AbstractBreadcrumbGenera
     public function __construct(
         private readonly BreadcrumbGeneratorUtilsInterface $breadcrumbGeneratorUtils,
         private readonly RequestStack $requestStack,
-        private readonly Cache $cache
+        private readonly CacheInterface $cache
     ) {
     }
 
