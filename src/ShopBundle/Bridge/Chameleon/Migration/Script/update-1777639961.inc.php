@@ -21,6 +21,32 @@ $tableList = [
         'shop_module_articlelist_orderby',
         'pkg_shop_listfilter_item',
         'shop_module_article_list_shop_article_group_mlt',
+    'pkg_image_hotspot',
+    'pkg_image_hotspot_item',
+    'pkg_shop_article_review_module_shop_article_review_configuration',
+    'shop_vat',
+    'shop_manufacturer',
+
+    'shop_order_step',
+    'shop_payment_method',
+    'shop_shipping_type',
+    'shop_payment_handler',
+    'shop_payment_handler_parameter',
+    'shop_payment_handler_group_config',
+    'shop_payment_handler_group',
+    'pkg_shop_credit_check_rule',
+    'shop_order_step',
+    'shop_order_step',
+
+        'shop_stock_message',
+        'shop_stock_message',
+        'shop_multi_warehouse',
+        'shop_stock_message_trigger',
+        'shop_article_shop_stock_message_mlt',
+        'shop_article_image_size',
+        'pkg_shop_currency',
+        'shop_shipping_group',
+
 ];
 
 foreach ($tableList as $tableName) {

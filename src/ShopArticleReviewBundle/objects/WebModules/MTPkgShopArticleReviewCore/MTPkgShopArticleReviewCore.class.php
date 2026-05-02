@@ -10,7 +10,9 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopArticleReviewBundle\AuthorDisplayConstants;
+use Doctrine\DBAL\Connection;
 
 /**
  * used to show and write article reviews.
@@ -157,17 +159,19 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
     protected function GetCommentTypeId()
     {
         if (false === $this->sPkgCommentTypeId) {
-            $sQuery = "SELECT * FROM `pkg_comment_type` WHERE `pkg_comment_type`.`class_name` = 'TPkgCommentTypePkgShopArticleReview'";
-            $oRes = MySqlLegacySupport::getInstance()->query($sQuery);
-            if (MySqlLegacySupport::getInstance()->num_rows($oRes) > 0) {
-                $aRow = MySqlLegacySupport::getInstance()->fetch_assoc($oRes);
-                $this->sPkgCommentTypeId = $aRow['id'];
-            } else {
-                $this->sPkgCommentTypeId = '';
+            $sQuery = "SELECT id FROM `pkg_comment_type` WHERE `pkg_comment_type`.`class_name` = 'TPkgCommentTypePkgShopArticleReview'";
+            $this->sPkgCommentTypeId = '';
+            $commentTypeId = $this->getDatabaseConnection()->fetchOne($sQuery);
+            if (false !== $commentTypeId) {
+                $this->sPkgCommentTypeId = $commentTypeId;
             }
         }
 
         return $this->sPkgCommentTypeId;
+    }
+    private function getDatabaseConnection(): Connection
+    {
+        return ServiceLocator::get('database_connection');
     }
 
     /**
@@ -594,7 +598,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      */
     protected function DeleteConnectedComments($oReviewItem)
     {
-        /* @var $connection \Doctrine\DBAL\Connection */
+        /* @var $connection Connection */
         $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         if ($this->AllowToCommentReview()) {
@@ -905,7 +909,7 @@ class MTPkgShopArticleReviewCore extends TUserCustomModelBase
      */
     protected function InsertOfReviewLocked()
     {
-        /* @var $connection \Doctrine\DBAL\Connection */
+        /* @var $connection Connection */
         $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
 
         $bReviewLocked = false;
