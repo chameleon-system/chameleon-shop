@@ -47,7 +47,6 @@ class TShopStockMessage extends TAdbShopStockMessage
      */
     public function GetShopStockMessage()
     {
-        $oShopStockMessageTrigger = null;
         $sMessage = $this->RenderStockMessage();
         if (is_object($this->GetArticle()) && property_exists($this->GetArticle(), 'dAmount') && is_null($this->aMessagesForQuantity)) {
             /*
@@ -182,10 +181,11 @@ class TShopStockMessage extends TAdbShopStockMessage
 
     /**
      * The method checks the ShopStockMessageTrigger for the current ShopStockMessage
-     * if there is a Match it will return this matching one in the other case
+     * if there is a Match, it will return this matching one in the other case
      * it will return a null object.
      *
      * @return TdbShopStockMessageTrigger|null
+     * @throws \Doctrine\DBAL\Exception
      */
     public function GetFieldShopStockMessageTrigger()
     {
@@ -193,22 +193,21 @@ class TShopStockMessage extends TAdbShopStockMessage
         $oShopStockMessageTrigger = $this->GetFromInternalCache('oActive_shop_stock_message_trigger_id');
 
         if (is_null($oShopStockMessageTrigger)) {
-            /** @var Doctrine\DBAL\Connection $connection */
-            $connection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
-
-            $quotedShopStockMessageId = $connection->quote($this->id);
-            $quotedAvailableStock = $connection->quote($this->GetArticle()->getAvailableStock());
-
             $sQuery = "SELECT *
                     FROM `shop_stock_message_trigger`
-                WHERE `shop_stock_message_id` = {$quotedShopStockMessageId}
-                    AND `amount` >= {$quotedAvailableStock}
+                WHERE `shop_stock_message_id` = :shopStockMessageId
+                    AND `amount` >= :availableStock
                 ORDER BY `amount` ASC
                 LIMIT 1
                 ";
-
-            $result = $connection->executeQuery($sQuery);
-            $row = $result->fetchAssociative();
+            $row = $this->getDatabaseConnection()->fetchAssociative(
+                $sQuery,
+                [
+                    'shopStockMessageId' => $this->id,
+                    'availableStock' => $this->GetArticle()->getAvailableStock(),
+                ],
+                ['availableStock' => PDO::PARAM_INT]
+            );
 
             $oShopStockMessageTrigger = TdbShopStockMessageTrigger::GetNewInstance();
             /* @var $oShopStockMessageTrigger TdbShopStockMessageTrigger */
