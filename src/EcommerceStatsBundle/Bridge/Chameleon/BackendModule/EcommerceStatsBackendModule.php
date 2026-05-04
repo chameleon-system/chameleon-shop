@@ -32,7 +32,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     public function __construct(
         private readonly StatsTableServiceInterface $stats,
         private readonly TranslatorInterface $translator,
-        private readonly PortalAndLanguageAwareRouterInterface $frontendRouter,
+        private readonly PortalAndLanguageAwareRouterInterface $router,
         private readonly StatsCurrencyServiceInterface $statsCurrencyService,
         private readonly SecurityHelperAccess $securityHelperAccess,
         private readonly ShopServiceInterface $shopService,
@@ -86,11 +86,11 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         $oVisitor->SetMappedValueFromArray([
-            'csvDownloadUrl' => $this->frontendRouter->generateWithPrefixes(
+            'csvDownloadUrl' => $this->router->generateWithPrefixes(
                 'chameleon_system_ecommerce_stats.export_csv.stats',
                 $urlParameters
             ),
-            'topSellerDownloadUrl' => $this->frontendRouter->generateWithPrefixes(
+            'topSellerDownloadUrl' => $this->router->generateWithPrefixes(
                 'chameleon_system_ecommerce_stats.export_csv.topsellers',
                 $urlParameters
             ),
