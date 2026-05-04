@@ -24,7 +24,7 @@
             shared="false"
             autowire="true">
             <argument key="$translator" type="service" id="chameleon_system_core.translator"/>
-            <argument key="$frontendRouter" type="service" id="chameleon_system_core.router.chameleon_frontend"/>
+            <argument key="$router" type="service" id="chameleon_system_core.router.chameleon_frontend"/>
             <argument key="$statsCurrencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service"/>
             <argument key="$securityHelperAccess" type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
             <argument key="$shopService" type="service" id="chameleon_system_shop.shop_service"/>
