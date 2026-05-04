@@ -7,20 +7,19 @@
 
 TCMSLogChange::requireBundleUpdates('ChameleonSystemCmsCacheBundle', 1777558170);
 
-
 $tableList = [
-        'shop',
-        'shop_cms_portal_mlt',
-        'pkg_shop_currency',
-        'shop_attribute',
-        'shop_category',
-        'shop_article_image_size',
-        'shop_stock_message_trigger',
-        'shop_module_article_list',
-        'shop_module_article_list_filter',
-        'shop_module_articlelist_orderby',
-        'pkg_shop_listfilter_item',
-        'shop_module_article_list_shop_article_group_mlt',
+    'shop',
+    'shop_cms_portal_mlt',
+    'pkg_shop_currency',
+    'shop_attribute',
+    'shop_category',
+    'shop_article_image_size',
+    'shop_stock_message_trigger',
+    'shop_module_article_list',
+    'shop_module_article_list_filter',
+    'shop_module_articlelist_orderby',
+    'pkg_shop_listfilter_item',
+    'shop_module_article_list_shop_article_group_mlt',
     'pkg_image_hotspot',
     'pkg_image_hotspot_item',
     'pkg_shop_article_review_module_shop_article_review_configuration',
@@ -38,22 +37,21 @@ $tableList = [
     'shop_order_step',
     'shop_order_step',
 
-        'shop_stock_message',
-        'shop_stock_message',
-        'shop_multi_warehouse',
-        'shop_stock_message_trigger',
-        'shop_article_shop_stock_message_mlt',
-        'shop_article_image_size',
-        'pkg_shop_currency',
-        'shop_shipping_group',
-
+    'shop_stock_message',
+    'shop_stock_message',
+    'shop_multi_warehouse',
+    'shop_stock_message_trigger',
+    'shop_article_shop_stock_message_mlt',
+    'shop_article_image_size',
+    'pkg_shop_currency',
+    'shop_shipping_group',
 ];
 
 foreach ($tableList as $tableName) {
     $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'de')
-            ->setFields([
-                    'enable_query_cache' => '1', // prev.: 'new_field'
-            ])->setWhereEquals(['name'=>$tableName]);
-    ;
+        ->setFields([
+            'enable_query_cache' => '1', // prev.: 'new_field'
+        ])->setWhereEquals(['name' => $tableName]);
+
     TCMSLogChange::update(__LINE__, $data);
 }
