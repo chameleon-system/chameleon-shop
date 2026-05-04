@@ -13,8 +13,7 @@
         <service
             id="chameleon_system_ecommerce_stats.controller.csv_export"
             class="ChameleonSystem\EcommerceStatsBundle\Controllers\CsvExportController"
-            autowire="true"
-        >
+            autowire="true">
             <tag name="controller.service_arguments"/>
         </service>
 
@@ -23,10 +22,9 @@
             id="chameleon_system_ecommerce_stats.backend_module.ecommerce_stats"
             class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule\EcommerceStatsBackendModule"
             shared="false"
-            autowire="true"
-        >
+            autowire="true">
             <argument key="$translator" type="service" id="chameleon_system_core.translator"/>
-            <argument key="$urlGenerator" type="service" id="router"/>
+            <argument key="$frontendRouter" type="service" id="chameleon_system_core.router.chameleon_frontend"/>
             <argument key="$statsCurrencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service"/>
             <argument key="$securityHelperAccess" type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
             <argument key="$shopService" type="service" id="chameleon_system_shop.shop_service"/>
@@ -37,13 +35,12 @@
         <!-- Provider -->
         <service
             id="ChameleonSystem\EcommerceStatsBundle\StatsProvider\StatsProviderCollection"
-            autowire="true"
-        />
+            autowire="true"/>
+
         <service
             id="chameleon_system_ecommerce_stats.stats_provider.pkg_shop_statistics"
             class="ChameleonSystem\EcommerceStatsBundle\StatsProvider\PkgShopStatisticsGroupProvider"
-            autowire="true"
-        >
+            autowire="true">
             <argument key="$translator" type="service" id="chameleon_system_core.translator"/>
             <argument key="$currencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service"/>
             <argument key="$securityHelperAccess" type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
@@ -54,25 +51,21 @@
         <service
             id="chameleon_system_ecommerce_stats.ecommerce_stats_table"
             class="ChameleonSystem\EcommerceStatsBundle\Service\StatsTableService"
-            autowire="true"
-        />
+            autowire="true"/>
         <service
             id="chameleon_system_ecommerce_stats.csv_export"
-            class="ChameleonSystem\EcommerceStatsBundle\Service\CsvExportService"
-        >
+            class="ChameleonSystem\EcommerceStatsBundle\Service\CsvExportService">
             <argument type="service" id="chameleon_system_core.translator"/>
         </service>
         <service
             id="chameleon_system_ecommerce_stats.top_seller"
-            class="ChameleonSystem\EcommerceStatsBundle\Service\TopSellerService"
-        >
+            class="ChameleonSystem\EcommerceStatsBundle\Service\TopSellerService">
             <argument type="service" id="database_connection"/>
         </service>
 
         <service
             class="ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\Twig\FormatterTwigExtension"
-            id="chameleon_system_ecommerce_stats.twig.formatter"
-        >
+            id="chameleon_system_ecommerce_stats.twig.formatter">
             <tag name="twig.extension"/>
         </service>
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule;
 
+use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtil;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatisticEvaluationRequestDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
@@ -20,7 +21,6 @@ use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterfa
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
@@ -32,7 +32,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     public function __construct(
         private readonly StatsTableServiceInterface $stats,
         private readonly TranslatorInterface $translator,
-        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly PortalAndLanguageAwareRouterInterface $frontendRouter,
         private readonly StatsCurrencyServiceInterface $statsCurrencyService,
         private readonly SecurityHelperAccess $securityHelperAccess,
         private readonly ShopServiceInterface $shopService,
@@ -44,8 +44,11 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     /**
      * {@inheritDoc}
      */
-    public function Accept(\IMapperVisitorRestricted $oVisitor, $bCachingEnabled, \IMapperCacheTriggerRestricted $oCacheTriggerManager): void
-    {
+    public function Accept(
+        \IMapperVisitorRestricted $oVisitor,
+        $bCachingEnabled,
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
+    ): void {
         if (false === $this->securityHelperAccess->isGranted(self::CMS_RIGHT_ECOMMERCE_STATS_SHOW_MODULE)) {
             $oVisitor->SetMappedValue('accessDenied', true);
 
@@ -69,7 +72,11 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $urlParameters = array_merge($urlParameters, $this->getCustomFilterUrlParameters($customFilters));
 
         $shopStatisticGroupOptions = array_merge(
-            [self::ALL_STATS_FILTER_NAME => $this->translator->trans('chameleon_system_ecommerce_stats.form_all_stats_label')],
+            [
+                self::ALL_STATS_FILTER_NAME => $this->translator->trans(
+                    'chameleon_system_ecommerce_stats.form_all_stats_label'
+                ),
+            ],
             $this->getStatisticOptions()
         );
 
@@ -79,11 +86,11 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         $oVisitor->SetMappedValueFromArray([
-            'csvDownloadUrl' => $this->urlGenerator->generate(
+            'csvDownloadUrl' => $this->frontendRouter->generateWithPrefixes(
                 'chameleon_system_ecommerce_stats.export_csv.stats',
                 $urlParameters
             ),
-            'topSellerDownloadUrl' => $this->urlGenerator->generate(
+            'topSellerDownloadUrl' => $this->frontendRouter->generateWithPrefixes(
                 'chameleon_system_ecommerce_stats.export_csv.topsellers',
                 $urlParameters
             ),
@@ -112,17 +119,44 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         ]);
     }
 
+    /**
+     * @return string[]
+     * @throws \ErrorException
+     */
+    public function GetHtmlHeadIncludes(): array
+    {
+        $includes = parent::GetHtmlHeadIncludes();
+
+        $jsPath = $this->global->GetStaticURL(
+            '/bundles/chameleonsystemecommercestats/ecommerce_stats/js/ecommerce-stats.js',
+            false
+        );
+        $includes[] = sprintf('<script type="text/javascript" src="%s"></script>', $jsPath);
+        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart.4.4.7.js"></script>';
+        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart-init.4.4.7.js"></script>';
+        $cssPath = \TGlobal::GetStaticURL(
+            '/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats.css'
+        );
+        $printCssPath = \TGlobal::GetStaticURL(
+            '/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats-print.css'
+        );
+        $includes[] = sprintf('<link href="%s" rel="stylesheet" type="text/css">', $cssPath);
+        $includes[] = sprintf('<link href="%s" rel="stylesheet" type="text/css" media="print">', $printCssPath);
+
+        return $includes;
+    }
+
     protected function createStatisticEvaluationRequest(): StatisticEvaluationRequestDataModel
     {
         $startDate = \DateTime::createFromFormat(
             'Y-m-d',
-            (string) $this->inputFilterUtil->getFilteredInput('startDate', date('Y-m-01'))
+            (string)$this->inputFilterUtil->getFilteredInput('startDate', date('Y-m-01'))
         );
         $startDate->setTime(0, 0, 0);
 
         $endDate = \DateTime::createFromFormat(
             'Y-m-d',
-            (string) $this->inputFilterUtil->getFilteredInput('endDate', date('Y-m-d'))
+            (string)$this->inputFilterUtil->getFilteredInput('endDate', date('Y-m-d'))
         );
         $endDate->setTime(23, 59, 59);
 
@@ -155,57 +189,6 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             ),
             // @TODO handle custom filter extension
         );
-    }
-
-    private function getStatisticOptions(): array
-    {
-        $groupNames = [];
-        $groupList = \TdbPkgShopStatisticGroupList::GetList();
-        while ($group = $groupList->Next()) {
-            $groupNames[$group->fieldSystemName] = $group->fieldName;
-        }
-
-        return $groupNames;
-    }
-
-    /**
-     * @return array<string, string> id => name
-     */
-    private function getActivePortalOptions(): array
-    {
-        $portalIdList = [];
-        $portalList = \TdbCmsPortalList::GetList();
-        $portalList->AddFilterString("`deactive_portal` = '0'");
-
-        while ($portal = $portalList->Next()) {
-            $portalIdList[(string) $portal->id] = (string) $portal->GetName();
-        }
-
-        return $portalIdList;
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    private function getViewList(): array
-    {
-        return [
-            'html.table' => $this->translator->trans('chameleon_system_ecommerce_stats.form_output_type_table'),
-            'html.barchart' => $this->translator->trans('chameleon_system_ecommerce_stats.form_output_type_chart'),
-        ];
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    private function getDateGroupOptions(): array
-    {
-        return [
-            StatsProviderInterface::DATE_GROUP_YEAR => $this->translator->trans('chameleon_system_ecommerce_stats.date_year'),
-            StatsProviderInterface::DATE_GROUP_MONTH => $this->translator->trans('chameleon_system_ecommerce_stats.date_month'),
-            StatsProviderInterface::DATE_GROUP_WEEK => $this->translator->trans('chameleon_system_ecommerce_stats.date_week'),
-            StatsProviderInterface::DATE_GROUP_DAY => $this->translator->trans('chameleon_system_ecommerce_stats.date_day'),
-        ];
     }
 
     /**
@@ -249,32 +232,59 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     protected function getCustomFilterUrlParameters(array $customFilters): array
     {
-        $urlParameters = [];
-        foreach ($customFilters as $name => $value) {
-            if (null === $value || is_scalar($value)) {
-                $urlParameters[$name] = $value;
-            }
+        return array_filter($customFilters, function ($value) {
+            return null === $value || is_scalar($value);
+        });
+    }
+
+    private function getStatisticOptions(): array
+    {
+        $groupNames = [];
+        $groupList = \TdbPkgShopStatisticGroupList::GetList();
+        while ($group = $groupList->Next()) {
+            $groupNames[$group->fieldSystemName] = $group->fieldName;
         }
 
-        return $urlParameters;
+        return $groupNames;
     }
 
     /**
-     * @return string[]
+     * @return array<string, string> id => name
      */
-    public function GetHtmlHeadIncludes(): array
+    private function getActivePortalOptions(): array
     {
-        $includes = parent::GetHtmlHeadIncludes();
+        $portalIdList = [];
+        $portalList = \TdbCmsPortalList::GetList();
+        $portalList->AddFilterString("`deactive_portal` = '0'");
 
-        $jsPath = $this->global->GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/js/ecommerce-stats.js', false);
-        $includes[] = sprintf('<script type="text/javascript" src="%s"></script>', $jsPath);
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart.4.4.7.js"></script>';
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart-init.4.4.7.js"></script>';
-        $cssPath = \TGlobal::GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats.css');
-        $printCssPath = \TGlobal::GetStaticURL('/bundles/chameleonsystemecommercestats/ecommerce_stats/css/ecommerce-stats-print.css');
-        $includes[] = sprintf('<link href="%s" rel="stylesheet" type="text/css">', $cssPath);
-        $includes[] = sprintf('<link href="%s" rel="stylesheet" type="text/css" media="print">', $printCssPath);
+        while ($portal = $portalList->Next()) {
+            $portalIdList[$portal->id] = (string)$portal->GetName();
+        }
 
-        return $includes;
+        return $portalIdList;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function getViewList(): array
+    {
+        return [
+            'html.table' => $this->translator->trans('chameleon_system_ecommerce_stats.form_output_type_table'),
+            'html.barchart' => $this->translator->trans('chameleon_system_ecommerce_stats.form_output_type_chart'),
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function getDateGroupOptions(): array
+    {
+        return [
+            StatsProviderInterface::DATE_GROUP_YEAR => $this->translator->trans('chameleon_system_ecommerce_stats.date_year'),
+            StatsProviderInterface::DATE_GROUP_MONTH => $this->translator->trans('chameleon_system_ecommerce_stats.date_month'),
+            StatsProviderInterface::DATE_GROUP_WEEK => $this->translator->trans('chameleon_system_ecommerce_stats.date_week'),
+            StatsProviderInterface::DATE_GROUP_DAY => $this->translator->trans('chameleon_system_ecommerce_stats.date_day'),
+        ];
     }
 }
