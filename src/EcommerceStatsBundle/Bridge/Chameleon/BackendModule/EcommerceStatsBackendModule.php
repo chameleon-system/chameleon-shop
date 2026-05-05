@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\EcommerceStatsBundle\Bridge\Chameleon\BackendModule;
 
-use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtil;
 use ChameleonSystem\EcommerceStatsBundle\Library\DataModel\StatisticEvaluationRequestDataModel;
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsCurrencyServiceInterface;
@@ -21,6 +20,8 @@ use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsProviderInterfa
 use ChameleonSystem\EcommerceStatsBundle\Library\Interfaces\StatsTableServiceInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
@@ -32,11 +33,12 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     public function __construct(
         private readonly StatsTableServiceInterface $stats,
         private readonly TranslatorInterface $translator,
-        private readonly PortalAndLanguageAwareRouterInterface $router,
+        private readonly UrlGeneratorInterface $urlGenerator,
         private readonly StatsCurrencyServiceInterface $statsCurrencyService,
         private readonly SecurityHelperAccess $securityHelperAccess,
         private readonly ShopServiceInterface $shopService,
-        private readonly InputFilterUtil $inputFilterUtil
+        private readonly InputFilterUtil $inputFilterUtil,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -70,6 +72,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             'statsGroup' => $statsEvaluationRequest->getSelectedStatsGroupSystemName(),
         ];
         $urlParameters = array_merge($urlParameters, $this->getCustomFilterUrlParameters($customFilters));
+        $downloadUrls = $this->getDownloadUrls($urlParameters);
 
         $shopStatisticGroupOptions = array_merge(
             [
@@ -86,14 +89,8 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         $oVisitor->SetMappedValueFromArray([
-            'csvDownloadUrl' => $this->router->generateWithPrefixes(
-                'chameleon_system_ecommerce_stats.export_csv.stats',
-                $urlParameters
-            ),
-            'topSellerDownloadUrl' => $this->router->generateWithPrefixes(
-                'chameleon_system_ecommerce_stats.export_csv.topsellers',
-                $urlParameters
-            ),
+            'csvDownloadUrl' => $downloadUrls['stats'] ?? null,
+            'topSellerDownloadUrl' => $downloadUrls['topSellers'] ?? null,
             'activeViewName' => $viewName,
             'viewOptions' => $this->getViewList(),
             'dateGroupOptions' => $this->getDateGroupOptions(),
@@ -216,7 +213,7 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * Override in project-specific subclasses to add custom filter values to the stats request.
+     * Override in project-specific subclasses to add custom filter values to the stat request.
      *
      * @return array<string, mixed>
      */
@@ -286,5 +283,42 @@ class EcommerceStatsBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             StatsProviderInterface::DATE_GROUP_WEEK => $this->translator->trans('chameleon_system_ecommerce_stats.date_week'),
             StatsProviderInterface::DATE_GROUP_DAY => $this->translator->trans('chameleon_system_ecommerce_stats.date_day'),
         ];
+    }
+
+    /**
+     * @internal
+     * The related routes can only be used to map the request to the respective
+     * controller action, when the routing config has been linked in the project
+     * specific routing setup (see README). If this linking has not been made,
+     * the routes cannot be created, resulting in an exception, which is logged
+     * along with the information about the potential missing link.
+     * So if the linking has not been made, the module should work in general,
+     * but the download URLs will just be the initial fallback values ("#").
+     *
+     * @see ../../../Resources/config/routing.yml
+     */
+    private function getDownloadUrls(array $urlParameters): array
+    {
+        $downloadURLs = [
+            'stats' => '#',
+            'topSellers' => '#',
+        ];
+
+        try {
+            $downloadURLs['stats'] = $this->urlGenerator->generate('chameleon_system_ecommerce_stats.export_csv.stats', $urlParameters);
+            $downloadURLs['topSellers'] = $this->urlGenerator->generate('chameleon_system_ecommerce_stats.export_csv.topsellers', $urlParameters);
+        } catch (\Exception $e) {
+            $this->logger->error(
+                'Could not generate download URLs. Check if the required route config has been linked to the active project (see bundle README): {errorMessage}',
+                [
+                    'errorMessage' => $e->getMessage(),
+                    'exception' => $e,
+                    'urlParameters' => $urlParameters,
+                    'moduleConfig' => $this->aModuleConfig,
+                ]
+            );
+        }
+
+        return $downloadURLs;
     }
 }

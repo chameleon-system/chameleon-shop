@@ -38,18 +38,21 @@ chameleon_system_ecommerce_stats:
     type: yaml
 ```
 
+> The CSV export endpoints are used from the CMS backend under `/cms/...`. The `pkg_cms_routing` entry alone is not
+> enough for this use case, because it adds frontend portal host requirements. Therefore, the Symfony routing import
+> shown above is required as well.
+
 Clear cache:
 ```bash
 php bin/console cache:clear
 ```
 
-
 ## Extending
 
-There are currently 2 ways of adding statistics to the bundles output:
+There are currently two ways of adding statistics to the bundle output:
 
 ### 1. Implementing a custom `StatsProvider`
-In order to add new stats through a StatsProvider, add a service that implements `StatsProviderInterface` and 
+To add new stats through a StatsProvider, add a service that implements `StatsProviderInterface` and
 tag it with `chameleon_system_ecommerce_stats.stats_provider`.
 
 ```php

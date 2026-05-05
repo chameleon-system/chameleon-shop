@@ -24,11 +24,12 @@
             shared="false"
             autowire="true">
             <argument key="$translator" type="service" id="chameleon_system_core.translator"/>
-            <argument key="$router" type="service" id="chameleon_system_core.router.chameleon_frontend"/>
+            <argument key="$urlGenerator" type="service" id="router"/>
             <argument key="$statsCurrencyService" type="service" id="chameleon_system_ecommerce_stats.service.stats_currency_service"/>
             <argument key="$securityHelperAccess" type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
             <argument key="$shopService" type="service" id="chameleon_system_shop.shop_service"/>
             <argument key="$inputFilterUtil" type="service" id="chameleon_system_core.util.input_filter"/>
+            <argument key="$logger" type="service" id="logger"/>
             <tag name="chameleon_system.module"/>
         </service>
 
