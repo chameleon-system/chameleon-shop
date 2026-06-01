@@ -388,6 +388,28 @@ class TShopSearchIndexer extends TShopSearchIndexerAutoParent
 
         $logger->info('copy index tables start');
         $aIndexTableNames = TdbShopSearchIndexer::GetAllIndexTableNames();
+        $missingTmpTables = [];
+        $existingTmpTableCount = 0;
+        foreach ($aIndexTableNames as $sTableName => $iLength) {
+            $sTmpTableName = '_tmp'.$sTableName;
+            if (TCMSRecord::TableExists($sTmpTableName)) {
+                ++$existingTmpTableCount;
+                continue;
+            }
+            $missingTmpTables[] = $sTmpTableName;
+        }
+        if (false === $this->bRegenerateCompleteIndex) {
+            if (0 === $existingTmpTableCount) {
+                $logger->info('skip copy index tables: no temporary index tables found for partial index run');
+
+                return;
+            }
+            if (count($missingTmpTables) > 0) {
+                $logger->warning('skip copy index tables: partial index run has incomplete temporary index table set', ['missing_tables' => $missingTmpTables]);
+
+                return;
+            }
+        }
         foreach ($aIndexTableNames as $sTableName => $iLength) {
             $logger->info('Load data for table '.$sTableName);
             $sTmpTableName = '_tmp'.$sTableName;
