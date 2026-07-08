@@ -28,6 +28,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class Module extends \MTPkgViewRendererAbstractModuleMapper
 {
+    use ArticleListStateCacheControlTrait;
+
     /**
      * @var StateFactoryInterface
      */
@@ -183,6 +185,7 @@ class Module extends \MTPkgViewRendererAbstractModuleMapper
         $stateData = $this->getStateDataFromRequest($this->getCurrentRequest());
         $stateData = $this->makePageSizeValid($stateData);
         $this->state = $this->stateFactory->createState($stateData);
+        $this->makeSortValid();
     }
 
     private function makePageSizeValid(array $stateData): array
@@ -207,6 +210,30 @@ class Module extends \MTPkgViewRendererAbstractModuleMapper
     {
         return $requestedPageSize === $this->configuration->getDefaultPageSize()
             || in_array($requestedPageSize, $this->validPageSizes);
+    }
+
+    private function makeSortValid(): void
+    {
+        $sortId = $this->state->getState(StateInterface::SORT);
+        if (null === $sortId || $this->sortIdIsValid($sortId)) {
+            return;
+        }
+
+        $this->state->setState(StateInterface::SORT, $this->configuration->getDefaultSortId());
+    }
+
+    /**
+     * @param string $sortId
+     *
+     * @return bool
+     */
+    private function sortIdIsValid(string $sortId): bool
+    {
+        if ($sortId === $this->configuration->getDefaultSortId()) {
+            return true;
+        }
+
+        return true === in_array($sortId, array_column($this->getSortList(), 'id'), true);
     }
 
     /**
@@ -456,6 +483,10 @@ class Module extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         if (false === $this->resultFactory->_AllowCache($this->configuration)) {
+            return false;
+        }
+
+        if (false === $this->articleListStateAllowsCache($this->state)) {
             return false;
         }
 

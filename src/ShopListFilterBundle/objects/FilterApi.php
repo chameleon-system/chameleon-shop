@@ -16,6 +16,7 @@ use ChameleonSystem\pkgshoplistfilter\DatabaseAccessLayer\DbAdapter;
 use ChameleonSystem\pkgshoplistfilter\Interfaces\FilterApiInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\ConfigurationInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\DbAdapterInterface;
+use ChameleonSystem\ShopBundle\objects\ArticleList\ArticleListStateCacheControlTrait;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultFactoryInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateFactoryInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
@@ -25,6 +26,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class FilterApi implements FilterApiInterface
 {
+    use ArticleListStateCacheControlTrait;
+
     private DbAdapter $dbAdapter;
     private DbAdapterInterface $listDbAdapter;
     private StateFactoryInterface $stateFactory;
@@ -140,7 +143,11 @@ class FilterApi implements FilterApiInterface
      */
     public function allowCache()
     {
-        return $this->resultFactory->_AllowCache($this->getListConfiguration());
+        if (false === $this->resultFactory->_AllowCache($this->getListConfiguration())) {
+            return false;
+        }
+
+        return $this->articleListStateAllowsCache($this->getArticleListState());
     }
 
     /**

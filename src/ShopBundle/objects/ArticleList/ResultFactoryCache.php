@@ -24,6 +24,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ResultFactoryCache implements ResultFactoryInterface
 {
+    use ArticleListStateCacheControlTrait;
+
     /**
      * @var ResultFactoryInterface
      */
@@ -66,7 +68,7 @@ class ResultFactoryCache implements ResultFactoryInterface
      */
     public function createResult(ConfigurationInterface $moduleConfiguration, StateInterface $state)
     {
-        if (false === $this->_AllowCache($moduleConfiguration)) {
+        if (false === $this->_AllowCache($moduleConfiguration) || false === $this->articleListStateAllowsCache($state)) {
             return $this->resultFactory->createResult($moduleConfiguration, $state);
         }
         $key = $this->getKey($moduleConfiguration, $state);
