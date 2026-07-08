@@ -26,6 +26,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ResultFactory implements ResultFactoryInterface
 {
+    private const MAX_CACHEABLE_PAGE = 10;
+
     /**
      * @var DbAdapterInterface
      */
@@ -151,9 +153,25 @@ class ResultFactory implements ResultFactoryInterface
         return $this->filterCache[$filterId];
     }
 
-    public function _AllowCache(ConfigurationInterface $moduleConfiguration)
+    public function _AllowCache(ConfigurationInterface $moduleConfiguration, ?StateInterface $state = null)
     {
-        return $this->getFilter($moduleConfiguration)->_AllowCache();
+        if (false === $this->getFilter($moduleConfiguration)->_AllowCache()) {
+            return false;
+        }
+
+        if (null === $state) {
+            return true;
+        }
+
+        if ((int) $state->getState(StateInterface::PAGE, 0) > self::MAX_CACHEABLE_PAGE) {
+            return false;
+        }
+
+        if ([] !== $state->getState(StateInterface::QUERY, [])) {
+            return false;
+        }
+
+        return true;
     }
 
     public function _GetCacheParameters(ConfigurationInterface $moduleConfiguration, StateInterface $state)

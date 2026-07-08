@@ -25,7 +25,7 @@ interface ResultFactoryInterface
     /**
      * @return bool
      */
-    public function _AllowCache(ConfigurationInterface $moduleConfiguration);
+    public function _AllowCache(ConfigurationInterface $moduleConfiguration, ?StateInterface $state = null);
 
     /**
      * @return array

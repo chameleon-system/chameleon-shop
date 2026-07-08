@@ -140,7 +140,7 @@ class FilterApi implements FilterApiInterface
      */
     public function allowCache()
     {
-        return $this->resultFactory->_AllowCache($this->getListConfiguration());
+        return $this->resultFactory->_AllowCache($this->getListConfiguration(), $this->getArticleListState());
     }
 
     /**

@@ -66,7 +66,7 @@ class ResultFactoryCache implements ResultFactoryInterface
      */
     public function createResult(ConfigurationInterface $moduleConfiguration, StateInterface $state)
     {
-        if (false === $this->_AllowCache($moduleConfiguration)) {
+        if (false === $this->_AllowCache($moduleConfiguration, $state)) {
             return $this->resultFactory->createResult($moduleConfiguration, $state);
         }
         $key = $this->getKey($moduleConfiguration, $state);
@@ -106,9 +106,9 @@ class ResultFactoryCache implements ResultFactoryInterface
         return $this->_GetCacheTableInfos($moduleConfiguration);
     }
 
-    public function _AllowCache(ConfigurationInterface $moduleConfiguration)
+    public function _AllowCache(ConfigurationInterface $moduleConfiguration, ?StateInterface $state = null)
     {
-        return $this->resultFactory->_AllowCache($moduleConfiguration);
+        return $this->resultFactory->_AllowCache($moduleConfiguration, $state);
     }
 
     public function _GetCacheParameters(ConfigurationInterface $moduleConfiguration, StateInterface $state)
