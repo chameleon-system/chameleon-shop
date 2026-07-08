@@ -185,6 +185,7 @@ class Module extends \MTPkgViewRendererAbstractModuleMapper
         $stateData = $this->getStateDataFromRequest($this->getCurrentRequest());
         $stateData = $this->makePageSizeValid($stateData);
         $this->state = $this->stateFactory->createState($stateData);
+        $this->makeSortValid();
     }
 
     private function makePageSizeValid(array $stateData): array
@@ -209,6 +210,30 @@ class Module extends \MTPkgViewRendererAbstractModuleMapper
     {
         return $requestedPageSize === $this->configuration->getDefaultPageSize()
             || in_array($requestedPageSize, $this->validPageSizes);
+    }
+
+    private function makeSortValid(): void
+    {
+        $sortId = $this->state->getState(StateInterface::SORT);
+        if (null === $sortId || $this->sortIdIsValid($sortId)) {
+            return;
+        }
+
+        $this->state->setState(StateInterface::SORT, $this->configuration->getDefaultSortId());
+    }
+
+    /**
+     * @param string $sortId
+     *
+     * @return bool
+     */
+    private function sortIdIsValid($sortId)
+    {
+        if ($sortId === $this->configuration->getDefaultSortId()) {
+            return true;
+        }
+
+        return in_array($sortId, array_column($this->getSortList(), 'id'), true);
     }
 
     /**
