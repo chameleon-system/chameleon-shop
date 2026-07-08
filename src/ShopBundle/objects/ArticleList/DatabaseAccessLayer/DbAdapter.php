@@ -91,21 +91,12 @@ class DbAdapter implements DbAdapterInterface
      */
     public function getSortListForConfiguration($configurationId)
     { // shop_module_article_list_shop_module_articlelist_orderby_mlt
-        $sortList = [];
-        $query = 'SELECT `shop_module_articlelist_orderby`.*
+        $query = 'SELECT `shop_module_articlelist_orderby`.`id` AS id, `shop_module_articlelist_orderby`.`name_public` AS name
                     FROM `shop_module_articlelist_orderby`
               INNER JOIN `shop_module_article_list_shop_module_articlelist_orderby_mlt` ON `shop_module_articlelist_orderby`.`id` = `shop_module_article_list_shop_module_articlelist_orderby_mlt`.`target_id`
-                   WHERE `shop_module_article_list_shop_module_articlelist_orderby_mlt`.`source_id` = '.$this->getDatabaseConnection()->quote($configurationId).'
+                   WHERE `shop_module_article_list_shop_module_articlelist_orderby_mlt`.`source_id` = :configurationId
                 ORDER BY `shop_module_articlelist_orderby`.`position` ASC
         ';
-        $list = \TdbShopModuleArticlelistOrderbyList::GetList($query);
-        while ($listItem = $list->Next()) {
-            $sortList[] = [
-                'id' => $listItem->id,
-                'name' => $listItem->fieldNamePublic,
-            ];
-        }
-
-        return $sortList;
+        return $this->databaseConnection->fetchAllAssociative($query, ['configurationId' => $configurationId]);
     }
 }
