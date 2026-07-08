@@ -17,14 +17,15 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Event\ArticleListFilterExecut
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\FilterFactoryInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultDataInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultFactoryInterface;
-use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateAwareResultFactoryInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 use ChameleonSystem\ShopBundle\ShopEvents;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ResultFactoryCache implements ResultFactoryInterface, StateAwareResultFactoryInterface
+class ResultFactoryCache implements ResultFactoryInterface
 {
+    use ArticleListStateCacheControlTrait;
+
     /**
      * @var ResultFactoryInterface
      */
@@ -67,7 +68,7 @@ class ResultFactoryCache implements ResultFactoryInterface, StateAwareResultFact
      */
     public function createResult(ConfigurationInterface $moduleConfiguration, StateInterface $state)
     {
-        if (false === $this->allowCacheForState($moduleConfiguration, $state)) {
+        if (false === $this->_AllowCache($moduleConfiguration) || false === $this->articleListStateAllowsCache($state)) {
             return $this->resultFactory->createResult($moduleConfiguration, $state);
         }
         $key = $this->getKey($moduleConfiguration, $state);
@@ -109,15 +110,6 @@ class ResultFactoryCache implements ResultFactoryInterface, StateAwareResultFact
 
     public function _AllowCache(ConfigurationInterface $moduleConfiguration)
     {
-        return $this->resultFactory->_AllowCache($moduleConfiguration);
-    }
-
-    public function allowCacheForState(ConfigurationInterface $moduleConfiguration, StateInterface $state)
-    {
-        if ($this->resultFactory instanceof StateAwareResultFactoryInterface) {
-            return $this->resultFactory->allowCacheForState($moduleConfiguration, $state);
-        }
-
         return $this->resultFactory->_AllowCache($moduleConfiguration);
     }
 
