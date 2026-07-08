@@ -19,12 +19,13 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Exceptions\InvalidPageNumberE
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\FilterFactoryInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultDataInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultFactoryInterface;
+use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateAwareResultFactoryInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\ResultModifier\Interfaces\ResultModifierInterface;
 use ChameleonSystem\ShopBundle\ShopEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ResultFactory implements ResultFactoryInterface
+class ResultFactory implements ResultFactoryInterface, StateAwareResultFactoryInterface
 {
     private const MAX_CACHEABLE_PAGE = 10;
 
@@ -153,14 +154,15 @@ class ResultFactory implements ResultFactoryInterface
         return $this->filterCache[$filterId];
     }
 
-    public function _AllowCache(ConfigurationInterface $moduleConfiguration, ?StateInterface $state = null)
+    public function _AllowCache(ConfigurationInterface $moduleConfiguration)
     {
-        if (false === $this->getFilter($moduleConfiguration)->_AllowCache()) {
-            return false;
-        }
+        return $this->getFilter($moduleConfiguration)->_AllowCache();
+    }
 
-        if (null === $state) {
-            return true;
+    public function allowCacheForState(ConfigurationInterface $moduleConfiguration, StateInterface $state)
+    {
+        if (false === $this->_AllowCache($moduleConfiguration)) {
+            return false;
         }
 
         if ((int) $state->getState(StateInterface::PAGE, 0) > self::MAX_CACHEABLE_PAGE) {

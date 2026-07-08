@@ -18,6 +18,7 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interface
 use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interfaces\DbAdapterInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultFactoryInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateFactoryInterface;
+use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateAwareResultFactoryInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\StateRequestExtractor\Interfaces\StateRequestExtractorCollectionInterface;
 use esono\pkgCmsCache\CacheInterface;
@@ -140,7 +141,11 @@ class FilterApi implements FilterApiInterface
      */
     public function allowCache()
     {
-        return $this->resultFactory->_AllowCache($this->getListConfiguration(), $this->getArticleListState());
+        if ($this->resultFactory instanceof StateAwareResultFactoryInterface) {
+            return $this->resultFactory->allowCacheForState($this->getListConfiguration(), $this->getArticleListState());
+        }
+
+        return $this->resultFactory->_AllowCache($this->getListConfiguration());
     }
 
     /**

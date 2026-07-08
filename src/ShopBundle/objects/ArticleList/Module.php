@@ -19,6 +19,7 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\DatabaseAccessLayer\Interface
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultDataInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultFactoryInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateFactoryInterface;
+use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateAwareResultFactoryInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\State\StateElementPageSize;
 use ChameleonSystem\ShopBundle\objects\ArticleList\StateRequestExtractor\Interfaces\StateRequestExtractorCollectionInterface;
@@ -480,7 +481,11 @@ class Module extends \MTPkgViewRendererAbstractModuleMapper
             return false;
         }
 
-        if (false === $this->resultFactory->_AllowCache($this->configuration, $this->state)) {
+        if ($this->resultFactory instanceof StateAwareResultFactoryInterface) {
+            return $this->resultFactory->allowCacheForState($this->configuration, $this->state);
+        }
+
+        if (false === $this->resultFactory->_AllowCache($this->configuration)) {
             return false;
         }
 

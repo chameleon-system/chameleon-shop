@@ -17,12 +17,13 @@ use ChameleonSystem\ShopBundle\objects\ArticleList\Event\ArticleListFilterExecut
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\FilterFactoryInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultDataInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\ResultFactoryInterface;
+use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateAwareResultFactoryInterface;
 use ChameleonSystem\ShopBundle\objects\ArticleList\Interfaces\StateInterface;
 use ChameleonSystem\ShopBundle\ShopEvents;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ResultFactoryCache implements ResultFactoryInterface
+class ResultFactoryCache implements ResultFactoryInterface, StateAwareResultFactoryInterface
 {
     /**
      * @var ResultFactoryInterface
@@ -66,7 +67,7 @@ class ResultFactoryCache implements ResultFactoryInterface
      */
     public function createResult(ConfigurationInterface $moduleConfiguration, StateInterface $state)
     {
-        if (false === $this->_AllowCache($moduleConfiguration, $state)) {
+        if (false === $this->allowCacheForState($moduleConfiguration, $state)) {
             return $this->resultFactory->createResult($moduleConfiguration, $state);
         }
         $key = $this->getKey($moduleConfiguration, $state);
@@ -106,9 +107,18 @@ class ResultFactoryCache implements ResultFactoryInterface
         return $this->_GetCacheTableInfos($moduleConfiguration);
     }
 
-    public function _AllowCache(ConfigurationInterface $moduleConfiguration, ?StateInterface $state = null)
+    public function _AllowCache(ConfigurationInterface $moduleConfiguration)
     {
-        return $this->resultFactory->_AllowCache($moduleConfiguration, $state);
+        return $this->resultFactory->_AllowCache($moduleConfiguration);
+    }
+
+    public function allowCacheForState(ConfigurationInterface $moduleConfiguration, StateInterface $state)
+    {
+        if ($this->resultFactory instanceof StateAwareResultFactoryInterface) {
+            return $this->resultFactory->allowCacheForState($moduleConfiguration, $state);
+        }
+
+        return $this->resultFactory->_AllowCache($moduleConfiguration);
     }
 
     public function _GetCacheParameters(ConfigurationInterface $moduleConfiguration, StateInterface $state)
