@@ -490,12 +490,21 @@ class Module extends \MTPkgViewRendererAbstractModuleMapper
             return false;
         }
 
+        if ($this->hasActiveFilterQuery()) {
+            return false;
+        }
+
         return true;
     }
 
     private function requestedPageIsAboveCacheLimit(): bool
     {
         return (int) $this->state->getState(StateInterface::PAGE, 0) > self::MAX_CACHEABLE_PAGE;
+    }
+
+    private function hasActiveFilterQuery(): bool
+    {
+        return [] !== $this->state->getState(StateInterface::QUERY, []);
     }
 
     /**
