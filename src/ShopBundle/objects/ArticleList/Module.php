@@ -227,13 +227,13 @@ class Module extends \MTPkgViewRendererAbstractModuleMapper
      *
      * @return bool
      */
-    private function sortIdIsValid($sortId)
+    private function sortIdIsValid(string $sortId): bool
     {
         if ($sortId === $this->configuration->getDefaultSortId()) {
             return true;
         }
 
-        return in_array($sortId, array_column($this->getSortList(), 'id'), true);
+        return true === in_array($sortId, array_column($this->getSortList(), 'id'), true);
     }
 
     /**

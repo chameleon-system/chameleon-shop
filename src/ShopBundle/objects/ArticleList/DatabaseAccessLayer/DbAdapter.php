@@ -97,6 +97,7 @@ class DbAdapter implements DbAdapterInterface
                    WHERE `shop_module_article_list_shop_module_articlelist_orderby_mlt`.`source_id` = :configurationId
                 ORDER BY `shop_module_articlelist_orderby`.`position` ASC
         ';
+
         return $this->databaseConnection->fetchAllAssociative($query, ['configurationId' => $configurationId]);
     }
 }
