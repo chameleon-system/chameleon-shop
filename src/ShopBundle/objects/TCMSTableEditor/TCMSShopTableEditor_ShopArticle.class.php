@@ -29,6 +29,8 @@ class TCMSShopTableEditor_ShopArticle extends TCMSTableEditor
      */
     public function ProcessFieldsBeforeDisplay($oFields)
     {
+        parent::ProcessFieldsBeforeDisplay($oFields);
+
         /** @var TdbShopArticle $product */
         $product = $this->oTable;
         if ($product->IsVariant()) {
