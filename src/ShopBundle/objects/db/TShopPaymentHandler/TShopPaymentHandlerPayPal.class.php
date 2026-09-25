@@ -87,6 +87,22 @@ class TShopPaymentHandlerPayPal extends TShopPaymentHandlerPayPal_PayViaLink
         $aParameter['RETURNURL'] = $sSuccessURL; // go to the checkout complete page
         $aParameter['CANCELURL'] = $sCancelURL; // urldecode(str_replace('&amp;','&',$oActivePage->GetRealURL(array('paypalreturn'=>'1'),$aExcludes,true))); // return to the cancel page
 
+        // The NVP LOCALECODE uses PayPal's legacy language_region codes (de_DE), unlike the JS SDK's de-DE.
+        // PayPal maps Swiss-German and French to de_DE and fr_FR; the CMS code may already contain a region.
+        // https://developer.paypal.com/api/codes/locale/
+        $languageCode = strtolower(substr(self::getLanguageService()->getLanguageIsoCode() ?? '', 0, 2));
+        $localeCode = match ($languageCode) {
+            'de' => 'de_DE',
+            'fr' => 'fr_FR',
+            'it' => 'it_IT',
+            'nl' => 'nl_NL',
+            'en' => 'en_US',
+            default => null,
+        };
+        if (null !== $localeCode) {
+            $aParameter['LOCALECODE'] = $localeCode;
+        }
+
         // styling
         $aParameter['HDRIMG'] = ''; // - : specify an image to appear at the top left of the payment page
         $aParameter['HDRBORDERCOLOR'] = ''; // - : set the border color around the header of the payment page
