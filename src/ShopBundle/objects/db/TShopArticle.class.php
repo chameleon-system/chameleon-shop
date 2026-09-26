@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopCategoryDataAccessInterface;
 use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopStockMessageDataAccessInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
@@ -361,9 +362,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         $oShopConfig = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
 
         if (!is_null($iCategoryId)) {
-            $oCategory = TdbShopCategory::GetNewInstance();
-            /** @var $oCategory TdbShopCategory */
-            if (!$oCategory->Load($iCategoryId) || false == $oCategory->AllowDisplayInShop()) {
+            $oCategory = $this->getCategory($iCategoryId);
+            if (null !== $oCategory && false === $oCategory->AllowDisplayInShop()) {
                 $oCategory = null;
             }
         }
@@ -405,6 +405,24 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         return $sLink;
     }
 
+    private function getShopCategoryDataAccess(): ShopCategoryDataAccessInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.shop_category_data_access');
+    }
+    /**
+     * load a category and retain it in the runtime cache
+     * @param string $categoryId
+     * @return TdbShopCategory|null
+     */
+    private function getCategory(string $categoryId): ?TdbShopCategory
+    {
+        $categoryRow =  $this->getShopCategoryDataAccess()->getCategory($categoryId);
+        if (is_null($categoryRow)) {
+            return null;
+        }
+
+        return TdbShopCategory::GetNewInstance($categoryRow);
+    }
     /**
      * a better SEO URL (depends on TCMSSmartURLHandler_ShopProductV2).
      *
@@ -428,8 +446,8 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
         $oCategory = null;
         if (!is_null($iCategoryId)) {
-            $oCategory = TdbShopCategory::GetNewInstance();
-            if (!$oCategory->Load($iCategoryId) || false == $oCategory->AllowDisplayInShop()) {
+            $oCategory = $this->getCategory($iCategoryId);
+            if (null !== $oCategory && false === $oCategory->AllowDisplayInShop()) {
                 $oCategory = null;
             }
         }

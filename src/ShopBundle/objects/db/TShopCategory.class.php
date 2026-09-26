@@ -12,7 +12,9 @@
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopCategoryDataAccessInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
@@ -31,6 +33,22 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
     {
         return $this->GetFieldShopVat();
     }
+    private function getShopCategoryDataAccess(): ShopCategoryDataAccessInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.shop_category_data_access');
+    }
+    public function Load($id)
+    {
+        $row = $this->getShopCategoryDataAccess()->getCategory($id);
+        if (null === $row) {
+            $this->sqlData = false;
+            return false;
+        }
+        $this->LoadFromRow($row);
+
+        return true;
+    }
+
 
     /**
      * returns a link that restricts the current search to the category.
