@@ -63,8 +63,10 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
             $this->oActiveOrderStep = TdbShopOrderStep::GetStep($sStepName);
         }
         if (!is_null($this->oActiveOrderStep)) {
+            $this->logAddressStepMessageState('target-before-init');
             $this->oActiveOrderStep->bIsTheActiveStep = true;
             $this->oActiveOrderStep->Init();
+            $this->logAddressStepMessageState('target-after-init');
         }
 
         // TdbShopPaymentHandler::SetExecutePaymentInterrupt(true);
@@ -123,7 +125,24 @@ class MTShopOrderWizardCoreEndPoint extends TShopUserCustomModelBase
         $this->data['oSteps'] = TdbShopOrderStepList::GetNavigationStepList($this->oActiveOrderStep);
         $this->data['sBasketRequestURL'] = self::GetCallingURL();
 
+        $this->logAddressStepMessageState('target-execute');
+
         return $this->data;
+    }
+
+    private function logAddressStepMessageState(string $stage): void
+    {
+        if (null === $this->oActiveOrderStep || !in_array($this->oActiveOrderStep->fieldSystemname, ['user', 'shippingaddress'], true)) {
+            return;
+        }
+
+        error_log(sprintf(
+            '[PAYPAL_COUNTRY_MSG_DIAG] stage=%s session=%s step=%s global_count=%d',
+            $stage,
+            substr(hash('sha256', session_id()), 0, 12),
+            $this->oActiveOrderStep->fieldSystemname,
+            TCMSMessageManager::GetInstance()->ConsumerMessageCount(TCMSMessageManager::GLOBAL_CONSUMER_NAME, false)
+        ));
     }
 
     /**
