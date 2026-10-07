@@ -168,6 +168,10 @@ class TShopOrderStep extends TShopOrderStepAutoParent
         $classList = str_replace(' ', '', $classList);
         $classes = explode(',', $classList);
         foreach ($classes as $class) {
+            if ('' === $class) {
+                continue;
+            }
+
             /** @var TdbShopOrderStep $classObject */
             $classObject = new $class();
             if (true === $classObject->isApplicableForBasket($basket)) {
