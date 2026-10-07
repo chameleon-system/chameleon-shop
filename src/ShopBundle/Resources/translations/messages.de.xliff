@@ -43,8 +43,10 @@
                 <source>chameleon_system_shop.error.shipping_country_inactive</source>
                 <target>Das gewählte Lieferland ist nicht verfügbar. Bitte wählen Sie ein anderes Lieferland.</target>
             </trans-unit>
-
-
+            <trans-unit id="chameleon_system_shop.payment_paypal_express.shipping_country_invalid">
+                <source>chameleon_system_shop.payment_paypal_express.shipping_country_invalid</source>
+                <target>Das in PayPal Express angegebene Lieferland ist nicht gültig. Bitte wählen Sie ein anderes Lieferland.</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_shop.payment_data_trans.settlement_failure_mail_info">
                 <source>chameleon_system_shop.payment_data_trans.settlement_failure_mail_info</source>
                 <target>Bestellnummer: %ordernumber% Referenznummer: %ref%</target>

@@ -1465,6 +1465,20 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
         }
 
         if ($bAllowCreation) {
+            $oShippingAddress = $oUser->GetShippingAddress();
+            $oShippingCountryId = null === $oShippingAddress ? null : $oShippingAddress->fieldDataCountryId;
+            $oShippingCountry = empty($oShippingCountryId) ? null : TdbDataCountry::GetNewInstance($oShippingCountryId);
+            if (null === $oShippingCountry || false === $oShippingCountry->sqlData || !$oShippingCountry->isActive()) {
+                $oMsgManager->AddMessage(
+                    $sMessageConsumer,
+                    'ERROR-ORDER-REQUEST-PAYMENT-ERROR',
+                    ['errorMsg' => ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.error.shipping_country_inactive')]
+                );
+                $bAllowCreation = false;
+            }
+        }
+
+        if ($bAllowCreation) {
             // check if shipping and payment have been selected
             if (false == $this->HasValidShippingGroup()) {
                 $oMsgManager->AddMessage($sMessageConsumer, 'ERROR-ORDER-REQUEST-SHIPPING-GROUP-NOT-VALID');

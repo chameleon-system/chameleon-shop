@@ -40,11 +40,11 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
                 TCMSMessageManager::GetInstance()->AddMessage(
                     TCMSMessageManager::GLOBAL_CONSUMER_NAME,
                     'ERROR-ORDER-REQUEST-PAYMENT-ERROR',
-                    ['errorMsg' => ServiceLocator::get('translator')->trans('chameleon_system_shop.error.shipping_country_inactive')]
+                    ['errorMsg' => ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_paypal_express.shipping_country_invalid')]
                 );
-                $userStep = TdbShopOrderStep::GetStep('user');
-                if (null !== $userStep) {
-                    $userStep->JumpToStep($userStep);
+                $addressStep = TdbShopOrderStep::GetShippingAddressStep();
+                if (null !== $addressStep) {
+                    $addressStep->JumpToStep($addressStep);
                 }
 
                 return false;

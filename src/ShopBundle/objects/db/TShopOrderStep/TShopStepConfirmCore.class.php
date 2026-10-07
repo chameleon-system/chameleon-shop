@@ -270,9 +270,9 @@ class TShopStepConfirmCore extends TdbShopOrderStep
             ['errorMsg' => ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.error.shipping_country_inactive')]
         );
 
-        $userStep = TdbShopOrderStep::GetStep('user');
-        if (null !== $userStep) {
-            $this->JumpToStep($userStep);
+        $addressStep = TdbShopOrderStep::GetShippingAddressStep();
+        if (null !== $addressStep) {
+            $this->JumpToStep($addressStep);
         }
     }
 
