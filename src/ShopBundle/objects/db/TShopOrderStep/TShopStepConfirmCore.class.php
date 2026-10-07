@@ -97,6 +97,13 @@ class TShopStepConfirmCore extends TdbShopOrderStep
             }
         }
 
+        if ($bAllowAccess && !$this->hasActiveShippingCountry()) {
+            $bAllowAccess = false;
+            if ($bRedirectToPreviousPermittedStep) {
+                $this->redirectToAddressStepForInactiveShippingCountry();
+            }
+        }
+
         return $bAllowAccess;
     }
 
@@ -195,6 +202,12 @@ class TShopStepConfirmCore extends TdbShopOrderStep
     {
         $continue = parent::ProcessStep();
 
+        if ($continue && !$this->hasActiveShippingCountry()) {
+            $this->redirectToAddressStepForInactiveShippingCountry();
+
+            return false;
+        }
+
         $basket = $this->getShopService()->getActiveBasket();
         /*
          * If the user managed to submit the confirmation form twice, we need to avoid handling the second submit.
@@ -235,6 +248,32 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         }
 
         return $continue;
+    }
+
+    private function hasActiveShippingCountry(): bool
+    {
+        $shippingAddress = $this->getExtranetUserProvider()->getActiveUser()->GetShippingAddress();
+        if (null === $shippingAddress || empty($shippingAddress->fieldDataCountryId)) {
+            return false;
+        }
+
+        $shippingCountry = TdbDataCountry::GetNewInstance($shippingAddress->fieldDataCountryId);
+
+        return false !== $shippingCountry->sqlData && $shippingCountry->isActive();
+    }
+
+    private function redirectToAddressStepForInactiveShippingCountry(): void
+    {
+        $this->getFlashMessages()->addMessage(
+            TCMSMessageManager::GLOBAL_CONSUMER_NAME,
+            'ERROR-ORDER-REQUEST-PAYMENT-ERROR',
+            ['errorMsg' => ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.error.shipping_country_inactive')]
+        );
+
+        $userStep = TdbShopOrderStep::GetStep('user');
+        if (null !== $userStep) {
+            $this->JumpToStep($userStep);
+        }
     }
 
     /**

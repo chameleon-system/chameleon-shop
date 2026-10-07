@@ -39,6 +39,10 @@
                 <source>chameleon_system_shop.error.generic_payment_shipping_error</source>
                 <target>Error occurred during shipping or payment method selection.</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_shop.error.shipping_country_inactive">
+                <source>chameleon_system_shop.error.shipping_country_inactive</source>
+                <target>The selected shipping country is not available. Please choose another shipping country.</target>
+            </trans-unit>
 
 
             <trans-unit id="chameleon_system_shop.payment_data_trans.settlement_failure_mail_info">
