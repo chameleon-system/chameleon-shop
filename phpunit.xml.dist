@@ -12,6 +12,7 @@
         <testsuite name="Project Test Suite">
             <directory>src/SearchBundle/Tests</directory>
             <directory>src/ShopArticleDetailPagingBundle/Tests</directory>
+            <file>src/ShopBundle/Tests/OrderStep/OrderStepClassListTest.php</file>
         </testsuite>
     </testsuites>
 
