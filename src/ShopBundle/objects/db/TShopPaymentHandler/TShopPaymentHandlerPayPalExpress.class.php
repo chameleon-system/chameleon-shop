@@ -37,18 +37,16 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
             $countryIsoCode = trim((string) ($this->aCheckoutDetails['SHIPTOCOUNTRYCODE'] ?? ''));
             $shippingCountry = '' === $countryIsoCode ? null : TdbDataCountry::GetInstanceForIsoCode($countryIsoCode);
             if (null === $shippingCountry || !$shippingCountry->isActive()) {
+                $executingModule = TGlobal::instance()->GetExecutingModulePointer();
+                $messageConsumer = $executingModule instanceof MTShopOrderWizardCore
+                    ? $executingModule->sModuleSpotName
+                    : TCMSMessageManager::GLOBAL_CONSUMER_NAME;
                 TCMSMessageManager::GetInstance()->AddMessage(
-                    TCMSMessageManager::GLOBAL_CONSUMER_NAME,
+                    $messageConsumer,
                     'ERROR-ORDER-REQUEST-PAYMENT-ERROR',
                     ['errorMsg' => ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_paypal_express.shipping_country_invalid')]
                 );
                 $addressStep = TdbShopOrderStep::GetShippingAddressStep();
-                error_log(sprintf(
-                    '[PAYPAL_COUNTRY_MSG_DIAG] stage=paypal-return session=%s step=%s global_count=%d',
-                    substr(hash('sha256', session_id()), 0, 12),
-                    null === $addressStep ? 'none' : $addressStep->fieldSystemname,
-                    TCMSMessageManager::GetInstance()->ConsumerMessageCount(TCMSMessageManager::GLOBAL_CONSUMER_NAME, false)
-                ));
                 if (null !== $addressStep) {
                     $addressStep->JumpToStep($addressStep);
                 }

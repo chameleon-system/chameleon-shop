@@ -264,8 +264,12 @@ class TShopStepConfirmCore extends TdbShopOrderStep
 
     private function redirectToAddressStepForInactiveShippingCountry(): void
     {
+        $executingModule = TGlobal::instance()->GetExecutingModulePointer();
+        $messageConsumer = $executingModule instanceof MTShopOrderWizardCore
+            ? $executingModule->sModuleSpotName
+            : TCMSMessageManager::GLOBAL_CONSUMER_NAME;
         $this->getFlashMessages()->addMessage(
-            TCMSMessageManager::GLOBAL_CONSUMER_NAME,
+            $messageConsumer,
             'ERROR-ORDER-REQUEST-PAYMENT-ERROR',
             ['errorMsg' => ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.error.shipping_country_inactive')]
         );
