@@ -1464,7 +1464,8 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             }
         }
 
-        if ($bAllowCreation) {
+        $oPaymentMethod = $this->GetActivePaymentMethod();
+        if ($bAllowCreation && null !== $oPaymentMethod && $oPaymentMethod->RequiresActiveShippingCountryValidation()) {
             $oShippingAddress = $oUser->GetShippingAddress();
             $oShippingCountryId = null === $oShippingAddress ? null : $oShippingAddress->fieldDataCountryId;
             $oShippingCountry = empty($oShippingCountryId) ? null : TdbDataCountry::GetNewInstance($oShippingCountryId);

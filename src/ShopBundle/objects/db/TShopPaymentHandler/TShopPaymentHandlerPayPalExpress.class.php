@@ -46,9 +46,10 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
                     'ERROR-ORDER-REQUEST-PAYMENT-ERROR',
                     ['errorMsg' => ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_paypal_express.shipping_country_invalid')]
                 );
-                $addressStep = TdbShopOrderStep::GetShippingAddressStep();
-                if (null !== $addressStep) {
-                    $addressStep->JumpToStep($addressStep);
+                $firstStep = TdbShopOrderStepList::GetFirstActiveNavigationStep();
+                $targetStep = $firstStep ?? TdbShopOrderStep::GetShippingAddressStep();
+                if (null !== $targetStep) {
+                    $targetStep->JumpToStep($targetStep);
                 }
 
                 return false;

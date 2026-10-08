@@ -97,7 +97,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
             }
         }
 
-        if ($bAllowAccess && !$this->hasActiveShippingCountry()) {
+        if ($bAllowAccess && $this->requiresActiveShippingCountryValidation() && !$this->hasActiveShippingCountry()) {
             $bAllowAccess = false;
             if ($bRedirectToPreviousPermittedStep) {
                 $this->redirectToAddressStepForInactiveShippingCountry();
@@ -202,7 +202,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
     {
         $continue = parent::ProcessStep();
 
-        if ($continue && !$this->hasActiveShippingCountry()) {
+        if ($continue && $this->requiresActiveShippingCountryValidation() && !$this->hasActiveShippingCountry()) {
             $this->redirectToAddressStepForInactiveShippingCountry();
 
             return false;
@@ -248,6 +248,13 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         }
 
         return $continue;
+    }
+
+    private function requiresActiveShippingCountryValidation(): bool
+    {
+        $paymentMethod = $this->getShopService()->getActiveBasket()->GetActivePaymentMethod();
+
+        return null !== $paymentMethod && $paymentMethod->RequiresActiveShippingCountryValidation();
     }
 
     private function hasActiveShippingCountry(): bool
