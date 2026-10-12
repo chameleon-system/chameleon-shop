@@ -97,6 +97,13 @@ class TShopStepConfirmCore extends TdbShopOrderStep
             }
         }
 
+        if (true === $bAllowAccess && true === $this->requiresActiveShippingCountryValidation() && false === $this->hasActiveShippingCountry()) {
+            $bAllowAccess = false;
+            if (true === $bRedirectToPreviousPermittedStep) {
+                $this->redirectToAddressStepForInactiveShippingCountry();
+            }
+        }
+
         return $bAllowAccess;
     }
 
@@ -195,6 +202,12 @@ class TShopStepConfirmCore extends TdbShopOrderStep
     {
         $continue = parent::ProcessStep();
 
+        if (true === $continue && true === $this->requiresActiveShippingCountryValidation() && false === $this->hasActiveShippingCountry()) {
+            $this->redirectToAddressStepForInactiveShippingCountry();
+
+            return false;
+        }
+
         $basket = $this->getShopService()->getActiveBasket();
         /*
          * If the user managed to submit the confirmation form twice, we need to avoid handling the second submit.
@@ -235,6 +248,43 @@ class TShopStepConfirmCore extends TdbShopOrderStep
         }
 
         return $continue;
+    }
+
+    private function requiresActiveShippingCountryValidation(): bool
+    {
+        $paymentMethod = $this->getShopService()->getActiveBasket()->GetActivePaymentMethod();
+
+        return null !== $paymentMethod && true === $paymentMethod->RequiresActiveShippingCountryValidation();
+    }
+
+    private function hasActiveShippingCountry(): bool
+    {
+        $shippingAddress = $this->getExtranetUserProvider()->getActiveUser()->GetShippingAddress();
+        if (null === $shippingAddress || true === empty($shippingAddress->fieldDataCountryId)) {
+            return false;
+        }
+
+        $shippingCountry = TdbDataCountry::GetNewInstance($shippingAddress->fieldDataCountryId);
+
+        return false !== $shippingCountry->sqlData && true === $shippingCountry->isActive();
+    }
+
+    private function redirectToAddressStepForInactiveShippingCountry(): void
+    {
+        $executingModule = TGlobal::instance()->GetExecutingModulePointer();
+        $messageConsumer = $executingModule instanceof MTShopOrderWizardCore
+            ? $executingModule->sModuleSpotName
+            : TCMSMessageManager::GLOBAL_CONSUMER_NAME;
+        $this->getFlashMessages()->addMessage(
+            $messageConsumer,
+            'ERROR-ORDER-REQUEST-PAYMENT-ERROR',
+            ['errorMsg' => ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.error.shipping_country_inactive')]
+        );
+
+        $addressStep = TdbShopOrderStep::GetShippingAddressStep();
+        if (null !== $addressStep) {
+            $this->JumpToStep($addressStep);
+        }
     }
 
     /**

@@ -34,6 +34,27 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
         $bResponse = parent::PostProcessExternalPaymentHandlerHook();
 
         if ($bResponse) {
+            $countryIsoCode = trim((string) ($this->aCheckoutDetails['SHIPTOCOUNTRYCODE'] ?? ''));
+            $shippingCountry = '' === $countryIsoCode ? null : TdbDataCountry::GetInstanceForIsoCode($countryIsoCode);
+            if (null === $shippingCountry || false === $shippingCountry->isActive()) {
+                $executingModule = TGlobal::instance()->GetExecutingModulePointer();
+                $messageConsumer = $executingModule instanceof MTShopOrderWizardCore
+                    ? $executingModule->sModuleSpotName
+                    : TCMSMessageManager::GLOBAL_CONSUMER_NAME;
+                TCMSMessageManager::GetInstance()->AddMessage(
+                    $messageConsumer,
+                    'ERROR-ORDER-REQUEST-PAYMENT-ERROR',
+                    ['errorMsg' => ServiceLocator::get('translator')->trans('chameleon_system_shop.payment_paypal_express.shipping_country_invalid')]
+                );
+                $firstStep = TdbShopOrderStepList::GetFirstActiveNavigationStep();
+                $targetStep = $firstStep ?? TdbShopOrderStep::GetShippingAddressStep();
+                if (null !== $targetStep) {
+                    $targetStep->JumpToStep($targetStep);
+                }
+
+                return false;
+            }
+
             $oUser = TdbDataExtranetUser::GetInstance();
             if (is_null($oUser->id)) {
                 $aBilling = [];

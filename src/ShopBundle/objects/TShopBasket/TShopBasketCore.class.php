@@ -1464,6 +1464,21 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             }
         }
 
+        $paymentMethod = $this->GetActivePaymentMethod();
+        if (true === $bAllowCreation && null !== $paymentMethod && true === $paymentMethod->RequiresActiveShippingCountryValidation()) {
+            $shippingAddress = $oUser->GetShippingAddress();
+            $shippingCountryId = null === $shippingAddress ? null : $shippingAddress->fieldDataCountryId;
+            $shippingCountry = TdbDataCountry::GetNewInstance();
+            if (false === $shippingCountry->Load($shippingCountryId) || false === $shippingCountry->isActive()) {
+                $oMsgManager->AddMessage(
+                    $sMessageConsumer,
+                    'ERROR-ORDER-REQUEST-PAYMENT-ERROR',
+                    ['errorMsg' => ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.error.shipping_country_inactive')]
+                );
+                $bAllowCreation = false;
+            }
+        }
+
         if ($bAllowCreation) {
             // check if shipping and payment have been selected
             if (false == $this->HasValidShippingGroup()) {

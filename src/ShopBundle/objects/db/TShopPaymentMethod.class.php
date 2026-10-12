@@ -101,6 +101,14 @@ class TShopPaymentMethod extends TShopPaymentMethodAutoParent implements IPkgSho
     }
 
     /**
+     * Whether this payment method requires an active shipping country even after address selection.
+     */
+    public function RequiresActiveShippingCountryValidation(): bool
+    {
+        return $this->GetFieldShopPaymentHandler() instanceof TShopPaymentHandlerPayPalExpress;
+    }
+
+    /**
      * return true if this shipping type is valid for the current user / basket.
      *
      * @return bool

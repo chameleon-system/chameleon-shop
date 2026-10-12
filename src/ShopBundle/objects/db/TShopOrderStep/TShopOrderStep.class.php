@@ -132,6 +132,17 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     }
 
     /**
+     * Return the step where the customer can correct the delivery address.
+     * Older checkouts collect the address in "user"; newer ones use a separate step.
+     */
+    public static function GetShippingAddressStep(): ?TdbShopOrderStep
+    {
+        $addressStep = self::GetStep('shippingaddress');
+
+        return null !== $addressStep && true === $addressStep->IsActive() ? $addressStep : self::GetStep('user');
+    }
+
+    /**
      * @param string|array|null $sData - either the id of the object to load, or the row with which the instance should be initialized
      * @param string|null $sLanguage - init with the language passed
      */

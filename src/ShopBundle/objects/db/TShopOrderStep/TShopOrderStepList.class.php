@@ -129,6 +129,22 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
     }
 
     /**
+     * Return the first active step shown in the checkout navigation.
+     */
+    public static function GetFirstActiveNavigationStep(): ?TdbShopOrderStep
+    {
+        $query = "SELECT * FROM `shop_order_step` WHERE `show_in_navigation` = '1' ORDER BY `position` ASC";
+        $steps = TdbShopOrderStepList::GetList($query);
+        while ($step = $steps->Next()) {
+            if (true === $step->IsActive()) {
+                return $step;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * returns the position of the currently active step. if no step is marked as active,
      * it will return false. Step positions will start at 1 (not zero).
      *
