@@ -36,7 +36,7 @@ class TShopPaymentHandlerPayPalExpress extends TShopPaymentHandlerPayPal
         if ($bResponse) {
             $countryIsoCode = trim((string) ($this->aCheckoutDetails['SHIPTOCOUNTRYCODE'] ?? ''));
             $shippingCountry = '' === $countryIsoCode ? null : TdbDataCountry::GetInstanceForIsoCode($countryIsoCode);
-            if (null === $shippingCountry || !$shippingCountry->isActive()) {
+            if (null === $shippingCountry || false === $shippingCountry->isActive()) {
                 $executingModule = TGlobal::instance()->GetExecutingModulePointer();
                 $messageConsumer = $executingModule instanceof MTShopOrderWizardCore
                     ? $executingModule->sModuleSpotName

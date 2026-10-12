@@ -1464,12 +1464,12 @@ class TShopBasketCore implements IDataExtranetUserObserver, IPkgCmsSessionPostWa
             }
         }
 
-        $oPaymentMethod = $this->GetActivePaymentMethod();
-        if ($bAllowCreation && null !== $oPaymentMethod && $oPaymentMethod->RequiresActiveShippingCountryValidation()) {
-            $oShippingAddress = $oUser->GetShippingAddress();
-            $oShippingCountryId = null === $oShippingAddress ? null : $oShippingAddress->fieldDataCountryId;
-            $oShippingCountry = empty($oShippingCountryId) ? null : TdbDataCountry::GetNewInstance($oShippingCountryId);
-            if (null === $oShippingCountry || false === $oShippingCountry->sqlData || !$oShippingCountry->isActive()) {
+        $paymentMethod = $this->GetActivePaymentMethod();
+        if (true === $bAllowCreation && null !== $paymentMethod && true === $paymentMethod->RequiresActiveShippingCountryValidation()) {
+            $shippingAddress = $oUser->GetShippingAddress();
+            $shippingCountryId = null === $shippingAddress ? null : $shippingAddress->fieldDataCountryId;
+            $shippingCountry = TdbDataCountry::GetNewInstance();
+            if (false === $shippingCountry->Load($shippingCountryId) || false === $shippingCountry->isActive()) {
                 $oMsgManager->AddMessage(
                     $sMessageConsumer,
                     'ERROR-ORDER-REQUEST-PAYMENT-ERROR',

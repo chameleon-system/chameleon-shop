@@ -136,7 +136,7 @@ class TShopOrderStepList extends TShopOrderStepListAutoParent
         $query = "SELECT * FROM `shop_order_step` WHERE `show_in_navigation` = '1' ORDER BY `position` ASC";
         $steps = TdbShopOrderStepList::GetList($query);
         while ($step = $steps->Next()) {
-            if ($step->IsActive()) {
+            if (true === $step->IsActive()) {
                 return $step;
             }
         }

@@ -97,9 +97,9 @@ class TShopStepConfirmCore extends TdbShopOrderStep
             }
         }
 
-        if ($bAllowAccess && $this->requiresActiveShippingCountryValidation() && !$this->hasActiveShippingCountry()) {
+        if (true === $bAllowAccess && true === $this->requiresActiveShippingCountryValidation() && false === $this->hasActiveShippingCountry()) {
             $bAllowAccess = false;
-            if ($bRedirectToPreviousPermittedStep) {
+            if (true === $bRedirectToPreviousPermittedStep) {
                 $this->redirectToAddressStepForInactiveShippingCountry();
             }
         }
@@ -202,7 +202,7 @@ class TShopStepConfirmCore extends TdbShopOrderStep
     {
         $continue = parent::ProcessStep();
 
-        if ($continue && $this->requiresActiveShippingCountryValidation() && !$this->hasActiveShippingCountry()) {
+        if (true === $continue && true === $this->requiresActiveShippingCountryValidation() && false === $this->hasActiveShippingCountry()) {
             $this->redirectToAddressStepForInactiveShippingCountry();
 
             return false;
@@ -254,19 +254,19 @@ class TShopStepConfirmCore extends TdbShopOrderStep
     {
         $paymentMethod = $this->getShopService()->getActiveBasket()->GetActivePaymentMethod();
 
-        return null !== $paymentMethod && $paymentMethod->RequiresActiveShippingCountryValidation();
+        return null !== $paymentMethod && true === $paymentMethod->RequiresActiveShippingCountryValidation();
     }
 
     private function hasActiveShippingCountry(): bool
     {
         $shippingAddress = $this->getExtranetUserProvider()->getActiveUser()->GetShippingAddress();
-        if (null === $shippingAddress || empty($shippingAddress->fieldDataCountryId)) {
+        if (null === $shippingAddress || true === empty($shippingAddress->fieldDataCountryId)) {
             return false;
         }
 
         $shippingCountry = TdbDataCountry::GetNewInstance($shippingAddress->fieldDataCountryId);
 
-        return false !== $shippingCountry->sqlData && $shippingCountry->isActive();
+        return false !== $shippingCountry->sqlData && true === $shippingCountry->isActive();
     }
 
     private function redirectToAddressStepForInactiveShippingCountry(): void

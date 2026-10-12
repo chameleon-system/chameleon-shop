@@ -139,7 +139,7 @@ class TShopOrderStep extends TShopOrderStepAutoParent
     {
         $addressStep = self::GetStep('shippingaddress');
 
-        return null !== $addressStep && $addressStep->IsActive() ? $addressStep : self::GetStep('user');
+        return null !== $addressStep && true === $addressStep->IsActive() ? $addressStep : self::GetStep('user');
     }
 
     /**
