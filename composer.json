@@ -35,7 +35,8 @@
         "phpspec/prophecy-phpunit": "^2.0.0",
         "phpunit/phpunit": "^9.5.1",
         "vimeo/psalm": "^4.22",
-        "psalm/plugin-symfony": "^3.1"
+        "psalm/plugin-symfony": "^3.1",
+        "phpcompatibility/php-compatibility": "^10.0.0@dev"
     },
     "conflict": {
         "sebastian/comparator": "<1.2.4"
@@ -134,5 +135,15 @@
     },
     "scripts": {
         "analyze": "psalm --no-cache"
+    },
+    "config": {
+        "policy": {
+            "advisories": {
+                "block": false
+            }
+        },
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
