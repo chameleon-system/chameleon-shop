@@ -33,15 +33,17 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
     {
         return $this->GetFieldShopVat();
     }
-    private function getShopCategoryDataAccess(): ShopCategoryDataAccessInterface
-    {
-        return ServiceLocator::get('chameleon_system_shop.shop_category_data_access');
-    }
+
     public function Load($id)
     {
+        if (false === $this->GetEnableObjectCaching()) {
+            return parent::Load($id);
+        }
+
         $row = $this->getShopCategoryDataAccess()->getCategory($id);
         if (null === $row) {
             $this->sqlData = false;
+
             return false;
         }
         $this->LoadFromRow($row);
@@ -49,11 +51,12 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
         return true;
     }
 
-
     /**
      * returns a link that restricts the current search to the category.
      *
      * @return string
+     *
+     * @throws ErrorException
      */
     public function GetSearchRestrictionLink()
     {
@@ -488,7 +491,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
 
     private function shouldShowEmptyCategories(): bool
     {
-        $shop = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
+        $shop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
 
         return null !== $shop && true === $shop->fieldShowEmptyCategories;
     }
@@ -651,7 +654,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     private function getActivePageService()
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -659,7 +662,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     private function getShopService()
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service');
+        return ServiceLocator::get('chameleon_system_shop.shop_service');
     }
 
     /**
@@ -667,7 +670,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     private function getSystemPageService()
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 
     /**
@@ -675,7 +678,7 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     private function getPortalDomainService()
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -683,6 +686,11 @@ class TShopCategory extends TShopCategoryAutoParent implements ICMSSeoPatternIte
      */
     private function getUrlUtil()
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ServiceLocator::get('chameleon_system_core.util.url');
+    }
+
+    private function getShopCategoryDataAccess(): ShopCategoryDataAccessInterface
+    {
+        return ServiceLocator::get('chameleon_system_shop.shop_category_data_access');
     }
 }

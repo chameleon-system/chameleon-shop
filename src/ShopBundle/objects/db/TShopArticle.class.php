@@ -15,7 +15,6 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopCategoryDataAccessInterface;
 use ChameleonSystem\ShopBundle\Interfaces\DataAccess\ShopStockMessageDataAccessInterface;
 use ChameleonSystem\ShopBundle\Interfaces\ShopServiceInterface;
 use ChameleonSystem\ShopBundle\ProductInventory\Interfaces\ProductInventoryServiceInterface;
@@ -405,24 +404,20 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
         return $sLink;
     }
 
-    private function getShopCategoryDataAccess(): ShopCategoryDataAccessInterface
-    {
-        return ServiceLocator::get('chameleon_system_shop.shop_category_data_access');
-    }
     /**
-     * load a category and retain it in the runtime cache
-     * @param string $categoryId
-     * @return TdbShopCategory|null
+     * Load a category using the article's object caching setting.
      */
     private function getCategory(string $categoryId): ?TdbShopCategory
     {
-        $categoryRow =  $this->getShopCategoryDataAccess()->getCategory($categoryId);
-        if (is_null($categoryRow)) {
+        $category = TdbShopCategory::GetNewInstance();
+        $category->SetEnableObjectCaching($this->GetEnableObjectCaching());
+        if (false === $category->Load($categoryId)) {
             return null;
         }
 
-        return TdbShopCategory::GetNewInstance($categoryRow);
+        return $category;
     }
+
     /**
      * a better SEO URL (depends on TCMSSmartURLHandler_ShopProductV2).
      *
@@ -1487,7 +1482,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             $quotedOrderByField = $connection->quoteIdentifier($oVariantType->fieldShopVariantTypeValueCmsfieldname);
 
             $query = "
-            SELECT `shop_variant_type_value`.*, 
+            SELECT `shop_variant_type_value`.*,
                    SUM(CASE WHEN `shop_article`.`active` = '1' THEN 1 ELSE 0 END) AS articleactive
               FROM `shop_variant_type_value`
         INNER JOIN `shop_article_shop_variant_type_value_mlt`
@@ -1603,7 +1598,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
             $quotedId = $connection->quote($this->id);
 
             $query = "
-            SELECT `shop_variant_type_value`.*, 
+            SELECT `shop_variant_type_value`.*,
                    `shop_variant_type`.`identifier` AS variantTypeName
               FROM `shop_variant_type_value`
         INNER JOIN `shop_article_shop_variant_type_value_mlt`
@@ -1761,7 +1756,7 @@ class TShopArticle extends TShopArticleAutoParent implements ICMSSeoPatternItem,
 
             $query = TdbShopArticleImageList::GetDefaultQuery(
                 $this->iLanguageId,
-                "`shop_article_image`.`shop_article_id`= {$quotedId} 
+                "`shop_article_image`.`shop_article_id`= {$quotedId}
              AND `shop_article_image`.`cms_media_id` NOT IN ('','0','1','2','3','4','5','6','7','8','9','11','12','13','14')"
             ); // exclude broken records and template images
 
